@@ -6,14 +6,16 @@
 statistical models.}
 \usage{
 extract(models, statistic = "std.error", conf_level = 0.95,
-  coef_map = NULL, coef_omit = NULL, gof_map = NULL,
-  gof_omit = NULL, fmt = "\%.3f", ...)
+  coef_map = NULL, coef_omit = NULL, gof_map = NULL, gof_omit = NULL,
+  stars = NULL, fmt = "\%.3f")
 }
 \arguments{
 \item{models}{named list of models to summarize}
 
 \item{statistic}{string name of the statistic to include in parentheses
-below estimates}
+below estimates. Must be either "conf.int", or one of the column names
+produced by the `broom::tidy` function. Typical values include: "std.error",
+"conf.int", "statistic", "p.value".}
 
 \item{conf_level}{confidence level to use for confidence intervals}
 

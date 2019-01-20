@@ -5,7 +5,7 @@
 \title{Extract estimates and statistics from a single model}
 \usage{
 extract_estimates(model, statistic = "std.error", conf_level = 0.95,
-  fmt = "\%.3f", ...)
+  fmt = "\%.3f", stars = NULL, ...)
 }
 \description{
 Extract estimates and statistics from a single model

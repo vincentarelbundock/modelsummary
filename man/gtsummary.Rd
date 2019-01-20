@@ -5,9 +5,37 @@
 \title{Beautiful, customizable summaries of statistical models}
 \usage{
 gtsummary(models, statistic = "std.error", conf_level = 0.95,
-  coef_map = NULL, coef_omit = NULL, gof_map = NULL,
-  gof_omit = NULL, fmt = "\%.3f", title = NULL, subtitle = NULL,
-  filename = NULL, ...)
+  coef_map = NULL, coef_omit = NULL, gof_map = NULL, gof_omit = NULL,
+  fmt = "\%.3f", stars = NULL, title = NULL, subtitle = NULL,
+  notes = NULL, filename = NULL)
+}
+\arguments{
+\item{models}{named list of models to summarize}
+
+\item{statistic}{string name of the statistic to include in parentheses
+below estimates. Must be either "conf.int", or one of the column names
+produced by the `broom::tidy` function. Typical values include: "std.error",
+"conf.int", "statistic", "p.value".}
+
+\item{conf_level}{confidence level to use for confidence intervals}
+
+\item{coef_map}{named character vector. Names refer to the original variable
+names. Values refer to the variable names that will appear in the table.
+Coefficients which are omitted from this vector will be omitted from the
+table. The table will be ordered in the same order as this vector.}
+
+\item{coef_omit}{string regular expression. Omits all matching coefficients
+from the table (using `stringr::str_detect`).}
+
+\item{gof_map}{data.frame in the same format as `gtsummary::gof_map`}
+
+\item{fmt}{passed to the `sprintf` function to format numeric values into
+strings, with rounding, etc. See `?sprintf` for options.}
+
+\item{notes}{a character vector of notes to append to the bottom of the table.}
+
+\item{gof}{string regular expression. Omits all matching gof statistics from
+the table (using `stringr::str_detect`).}
 }
 \description{
 Beautiful, customizable summaries of statistical models
