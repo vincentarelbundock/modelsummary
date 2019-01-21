@@ -25,6 +25,7 @@ Summaries can also be saved to html, rtf, and LaTeX files. Support for Text/ASCI
     * [Rename, reorder, and subset goodness-of-fit statistics](https://github.com/vincentarelbundock/gtsummary#rename-reorder-and-subset-goodness-of-fit-statistics)
     * [Stars](https://github.com/vincentarelbundock/gtsummary#stars-statistical-significance-markers)
     * [Digits, rounding, exponential notation](https://github.com/vincentarelbundock/gtsummary#digits-rounding-exponential-notation)
+    * [Fancy text with markdown: bold, italics, etc.](https://github.com/vincentarelbundock/gtsummary#fancy-text-with-markdown-bold-italics-etc)
     * [Complex table](https://github.com/vincentarelbundock/gtsummary#complex-table)
     * [Power users](https://github.com/vincentarelbundock/gtsummary#power-users)
 + [Alternative summary table packages for R](https://github.com/vincentarelbundock/gtsummary#alternative-summary-table-packages-for-r)
@@ -39,7 +40,7 @@ remotes::install_github('rstudio/gt')
 remotes::install_github('vincentarelbundock/gtsummary')
 ```
 
-Make sure you also install `tidyverse`, as `gtsummary` depends on a lot of its packages (e.g., `stringr`, `dplyr`, `tidyr`):
+Make sure you also install `tidyverse`, as `gtsummary` depends on a lot of its packages (e.g., `stringr`, `dplyr`, `tidyr`, `purrr`):
 
 ```r
 install.packages('tidyverse')
@@ -49,7 +50,7 @@ install.packages('tidyverse')
 
 ## Preliminaries
 
-Load packages and download some data from the [RDatasets](https://vincentarelbundock.github.io/Rdatasets/) repository.
+Load packages and download some data from the [RDatasets](https://vincentarelbundock.github.io/Rdatasets/) repository. Then, estimate 5 different models and store them in a named list. The name of each model in that list will be used as a column label:
 
 ```r
 library(gt)
@@ -58,11 +59,7 @@ library(gtsummary)
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
 dat <- read.csv(url) 
 dat$Clergy <- ifelse(dat$Clergy > 40, 1, 0) # binary variable for logit model
-```
 
-Estimate 5 different models and store them in a named list. The name of each model in that list will be used as a column label:
-
-```r
 models <- list()
 models[['OLS 1']] <- lm(Literacy ~ Crime_prop + Infants, dat)
 models[['NBin 1']] <- glm.nb(Literacy ~ Crime_prop + Donations, dat)
@@ -127,8 +124,8 @@ Add notes to the bottom of your table:
 
 ```r
 gtsummary(models, 
-          notes = c('Text of the first note.', 
-                    'Text of the second note.'))
+          notes = list('Text of the first note.', 
+                       'Text of the second note.'))
 ```
 
 ## Rename, reorder, and subset coefficients
@@ -193,6 +190,16 @@ Most users will just modify the `3` in `%.3f`, but this is a very powerful syste
 
 ```r
 gtsummary(models, fmt = '%.7f')
+```
+
+## Fancy text with markdown: bold, italics, etc.
+
+Thanks to `gt`, `gtsummary` accepts markdown indications for emphasis and more:
+
+```r
+gtsummary(models, 
+          title = md('This is a **bolded series of words.**'),
+          notes = list(md('And an *emphasized note*.')))
 ```
 
 ## Complex table
