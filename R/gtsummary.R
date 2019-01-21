@@ -1,6 +1,7 @@
 #' Beautiful, customizable summaries of statistical models
 #'
-#' @param models named list of models to summarize
+#' @param models a single model object or a (potentially named) list of models
+#' to summarize
 #' @param statistic string name of the statistic to include in parentheses
 #' below estimates. Must be either "conf.int", or one of the column names
 #' produced by the `broom::tidy` function. Typical values include: "std.error",
@@ -17,7 +18,7 @@
 #' @param gof_map data.frame in the same format as `gtsummary::gof_map`
 #' @param fmt passed to the `sprintf` function to format numeric values into
 #' strings, with rounding, etc. See `?sprintf` for options.
-#' @param notes a character vector of notes to append to the bottom of the table.
+#' @param notes a list of notes to append to the bottom of the table.
 #'
 #' @export
 gtsummary <- function(models, 
