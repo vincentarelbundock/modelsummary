@@ -5,12 +5,13 @@
 \title{Beautiful, customizable summaries of statistical models}
 \usage{
 gtsummary(models, statistic = "std.error", conf_level = 0.95,
-  coef_map = NULL, coef_omit = NULL, gof_map = NULL, gof_omit = NULL,
-  fmt = "\%.3f", stars = NULL, title = NULL, subtitle = NULL,
-  notes = NULL, filename = NULL)
+  coef_map = NULL, coef_omit = NULL, gof_map = NULL,
+  gof_omit = NULL, fmt = "\%.3f", stars = NULL, title = NULL,
+  subtitle = NULL, notes = NULL, filename = NULL)
 }
 \arguments{
-\item{models}{named list of models to summarize}
+\item{models}{a single model object or a (potentially named) list of models
+to summarize}
 
 \item{statistic}{string name of the statistic to include in parentheses
 below estimates. Must be either "conf.int", or one of the column names
@@ -29,14 +30,63 @@ from the table (using `stringr::str_detect`).}
 
 \item{gof_map}{data.frame in the same format as `gtsummary::gof_map`}
 
-\item{fmt}{passed to the `sprintf` function to format numeric values into
-strings, with rounding, etc. See `?sprintf` for options.}
-
-\item{notes}{a character vector of notes to append to the bottom of the table.}
-
-\item{gof}{string regular expression. Omits all matching gof statistics from
+\item{gof_omit}{string regular expression. Omits all matching gof statistics from
 the table (using `stringr::str_detect`).}
+
+\item{fmt}{string which specifies how numeric values will be rounded. This
+string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
+the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
+use exponential notation. See `?sprintf` for more options.}
+
+\item{stars}{NULL for no significance stars. TRUE for default significance
+stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
+stars: c('*' = .1, '+' = .05).}
+
+\item{title}{string}
+
+\item{subtitle}{string}
+
+\item{notes}{list of notes to append to the bottom of the table.}
+
+\item{filename}{if not NULL, the table will be written to file. The file
+format is infered from the file extension. Valid extensions include: .html,
+.rtf, .tex.}
 }
 \description{
 Beautiful, customizable summaries of statistical models
+}
+\examples{
+
+# load data and estimate models
+data(trees)
+models <- list()
+models[['Bivariate']] <- lm(Girth ~ Height, data = trees)
+models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
+
+# simple table
+gtsummary(models)
+
+# confidence intervals, p values, or t-stats instead of standard errors
+gtsummary(models, statistic = 'conf.int', conf_level = 0.99)
+gtsummary(models, statistic = 'p.value', conf_level = 0.99)
+gtsummary(models, statistic = 'statistic', conf_level = 0.99)
+
+# rename and re-order coefficients
+gtsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
+
+# save to file (html, rtf, or LaTeX)
+gtsummary(models, filename = 'table.html')
+gtsummary(models, filename = 'table.rtf')
+gtsummary(models, filename = 'table.tex')
+
+# titles and subtitles
+gtsummary(models, title = 'This is the title', subtitle = 'And a subtitle')
+
+# title with italicized text
+gtsummary(models, title = gt::md('This is *the* title'))
+
+# notes at the bottom of the table (here, the second note includes markdown bold characters)
+gtsummary(models, notes = list('A first note', gt::md('A **bold** note'))
+
+
 }
