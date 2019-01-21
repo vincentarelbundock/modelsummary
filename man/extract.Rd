@@ -6,8 +6,8 @@
 statistical models.}
 \usage{
 extract(models, statistic = "std.error", conf_level = 0.95,
-  coef_map = NULL, coef_omit = NULL, gof_map = NULL, gof_omit = NULL,
-  stars = NULL, fmt = "\%.3f")
+  coef_map = NULL, coef_omit = NULL, gof_map = NULL,
+  gof_omit = NULL, stars = NULL, fmt = "\%.3f")
 }
 \arguments{
 \item{models}{named list of models to summarize}
