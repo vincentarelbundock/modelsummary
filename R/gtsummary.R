@@ -59,11 +59,7 @@ gtsummary <- function(models,
            gt::tab_row_group(group = '', rows = idx)
     # titles
     if (!is.null(title)) {
-        if (!is.null(subtitle)) {
-            tab <- tab %>% gt::tab_header(title = title, subtitle = subtitle)
-        } else {
-            tab <- tab %>% gt::tab_header(title = title)
-        }
+        tab <- tab %>% gt::tab_header(title = title, subtitle = subtitle)
     }
     # stars
     if (!is.null(stars)) {
