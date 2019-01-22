@@ -25,6 +25,7 @@ Summaries can also be saved to html, rtf, and LaTeX files. Support for Text/ASCI
     * [Rename, reorder, and subset goodness-of-fit statistics](https://github.com/vincentarelbundock/gtsummary#rename-reorder-and-subset-goodness-of-fit-statistics)
     * [Stars](https://github.com/vincentarelbundock/gtsummary#stars-statistical-significance-markers)
     * [Digits, rounding, exponential notation](https://github.com/vincentarelbundock/gtsummary#digits-rounding-exponential-notation)
+    * [Styles and colors](https://github.com/vincentarelbundock/gtsummary#styles-and-colors)
     * [Fancy text with markdown: bold, italics, etc.](https://github.com/vincentarelbundock/gtsummary#fancy-text-with-markdown-bold-italics-etc)
     * [Complex table](https://github.com/vincentarelbundock/gtsummary#complex-table)
     * [Power users](https://github.com/vincentarelbundock/gtsummary#power-users)
@@ -191,6 +192,23 @@ Most users will just modify the `3` in `%.3f`, but this is a very powerful syste
 ```r
 gtsummary(models, fmt = '%.7f')
 ```
+
+## Styles and colors
+
+The power of the `gt` package makes `gtsummary` tables endlessly customizable. For instance, we can color columns and cells, and present values in bold or italics:
+
+```r
+gtsummary(models) %>%
+    tab_style(style = cells_styles(bkgd_color = "lightcyan",
+                                   text_weight = "bold"),
+              locations = cells_data(columns = vars(`OLS 1`))) %>%
+    tab_style(style = cells_styles(bkgd_color = "#F9E3D6",
+                                   text_style = "italic"),
+              locations = cells_data(columns = vars(`NBin 2`),
+                                     rows = 2:6))
+```
+
+<img src="examples/colors.png" width="50%">
 
 ## Fancy text with markdown: bold, italics, etc.
 
