@@ -2,11 +2,18 @@
 
 The `gtsummary` package for `R` produces beautiful, customizable, publication-ready tables to summarize statistical models. Results from several models are presented side-by-side, with uncertainty estimates in parentheses (or brackets) underneath coefficient estimates.
 
-`gtsummary` offers great RStudio integration: Model summaries pop up automatically in the "Viewer" window as a clean html table. 
+Here are a few benefits of `gtsummary` over some [alternative packages](https://github.com/vincentarelbundock/gtsummary#alternative-summary-table-packages-for-r):
 
-Summaries can also be saved to html, rtf, and LaTeX files. Support for Text/ASCII should be coming soon.
-
-`gtsummary` supports dozens of model/object types, thanks to the power of [`broom`](https://broom.tidyverse.org/). It uses the incredibly flexible [`gt`](https://github.com/rstudio/gt) package to produce customizable, publication-ready tables.
+* html, rtf, and LaTeX output 
+* Excellent integration with:
+    - RStudio: When users type `gtsummary(models)`, the summary table immediately appears in RStudio's Viewer window.
+    - `knitr`: Dynamic document generation FTW.
+    - Designed from the ground up with the `tidy` paradigm in mind.
+* Endlessly customizable tables, thanks to the power of the [`gt` package.](https://gt.rstudio.com)
+    - In the next section of this README, you will find tables with colored cells, weird text, spanning column labels, row groups, titles and subtitles, footnotes, significance stars, etc. 
+* `gtsummary` uses the `broom` package to extract information from model objects. This means that `gtsummary` supports dozens of model types out of the box. Most importantly, `broom` already has a large community of users, and whenever `broom` improves, `gtsummary` improves.
+* By using the `broom` and `gt` package for key operations, `gtsummary` has a massively simplified codebase. This should improve long term code maintainability, and allow contributors to participate through GitHub.
+* `gtsummary` is developed with unit tests.
 
 <img src="examples/complex_table.png" width="50%">
 
@@ -270,19 +277,9 @@ The `gt` package allows a bunch more customization and styling. Power users can 
 There are several excellent alternative summary table packages for R:
 
 * [texreg](https://cran.r-project.org/web/packages/texreg/index.html)
+* [huxtable](https://cran.r-project.org/web/packages/huxtable/index.html)
 * [stargazer](https://cran.r-project.org/web/packages/stargazer/index.html)
 * [apsrtable](https://cran.r-project.org/web/packages/apsrtable/index.html)
 
-The benefits of `gtsummary` over these packages:
 
-* RStudio integration: When users type `gtsummary(models)`, the summary table immediately appear as an html table in RStudio's Viewer window.
-* RTF output is useful, especially for people working with Word documents.
-* Using the `gt` package to build tables means that outputs are almost infinitely customizable. See: [https://gt.rstudio.com](https://gt.rstudio.com)
-* Using the `broom` package to extract information from model objects means that `gtsummary` supports dozens of model types out of the box.
-* Relative to the packages listed above, `gtsummary` has a massively simplified codebase, which should improve maintainability, and allow contributors to participate through GitHub.
-* `gtsummary` is developed with unit tests.
 
-The downsides of `gtsummary`:
-
-* Relies on a lot of dependencies. To mitigate breakage, we are using unit tests to detect when upstream changes affect `gtsummary`.
-* Did I miss anything?
