@@ -7,7 +7,7 @@ statistical models.}
 \usage{
 extract(models, statistic = "std.error", conf_level = 0.95,
   coef_map = NULL, coef_omit = NULL, gof_map = NULL,
-  gof_omit = NULL, stars = NULL, fmt = "\%.3f")
+  gof_omit = NULL, add_rows = NULL, stars = NULL, fmt = "\%.3f")
 }
 \arguments{
 \item{models}{named list of models to summarize}
@@ -28,6 +28,9 @@ table. The table will be ordered in the same order as this vector.}
 from the table (using `stringr::str_detect`).}
 
 \item{gof_map}{data.frame in the same format as `gtsummary::gof_map`}
+
+\item{add_rows}{list of character vectors, each of length equal to the number
+of models + 1.}
 
 \item{fmt}{passed to the `sprintf` function to format numeric values into
 strings, with rounding, etc. See `?sprintf` for options.}

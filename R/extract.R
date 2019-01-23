@@ -16,17 +16,20 @@
 #' @param gof string regular expression. Omits all matching gof statistics from
 #' the table (using `stringr::str_detect`).
 #' @param gof_map data.frame in the same format as `gtsummary::gof_map`
+#' @param add_rows list of character vectors, each of length equal to the number
+#' of models + 1.
 #' @param fmt passed to the `sprintf` function to format numeric values into
 #' strings, with rounding, etc. See `?sprintf` for options.
 #'
 #' @export
-extract <- function(models, 
+extract <- function(models,
                     statistic = 'std.error',
                     conf_level = 0.95,
                     coef_map = NULL,
                     coef_omit = NULL,
                     gof_map = NULL,
                     gof_omit = NULL,
+                    add_rows = NULL,
                     stars = NULL,
                     fmt = '%.3f') {
     # models must be a list of models or a single model
@@ -43,33 +46,47 @@ extract <- function(models,
         model_names <- names(models)
     }
     # extract and combine estimates
-    est <- models %>% 
+    est <- models %>%
            purrr::map(extract_estimates, fmt = fmt, statistic = statistic, conf_level = conf_level, stars = stars) %>%
            purrr::reduce(dplyr::full_join, by = c('term', 'statistic'))  %>%
            setNames(c('term', 'statistic', model_names)) %>%
            dplyr::mutate(group = 'estimates') %>%
            dplyr::select(group, term, statistic, names(.))
     # extract and combine gof
-    gof <- models %>% 
+    gof <- models %>%
            purrr::map(extract_gof, fmt = fmt, gof_map = gof_map)  %>%
            purrr::reduce(dplyr::full_join, by = 'term') %>%
-           setNames(c('term', model_names)) %>%
+           setNames(c('term', model_names))
+    # add_rows to bottom of gof
+    if (!is.null(add_rows)) {
+        bad <- any(sapply(add_rows, length) != length(models) + 1)
+        if (bad) {
+            stop('All string vectors in the `add_rows` list must include one more element (i.e. the row name) than the number of models in the table.')
+        }
+        add_rows <- lapply(add_rows, as.character) %>%  # TODO: remove once sanity checks are complete
+                    do.call('rbind', .) %>%
+                    data.frame(stringsAsFactors = FALSE) %>%
+                    setNames(names(gof))
+        gof <- dplyr::bind_rows(gof, add_rows)
+    }
+    # add gof row identifier
+    gof <- gof %>%
            dplyr::mutate(group = 'gof') %>%
            dplyr::select(group, term, names(.))
     # omit using regex
-    if (!is.null(coef_omit)) { 
-        est <- est %>% 
+    if (!is.null(coef_omit)) {
+        est <- est %>%
                dplyr::filter(!stringr::str_detect(term, coef_omit))
     }
-    if (!is.null(gof_omit)) { 
-        gof <- gof %>% 
+    if (!is.null(gof_omit)) {
+        gof <- gof %>%
                dplyr::filter(!stringr::str_detect(term, gof_omit))
     }
-    # reorder estimates using map
+    # reorder estimates using coef_map
     if (!is.null(coef_map)) {
         est <- est[est$term %in% names(coef_map),] # subset
         idx <- match(est$term, names(coef_map))
-        est$term <- coef_map[idx] # rename 
+        est$term <- coef_map[idx] # rename
         est <- est[order(idx, est$statistic),] # reorder
     }
     # output

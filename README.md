@@ -34,6 +34,7 @@ Here are a few benefits of `gtsummary` over some [alternative packages](https://
     * [Digits, rounding, exponential notation](https://github.com/vincentarelbundock/gtsummary#digits-rounding-exponential-notation)
     * [Styles and colors](https://github.com/vincentarelbundock/gtsummary#styles-and-colors)
     * [Fancy text with markdown: bold, italics, etc.](https://github.com/vincentarelbundock/gtsummary#fancy-text-with-markdown-bold-italics-etc)
+    * [Add rows manually](https://github.com/vincentarelbundock/gtsummary#add-rows-manually)
     * [Complex table](https://github.com/vincentarelbundock/gtsummary#complex-table)
     * [Power users](https://github.com/vincentarelbundock/gtsummary#power-users)
 + [Alternative summary table packages for R](https://github.com/vincentarelbundock/gtsummary#alternative-summary-table-packages-for-r)
@@ -225,6 +226,16 @@ Thanks to `gt`, `gtsummary` accepts markdown indications for emphasis and more:
 gtsummary(models, 
           title = md('This is a **bolded series of words.**'),
           notes = list(md('And an *emphasized note*.')))
+```
+
+## Add rows manually
+
+Use the `add_rows` argument to add rows manually to the bottom of the table.
+
+```r
+row1 <- c('Custom row 1', 'a', 'b', 'c', 'd', 'e')
+row2 <- c('Custom row 2', 5:1)
+gtsummary(models, add_rows = list(row1, row2))
 ```
 
 ## Complex table
