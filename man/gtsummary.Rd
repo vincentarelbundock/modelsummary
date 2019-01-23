@@ -7,7 +7,7 @@
 gtsummary(models, statistic = "std.error", conf_level = 0.95,
   coef_map = NULL, coef_omit = NULL, gof_map = NULL,
   gof_omit = NULL, fmt = "\%.3f", stars = NULL, title = NULL,
-  subtitle = NULL, notes = NULL, filename = NULL)
+  subtitle = NULL, notes = NULL, add_rows = NULL, filename = NULL)
 }
 \arguments{
 \item{models}{a single model object or a (potentially named) list of models
@@ -47,6 +47,9 @@ stars: c('*' = .1, '+' = .05).}
 \item{subtitle}{string}
 
 \item{notes}{list of notes to append to the bottom of the table.}
+
+\item{add_rows}{list of character vectors, each of length equal to the number
+of models + 1.}
 
 \item{filename}{if not NULL, the table will be written to file. The file
 format is infered from the file extension. Valid extensions include: .html,

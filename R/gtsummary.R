@@ -26,59 +26,62 @@
 #' @param gof_map data.frame in the same format as `gtsummary::gof_map`
 #' @param gof_omit string regular expression. Omits all matching gof statistics from
 #' the table (using `stringr::str_detect`).
+#' @param add_rows list of character vectors, each of length equal to the number
+#' of models + 1.
 #' @param title string
 #' @param subtitle string
 #' @param notes list of notes to append to the bottom of the table.
 #' @examples
-#' 
+#'
 #' # load data and estimate models
 #' data(trees)
 #' models <- list()
 #' models[['Bivariate']] <- lm(Girth ~ Height, data = trees)
 #' models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
-#' 
+#'
 #' # simple table
 #' gtsummary(models)
-#' 
+#'
 #' # confidence intervals, p values, or t-stats instead of standard errors
 #' gtsummary(models, statistic = 'conf.int', conf_level = 0.99)
 #' gtsummary(models, statistic = 'p.value', conf_level = 0.99)
 #' gtsummary(models, statistic = 'statistic', conf_level = 0.99)
-#' 
+#'
 #' # rename and re-order coefficients
 #' gtsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
-#' 
+#'
 #' # save to file (html, rtf, or LaTeX)
 #' gtsummary(models, filename = 'table.html')
 #' gtsummary(models, filename = 'table.rtf')
 #' gtsummary(models, filename = 'table.tex')
-#' 
+#'
 #' # titles and subtitles
 #' gtsummary(models, title = 'This is the title', subtitle = 'And a subtitle')
-#' 
+#'
 #' # title with italicized text
 #' gtsummary(models, title = gt::md('This is *the* title'))
-#' 
+#'
 #' # notes at the bottom of the table (here, the second note includes markdown bold characters)
 #' gtsummary(models, notes = list('A first note', gt::md('A **bold** note'))
-#' 
+#'
 # see the README on github for a lot more examples: https://github.com/vincentarelbundock/gtsummary
 #'
 #' @export
-gtsummary <- function(models, 
+gtsummary <- function(models,
                       statistic = 'std.error',
                       conf_level = 0.95,
                       coef_map = NULL,
                       coef_omit = NULL,
                       gof_map = NULL,
                       gof_omit = NULL,
-                      fmt = '%.3f', 
+                      fmt = '%.3f',
                       stars = NULL,
                       title = NULL,
                       subtitle = NULL,
                       notes = NULL,
+                      add_rows = NULL,
                       filename = NULL) {
-    dat <- extract(models, 
+    dat <- extract(models,
                    statistic = statistic,
                    conf_level = conf_level,
                    coef_map = coef_map,
@@ -86,10 +89,11 @@ gtsummary <- function(models,
                    gof_map = gof_map,
                    gof_omit = gof_omit,
                    stars = stars,
+                   add_rows = add_rows,
                    fmt = fmt)
     tab <- dat %>%
            # remove duplicate term labels
-           dplyr::mutate(term = ifelse(statistic == 'statistic', '', term)) 
+           dplyr::mutate(term = ifelse(statistic == 'statistic', '', term))
     idx <- (1:nrow(tab))[tab$group == 'estimates']
     tab <- tab %>%
            # remove columns not fit for printing
@@ -123,7 +127,7 @@ gtsummary <- function(models,
             tab <- tab %>% gt::tab_source_note(source_note = n)
         }
     }
-    # write to file 
+    # write to file
     if (!is.null(filename)) {
         # guess output format based on filename extension
         ext <- tools::file_ext(filename)
