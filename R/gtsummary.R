@@ -81,6 +81,52 @@ gtsummary <- function(models,
                       notes = NULL,
                       add_rows = NULL,
                       filename = NULL) {
+
+    # models must be a list of models or a single model
+    if (!'list' %in% class(models)) {
+        models <- list(models)
+    }
+    n_models <- length(models)
+
+    # sanity checks for user inputs
+    checkmate::assert_character(statistic, len = 1, null.ok = FALSE)
+    checkmate::assert_character(coef_map, null.ok = TRUE)
+    checkmate::assert_character(coef_omit, len = 1, null.ok = TRUE)
+    checkmate::assert(
+        checkmate::check_data_frame(gof_map, null.ok = TRUE),
+        checkmate::check_tibble(gof_map, null.ok = TRUE)
+    )
+    checkmate::assert_character(gof_omit, len = 1, null.ok = TRUE)
+    checkmate::assert_character(fmt, len = 1, null.ok = FALSE)
+    checkmate::assert_character(title, len = 1, null.ok = TRUE)
+    if (is.null(title)) {
+        checkmate::assert_character(subtitle, len = 1, null.ok = TRUE)
+    }
+    checkmate::assert_character(subtitle, len = 1, null.ok = TRUE)
+    checkmate::assert(
+        checkmate::check_logical(stars, null.ok = TRUE),
+        checkmate::check_numeric(stars, lower = 0, upper = 1, null.ok = TRUE)
+    )
+    checkmate::assert( # character vector or list of strings
+        checkmate::check_list(notes, null.ok = TRUE),
+        checkmate::check_character(notes, null.ok = TRUE)
+    )
+    if ('list' %in% class(notes)) {
+        for (note in notes) {
+            checkmate::assert(
+                checkmate::check_character(note),
+                checkmate::check_class(note, 'from_markdown')
+            )
+        }
+    }
+    checkmate::assert_list(add_rows, null.ok = TRUE)
+    if ('list' %in% class(add_rows)) {
+        for (custom_row in add_rows) {
+            checkmate::assert_character(custom_row, null.ok = FALSE, len = (n_models + 1))
+        }
+    }
+    checkmate::assert_character(filename, len = 1, null.ok = TRUE)
+
     dat <- extract(models,
                    statistic = statistic,
                    conf_level = conf_level,
