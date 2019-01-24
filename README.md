@@ -36,6 +36,7 @@ Here are a few benefits of `gtsummary` over some [alternative packages](https://
     * [Fancy text with markdown: bold, italics, etc.](https://github.com/vincentarelbundock/gtsummary#fancy-text-with-markdown-bold-italics-etc)
     * [Add rows manually](https://github.com/vincentarelbundock/gtsummary#add-rows-manually)
     * [Complex table](https://github.com/vincentarelbundock/gtsummary#complex-table)
+    * [Dynamic documents with knitr](https://github.com/vincentarelbundock/gtsummary#dynamic-documents-with-knitr)
     * [Power users](https://github.com/vincentarelbundock/gtsummary#power-users)
 + [Alternative summary table packages for R](https://github.com/vincentarelbundock/gtsummary#alternative-summary-table-packages-for-r)
 
@@ -260,6 +261,19 @@ gtsummary(models,
     gt::tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
     gt::tab_spanner(label = 'Clergy', columns = 'Logit 1')
 ```
+
+## Dynamic documents with `knitr`
+
+You can use `knitr` and `gtsummary` to create dynamic documents with nice summary tables. When knitting in html format, adding a `gtsummary(models)` call to a code chunk should work out of the box.
+
+When knitting to PDF output, things are slightly different. Indeed, the `gt` output functionality for LaTeX is still in development and it is somewhat limited. To avoid common sources of compilation errors, and to allow users to use `\label{}`, `gtsummary` includes the `knit_latex` function. To knit to PDF, simply use:
+
+```r
+gtsummary(models, title = 'Model summary') %>% 
+    knit_latex(label = 'tab:example')
+```
+
+My goal is to deprecate `knit_latex` when `gt` LaTeX export features improve.
 
 ## Power users
 
