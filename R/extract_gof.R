@@ -6,6 +6,13 @@ extract_gof <- function(model, fmt = '%.3f', gof_map = NULL, ...) {
     }
     # extract gof from model object
     gof <- broom::glance(model)
+
+    # extract nobs if not available from glance
+    # TODO: This should be fixed upstream
+    if (!'n' %in% names(gof)) {
+        gof$n <- tryCatch(stats::nobs(model), error = function(e) NULL)
+    }
+
     # round numeric values and rename
     for (column in colnames(gof)) {
         # is gof in gof_map?
