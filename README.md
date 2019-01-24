@@ -188,6 +188,14 @@ gtsummary(models, stars = TRUE)
 gtsummary(models, stars = c('+' = .1, '*' = .01)) 
 ```
 
+Whenever `stars != NULL`, `gtsummary` adds a note at the bottom of the table automatically. If you would like to omit this note, just use the `stars_note` argument:
+
+```r
+gtsummary(models, stars = TRUE, stars_note = FALSE) 
+```
+
+If you want to create your own stars description, you can add custom notes with the [`notes`](https://github.com/vincentarelbundock/gtsummary#notes) argument.
+
 ## Digits, rounding, exponential notation
 
 The `fmt` argument defines how numeric values are rounded and presented in the table. This argument follows the `sprintf` C-library standard. For example,
