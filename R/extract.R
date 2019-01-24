@@ -14,10 +14,7 @@ extract <- function(models,
                     add_rows = NULL,
                     stars = NULL,
                     fmt = '%.3f') {
-    # models must be a list of models or a single model
-    if (class(models) != 'list') {
-        models <- list(models)
-    }
+
     # model names
     if (is.null(names(models))) {
         model_names <- paste('Model', 1:length(models))
@@ -41,10 +38,6 @@ extract <- function(models,
            setNames(c('term', model_names))
     # add_rows to bottom of gof
     if (!is.null(add_rows)) {
-        bad <- any(sapply(add_rows, length) != length(models) + 1)
-        if (bad) {
-            stop('All string vectors in the `add_rows` list must include one more element (i.e. the row name) than the number of models in the table.')
-        }
         add_rows <- lapply(add_rows, as.character) %>%  # TODO: remove once sanity checks are complete
                     do.call('rbind', .) %>%
                     data.frame(stringsAsFactors = FALSE) %>%
