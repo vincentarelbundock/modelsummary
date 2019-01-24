@@ -12,6 +12,8 @@
 #' @param stars NULL for no significance stars. TRUE for default significance
 #' stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
 #' stars: c('*' = .1, '+' = .05).
+#' @param stars_note logical include a note at the bottom of the table to describe
+#' the contents of the `stars` argument. The note will be omitted if `stars==NULL`
 #' @param statistic string name of the statistic to include in parentheses
 #' below estimates. Must be either "conf.int", or one of the column names
 #' produced by the `broom::tidy` function. Typical values include: "std.error",
@@ -76,6 +78,7 @@ gtsummary <- function(models,
                       gof_omit = NULL,
                       fmt = '%.3f',
                       stars = NULL,
+                      stars_note = TRUE,
                       title = NULL,
                       subtitle = NULL,
                       notes = NULL,
@@ -107,6 +110,7 @@ gtsummary <- function(models,
         checkmate::check_logical(stars, null.ok = TRUE),
         checkmate::check_numeric(stars, lower = 0, upper = 1, null.ok = TRUE)
     )
+    checkmate::assert_logical(stars_note, null.ok = FALSE)
     checkmate::assert( # character vector or list of strings
         checkmate::check_list(notes, null.ok = TRUE),
         checkmate::check_character(notes, null.ok = TRUE)
@@ -127,6 +131,17 @@ gtsummary <- function(models,
     }
     checkmate::assert_character(filename, len = 1, null.ok = TRUE)
 
+    # stars
+    if (!is.null(stars)) {
+        if (is.logical(stars)) {
+            if (stars) {
+                stars <- c('*' = .1, '**' = .05, '***' = .01)
+            }
+        }
+        stars <- sort(stars, decreasing = TRUE)
+    }
+
+    # extract estimates and gof
     dat <- extract(models,
                    statistic = statistic,
                    conf_level = conf_level,
@@ -137,9 +152,12 @@ gtsummary <- function(models,
                    stars = stars,
                    add_rows = add_rows,
                    fmt = fmt)
+
     tab <- dat %>%
            # remove duplicate term labels
            dplyr::mutate(term = ifelse(statistic == 'statistic', '', term))
+
+    # create gt table object
     idx <- (1:nrow(tab))[tab$group == 'estimates']
     tab <- tab %>%
            # remove columns not fit for printing
@@ -151,29 +169,28 @@ gtsummary <- function(models,
            gt::gt(rowname_col = 'term') %>%
            # group statistics
            gt::tab_row_group(group = '', rows = idx)
+
     # titles
     if (!is.null(title)) {
         tab <- tab %>% gt::tab_header(title = title, subtitle = subtitle)
     }
-    # stars
-    if (!is.null(stars)) {
-        if (is.logical(stars)) {
-            if (stars) {
-                stars <- c('*' = .1, '**' = .05, '***' = .01)
-            }
-        }
-        stars <- sort(stars, decreasing = TRUE)
+
+    # stars note
+    if (stars_note & !is.null(stars)) {
         stars_note <- paste0(names(stars), ' p < ', stars)
         stars_note <- paste(stars_note, collapse = ', ')
-        tab = tab %>% gt::tab_source_note(source_note = stars_note)
+        tab = tab %>%
+              gt::tab_source_note(source_note = stars_note)
     }
-    # notes at the bottom of table
+
+    # user-supplied notes at the bottom of table
     if (!is.null(notes)) {
         for (n in notes) {
             tab <- tab %>% gt::tab_source_note(source_note = n)
         }
     }
-    # write to file
+
+    # output
     if (!is.null(filename)) {
         # guess output format based on filename extension
         ext <- tools::file_ext(filename)
@@ -192,4 +209,5 @@ gtsummary <- function(models,
     } else {
         return(tab)
     }
+
 }

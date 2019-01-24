@@ -6,8 +6,9 @@
 \usage{
 gtsummary(models, statistic = "std.error", conf_level = 0.95,
   coef_map = NULL, coef_omit = NULL, gof_map = NULL,
-  gof_omit = NULL, fmt = "\%.3f", stars = NULL, title = NULL,
-  subtitle = NULL, notes = NULL, add_rows = NULL, filename = NULL)
+  gof_omit = NULL, fmt = "\%.3f", stars = NULL, stars_note = TRUE,
+  title = NULL, subtitle = NULL, notes = NULL, add_rows = NULL,
+  filename = NULL)
 }
 \arguments{
 \item{models}{a single model object or a (potentially named) list of models
@@ -41,6 +42,9 @@ use exponential notation. See `?sprintf` for more options.}
 \item{stars}{NULL for no significance stars. TRUE for default significance
 stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
 stars: c('*' = .1, '+' = .05).}
+
+\item{stars_note}{logical include a note at the bottom of the table to describe
+the contents of the `stars` argument. The note will be omitted if `stars==NULL`}
 
 \item{title}{string}
 
