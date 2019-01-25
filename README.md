@@ -63,9 +63,9 @@ install.packages('tidyverse')
 Load packages and download some data from the [RDatasets](https://vincentarelbundock.github.io/Rdatasets/) repository. Then, estimate 5 different models and store them in a named list. The name of each model in that list will be used as a column label:
 
 ```r
-library(gt)
 library(MASS)
 library(gtsummary)
+
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
 dat <- read.csv(url) 
 dat$Clergy <- ifelse(dat$Clergy > 40, 1, 0) # binary variable for logit model
