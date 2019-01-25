@@ -1,15 +1,36 @@
 #' Extract estimates and statistics from a single model
 #' @importFrom broom tidy
 extract_estimates <- function(model,
-                             statistic = 'std.error',
-                             conf_level = .95,
-                             fmt = '%.3f',
-                             stars = NULL,
-                             ...) {
+                              statistic = 'std.error',
+                              statistic_override = NULL,
+                              conf_level = .95,
+                              fmt = '%.3f',
+                              stars = NULL,
+                              ...) {
+
+    # extract estimates
+    if (statistic == 'conf.int') {
+        est <- generics::tidy(model, conf.int = TRUE, conf.level = conf_level)
+    } else {
+        est <- generics::tidy(model)
+    }
+
+    # statistic override
+    if (!is.null(statistic_override)) {
+        so <- extract_statistic_override(model, 
+                                         statistic = statistic,
+                                         statistic_override = statistic_override)
+        if (!statistic %in% colnames(so)) {
+            stop(paste0(statistic, " cannot be extracted through the `statistic_override` argument. You might want to look at the `gtsummary:::extract_statistic_override` function to diagnose the problem."))
+        }
+        idx <- base::intersect(colnames(est), colnames(so))
+        idx <- idx[idx != 'term']
+        est <- est[, !colnames(est) %in% idx] 
+        est <- dplyr::left_join(est, so, by = 'term')
+    }
 
     # extract estimates with confidence intervals
     if (statistic == 'conf.int') {
-        est <- generics::tidy(model, conf.int = TRUE, conf.level = conf_level)
         if (!all(c('conf.low', 'conf.high') %in% colnames(est))) {
             stop('broom::tidy cannot not extract confidence intervals for a model of this class.')
         }
@@ -22,7 +43,6 @@ extract_estimates <- function(model,
 
     # extract estimates with another statistic
     } else {
-        est <- generics::tidy(model)
         if (!statistic %in% colnames(est)) {
             stop('argument statistic must be `conf.int` or match a column name in the output of broom::tidy(model). Typical values are: `std.error`, `p.value`, `statistic`.')
         }
