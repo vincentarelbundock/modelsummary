@@ -8,7 +8,7 @@ extract_estimates <- function(model,
 
     # extract estimates with confidence intervals
     if (statistic == 'conf.int') {
-        est <- broom::tidy(model, conf.int = TRUE, conf.level = conf_level)
+        est <- generics::tidy(model, conf.int = TRUE, conf.level = conf_level)
         if (!all(c('conf.low', 'conf.high') %in% colnames(est))) {
             stop('broom::tidy cannot not extract confidence intervals for a model of this class.')
         }
@@ -21,7 +21,7 @@ extract_estimates <- function(model,
 
     # extract estimates with another statistic
     } else {
-        est <- broom::tidy(model)
+        est <- generics::tidy(model)
         if (!statistic %in% colnames(est)) {
             stop('argument statistic must be `conf.int` or match a column name in the output of broom::tidy(model). Typical values are: `std.error`, `p.value`, `statistic`.')
         }
