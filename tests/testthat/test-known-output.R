@@ -2,6 +2,7 @@ context("Test known output")
 
 library(gt)
 library(MASS)
+library(sandwich)
 library(gtsummary)
 library(tidyverse)
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
@@ -35,47 +36,85 @@ test_that("html_output: complex table", {
 })
 
 test_that("html_output: uncertainty estimates", {
-    raw <- gtsummary(models, statistic = 'std.error') %>%
+    raw <- gtsummary(models, statistic = 'std.error',
+                     title = 'statistic = standard errors') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/std.error.html")
 
-    raw <- gtsummary(models, statistic = 'p.value') %>%
+    raw <- gtsummary(models, statistic = 'p.value',
+                     title = 'statistic = p.value') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/p.value.html")
 
-    raw <- gtsummary(models, statistic = 'statistic') %>%
+    raw <- gtsummary(models, statistic = 'statistic',
+                     title = 'statistic = statistic') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/statistic.html")
 
-    raw <- gtsummary(models, statistic = 'conf.int', conf_level = .99) %>%
+    raw <- gtsummary(models, statistic = 'conf.int', conf_level = .99,
+                     title = 'statistic = conf.int, conf_level = .99') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/conf.int.html")
+
+   
+})
+
+test_that("html_output: statistic_override", {
+
+	raw <- gtsummary(models, statistic_override = sandwich::vcovHC, statistic = 'p.value',
+                     title = 'statistic_override = sandwich::vcovHC, statistic = p.value') %>%
+		   gt::as_raw_html()
+	expect_known_output(cat(raw), 'known_output/statistic_override_1.html')
+
+	raw <- gtsummary(models, 
+					 statistic_override = list(vcov, vcovHC, vcovHAC, vcovHC, vcov),
+                     title = 'statistic_override = list of functions') %>%
+		   gt::as_raw_html()
+	expect_known_output(cat(raw), 'known_output/statistic_override_2.html')
+
+	vcov_matrices <- lapply(models, vcovHC)
+	raw <- gtsummary(models, statistic_override = vcov_matrices,
+                     title = 'statistic_override = vcov_matrices') %>%
+		   gt::as_raw_html()
+	expect_known_output(cat(raw), 'known_output/statistic_override_3.html')
+
+	custom_stats <- list(`OLS 1` = c('(Intercept)' = 2, Crime_prop = 3, Infants = 4), 
+						 `NBin 1` = c('(Intercept)' = 3, Crime_prop = -5, Donations = 3),
+						 `OLS 2` = c('(Intercept)' = 7, Crime_prop = -6, Infants = 9), 
+						 `NBin 2` = c('(Intercept)' = 4, Crime_prop = -7, Donations = -9),
+						 `Logit 1` = c('(Intercept)' = 1, Crime_prop = -5, Infants = -2))
+	raw <- gtsummary(models, statistic_override = custom_stats,
+                     title = 'statistic_override = list of vectors') %>%
+		   gt::as_raw_html()
+	expect_known_output(cat(raw), 'known_output/statistic_override_4.html')
 })
 
 test_that("html_output: title and subtitle", {
+
     raw <- gtsummary(models,
                      title = 'This is a title for my table.') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/title.html")
-    raw <- gtsummary(models,
-                     subtitle = 'And this is the subtitle.') %>%
-           gt::as_raw_html()
-    expect_known_output(cat(raw), "known_output/subtitle.html")
+
     raw <- gtsummary(models,
                      title = 'This is a title for my table.',
                      subtitle = 'And this is the subtitle.') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/title_subtitle.html")
+
+    expect_error(gtsummary(models, subtitle = 'And this is the subtitle.'))
 })
 
 test_that("html_output: rounding", {
-    raw <- gtsummary(models, fmt = '%.7f') %>%
+    raw <- gtsummary(models, fmt = '%.7f',
+                     title = 'rounding') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/rounding.html")
 })
 
 test_that("html_output: background color", {
-    raw <- gtsummary(models) %>%
+
+    raw <- gtsummary(models, title = 'colors') %>%
            tab_style(style = cells_styles(bkgd_color = "lightcyan",
                                           text_weight = "bold"),
                      locations = cells_data(columns = vars(`OLS 1`))) %>%
@@ -85,4 +124,5 @@ test_that("html_output: background color", {
                                             rows = 2:6)) %>%
            as_raw_html()
     expect_known_output(cat(raw), "known_output/background_color.html")
+
 })

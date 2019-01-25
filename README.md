@@ -117,6 +117,37 @@ gtsummary(models, statistic = 'p.value')
 gtsummary(models, statistic = 'statistic')
 gtsummary(models, statistic = 'conf.int', conf_level = .99)
 ```
+You can override the uncertainty estimates in a number of ways. First, you can specify a function that produces variance-covariance matrices:
+
+```r
+library(sandwich)
+gtsummary(models, statistic_override = vcovHC, statistic = 'p.value')
+```
+
+You can supply a list of functions of the same length as your model list:
+
+```r
+gtsummary(models, 
+          statistic_override = list(vcov, vcovHC, vcovHAC, vcovHC, vcov))
+```
+
+You can supply a list of named variance-covariance matrices:
+
+```r
+vcov_matrices <- lapply(models, vcovHC)
+gtsummary(models, statistic_override = vcov_matrices)
+```
+
+You can supply a list of named vectors:
+
+```r
+custom_stats <- list(`OLS 1` = c(`(Intercept)` = 2, Crime_prop = 3, Infants = 4), 
+                     `NBin 1` = c(`(Intercept)` = 3, Crime_prop = -5, Donations = 3),
+                     `OLS 2` = c(`(Intercept)` = 7, Crime_prop = -6, Infants = 9), 
+                     `NBin 2` = c(`(Intercept)` = 4, Crime_prop = -7, Donations = -9),
+                     `Logit 1` = c(`(Intercept)` = 1, Crime_prop = -5, Infants = -2))
+gtsummary(models, statistic_override = custom_stats)
+```
 
 ## Titles and subtitles
 

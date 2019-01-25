@@ -5,9 +5,10 @@
 \title{Extract and combine estimates and goodness-of-fit statistics from several
 statistical models.}
 \usage{
-extract(models, statistic = "std.error", conf_level = 0.95,
-  coef_map = NULL, coef_omit = NULL, gof_map = NULL,
-  gof_omit = NULL, add_rows = NULL, stars = NULL, fmt = "\%.3f")
+extract(models, statistic = "std.error", statistic_override = NULL,
+  conf_level = 0.95, coef_map = NULL, coef_omit = NULL,
+  gof_map = NULL, gof_omit = NULL, add_rows = NULL, stars = NULL,
+  fmt = "\%.3f")
 }
 \arguments{
 \item{models}{a single model object or a (potentially named) list of models
@@ -17,6 +18,14 @@ to summarize}
 below estimates. Must be either "conf.int", or one of the column names
 produced by the `broom::tidy` function. Typical values include: "std.error",
 "conf.int", "statistic", "p.value".}
+
+\item{statistic_override}{manually override the uncertainy estimates. This 
+argument accepts three types of input:
+\itemize{
+  \item a function or list of functions of length(models) which produce variance-covariance matrices with row and column names equal to the names of your coefficient estimates. For example, `R` supplies the `vcov` function, and the `sandwich` package supplies `vcovHC`, `vcovHAC`, etc.
+  \item a list of length(models) variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+  \item a list of length(models) numeric vectors with names equal to the names of your coefficient estimates.
+}}
 
 \item{conf_level}{confidence level to use for confidence intervals}
 

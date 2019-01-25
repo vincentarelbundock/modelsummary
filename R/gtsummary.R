@@ -18,6 +18,13 @@
 #' below estimates. Must be either "conf.int", or one of the column names
 #' produced by the `broom::tidy` function. Typical values include: "std.error",
 #' "conf.int", "statistic", "p.value".
+#' @param statistic_override manually override the uncertainy estimates. This 
+#' argument accepts three types of input:
+#' \itemize{
+#'   \item a function or list of functions of length(models) which produce variance-covariance matrices with row and column names equal to the names of your coefficient estimates. For example, `R` supplies the `vcov` function, and the `sandwich` package supplies `vcovHC`, `vcovHAC`, etc.
+#'   \item a list of length(models) variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+#'   \item a list of length(models) numeric vectors with names equal to the names of your coefficient estimates.
+#' }
 #' @param conf_level confidence level to use for confidence intervals
 #' @param coef_map named character vector. Names refer to the original variable
 #' names. Values refer to the variable names that will appear in the table.
@@ -71,6 +78,7 @@
 #' @export
 gtsummary <- function(models,
                       statistic = 'std.error',
+                      statistic_override = NULL,
                       conf_level = 0.95,
                       coef_map = NULL,
                       coef_omit = NULL,
@@ -91,26 +99,46 @@ gtsummary <- function(models,
     }
     n_models <- length(models)
 
-    # sanity checks for user inputs
+    # sanity: simple parameters
     checkmate::assert_character(statistic, len = 1, null.ok = FALSE)
     checkmate::assert_character(coef_map, null.ok = TRUE)
     checkmate::assert_character(coef_omit, len = 1, null.ok = TRUE)
+    checkmate::assert_character(gof_omit, len = 1, null.ok = TRUE)
+    checkmate::assert_character(fmt, len = 1, null.ok = FALSE)
+    checkmate::assert_logical(stars_note, null.ok = FALSE)
+    checkmate::assert_character(filename, len = 1, null.ok = TRUE)
+
+    # sanity: statistic_override
+    checkmate::assert(checkmate::check_list(statistic_override, null.ok = TRUE),
+                      checkmate::check_function(statistic_override, null.ok = TRUE))
+    if (is.list(statistic_override)) {
+        checkmate::assert_true(length(statistic_override) == length(models))
+        checkmate::assert(checkmate::check_true(all(sapply(statistic_override, is.function))),
+                          checkmate::check_true(all(sapply(statistic_override, is.vector))),
+                          checkmate::check_true(all(sapply(statistic_override, is.matrix))))
+    } else if (is.function(statistic_override)) {
+        statistic_override <- lapply(models, function(x) statistic_override)
+    }
+
+    # sanity: gof_map 
     checkmate::assert(
         checkmate::check_data_frame(gof_map, null.ok = TRUE),
         checkmate::check_tibble(gof_map, null.ok = TRUE)
     )
-    checkmate::assert_character(gof_omit, len = 1, null.ok = TRUE)
-    checkmate::assert_character(fmt, len = 1, null.ok = FALSE)
+
+    # sanity: title & subtitle
     checkmate::assert_character(title, len = 1, null.ok = TRUE)
-    if (is.null(title)) {
+    if (!is.null(title)) {
         checkmate::assert_character(subtitle, len = 1, null.ok = TRUE)
+    } else {
+        checkmate::assert_null(subtitle)
     }
-    checkmate::assert_character(subtitle, len = 1, null.ok = TRUE)
+
+    # sanity: stars
     checkmate::assert(
         checkmate::check_logical(stars, null.ok = TRUE),
         checkmate::check_numeric(stars, lower = 0, upper = 1, null.ok = TRUE)
     )
-    checkmate::assert_logical(stars_note, null.ok = FALSE)
     checkmate::assert( # character vector or list of strings
         checkmate::check_list(notes, null.ok = TRUE),
         checkmate::check_character(notes, null.ok = TRUE)
@@ -129,7 +157,6 @@ gtsummary <- function(models,
             checkmate::assert_character(custom_row, null.ok = FALSE, len = (n_models + 1))
         }
     }
-    checkmate::assert_character(filename, len = 1, null.ok = TRUE)
 
     # stars
     if (!is.null(stars)) {
@@ -144,6 +171,7 @@ gtsummary <- function(models,
     # extract estimates and gof
     dat <- gtsummary::extract(models,
                               statistic = statistic,
+                              statistic_override = statistic_override,
                               conf_level = conf_level,
                               coef_map = coef_map,
                               coef_omit = coef_omit,
