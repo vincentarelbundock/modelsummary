@@ -142,16 +142,16 @@ gtsummary <- function(models,
     }
 
     # extract estimates and gof
-    dat <- extract(models,
-                   statistic = statistic,
-                   conf_level = conf_level,
-                   coef_map = coef_map,
-                   coef_omit = coef_omit,
-                   gof_map = gof_map,
-                   gof_omit = gof_omit,
-                   stars = stars,
-                   add_rows = add_rows,
-                   fmt = fmt)
+    dat <- gtsummary::extract(models,
+                              statistic = statistic,
+                              conf_level = conf_level,
+                              coef_map = coef_map,
+                              coef_omit = coef_omit,
+                              gof_map = gof_map,
+                              gof_omit = gof_omit,
+                              stars = stars,
+                              add_rows = add_rows,
+                              fmt = fmt)
 
     tab <- dat %>%
            # remove duplicate term labels
