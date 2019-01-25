@@ -1,4 +1,5 @@
 #' Extract estimates and statistics from a single model
+#' @importFrom broom tidy
 extract_estimates <- function(model,
                              statistic = 'std.error',
                              conf_level = .95,

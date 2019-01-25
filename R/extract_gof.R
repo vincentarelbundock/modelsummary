@@ -1,5 +1,6 @@
 #' Extract goodness-of-fit statistics from a single model
 #'
+#' @importFrom broom glance
 extract_gof <- function(model, fmt = '%.3f', gof_map = NULL, ...) {
     if (is.null(gof_map)) {
         gof_map <- gtsummary::gof_map
