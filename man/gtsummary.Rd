@@ -4,11 +4,11 @@
 \alias{gtsummary}
 \title{Beautiful, customizable summaries of statistical models}
 \usage{
-gtsummary(models, statistic = "std.error", conf_level = 0.95,
-  coef_map = NULL, coef_omit = NULL, gof_map = NULL,
-  gof_omit = NULL, fmt = "\%.3f", stars = NULL, stars_note = TRUE,
-  title = NULL, subtitle = NULL, notes = NULL, add_rows = NULL,
-  filename = NULL)
+gtsummary(models, statistic = "std.error", statistic_override = NULL,
+  conf_level = 0.95, coef_map = NULL, coef_omit = NULL,
+  gof_map = NULL, gof_omit = NULL, fmt = "\%.3f", stars = NULL,
+  stars_note = TRUE, title = NULL, subtitle = NULL, notes = NULL,
+  add_rows = NULL, filename = NULL)
 }
 \arguments{
 \item{models}{a single model object or a (potentially named) list of models
@@ -18,6 +18,14 @@ to summarize}
 below estimates. Must be either "conf.int", or one of the column names
 produced by the `broom::tidy` function. Typical values include: "std.error",
 "conf.int", "statistic", "p.value".}
+
+\item{statistic_override}{manually override the uncertainy estimates. This 
+argument accepts three types of input:
+\itemize{
+  \item a function or list of functions of length(models) which produce variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+  \item a list of length(models) variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+  \item a list of length(models) numeric vectors with names equal to the names of your coefficient estimates.
+}}
 
 \item{conf_level}{confidence level to use for confidence intervals}
 

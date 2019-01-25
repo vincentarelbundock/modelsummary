@@ -4,8 +4,9 @@
 \alias{extract_estimates}
 \title{Extract estimates and statistics from a single model}
 \usage{
-extract_estimates(model, statistic = "std.error", conf_level = 0.95,
-  fmt = "\%.3f", stars = NULL, ...)
+extract_estimates(model, statistic = "std.error",
+  statistic_override = NULL, conf_level = 0.95, fmt = "\%.3f",
+  stars = NULL, ...)
 }
 \description{
 Extract estimates and statistics from a single model
