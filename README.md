@@ -35,6 +35,7 @@ Here are a few benefits of `gtsummary` over some [alternative packages](https://
     * [Styles and colors](https://github.com/vincentarelbundock/gtsummary#styles-and-colors)
     * [Fancy text with markdown: bold, italics, etc.](https://github.com/vincentarelbundock/gtsummary#fancy-text-with-markdown-bold-italics-etc)
     * [Add rows manually](https://github.com/vincentarelbundock/gtsummary#add-rows-manually)
+    * [Pooled multiple imputation results](https://github.com/vincentarelbundock/gtsummary#pooled-multiple-imputation-results)
     * [Complex table](https://github.com/vincentarelbundock/gtsummary#complex-table)
     * [Dynamic documents with knitr](https://github.com/vincentarelbundock/gtsummary#dynamic-documents-with-knitr)
     * [Power users](https://github.com/vincentarelbundock/gtsummary#power-users)
@@ -278,6 +279,38 @@ row2 <- c('Custom row 2', 5:1)
 gtsummary(models, add_rows = list(row1, row2))
 ```
 
+## Pooled multiple imputation results
+
+`gtsummary` can pool and display analyses on several datasets imputed using the `mice` package. For example:
+
+```r
+library(mice)
+
+# Create a new dataset with missing values
+url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
+tmp <- read.csv(url)[, c('Clergy', 'Donations', 'Literacy')]
+tmp$Clergy[sample(1:nrow(tmp), 3)] <- NA
+tmp$Donations[sample(1:nrow(tmp), 3)] <- NA
+tmp$Literacy[sample(1:nrow(tmp), 3)] <- NA
+
+# Impute dataset 5 times
+tmp <- mice(tmp, m = 5, printFlag = FALSE, seed = 1024)
+
+# Estimate models
+mod <- list()
+mod[[1]] <- with(tmp, lm(Clergy ~ Donations))
+mod[[2]] <- with(tmp, lm(Clergy ~ Donations + Literacy))
+
+# Summarize
+gtsummary(mod, statistic = 't')
+gtsummary(mod, statistic = 'ubar')
+```
+
+The `statistic` argument can take any column name in the tidy data frame obtained by:
+
+```r
+generics::tidy(mod[[1]])
+```
 ## Complex table
 
 This is the code I used to generate the "complex" table posted at the top of this README.
