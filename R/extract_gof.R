@@ -5,7 +5,7 @@ extract_gof <- function(model, fmt = '%.3f', gof_map = NULL, ...) {
         gof_map <- gtsummary::gof_map
     }
     # extract gof from model object
-    gof <- broom::glance(model)
+    gof <- generics::glance(model)
 
     # extract nobs if not available from glance
     # TODO: This should be fixed upstream
