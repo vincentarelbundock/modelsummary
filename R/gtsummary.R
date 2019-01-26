@@ -103,66 +103,24 @@ gtsummary <- function(models,
     if (!'list' %in% class(models)) {
         models <- list(models)
     }
-    n_models <- length(models)
 
-    # sanity: simple parameters
-    checkmate::assert_character(statistic, len = 1, null.ok = FALSE)
-    checkmate::assert_character(coef_map, null.ok = TRUE)
-    checkmate::assert_character(coef_omit, len = 1, null.ok = TRUE)
-    checkmate::assert_character(gof_omit, len = 1, null.ok = TRUE)
-    checkmate::assert_character(fmt, len = 1, null.ok = FALSE)
-    checkmate::assert_logical(stars_note, null.ok = FALSE)
-    checkmate::assert_character(filename, len = 1, null.ok = TRUE)
-
-    # sanity: statistic_override
-    checkmate::assert(checkmate::check_list(statistic_override, null.ok = TRUE),
-                      checkmate::check_function(statistic_override, null.ok = TRUE))
-    if (is.list(statistic_override)) {
-        checkmate::assert_true(length(statistic_override) == length(models))
-        checkmate::assert(checkmate::check_true(all(sapply(statistic_override, is.function))),
-                          checkmate::check_true(all(sapply(statistic_override, is.vector))),
-                          checkmate::check_true(all(sapply(statistic_override, is.matrix))))
-    } else if (is.function(statistic_override)) {
-        statistic_override <- lapply(models, function(x) statistic_override)
-    }
-
-    # sanity: gof_map 
-    checkmate::assert(
-        checkmate::check_data_frame(gof_map, null.ok = TRUE),
-        checkmate::check_tibble(gof_map, null.ok = TRUE)
-    )
-
-    # sanity: title & subtitle
-    checkmate::assert_character(title, len = 1, null.ok = TRUE)
-    if (!is.null(title)) {
-        checkmate::assert_character(subtitle, len = 1, null.ok = TRUE)
-    } else {
-        checkmate::assert_null(subtitle)
-    }
-
-    # sanity: stars
-    checkmate::assert(
-        checkmate::check_logical(stars, null.ok = TRUE),
-        checkmate::check_numeric(stars, lower = 0, upper = 1, null.ok = TRUE)
-    )
-    checkmate::assert( # character vector or list of strings
-        checkmate::check_list(notes, null.ok = TRUE),
-        checkmate::check_character(notes, null.ok = TRUE)
-    )
-    if ('list' %in% class(notes)) {
-        for (note in notes) {
-            checkmate::assert(
-                checkmate::check_character(note),
-                checkmate::check_class(note, 'from_markdown')
-            )
-        }
-    }
-    checkmate::assert_list(add_rows, null.ok = TRUE)
-    if ('list' %in% class(add_rows)) {
-        for (custom_row in add_rows) {
-            checkmate::assert_character(custom_row, null.ok = FALSE, len = (n_models + 1))
-        }
-    }
+    # check sanity of user input
+    sanity_checks(models,
+                  statistic = statistic,
+                  statistic_override = statistic_override,
+                  conf_level = conf_level,
+                  coef_map = coef_map,
+                  coef_omit = coef_omit,
+                  gof_map = gof_map,
+                  gof_omit = gof_omit,
+                  fmt = fmt,
+                  stars = stars,
+                  stars_note = stars_note,
+                  title = title,
+                  subtitle = subtitle,
+                  notes = notes,
+                  add_rows = add_rows,
+                  filename = filename)
 
     # stars
     if (!is.null(stars)) {
