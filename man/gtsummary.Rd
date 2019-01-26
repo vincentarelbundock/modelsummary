@@ -63,15 +63,15 @@ the contents of the `stars` argument. The note will be omitted if `stars==NULL`}
 \item{add_rows}{list of character vectors, each of length equal to the number
 of models + 1.}
 
-\item{filename}{if not NULL, the table will be written to file. The file
-format is infered from the file extension. Valid extensions include: .html,
-.rtf, .tex.}
+\item{filename}{the file name to create on disk. Ensure that an extension
+compatible with the output types is provided (`.html`, `.tex`, `.ltx`,
+`.rtf`). Read `?gt::gtsave` for further details.}
 }
 \description{
 Beautiful, customizable summaries of statistical models
 }
 \examples{
-
+\dontrun{
 # load data and estimate models
 data(trees)
 models <- list()
@@ -102,6 +102,7 @@ gtsummary(models, title = gt::md('This is *the* title'))
 
 # notes at the bottom of the table (here, the second note includes markdown bold characters)
 gtsummary(models, notes = list('A first note', gt::md('A **bold** note'))
+}
 
 
 }

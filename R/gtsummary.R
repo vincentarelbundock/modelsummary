@@ -1,3 +1,6 @@
+# quiets concerns of R CMD check re: the .'s that appear in pipelines
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("."))
+
 #' Beautiful, customizable summaries of statistical models
 #'
 #' @param models a single model object or a (potentially named) list of models
@@ -6,9 +9,9 @@
 #' string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
 #' the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
 #' use exponential notation. See `?sprintf` for more options.
-#' @param filename if not NULL, the table will be written to file. The file
-#' format is infered from the file extension. Valid extensions include: .html,
-#' .rtf, .tex.
+#' @param filename the file name to create on disk. Ensure that an extension
+#' compatible with the output types is provided (`.html`, `.tex`, `.ltx`,
+#' `.rtf`). Read `?gt::gtsave` for further details.
 #' @param stars NULL for no significance stars. TRUE for default significance
 #' stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
 #' stars: c('*' = .1, '+' = .05).
@@ -41,7 +44,7 @@
 #' @param subtitle string
 #' @param notes list of notes to append to the bottom of the table.
 #' @examples
-#'
+#' \dontrun{
 #' # load data and estimate models
 #' data(trees)
 #' models <- list()
@@ -72,6 +75,7 @@
 #'
 #' # notes at the bottom of the table (here, the second note includes markdown bold characters)
 #' gtsummary(models, notes = list('A first note', gt::md('A **bold** note'))
+#' }
 #'
 # see the README on github for a lot more examples: https://github.com/vincentarelbundock/gtsummary
 #'
@@ -220,20 +224,7 @@ gtsummary <- function(models,
 
     # output
     if (!is.null(filename)) {
-        # guess output format based on filename extension
-        ext <- tools::file_ext(filename)
-        if (ext == 'html') {
-            tab %>% gt::as_raw_html() %>%
-                    cat(file = filename)
-        } else if (ext == 'rtf') {
-            tab %>% gt::as_rtf() %>%
-                    cat(file = filename)
-        } else if (ext == 'tex') {
-            tab %>% gt::as_latex() %>%
-                    cat(file = filename)
-        } else {
-            stop('filename must have one of the following extensions: .html, .rtf, .tex')
-        }
+        gt::gtsave(tab, filename)
     } else {
         return(tab)
     }

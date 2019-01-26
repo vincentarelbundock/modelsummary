@@ -4,7 +4,17 @@
 \alias{extract_gof}
 \title{Extract goodness-of-fit statistics from a single model}
 \usage{
-extract_gof(model, fmt = "\%.3f", gof_map = NULL, ...)
+extract_gof(model, fmt = "\%.3f", gof_map = NULL)
+}
+\arguments{
+\item{model}{object type with an available `glance` method.}
+
+\item{fmt}{string which specifies how numeric values will be rounded. This
+string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
+the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
+use exponential notation. See `?sprintf` for more options.}
+
+\item{gof_map}{data.frame in the same format as `gtsummary::gof_map`}
 }
 \description{
 Extract goodness-of-fit statistics from a single model

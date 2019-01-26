@@ -28,14 +28,14 @@ extract <- function(models,
 
     # extract and combine estimates
     est <- seq_along(models) %>%
-           purrr::map(~ gtsummary:::extract_estimates(model = models[[.]], 
+           purrr::map(~ extract_estimates(model = models[[.]], 
                                                       fmt = fmt, 
                                                       statistic = statistic, 
                                                       statistic_override = statistic_override[[.]], 
                                                       conf_level = conf_level, 
                                                       stars = stars)) %>%
            purrr::reduce(dplyr::full_join, by = c('term', 'statistic'))  %>%
-           setNames(c('term', 'statistic', model_names)) %>%
+           stats::setNames(c('term', 'statistic', model_names)) %>%
            dplyr::mutate(group = 'estimates') %>%
            dplyr::select(group, term, statistic, names(.))
 
@@ -43,14 +43,14 @@ extract <- function(models,
     gof <- models %>%
            purrr::map(extract_gof, fmt = fmt, gof_map = gof_map)  %>%
            purrr::reduce(dplyr::full_join, by = 'term') %>%
-           setNames(c('term', model_names))
+           stats::setNames(c('term', model_names))
 
     # add_rows to bottom of gof
     if (!is.null(add_rows)) {
         add_rows <- lapply(add_rows, as.character) %>%  # TODO: remove once sanity checks are complete
                     do.call('rbind', .) %>%
                     data.frame(stringsAsFactors = FALSE) %>%
-                    setNames(names(gof))
+                    stats::setNames(names(gof))
         gof <- dplyr::bind_rows(gof, add_rows)
     }
 
