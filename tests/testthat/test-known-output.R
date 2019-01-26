@@ -61,6 +61,14 @@ test_that("html_output: uncertainty estimates", {
 
 test_that("html_output: statistic_override", {
 
+    models <- list()
+    models[['OLS 1']] <- lm(Literacy ~ Crime_prop + Infants, dat)
+    models[['NBin 1']] <- glm.nb(Literacy ~ Crime_prop + Donations, dat)
+    models[['OLS 2']] <- lm(Desertion ~ Crime_prop + Infants, dat)
+    models[['NBin 2']] <- glm.nb(Desertion ~ Crime_prop + Donations, dat)
+    models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
+
+
 	raw <- gtsummary(models, statistic_override = sandwich::vcovHC, statistic = 'p.value',
                      title = 'statistic_override = sandwich::vcovHC, statistic = p.value') %>%
 		   gt::as_raw_html()

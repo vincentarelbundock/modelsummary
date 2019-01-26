@@ -26,6 +26,11 @@ extract <- function(models,
         model_names <- names(models)
     }
 
+    # if statistics_override is a single function, repeat it in a list to allow map
+    if (is.function(statistic_override)) {
+        statistic_override <- rep(list(statistic_override), length(models))
+    }
+
     # extract and combine estimates
     est <- seq_along(models) %>%
            purrr::map(~ extract_estimates(model = models[[.]], 
