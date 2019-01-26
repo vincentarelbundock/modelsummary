@@ -1,12 +1,13 @@
 #' Extract estimates and statistics from a single model
 #' @importFrom broom tidy
+#' @param model object type with an available `tidy` method.
+#' @inheritParams gtsummary 
 extract_estimates <- function(model,
                               statistic = 'std.error',
                               statistic_override = NULL,
                               conf_level = .95,
                               fmt = '%.3f',
-                              stars = NULL,
-                              ...) {
+                              stars = NULL) {
 
     # extract estimates
     if (statistic == 'conf.int') {

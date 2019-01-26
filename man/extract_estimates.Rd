@@ -6,7 +6,34 @@
 \usage{
 extract_estimates(model, statistic = "std.error",
   statistic_override = NULL, conf_level = 0.95, fmt = "\%.3f",
-  stars = NULL, ...)
+  stars = NULL)
+}
+\arguments{
+\item{model}{object type with an available `tidy` method.}
+
+\item{statistic}{string name of the statistic to include in parentheses
+below estimates. Must be either "conf.int", or one of the column names
+produced by the `broom::tidy` function. Typical values include: "std.error",
+"conf.int", "statistic", "p.value".}
+
+\item{statistic_override}{manually override the uncertainy estimates. This 
+argument accepts three types of input:
+\itemize{
+  \item a function or list of functions of length(models) which produce variance-covariance matrices with row and column names equal to the names of your coefficient estimates. For example, `R` supplies the `vcov` function, and the `sandwich` package supplies `vcovHC`, `vcovHAC`, etc.
+  \item a list of length(models) variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+  \item a list of length(models) numeric vectors with names equal to the names of your coefficient estimates.
+}}
+
+\item{conf_level}{confidence level to use for confidence intervals}
+
+\item{fmt}{string which specifies how numeric values will be rounded. This
+string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
+the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
+use exponential notation. See `?sprintf` for more options.}
+
+\item{stars}{NULL for no significance stars. TRUE for default significance
+stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
+stars: c('*' = .1, '+' = .05).}
 }
 \description{
 Extract estimates and statistics from a single model

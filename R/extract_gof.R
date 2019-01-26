@@ -1,7 +1,9 @@
 #' Extract goodness-of-fit statistics from a single model
 #'
+#' @param model object type with an available `glance` method.
 #' @importFrom broom glance
-extract_gof <- function(model, fmt = '%.3f', gof_map = NULL, ...) {
+#' @inheritParams gtsummary
+extract_gof <- function(model, fmt = '%.3f', gof_map = NULL) {
     if (is.null(gof_map)) {
         gof_map <- gtsummary::gof_map
     }

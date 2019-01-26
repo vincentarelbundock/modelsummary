@@ -6,6 +6,17 @@
 \usage{
 statistic_override_matrix(model, statistic_override)
 }
+\arguments{
+\item{model}{object type with an available `tidy` method.}
+
+\item{statistic_override}{manually override the uncertainy estimates. This 
+argument accepts three types of input:
+\itemize{
+  \item a function or list of functions of length(models) which produce variance-covariance matrices with row and column names equal to the names of your coefficient estimates. For example, `R` supplies the `vcov` function, and the `sandwich` package supplies `vcovHC`, `vcovHAC`, etc.
+  \item a list of length(models) variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+  \item a list of length(models) numeric vectors with names equal to the names of your coefficient estimates.
+}}
+}
 \description{
 Use the statistic_override matrix to extract std.error
 }
