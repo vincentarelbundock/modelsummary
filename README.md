@@ -6,26 +6,29 @@ The `gtsummary` package for `R` produces beautiful, customizable, publication-re
 
 Here are a few benefits of `gtsummary` over some [alternative packages](https://github.com/vincentarelbundock/gtsummary#alternative-summary-table-packages-for-r):
 
-* html, rtf, and LaTeX output 
-* Excellent integration with:
-    - RStudio: When users type `gtsummary(models)`, the summary table immediately appears in RStudio's Viewer window.
-    - `knitr`: Dynamic document generation FTW.
-    - Designed from the ground up with the `tidy` paradigm in mind.
-* Endlessly customizable tables, thanks to the power of the [`gt` package.](https://gt.rstudio.com)
-    - In the next section of this README, you will find tables with colored cells, weird text, spanning column labels, row groups, titles and subtitles, footnotes, significance stars, etc. 
-* `gtsummary` uses the `broom` package to extract information from model objects. This means that `gtsummary` supports dozens of model types out of the box. Most importantly, `broom` already has a large community of users, and whenever `broom` improves, `gtsummary` improves.
-* By using the `broom` and `gt` package for key operations, `gtsummary` has a massively simplified codebase. This should improve long term code maintainability, and allow contributors to participate through GitHub.
-* `gtsummary` is developed with unit tests.
+* Customizability
+    - Tables are endlessly customizable, thanks to the power of the [`gt` package.](https://gt.rstudio.com). In this README, you will find tables with colored cells, weird text, spanning column labels, row groups, titles and subtitles, global footnotes, cell-specific footnotes,significance stars, etc. This only scratches the surface of possibilities. For more, see [](https://gt.rstudio.com) and the [Power Users](https://github.com/vincentarelbundock/gtsummary#power-users) section of this README.
+* Flexibility
+    - Tables can be saved to html, rtf, and LaTeX files. (Coming soon: PDF, TXT/ASCII, and more.)
+* Integration
+    - `gtsummary` is extremely well integrated with RStudio. When you type `gtsummary(models)`, the summary table immediately appears in the Viewer window.
+* Transparency and replicability
+    - By combining `knitr` and `gtsummary`, you can easily produce beautiful, replicable data analyses and documents. [Click here for details.](https://github.com/vincentarelbundock/gtsummary#dynamic-documents-with-knitr)
+* Community
+    - `gtsummary` does not try to do everything. It leverages the incredible work of the `R` community by building on top of the popular `broom` package. Thanks to the `broom` team, `gtsummary` already supports dozens of model types out of the box. Most importantly, as `broom` improves, `gtsummary` automatically improves.
+* Reliability
+    - `gtsummary` is developed using an extensive suite of unit tests. It (probably) won't break.
+* Simplicity
+    - By using the `broom` and `gt` package for key operations, `gtsummary` has a massively simplified codebase. This should improve long term code maintainability, and allow contributors to participate through GitHub.
 
 <img src="examples/complex_table.png" width="50%">
 
 # Table of contents
 
 + [Installation](https://github.com/vincentarelbundock/gtsummary#installation)
-+ [Using gtsummary](https://github.com/vincentarelbundock/gtsummary#using-gtsummary)
-    * [Preliminaries](https://github.com/vincentarelbundock/gtsummary#preliminaries)
-    * [Simple table](https://github.com/vincentarelbundock/gtsummary#simple-table)
-    * [SE, p, t, CI](https://github.com/vincentarelbundock/gtsummary#se-t-p-ci)
++ [A simple example](https://github.com/vincentarelbundock/gtsummary#a-simple-example)
++ Customizing your tables:
+    * [Uncertainty estimates: SE, p, t, CI](https://github.com/vincentarelbundock/gtsummary#uncertainty-estimates-se-t-p-ci)
     * [Output formats](https://github.com/vincentarelbundock/gtsummary#simple-table)
     * [Titles and subtitles](https://github.com/vincentarelbundock/gtsummary#titles-and-subtitles)
     * [Group columns (spanning labels)](https://github.com/vincentarelbundock/gtsummary#column-groups-spanning-labels)
@@ -37,9 +40,10 @@ Here are a few benefits of `gtsummary` over some [alternative packages](https://
     * [Styles and colors](https://github.com/vincentarelbundock/gtsummary#styles-and-colors)
     * [Fancy text with markdown: bold, italics, etc.](https://github.com/vincentarelbundock/gtsummary#fancy-text-with-markdown-bold-italics-etc)
     * [Add rows manually](https://github.com/vincentarelbundock/gtsummary#add-rows-manually)
-    * [Pooled multiple imputation results](https://github.com/vincentarelbundock/gtsummary#pooled-multiple-imputation-results)
-    * [Complex table](https://github.com/vincentarelbundock/gtsummary#complex-table)
++ [A complex example](https://github.com/vincentarelbundock/gtsummary#complex-table)
++ Other useful features
     * [Dynamic documents with knitr](https://github.com/vincentarelbundock/gtsummary#dynamic-documents-with-knitr)
+    * [Pooled multiple imputation results](https://github.com/vincentarelbundock/gtsummary#pooled-multiple-imputation-results)
     * [Power users](https://github.com/vincentarelbundock/gtsummary#power-users)
 + [Alternative summary table packages for R](https://github.com/vincentarelbundock/gtsummary#alternative-summary-table-packages-for-r)
 
@@ -59,9 +63,7 @@ Make sure you also install `tidyverse`, as `gtsummary` depends on a lot of its p
 install.packages('tidyverse')
 ```
 
-# Using gtsummary
-
-## Preliminaries
+# A simple example
 
 Load packages and download some data from the [RDatasets](https://vincentarelbundock.github.io/Rdatasets/) repository. Then, estimate 5 different models and store them in a named list. The name of each model in that list will be used as a column label:
 
@@ -81,9 +83,7 @@ models[['NBin 2']] <- glm.nb(Desertion ~ Crime_prop + Donations, dat)
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 ```
 
-## Simple table
-
-Produce a simple table. 
+Produce a simple table:
 
 ```r
 gtsummary(models)
@@ -98,19 +98,9 @@ mod <- lm(Clergy ~ Crime_prop, data = dat)
 gtsummary(mod)
 ```
 
-## Output formats
+# Customizing your tables
 
-To save a table to file, use the `filename` argument. `gtsummary` guesses the output format based on the `filename` extension. The supported extensions are: `.tex`, `.rtf`, `.html` (ASCII/Text tables coming soon).
-
-```r
-gtsummary(models, filename = 'table.tex')
-gtsummary(models, filename = 'table.rtf')
-gtsummary(models, filename = 'table.html')
-```
-
-If `filename` is not specified, `gtsummary` returns a `gt` object which can be further customized and rendered by the relevant functions in the `gt` package, such as `as_raw_html`, `as_latex`, or `as_rtf`. RStudio renders the html version of this object automatically.
-
-## SE, t, p, CI
+## Uncertainty estimates: SE, t, p, CI
 
 `gtsummary` prints an uncertainty estimate in parentheses below the corresponding coefficient estimate. The `statistic` argument must be a string which is equal to `conf.int` or to one of the columns produced by the `broom::tidy` function. When using `conf.int`, users can specify a confidence level with the `conf_level` argument.
 
@@ -196,6 +186,8 @@ gtsummary(models, coef_omit = 'Intercept|Donation')
 ```r
 gtsummary(models, gof_omit = 'DF|Deviance')
 ```
+
+You can also edit the `gtsummary::gof_map` data.frame to rename or change the format of goodness-of-fit statistics (see the `gof_map` argument of the `gtsummary` function). 
 
 ## Column groups (spanning labels)
 
@@ -313,7 +305,8 @@ The `statistic` argument can take any column name in the tidy data frame obtaine
 ```r
 generics::tidy(mod[[1]])
 ```
-## Complex table
+
+# A complex example
 
 This is the code I used to generate the "complex" table posted at the top of this README.
 
@@ -335,6 +328,20 @@ gtsummary(models,
     gt::tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
     gt::tab_spanner(label = 'Clergy', columns = 'Logit 1')
 ```
+
+# Other useful features
+
+## Output formats
+
+To save a table to file, use the `filename` argument. `gtsummary` guesses the output format based on the `filename` extension. The supported extensions are: `.tex`, `.rtf`, `.html` (ASCII/Text tables coming soon).
+
+```r
+gtsummary(models, filename = 'table.tex')
+gtsummary(models, filename = 'table.rtf')
+gtsummary(models, filename = 'table.html')
+```
+
+If `filename` is not specified, `gtsummary` returns a `gt` object which can be further customized and rendered by the relevant functions in the `gt` package, such as `as_raw_html`, `as_latex`, or `as_rtf`. RStudio renders the html version of this object automatically.
 
 ## Dynamic documents with `knitr`
 
