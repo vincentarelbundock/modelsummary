@@ -1,35 +1,35 @@
+# gtsummary: Beautiful, customizable, publication-ready model summaries in R.
+
 [![Travis-CI Build Status](https://travis-ci.org/vincentarelbundock/gtsummary.svg?branch=master)](https://travis-ci.org/vincentarelbundock/gtsummary)
 
-# `gtsummary`
-
 The `gtsummary` package for `R` produces beautiful, customizable, publication-ready tables to summarize statistical models. Results from several models are presented side-by-side, with uncertainty estimates in parentheses (or brackets) underneath coefficient estimates.
+
+<img src="examples/complex_table.png" width="40%">
 
 Here are a few benefits of `gtsummary` over some [alternative packages](https://github.com/vincentarelbundock/gtsummary#alternative-summary-table-packages-for-r):
 
 * Customizability
-    - Tables are endlessly customizable, thanks to the power of the [`gt` package.](https://gt.rstudio.com). In this README, you will find tables with colored cells, weird text, spanning column labels, row groups, titles and subtitles, global footnotes, cell-specific footnotes,significance stars, etc. This only scratches the surface of possibilities. For more, see [](https://gt.rstudio.com) and the [Power Users](https://github.com/vincentarelbundock/gtsummary#power-users) section of this README.
+    - Tables are endlessly customizable, thanks to the power of the [`gt` package.](https://gt.rstudio.com) In this README, you will find tables with colored cells, weird text, spanning column labels, row groups, titles and subtitles, global footnotes, cell-specific footnotes,significance stars, etc. This only scratches the surface of possibilities. For more, see [gt.rstudio.com](https://gt.rstudio.com) and the [Power Users](https://github.com/vincentarelbundock/gtsummary#power-users) section of this README.
 * Flexibility
     - Tables can be saved to html, rtf, and LaTeX files. (Coming soon: PDF, TXT/ASCII, and more.)
 * Integration
     - `gtsummary` is extremely well integrated with RStudio. When you type `gtsummary(models)`, the summary table immediately appears in the Viewer window.
-* Transparency and replicability
-    - By combining `knitr` and `gtsummary`, you can easily produce beautiful, replicable data analyses and documents. [Click here for details.](https://github.com/vincentarelbundock/gtsummary#dynamic-documents-with-knitr)
+* Transparency, replicability, and automation
+    - By combining `knitr` and `gtsummary`, you can easily produce beautiful, replicable, and automated documents and reports. [Click here for details.](https://github.com/vincentarelbundock/gtsummary#dynamic-documents-with-knitr)
 * Community
-    - `gtsummary` does not try to do everything. It leverages the incredible work of the `R` community by building on top of the popular `broom` package. Thanks to the `broom` team, `gtsummary` already supports dozens of model types out of the box. Most importantly, as `broom` improves, `gtsummary` automatically improves.
+    - `gtsummary` does not try to do everything. It leverages the incredible work of the `R` community by building on top of the popular `broom` package. Thanks to the `broom` team, `gtsummary` already supports dozens of model types out of the box. Most importantly, as `broom` and `gt` improve, `gtsummary` also improves.
 * Reliability
-    - `gtsummary` is developed using an extensive suite of unit tests. It (probably) won't break.
+    - `gtsummary` is developed using a suite of unit tests. It (probably) won't break.
 * Simplicity
     - By using the `broom` and `gt` package for key operations, `gtsummary` has a massively simplified codebase. This should improve long term code maintainability, and allow contributors to participate through GitHub.
 
-<img src="examples/complex_table.png" width="50%">
 
 # Table of contents
 
 + [Installation](https://github.com/vincentarelbundock/gtsummary#installation)
 + [A simple example](https://github.com/vincentarelbundock/gtsummary#a-simple-example)
-+ Customizing your tables:
++ [Customizing your tables](https://github.com/vincentarelbundock/gtsummary#customizing-your-tables)
     * [Uncertainty estimates: SE, p, t, CI](https://github.com/vincentarelbundock/gtsummary#uncertainty-estimates-se-t-p-ci)
-    * [Output formats](https://github.com/vincentarelbundock/gtsummary#simple-table)
     * [Titles and subtitles](https://github.com/vincentarelbundock/gtsummary#titles-and-subtitles)
     * [Group columns (spanning labels)](https://github.com/vincentarelbundock/gtsummary#column-groups-spanning-labels)
     * [Notes](https://github.com/vincentarelbundock/gtsummary#notes)
@@ -37,11 +37,12 @@ Here are a few benefits of `gtsummary` over some [alternative packages](https://
     * [Rename, reorder, and subset goodness-of-fit statistics](https://github.com/vincentarelbundock/gtsummary#rename-reorder-and-subset-goodness-of-fit-statistics)
     * [Stars](https://github.com/vincentarelbundock/gtsummary#stars-statistical-significance-markers)
     * [Digits, rounding, exponential notation](https://github.com/vincentarelbundock/gtsummary#digits-rounding-exponential-notation)
-    * [Styles and colors](https://github.com/vincentarelbundock/gtsummary#styles-and-colors)
+    * [Colors and styles](https://github.com/vincentarelbundock/gtsummary#colors-and-styles)
     * [Fancy text with markdown: bold, italics, etc.](https://github.com/vincentarelbundock/gtsummary#fancy-text-with-markdown-bold-italics-etc)
     * [Add rows manually](https://github.com/vincentarelbundock/gtsummary#add-rows-manually)
-+ [A complex example](https://github.com/vincentarelbundock/gtsummary#complex-table)
-+ Other useful features
++ [A complex example](https://github.com/vincentarelbundock/gtsummary#a-complex-example)
++ [Other useful features](https://github.com/vincentarelbundock/gtsummary#other-useful-features)
+    * [Output formats](https://github.com/vincentarelbundock/gtsummary#output-formats)
     * [Dynamic documents with knitr](https://github.com/vincentarelbundock/gtsummary#dynamic-documents-with-knitr)
     * [Pooled multiple imputation results](https://github.com/vincentarelbundock/gtsummary#pooled-multiple-imputation-results)
     * [Power users](https://github.com/vincentarelbundock/gtsummary#power-users)
@@ -88,8 +89,6 @@ Produce a simple table:
 ```r
 gtsummary(models)
 ```
-
-RStudio will render this automatically as an html table. If you do not use RStudio, read the next section to learn how to save to file.
 
 Of course, `gtsummary` can also summarize single models:
 
@@ -236,7 +235,7 @@ Most users will just modify the `3` in `%.3f`, but this is a very powerful syste
 gtsummary(models, fmt = '%.7f')
 ```
 
-## Styles and colors
+## Colors and styles
 
 The power of the `gt` package makes `gtsummary` tables endlessly customizable. For instance, we can color columns and cells, and present values in bold or italics:
 
@@ -271,39 +270,6 @@ Use the `add_rows` argument to add rows manually to the bottom of the table.
 row1 <- c('Custom row 1', 'a', 'b', 'c', 'd', 'e')
 row2 <- c('Custom row 2', 5:1)
 gtsummary(models, add_rows = list(row1, row2))
-```
-
-## Pooled multiple imputation results
-
-`gtsummary` can pool and display analyses on several datasets imputed using the `mice` package. For example:
-
-```r
-library(mice)
-
-# Create a new dataset with missing values
-url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
-tmp <- read.csv(url)[, c('Clergy', 'Donations', 'Literacy')]
-tmp$Clergy[sample(1:nrow(tmp), 3)] <- NA
-tmp$Donations[sample(1:nrow(tmp), 3)] <- NA
-tmp$Literacy[sample(1:nrow(tmp), 3)] <- NA
-
-# Impute dataset 5 times
-tmp <- mice(tmp, m = 5, printFlag = FALSE, seed = 1024)
-
-# Estimate models
-mod <- list()
-mod[[1]] <- with(tmp, lm(Clergy ~ Donations))
-mod[[2]] <- with(tmp, lm(Clergy ~ Donations + Literacy))
-
-# Summarize
-gtsummary(mod, statistic = 't')
-gtsummary(mod, statistic = 'ubar')
-```
-
-The `statistic` argument can take any column name in the tidy data frame obtained by:
-
-```r
-generics::tidy(mod[[1]])
 ```
 
 # A complex example
@@ -354,7 +320,45 @@ gtsummary(models, title = 'Model summary') %>%
     knit_latex(label = 'tab:example')
 ```
 
-My goal is to deprecate `knit_latex` when `gt` LaTeX export features improve.
+My goal is to deprecate `knit_latex` when `gt` LaTeX export features improve. 
+
+Here are two minimal working examples of markdown files which can be converted to HTML or PDF using the `knitr` package. Just open one the `.Rmd` files in RStudio and click the "Knit" button:
+
+* [markdown_to_pdf.Rmd](examples/markdown_to_pdf.Rmd) / [markdown_to_pdf.pdf](examples/markdown_to_pdf.pdf) 
+* [markdown_to_html.Rmd](examples/markdown_to_html.Rmd) / [markdown_to_html.html](examples/markdown_to_html.html) 
+
+## Pooled multiple imputation results
+
+`gtsummary` can pool and display analyses on several datasets imputed using the `mice` package. For example:
+
+```r
+library(mice)
+
+# Create a new dataset with missing values
+url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
+tmp <- read.csv(url)[, c('Clergy', 'Donations', 'Literacy')]
+tmp$Clergy[sample(1:nrow(tmp), 3)] <- NA
+tmp$Donations[sample(1:nrow(tmp), 3)] <- NA
+tmp$Literacy[sample(1:nrow(tmp), 3)] <- NA
+
+# Impute dataset 5 times
+tmp <- mice(tmp, m = 5, printFlag = FALSE, seed = 1024)
+
+# Estimate models
+mod <- list()
+mod[[1]] <- with(tmp, lm(Clergy ~ Donations))
+mod[[2]] <- with(tmp, lm(Clergy ~ Donations + Literacy))
+
+# Summarize
+gtsummary(mod, statistic = 't')
+gtsummary(mod, statistic = 'ubar')
+```
+
+The `statistic` argument can take any column name in the tidy data frame obtained by:
+
+```r
+generics::tidy(mod[[1]])
+```
 
 ## Power users
 

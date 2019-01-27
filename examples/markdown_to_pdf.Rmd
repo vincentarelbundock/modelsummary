@@ -1,0 +1,23 @@
+---
+output: pdf_document
+---
+
+```{r, message=FALSE}
+# load
+library(dplyr)
+library(gtsummary)
+
+# simulate data
+x <- rnorm(30)
+w <- rnorm(30)
+y <- x + w + rnorm(30)
+
+# fit models
+mod <- list()
+mod[[1]] <- lm(y ~ x)
+mod[[2]] <- lm(y ~ x + w)
+
+# summarize
+gtsummary(mod) %>%
+    knit_latex()
+```  
