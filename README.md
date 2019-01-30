@@ -44,6 +44,7 @@ Here are a few benefits of `gtsummary` over some [alternative packages](https://
 + [Other useful features](https://github.com/vincentarelbundock/gtsummary#other-useful-features)
     * [Output formats](https://github.com/vincentarelbundock/gtsummary#output-formats)
     * [Dynamic documents with knitr](https://github.com/vincentarelbundock/gtsummary#dynamic-documents-with-knitr)
+    * [Unsupported models and custom tidiers](https://github.com/vincentarelbundock/gtsummary#unsupported-models-and-custom-tidiers)
     * [Pooled multiple imputation results](https://github.com/vincentarelbundock/gtsummary#pooled-multiple-imputation-results)
     * [Power users](https://github.com/vincentarelbundock/gtsummary#power-users)
 + [Alternative summary table packages for R](https://github.com/vincentarelbundock/gtsummary#alternative-summary-table-packages-for-r)
@@ -327,6 +328,46 @@ Here are two minimal working examples of markdown files which can be converted t
 * [markdown_to_pdf.Rmd](examples/markdown_to_pdf.Rmd) / [markdown_to_pdf.pdf](examples/markdown_to_pdf.pdf) 
 * [markdown_to_html.Rmd](examples/markdown_to_html.Rmd) / [markdown_to_html.html](examples/markdown_to_html.html) 
 
+## Unsupported models and custom tidiers
+
+`gtsummary` relies on two functions from the `broom` package to extract model information: `tidy` and `glance`. If `broom` doesn't support the type of model you are trying to summarize, `gtsummary` won't support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.
+
+For example, models produced by the `MCMCglmm` package are not currently supported by `broom`. To add support, you simply need to create a `tidy` and a `glance` method:
+
+```r
+# load packages and data
+library(gtsummary)
+library(MCMCglmm)
+data(PlodiaPO)
+
+# add custom functions to extract estimates (tidy) and goodness-of-fit (glance) information
+tidy.MCMCglmm <- function(object, ...) {
+    s <- summary(object, ...)
+    ret <- tibble::tibble(term = row.names(s$solutions),
+                          estimate = s$solutions[, 1],
+                          conf.low = s$solutions[, 2],
+                          conf.high = s$solutions[, 3])
+    ret
+}
+glance.MCMCglmm <- function(object, ...) {
+    ret <- tibble::tibble(dic = object$DIC,
+                          n = nrow(object$X))
+    ret
+}
+
+# estimate a simple model
+model <- MCMCglmm(PO ~ 1 + plate, random = ~ FSfamily, data = PlodiaPO, verbose=FALSE, pr=TRUE)
+
+# summarize the model
+gtsummary(model, statistic = 'conf.int')
+```
+
+Two important things to note. First, the methods are named `tidy.MCMCglmm` and `glance.MCMCglmm` because the model object I am trying to summarize is of class `MCMCglmm`. You can find the class of a model by running: `class(model)`.
+
+Second, in the example above, we used the `statistic = 'conf.int'` argument. This is because the `tidy` method produces `conf.low` and `conf.high` columns. In most cases, users will define `std.error` column in their custom `tidy` methods, so the `statistic` argument will need to be adjusted.
+
+If you create new `tidy` and `glance` methods, please consider contributing them to `broom` so that the rest of the community can benefit from your work: https://github.com/tidymodels/broom
+
 ## Pooled multiple imputation results
 
 `gtsummary` can pool and display analyses on several datasets imputed using the `mice` package. For example:
@@ -359,6 +400,7 @@ The `statistic` argument can take any column name in the tidy data frame obtaine
 ```r
 generics::tidy(mod[[1]])
 ```
+
 
 ## Power users
 
