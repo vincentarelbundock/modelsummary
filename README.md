@@ -21,8 +21,9 @@ Here are a few benefits of `gtsummary` over some [alternative packages](https://
 * Reliability
     - `gtsummary` is developed using a suite of unit tests. It (probably) won't break.
 * Simplicity
-    - By using the `broom` and `gt` package for key operations, `gtsummary` has a massively simplified codebase. This should improve long term code maintainability, and allow contributors to participate through GitHub.
+    - By using the `broom` and `gt` packages for key operations, `gtsummary` has a massively simplified codebase. This should improve long term code maintainability, and allow contributors to participate through GitHub.
 
+Yes, that spells CFITCRS!
 
 # Table of contents
 
