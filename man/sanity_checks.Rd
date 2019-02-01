@@ -10,6 +10,63 @@ sanity_checks(models, statistic = "std.error",
   stars = NULL, stars_note = TRUE, title = NULL, subtitle = NULL,
   notes = NULL, add_rows = NULL, filename = NULL)
 }
+\arguments{
+\item{models}{a single model object or a (potentially named) list of models
+to summarize}
+
+\item{statistic}{string name of the statistic to include in parentheses
+below estimates. Must be either "conf.int", or one of the column names
+produced by the `broom::tidy` function. Typical values include: "std.error",
+"conf.int", "statistic", "p.value".}
+
+\item{statistic_override}{manually override the uncertainy estimates. This 
+argument accepts three types of input:
+\itemize{
+  \item a function or list of functions of length(models) which produce variance-covariance matrices with row and column names equal to the names of your coefficient estimates. For example, `R` supplies the `vcov` function, and the `sandwich` package supplies `vcovHC`, `vcovHAC`, etc.
+  \item a list of length(models) variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+  \item a list of length(models) numeric vectors with names equal to the names of your coefficient estimates.
+}}
+
+\item{conf_level}{confidence level to use for confidence intervals}
+
+\item{coef_map}{named character vector. Names refer to the original variable
+names. Values refer to the variable names that will appear in the table.
+Coefficients which are omitted from this vector will be omitted from the
+table. The table will be ordered in the same order as this vector.}
+
+\item{coef_omit}{string regular expression. Omits all matching coefficients
+from the table (using `stringr::str_detect`).}
+
+\item{gof_map}{data.frame in the same format as `gtsummary::gof_map`}
+
+\item{gof_omit}{string regular expression. Omits all matching gof statistics from
+the table (using `stringr::str_detect`).}
+
+\item{fmt}{string which specifies how numeric values will be rounded. This
+string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
+the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
+use exponential notation. See `?sprintf` for more options.}
+
+\item{stars}{NULL for no significance stars. TRUE for default significance
+stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
+stars: c('*' = .1, '+' = .05).}
+
+\item{stars_note}{logical include a note at the bottom of the table to describe
+the contents of the `stars` argument. The note will be omitted if `stars==NULL`}
+
+\item{title}{string}
+
+\item{subtitle}{string}
+
+\item{notes}{list of notes to append to the bottom of the table.}
+
+\item{add_rows}{list of character vectors, each of length equal to the number
+of models + 1.}
+
+\item{filename}{the file name to create on disk. Ensure that an extension
+compatible with the output types is provided (`.html`, `.tex`, `.ltx`,
+`.rtf`). Read `?gt::gtsave` for further details.}
+}
 \description{
 internal function to check the sanity of user input
 }
