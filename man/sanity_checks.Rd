@@ -37,7 +37,8 @@ table. The table will be ordered in the same order as this vector.}
 \item{coef_omit}{string regular expression. Omits all matching coefficients
 from the table (using `stringr::str_detect`).}
 
-\item{gof_map}{data.frame in the same format as `gtsummary::gof_map`}
+\item{gof_map}{data.frame with four columns: `raw`, `clean`, `fmt`, and
+`omit`. See `gtsummary::gof_map`}
 
 \item{gof_omit}{string regular expression. Omits all matching gof statistics from
 the table (using `stringr::str_detect`).}

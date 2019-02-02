@@ -74,13 +74,21 @@ extract <- function(models,
                dplyr::filter(!stringr::str_detect(term, gof_omit))
     }
 
-    # reorder estimates using coef_map
+    # coef_map: omit, reorder, rename
     if (!is.null(coef_map)) {
-        est <- est[est$term %in% names(coef_map),] # subset
+        est <- est[est$term %in% names(coef_map),] # omit (white list)
         idx <- match(est$term, names(coef_map))
         est$term <- coef_map[idx] # rename
         est <- est[order(idx, est$statistic),] # reorder
     }
+
+    # gof_map: omit, reorder, rename
+    gof <- gof[!gof$term %in% gof_map$raw[gof_map$omit],] # omit (black list)
+	gof_names <- gof_map$clean[match(gof$term, gof_map$raw)] # rename
+	gof_names[is.na(gof_names)] <- gof$term[is.na(gof_names)]
+    gof$term <- gof_names
+	idx <- match(gof$term, gof_map$clean) # reorder
+    gof <- gof[order(idx, gof$term),] 
 
     # output
     out <- dplyr::bind_rows(est, gof)

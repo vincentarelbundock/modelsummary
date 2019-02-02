@@ -37,7 +37,8 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' table. The table will be ordered in the same order as this vector.
 #' @param coef_omit string regular expression. Omits all matching coefficients
 #' from the table (using `stringr::str_detect`).
-#' @param gof_map data.frame in the same format as `gtsummary::gof_map`
+#' @param gof_map data.frame with four columns: `raw`, `clean`, `fmt`, and
+#' `omit`. See `gtsummary::gof_map`
 #' @param gof_omit string regular expression. Omits all matching gof statistics from
 #' the table (using `stringr::str_detect`).
 #' @param add_rows list of character vectors, each of length equal to the number
@@ -132,6 +133,11 @@ gtsummary <- function(models,
         stars <- sort(stars, decreasing = TRUE)
     }
 
+    # gof map
+    if (is.null(gof_map)) {
+        gof_map <- gtsummary::gof_map
+    }
+
     # extract estimates and gof
     dat <- gtsummary::extract(models,
                               statistic = statistic,
@@ -145,8 +151,8 @@ gtsummary <- function(models,
                               add_rows = add_rows,
                               fmt = fmt)
 
+    # remove duplicate term labels
     tab <- dat %>%
-           # remove duplicate term labels
            dplyr::mutate(term = ifelse(statistic == 'statistic', '', term))
 
     # create gt table object
