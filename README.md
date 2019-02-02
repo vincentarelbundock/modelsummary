@@ -188,7 +188,16 @@ gtsummary(models, coef_omit = 'Intercept|Donation')
 gtsummary(models, gof_omit = 'DF|Deviance')
 ```
 
-You can also edit the `gtsummary::gof_map` data.frame to rename or change the format of goodness-of-fit statistics (see the `gof_map` argument of the `gtsummary` function). 
+A more powerful mechanism is to supply a `data.frame` (or `tibble`) through the `gof_map` argument. This data.frame must include 4 columns:
+
+1. `raw`: a string with the name of a column produced by `broom::glance(model)`.
+2. `clean`: a string with the "clean" name of the statistic you want to appear in your final table.
+3. `fmt`: a string which will be used to round/format the string in question (e.g., `"%.3f"`). This follows the same standards as the `fmt` argument in `?gtsummary`.
+4. `omit`: `TRUE` if you want the statistic to be omitted from your final table.
+
+You can see an example of a valid data frame by typing `gtsummary::gof_map`.
+
+Notice the subtle difference between `coef_map` and `gof_map`. `coef_map` works as a "white list": any coefficient not explicitly entered will be omitted from the table. `gof_map` works as a "black list": statistics need to be explicitly marked for omission.
 
 ## Column groups (spanning labels)
 

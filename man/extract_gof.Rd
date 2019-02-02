@@ -14,7 +14,8 @@ string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
 the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
 use exponential notation. See `?sprintf` for more options.}
 
-\item{gof_map}{data.frame in the same format as `gtsummary::gof_map`}
+\item{gof_map}{data.frame with four columns: `raw`, `clean`, `fmt`, and
+`omit`. See `gtsummary::gof_map`}
 }
 \description{
 Extract goodness-of-fit statistics from a single model
