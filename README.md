@@ -36,7 +36,7 @@ The `gtsummary` package for `R` produces beautiful, customizable, publication-re
 Here are a few benefits of `gtsummary` over some [alternative packages](https://github.com/vincentarelbundock/gtsummary#alternative-summary-table-packages-for-r):
 
 * Customizability
-    - Tables are endlessly customizable, thanks to the power of the [`gt` package.](https://gt.rstudio.com) In this README, you will find tables with colored cells, weird text, spanning column labels, row groups, titles and subtitles, global footnotes, cell-specific footnotes,significance stars, etc. This only scratches the surface of possibilities. For more, see [gt.rstudio.com](https://gt.rstudio.com) and the [Power Users](https://github.com/vincentarelbundock/gtsummary#power-users) section of this README.
+    - Tables are endlessly customizable, thanks to the power of the [`gt` package.](https://gt.rstudio.com) In this README, you will find tables with colored cells, weird text, spanning column labels, row groups, titles and subtitles, global footnotes, cell-specific footnotes, significance stars, etc. This only scratches the surface of possibilities. For more, see [gt.rstudio.com](https://gt.rstudio.com) and the [Power Users](https://github.com/vincentarelbundock/gtsummary#power-users) section of this README.
 * Flexibility
     - Tables can be saved to html, rtf, and LaTeX files. (Coming soon: PDF, TXT/ASCII, and more.)
 * Integration
@@ -165,6 +165,22 @@ gtsummary(models,
                        'Text of the second note.'))
 ```
 
+Add numbered footnotes to a column, a row, or a cell:
+
+```r
+library(gt)
+gtsummary(models) %>% 
+    tab_footnote(                                                                                                                                                                                  
+        footnote = md("This is a **very** important model, so we are pointing it out in a column-specific footnote."),                        
+        locations = cells_column_labels(columns = vars(`OLS 1`))) %>%  
+    tab_footnote(                                                                                                                                                                               
+        footnote = "This is the variable of interest.",                                                                                           
+        locations = cells_stub(rows = vars(Infants))) %>%                                                                                                                                      
+    tab_footnote(                                                                                                                      
+        footnote = "Most important model + most important variable = most important estimate.",
+        locations = cells_data(columns = vars(`OLS 1`), rows = vars(Infants)))
+```
+
 ## Rename, reorder, and subset
 
 ### Coefficient estimates
@@ -199,7 +215,15 @@ A more powerful mechanism is to supply a `data.frame` (or `tibble`) through the 
 3. `fmt`: a string which will be used to round/format the string in question (e.g., `"%.3f"`). This follows the same standards as the `fmt` argument in `?gtsummary`.
 4. `omit`: `TRUE` if you want the statistic to be omitted from your final table.
 
-You can see an example of a valid data frame by typing `gtsummary::gof_map`.
+You can see an example of a valid data frame by typing `gtsummary::gof_map`. This is the default data.frame that `gtsummary` uses to subset and reorder goodness-of-fit statistics. As you can see, `omit == TRUE` for quite a number of statistics. You can include setting `omit == FALSE`: 
+
+```r
+gm <- gtsummary::gof_map
+gm$omit <- FALSE
+gtsummary(models, gof_map = gm)
+```
+
+The goodness-of-fit statistics will be printed in the table in the same order as in the `gof_map` data.frame.
 
 Notice the subtle difference between `coef_map` and `gof_map`. `coef_map` works as a "white list": any coefficient not explicitly entered will be omitted from the table. `gof_map` works as a "black list": statistics need to be explicitly marked for omission.
 
@@ -292,6 +316,7 @@ gtsummary(models, add_rows = list(row1, row2))
 This is the code I used to generate the "complex" table posted at the top of this README.
 
 ```r
+library(gt)
 cm <- c('Crime_prop' = 'Crime / Population',
         'Donations' = 'Donations',
         'Infants' = 'Infants',
@@ -299,15 +324,28 @@ cm <- c('Crime_prop' = 'Crime / Population',
 gtsummary(models,
           coef_map = cm,
           stars = TRUE,
-          gof_omit = "Statistics|^p$|Deviance|Resid|Sigma|Log.Lik|^DF$",
+          gof_omit = "Deviance",
           title = 'Summarizing 5 statistical models using the `gtsummary` package for `R`.',
           subtitle = 'Models estimated using the Guerry dataset.',
           notes = c('First custom note to contain text.',
                     'Second custom note with different content.')) %>%
     # add spanning labels
-    gt::tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
-    gt::tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
-    gt::tab_spanner(label = 'Clergy', columns = 'Logit 1')
+    tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
+    tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
+    tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
+    # footnotes
+    tab_footnote(
+        footnote = md("This is a **very** important model, so we are pointing it out in a column-specific footnote."),                        
+        locations = cells_column_labels(columns = vars(`OLS 1`))) %>%  
+    tab_footnote(                                                                                                                                                                               
+        footnote = "This is the variable of interest.",                                                                                           
+        locations = cells_stub(rows = vars(Infants))) %>%                                                                                                                                      
+    tab_footnote(                                                                                                                      
+        footnote = "Most important model + most important variable = most important estimate.",
+        locations = cells_data(columns = vars(`OLS 1`), rows = vars(Infants))) %>%   
+    # color and bold
+    tab_style(style = cells_styles(text_color = "red", text_weight = "bold"),
+              locations = cells_data(columns = vars(`OLS 1`), rows = vars(Infants)))
 ```
 
 # Other useful features
