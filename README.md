@@ -6,6 +6,33 @@ The `gtsummary` package for `R` produces beautiful, customizable, publication-re
 
 <img src="examples/complex_table.png" width="40%">
 
+# Table of contents
+
++ [Sales pitch](https://github.com/vincentarelbundock/gtsummary#sales-pitch)
++ [Installation](https://github.com/vincentarelbundock/gtsummary#installation)
++ [A simple example](https://github.com/vincentarelbundock/gtsummary#a-simple-example)
++ [Customizing your tables](https://github.com/vincentarelbundock/gtsummary#customizing-your-tables)
+    * [Uncertainty estimates: SE, p, t, CI](https://github.com/vincentarelbundock/gtsummary#uncertainty-estimates-se-t-p-ci)
+    * [Titles and subtitles](https://github.com/vincentarelbundock/gtsummary#titles-and-subtitles)
+    * [Group columns (spanning labels)](https://github.com/vincentarelbundock/gtsummary#column-groups-spanning-labels)
+    * [Notes](https://github.com/vincentarelbundock/gtsummary#notes)
+    * [Rename, reorder, and subset](https://github.com/vincentarelbundock/gtsummary#rename-reorder-and-subset)
+    * [Stars](https://github.com/vincentarelbundock/gtsummary#stars-statistical-significance-markers)
+    * [Digits, rounding, exponential notation](https://github.com/vincentarelbundock/gtsummary#digits-rounding-exponential-notation)
+    * [Colors and styles](https://github.com/vincentarelbundock/gtsummary#colors-and-styles)
+    * [Fancy text with markdown: bold, italics, etc.](https://github.com/vincentarelbundock/gtsummary#fancy-text-with-markdown-bold-italics-etc)
+    * [Add rows manually](https://github.com/vincentarelbundock/gtsummary#add-rows-manually)
++ [A complex example](https://github.com/vincentarelbundock/gtsummary#a-complex-example)
++ [Other useful features](https://github.com/vincentarelbundock/gtsummary#other-useful-features)
+    * [Output formats](https://github.com/vincentarelbundock/gtsummary#output-formats)
+    * [Dynamic documents with knitr](https://github.com/vincentarelbundock/gtsummary#dynamic-documents-with-knitr)
+    * [Unsupported models and custom tidiers](https://github.com/vincentarelbundock/gtsummary#unsupported-models-and-custom-tidiers)
+    * [Pooled multiple imputation results](https://github.com/vincentarelbundock/gtsummary#pooled-multiple-imputation-results)
+    * [Power users](https://github.com/vincentarelbundock/gtsummary#power-users)
++ [Alternative summary table packages for R](https://github.com/vincentarelbundock/gtsummary#alternative-summary-table-packages-for-r)
+
+# Sales pitch
+
 Here are a few benefits of `gtsummary` over some [alternative packages](https://github.com/vincentarelbundock/gtsummary#alternative-summary-table-packages-for-r):
 
 * Customizability
@@ -24,31 +51,6 @@ Here are a few benefits of `gtsummary` over some [alternative packages](https://
     - By using the `broom` and `gt` packages for key operations, `gtsummary` has a massively simplified codebase. This should improve long term code maintainability, and allow contributors to participate through GitHub.
 
 Yes, that spells CFITCRS!
-
-# Table of contents
-
-+ [Installation](https://github.com/vincentarelbundock/gtsummary#installation)
-+ [A simple example](https://github.com/vincentarelbundock/gtsummary#a-simple-example)
-+ [Customizing your tables](https://github.com/vincentarelbundock/gtsummary#customizing-your-tables)
-    * [Uncertainty estimates: SE, p, t, CI](https://github.com/vincentarelbundock/gtsummary#uncertainty-estimates-se-t-p-ci)
-    * [Titles and subtitles](https://github.com/vincentarelbundock/gtsummary#titles-and-subtitles)
-    * [Group columns (spanning labels)](https://github.com/vincentarelbundock/gtsummary#column-groups-spanning-labels)
-    * [Notes](https://github.com/vincentarelbundock/gtsummary#notes)
-    * [Rename, reorder, and subset coefficients](https://github.com/vincentarelbundock/gtsummary#rename-reorder-and-subset-coefficients)
-    * [Rename, reorder, and subset goodness-of-fit statistics](https://github.com/vincentarelbundock/gtsummary#rename-reorder-and-subset-goodness-of-fit-statistics)
-    * [Stars](https://github.com/vincentarelbundock/gtsummary#stars-statistical-significance-markers)
-    * [Digits, rounding, exponential notation](https://github.com/vincentarelbundock/gtsummary#digits-rounding-exponential-notation)
-    * [Colors and styles](https://github.com/vincentarelbundock/gtsummary#colors-and-styles)
-    * [Fancy text with markdown: bold, italics, etc.](https://github.com/vincentarelbundock/gtsummary#fancy-text-with-markdown-bold-italics-etc)
-    * [Add rows manually](https://github.com/vincentarelbundock/gtsummary#add-rows-manually)
-+ [A complex example](https://github.com/vincentarelbundock/gtsummary#a-complex-example)
-+ [Other useful features](https://github.com/vincentarelbundock/gtsummary#other-useful-features)
-    * [Output formats](https://github.com/vincentarelbundock/gtsummary#output-formats)
-    * [Dynamic documents with knitr](https://github.com/vincentarelbundock/gtsummary#dynamic-documents-with-knitr)
-    * [Unsupported models and custom tidiers](https://github.com/vincentarelbundock/gtsummary#unsupported-models-and-custom-tidiers)
-    * [Pooled multiple imputation results](https://github.com/vincentarelbundock/gtsummary#pooled-multiple-imputation-results)
-    * [Power users](https://github.com/vincentarelbundock/gtsummary#power-users)
-+ [Alternative summary table packages for R](https://github.com/vincentarelbundock/gtsummary#alternative-summary-table-packages-for-r)
 
 # Installation
 
@@ -163,7 +165,9 @@ gtsummary(models,
                        'Text of the second note.'))
 ```
 
-## Rename, reorder, and subset coefficients
+## Rename, reorder, and subset
+
+### Coefficient estimates
 
 The `coef_map` argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the "clean" variable name. Names of this vector correspond to the "raw" variable name. The table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.
 
@@ -180,7 +184,7 @@ An alternative mechanism to subset coefficients is to use the `coef_omit` argume
 gtsummary(models, coef_omit = 'Intercept|Donation')
 ```
 
-## Rename, reorder, and subset goodness-of-fit statistics
+### Goodness-of-fit and other statistics
 
 `gof_omit` is a regular expression which will be fed to `stringr::str_detect` to detect the names of the statistics which should be excluded from the table.
 
