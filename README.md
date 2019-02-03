@@ -22,6 +22,7 @@ The `gtsummary` package for `R` produces beautiful, customizable, publication-re
     * [Colors and styles](https://github.com/vincentarelbundock/gtsummary#colors-and-styles)
     * [Fancy text with markdown: bold, italics, etc.](https://github.com/vincentarelbundock/gtsummary#fancy-text-with-markdown-bold-italics-etc)
     * [Add rows manually](https://github.com/vincentarelbundock/gtsummary#add-rows-manually)
+    * [Images](https://github.com/vincentarelbundock/gtsummary#images)
 + [A complex example](https://github.com/vincentarelbundock/gtsummary#a-complex-example)
 + [Other useful features](https://github.com/vincentarelbundock/gtsummary#other-useful-features)
     * [Output formats](https://github.com/vincentarelbundock/gtsummary#output-formats)
@@ -50,7 +51,11 @@ Here are a few benefits of `gtsummary` over some [alternative packages](https://
 * Simplicity
     - By using the `broom` and `gt` packages for key operations, `gtsummary` has a massively simplified codebase. This should improve long term code maintainability, and allow contributors to participate through GitHub.
 
-Yes, that spells CFITCRS!
+CFITCRS!
+
+At the `gtsummary` factory, we are *serious* about customizability. Are your bored of regression tables with good ol' "Intercept"? If so, we have [a solution for you:](https://github.com/vincentarelbundock/gtsummary#images)
+
+<img src="examples/squirrel_table.png" width="40%">
 
 # Installation
 
@@ -309,6 +314,20 @@ Use the `add_rows` argument to add rows manually to the bottom of the table.
 row1 <- c('Custom row 1', 'a', 'b', 'c', 'd', 'e')
 row2 <- c('Custom row 2', 5:1)
 gtsummary(models, add_rows = list(row1, row2))
+```
+
+## Images
+
+
+Insert images in your tables using the `gt::text_transform` and `gt::local_image` functions.
+
+```r
+library(gt)
+gtsummary(models) %>%
+    text_transform(
+        locations = cells_data(columns = 1, rows = 1),
+        fn = function(x) {local_image(file = "examples/squirrel.png", height = 120)}
+    )
 ```
 
 # A complex example
