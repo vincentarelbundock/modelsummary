@@ -35,6 +35,16 @@ test_that("html_output: complex table", {
     expect_known_output(cat(raw), "known_output/complex_table.html")
 })
 
+test_that("html_output: significance stars", {
+    raw <- gtsummary(models, stars =TRUE) %>% 
+           gt::as_raw_html()
+    expect_known_output(cat(raw), "known_output/stars_default.html")
+
+    raw <- gtsummary(models, stars = c('+' = .8, '*' = .1)) %>%
+           gt::as_raw_html()
+    expect_known_output(cat(raw), "known_output/stars_custom.html")
+})
+
 test_that("html_output: uncertainty estimates", {
     raw <- gtsummary(models, statistic = 'std.error',
                      title = 'statistic = standard errors') %>%

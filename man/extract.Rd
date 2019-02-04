@@ -7,7 +7,7 @@ statistical models.}
 \usage{
 extract(models, statistic = "std.error", statistic_override = NULL,
   conf_level = 0.95, coef_map = NULL, coef_omit = NULL,
-  gof_map = NULL, gof_omit = NULL, add_rows = NULL, stars = NULL,
+  gof_map = NULL, gof_omit = NULL, add_rows = NULL, stars = FALSE,
   fmt = "\%.3f")
 }
 \arguments{
@@ -46,9 +46,9 @@ the table (using `stringr::str_detect`).}
 \item{add_rows}{list of character vectors, each of length equal to the number
 of models + 1.}
 
-\item{stars}{NULL for no significance stars. TRUE for default significance
+\item{stars}{FALSE for no significance stars. TRUE for default significance
 stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
-stars: c('*' = .1, '+' = .05).}
+stars. For example, `c('*' = .1, '+' = .05)`}
 
 \item{fmt}{string which specifies how numeric values will be rounded. This
 string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after

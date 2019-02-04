@@ -48,9 +48,9 @@ string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
 the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
 use exponential notation. See `?sprintf` for more options.}
 
-\item{stars}{NULL for no significance stars. TRUE for default significance
+\item{stars}{FALSE for no significance stars. TRUE for default significance
 stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
-stars: c('*' = .1, '+' = .05).}
+stars. For example, `c('*' = .1, '+' = .05)`}
 
 \item{stars_note}{logical include a note at the bottom of the table to describe
 the contents of the `stars` argument. The note will be omitted if `stars==NULL`}

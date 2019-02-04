@@ -55,8 +55,8 @@ sanity_checks <- function(models,
 
     # stars
     checkmate::assert(
-        checkmate::check_logical(stars, null.ok = TRUE),
-        checkmate::check_numeric(stars, lower = 0, upper = 1, null.ok = TRUE)
+        checkmate::check_logical(stars, null.ok = FALSE),
+        checkmate::check_numeric(stars, lower = 0, upper = 1, null.ok = FALSE)
     )
 
 	# notes
