@@ -6,7 +6,7 @@
 \usage{
 extract_estimates(model, statistic = "std.error",
   statistic_override = NULL, conf_level = 0.95, fmt = "\%.3f",
-  stars = NULL)
+  stars = FALSE)
 }
 \arguments{
 \item{model}{object type with an available `tidy` method.}
@@ -31,9 +31,9 @@ string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
 the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
 use exponential notation. See `?sprintf` for more options.}
 
-\item{stars}{NULL for no significance stars. TRUE for default significance
+\item{stars}{FALSE for no significance stars. TRUE for default significance
 stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
-stars: c('*' = .1, '+' = .05).}
+stars. For example, `c('*' = .1, '+' = .05)`}
 }
 \description{
 Extract estimates and statistics from a single model

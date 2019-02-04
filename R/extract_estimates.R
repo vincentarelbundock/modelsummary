@@ -7,7 +7,7 @@ extract_estimates <- function(model,
                               statistic_override = NULL,
                               conf_level = .95,
                               fmt = '%.3f',
-                              stars = NULL) {
+                              stars = FALSE) {
 
     # extract estimates
     if (statistic == 'conf.int') {
@@ -56,7 +56,7 @@ extract_estimates <- function(model,
     }
 
     # stars
-    if (!is.null(stars)) {
+    if (is.numeric(stars)) {
         if (!'p.value' %in% colnames(est)) {
             stop('To use the `stars` argument, the `broom::tidy` function must produce a column called "p.value"')
         }

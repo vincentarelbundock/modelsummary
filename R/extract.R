@@ -13,7 +13,7 @@ extract <- function(models,
                     gof_map = NULL,
                     gof_omit = NULL,
                     add_rows = NULL,
-                    stars = NULL,
+                    stars = FALSE,
                     fmt = '%.3f') {
 
     # model names

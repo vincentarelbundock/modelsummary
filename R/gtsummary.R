@@ -14,9 +14,9 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param filename the file name to create on disk. Ensure that an extension
 #' compatible with the output types is provided (`.html`, `.tex`, `.ltx`,
 #' `.rtf`). Read `?gt::gtsave` for further details.
-#' @param stars NULL for no significance stars. TRUE for default significance
+#' @param stars FALSE for no significance stars. TRUE for default significance
 #' stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
-#' stars: c('*' = .1, '+' = .05).
+#' stars. For example, `c('*' = .1, '+' = .05)`
 #' @param stars_note logical include a note at the bottom of the table to describe
 #' the contents of the `stars` argument. The note will be omitted if `stars==NULL`
 #' @param statistic string name of the statistic to include in parentheses
@@ -92,7 +92,7 @@ gtsummary <- function(models,
                       gof_map = NULL,
                       gof_omit = NULL,
                       fmt = '%.3f',
-                      stars = NULL,
+                      stars = FALSE,
                       stars_note = TRUE,
                       title = NULL,
                       subtitle = NULL,
@@ -124,12 +124,13 @@ gtsummary <- function(models,
                   filename = filename)
 
     # stars
-    if (!is.null(stars)) {
-        if (is.logical(stars)) {
-            if (stars) {
-                stars <- c('*' = .1, '**' = .05, '***' = .01)
-            }
+    if (is.logical(stars)) {
+        if (stars) {
+            stars <- c('*' = .1, '**' = .05, '***' = .01)
+        } else {
+            stars_note <- FALSE
         }
+    } else {
         stars <- sort(stars, decreasing = TRUE)
     }
 
