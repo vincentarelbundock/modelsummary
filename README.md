@@ -21,6 +21,7 @@ The `gtsummary` package for `R` produces beautiful, customizable, publication-re
     * [Digits, rounding, exponential notation](https://github.com/vincentarelbundock/gtsummary#digits-rounding-exponential-notation)
     * [Colors and styles](https://github.com/vincentarelbundock/gtsummary#colors-and-styles)
     * [Fancy text with markdown: bold, italics, etc.](https://github.com/vincentarelbundock/gtsummary#fancy-text-with-markdown-bold-italics-etc)
+    * [Font size](https://github.com/vincentarelbundock/gtsummary#font-size)
     * [Add rows manually](https://github.com/vincentarelbundock/gtsummary#add-rows-manually)
     * [Images](https://github.com/vincentarelbundock/gtsummary#images)
 + [A complex example](https://github.com/vincentarelbundock/gtsummary#a-complex-example)
@@ -305,6 +306,20 @@ gtsummary(models,
           title = md('This is a **bolded series of words.**'),
           notes = list(md('And an *emphasized note*.')))
 ```
+
+## Font size
+
+This will produce a table with extra large row labels and extra small coefficient estimates.
+```r
+library(gt)
+gtsummary(models) %>%
+    tab_style(style = cells_styles(text_size = 'x-large'),
+              locations = cells_stub()) %>%
+    tab_style(style = cells_styles(text_size = 'x-small'),
+              locations = cells_data())
+```
+
+Note that `gt`'s `tab_style` function is more developed for HTML output than for RTF or LaTeX, so some styling options may not be availble yet. The `gt` package is under heavy development, so feel free to file an issue on github if you have a special request, and stay tuned for more!
 
 ## Add rows manually
 
