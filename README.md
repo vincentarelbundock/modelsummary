@@ -2,7 +2,7 @@
 
 [![Travis-CI Build Status](https://travis-ci.org/vincentarelbundock/gtsummary.svg?branch=master)](https://travis-ci.org/vincentarelbundock/gtsummary)
 
-The `gtsummary` package for `R` produces beautiful, customizable, publication-ready tables to summarize statistical models. Results from several models are presented side-by-side, with uncertainty estimates in parentheses (or brackets) underneath coefficient estimates.
+The `gtsummary` package for `R` produces beautiful, customizable, publication-ready tables to summarize statistical models. Results from several models are presented side-by-side, with uncertainty estimates in parentheses (or brackets) underneath coefficient estimates. Tables can be saved to HTML, LaTeX and RTF (MS Word-ready) formats, or they can be fed to a dynamic report pipeline like `knitr` or `Sweave`.
 
 <img src="examples/complex_table.png" width="40%">
 
