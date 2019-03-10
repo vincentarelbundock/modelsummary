@@ -77,7 +77,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' gtsummary(models, title = gt::md('This is *the* title'))
 #'
 #' # notes at the bottom of the table (here, the second note includes markdown bold characters)
-#' gtsummary(models, notes = list('A first note', gt::md('A **bold** note'))
+#' gtsummary(models, notes = list('A first note', gt::md('A **bold** note')))
 #' }
 #'
 # see the README on github for a lot more examples: https://github.com/vincentarelbundock/gtsummary
