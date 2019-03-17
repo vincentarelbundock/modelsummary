@@ -32,13 +32,34 @@ extract <- function(models,
     }
 
     # extract and combine estimates
-    est <- seq_along(models) %>%
-           purrr::map(~ extract_estimates(model = models[[.]], 
-                                                      fmt = fmt, 
-                                                      statistic = statistic, 
-                                                      statistic_override = statistic_override[[.]], 
-                                                      conf_level = conf_level, 
-                                                      stars = stars)) %>%
+    est <- list()
+    for (i in seq_along(models)) {
+        est[[i]] <- extract_estimates(model = models[[i]],
+                                      fmt = fmt,
+                                      statistic = statistic,
+                                      statistic_override = statistic_override[[i]],
+                                      conf_level = conf_level,
+                                      stars = stars)
+        # coef_map: omit, reorder, rename
+        if (!is.null(coef_map)) {
+            est[[i]] <- est[[i]][est[[i]]$term %in% names(coef_map),] # omit (white list)
+            idx <- match(est[[i]]$term, names(coef_map))
+            est[[i]]$term <- coef_map[idx] # rename
+            est[[i]] <- est[[i]][order(idx, est[[i]]$statistic),] # reorder
+
+            # defensive programming
+            if (any(table(est[[i]]$term) > 2)) {
+                msg <- paste('You are trying to assign the same name to two different variables in model', i)
+                stop(msg)
+            }
+        }
+        # coef_omit
+        if (!is.null(coef_omit)) {
+            est <- est %>%
+                   dplyr::filter(!stringr::str_detect(term, coef_omit))
+        }
+    }
+    est <- est %>% 
            purrr::reduce(dplyr::full_join, by = c('term', 'statistic'))  %>%
            stats::setNames(c('term', 'statistic', model_names)) %>%
            dplyr::mutate(group = 'estimates') %>%
@@ -64,23 +85,12 @@ extract <- function(models,
            dplyr::mutate(group = 'gof') %>%
            dplyr::select(group, term, names(.))
 
-    # omit using regex
-    if (!is.null(coef_omit)) {
-        est <- est %>%
-               dplyr::filter(!stringr::str_detect(term, coef_omit))
-    }
+    # omit gof using regex
     if (!is.null(gof_omit)) {
         gof <- gof %>%
                dplyr::filter(!stringr::str_detect(term, gof_omit))
     }
 
-    # coef_map: omit, reorder, rename
-    if (!is.null(coef_map)) {
-        est <- est[est$term %in% names(coef_map),] # omit (white list)
-        idx <- match(est$term, names(coef_map))
-        est$term <- coef_map[idx] # rename
-        est <- est[order(idx, est$statistic),] # reorder
-    }
 
     # gof_map: omit, reorder, rename
     gof <- gof[!gof$term %in% gof_map$raw[gof_map$omit],] # omit (black list)

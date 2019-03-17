@@ -35,6 +35,19 @@ test_that("html_output: complex table", {
     expect_known_output(cat(raw), "known_output/complex_table.html")
 })
 
+test_that("html_output: coef_map -- collapse coefficients", {
+    set.seed(1024)
+    x <- rnorm(100)
+    y <- rnorm(100)
+    z <- rnorm(100)
+    mod <- list()
+    mod[[1]] <- lm(y ~ x)
+    mod[[2]] <- lm(y ~ z)
+    raw <- gtsummary(mod, coef_map = c('x' = 'single variable', 'z' = 'single variable')) %>%
+           gt::as_raw_html()
+    expect_known_output(cat(raw), "known_output/coef_map_collapse_coefficients.html")
+})
+
 test_that("html_output: significance stars", {
     raw <- gtsummary(models, stars =TRUE) %>% 
            gt::as_raw_html()
