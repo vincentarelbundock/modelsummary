@@ -7,8 +7,8 @@ statistical models.}
 \usage{
 extract(models, statistic = "std.error", statistic_override = NULL,
   conf_level = 0.95, coef_map = NULL, coef_omit = NULL,
-  gof_map = NULL, gof_omit = NULL, add_rows = NULL, stars = FALSE,
-  fmt = "\%.3f")
+  gof_map = gtsummary::gof_map, gof_omit = NULL, add_rows = NULL,
+  stars = FALSE, fmt = "\%.3f")
 }
 \arguments{
 \item{models}{a single model object or a (potentially named) list of models
