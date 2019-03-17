@@ -89,7 +89,7 @@ gtsummary <- function(models,
                       conf_level = 0.95,
                       coef_map = NULL,
                       coef_omit = NULL,
-                      gof_map = NULL,
+                      gof_map = gtsummary::gof_map,
                       gof_omit = NULL,
                       fmt = '%.3f',
                       stars = FALSE,
@@ -132,11 +132,6 @@ gtsummary <- function(models,
         }
     } else {
         stars <- sort(stars, decreasing = TRUE)
-    }
-
-    # gof map
-    if (is.null(gof_map)) {
-        gof_map <- gtsummary::gof_map
     }
 
     # extract estimates and gof

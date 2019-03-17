@@ -6,9 +6,9 @@
 \usage{
 gtsummary(models, statistic = "std.error", statistic_override = NULL,
   conf_level = 0.95, coef_map = NULL, coef_omit = NULL,
-  gof_map = NULL, gof_omit = NULL, fmt = "\%.3f", stars = FALSE,
-  stars_note = TRUE, title = NULL, subtitle = NULL, notes = NULL,
-  add_rows = NULL, filename = NULL)
+  gof_map = gtsummary::gof_map, gof_omit = NULL, fmt = "\%.3f",
+  stars = FALSE, stars_note = TRUE, title = NULL, subtitle = NULL,
+  notes = NULL, add_rows = NULL, filename = NULL)
 }
 \arguments{
 \item{models}{a single model object or a (potentially named) list of models
@@ -102,7 +102,7 @@ gtsummary(models, title = 'This is the title', subtitle = 'And a subtitle')
 gtsummary(models, title = gt::md('This is *the* title'))
 
 # notes at the bottom of the table (here, the second note includes markdown bold characters)
-gtsummary(models, notes = list('A first note', gt::md('A **bold** note'))
+gtsummary(models, notes = list('A first note', gt::md('A **bold** note')))
 }
 
 
