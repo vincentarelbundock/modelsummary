@@ -55,8 +55,8 @@ extract <- function(models,
         }
         # coef_omit
         if (!is.null(coef_omit)) {
-            est <- est %>%
-                   dplyr::filter(!stringr::str_detect(term, coef_omit))
+            est[[i]] <- est[[i]] %>%
+                        dplyr::filter(!stringr::str_detect(term, coef_omit))
         }
     }
     est <- est %>% 

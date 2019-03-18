@@ -15,6 +15,12 @@ models[['OLS 2']] <- lm(Desertion ~ Crime_prop + Infants, dat)
 models[['NBin 2']] <- glm.nb(Desertion ~ Crime_prop + Donations, dat)
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 
+test_that("html_output: coef_omit", {
+    raw <- gtsummary(models, coef_omit = 'Crime_prop|Infants|Donations', title = 'coef_omit expect intercept only') %>%
+           gt::as_raw_html()
+    expect_known_output(cat(raw), "known_output/coef_omit.html")
+})
+
 test_that("html_output: complex table", {
 	cm <- c('Crime_prop' = 'Crime / Population',
 		'Donations' = 'Donations',
