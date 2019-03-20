@@ -16,6 +16,15 @@ extract <- function(models,
                     stars = FALSE,
                     fmt = '%.3f') {
 
+
+    # models must be a list of models or a single model 
+    # TODO: this is code repetition from gtsummary(), but we need it over there
+    # as well for sanity checks. This doesn't matter at all, but maybe there's
+    # a more elegant solution.
+    if (!'list' %in% class(models)) {
+        models <- list(models)
+    }
+
     # model names
     if (is.null(names(models))) {
         model_names <- paste('Model', 1:length(models))
