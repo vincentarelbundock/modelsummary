@@ -49,12 +49,12 @@ extract <- function(models,
                                       statistic_override = statistic_override[[i]],
                                       conf_level = conf_level,
                                       stars = stars)
-        # coef_map: omit, reorder, rename
+
+        # coef_map: omit, rename (must be done before join to collapse rows)
         if (!is.null(coef_map)) {
             est[[i]] <- est[[i]][est[[i]]$term %in% names(coef_map),] # omit (white list)
             idx <- match(est[[i]]$term, names(coef_map))
             est[[i]]$term <- coef_map[idx] # rename
-            est[[i]] <- est[[i]][order(idx, est[[i]]$statistic),] # reorder
 
             # defensive programming
             if (any(table(est[[i]]$term) > 2)) {
@@ -68,11 +68,18 @@ extract <- function(models,
                         dplyr::filter(!stringr::str_detect(term, coef_omit))
         }
     }
+
     est <- est %>% 
            purrr::reduce(dplyr::full_join, by = c('term', 'statistic'))  %>%
            stats::setNames(c('term', 'statistic', model_names)) %>%
            dplyr::mutate(group = 'estimates') %>%
            dplyr::select(group, term, statistic, names(.))
+
+    # reorder estimates (must be done after join
+    if (!is.null(coef_map)) {
+        idx <- match(est[['term']], coef_map)
+        est <- est[order(idx, est[['statistic']]),]
+    }
 
     # extract and combine gof
     gof <- models %>%
