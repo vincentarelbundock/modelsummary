@@ -65,10 +65,13 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' # rename and re-order coefficients
 #' gtsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 #'
-#' # save to file (html, rtf, or LaTeX)
+#' # save to file (html, rtf, pdf, jpeg, png, or LaTeX)
 #' gtsummary(models, filename = 'table.html')
 #' gtsummary(models, filename = 'table.rtf')
 #' gtsummary(models, filename = 'table.tex')
+#' gtsummary(models, filename = 'table.png')
+#' gtsummary(models, filename = 'table.pdf')
+#' gtsummary(models, filename = 'table.jpeg')
 #'
 #' # titles and subtitles
 #' gtsummary(models, title = 'This is the title', subtitle = 'And a subtitle')
