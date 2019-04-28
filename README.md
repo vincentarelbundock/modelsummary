@@ -40,7 +40,7 @@ Here are a few benefits of `gtsummary` over some [alternative packages](https://
 * Customizability
     - Tables are endlessly customizable, thanks to the power of the [`gt` package.](https://gt.rstudio.com) In this README, you will find tables with colored cells, weird text, spanning column labels, row groups, titles and subtitles, global footnotes, cell-specific footnotes, significance stars, etc. This only scratches the surface of possibilities. For more, see [gt.rstudio.com](https://gt.rstudio.com) and the [Power Users](https://github.com/vincentarelbundock/gtsummary#power-users) section of this README.
 * Flexibility
-    - Tables can be saved to html, rtf, and LaTeX files. (Coming soon: PDF, TXT/ASCII, and more.)
+    - Tables can be saved to html, rtf, jpeg, png, pdf, or LaTeX files. (Coming soon: TXT/ASCII, and more.)
 * Integration
     - `gtsummary` is extremely well integrated with RStudio. When you type `gtsummary(models)`, the summary table immediately appears in the Viewer window.
 * Transparency, replicability, and automation
@@ -392,6 +392,7 @@ To save a table to file, use the `filename` argument. `gtsummary` guesses the ou
 gtsummary(models, filename = 'table.tex')
 gtsummary(models, filename = 'table.rtf')
 gtsummary(models, filename = 'table.html')
+gtsummary(models, filename = 'table.jpeg')
 ```
 
 If `filename` is not specified, `gtsummary` returns a `gt` object which can be further customized and rendered by the relevant functions in the `gt` package, such as `as_raw_html`, `as_latex`, or `as_rtf`. RStudio renders the html version of this object automatically.
