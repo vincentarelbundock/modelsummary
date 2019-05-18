@@ -397,6 +397,16 @@ gtsummary(models, filename = 'table.jpeg')
 
 If `filename` is not specified, `gtsummary` returns a `gt` object which can be further customized and rendered by the relevant functions in the `gt` package, such as `as_raw_html`, `as_latex`, or `as_rtf`. RStudio renders the html version of this object automatically.
 
+*Warning*: When creating complex tables by chaining multiple `gt` functions with the `%>%` pipe operator, the `filename` argument will not work. The problem is that `gtsummary` is trying to write-to-file immediately at the main `gtsummary()` call, before the rest of the functions in the chain are executed. In that case, it is better to use `gt::gtsave` explicitly at the very end of your chain. For example, 
+
+```r
+gtsummary(models) %>f
+       gt::tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
+       gt::tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
+       gt::tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
+       gt::gtsave('table.tex')
+```
+
 ## Dynamic documents with `knitr`
 
 You can use `knitr` and `gtsummary` to create dynamic documents with nice summary tables. When knitting in html format, adding a `gtsummary(models)` call to a code chunk should work out of the box.
