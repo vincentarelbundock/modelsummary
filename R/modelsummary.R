@@ -154,44 +154,54 @@ modelsummary <- function(models,
     tab <- dat %>%
            dplyr::mutate(term = ifelse(statistic == 'statistic', '', term))
 
-    # create gt table object
-    idx <- (1:nrow(tab))[tab$group == 'estimates']
-    tab <- tab %>%
-           # remove columns not fit for printing
-           dplyr::select(-statistic, -group) %>%
-           ## group statistics (alternate mechanism. probably better, but I
-           ## can't find a way to suppress group labels)
-           #dplyr::group_by(group) %>%
-           # gt object
-           gt::gt(rowname_col = 'term') %>%
-           # group statistics
-           gt::tab_row_group(group = '', rows = idx)
+    # check if gt is installed and warn otherwise (not available from CRAN yet)
+    if (!'gt' %in% rownames(installed.packages())) {
 
-    # titles
-    if (!is.null(title)) {
-        tab <- tab %>% gt::tab_header(title = title, subtitle = subtitle)
-    }
-
-    # stars note
-    if (stars_note & !is.null(stars)) {
-        stars_note <- paste0(names(stars), ' p < ', stars)
-        stars_note <- paste(stars_note, collapse = ', ')
-        tab = tab %>%
-              gt::tab_source_note(source_note = stars_note)
-    }
-
-    # user-supplied notes at the bottom of table
-    if (!is.null(notes)) {
-        for (n in notes) {
-            tab <- tab %>% gt::tab_source_note(source_note = n)
-        }
-    }
-
-    # output
-    if (!is.null(filename)) {
-        gt::gtsave(tab, filename)
-    } else {
+        message('To take full advantage of the `modelsummary` package, you should install the `gt` package (currently unavailable from CRAN): https://github.com/rstudio/gt\n\nlibrary(remotes)\ninstall_github("rstudio/gt")\n\n')
         return(tab)
+
+    } else {
+
+        # create gt table object
+        idx <- (1:nrow(tab))[tab$group == 'estimates']
+        tab <- tab %>%
+               # remove columns not fit for printing
+               dplyr::select(-statistic, -group) %>%
+               ## group statistics (alternate mechanism. probably better, but I
+               ## can't find a way to suppress group labels)
+               #dplyr::group_by(group) %>%
+               # gt object
+               gt::gt(rowname_col = 'term') %>%
+               # group statistics
+               gt::tab_row_group(group = '', rows = idx)
+
+        # titles
+        if (!is.null(title)) {
+            tab <- tab %>% gt::tab_header(title = title, subtitle = subtitle)
+        }
+
+        # stars note
+        if (stars_note & !is.null(stars)) {
+            stars_note <- paste0(names(stars), ' p < ', stars)
+            stars_note <- paste(stars_note, collapse = ', ')
+            tab = tab %>%
+                  gt::tab_source_note(source_note = stars_note)
+        }
+
+        # user-supplied notes at the bottom of table
+        if (!is.null(notes)) {
+            for (n in notes) {
+                tab <- tab %>% gt::tab_source_note(source_note = n)
+            }
+        }
+
+        # output
+        if (!is.null(filename)) {
+            gt::gtsave(tab, filename)
+        } else {
+            return(tab)
+        }
+
     }
 
 }
