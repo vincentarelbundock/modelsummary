@@ -155,9 +155,9 @@ modelsummary <- function(models,
            dplyr::mutate(term = ifelse(statistic == 'statistic', '', term))
 
     # check if gt is installed and warn otherwise (not available from CRAN yet)
-    if (!'gt' %in% rownames(installed.packages())) {
+    if (!'gt' %in% rownames(utils::installed.packages())) {
 
-        message('To take full advantage of the `modelsummary` package, you should install the `gt` package (currently unavailable from CRAN): https://github.com/rstudio/gt\n\nlibrary(remotes)\ninstall_github("rstudio/gt")\n\n')
+        warning('To take full advantage of the `modelsummary` package, you should install the `gt` package (currently unavailable from CRAN): https://github.com/rstudio/gt\n\nlibrary(remotes)\ninstall_github("rstudio/gt")\n\n')
         return(tab)
 
     } else {
