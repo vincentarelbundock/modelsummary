@@ -1,6 +1,6 @@
 #' internal function to check the sanity of user input
 #'
-#' @inheritParams gtsummary 
+#' @inheritParams modelsummary 
 sanity_checks <- function(models,
 						  statistic = 'std.error',
 						  statistic_override = NULL,

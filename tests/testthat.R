@@ -1,4 +1,4 @@
 library(testthat)
-library(gtsummary)
+library(modelsummary)
 
-test_check("gtsummary")
+test_check("modelsummary")

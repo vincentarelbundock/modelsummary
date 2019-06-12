@@ -1,7 +1,7 @@
 #' Extract estimates and statistics from a single model
 #' @importFrom broom tidy
 #' @param model object type with an available `tidy` method.
-#' @inheritParams gtsummary 
+#' @inheritParams modelsummary 
 extract_estimates <- function(model,
                               statistic = 'std.error',
                               statistic_override = NULL,
@@ -22,7 +22,7 @@ extract_estimates <- function(model,
                                          statistic = statistic,
                                          statistic_override = statistic_override)
         if (!statistic %in% colnames(so)) {
-            stop(paste0(statistic, " cannot be extracted through the `statistic_override` argument. You might want to look at the `gtsummary:::extract_statistic_override` function to diagnose the problem."))
+            stop(paste0(statistic, " cannot be extracted through the `statistic_override` argument. You might want to look at the `modelsummary:::extract_statistic_override` function to diagnose the problem."))
         }
         idx <- base::intersect(colnames(est), colnames(so))
         idx <- idx[idx != 'term']

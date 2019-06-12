@@ -8,7 +8,7 @@ well with `knitr`}
 knit_latex(tab, label = NULL)
 }
 \arguments{
-\item{tab}{table object produced by `gtsummary` or `gt`}
+\item{tab}{table object produced by `modelsummary` or `gt`}
 
 \item{label}{string will be inserted as a `label`}
 }
