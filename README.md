@@ -1,6 +1,6 @@
 # modelsummary: Beautiful, customizable, publication-ready model summaries in R.
 
-[![Travis-CI Build Status](https://travis-ci.org/vincentarelbundock/gtsummary.svg?branch=master)](https://travis-ci.org/vincentarelbundock/gtsummary)
+[![Travis-CI Build Status](https://travis-ci.org/vincentarelbundock/modelsummary.svg?branch=master)](https://travis-ci.org/vincentarelbundock/modelsummary)
 
 The `modelsummary` package for `R` produces beautiful, customizable, publication-ready tables to summarize statistical models. Results from several models are presented side-by-side, with uncertainty estimates in parentheses (or brackets) underneath coefficient estimates. Tables can be saved to HTML, LaTeX and RTF (MS Word-ready) formats, or they can be fed to a dynamic report pipeline like `knitr` or `Sweave`.
 
