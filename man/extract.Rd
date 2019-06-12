@@ -7,7 +7,7 @@ statistical models.}
 \usage{
 extract(models, statistic = "std.error", statistic_override = NULL,
   conf_level = 0.95, coef_map = NULL, coef_omit = NULL,
-  gof_map = gtsummary::gof_map, gof_omit = NULL, add_rows = NULL,
+  gof_map = modelsummary::gof_map, gof_omit = NULL, add_rows = NULL,
   stars = FALSE, fmt = "\%.3f")
 }
 \arguments{
@@ -38,7 +38,7 @@ table. The table will be ordered in the same order as this vector.}
 from the table (using `stringr::str_detect`).}
 
 \item{gof_map}{data.frame with four columns: `raw`, `clean`, `fmt`, and
-`omit`. See `gtsummary::gof_map`}
+`omit`. See `modelsummary::gof_map`}
 
 \item{gof_omit}{string regular expression. Omits all matching gof statistics from
 the table (using `stringr::str_detect`).}

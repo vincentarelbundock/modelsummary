@@ -1,74 +1,74 @@
-# gtsummary: Beautiful, customizable, publication-ready model summaries in R.
+# modelsummary: Beautiful, customizable, publication-ready model summaries in R.
 
-[![Travis-CI Build Status](https://travis-ci.org/vincentarelbundock/gtsummary.svg?branch=master)](https://travis-ci.org/vincentarelbundock/gtsummary)
+[![Travis-CI Build Status](https://travis-ci.org/vincentarelbundock/modelsummary.svg?branch=master)](https://travis-ci.org/vincentarelbundock/modelsummary)
 
-The `gtsummary` package for `R` produces beautiful, customizable, publication-ready tables to summarize statistical models. Results from several models are presented side-by-side, with uncertainty estimates in parentheses (or brackets) underneath coefficient estimates. Tables can be saved to HTML, LaTeX and RTF (MS Word-ready) formats, or they can be fed to a dynamic report pipeline like `knitr` or `Sweave`.
+The `modelsummary` package for `R` produces beautiful, customizable, publication-ready tables to summarize statistical models. Results from several models are presented side-by-side, with uncertainty estimates in parentheses (or brackets) underneath coefficient estimates. Tables can be saved to HTML, LaTeX and RTF (MS Word-ready) formats, or they can be fed to a dynamic report pipeline like `knitr` or `Sweave`.
 
 <img src="examples/complex_table.png" width="40%">
 
 # Table of contents
 
-+ [Sales pitch](https://github.com/vincentarelbundock/gtsummary#sales-pitch)
-+ [Installation](https://github.com/vincentarelbundock/gtsummary#installation)
-+ [A simple example](https://github.com/vincentarelbundock/gtsummary#a-simple-example)
-+ [Customizing your tables](https://github.com/vincentarelbundock/gtsummary#customizing-your-tables)
-    * [Uncertainty estimates: SE, p, t, CI](https://github.com/vincentarelbundock/gtsummary#uncertainty-estimates-se-t-p-ci)
-    * [Titles and subtitles](https://github.com/vincentarelbundock/gtsummary#titles-and-subtitles)
-    * [Group columns (spanning labels)](https://github.com/vincentarelbundock/gtsummary#column-groups-spanning-labels)
-    * [Notes](https://github.com/vincentarelbundock/gtsummary#notes)
-    * [Rename, reorder, and subset](https://github.com/vincentarelbundock/gtsummary#rename-reorder-and-subset)
-    * [Stars](https://github.com/vincentarelbundock/gtsummary#stars-statistical-significance-markers)
-    * [Digits, rounding, exponential notation](https://github.com/vincentarelbundock/gtsummary#digits-rounding-exponential-notation)
-    * [Colors and styles](https://github.com/vincentarelbundock/gtsummary#colors-and-styles)
-    * [Fancy text with markdown: bold, italics, etc.](https://github.com/vincentarelbundock/gtsummary#fancy-text-with-markdown-bold-italics-etc)
-    * [Font size](https://github.com/vincentarelbundock/gtsummary#font-size)
-    * [Add rows manually](https://github.com/vincentarelbundock/gtsummary#add-rows-manually)
-    * [Images](https://github.com/vincentarelbundock/gtsummary#images)
-+ [A complex example](https://github.com/vincentarelbundock/gtsummary#a-complex-example)
-+ [Other useful features](https://github.com/vincentarelbundock/gtsummary#other-useful-features)
-    * [Output formats](https://github.com/vincentarelbundock/gtsummary#output-formats)
-    * [Dynamic documents with knitr](https://github.com/vincentarelbundock/gtsummary#dynamic-documents-with-knitr)
-    * [Unsupported models and custom tidiers](https://github.com/vincentarelbundock/gtsummary#unsupported-models-and-custom-tidiers)
-    * [Pooled multiple imputation results](https://github.com/vincentarelbundock/gtsummary#pooled-multiple-imputation-results)
-    * [Power users](https://github.com/vincentarelbundock/gtsummary#power-users)
-+ [Alternative summary table packages for R](https://github.com/vincentarelbundock/gtsummary#alternative-summary-table-packages-for-r)
++ [Sales pitch](https://github.com/vincentarelbundock/modelsummary#sales-pitch)
++ [Installation](https://github.com/vincentarelbundock/modelsummary#installation)
++ [A simple example](https://github.com/vincentarelbundock/modelsummary#a-simple-example)
++ [Customizing your tables](https://github.com/vincentarelbundock/modelsummary#customizing-your-tables)
+    * [Uncertainty estimates: SE, p, t, CI](https://github.com/vincentarelbundock/modelsummary#uncertainty-estimates-se-t-p-ci)
+    * [Titles and subtitles](https://github.com/vincentarelbundock/modelsummary#titles-and-subtitles)
+    * [Group columns (spanning labels)](https://github.com/vincentarelbundock/modelsummary#column-groups-spanning-labels)
+    * [Notes](https://github.com/vincentarelbundock/modelsummary#notes)
+    * [Rename, reorder, and subset](https://github.com/vincentarelbundock/modelsummary#rename-reorder-and-subset)
+    * [Stars](https://github.com/vincentarelbundock/modelsummary#stars-statistical-significance-markers)
+    * [Digits, rounding, exponential notation](https://github.com/vincentarelbundock/modelsummary#digits-rounding-exponential-notation)
+    * [Colors and styles](https://github.com/vincentarelbundock/modelsummary#colors-and-styles)
+    * [Fancy text with markdown: bold, italics, etc.](https://github.com/vincentarelbundock/modelsummary#fancy-text-with-markdown-bold-italics-etc)
+    * [Font size](https://github.com/vincentarelbundock/modelsummary#font-size)
+    * [Add rows manually](https://github.com/vincentarelbundock/modelsummary#add-rows-manually)
+    * [Images](https://github.com/vincentarelbundock/modelsummary#images)
++ [A complex example](https://github.com/vincentarelbundock/modelsummary#a-complex-example)
++ [Other useful features](https://github.com/vincentarelbundock/modelsummary#other-useful-features)
+    * [Output formats](https://github.com/vincentarelbundock/modelsummary#output-formats)
+    * [Dynamic documents with knitr](https://github.com/vincentarelbundock/modelsummary#dynamic-documents-with-knitr)
+    * [Unsupported models and custom tidiers](https://github.com/vincentarelbundock/modelsummary#unsupported-models-and-custom-tidiers)
+    * [Pooled multiple imputation results](https://github.com/vincentarelbundock/modelsummary#pooled-multiple-imputation-results)
+    * [Power users](https://github.com/vincentarelbundock/modelsummary#power-users)
++ [Alternative summary table packages for R](https://github.com/vincentarelbundock/modelsummary#alternative-summary-table-packages-for-r)
 
 # Sales pitch
 
-Here are a few benefits of `gtsummary` over some [alternative packages](https://github.com/vincentarelbundock/gtsummary#alternative-summary-table-packages-for-r):
+Here are a few benefits of `modelsummary` over some [alternative packages](https://github.com/vincentarelbundock/modelsummary#alternative-summary-table-packages-for-r):
 
 * Customizability
-    - Tables are endlessly customizable, thanks to the power of the [`gt` package.](https://gt.rstudio.com) In this README, you will find tables with colored cells, weird text, spanning column labels, row groups, titles and subtitles, global footnotes, cell-specific footnotes, significance stars, etc. This only scratches the surface of possibilities. For more, see [gt.rstudio.com](https://gt.rstudio.com) and the [Power Users](https://github.com/vincentarelbundock/gtsummary#power-users) section of this README.
+    - Tables are endlessly customizable, thanks to the power of the [`gt` package.](https://gt.rstudio.com) In this README, you will find tables with colored cells, weird text, spanning column labels, row groups, titles and subtitles, global footnotes, cell-specific footnotes, significance stars, etc. This only scratches the surface of possibilities. For more, see [gt.rstudio.com](https://gt.rstudio.com) and the [Power Users](https://github.com/vincentarelbundock/modelsummary#power-users) section of this README.
 * Flexibility
     - Tables can be saved to html, rtf, jpeg, png, pdf, or LaTeX files. (Coming soon: TXT/ASCII, and more.)
 * Integration
-    - `gtsummary` is extremely well integrated with RStudio. When you type `gtsummary(models)`, the summary table immediately appears in the Viewer window.
+    - `modelsummary` is extremely well integrated with RStudio. When you type `ms(models)`, the summary table immediately appears in the Viewer window.
 * Transparency, replicability, and automation
-    - By combining `knitr` and `gtsummary`, you can easily produce beautiful, replicable, and automated documents and reports. [Click here for details.](https://github.com/vincentarelbundock/gtsummary#dynamic-documents-with-knitr)
+    - By combining `knitr` and `modelsummary`, you can easily produce beautiful, replicable, and automated documents and reports. [Click here for details.](https://github.com/vincentarelbundock/modelsummary#dynamic-documents-with-knitr)
 * Community
-    - `gtsummary` does not try to do everything. It leverages the incredible work of the `R` community by building on top of the popular `broom` package. Thanks to the `broom` team, `gtsummary` already supports dozens of model types out of the box. Most importantly, as `broom` and `gt` improve, `gtsummary` also improves.
+    - `modelsummary` does not try to do everything. It leverages the incredible work of the `R` community by building on top of the popular `broom` package. Thanks to the `broom` team, `modelsummary` already supports dozens of model types out of the box. Most importantly, as `broom` and `gt` improve, `modelsummary` also improves.
 * Reliability
-    - `gtsummary` is developed using a suite of unit tests. It (probably) won't break.
+    - `modelsummary` is developed using a suite of unit tests. It (probably) won't break.
 * Simplicity
-    - By using the `broom` and `gt` packages for key operations, `gtsummary` has a massively simplified codebase. This should improve long term code maintainability, and allow contributors to participate through GitHub.
+    - By using the `broom` and `gt` packages for key operations, `modelsummary` has a massively simplified codebase. This should improve long term code maintainability, and allow contributors to participate through GitHub.
 
 CFITCRS!
 
-At the `gtsummary` factory, we are *serious* about customizability. Are your bored of regression tables with good ol' "Intercept"? If so, we have [a solution for you:](https://github.com/vincentarelbundock/gtsummary#images)
+At the `modelsummary` factory, we are *serious* about customizability. Are your bored of regression tables with good ol' "Intercept"? If so, we have [a solution for you:](https://github.com/vincentarelbundock/modelsummary#images)
 
 <img src="examples/squirrel_table.png" width="40%">
 
 # Installation
 
-The `gt` and `gtsummary` packages are not available on CRAN yet. You can install them from github:
+The `gt` and `modelsummary` packages are not available on CRAN yet. You can install them from github:
 
 ```r
 library(remotes)
 remotes::install_github('rstudio/gt')
-remotes::install_github('vincentarelbundock/gtsummary')
+remotes::install_github('vincentarelbundock/modelsummary')
 ```
 
-Make sure you also install `tidyverse`, as `gtsummary` depends on a lot of its packages (e.g., `stringr`, `dplyr`, `tidyr`, `purrr`):
+Make sure you also install `tidyverse`, as `modelsummary` depends on a lot of its packages (e.g., `stringr`, `dplyr`, `tidyr`, `purrr`):
 
 ```r
 install.packages('tidyverse')
@@ -80,7 +80,7 @@ Load packages and download some data from the [RDatasets](https://vincentarelbun
 
 ```r
 library(MASS)
-library(gtsummary)
+library(modelsummary)
 
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
 dat <- read.csv(url) 
@@ -97,39 +97,39 @@ models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial
 Produce a simple table:
 
 ```r
-gtsummary(models)
+ms(models)
 ```
 
-Of course, `gtsummary` can also summarize single models:
+Of course, `modelsummary` can also summarize single models:
 
 ```r
 mod <- lm(Clergy ~ Crime_prop, data = dat)
-gtsummary(mod)
+ms(mod)
 ```
 
 # Customizing your tables
 
 ## Uncertainty estimates: SE, t, p, CI
 
-`gtsummary` prints an uncertainty estimate in parentheses below the corresponding coefficient estimate. The `statistic` argument must be a string which is equal to `conf.int` or to one of the columns produced by the `broom::tidy` function. When using `conf.int`, users can specify a confidence level with the `conf_level` argument.
+`modelsummary` prints an uncertainty estimate in parentheses below the corresponding coefficient estimate. The `statistic` argument must be a string which is equal to `conf.int` or to one of the columns produced by the `broom::tidy` function. When using `conf.int`, users can specify a confidence level with the `conf_level` argument.
 
 ```r
-gtsummary(models, statistic = 'std.error')
-gtsummary(models, statistic = 'p.value')
-gtsummary(models, statistic = 'statistic')
-gtsummary(models, statistic = 'conf.int', conf_level = .99)
+ms(models, statistic = 'std.error')
+ms(models, statistic = 'p.value')
+ms(models, statistic = 'statistic')
+ms(models, statistic = 'conf.int', conf_level = .99)
 ```
 You can override the uncertainty estimates in a number of ways. First, you can specify a function that produces variance-covariance matrices:
 
 ```r
 library(sandwich)
-gtsummary(models, statistic_override = vcovHC, statistic = 'p.value')
+ms(models, statistic_override = vcovHC, statistic = 'p.value')
 ```
 
 You can supply a list of functions of the same length as your model list:
 
 ```r
-gtsummary(models, 
+ms(models, 
           statistic_override = list(vcov, vcovHC, vcovHAC, vcovHC, vcov))
 ```
 
@@ -137,7 +137,7 @@ You can supply a list of named variance-covariance matrices:
 
 ```r
 vcov_matrices <- lapply(models, vcovHC)
-gtsummary(models, statistic_override = vcov_matrices)
+ms(models, statistic_override = vcov_matrices)
 ```
 
 You can supply a list of named vectors:
@@ -148,7 +148,7 @@ custom_stats <- list(`OLS 1` = c(`(Intercept)` = 2, Crime_prop = 3, Infants = 4)
                      `OLS 2` = c(`(Intercept)` = 7, Crime_prop = -6, Infants = 9), 
                      `NBin 2` = c(`(Intercept)` = 4, Crime_prop = -7, Donations = -9),
                      `Logit 1` = c(`(Intercept)` = 1, Crime_prop = -5, Infants = -2))
-gtsummary(models, statistic_override = custom_stats)
+ms(models, statistic_override = custom_stats)
 ```
 
 ## Titles and subtitles
@@ -156,7 +156,7 @@ gtsummary(models, statistic_override = custom_stats)
 You can add titles and subtitles to your table as follows:
 
 ```r
-gtsummary(models, 
+ms(models, 
           title = 'This is a title for my table.',
           subtitle = 'And this is the subtitle.')
 ```
@@ -166,7 +166,7 @@ gtsummary(models,
 Add notes to the bottom of your table:
 
 ```r
-gtsummary(models, 
+ms(models, 
           notes = list('Text of the first note.', 
                        'Text of the second note.'))
 ```
@@ -175,7 +175,7 @@ Add numbered footnotes to a column, a row, or a cell:
 
 ```r
 library(gt)
-gtsummary(models) %>% 
+ms(models) %>% 
     tab_footnote(                                                                                                                                                                                  
         footnote = md("This is a **very** important model, so we are pointing it out in a column-specific footnote."),                        
         locations = cells_column_labels(columns = vars(`OLS 1`))) %>%  
@@ -197,13 +197,13 @@ The `coef_map` argument is a named vector which allows users to rename, reorder,
 cm <- c('Crime_prop' = 'Crime / Population',
         'Donations' = 'Donations',
         '(Intercept)' = 'Constant')
-gtsummary(models, coef_map = cm)
+ms(models, coef_map = cm)
 ```
 
 An alternative mechanism to subset coefficients is to use the `coef_omit` argument. This string is a regular expression which will be fed to `stringr::str_detect` to detect the variable names which should be excluded from the table.
 
 ```r
-gtsummary(models, coef_omit = 'Intercept|Donation')
+ms(models, coef_omit = 'Intercept|Donation')
 ```
 
 ### Goodness-of-fit and other statistics
@@ -211,22 +211,22 @@ gtsummary(models, coef_omit = 'Intercept|Donation')
 `gof_omit` is a regular expression which will be fed to `stringr::str_detect` to detect the names of the statistics which should be excluded from the table.
 
 ```r
-gtsummary(models, gof_omit = 'DF|Deviance')
+ms(models, gof_omit = 'DF|Deviance')
 ```
 
 A more powerful mechanism is to supply a `data.frame` (or `tibble`) through the `gof_map` argument. This data.frame must include 4 columns:
 
 1. `raw`: a string with the name of a column produced by `broom::glance(model)`.
 2. `clean`: a string with the "clean" name of the statistic you want to appear in your final table.
-3. `fmt`: a string which will be used to round/format the string in question (e.g., `"%.3f"`). This follows the same standards as the `fmt` argument in `?gtsummary`.
+3. `fmt`: a string which will be used to round/format the string in question (e.g., `"%.3f"`). This follows the same standards as the `fmt` argument in `?modelsummary`.
 4. `omit`: `TRUE` if you want the statistic to be omitted from your final table.
 
-You can see an example of a valid data frame by typing `gtsummary::gof_map`. This is the default data.frame that `gtsummary` uses to subset and reorder goodness-of-fit statistics. As you can see, `omit == TRUE` for quite a number of statistics. You can include setting `omit == FALSE`: 
+You can see an example of a valid data frame by typing `modelsummary::gof_map`. This is the default data.frame that `modelsummary` uses to subset and reorder goodness-of-fit statistics. As you can see, `omit == TRUE` for quite a number of statistics. You can include setting `omit == FALSE`: 
 
 ```r
-gm <- gtsummary::gof_map
+gm <- modelsummary::gof_map
 gm$omit <- FALSE
-gtsummary(models, gof_map = gm)
+ms(models, gof_map = gm)
 ```
 
 The goodness-of-fit statistics will be printed in the table in the same order as in the `gof_map` data.frame.
@@ -238,7 +238,7 @@ Notice the subtle difference between `coef_map` and `gof_map`. `coef_map` works 
 Create spanning labels to group models (columns):
 
 ```r
-gtsummary(models) %>%
+ms(models) %>%
        gt::tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
        gt::tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
        gt::tab_spanner(label = 'Clergy', columns = 'Logit 1')
@@ -253,18 +253,18 @@ Some people like to add "stars" to their model summary tables to mark statistica
 3. Named numeric vector for custom stars.
 
 ```r
-gtsummary(models)
-gtsummary(models, stars = TRUE) 
-gtsummary(models, stars = c('+' = .1, '*' = .01)) 
+ms(models)
+ms(models, stars = TRUE) 
+ms(models, stars = c('+' = .1, '*' = .01)) 
 ```
 
-Whenever `stars != NULL`, `gtsummary` adds a note at the bottom of the table automatically. If you would like to omit this note, just use the `stars_note` argument:
+Whenever `stars != NULL`, `modelsummary` adds a note at the bottom of the table automatically. If you would like to omit this note, just use the `stars_note` argument:
 
 ```r
-gtsummary(models, stars = TRUE, stars_note = FALSE) 
+ms(models, stars = TRUE, stars_note = FALSE) 
 ```
 
-If you want to create your own stars description, you can add custom notes with the [`notes`](https://github.com/vincentarelbundock/gtsummary#notes) argument.
+If you want to create your own stars description, you can add custom notes with the [`notes`](https://github.com/vincentarelbundock/modelsummary#notes) argument.
 
 ## Digits, rounding, exponential notation
 
@@ -277,15 +277,15 @@ The `fmt` argument defines how numeric values are rounded and presented in the t
 Most users will just modify the `3` in `%.3f`, but this is a very powerful system, and all users are encouraged to read the details: `?sprintf`
 
 ```r
-gtsummary(models, fmt = '%.7f')
+ms(models, fmt = '%.7f')
 ```
 
 ## Colors and styles
 
-The power of the `gt` package makes `gtsummary` tables endlessly customizable. For instance, we can color columns and cells, and present values in bold or italics:
+The power of the `gt` package makes `modelsummary` tables endlessly customizable. For instance, we can color columns and cells, and present values in bold or italics:
 
 ```r
-gtsummary(models) %>%
+ms(models) %>%
     tab_style(style = cells_styles(bkgd_color = "lightcyan",
                                    text_weight = "bold"),
               locations = cells_data(columns = vars(`OLS 1`))) %>%
@@ -299,10 +299,10 @@ gtsummary(models) %>%
 
 ## Fancy text with markdown: bold, italics, etc.
 
-Thanks to `gt`, `gtsummary` accepts markdown indications for emphasis and more:
+Thanks to `gt`, `modelsummary` accepts markdown indications for emphasis and more:
 
 ```r
-gtsummary(models, 
+ms(models, 
           title = md('This is a **bolded series of words.**'),
           notes = list(md('And an *emphasized note*.')))
 ```
@@ -312,7 +312,7 @@ gtsummary(models,
 This will produce a table with extra large row labels and extra small coefficient estimates.
 ```r
 library(gt)
-gtsummary(models) %>%
+ms(models) %>%
     tab_style(style = cells_styles(text_size = 'x-large'),
               locations = cells_stub()) %>%
     tab_style(style = cells_styles(text_size = 'x-small'),
@@ -328,7 +328,7 @@ Use the `add_rows` argument to add rows manually to the bottom of the table.
 ```r
 row1 <- c('Custom row 1', 'a', 'b', 'c', 'd', 'e')
 row2 <- c('Custom row 2', 5:1)
-gtsummary(models, add_rows = list(row1, row2))
+ms(models, add_rows = list(row1, row2))
 ```
 
 ## Images
@@ -338,7 +338,7 @@ Insert images in your tables using the `gt::text_transform` and `gt::local_image
 
 ```r
 library(gt)
-gtsummary(models) %>%
+ms(models) %>%
     text_transform(
         locations = cells_data(columns = 1, rows = 1),
         fn = function(x) {local_image(file = "examples/squirrel.png", height = 120)}
@@ -355,11 +355,11 @@ cm <- c('Crime_prop' = 'Crime / Population',
         'Donations' = 'Donations',
         'Infants' = 'Infants',
         '(Intercept)' = 'Constant')
-gtsummary(models,
+ms(models,
           coef_map = cm,
           stars = TRUE,
           gof_omit = "Deviance",
-          title = 'Summarizing 5 statistical models using the `gtsummary` package for `R`.',
+          title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
           subtitle = 'Models estimated using the Guerry dataset.',
           notes = c('First custom note to contain text.',
                     'Second custom note with different content.')) %>%
@@ -386,21 +386,21 @@ gtsummary(models,
 
 ## Output formats
 
-To save a table to file, use the `filename` argument. `gtsummary` guesses the output format based on the `filename` extension. The supported extensions are: `.tex`, `.rtf`, `.html` (ASCII/Text tables coming soon).
+To save a table to file, use the `filename` argument. `modelsummary` guesses the output format based on the `filename` extension. The supported extensions are: `.tex`, `.rtf`, `.html` (ASCII/Text tables coming soon).
 
 ```r
-gtsummary(models, filename = 'table.tex')
-gtsummary(models, filename = 'table.rtf')
-gtsummary(models, filename = 'table.html')
-gtsummary(models, filename = 'table.jpeg')
+ms(models, filename = 'table.tex')
+ms(models, filename = 'table.rtf')
+ms(models, filename = 'table.html')
+ms(models, filename = 'table.jpeg')
 ```
 
-If `filename` is not specified, `gtsummary` returns a `gt` object which can be further customized and rendered by the relevant functions in the `gt` package, such as `as_raw_html`, `as_latex`, or `as_rtf`. RStudio renders the html version of this object automatically.
+If `filename` is not specified, `modelsummary` returns a `gt` object which can be further customized and rendered by the relevant functions in the `gt` package, such as `as_raw_html`, `as_latex`, or `as_rtf`. RStudio renders the html version of this object automatically.
 
-*Warning*: When creating complex tables by chaining multiple `gt` functions with the `%>%` pipe operator, the `filename` argument will not work. The problem is that `gtsummary` is trying to write-to-file immediately at the main `gtsummary()` call, before the rest of the functions in the chain are executed. In that case, it is better to use `gt::gtsave` explicitly at the very end of your chain. For example, 
+*Warning*: When creating complex tables by chaining multiple `gt` functions with the `%>%` pipe operator, the `filename` argument will not work. The problem is that `modelsummary` is trying to write-to-file immediately at the main `ms()` call, before the rest of the functions in the chain are executed. In that case, it is better to use `gt::gtsave` explicitly at the very end of your chain. For example, 
 
 ```r
-gtsummary(models) %>f
+ms(models) %>f
        gt::tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
        gt::tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
        gt::tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
@@ -409,12 +409,12 @@ gtsummary(models) %>f
 
 ## Dynamic documents with `knitr`
 
-You can use `knitr` and `gtsummary` to create dynamic documents with nice summary tables. When knitting in html format, adding a `gtsummary(models)` call to a code chunk should work out of the box.
+You can use `knitr` and `modelsummary` to create dynamic documents with nice summary tables. When knitting in html format, adding a `ms(models)` call to a code chunk should work out of the box.
 
-When knitting to PDF output, things are slightly different. Indeed, the `gt` output functionality for LaTeX is still in development and it is somewhat limited. To avoid common sources of compilation errors, and to allow users to use `\label{}`, `gtsummary` includes the `knit_latex` function. To knit to PDF, simply use:
+When knitting to PDF output, things are slightly different. Indeed, the `gt` output functionality for LaTeX is still in development and it is somewhat limited. To avoid common sources of compilation errors, and to allow users to use `\label{}`, `modelsummary` includes the `knit_latex` function. To knit to PDF, simply use:
 
 ```r
-gtsummary(models, title = 'Model summary') %>% 
+ms(models, title = 'Model summary') %>% 
     knit_latex(label = 'tab:example')
 ```
 
@@ -427,13 +427,13 @@ Here are two minimal working examples of markdown files which can be converted t
 
 ## Unsupported models and custom tidiers
 
-`gtsummary` relies on two functions from the `broom` package to extract model information: `tidy` and `glance`. If `broom` doesn't support the type of model you are trying to summarize, `gtsummary` won't support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.
+`modelsummary` relies on two functions from the `broom` package to extract model information: `tidy` and `glance`. If `broom` doesn't support the type of model you are trying to summarize, `modelsummary` won't support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.
 
 For example, models produced by the `MCMCglmm` package are not currently supported by `broom`. To add support, you simply need to create a `tidy` and a `glance` method:
 
 ```r
 # load packages and data
-library(gtsummary)
+library(modelsummary)
 library(MCMCglmm)
 data(PlodiaPO)
 
@@ -456,7 +456,7 @@ glance.MCMCglmm <- function(object, ...) {
 model <- MCMCglmm(PO ~ 1 + plate, random = ~ FSfamily, data = PlodiaPO, verbose=FALSE, pr=TRUE)
 
 # summarize the model
-gtsummary(model, statistic = 'conf.int')
+ms(model, statistic = 'conf.int')
 ```
 
 Two important things to note. First, the methods are named `tidy.MCMCglmm` and `glance.MCMCglmm` because the model object I am trying to summarize is of class `MCMCglmm`. You can find the class of a model by running: `class(model)`.
@@ -467,7 +467,7 @@ If you create new `tidy` and `glance` methods, please consider contributing them
 
 ## Pooled multiple imputation results
 
-`gtsummary` can pool and display analyses on several datasets imputed using the `mice` package. For example:
+`modelsummary` can pool and display analyses on several datasets imputed using the `mice` package. For example:
 
 ```r
 library(mice)
@@ -488,8 +488,8 @@ mod[[1]] <- with(tmp, lm(Clergy ~ Donations))
 mod[[2]] <- with(tmp, lm(Clergy ~ Donations + Literacy))
 
 # Summarize
-gtsummary(mod, statistic = 't')
-gtsummary(mod, statistic = 'ubar')
+ms(mod, statistic = 't')
+ms(mod, statistic = 'ubar')
 ```
 
 The `statistic` argument can take any column name in the tidy data frame obtained by:
@@ -501,10 +501,10 @@ generics::tidy(mod[[1]])
 
 ## Power users
 
-The `gt` package allows a bunch more customization and styling. Power users can use `gtsummary`'s `extract` function to produce a tibble which can easily be fed into `gt`.
+The `gt` package allows a bunch more customization and styling. Power users can use `modelsummary`'s `extract` function to produce a tibble which can easily be fed into `gt`.
 
 ```r
-> gtsummary::extract(models)
+> modelsummary::extract(models)
 # A tibble: 21 x 8
    group     term        statistic `OLS 1` `NBin 1` `OLS 2` `NBin 2` `Logit 1`
    <chr>     <chr>       <chr>     <chr>   <chr>    <chr>   <chr>    <chr>

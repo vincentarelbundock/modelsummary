@@ -1,7 +1,7 @@
 #' Extract and combine estimates and goodness-of-fit statistics from several
 #' statistical models.
 #'
-#' @inheritParams gtsummary
+#' @inheritParams modelsummary
 #'
 #' @export
 extract <- function(models,
@@ -10,7 +10,7 @@ extract <- function(models,
                     conf_level = 0.95,
                     coef_map = NULL,
                     coef_omit = NULL,
-                    gof_map = gtsummary::gof_map,
+                    gof_map = modelsummary::gof_map,
                     gof_omit = NULL,
                     add_rows = NULL,
                     stars = FALSE,
@@ -18,7 +18,7 @@ extract <- function(models,
 
 
     # models must be a list of models or a single model 
-    # TODO: this is code repetition from gtsummary(), but we need it over there
+    # TODO: this is code repetition from modelsummary(), but we need it over there
     # as well for sanity checks. This doesn't matter at all, but maybe there's
     # a more elegant solution.
     if (!'list' %in% class(models)) {
@@ -30,7 +30,7 @@ extract <- function(models,
         model_names <- paste('Model', 1:length(models))
     } else {
         if (any(names(models) == '')) {
-            stop('Model names cannot include empty strings. Please make sure that every object in the `models` list has a unique, non-empty name. If the `models` list has no names at all, `gtsummary` will create some automatically.')
+            stop('Model names cannot include empty strings. Please make sure that every object in the `models` list has a unique, non-empty name. If the `models` list has no names at all, `modelsummary` will create some automatically.')
         }
         model_names <- names(models)
     }

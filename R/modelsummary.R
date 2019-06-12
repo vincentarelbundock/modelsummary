@@ -38,7 +38,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param coef_omit string regular expression. Omits all matching coefficients
 #' from the table (using `stringr::str_detect`).
 #' @param gof_map data.frame with four columns: `raw`, `clean`, `fmt`, and
-#' `omit`. See `gtsummary::gof_map`
+#' `omit`. See `modelsummary::gof_map`
 #' @param gof_omit string regular expression. Omits all matching gof statistics from
 #' the table (using `stringr::str_detect`).
 #' @param add_rows list of character vectors, each of length equal to the number
@@ -55,53 +55,53 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
 #'
 #' # simple table
-#' gtsummary(models)
+#' ms(models)
 #'
 #' # confidence intervals, p values, or t-stats instead of standard errors
-#' gtsummary(models, statistic = 'conf.int', conf_level = 0.99)
-#' gtsummary(models, statistic = 'p.value', conf_level = 0.99)
-#' gtsummary(models, statistic = 'statistic', conf_level = 0.99)
+#' ms(models, statistic = 'conf.int', conf_level = 0.99)
+#' ms(models, statistic = 'p.value', conf_level = 0.99)
+#' ms(models, statistic = 'statistic', conf_level = 0.99)
 #'
 #' # rename and re-order coefficients
-#' gtsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
+#' ms(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 #'
 #' # save to file (html, rtf, pdf, jpeg, png, or LaTeX)
-#' gtsummary(models, filename = 'table.html')
-#' gtsummary(models, filename = 'table.rtf')
-#' gtsummary(models, filename = 'table.tex')
-#' gtsummary(models, filename = 'table.png')
-#' gtsummary(models, filename = 'table.pdf')
-#' gtsummary(models, filename = 'table.jpeg')
+#' ms(models, filename = 'table.html')
+#' ms(models, filename = 'table.rtf')
+#' ms(models, filename = 'table.tex')
+#' ms(models, filename = 'table.png')
+#' ms(models, filename = 'table.pdf')
+#' ms(models, filename = 'table.jpeg')
 #'
 #' # titles and subtitles
-#' gtsummary(models, title = 'This is the title', subtitle = 'And a subtitle')
+#' ms(models, title = 'This is the title', subtitle = 'And a subtitle')
 #'
 #' # title with italicized text
-#' gtsummary(models, title = gt::md('This is *the* title'))
+#' ms(models, title = gt::md('This is *the* title'))
 #'
 #' # notes at the bottom of the table (here, the second note includes markdown bold characters)
-#' gtsummary(models, notes = list('A first note', gt::md('A **bold** note')))
+#' ms(models, notes = list('A first note', gt::md('A **bold** note')))
 #' }
 #'
-# see the README on github for a lot more examples: https://github.com/vincentarelbundock/gtsummary
+# see the README on github for a lot more examples: https://github.com/vincentarelbundock/modelsummary
 #'
 #' @export
-gtsummary <- function(models,
-                      statistic = 'std.error',
-                      statistic_override = NULL,
-                      conf_level = 0.95,
-                      coef_map = NULL,
-                      coef_omit = NULL,
-                      gof_map = gtsummary::gof_map,
-                      gof_omit = NULL,
-                      fmt = '%.3f',
-                      stars = FALSE,
-                      stars_note = TRUE,
-                      title = NULL,
-                      subtitle = NULL,
-                      notes = NULL,
-                      add_rows = NULL,
-                      filename = NULL) {
+modelsummary <- function(models,
+                         statistic = 'std.error',
+                         statistic_override = NULL,
+                         conf_level = 0.95,
+                         coef_map = NULL,
+                         coef_omit = NULL,
+                         gof_map = modelsummary::gof_map,
+                         gof_omit = NULL,
+                         fmt = '%.3f',
+                         stars = FALSE,
+                         stars_note = TRUE,
+                         title = NULL,
+                         subtitle = NULL,
+                         notes = NULL,
+                         add_rows = NULL,
+                         filename = NULL) {
 
     # models must be a list of models or a single model
     if (!'list' %in% class(models)) {
@@ -138,7 +138,7 @@ gtsummary <- function(models,
     }
 
     # extract estimates and gof
-    dat <- gtsummary::extract(models,
+    dat <- modelsummary::extract(models,
                               statistic = statistic,
                               statistic_override = statistic_override,
                               conf_level = conf_level,
@@ -195,3 +195,9 @@ gtsummary <- function(models,
     }
 
 }
+
+#' Beautiful, customizable summaries of statistical models
+#'
+#' @inherit modelsummary
+#' @export
+ms <- modelsummary

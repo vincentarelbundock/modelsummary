@@ -7,7 +7,7 @@
 #' avoid common compilation errors. In time, as upstream improves, the goal is
 #' to deprecate this function.
 #'
-#' @param tab table object produced by `gtsummary` or `gt`
+#' @param tab table object produced by `modelsummary` or `gt`
 #' @param label string will be inserted as a `label`
 #' @return an object of class `knit_asis`. The first element of this object
 #'   (`x[[1]]`) contains raw LaTeX code.
