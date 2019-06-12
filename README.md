@@ -1,6 +1,6 @@
 # modelsummary: Beautiful, customizable, publication-ready model summaries in R.
 
-[![Travis-CI Build Status](https://travis-ci.org/vincentarelbundock/modelsummary.svg?branch=master)](https://travis-ci.org/vincentarelbundock/modelsummary)
+[![Travis-CI Build Status](https://travis-ci.org/vincentarelbundock/gtsummary.svg?branch=master)](https://travis-ci.org/vincentarelbundock/gtsummary)
 
 The `modelsummary` package for `R` produces beautiful, customizable, publication-ready tables to summarize statistical models. Results from several models are presented side-by-side, with uncertainty estimates in parentheses (or brackets) underneath coefficient estimates. Tables can be saved to HTML, LaTeX and RTF (MS Word-ready) formats, or they can be fed to a dynamic report pipeline like `knitr` or `Sweave`.
 
@@ -130,7 +130,7 @@ You can supply a list of functions of the same length as your model list:
 
 ```r
 ms(models, 
-          statistic_override = list(vcov, vcovHC, vcovHAC, vcovHC, vcov))
+   statistic_override = list(vcov, vcovHC, vcovHAC, vcovHC, vcov))
 ```
 
 You can supply a list of named variance-covariance matrices:
@@ -157,8 +157,8 @@ You can add titles and subtitles to your table as follows:
 
 ```r
 ms(models, 
-          title = 'This is a title for my table.',
-          subtitle = 'And this is the subtitle.')
+   title = 'This is a title for my table.',
+   subtitle = 'And this is the subtitle.')
 ```
 
 ## Notes
@@ -167,8 +167,8 @@ Add notes to the bottom of your table:
 
 ```r
 ms(models, 
-          notes = list('Text of the first note.', 
-                       'Text of the second note.'))
+   notes = list('Text of the first note.', 
+                'Text of the second note.'))
 ```
 
 Add numbered footnotes to a column, a row, or a cell:
@@ -239,9 +239,9 @@ Create spanning labels to group models (columns):
 
 ```r
 ms(models) %>%
-       gt::tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
-       gt::tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
-       gt::tab_spanner(label = 'Clergy', columns = 'Logit 1')
+    gt::tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
+    gt::tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
+    gt::tab_spanner(label = 'Clergy', columns = 'Logit 1')
 ```
 
 ## Stars: Statistical significance markers
@@ -303,8 +303,8 @@ Thanks to `gt`, `modelsummary` accepts markdown indications for emphasis and mor
 
 ```r
 ms(models, 
-          title = md('This is a **bolded series of words.**'),
-          notes = list(md('And an *emphasized note*.')))
+   title = md('This is a **bolded series of words.**'),
+   notes = list(md('And an *emphasized note*.')))
 ```
 
 ## Font size
@@ -356,21 +356,21 @@ cm <- c('Crime_prop' = 'Crime / Population',
         'Infants' = 'Infants',
         '(Intercept)' = 'Constant')
 ms(models,
-          coef_map = cm,
-          stars = TRUE,
-          gof_omit = "Deviance",
-          title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
-          subtitle = 'Models estimated using the Guerry dataset.',
-          notes = c('First custom note to contain text.',
-                    'Second custom note with different content.')) %>%
-    # add spanning labels
-    tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
-    tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
-    tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
-    # footnotes
-    tab_footnote(
-        footnote = md("This is a **very** important model, so we are pointing it out in a column-specific footnote."),                        
-        locations = cells_column_labels(columns = vars(`OLS 1`))) %>%  
+   coef_map = cm,
+   stars = TRUE,
+   gof_omit = "Deviance",
+   title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
+   subtitle = 'Models estimated using the Guerry dataset.',
+   notes = c('First custom note to contain text.',
+             'Second custom note with different content.')) %>%
+   # add spanning labels
+   tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
+   tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
+   tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
+   # footnotes
+   tab_footnote(
+       footnote = md("This is a **very** important model, so we are pointing it out in a column-specific footnote."),                        
+       locations = cells_column_labels(columns = vars(`OLS 1`))) %>%  
     tab_footnote(                                                                                                                                                                               
         footnote = "This is the variable of interest.",                                                                                           
         locations = cells_stub(rows = vars(Infants))) %>%                                                                                                                                      
@@ -400,7 +400,7 @@ If `filename` is not specified, `modelsummary` returns a `gt` object which can b
 *Warning*: When creating complex tables by chaining multiple `gt` functions with the `%>%` pipe operator, the `filename` argument will not work. The problem is that `modelsummary` is trying to write-to-file immediately at the main `ms()` call, before the rest of the functions in the chain are executed. In that case, it is better to use `gt::gtsave` explicitly at the very end of your chain. For example, 
 
 ```r
-ms(models) %>f
+ms(models) %>%
        gt::tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
        gt::tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
        gt::tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
