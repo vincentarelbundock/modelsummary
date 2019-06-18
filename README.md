@@ -1,4 +1,4 @@
-# modelsummary: Beautiful, customizable, publication-ready model summaries in R.
+#/ modelsummary: Beautiful, customizable, publication-ready model summaries in R.
 
 [![Travis-CI Build Status](https://travis-ci.org/vincentarelbundock/modelsummary.svg?branch=master)](https://travis-ci.org/vincentarelbundock/modelsummary)
 
@@ -422,8 +422,8 @@ My goal is to deprecate `knit_latex` when `gt` LaTeX export features improve.
 
 Here are two minimal working examples of markdown files which can be converted to HTML or PDF using the `knitr` package. Just open one the `.Rmd` files in RStudio and click the "Knit" button:
 
-* [markdown_to_pdf.Rmd](examples/markdown_to_pdf.Rmd) / [markdown_to_pdf.pdf](examples/markdown_to_pdf.pdf) 
-* [markdown_to_html.Rmd](examples/markdown_to_html.Rmd) / [markdown_to_html.html](examples/markdown_to_html.html) 
+* [markdown_to_pdf.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_pdf.Rmd) / [markdown_to_pdf.pdf](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_pdf.pdf) 
+* [markdown_to_html.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_html.Rmd) / [markdown_to_html.html](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_html.html) 
 
 ## Unsupported models and custom tidiers
 
@@ -525,10 +525,8 @@ The `gt` package allows a bunch more customization and styling. Power users can 
 
 There are several excellent alternative summary table packages for R:
 
-* [texreg](https://cran.r-project.org/web/packages/texreg/index.html)
-* [huxtable](https://cran.r-project.org/web/packages/huxtable/index.html)
-* [stargazer](https://cran.r-project.org/web/packages/stargazer/index.html)
-* [apsrtable](https://cran.r-project.org/web/packages/apsrtable/index.html)
-
-
+* [texreg](https://cran.r-project.org/package=texreg)
+* [huxtable](https://cran.r-project.org/package=huxtable)
+* [stargazer](https://cran.r-project.org/package=stargazer)
+* [apsrtable](https://cran.r-project.org/package=apsrtable)
 
