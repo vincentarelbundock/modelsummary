@@ -55,32 +55,32 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
 #'
 #' # simple table
-#' ms(models)
+#' msummarymodels)
 #'
 #' # confidence intervals, p values, or t-stats instead of standard errors
-#' ms(models, statistic = 'conf.int', conf_level = 0.99)
-#' ms(models, statistic = 'p.value', conf_level = 0.99)
-#' ms(models, statistic = 'statistic', conf_level = 0.99)
+#' msummarymodels, statistic = 'conf.int', conf_level = 0.99)
+#' msummarymodels, statistic = 'p.value', conf_level = 0.99)
+#' msummarymodels, statistic = 'statistic', conf_level = 0.99)
 #'
 #' # rename and re-order coefficients
-#' ms(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
+#' msummarymodels, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 #'
 #' # save to file (html, rtf, pdf, jpeg, png, or LaTeX)
-#' ms(models, filename = 'table.html')
-#' ms(models, filename = 'table.rtf')
-#' ms(models, filename = 'table.tex')
-#' ms(models, filename = 'table.png')
-#' ms(models, filename = 'table.pdf')
-#' ms(models, filename = 'table.jpeg')
+#' msummarymodels, filename = 'table.html')
+#' msummarymodels, filename = 'table.rtf')
+#' msummarymodels, filename = 'table.tex')
+#' msummarymodels, filename = 'table.png')
+#' msummarymodels, filename = 'table.pdf')
+#' msummarymodels, filename = 'table.jpeg')
 #'
 #' # titles and subtitles
-#' ms(models, title = 'This is the title', subtitle = 'And a subtitle')
+#' msummarymodels, title = 'This is the title', subtitle = 'And a subtitle')
 #'
 #' # title with italicized text
-#' ms(models, title = gt::md('This is *the* title'))
+#' msummarymodels, title = gt::md('This is *the* title'))
 #'
 #' # notes at the bottom of the table (here, the second note includes markdown bold characters)
-#' ms(models, notes = list('A first note', gt::md('A **bold** note')))
+#' msummarymodels, notes = list('A first note', gt::md('A **bold** note')))
 #' }
 #'
 # see the README on github for a lot more examples: https://github.com/vincentarelbundock/modelsummary
@@ -210,4 +210,4 @@ modelsummary <- function(models,
 #'
 #' @inherit modelsummary
 #' @export
-ms <- modelsummary
+msummary <- modelsummary

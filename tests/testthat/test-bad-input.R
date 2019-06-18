@@ -15,13 +15,13 @@ test_that("coef_map: two variables with the same name", {
     y <- rnorm(100)
     z <- rnorm(100)
     mod <- lm(y ~ x + z)
-    expect_error(ms(mod, coef_map = c('x' = 'X', 'z' = 'X')))
+    expect_error(msummary(mod, coef_map = c('x' = 'X', 'z' = 'X')))
 
     # across models works well
     mod <- list()
     mod[[1]] <- lm(y ~ x)
     mod[[2]] <- lm(y ~ z)
-    tab <- ms(mod, coef_map = c('x' = 'X', 'z' = 'X'))
+    tab <- msummary(mod, coef_map = c('x' = 'X', 'z' = 'X'))
     checkmate::expect_class(tab, 'gt_tbl')
 
 })

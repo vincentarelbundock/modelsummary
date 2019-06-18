@@ -42,7 +42,7 @@ Here are a few benefits of `modelsummary` over some [alternative packages](https
 * Flexibility
     - Tables can be saved to html, rtf, jpeg, png, pdf, or LaTeX files. (Coming soon: TXT/ASCII, and more.)
 * Integration
-    - `modelsummary` is extremely well integrated with RStudio. When you type `ms(models)`, the summary table immediately appears in the Viewer window.
+    - `modelsummary` is extremely well integrated with RStudio. When you type `msummary(models)`, the summary table immediately appears in the Viewer window.
 * Transparency, replicability, and automation
     - By combining `knitr` and `modelsummary`, you can easily produce beautiful, replicable, and automated documents and reports. [Click here for details.](https://github.com/vincentarelbundock/modelsummary#dynamic-documents-with-knitr)
 * Community
@@ -97,14 +97,14 @@ models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial
 Produce a simple table:
 
 ```r
-ms(models)
+msummary(models)
 ```
 
 Of course, `modelsummary` can also summarize single models:
 
 ```r
 mod <- lm(Clergy ~ Crime_prop, data = dat)
-ms(mod)
+msummary(mod)
 ```
 
 # Customizing your tables
@@ -114,22 +114,22 @@ ms(mod)
 `modelsummary` prints an uncertainty estimate in parentheses below the corresponding coefficient estimate. The `statistic` argument must be a string which is equal to `conf.int` or to one of the columns produced by the `broom::tidy` function. When using `conf.int`, users can specify a confidence level with the `conf_level` argument.
 
 ```r
-ms(models, statistic = 'std.error')
-ms(models, statistic = 'p.value')
-ms(models, statistic = 'statistic')
-ms(models, statistic = 'conf.int', conf_level = .99)
+msummary(models, statistic = 'std.error')
+msummary(models, statistic = 'p.value')
+msummary(models, statistic = 'statistic')
+msummary(models, statistic = 'conf.int', conf_level = .99)
 ```
 You can override the uncertainty estimates in a number of ways. First, you can specify a function that produces variance-covariance matrices:
 
 ```r
 library(sandwich)
-ms(models, statistic_override = vcovHC, statistic = 'p.value')
+msummary(models, statistic_override = vcovHC, statistic = 'p.value')
 ```
 
 You can supply a list of functions of the same length as your model list:
 
 ```r
-ms(models, 
+msummary(models, 
    statistic_override = list(vcov, vcovHC, vcovHAC, vcovHC, vcov))
 ```
 
@@ -137,7 +137,7 @@ You can supply a list of named variance-covariance matrices:
 
 ```r
 vcov_matrices <- lapply(models, vcovHC)
-ms(models, statistic_override = vcov_matrices)
+msummary(models, statistic_override = vcov_matrices)
 ```
 
 You can supply a list of named vectors:
@@ -148,7 +148,7 @@ custom_stats <- list(`OLS 1` = c(`(Intercept)` = 2, Crime_prop = 3, Infants = 4)
                      `OLS 2` = c(`(Intercept)` = 7, Crime_prop = -6, Infants = 9), 
                      `NBin 2` = c(`(Intercept)` = 4, Crime_prop = -7, Donations = -9),
                      `Logit 1` = c(`(Intercept)` = 1, Crime_prop = -5, Infants = -2))
-ms(models, statistic_override = custom_stats)
+msummary(models, statistic_override = custom_stats)
 ```
 
 ## Titles and subtitles
@@ -156,7 +156,7 @@ ms(models, statistic_override = custom_stats)
 You can add titles and subtitles to your table as follows:
 
 ```r
-ms(models, 
+msummary(models, 
    title = 'This is a title for my table.',
    subtitle = 'And this is the subtitle.')
 ```
@@ -166,7 +166,7 @@ ms(models,
 Add notes to the bottom of your table:
 
 ```r
-ms(models, 
+msummary(models, 
    notes = list('Text of the first note.', 
                 'Text of the second note.'))
 ```
@@ -175,7 +175,7 @@ Add numbered footnotes to a column, a row, or a cell:
 
 ```r
 library(gt)
-ms(models) %>% 
+msummary(models) %>% 
     tab_footnote(                                                                                                                                                                                  
         footnote = md("This is a **very** important model, so we are pointing it out in a column-specific footnote."),                        
         locations = cells_column_labels(columns = vars(`OLS 1`))) %>%  
@@ -197,13 +197,13 @@ The `coef_map` argument is a named vector which allows users to rename, reorder,
 cm <- c('Crime_prop' = 'Crime / Population',
         'Donations' = 'Donations',
         '(Intercept)' = 'Constant')
-ms(models, coef_map = cm)
+msummary(models, coef_map = cm)
 ```
 
 An alternative mechanism to subset coefficients is to use the `coef_omit` argument. This string is a regular expression which will be fed to `stringr::str_detect` to detect the variable names which should be excluded from the table.
 
 ```r
-ms(models, coef_omit = 'Intercept|Donation')
+msummary(models, coef_omit = 'Intercept|Donation')
 ```
 
 ### Goodness-of-fit and other statistics
@@ -211,7 +211,7 @@ ms(models, coef_omit = 'Intercept|Donation')
 `gof_omit` is a regular expression which will be fed to `stringr::str_detect` to detect the names of the statistics which should be excluded from the table.
 
 ```r
-ms(models, gof_omit = 'DF|Deviance')
+msummary(models, gof_omit = 'DF|Deviance')
 ```
 
 A more powerful mechanism is to supply a `data.frame` (or `tibble`) through the `gof_map` argument. This data.frame must include 4 columns:
@@ -226,7 +226,7 @@ You can see an example of a valid data frame by typing `modelsummary::gof_map`. 
 ```r
 gm <- modelsummary::gof_map
 gm$omit <- FALSE
-ms(models, gof_map = gm)
+msummary(models, gof_map = gm)
 ```
 
 The goodness-of-fit statistics will be printed in the table in the same order as in the `gof_map` data.frame.
@@ -238,7 +238,7 @@ Notice the subtle difference between `coef_map` and `gof_map`. `coef_map` works 
 Create spanning labels to group models (columns):
 
 ```r
-ms(models) %>%
+msummary(models) %>%
     gt::tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
     gt::tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
     gt::tab_spanner(label = 'Clergy', columns = 'Logit 1')
@@ -253,15 +253,15 @@ Some people like to add "stars" to their model summary tables to mark statistica
 3. Named numeric vector for custom stars.
 
 ```r
-ms(models)
-ms(models, stars = TRUE) 
-ms(models, stars = c('+' = .1, '*' = .01)) 
+msummary(models)
+msummary(models, stars = TRUE) 
+msummary(models, stars = c('+' = .1, '*' = .01)) 
 ```
 
 Whenever `stars != NULL`, `modelsummary` adds a note at the bottom of the table automatically. If you would like to omit this note, just use the `stars_note` argument:
 
 ```r
-ms(models, stars = TRUE, stars_note = FALSE) 
+msummary(models, stars = TRUE, stars_note = FALSE) 
 ```
 
 If you want to create your own stars description, you can add custom notes with the [`notes`](https://github.com/vincentarelbundock/modelsummary#notes) argument.
@@ -277,7 +277,7 @@ The `fmt` argument defines how numeric values are rounded and presented in the t
 Most users will just modify the `3` in `%.3f`, but this is a very powerful system, and all users are encouraged to read the details: `?sprintf`
 
 ```r
-ms(models, fmt = '%.7f')
+msummary(models, fmt = '%.7f')
 ```
 
 ## Colors and styles
@@ -285,7 +285,7 @@ ms(models, fmt = '%.7f')
 The power of the `gt` package makes `modelsummary` tables endlessly customizable. For instance, we can color columns and cells, and present values in bold or italics:
 
 ```r
-ms(models) %>%
+msummary(models) %>%
     tab_style(style = cells_styles(bkgd_color = "lightcyan",
                                    text_weight = "bold"),
               locations = cells_data(columns = vars(`OLS 1`))) %>%
@@ -302,7 +302,7 @@ ms(models) %>%
 Thanks to `gt`, `modelsummary` accepts markdown indications for emphasis and more:
 
 ```r
-ms(models, 
+msummary(models, 
    title = md('This is a **bolded series of words.**'),
    notes = list(md('And an *emphasized note*.')))
 ```
@@ -312,7 +312,7 @@ ms(models,
 This will produce a table with extra large row labels and extra small coefficient estimates.
 ```r
 library(gt)
-ms(models) %>%
+msummary(models) %>%
     tab_style(style = cells_styles(text_size = 'x-large'),
               locations = cells_stub()) %>%
     tab_style(style = cells_styles(text_size = 'x-small'),
@@ -328,7 +328,7 @@ Use the `add_rows` argument to add rows manually to the bottom of the table.
 ```r
 row1 <- c('Custom row 1', 'a', 'b', 'c', 'd', 'e')
 row2 <- c('Custom row 2', 5:1)
-ms(models, add_rows = list(row1, row2))
+msummary(models, add_rows = list(row1, row2))
 ```
 
 ## Images
@@ -338,7 +338,7 @@ Insert images in your tables using the `gt::text_transform` and `gt::local_image
 
 ```r
 library(gt)
-ms(models) %>%
+msummary(models) %>%
     text_transform(
         locations = cells_data(columns = 1, rows = 1),
         fn = function(x) {local_image(file = "examples/squirrel.png", height = 120)}
@@ -355,7 +355,7 @@ cm <- c('Crime_prop' = 'Crime / Population',
         'Donations' = 'Donations',
         'Infants' = 'Infants',
         '(Intercept)' = 'Constant')
-ms(models,
+msummary(models,
    coef_map = cm,
    stars = TRUE,
    gof_omit = "Deviance",
@@ -389,18 +389,18 @@ ms(models,
 To save a table to file, use the `filename` argument. `modelsummary` guesses the output format based on the `filename` extension. The supported extensions are: `.tex`, `.rtf`, `.html` (ASCII/Text tables coming soon).
 
 ```r
-ms(models, filename = 'table.tex')
-ms(models, filename = 'table.rtf')
-ms(models, filename = 'table.html')
-ms(models, filename = 'table.jpeg')
+msummary(models, filename = 'table.tex')
+msummary(models, filename = 'table.rtf')
+msummary(models, filename = 'table.html')
+msummary(models, filename = 'table.jpeg')
 ```
 
 If `filename` is not specified, `modelsummary` returns a `gt` object which can be further customized and rendered by the relevant functions in the `gt` package, such as `as_raw_html`, `as_latex`, or `as_rtf`. RStudio renders the html version of this object automatically.
 
-*Warning*: When creating complex tables by chaining multiple `gt` functions with the `%>%` pipe operator, the `filename` argument will not work. The problem is that `modelsummary` is trying to write-to-file immediately at the main `ms()` call, before the rest of the functions in the chain are executed. In that case, it is better to use `gt::gtsave` explicitly at the very end of your chain. For example, 
+*Warning*: When creating complex tables by chaining multiple `gt` functions with the `%>%` pipe operator, the `filename` argument will not work. The problem is that `modelsummary` is trying to write-to-file immediately at the main `msummary()` call, before the rest of the functions in the chain are executed. In that case, it is better to use `gt::gtsave` explicitly at the very end of your chain. For example, 
 
 ```r
-ms(models) %>%
+msummary(models) %>%
        gt::tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
        gt::tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
        gt::tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
@@ -409,12 +409,12 @@ ms(models) %>%
 
 ## Dynamic documents with `knitr`
 
-You can use `knitr` and `modelsummary` to create dynamic documents with nice summary tables. When knitting in html format, adding a `ms(models)` call to a code chunk should work out of the box.
+You can use `knitr` and `modelsummary` to create dynamic documents with nice summary tables. When knitting in html format, adding a `msummary(models)` call to a code chunk should work out of the box.
 
 When knitting to PDF output, things are slightly different. Indeed, the `gt` output functionality for LaTeX is still in development and it is somewhat limited. To avoid common sources of compilation errors, and to allow users to use `\label{}`, `modelsummary` includes the `knit_latex` function. To knit to PDF, simply use:
 
 ```r
-ms(models, title = 'Model summary') %>% 
+msummary(models, title = 'Model summary') %>% 
     knit_latex(label = 'tab:example')
 ```
 
@@ -456,7 +456,7 @@ glance.MCMCglmm <- function(object, ...) {
 model <- MCMCglmm(PO ~ 1 + plate, random = ~ FSfamily, data = PlodiaPO, verbose=FALSE, pr=TRUE)
 
 # summarize the model
-ms(model, statistic = 'conf.int')
+msummary(model, statistic = 'conf.int')
 ```
 
 Two important things to note. First, the methods are named `tidy.MCMCglmm` and `glance.MCMCglmm` because the model object I am trying to summarize is of class `MCMCglmm`. You can find the class of a model by running: `class(model)`.
@@ -488,8 +488,8 @@ mod[[1]] <- with(tmp, lm(Clergy ~ Donations))
 mod[[2]] <- with(tmp, lm(Clergy ~ Donations + Literacy))
 
 # Summarize
-ms(mod, statistic = 't')
-ms(mod, statistic = 'ubar')
+msummary(mod, statistic = 't')
+msummary(mod, statistic = 'ubar')
 ```
 
 The `statistic` argument can take any column name in the tidy data frame obtained by:

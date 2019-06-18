@@ -16,7 +16,7 @@ models[['NBin 2']] <- glm.nb(Desertion ~ Crime_prop + Donations, dat)
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 
 test_that("html_output: coef_omit", {
-    raw <- ms(models, coef_omit = 'Crime_prop|Infants|Donations', title = 'coef_omit expect intercept only') %>%
+    raw <- msummary(models, coef_omit = 'Crime_prop|Infants|Donations', title = 'coef_omit expect intercept only') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/coef_omit.html")
 })
@@ -26,7 +26,7 @@ test_that("html_output: complex table", {
 		'Donations' = 'Donations',
 		'Infants' = 'Infants',
 		'(Intercept)' = 'Constant')
-	raw <- ms(models,
+	raw <- msummary(models,
 		   coef_map = cm,
  		   stars = TRUE,
  		   gof_omit = "Statistics|^p$|Deviance|Resid|Sigma|Log.Lik|^DF$",
@@ -49,38 +49,38 @@ test_that("html_output: coef_map -- collapse coefficients", {
     mod <- list()
     mod[[1]] <- lm(y ~ x)
     mod[[2]] <- lm(y ~ z)
-    raw <- ms(mod, coef_map = c('x' = 'single variable', 'z' = 'single variable')) %>%
+    raw <- msummary(mod, coef_map = c('x' = 'single variable', 'z' = 'single variable')) %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/coef_map_collapse_coefficients.html")
 })
 
 test_that("html_output: significance stars", {
-    raw <- ms(models, stars =TRUE) %>% 
+    raw <- msummary(models, stars =TRUE) %>% 
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/stars_default.html")
 
-    raw <- ms(models, stars = c('+' = .8, '*' = .1)) %>%
+    raw <- msummary(models, stars = c('+' = .8, '*' = .1)) %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/stars_custom.html")
 })
 
 test_that("html_output: uncertainty estimates", {
-    raw <- ms(models, statistic = 'std.error',
+    raw <- msummary(models, statistic = 'std.error',
                      title = 'statistic = standard errors') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/std.error.html")
 
-    raw <- ms(models, statistic = 'p.value',
+    raw <- msummary(models, statistic = 'p.value',
                      title = 'statistic = p.value') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/p.value.html")
 
-    raw <- ms(models, statistic = 'statistic',
+    raw <- msummary(models, statistic = 'statistic',
                      title = 'statistic = statistic') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/statistic.html")
 
-    raw <- ms(models, statistic = 'conf.int', conf_level = .99,
+    raw <- msummary(models, statistic = 'conf.int', conf_level = .99,
                      title = 'statistic = conf.int, conf_level = .99') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/conf.int.html")
@@ -98,19 +98,19 @@ test_that("html_output: statistic_override", {
     models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 
 
-	raw <- ms(models, statistic_override = sandwich::vcovHC, statistic = 'p.value',
+	raw <- msummary(models, statistic_override = sandwich::vcovHC, statistic = 'p.value',
                      title = 'statistic_override = sandwich::vcovHC, statistic = p.value') %>%
 		   gt::as_raw_html()
 	expect_known_output(cat(raw), 'known_output/statistic_override_1.html')
 
-	raw <- ms(models, 
+	raw <- msummary(models, 
 					 statistic_override = list(vcov, vcovHC, vcovHAC, vcovHC, vcov),
                      title = 'statistic_override = list of functions') %>%
 		   gt::as_raw_html()
 	expect_known_output(cat(raw), 'known_output/statistic_override_2.html')
 
 	vcov_matrices <- lapply(models, vcovHC)
-	raw <- ms(models, statistic_override = vcov_matrices,
+	raw <- msummary(models, statistic_override = vcov_matrices,
                      title = 'statistic_override = vcov_matrices') %>%
 		   gt::as_raw_html()
 	expect_known_output(cat(raw), 'known_output/statistic_override_3.html')
@@ -120,7 +120,7 @@ test_that("html_output: statistic_override", {
 						 `OLS 2` = c('(Intercept)' = 7, Crime_prop = -6, Infants = 9), 
 						 `NBin 2` = c('(Intercept)' = 4, Crime_prop = -7, Donations = -9),
 						 `Logit 1` = c('(Intercept)' = 1, Crime_prop = -5, Infants = -2))
-	raw <- ms(models, statistic_override = custom_stats,
+	raw <- msummary(models, statistic_override = custom_stats,
                      title = 'statistic_override = list of vectors') %>%
 		   gt::as_raw_html()
 	expect_known_output(cat(raw), 'known_output/statistic_override_4.html')
@@ -128,22 +128,22 @@ test_that("html_output: statistic_override", {
 
 test_that("html_output: title and subtitle", {
 
-    raw <- ms(models,
+    raw <- msummary(models,
                      title = 'This is a title for my table.') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/title.html")
 
-    raw <- ms(models,
+    raw <- msummary(models,
                      title = 'This is a title for my table.',
                      subtitle = 'And this is the subtitle.') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/title_subtitle.html")
 
-    expect_error(ms(models, subtitle = 'And this is the subtitle.'))
+    expect_error(msummary(models, subtitle = 'And this is the subtitle.'))
 })
 
 test_that("html_output: rounding", {
-    raw <- ms(models, fmt = '%.7f',
+    raw <- msummary(models, fmt = '%.7f',
                      title = 'rounding') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/rounding.html")
@@ -151,7 +151,7 @@ test_that("html_output: rounding", {
 
 test_that("html_output: background color", {
 
-    raw <- ms(models, title = 'colors') %>%
+    raw <- msummary(models, title = 'colors') %>%
            tab_style(style = cells_styles(bkgd_color = "lightcyan",
                                           text_weight = "bold"),
                      locations = cells_data(columns = vars(`OLS 1`))) %>%
