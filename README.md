@@ -1,10 +1,10 @@
-#/ modelsummary: Beautiful, customizable, publication-ready model summaries in R.
+# modelsummary: Beautiful, customizable, publication-ready model summaries in R.
 
 [![Travis-CI Build Status](https://travis-ci.org/vincentarelbundock/modelsummary.svg?branch=master)](https://travis-ci.org/vincentarelbundock/modelsummary)
 
 The `modelsummary` package for `R` produces beautiful, customizable, publication-ready tables to summarize statistical models. Results from several models are presented side-by-side, with uncertainty estimates in parentheses (or brackets) underneath coefficient estimates. Tables can be saved to HTML, LaTeX and RTF (MS Word-ready) formats, or they can be fed to a dynamic report pipeline like `knitr` or `Sweave`.
 
-<img src="examples/complex_table.png" width="40%">
+<img src="https://raw.githubusercontent.com/vincentarelbundock/modelsummary/master/examples/complex_table.png" width="40%">
 
 # Table of contents
 
@@ -56,7 +56,7 @@ CFITCRS!
 
 At the `modelsummary` factory, we are *serious* about customizability. Are your bored of regression tables with good ol' "Intercept"? If so, we have [a solution for you:](https://github.com/vincentarelbundock/modelsummary#images)
 
-<img src="examples/squirrel_table.png" width="40%">
+<img src="https://raw.githubusercontent.com/vincentarelbundock/modelsummary/master/examples/squirrel_table.png" width="40%">
 
 # Installation
 
@@ -295,7 +295,7 @@ msummary(models) %>%
                                      rows = 2:6))
 ```
 
-<img src="examples/colors.png" width="50%">
+<img src="https://raw.githubusercontent.com/vincentarelbundock/modelsummary/master/examples/colors.png" width="50%">
 
 ## Fancy text with markdown: bold, italics, etc.
 
