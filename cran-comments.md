@@ -7,4 +7,6 @@ This is a new package
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
 
-This package suggests & can be enhanced by the {gt} package which is only available at rstudio/gt on github. This raises a NOTE.
+This package suggests & can be enhanced by the {gt} package, which is only
+available at rstudio/gt on github. This raises a NOTE. The Description field
+tells users where they can download {gt}.
