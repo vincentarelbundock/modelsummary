@@ -1,6 +1,7 @@
 #' Extract estimates and statistics from a single model
 #' @importFrom broom tidy
 #' @param model object type with an available `tidy` method.
+#' @return data.frame with side-by-side model summaries
 #' @inheritParams modelsummary 
 extract_estimates <- function(model,
                               statistic = 'std.error',

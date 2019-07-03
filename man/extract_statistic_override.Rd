@@ -24,6 +24,9 @@ below estimates. Must be either "conf.int", or one of the column names
 produced by the `broom::tidy` function. Typical values include: "std.error",
 "conf.int", "statistic", "p.value".}
 }
+\value{
+a numeric vector of test statistics
+}
 \description{
 Allow users to override uncertainty estimates
 importFrom broom tidy

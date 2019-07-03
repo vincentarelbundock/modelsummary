@@ -11,6 +11,9 @@
 
 \item{...}{extra arguments (not used)}
 }
+\value{
+a tibble with one row
+}
 \description{
 Glance a multiple imputation `mice` pooled object
 }

@@ -13,7 +13,10 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' use exponential notation. See `?sprintf` for more options.
 #' @param filename the file name to create on disk. Ensure that an extension
 #' compatible with the output types is provided (`.html`, `.tex`, `.ltx`,
-#' `.rtf`). Read `?gt::gtsave` for further details.
+#' `.rtf`). Read `?gt::gtsave` for further details. When the table produced by
+#' `modelsummary` is post-processed by another `gt` function, users need to use
+#' the `gtsave` function from the `gt` package; using the `filename` argument
+#' will produce an error.
 #' @param stars FALSE for no significance stars. TRUE for default significance
 #' stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
 #' stars. For example, `c('*' = .1, '+' = .05)`
@@ -46,8 +49,9 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param title string
 #' @param subtitle string
 #' @param notes list of notes to append to the bottom of the table.
+#' @return a 'gt' table object.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # load data and estimate models
 #' data(trees)
 #' models <- list()
@@ -55,32 +59,24 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
 #'
 #' # simple table
-#' msummarymodels)
+#' msummary(models)
 #'
 #' # confidence intervals, p values, or t-stats instead of standard errors
-#' msummarymodels, statistic = 'conf.int', conf_level = 0.99)
-#' msummarymodels, statistic = 'p.value', conf_level = 0.99)
-#' msummarymodels, statistic = 'statistic', conf_level = 0.99)
+#' msummary(models, statistic = 'conf.int', conf_level = 0.99)
+#' msummary(models, statistic = 'p.value', conf_level = 0.99)
+#' msummary(models, statistic = 'statistic', conf_level = 0.99)
 #'
 #' # rename and re-order coefficients
-#' msummarymodels, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
-#'
-#' # save to file (html, rtf, pdf, jpeg, png, or LaTeX)
-#' msummarymodels, filename = 'table.html')
-#' msummarymodels, filename = 'table.rtf')
-#' msummarymodels, filename = 'table.tex')
-#' msummarymodels, filename = 'table.png')
-#' msummarymodels, filename = 'table.pdf')
-#' msummarymodels, filename = 'table.jpeg')
+#' msummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 #'
 #' # titles and subtitles
-#' msummarymodels, title = 'This is the title', subtitle = 'And a subtitle')
+#' msummary(models, title = 'This is the title', subtitle = 'And a subtitle')
 #'
 #' # title with italicized text
-#' msummarymodels, title = gt::md('This is *the* title'))
+#' msummary(models, title = gt::md('This is *the* title'))
 #'
 #' # notes at the bottom of the table (here, the second note includes markdown bold characters)
-#' msummarymodels, notes = list('A first note', gt::md('A **bold** note')))
+#' msummary(models, notes = list('A first note', gt::md('A **bold** note')))
 #' }
 #'
 # see the README on github for a lot more examples: https://github.com/vincentarelbundock/modelsummary
@@ -155,7 +151,9 @@ modelsummary <- function(models,
            dplyr::mutate(term = ifelse(statistic == 'statistic', '', term))
 
     # check if gt is installed and warn otherwise (not available from CRAN yet)
-    if (!'gt' %in% rownames(utils::installed.packages())) {
+    gt_loc <- try(base::find.package('gt'), silent = TRUE)
+
+    if ('try-error' %in% class(gt_loc)) {
 
         warning('To take full advantage of the `modelsummary` package, you should install the `gt` package (currently unavailable from CRAN): https://github.com/rstudio/gt\n\nlibrary(remotes)\ninstall_github("rstudio/gt")\n\n')
         return(tab)

@@ -17,6 +17,9 @@ use exponential notation. See `?sprintf` for more options.}
 \item{gof_map}{data.frame with four columns: `raw`, `clean`, `fmt`, and
 `omit`. See `modelsummary::gof_map`}
 }
+\value{
+tibble with goodness-of-fit  statistics
+}
 \description{
 Extract goodness-of-fit statistics from a single model
 }

@@ -66,7 +66,13 @@ of models + 1.}
 
 \item{filename}{the file name to create on disk. Ensure that an extension
 compatible with the output types is provided (`.html`, `.tex`, `.ltx`,
-`.rtf`). Read `?gt::gtsave` for further details.}
+`.rtf`). Read `?gt::gtsave` for further details. When the table produced by
+`modelsummary` is post-processed by another `gt` function, users need to use
+the `gtsave` function from the `gt` package; using the `filename` argument
+will produce an error.}
+}
+\value{
+error if sanity checks fail
 }
 \description{
 internal function to check the sanity of user input

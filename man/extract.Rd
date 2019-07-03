@@ -55,7 +55,19 @@ string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
 the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
 use exponential notation. See `?sprintf` for more options.}
 }
+\value{
+tibble
+}
 \description{
 Extract and combine estimates and goodness-of-fit statistics from several
 statistical models.
+}
+\examples{
+library(modelsummary)
+data(trees)
+models <- list()
+models[['Bivariate']] <- lm(Girth ~ Height, data = trees)
+models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
+extract(models)
+
 }

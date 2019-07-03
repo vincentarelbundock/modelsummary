@@ -17,6 +17,9 @@ argument accepts three types of input:
   \item a list of length(models) numeric vectors with names equal to the names of your coefficient estimates.
 }}
 }
+\value{
+tibble
+}
 \description{
 Use the statistic_override matrix to extract std.error
 }
