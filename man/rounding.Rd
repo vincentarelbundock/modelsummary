@@ -13,6 +13,9 @@ rounding(x, fmt = "\%.3f")
 \item{fmt}{a character vector of format strings which will be fed to the
 `sprintf` function. See ?sprintf for details.}
 }
+\value{
+a rounded number as character
+}
 \description{
 Convert numeric values to strings using the `sprintf` function. NA, NaN,
 -Inf, and Inf are replaced by an empty string.

@@ -35,6 +35,9 @@ use exponential notation. See `?sprintf` for more options.}
 stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
 stars. For example, `c('*' = .1, '+' = .05)`}
 }
+\value{
+data.frame with side-by-side model summaries
+}
 \description{
 Extract estimates and statistics from a single model
 }

@@ -34,6 +34,7 @@ generics::glance
 #' mod <- with(tmp, lm(Temp~ Ozone+Solar.R+Wind))
 #' tidy(mod)
 #'
+#' @return a tibble with one row per term
 #' @export
 #' @family tidiers
 tidy.mira <- function(x, ...) {
@@ -49,6 +50,7 @@ tidy.mira <- function(x, ...) {
 #'
 #' @param x An object returned by one of the `mice::pool` function.
 #' @param ... extra arguments (not used)
+#' @return a tibble with one row
 #'
 #' @examples
 #' library(mice)

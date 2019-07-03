@@ -2,6 +2,7 @@
 #' @param model object type with an available `glance` method.
 #' @importFrom broom glance
 #' @inheritParams modelsummary
+#' @return tibble with goodness-of-fit  statistics
 extract_gof <- function(model, fmt = '%.3f', gof_map = NULL) {
 
     # extract gof from model object

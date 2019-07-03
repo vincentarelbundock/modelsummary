@@ -22,6 +22,9 @@ below estimates. Must be either "conf.int", or one of the column names
 produced by the `broom::tidy` function. Typical values include: "std.error",
 "conf.int", "statistic", "p.value".}
 }
+\value{
+tibble
+}
 \description{
 Use the statistic_override vector to extract std.error/p.value/statistic
 }

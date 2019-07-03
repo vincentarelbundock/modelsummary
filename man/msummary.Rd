@@ -66,13 +66,19 @@ of models + 1.}
 
 \item{filename}{the file name to create on disk. Ensure that an extension
 compatible with the output types is provided (`.html`, `.tex`, `.ltx`,
-`.rtf`). Read `?gt::gtsave` for further details.}
+`.rtf`). Read `?gt::gtsave` for further details. When the table produced by
+`modelsummary` is post-processed by another `gt` function, users need to use
+the `gtsave` function from the `gt` package; using the `filename` argument
+will produce an error.}
+}
+\value{
+a 'gt' table object.
 }
 \description{
 Beautiful, customizable summaries of statistical models
 }
 \examples{
-\dontrun{
+\donttest{
 # load data and estimate models
 data(trees)
 models <- list()
@@ -80,32 +86,24 @@ models[['Bivariate']] <- lm(Girth ~ Height, data = trees)
 models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
 
 # simple table
-msummarymodels)
+msummary(models)
 
 # confidence intervals, p values, or t-stats instead of standard errors
-msummarymodels, statistic = 'conf.int', conf_level = 0.99)
-msummarymodels, statistic = 'p.value', conf_level = 0.99)
-msummarymodels, statistic = 'statistic', conf_level = 0.99)
+msummary(models, statistic = 'conf.int', conf_level = 0.99)
+msummary(models, statistic = 'p.value', conf_level = 0.99)
+msummary(models, statistic = 'statistic', conf_level = 0.99)
 
 # rename and re-order coefficients
-msummarymodels, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
-
-# save to file (html, rtf, pdf, jpeg, png, or LaTeX)
-msummarymodels, filename = 'table.html')
-msummarymodels, filename = 'table.rtf')
-msummarymodels, filename = 'table.tex')
-msummarymodels, filename = 'table.png')
-msummarymodels, filename = 'table.pdf')
-msummarymodels, filename = 'table.jpeg')
+msummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 
 # titles and subtitles
-msummarymodels, title = 'This is the title', subtitle = 'And a subtitle')
+msummary(models, title = 'This is the title', subtitle = 'And a subtitle')
 
 # title with italicized text
-msummarymodels, title = gt::md('This is *the* title'))
+msummary(models, title = gt::md('This is *the* title'))
 
 # notes at the bottom of the table (here, the second note includes markdown bold characters)
-msummarymodels, notes = list('A first note', gt::md('A **bold** note')))
+msummary(models, notes = list('A first note', gt::md('A **bold** note')))
 }
 
 
