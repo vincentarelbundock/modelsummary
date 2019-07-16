@@ -27,7 +27,7 @@ The `modelsummary` package for `R` produces beautiful, customizable, publication
 + [A complex example](https://github.com/vincentarelbundock/modelsummary#a-complex-example)
 + [Other useful features](https://github.com/vincentarelbundock/modelsummary#other-useful-features)
     * [Output formats](https://github.com/vincentarelbundock/modelsummary#output-formats)
-    * [Dynamic documents with knitr](https://github.com/vincentarelbundock/modelsummary#dynamic-documents-with-knitr)
+    * [LaTeX output and dynamic documents with knitr](https://github.com/vincentarelbundock/modelsummary#latex-output-and-dynamic-documents-with-knitr)
     * [Unsupported models and custom tidiers](https://github.com/vincentarelbundock/modelsummary#unsupported-models-and-custom-tidiers)
     * [Pooled multiple imputation results](https://github.com/vincentarelbundock/modelsummary#pooled-multiple-imputation-results)
     * [Power users](https://github.com/vincentarelbundock/modelsummary#power-users)
@@ -393,9 +393,10 @@ msummary(models, filename = 'table.tex')
 msummary(models, filename = 'table.rtf')
 msummary(models, filename = 'table.html')
 msummary(models, filename = 'table.jpeg')
+msummary(models, filename = 'table.png')
 ```
 
-If `filename` is not specified, `modelsummary` returns a `gt` object which can be further customized and rendered by the relevant functions in the `gt` package, such as `as_raw_html`, `as_latex`, or `as_rtf`. RStudio renders the html version of this object automatically.
+If `filename` is not specified, `modelsummary` returns a `gt` object which can be further customized and rendered by the `gtsave` function from the `gt` package. RStudio renders the html version of this object automatically.
 
 *Warning*: When creating complex tables by chaining multiple `gt` functions with the `%>%` pipe operator, the `filename` argument will not work. The problem is that `modelsummary` is trying to write-to-file immediately at the main `msummary()` call, before the rest of the functions in the chain are executed. In that case, it is better to use `gt::gtsave` explicitly at the very end of your chain. For example, 
 
@@ -407,7 +408,7 @@ msummary(models) %>%
        gt::gtsave('table.tex')
 ```
 
-## Dynamic documents with `knitr`
+## LaTeX output and dynamic documents with `knitr`
 
 You can use `knitr` and `modelsummary` to create dynamic documents with nice summary tables. When knitting in html format, adding a `msummary(models)` call to a code chunk should work out of the box.
 
