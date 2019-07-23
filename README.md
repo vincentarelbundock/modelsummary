@@ -153,6 +153,16 @@ custom_stats <- list(`OLS 1` = c(`(Intercept)` = 2, Crime_prop = 3, Infants = 4)
 msummary(models, statistic_override = custom_stats)
 ```
 
+You can also display several different uncertainty estimates below the coefficient estimates. For example,
+
+```r
+msummary(models, statistic = c('std.error', 'p.value', 'conf.int'))
+```
+
+Will produce something like this:
+
+<img src="https://imgur.com/yNLr5Nt.png" width="30%">
+
 ## Titles and subtitles
 
 You can add titles and subtitles to your table as follows:

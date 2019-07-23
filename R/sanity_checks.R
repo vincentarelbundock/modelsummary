@@ -20,7 +20,7 @@ sanity_checks <- function(models,
 						  filename = NULL) {
 
     # simple parameters
-    checkmate::assert_character(statistic, len = 1, null.ok = FALSE)
+    checkmate::assert_character(statistic, null.ok = FALSE)
     checkmate::assert_character(coef_map, null.ok = TRUE)
     checkmate::assert_character(coef_omit, len = 1, null.ok = TRUE)
     checkmate::assert_character(gof_omit, len = 1, null.ok = TRUE)
