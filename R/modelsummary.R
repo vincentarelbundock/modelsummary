@@ -25,7 +25,8 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param statistic string name of the statistic to include in parentheses
 #' below estimates. Must be either "conf.int", or one of the column names
 #' produced by the `broom::tidy` function. Typical values include: "std.error",
-#' "conf.int", "statistic", "p.value".
+#' "conf.int", "statistic", "p.value". A character vector will stack several
+#' uncertainty estimates on top of one another (in different rows).
 #' @param statistic_override manually override the uncertainy estimates. This 
 #' argument accepts three types of input:
 #' \itemize{
@@ -147,8 +148,9 @@ modelsummary <- function(models,
                               fmt = fmt)
 
     # remove duplicate term labels
+    idx <- stringr::str_detect(dat$statistic, 'statistic\\d*$')
     tab <- dat %>%
-           dplyr::mutate(term = ifelse(statistic == 'statistic', '', term))
+           dplyr::mutate(term = ifelse(idx, '', term))
 
     # check if gt is installed and warn otherwise (not available from CRAN yet)
     gt_loc <- try(base::find.package('gt'), silent = TRUE)
