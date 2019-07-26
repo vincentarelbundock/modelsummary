@@ -11,7 +11,7 @@ extract_gof <- function(model, fmt = '%.3f', gof_map = NULL) {
     # extract nobs if not available from glance
     # TODO: This should be fixed upstream in broom
     if (!'nobs' %in% names(gof)) {
-        gof$nobs <- tryCatch(stats::nobs(model), error = function(e) NULL)
+        gof$nobs <- tryCatch(stats::nobs(model, use.fallback = TRUE), error = function(e) NULL)
     }
 
     # round integer/numeric values
