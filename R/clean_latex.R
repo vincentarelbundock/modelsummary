@@ -1,5 +1,5 @@
-#' Utility function to cleanup LaTeX output from gt and ensures that it knits
-#' well with `knitr`
+#' Utility function to cleanup LaTeX output from gt and ensures that it
+#' compiles with latex and that it knits well with `knitr`
 #'
 #' The `gt::as_latex` function is still in development, rather feature poor, and
 #' prone to breakage when using `knitr`. This function is a stopgap measure
@@ -12,7 +12,7 @@
 #' @return an object of class `knit_asis`. The first element of this object
 #'   (`x[[1]]`) contains raw LaTeX code.
 #' @export
-knit_latex <- function(tab, label = NULL) {
+clean_latex <- function(tab, label = NULL) {
 
     # input sanity check
     checkmate::check_character(label, len = 1, null.ok = TRUE)
@@ -47,6 +47,7 @@ knit_latex <- function(tab, label = NULL) {
                                          stringr::fixed("\\midrule"),
                                          stringr::fixed("\\midrule\\relax"))
 
+
     # TODO: deprecate when fixed upstream -- allow users to include caption labels
     if (!is.null(label)) {
         out[[1]] <- stringr::str_replace(out[[1]],
@@ -56,6 +57,20 @@ knit_latex <- function(tab, label = NULL) {
                                          stringr::fixed("\\caption*{"),
                                          stringr::fixed(paste0("\\caption{\\label{", label, "}")))
     }
+
+    # caption should be normal size, not large
+    out <- stringr::str_replace(out, '\\\\large ', '')
+    
+    # captionsetup options
+    out <- stringr::str_replace(out, '1pt', '0pt')
+    out <- stringr::str_replace(out, 'captionsetup\\[table\\]\\{', 'captionsetup\\[table\\]\\{font=normal,')
+    out <- stringr::str_replace(out, 'labelformat=empty,', '')
+
+    # center table
+    out <- stringr::str_replace(out, 'longtable\\}', 'longtable\\}\\[c\\]')
+
+    # tables should be numbered
+    out <- stringr::str_replace(out, 'caption\\*', 'caption')
 
     # output
     return(out)

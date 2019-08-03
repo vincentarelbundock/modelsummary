@@ -14,7 +14,8 @@ extract_estimates(model, statistic = "std.error",
 \item{statistic}{string name of the statistic to include in parentheses
 below estimates. Must be either "conf.int", or one of the column names
 produced by the `broom::tidy` function. Typical values include: "std.error",
-"conf.int", "statistic", "p.value".}
+"conf.int", "statistic", "p.value". A character vector will stack several
+uncertainty estimates on top of one another (in different rows).}
 
 \item{statistic_override}{manually override the uncertainy estimates. This 
 argument accepts three types of input:
