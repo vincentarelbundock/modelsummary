@@ -424,14 +424,14 @@ msummary(models) %>%
 
 You can use `knitr` and `modelsummary` to create dynamic documents with nice summary tables. When knitting in html format, adding a `msummary(models)` call to a code chunk should work out of the box.
 
-When knitting to PDF output, things are slightly different. Indeed, the `gt` output functionality for LaTeX is still in development and it is somewhat limited. To avoid common sources of compilation errors, and to allow users to use `\label{}`, `modelsummary` includes the `knit_latex` function. To knit to PDF, simply use:
+When knitting to PDF output, things are slightly different. Indeed, the `gt` output functionality for LaTeX is still in development and it is somewhat limited. To avoid common sources of compilation errors, and to allow users to use `\label{}`, `modelsummary` includes the `clean_latex` function. To knit to PDF, simply use:
 
 ```r
 msummary(models, title = 'Model summary') %>% 
-    knit_latex(label = 'tab:example')
+    clean_latex(label = 'tab:example')
 ```
 
-My goal is to deprecate `knit_latex` when `gt` LaTeX export features improve. 
+My goal is to deprecate `clean_latex` when `gt` LaTeX export features improve. 
 
 Here are two minimal working examples of markdown files which can be converted to HTML or PDF using the `knitr` package. Just open one the `.Rmd` files in RStudio and click the "Knit" button:
 
