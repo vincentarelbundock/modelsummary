@@ -95,14 +95,6 @@ extract <- function(models,
            purrr::reduce(dplyr::full_join, by = 'term') %>%
            stats::setNames(c('term', model_names))
 
-    # add_rows to bottom of gof
-    if (!is.null(add_rows)) {
-        add_rows <- lapply(add_rows, as.character) %>%  # TODO: remove once sanity checks are complete
-                    do.call('rbind', .) %>%
-                    data.frame(stringsAsFactors = FALSE) %>%
-                    stats::setNames(names(gof))
-        gof <- dplyr::bind_rows(gof, add_rows)
-    }
 
     # add gof row identifier
     gof <- gof %>%
@@ -115,7 +107,6 @@ extract <- function(models,
                dplyr::filter(!stringr::str_detect(term, gof_omit))
     }
 
-
     # gof_map: omit, reorder, rename
     gof <- gof[!gof$term %in% gof_map$raw[gof_map$omit],] # omit (black list)
 	gof_names <- gof_map$clean[match(gof$term, gof_map$raw)] # rename
@@ -123,6 +114,18 @@ extract <- function(models,
     gof$term <- gof_names
 	idx <- match(gof$term, gof_map$clean) # reorder
     gof <- gof[order(idx, gof$term),] 
+
+    # add_rows to bottom of gof.  this needs to be done after sorting of gof to
+    # preserve user-selected row order
+    if (!is.null(add_rows)) {
+        add_rows <- lapply(add_rows, as.character) %>%  # TODO: remove once sanity checks are complete
+                    do.call('rbind', .) %>%
+                    data.frame(stringsAsFactors = FALSE) %>%
+                    stats::setNames(c('term', model_names)) %>%
+                    dplyr::mutate(group = 'gof', statistic = '')
+        add_rows <- add_rows[, colnames(gof)]
+        gof <- dplyr::bind_rows(gof, add_rows)
+    }
 
     # output
     out <- dplyr::bind_rows(est, gof)
