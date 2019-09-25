@@ -57,7 +57,9 @@ extract_estimates <- function(model,
                 # rounding non-character values and parentheses
                 if (!is.character(est[[s]])) {
                     est[[s]] <- rounding(est[[s]], fmt)
-                    est[[s]] <- paste0('(', est[[s]], ')')
+                    est[[s]] <- ifelse(est[[s]] != '',  # avoid empty parentheses for NAs
+                                       paste0('(', est[[s]], ')'),
+                                       est[[s]])
                     est[[paste0('statistic', i)]] <- est[[s]]
                 }
 
