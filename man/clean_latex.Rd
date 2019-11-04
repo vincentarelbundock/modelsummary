@@ -3,7 +3,7 @@
 \name{clean_latex}
 \alias{clean_latex}
 \title{Utility function to cleanup LaTeX output from gt and ensures that it
-compiles with latex and that it knits well with `knitr`}
+compiles with latex}
 \usage{
 clean_latex(tab, label = NULL)
 }
@@ -13,13 +13,12 @@ clean_latex(tab, label = NULL)
 \item{label}{string will be inserted as a `label`}
 }
 \value{
-an object of class `knit_asis`. The first element of this object
-  (`x[[1]]`) contains raw LaTeX code.
+a string object with LaTeX code
 }
 \description{
-The `gt::as_latex` function is still in development, rather feature poor, and
-prone to breakage when using `knitr`. This function is a stopgap measure
-which adds a little functionality and "cleans-up" some of the LaTeX output to
-avoid common compilation errors. In time, as upstream improves, the goal is
-to deprecate this function.
+The `gt::as_latex` function is still in development, rather feature poor,
+and prone to breakage. This function is a stopgap measure which adds a
+little functionality and "cleans-up" some of the LaTeX output to avoid
+common compilation errors. In time, as upstream improves, the goal is to
+deprecate this function.
 }

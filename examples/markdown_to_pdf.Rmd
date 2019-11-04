@@ -1,8 +1,14 @@
 ---
 output: pdf_document
+header-includes: 
+  - \usepackage{caption}
+  - \usepackage{longtable}
+  - \usepackage{booktabs}
 ---
 
-```{r, message=FALSE}
+Table \ref{test_label} shows two models.
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 # load
 library(dplyr)
 library(modelsummary)
@@ -19,5 +25,6 @@ mod[[2]] <- lm(y ~ x + w)
 
 # summarize
 msummary(mod) %>%
-    knit_latex()
+    knit_latex(label = 'test_label')
 ```  
+
