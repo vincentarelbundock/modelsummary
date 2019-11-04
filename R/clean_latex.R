@@ -6,11 +6,32 @@
 #' which adds a little functionality and "cleans-up" some of the LaTeX output to
 #' avoid common compilation errors. In time, as upstream improves, the goal is
 #' to deprecate this function.
+#' 
+#' LaTeX compilation requires the following packages: booktabs, caption, longtable
 #'
 #' @param tab table object produced by `modelsummary` or `gt`
 #' @param label string will be inserted as a `label`
 #' @return an object of class `knit_asis`. The first element of this object
 #'   (`x[[1]]`) contains raw LaTeX code.
+#' @importFrom knitr asis_output
+#' @export
+knit_latex <- function(tab, label=NULL) {
+    out <- clean_latex(tab, label = label)
+    asis_output(out)
+}
+
+#' Utility function to cleanup LaTeX output from gt and ensures that it
+#' compiles with latex
+#'
+#' The `gt::as_latex` function is still in development, rather feature poor,
+#' and prone to breakage. This function is a stopgap measure which adds a
+#' little functionality and "cleans-up" some of the LaTeX output to avoid
+#' common compilation errors. In time, as upstream improves, the goal is to
+#' deprecate this function.
+#'
+#' @param tab table object produced by `modelsummary` or `gt`
+#' @param label string will be inserted as a `label`
+#' @return a string object with LaTeX code
 #' @export
 clean_latex <- function(tab, label = NULL) {
 

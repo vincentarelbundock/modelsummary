@@ -422,21 +422,35 @@ msummary(models) %>%
 
 ## LaTeX output and dynamic documents with `knitr`
 
-You can use `knitr` and `modelsummary` to create dynamic documents with nice summary tables. When knitting in html format, adding a `msummary(models)` call to a code chunk should work out of the box.
+You can use `modelsummary` to produce LaTeX tables and to create dynamic documents with `knitr`. When knitting in html format, adding a `msummary(models)` call to a code chunk should work out of the box.
 
-When knitting to PDF output, things are slightly different. Indeed, the `gt` output functionality for LaTeX is still in development and it is somewhat limited. To avoid common sources of compilation errors, and to allow users to use `\label{}`, `modelsummary` includes the `clean_latex` function. To knit to PDF, simply use:
+When creating LaTeX tables to generate PDF document, things are slightly different. Indeed, the `gt` output functionality for LaTeX is still in development and it is somewhat limited. To avoid common sources of compilation errors, and to allow users to use `\label{}`, `modelsummary` includes two convencience function: 
+
+1. `clean_latex` returns a LaTeX table as a string.
+2. `knit_latex` returns an object of type `as_is`, which can be used directly by the `knitr` package.
+
+For instance, this code will produce a LaTeX table in as a string object:
 
 ```r
 msummary(models, title = 'Model summary') %>% 
     clean_latex(label = 'tab:example')
 ```
 
-My goal is to deprecate `clean_latex` when `gt` LaTeX export features improve. 
+This code will produce a table inside a `knitr` PDF document:
+
+```r
+msummary(models, title = 'Model summary') %>% 
+    knit_latex(label = 'tab:example')
+```
+
+Please note that the tables produced by `modelsummary` require the following LaTeX packages to compile: caption, longtable, booktabs. You will need to include those in your header or preamble if you want documents to compile properly.
 
 Here are two minimal working examples of markdown files which can be converted to HTML or PDF using the `knitr` package. Just open one the `.Rmd` files in RStudio and click the "Knit" button:
 
 * [markdown_to_pdf.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_pdf.Rmd) / [markdown_to_pdf.pdf](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_pdf.pdf) 
 * [markdown_to_html.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_html.Rmd) / [markdown_to_html.html](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_html.html) 
+
+My goal is to deprecate the `clean_latex` and `knit_latex` functions when `gt` LaTeX export features improve. 
 
 ## Unsupported models and custom tidiers
 
