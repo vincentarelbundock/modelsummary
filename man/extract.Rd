@@ -8,7 +8,7 @@ statistical models.}
 extract(models, statistic = "std.error", statistic_override = NULL,
   conf_level = 0.95, coef_map = NULL, coef_omit = NULL,
   gof_map = modelsummary::gof_map, gof_omit = NULL, add_rows = NULL,
-  stars = FALSE, fmt = "\%.3f")
+  add_rows_location = NULL, stars = FALSE, fmt = "\%.3f")
 }
 \arguments{
 \item{models}{a single model object or a (potentially named) list of models
@@ -46,6 +46,10 @@ the table (using `stringr::str_detect`).}
 
 \item{add_rows}{list of character vectors, each of length equal to the number
 of models + 1.}
+
+\item{add_rows_location}{integer or NULL. custom rows will be added to the
+bottom of the table if this parameter is NULL, or after the position set by
+this integer.}
 
 \item{stars}{FALSE for no significance stars. TRUE for default significance
 stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance

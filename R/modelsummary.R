@@ -47,6 +47,9 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' the table (using `stringr::str_detect`).
 #' @param add_rows list of character vectors, each of length equal to the number
 #' of models + 1.
+#' @param add_rows_location integer or NULL. custom rows will be added to the
+#' bottom of the table if this parameter is NULL, or after the position set by
+#' this integer.
 #' @param title string
 #' @param subtitle string
 #' @param notes list of notes to append to the bottom of the table.
@@ -98,6 +101,7 @@ modelsummary <- function(models,
                          subtitle = NULL,
                          notes = NULL,
                          add_rows = NULL,
+                         add_rows_location = NULL,
                          filename = NULL) {
 
     # models must be a list of models or a single model
@@ -145,6 +149,7 @@ modelsummary <- function(models,
                               gof_omit = gof_omit,
                               stars = stars,
                               add_rows = add_rows,
+                              add_rows_location = add_rows_location,
                               fmt = fmt)
 
     # remove duplicate term labels
