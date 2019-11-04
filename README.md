@@ -343,6 +343,18 @@ row2 <- c('Custom row 2', 5:1)
 msummary(models, add_rows = list(row1, row2))
 ```
 
+Use the `add_rows` argument to specify where the custom rows should be displayed in the bottom panel. For example, this prints custom rows after the coefficients, but at first position in the goodness of fit measures:
+
+```r
+msummary(models, add_rows = list(row1, row2), add_rows_location = 0)
+```
+
+This prints custom rows after the 2nd GOF statistic:
+
+```r
+msummary(models, add_rows = list(row1, row2), add_rows_location = 2)
+```
+
 ## Images
 
 
