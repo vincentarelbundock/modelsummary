@@ -6,6 +6,7 @@
 extract_estimates <- function(model,
                               statistic = 'std.error',
                               statistic_override = NULL,
+                              statistic_vertical = TRUE,
                               conf_level = .95,
                               fmt = '%.3f',
                               stars = FALSE) {
@@ -84,11 +85,17 @@ extract_estimates <- function(model,
     cols <- c('term', 'estimate', paste0('statistic', seq_along(statistic)))
     est <- est[, cols]
 
-    # reshape
-    est <- est %>%
-           tidyr::gather(statistic, value, -term) %>%
-           dplyr::arrange(term, statistic)
-
+    # reshape to vertical
+    if (statistic_vertical) {
+        est <- est %>%
+               tidyr::gather(statistic, value, -term) %>%
+               dplyr::arrange(term, statistic)
+    } else {
+        est <- est %>%
+               dplyr::mutate(statistic = 'estimate',
+                             value = paste(estimate, statistic1)) %>%
+               dplyr::select(-estimate, -statistic1) 
+    }
 
     # output
     return(est)
