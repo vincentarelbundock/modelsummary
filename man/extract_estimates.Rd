@@ -5,8 +5,8 @@
 \title{Extract estimates and statistics from a single model}
 \usage{
 extract_estimates(model, statistic = "std.error",
-  statistic_override = NULL, conf_level = 0.95, fmt = "\%.3f",
-  stars = FALSE)
+  statistic_override = NULL, statistic_vertical = TRUE,
+  conf_level = 0.95, fmt = "\%.3f", stars = FALSE)
 }
 \arguments{
 \item{model}{object type with an available `tidy` method.}
@@ -24,6 +24,9 @@ argument accepts three types of input:
   \item a list of length(models) variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
   \item a list of length(models) numeric vectors with names equal to the names of your coefficient estimates.
 }}
+
+\item{statistic_vertical}{TRUE if statistics should be printed below
+estimates. FALSE if statistics should be printed beside estimates.}
 
 \item{conf_level}{confidence level to use for confidence intervals}
 

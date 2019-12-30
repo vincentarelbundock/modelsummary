@@ -5,6 +5,7 @@
 sanity_checks <- function(models,
 						  statistic = 'std.error',
 						  statistic_override = NULL,
+						  statistic_vertical = TRUE,
 						  conf_level = 0.95,
 						  coef_map = NULL,
 						  coef_omit = NULL,
@@ -28,6 +29,7 @@ sanity_checks <- function(models,
     checkmate::assert_logical(stars_note, null.ok = FALSE)
     checkmate::assert_character(filename, len = 1, null.ok = TRUE)
 
+
     # statistic_override
     checkmate::assert(checkmate::check_list(statistic_override, null.ok = TRUE),
                       checkmate::check_function(statistic_override, null.ok = TRUE))
@@ -38,6 +40,14 @@ sanity_checks <- function(models,
                           checkmate::check_true(all(sapply(statistic_override, is.matrix))))
     } else if (is.function(statistic_override)) {
         statistic_override <- lapply(models, function(x) statistic_override)
+    }
+
+    # statistic_vertical = FALSE: only one statistic can be displayed horizontally
+    checkmate::assert_logical(statistic_vertical, len = 1, null.ok = FALSE)
+    if (!statistic_vertical) {
+        if ((length(statistic_override) > 1) | (length(statistic) > 1)) {
+            stop("Only one statistic can be displayed next to the estimate. Check the statistic_vertical argument.")
+        }
     }
 
     # gof_map 

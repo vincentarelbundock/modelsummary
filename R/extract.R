@@ -15,6 +15,7 @@
 extract <- function(models,
                     statistic = 'std.error',
                     statistic_override = NULL,
+                    statistic_vertical = TRUE,
                     conf_level = 0.95,
                     coef_map = NULL,
                     coef_omit = NULL,
@@ -56,6 +57,7 @@ extract <- function(models,
                                       fmt = fmt,
                                       statistic = statistic,
                                       statistic_override = statistic_override[[i]],
+                                      statistic_vertical = statistic_vertical,
                                       conf_level = conf_level,
                                       stars = stars)
 

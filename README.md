@@ -121,6 +121,13 @@ msummary(models, statistic = 'p.value')
 msummary(models, statistic = 'statistic')
 msummary(models, statistic = 'conf.int', conf_level = .99)
 ```
+
+Display the uncertainty estimate next to the coefficient instead of below it:
+
+```r
+msummary(models, statistic_vertical = FALSE)
+```
+
 You can override the uncertainty estimates in a number of ways. First, you can specify a function that produces variance-covariance matrices:
 
 ```r

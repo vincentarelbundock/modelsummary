@@ -6,9 +6,10 @@
 statistical models.}
 \usage{
 extract(models, statistic = "std.error", statistic_override = NULL,
-  conf_level = 0.95, coef_map = NULL, coef_omit = NULL,
-  gof_map = modelsummary::gof_map, gof_omit = NULL, add_rows = NULL,
-  add_rows_location = NULL, stars = FALSE, fmt = "\%.3f")
+  statistic_vertical = TRUE, conf_level = 0.95, coef_map = NULL,
+  coef_omit = NULL, gof_map = modelsummary::gof_map, gof_omit = NULL,
+  add_rows = NULL, add_rows_location = NULL, stars = FALSE,
+  fmt = "\%.3f")
 }
 \arguments{
 \item{models}{a single model object or a (potentially named) list of models
@@ -27,6 +28,9 @@ argument accepts three types of input:
   \item a list of length(models) variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
   \item a list of length(models) numeric vectors with names equal to the names of your coefficient estimates.
 }}
+
+\item{statistic_vertical}{TRUE if statistics should be printed below
+estimates. FALSE if statistics should be printed beside estimates.}
 
 \item{conf_level}{confidence level to use for confidence intervals}
 

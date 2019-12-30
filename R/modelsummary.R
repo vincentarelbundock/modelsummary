@@ -34,6 +34,8 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #'   \item a list of length(models) variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
 #'   \item a list of length(models) numeric vectors with names equal to the names of your coefficient estimates.
 #' }
+#' @param statistic_vertical TRUE if statistics should be printed below
+#' estimates. FALSE if statistics should be printed beside estimates.
 #' @param conf_level confidence level to use for confidence intervals
 #' @param coef_map named character vector. Names refer to the original variable
 #' names. Values refer to the variable names that will appear in the table.
@@ -89,6 +91,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 modelsummary <- function(models,
                          statistic = 'std.error',
                          statistic_override = NULL,
+                         statistic_vertical = TRUE,
                          conf_level = 0.95,
                          coef_map = NULL,
                          coef_omit = NULL,
@@ -113,6 +116,7 @@ modelsummary <- function(models,
     sanity_checks(models,
                   statistic = statistic,
                   statistic_override = statistic_override,
+                  statistic_vertical = statistic_vertical,
                   conf_level = conf_level,
                   coef_map = coef_map,
                   coef_omit = coef_omit,
@@ -142,6 +146,7 @@ modelsummary <- function(models,
     dat <- modelsummary::extract(models,
                               statistic = statistic,
                               statistic_override = statistic_override,
+                              statistic_vertical = statistic_vertical,
                               conf_level = conf_level,
                               coef_map = coef_map,
                               coef_omit = coef_omit,
