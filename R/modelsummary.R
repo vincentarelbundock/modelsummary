@@ -173,17 +173,17 @@ modelsummary <- function(models,
     } else {
 
         # create gt table object
-        idx <- (1:nrow(tab))[tab$group == 'estimates']
+	    idx_row <- match('gof', tab$group)
+	    idx_col <- ncol(tab) - 2
         tab <- tab %>%
                # remove columns not fit for printing
                dplyr::select(-statistic, -group) %>%
-               ## group statistics (alternate mechanism. probably better, but I
-               ## can't find a way to suppress group labels)
-               #dplyr::group_by(group) %>%
                # gt object
-               gt::gt(rowname_col = 'term') %>%
-               # group statistics
-               gt::tab_row_group(group = '', rows = idx)
+               dplyr::rename(`       ` = term) %>% # HACK: arbitrary 7 spaces to avoid name conflict
+               gt::gt() %>%
+			   # horizontal rule to separate coef/gof
+			   gt::tab_style(style = gt::cell_borders(sides = 'bottom', color = '#000000'),
+                             locations = gt::cells_body(columns = 1:idx_col, rows = idx_row))
 
         # titles
         if (!is.null(title)) {
