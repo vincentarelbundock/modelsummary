@@ -5,12 +5,15 @@
 \title{Utility function to cleanup LaTeX output from gt and ensures that it
 compiles with latex}
 \usage{
-clean_latex(tab, label = NULL)
+clean_latex(tab, label = NULL, gof_regex = "^Num Obs.")
 }
 \arguments{
 \item{tab}{table object produced by `modelsummary` or `gt`}
 
 \item{label}{string will be inserted as a `label`}
+
+\item{regex}{which identifies the first GOF statistic. Used to figure out
+where to insert a midrule to separate coefficients from GOFs.}
 }
 \value{
 a string object with LaTeX code

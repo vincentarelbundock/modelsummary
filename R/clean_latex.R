@@ -31,9 +31,11 @@ knit_latex <- function(tab, label=NULL) {
 #'
 #' @param tab table object produced by `modelsummary` or `gt`
 #' @param label string will be inserted as a `label`
+#' @param regex which identifies the first GOF statistic. Used to figure out
+#' where to insert a midrule to separate coefficients from GOFs.
 #' @return a string object with LaTeX code
 #' @export
-clean_latex <- function(tab, label = NULL) {
+clean_latex <- function(tab, label = NULL, gof_regex = '^Num Obs.') {
 
     # input sanity check
     checkmate::check_character(label, len = 1, null.ok = TRUE)
@@ -86,6 +88,9 @@ clean_latex <- function(tab, label = NULL) {
     out <- stringr::str_replace(out, '1pt', '0pt')
     out <- stringr::str_replace(out, 'captionsetup\\[table\\]\\{', 'captionsetup\\[table\\]\\{font=normal,')
     out <- stringr::str_replace(out, 'labelformat=empty,', '')
+
+    # midrule to separate coef/gof
+    out <- stringr::str_replace(out, 'Num.Obs.', '\\\\midrule\nNum.Obs.')
 
     # center table
     out <- stringr::str_replace(out, 'longtable\\}', 'longtable\\}\\[c\\]')
