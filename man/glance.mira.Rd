@@ -28,6 +28,7 @@ glance(mod)
 
 }
 \seealso{
-Other tidiers: \code{\link{tidy.mira}}
+Other tidiers: 
+\code{\link{tidy.mira}()}
 }
 \concept{tidiers}

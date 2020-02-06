@@ -5,11 +5,21 @@
 \title{Extract and combine estimates and goodness-of-fit statistics from several
 statistical models.}
 \usage{
-extract(models, statistic = "std.error", statistic_override = NULL,
-  statistic_vertical = TRUE, conf_level = 0.95, coef_map = NULL,
-  coef_omit = NULL, gof_map = modelsummary::gof_map, gof_omit = NULL,
-  add_rows = NULL, add_rows_location = NULL, stars = FALSE,
-  fmt = "\%.3f")
+extract(
+  models,
+  statistic = "std.error",
+  statistic_override = NULL,
+  statistic_vertical = TRUE,
+  conf_level = 0.95,
+  coef_map = NULL,
+  coef_omit = NULL,
+  gof_map = modelsummary::gof_map,
+  gof_omit = NULL,
+  add_rows = NULL,
+  add_rows_location = NULL,
+  stars = FALSE,
+  fmt = "\%.3f"
+)
 }
 \arguments{
 \item{models}{a single model object or a (potentially named) list of models

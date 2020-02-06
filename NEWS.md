@@ -1,5 +1,7 @@
-# 2020-02-05
+# 2020-02-06
 
+* bug in statistic_override with functions
+* bug caused by upstream changes in tab_style
 * bug caused by upstream changes in filename='rtf'
 * Allow multiple rows of uncertainty estimates per coefficient
 * Preserve add_rows order

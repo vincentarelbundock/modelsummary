@@ -92,10 +92,9 @@ extract_estimates <- function(model,
                tidyr::gather(statistic, value, -term) %>%
                dplyr::arrange(term, statistic)
     } else {
-        est <- est %>%
-               dplyr::mutate(statistic = 'estimate',
-                             value = paste(estimate, statistic1)) %>%
-               dplyr::select(-estimate, -statistic1) 
+        est$statistic <- 'estimate'
+        est$value <- paste(est$estimate, est$statistic1)
+        est$estimate <- est$statistic1 <- NULL
     }
 
     # output

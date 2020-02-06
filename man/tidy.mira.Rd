@@ -42,6 +42,7 @@ tidy(mod)
 
 }
 \seealso{
-Other tidiers: \code{\link{glance.mira}}
+Other tidiers: 
+\code{\link{glance.mira}()}
 }
 \concept{tidiers}
