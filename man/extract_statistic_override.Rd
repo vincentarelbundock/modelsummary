@@ -5,8 +5,7 @@
 \title{Allow users to override uncertainty estimates
 importFrom broom tidy}
 \usage{
-extract_statistic_override(model, statistic_override,
-  statistic = "std.error")
+extract_statistic_override(model, statistic_override, statistic = "std.error")
 }
 \arguments{
 \item{model}{object type with an available `tidy` method.}

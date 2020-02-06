@@ -4,13 +4,26 @@
 \alias{modelsummary}
 \title{Beautiful, customizable summaries of statistical models}
 \usage{
-modelsummary(models, statistic = "std.error",
-  statistic_override = NULL, statistic_vertical = TRUE,
-  conf_level = 0.95, coef_map = NULL, coef_omit = NULL,
-  gof_map = modelsummary::gof_map, gof_omit = NULL, fmt = "\%.3f",
-  stars = FALSE, stars_note = TRUE, title = NULL, subtitle = NULL,
-  notes = NULL, add_rows = NULL, add_rows_location = NULL,
-  filename = NULL)
+modelsummary(
+  models,
+  statistic = "std.error",
+  statistic_override = NULL,
+  statistic_vertical = TRUE,
+  conf_level = 0.95,
+  coef_map = NULL,
+  coef_omit = NULL,
+  gof_map = modelsummary::gof_map,
+  gof_omit = NULL,
+  fmt = "\%.3f",
+  stars = FALSE,
+  stars_note = TRUE,
+  title = NULL,
+  subtitle = NULL,
+  notes = NULL,
+  add_rows = NULL,
+  add_rows_location = NULL,
+  filename = NULL
+)
 }
 \arguments{
 \item{models}{a single model object or a (potentially named) list of models

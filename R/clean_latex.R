@@ -13,11 +13,16 @@
 #' @param label string will be inserted as a `label`
 #' @return an object of class `knit_asis`. The first element of this object
 #'   (`x[[1]]`) contains raw LaTeX code.
-#' @importFrom knitr asis_output
 #' @export
 knit_latex <- function(tab, label=NULL) {
+    # knitr is installed
+    knitr_installed <- try(base::find.package('knitr'), silent = TRUE)
+    knitr_installed <- !'try-error' %in% class(knitr_installed)
+    if (!knitr_installed) {
+        stop('The `knitr` package must be installed to use the `knit_latex` function.')
+    }
     out <- clean_latex(tab, label = label)
-    asis_output(out)
+    knitr::asis_output(out)
 }
 
 #' Utility function to cleanup LaTeX output from gt and ensures that it
@@ -31,7 +36,7 @@ knit_latex <- function(tab, label=NULL) {
 #'
 #' @param tab table object produced by `modelsummary` or `gt`
 #' @param label string will be inserted as a `label`
-#' @param regex which identifies the first GOF statistic. Used to figure out
+#' @param gof_regex regex which identifies the first GOF statistic. Used to figure out
 #' where to insert a midrule to separate coefficients from GOFs.
 #' @return a string object with LaTeX code
 #' @export

@@ -12,7 +12,7 @@ clean_latex(tab, label = NULL, gof_regex = "^Num Obs.")
 
 \item{label}{string will be inserted as a `label`}
 
-\item{regex}{which identifies the first GOF statistic. Used to figure out
+\item{gof_regex}{regex which identifies the first GOF statistic. Used to figure out
 where to insert a midrule to separate coefficients from GOFs.}
 }
 \value{

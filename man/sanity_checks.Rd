@@ -4,12 +4,25 @@
 \alias{sanity_checks}
 \title{internal function to check the sanity of user input}
 \usage{
-sanity_checks(models, statistic = "std.error",
-  statistic_override = NULL, statistic_vertical = TRUE,
-  conf_level = 0.95, coef_map = NULL, coef_omit = NULL,
-  gof_map = NULL, gof_omit = NULL, fmt = "\%.3f", stars = NULL,
-  stars_note = TRUE, title = NULL, subtitle = NULL, notes = NULL,
-  add_rows = NULL, filename = NULL)
+sanity_checks(
+  models,
+  statistic = "std.error",
+  statistic_override = NULL,
+  statistic_vertical = TRUE,
+  conf_level = 0.95,
+  coef_map = NULL,
+  coef_omit = NULL,
+  gof_map = NULL,
+  gof_omit = NULL,
+  fmt = "\%.3f",
+  stars = NULL,
+  stars_note = TRUE,
+  title = NULL,
+  subtitle = NULL,
+  notes = NULL,
+  add_rows = NULL,
+  filename = NULL
+)
 }
 \arguments{
 \item{models}{a single model object or a (potentially named) list of models
