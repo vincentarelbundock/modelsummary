@@ -13,15 +13,17 @@ extract_estimates <- function(model,
 
     # statistic override
     if (!is.null(statistic_override)) {
+
+        # extract overriden statistics
         so <- extract_statistic_override(model, 
                                          statistic = statistic,
                                          statistic_override = statistic_override)
         if (!statistic %in% colnames(so)) {
             stop(paste0(statistic, " cannot be extracted through the `statistic_override` argument. You might want to look at the `modelsummary:::extract_statistic_override` function to diagnose the problem."))
         }
-        idx <- base::intersect(colnames(est), colnames(so))
-        idx <- idx[idx != 'term']
-        est <- est[, !colnames(est) %in% idx] 
+        # extract estimates, but keep only columns that do not appear in so
+        est <- tidy(model)
+        est <- est[, c('term', base::setdiff(colnames(est), colnames(so)))]
         est <- dplyr::left_join(est, so, by = 'term')
 
     } else { # if statistic_override is not used
@@ -32,41 +34,40 @@ extract_estimates <- function(model,
         } else {
             est <- tidy(model)
         }
+    }
 
-        # round estimates
-        est$estimate <- rounding(est$estimate, fmt)
+    # round estimates
+    est$estimate <- rounding(est$estimate, fmt)
 
-        # extract statistics
-        for (i in seq_along(statistic)) {
+    # extract statistics
+    for (i in seq_along(statistic)) {
 
-            s <- statistic[i]
+        s <- statistic[i]
 
-            # extract confidence intervals
-            if (s == 'conf.int') {
-                if (!all(c('conf.low', 'conf.high') %in% colnames(est))) {
-                    stop('tidy cannot not extract confidence intervals for a model of this class.')
-                }
-
-                # rounding and brackets
-                est$conf.high <- rounding(est$conf.high, fmt)
-                est$conf.low <- rounding(est$conf.low, fmt)
-                est[[paste0('statistic', i)]] <- paste0('[', est$conf.low, ', ', est$conf.high, ']')
-
-            # extract other types of statistics
-            } else {
-
-                # rounding non-character values and parentheses
-                if (!is.character(est[[s]])) {
-                    est[[s]] <- rounding(est[[s]], fmt)
-                    est[[s]] <- ifelse(est[[s]] != '',  # avoid empty parentheses for NAs
-                                       paste0('(', est[[s]], ')'),
-                                       est[[s]])
-                    est[[paste0('statistic', i)]] <- est[[s]]
-                }
-
+        # extract confidence intervals
+        if (s == 'conf.int') {
+            if (!all(c('conf.low', 'conf.high') %in% colnames(est))) {
+                stop('tidy cannot not extract confidence intervals for a model of this class.')
             }
-        }
 
+            # rounding and brackets
+            est$conf.high <- rounding(est$conf.high, fmt)
+            est$conf.low <- rounding(est$conf.low, fmt)
+            est[[paste0('statistic', i)]] <- paste0('[', est$conf.low, ', ', est$conf.high, ']')
+
+        # extract other types of statistics
+        } else {
+
+            # rounding non-character values and parentheses
+            if (!is.character(est[[s]])) {
+                est[[s]] <- rounding(est[[s]], fmt)
+                est[[s]] <- ifelse(est[[s]] != '',  # avoid empty parentheses for NAs
+                                   paste0('(', est[[s]], ')'),
+                                   est[[s]])
+                est[[paste0('statistic', i)]] <- est[[s]]
+            }
+
+        }
     }
 
     # stars
