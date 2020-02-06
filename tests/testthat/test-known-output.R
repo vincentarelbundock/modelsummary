@@ -154,13 +154,10 @@ if ('gt' %in% rownames(utils::installed.packages())) {
     test_that("html_output: background color", {
 
         raw <- msummary(models, title = 'colors') %>%
-               tab_style(style = cells_styles(bkgd_color = "lightcyan",
-                                              text_weight = "bold"),
-                         locations = cells_data(columns = vars(`OLS 1`))) %>%
-               tab_style(style = cells_styles(bkgd_color = "#F9E3D6",
-                                              text_style = "italic"),
-                         locations = cells_data(columns = vars(`NBin 2`),
-                                                rows = 2:6)) %>%
+               tab_style(style = cell_text(color = "lightcyan", weight = "bold"),
+                         locations = cells_body(columns = vars(`OLS 1`))) %>%
+               tab_style(style = cell_text(color = "#F9E3D6", style = "italic"),
+                         locations = cells_body(columns = vars(`NBin 2`), rows = 2:6)) %>%
                as_raw_html()
         expect_known_output(cat(raw), "known_output/background_color.html")
 
