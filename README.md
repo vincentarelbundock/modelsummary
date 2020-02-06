@@ -81,6 +81,7 @@ install.packages('tidyverse')
 Load packages and download some data from the [RDatasets](https://vincentarelbundock.github.io/Rdatasets/) repository. Then, estimate 5 different models and store them in a named list. The name of each model in that list will be used as a column label:
 
 ```r
+library(gt)
 library(MASS)
 library(modelsummary)
 
@@ -193,17 +194,16 @@ msummary(models,
 Add numbered footnotes to a column, a row, or a cell:
 
 ```r
-library(gt)
 msummary(models) %>% 
     tab_footnote(                                                                                                                                                                                  
         footnote = md("This is a **very** important model, so we are pointing it out in a column-specific footnote."),                        
         locations = cells_column_labels(columns = vars(`OLS 1`))) %>%  
     tab_footnote(                                                                                                                                                                               
         footnote = "This is the variable of interest.",                                                                                           
-        locations = cells_stub(rows = vars(Infants))) %>%                                                                                                                                      
+        locations = cells_body(columns = 1, rows = 3)) %>%                                                                                                                                      
     tab_footnote(                                                                                                                      
         footnote = "Most important model + most important variable = most important estimate.",
-        locations = cells_data(columns = vars(`OLS 1`), rows = vars(Infants)))
+        locations = cells_body(columns = vars(`OLS 1`), rows = 3))
 ```
 
 ## Rename, reorder, and subset
@@ -258,9 +258,9 @@ Create spanning labels to group models (columns):
 
 ```r
 msummary(models) %>%
-    gt::tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
-    gt::tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
-    gt::tab_spanner(label = 'Clergy', columns = 'Logit 1')
+    tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
+    tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
+    tab_spanner(label = 'Clergy', columns = 'Logit 1')
 ```
 
 ## Stars: Statistical significance markers
@@ -305,13 +305,14 @@ The power of the `gt` package makes `modelsummary` tables endlessly customizable
 
 ```r
 msummary(models) %>%
-    tab_style(style = cells_styles(bkgd_color = "lightcyan",
-                                   text_weight = "bold"),
-              locations = cells_data(columns = vars(`OLS 1`))) %>%
-    tab_style(style = cells_styles(bkgd_color = "#F9E3D6",
-                                   text_style = "italic"),
-              locations = cells_data(columns = vars(`NBin 2`),
-                                     rows = 2:6))
+    tab_style(style = cell_fill(color = "lightcyan"), 
+			  locations = cells_body(columns = vars(`OLS 1`))) %>% 
+    tab_style(style = cell_fill(color = "#F9E3D6"),
+              locations = cells_data(columns = vars(`NBin 2`), rows = 2:6)) %>%
+    tab_style(style = cell_text(weight = "bold"), 
+		      locations = cells_body(columns = vars(`OLS 1`))) %>%
+	tab_style(style = cell_text(style = "italic"), 
+              locations = cells_data(columns = vars(`NBin 2`), rows = 2:6))
 ```
 
 <img src="https://i.imgur.com/1u9hgm2.png" width="50%">
@@ -328,14 +329,12 @@ msummary(models,
 
 ## Font size
 
-This will produce a table with extra large row labels and extra small coefficient estimates.
+This will produce a table with extra large variable names.
+
 ```r
-library(gt)
 msummary(models) %>%
-    tab_style(style = cells_styles(text_size = 'x-large'),
-              locations = cells_stub()) %>%
-    tab_style(style = cells_styles(text_size = 'x-small'),
-              locations = cells_data())
+    tab_style(style = cell_text(size = 'x-large'),
+              locations = cells_body(columns = 1)) 
 ```
 
 Note that `gt`'s `tab_style` function is more developed for HTML output than for RTF or LaTeX, so some styling options may not be availble yet. The `gt` package is under heavy development, so feel free to file an issue on github if you have a special request, and stay tuned for more!
@@ -364,14 +363,12 @@ msummary(models, add_rows = list(row1, row2), add_rows_location = 2)
 
 ## Images
 
-
 Insert images in your tables using the `gt::text_transform` and `gt::local_image` functions.
 
 ```r
-library(gt)
 msummary(models) %>%
     text_transform(
-        locations = cells_data(columns = 1, rows = 1),
+        locations = cells_body(columns = 1, rows = 1),
         fn = function(x) {web_image(url = "https://raw.githubusercontent.com/vincentarelbundock/modelsummary/master/examples/squirrel.png", height = 120)}
     )
 ```
@@ -381,7 +378,6 @@ msummary(models) %>%
 This is the code I used to generate the "complex" table posted at the top of this README.
 
 ```r
-library(gt)
 cm <- c('Crime_prop' = 'Crime / Population',
         'Donations' = 'Donations',
         'Infants' = 'Infants',
@@ -404,13 +400,13 @@ msummary(models,
        locations = cells_column_labels(columns = vars(`OLS 1`))) %>%  
     tab_footnote(                                                                                                                                                                               
         footnote = "This is the variable of interest.",                                                                                           
-        locations = cells_stub(rows = vars(Infants))) %>%                                                                                                                                      
+        locations = cells_body(rows =5)) %>%                                                                                                                                      
     tab_footnote(                                                                                                                      
         footnote = "Most important model + most important variable = most important estimate.",
-        locations = cells_data(columns = vars(`OLS 1`), rows = vars(Infants))) %>%   
+        locations = cells_body(columns = vars(`OLS 1`), rows = 5)) %>%   
     # color and bold
-    tab_style(style = cells_styles(text_color = "red", text_weight = "bold"),
-              locations = cells_data(columns = vars(`OLS 1`), rows = vars(Infants)))
+    tab_style(style = cell_text(color = "red", weight = "bold"),
+              locations = cells_body(columns = vars(`OLS 1`), rows = 5))
 ```
 
 # Other useful features
@@ -433,10 +429,10 @@ If `filename` is not specified, `modelsummary` returns a `gt` object which can b
 
 ```r
 msummary(models) %>%
-       gt::tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
-       gt::tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
-       gt::tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
-       gt::gtsave('table.tex')
+       tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
+       tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
+       tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
+       gtsave('table.tex')
 ```
 
 ## LaTeX output and dynamic documents with `knitr`
