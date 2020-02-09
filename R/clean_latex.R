@@ -47,7 +47,7 @@ clean_latex <- function(tab, label = NULL, gof_regex = '^Num Obs.') {
 
     # add empty title if label != NULL and there is no title in tab
     if (!is.null(label)) {
-        if (is.null(attr(tab, 'heading'))) {
+        if (is.null(gt:::dt_heading_get(tab)$title)) {
             tab <- tab %>%
                    gt::tab_header(title = '')
         }
