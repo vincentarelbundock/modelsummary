@@ -30,6 +30,9 @@ extract_gof <- function(model, fmt = '%.3f', gof_map = NULL) {
         if (inherits(gof[[i]], 'numeric')) {
             gof[[i]] <- rounding(gof[[i]], gof_map$fmt[i])
         }
+        else {	
+            gof[[i]] <- as.character(gof[[i]])	
+        }
     }
 
     # reshape
