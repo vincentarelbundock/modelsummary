@@ -60,12 +60,23 @@ At the `modelsummary` factory, we are *serious* about customizability. Are your 
 
 # Installation
 
-The `gt` and `modelsummary` packages are not available on CRAN yet. You can install them from github:
+You can install `modelsummary` from CRAN:
+
+```r
+install.packages('modelsummary')
+```
+
+If you want the very latest version, install it from Github:
 
 ```r
 library(remotes)
-remotes::install_github('rstudio/gt')
 remotes::install_github('vincentarelbundock/modelsummary')
+```
+
+`modelsummary` relies heavily on the `gt` package, which is not available on CRAN yet. You can install it from github:
+
+```r
+remotes::install_github('rstudio/gt')
 ```
 
 Make sure you also install `tidyverse`, as `modelsummary` depends on a lot of its packages (e.g., `stringr`, `dplyr`, `tidyr`, `purrr`):
