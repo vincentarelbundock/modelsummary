@@ -98,7 +98,6 @@ extract <- function(models,
            purrr::reduce(dplyr::full_join, by = 'term') %>%
            stats::setNames(c('term', model_names))
 
-
     # add gof row identifier
     gof <- gof %>%
            dplyr::mutate(group = 'gof') %>%

@@ -180,10 +180,13 @@ modelsummary <- function(models,
                dplyr::select(-statistic, -group) %>%
                # gt object
                dplyr::rename(`       ` = term) %>% # HACK: arbitrary 7 spaces to avoid name conflict
-               gt::gt() %>%
-			   # horizontal rule to separate coef/gof
-			   gt::tab_style(style = gt::cell_borders(sides = 'bottom', color = '#000000'),
-                             locations = gt::cells_body(columns = 1:idx_col, rows = idx_row))
+               gt::gt() 
+
+   	    # horizontal rule to separate coef/gof
+        if (!is.na(idx_row)) { # check if there are >0 GOF
+            tab <- tab %>% gt::tab_style(style = gt::cell_borders(sides = 'bottom', color = '#000000'),
+                   locations = gt::cells_body(columns = 1:idx_col, rows = idx_row))
+        }
 
         # titles
         if (!is.null(title)) {
