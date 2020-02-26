@@ -3,7 +3,7 @@
 #' @importFrom broom glance
 #' @inheritParams modelsummary
 #' @return tibble with goodness-of-fit  statistics
-extract_gof <- function(model, fmt = '%.3f', gof_map = NULL) {
+extract_gof <- function(model, fmt, gof_map = NULL) {
 
     # define gof_map
     if (is.null(gof_map)) {
@@ -16,29 +16,51 @@ extract_gof <- function(model, fmt = '%.3f', gof_map = NULL) {
     # extract nobs if not in glance but gof_maps says we want it
     # TODO: This should be fixed upstream in broom
     if ((!'nobs' %in% names(gof)) & ('nobs' %in% gof_map$raw)) { 
-        gof$nobs <- tryCatch(stats::nobs(model, use.fallback = TRUE), error = function(e) NULL)
+        gof$nobs <- tryCatch(stats::nobs(model, use.fallback = TRUE), 
+                             error = function(e) NULL)
     }
 
-    # subset and re-order gof
-    gof_map <- gof_map[!gof_map$omit,]
-    idx <- base::intersect(gof_map$raw, colnames(gof))
-    gof_map <- gof_map[gof_map$raw %in% idx,]
-    gof <- gof[gof_map$raw]
+    # drop if gof_map$omiot == TRUE
+    bad <- gof_map$raw[gof_map$omit] 
+    gof <- gof[setdiff(colnames(gof), bad)] 
 
-    # round integer/numeric values
+    # re-order gof columns
+    idx1 <- intersect(gof_map$raw, colnames(gof))
+    idx2 <- setdiff(colnames(gof), gof_map$raw)
+    gof <- gof[c(idx1, idx2)]
+
     for (i in seq_along(gof)) {
-        if (inherits(gof[[i]], 'numeric')) {
-            gof[[i]] <- rounding(gof[[i]], gof_map$fmt[i])
-        }
-        else {	
-            gof[[i]] <- as.character(gof[[i]])	
+ 
+        idx <- match(colnames(gof)[i], gof_map$raw)
+
+        if (!is.na(idx)) { # if gof in gof_map
+
+            # rename
+            colnames(gof)[i] <- gof_map$clean[idx]
+
+            # round integer/numeric values
+            if (inherits(gof[[i]], 'numeric')) {
+                gof[[i]] <- rounding(gof[[i]], gof_map$fmt[idx])
+            } else {	
+                gof[[i]] <- as.character(gof[[i]])	
+            }
+
+        } else { # if gof is not in gof_map
+
+            # round integer/numeric values
+            if (inherits(gof[[i]], 'numeric')) {
+                gof[[i]] <- rounding(gof[[i]], fmt)
+            }
+            else {	
+                gof[[i]] <- as.character(gof[[i]])	
+            }
         }
     }
 
     # reshape
-    gof <- gof %>%
+    out <- gof %>%
            tidyr::pivot_longer(cols = 1:ncol(.), names_to = 'term')
 
     # output
-    return(gof)
+    return(out)
 }

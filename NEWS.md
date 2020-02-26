@@ -1,5 +1,6 @@
 # 2020-02-06
 
+* bug when all gof omitted
 * bug in statistic_override with functions
 * bug caused by upstream changes in tab_style
 * bug caused by upstream changes in filename='rtf'
