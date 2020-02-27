@@ -184,8 +184,9 @@ modelsummary <- function(models,
 
    	    # horizontal rule to separate coef/gof
         if (!is.na(idx_row)) { # check if there are >0 GOF
-            tab <- tab %>% gt::tab_style(style = gt::cell_borders(sides = 'bottom', color = '#000000'),
-                   locations = gt::cells_body(columns = 1:idx_col, rows = idx_row))
+            tab <- tab %>% 
+                   gt::tab_style(style = gt::cell_borders(sides = 'bottom', color = '#000000'),
+                                 locations = gt::cells_body(columns = 1:idx_col, rows = (idx_row - 1)))
         }
 
         # titles
