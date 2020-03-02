@@ -4,7 +4,7 @@
 \alias{extract_gof}
 \title{Extract goodness-of-fit statistics from a single model}
 \usage{
-extract_gof(model, fmt = "\%.3f", gof_map = NULL)
+extract_gof(model, fmt, gof_map = NULL)
 }
 \arguments{
 \item{model}{object type with an available `glance` method.}

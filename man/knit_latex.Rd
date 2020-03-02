@@ -5,12 +5,15 @@
 \title{Utility function to cleanup LaTeX output from gt and ensures that it
 compiles with latex and that it knits well with `knitr`}
 \usage{
-knit_latex(tab, label = NULL)
+knit_latex(tab, label = NULL, latex_env = "longtable")
 }
 \arguments{
 \item{tab}{table object produced by `modelsummary` or `gt`}
 
 \item{label}{string will be inserted as a `label`}
+
+\item{latex_env}{the default LaTeX environment is longtable. Fix this
+argument to 'table' if you want to use a tabular nested inside a table.}
 }
 \value{
 an object of class `knit_asis`. The first element of this object
