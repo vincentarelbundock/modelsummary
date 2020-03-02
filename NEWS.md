@@ -1,5 +1,6 @@
 # 2020-02-06
 
+* new latex_env argument for knit_latex and clean_latex
 * bug when all gof omitted
 * bug in statistic_override with functions
 * bug caused by upstream changes in tab_style
