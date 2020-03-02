@@ -11,17 +11,19 @@
 #'
 #' @param tab table object produced by `modelsummary` or `gt`
 #' @param label string will be inserted as a `label`
+#' @param latex_env the default LaTeX environment is longtable. Fix this
+#' argument to 'table' if you want to use a tabular nested inside a table.
 #' @return an object of class `knit_asis`. The first element of this object
 #'   (`x[[1]]`) contains raw LaTeX code.
 #' @export
-knit_latex <- function(tab, label=NULL) {
+knit_latex <- function(tab, label = NULL, latex_env = 'longtable') {
     # knitr is installed
     knitr_installed <- try(base::find.package('knitr'), silent = TRUE)
     knitr_installed <- !'try-error' %in% class(knitr_installed)
     if (!knitr_installed) {
         stop('The `knitr` package must be installed to use the `knit_latex` function.')
     }
-    out <- clean_latex(tab, label = label)
+    out <- clean_latex(tab, label = label, latex_env = latex_env)
     knitr::asis_output(out)
 }
 
@@ -36,11 +38,13 @@ knit_latex <- function(tab, label=NULL) {
 #'
 #' @param tab table object produced by `modelsummary` or `gt`
 #' @param label string will be inserted as a `label`
+#' @param latex_env the default LaTeX environment is longtable. Fix this
+#' argument to 'table' if you want to use a tabular nested inside a table.
 #' @param gof_regex regex which identifies the first GOF statistic. Used to figure out
 #' where to insert a midrule to separate coefficients from GOFs.
 #' @return a string object with LaTeX code
 #' @export
-clean_latex <- function(tab, label = NULL, gof_regex = '^Num Obs.') {
+clean_latex <- function(tab, label = NULL, latex_env = 'longtable', gof_regex = '^Num Obs.') {
 
     # input sanity check
     checkmate::check_character(label, len = 1, null.ok = TRUE)
@@ -102,6 +106,25 @@ clean_latex <- function(tab, label = NULL, gof_regex = '^Num Obs.') {
 
     # tables should be numbered
     out <- stringr::str_replace(out, 'caption\\*', 'caption')
+
+    # longtable -> table
+    if (latex_env == 'table') {
+        out <- out %>%
+               stringr::str_replace('.*captionsetup.*', '') %>%
+               stringr::str_replace_all('longtable', 'tabular') %>%
+               stringr::str_replace('\\[c\\]', '') 
+        cap <- stringr::str_extract(out, '.caption.*\\n.*.\\n') %>% # caption order is different in table
+               stringr::str_replace_all('\\n', ' ') %>% # empty line breaks latex
+               stringr::str_trim() %>%
+               stringr::str_replace('..$', '') # superfluous line break
+        out <- out %>%
+               stringr::str_replace('.caption.*\\n.*.\\n', '') %>%
+               paste0('\\begin{table}\n\\centering\n',
+                      cap,
+                      .,
+                      '\\end{table}')
+
+    }
 
     # output
     return(out)

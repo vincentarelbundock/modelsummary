@@ -5,12 +5,20 @@
 \title{Utility function to cleanup LaTeX output from gt and ensures that it
 compiles with latex}
 \usage{
-clean_latex(tab, label = NULL, gof_regex = "^Num Obs.")
+clean_latex(
+  tab,
+  label = NULL,
+  latex_env = "longtable",
+  gof_regex = "^Num Obs."
+)
 }
 \arguments{
 \item{tab}{table object produced by `modelsummary` or `gt`}
 
 \item{label}{string will be inserted as a `label`}
+
+\item{latex_env}{the default LaTeX environment is longtable. Fix this
+argument to 'table' if you want to use a tabular nested inside a table.}
 
 \item{gof_regex}{regex which identifies the first GOF statistic. Used to figure out
 where to insert a midrule to separate coefficients from GOFs.}
