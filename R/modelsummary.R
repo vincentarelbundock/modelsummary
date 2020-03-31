@@ -162,60 +162,48 @@ modelsummary <- function(models,
     tab <- dat %>%
            dplyr::mutate(term = ifelse(idx, '', term))
 
-    # check if gt is installed and warn otherwise (not available from CRAN yet)
-    gt_loc <- try(base::find.package('gt'), silent = TRUE)
+    # create gt table object
+    idx_row <- match('gof', tab$group)
+    idx_col <- ncol(tab) - 2
+    tab <- tab %>%
+           # remove columns not fit for printing
+           dplyr::select(-statistic, -group) %>%
+           # gt object
+           dplyr::rename(`       ` = term) %>% # HACK: arbitrary 7 spaces to avoid name conflict
+           gt::gt() 
 
-    if ('try-error' %in% class(gt_loc)) {
+    # horizontal rule to separate coef/gof
+    if (!is.na(idx_row)) { # check if there are >0 GOF
+        tab <- tab %>% 
+               gt::tab_style(style = gt::cell_borders(sides = 'bottom', color = '#000000'),
+                             locations = gt::cells_body(columns = 1:idx_col, rows = (idx_row - 1)))
+    }
 
-        warning('To take full advantage of the `modelsummary` package, you should install the `gt` package (currently unavailable from CRAN): https://github.com/rstudio/gt\n\nlibrary(remotes)\ninstall_github("rstudio/gt")\n\n')
-        return(tab)
+    # titles
+    if (!is.null(title)) {
+        tab <- tab %>% gt::tab_header(title = title, subtitle = subtitle)
+    }
 
+    # stars note
+    if (stars_note & !is.null(stars)) {
+        stars_note <- paste0(names(stars), ' p < ', stars)
+        stars_note <- paste(stars_note, collapse = ', ')
+        tab = tab %>%
+              gt::tab_source_note(source_note = stars_note)
+    }
+
+    # user-supplied notes at the bottom of table
+    if (!is.null(notes)) {
+        for (n in notes) {
+            tab <- tab %>% gt::tab_source_note(source_note = n)
+        }
+    }
+
+    # output
+    if (!is.null(filename)) {
+        gt::gtsave(tab, filename)
     } else {
-
-        # create gt table object
-	    idx_row <- match('gof', tab$group)
-	    idx_col <- ncol(tab) - 2
-        tab <- tab %>%
-               # remove columns not fit for printing
-               dplyr::select(-statistic, -group) %>%
-               # gt object
-               dplyr::rename(`       ` = term) %>% # HACK: arbitrary 7 spaces to avoid name conflict
-               gt::gt() 
-
-   	    # horizontal rule to separate coef/gof
-        if (!is.na(idx_row)) { # check if there are >0 GOF
-            tab <- tab %>% 
-                   gt::tab_style(style = gt::cell_borders(sides = 'bottom', color = '#000000'),
-                                 locations = gt::cells_body(columns = 1:idx_col, rows = (idx_row - 1)))
-        }
-
-        # titles
-        if (!is.null(title)) {
-            tab <- tab %>% gt::tab_header(title = title, subtitle = subtitle)
-        }
-
-        # stars note
-        if (stars_note & !is.null(stars)) {
-            stars_note <- paste0(names(stars), ' p < ', stars)
-            stars_note <- paste(stars_note, collapse = ', ')
-            tab = tab %>%
-                  gt::tab_source_note(source_note = stars_note)
-        }
-
-        # user-supplied notes at the bottom of table
-        if (!is.null(notes)) {
-            for (n in notes) {
-                tab <- tab %>% gt::tab_source_note(source_note = n)
-            }
-        }
-
-        # output
-        if (!is.null(filename)) {
-            gt::gtsave(tab, filename)
-        } else {
-            return(tab)
-        }
-
+        return(tab)
     }
 
 }
