@@ -10,6 +10,7 @@
 * Preserve add_rows order
 * Display uncertainty estimates next to the coefficient with statistic_vertical = FALSE
 * Better clean_latex function
+* Can display R2 and confidence intervals for mice-imputed lm-models
 
 # 0.1.0: 2019-06-30
 
