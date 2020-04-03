@@ -7,7 +7,7 @@
 \method{glance}{mira}(x, ...)
 }
 \arguments{
-\item{x}{An object returned by one of the `mice::pool` function.}
+\item{x}{An object with multiply-imputed models from `mice` (class: `mira`)}
 
 \item{...}{extra arguments (not used)}
 }
@@ -16,6 +16,9 @@ a tibble with one row
 }
 \description{
 Glance a multiple imputation `mice` pooled object
+}
+\note{
+If x contains `lm` models, R2 is included in the output
 }
 \examples{
 library(mice)
