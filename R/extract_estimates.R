@@ -2,7 +2,7 @@
 #' @importFrom generics tidy
 #' @param model object type with an available `tidy` method.
 #' @return data.frame with side-by-side model summaries
-#' @inheritParams modelsummary 
+#' @inheritParams modelsummary
 extract_estimates <- function(model,
                               statistic = 'std.error',
                               statistic_override = NULL,
@@ -15,7 +15,7 @@ extract_estimates <- function(model,
     if (!is.null(statistic_override)) {
 
         # extract overriden statistics
-        so <- extract_statistic_override(model, 
+        so <- extract_statistic_override(model,
                                          statistic = statistic,
                                          statistic_override = statistic_override)
         if (!statistic %in% colnames(so)) {
@@ -65,6 +65,11 @@ extract_estimates <- function(model,
                                    paste0('(', est[[s]], ')'),
                                    est[[s]])
                 est[[paste0('statistic', i)]] <- est[[s]]
+            } else if (is.character(est[[s]])) {
+            # renaming character columns - for later subsetting
+                est[[paste0('statistic', i)]] <- est[[s]]
+                message("A statistics vector is formatted as character -
+                        they will be printed as given")
             }
 
         }

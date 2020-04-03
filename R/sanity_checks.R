@@ -1,7 +1,7 @@
 #' internal function to check the sanity of user input
 #'
 #' @return error if sanity checks fail
-#' @inheritParams modelsummary 
+#' @inheritParams modelsummary
 sanity_checks <- function(models,
 						  statistic = 'std.error',
 						  statistic_override = NULL,
@@ -45,12 +45,12 @@ sanity_checks <- function(models,
     # statistic_vertical = FALSE: only one statistic can be displayed horizontally
     checkmate::assert_logical(statistic_vertical, len = 1, null.ok = FALSE)
     if (!statistic_vertical) {
-        if ((length(statistic_override) > 1) | (length(statistic) > 1)) {
+        if ((length(statistic_override)/length(models) > 1) | (length(statistic) > 1)) {
             stop("Only one statistic can be displayed next to the estimate. Check the statistic_vertical argument.")
         }
     }
 
-    # gof_map 
+    # gof_map
     checkmate::assert(
         checkmate::check_data_frame(gof_map, null.ok = TRUE),
         checkmate::check_tibble(gof_map, null.ok = TRUE)
