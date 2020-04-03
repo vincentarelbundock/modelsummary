@@ -2,20 +2,20 @@
 % Please edit documentation in R/tidiers.R
 \name{tidy.mira}
 \alias{tidy.mira}
-\title{Tidy a multiple imputation `mice` pooled object}
+\title{Tidy a multiple imputation `mice` object}
 \usage{
 \method{tidy}{mira}(x, ...)
 }
 \arguments{
-\item{x}{An object returned by one of the `mice::pool` function.}
+\item{x}{An object with multiply-imputed models from `mice` (class: `mira`)}
 
-\item{...}{extra arguments (not used)}
+\item{...}{extra arguments (not used, unless confidence intervals are requested for multiple `lm` models)}
 }
 \value{
 a tibble with one row per term
 }
 \description{
-Tidy a multiple imputation `mice` pooled object
+Tidy a multiple imputation `mice` object
 }
 \note{
 Available stats in mipo object:
@@ -29,6 +29,13 @@ Available stats in mipo object:
      \item riv
      \item lambda
      \item fmi
+}
+
+If `mira` object consists of `lm`-models, additional results can be returned to facilitate side-by-side tables with other `lm`-model:
+\itemize{
+     \item p.value
+     \item conf.low (if called with conf.int = TRUE)
+     \item conf.high (if called with conf.int = TRUE)
 }
 }
 \examples{
