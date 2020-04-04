@@ -64,6 +64,7 @@ tidy.mira <- function(x, ...) {
 #' @param conf.int Logical. Should confidence intervals be returned. Defaults to true.
 #' @param conf.level Confidence level for intervals. Defaults to .95
 #' @param ... extra arguments (not used)
+#' @export
 #'
 #' @note
 #' Available stats in result:
@@ -81,8 +82,6 @@ tidy.mira <- function(x, ...) {
 #'      \item conf.low (if called with conf.int = TRUE)
 #'      \item conf.high (if called with conf.int = TRUE)
 #' }
-
-
 tidy.mira.lm <- function(x, conf.int = TRUE, conf.level = .95, ...) {
          out <- summary(mice::pool(x, ...), type = "all", conf.int = conf.int, conf.level = conf.level) %>%
              dplyr::mutate(term = as.character(term)) %>%
@@ -116,7 +115,7 @@ tidy.mira.lm <- function(x, conf.int = TRUE, conf.level = .95, ...) {
 #' @family tidiers
 glance.mira <- function(x, ...) {
     out <- tibble::tibble('m' = length(x$analyses))
-	out$n <- tryCatch(stats::nobs(x$analyses[[1]]), error = function(e) NULL)
+	out$nobs <- tryCatch(stats::nobs(x$analyses[[1]]), error = function(e) NULL)
 	if (class(x$analyses[[1]]) == "lm") {
 	    out$r.squared <- mice::pool.r.squared(x, adjusted = FALSE)[1]
 	    out$adj.r.squared <- mice::pool.r.squared(x, adjusted = TRUE)[1]
