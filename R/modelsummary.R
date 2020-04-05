@@ -131,17 +131,6 @@ modelsummary <- function(models,
                   add_rows = add_rows,
                   filename = filename)
 
-    # stars
-    if (is.logical(stars)) {
-        if (stars) {
-            stars <- c('*' = .1, '**' = .05, '***' = .01)
-        } else {
-            stars_note <- FALSE
-        }
-    } else {
-        stars <- sort(stars, decreasing = TRUE)
-    }
-
     # extract estimates and gof
     dat <- modelsummary::extract(models,
                               statistic = statistic,

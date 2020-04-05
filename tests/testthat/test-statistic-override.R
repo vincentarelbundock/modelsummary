@@ -73,16 +73,67 @@ test_that("list of functions", {
 
 })
     
-#test_that("list of vcov matrices", {
-    #vcov_matrices <- lapply(models, vcovHC)
-    #raw <- modelsummary::extract(models, statistic_override = vcov_matrices, fmt = '%.5f')
-#})
+test_that("list of vcov matrices", {
 
-#test_that("list of hardcoded numerical values", {
-    #custom_stats <- list(`OLS 1` = c('(Intercept)' = 2, Crime_prop = 3, Infants = 4), 
-                         #`NBin 1` = c('(Intercept)' = 3, Crime_prop = -5, Donations = 3),
-                         #`OLS 2` = c('(Intercept)' = 7, Crime_prop = -6, Infants = 9), 
-                         #`NBin 2` = c('(Intercept)' = 4, Crime_prop = -7, Donations = -9),
-                         #`Logit 1` = c('(Intercept)' = 1, Crime_prop = -5, Infants = -2))
-    #raw <- modelsummary::extract(models, statistic_override = custom_stats)
-#})
+    vcov_matrices <- lapply(models, vcovHC)
+
+    raw <- modelsummary::extract(models, statistic_override = vcov_matrices, fmt = '%.5f')
+
+    truth <- c("64.11416", "(4.50309)", "-0.00158", "(0.00044)", "-0.00065",
+               "(0.00021)", "", "", "86", "0.237", "0.218", "718.8", "728.6",
+               "-355.382")
+    expect_equal(raw[[4]], truth)
+
+    truth <- c("4.21807", "(0.12184)", "-0.00006", "(0.00001)", "", "",
+               "-0.00001", "(0.00001)", "86", "", "", "720.2", "730.0",
+               "-356.106")
+    expect_equal(raw[[5]], truth)
+    
+    truth <- c("57.33113", "(8.70411)", "-0.00230", "(0.00088)", "0.00022",
+               "(0.00037)", "", "", "86", "0.073", "0.051", "797.9", "807.8",
+               "-394.974")
+    expect_equal(raw[[6]], truth)
+    
+    truth <- c("4.38418", "(0.25900)", "-0.00007", "(0.00003)", "", "",
+               "-0.00001", "(0.00002)", "86", "", "", "803.2", "813.1",
+               "-397.620")
+    expect_equal(raw[[7]], truth)
+    
+    truth <- c("1.00613", "(0.79260)", "-0.00005", "(0.00009)", "-0.00002",
+               "(0.00004)", "", "", "86", "", "", "123.0", "130.4", "-58.498")
+    expect_equal(raw[[8]], truth)
+
+})
+
+test_that("list of hardcoded numerical values", {
+
+    custom_stats <- list(`OLS 1` = c('(Intercept)' = 2, Crime_prop = 3, Infants = 4), 
+                         `NBin 1` = c('(Intercept)' = 3, Crime_prop = -5, Donations = 3),
+                         `OLS 2` = c('(Intercept)' = 7, Crime_prop = -6, Infants = 9), 
+                         `NBin 2` = c('(Intercept)' = 4, Crime_prop = -7, Donations = -9),
+                         `Logit 1` = c('(Intercept)' = 1, Crime_prop = -5, Infants = -2))
+    
+    raw <- modelsummary::extract(models, statistic_override = custom_stats)
+
+    truth <- c("64.114", "(2.000)", "-0.002", "(3.000)", "-0.001", "(4.000)",
+               "", "", "86", "0.237", "0.218", "718.8", "728.6", "-355.382")
+    expect_equal(raw[[4]], truth)
+
+    truth <- c("4.218", "(3.000)", "-0.000", "(-5.000)", "", "", "-0.000",
+               "(3.000)", "86", "", "", "720.2", "730.0", "-356.106")
+    expect_equal(raw[[5]], truth)
+
+    truth <- c("57.331", "(7.000)", "-0.002", "(-6.000)", "0.000", "(9.000)",
+               "", "", "86", "0.073", "0.051", "797.9", "807.8", "-394.974")
+    expect_equal(raw[[6]], truth)
+
+    truth <- c("4.384", "(4.000)", "-0.000", "(-7.000)", "", "", "-0.000",
+               "(-9.000)", "86", "", "", "803.2", "813.1", "-397.620")
+    expect_equal(raw[[7]], truth)
+
+    truth <- c("1.006", "(1.000)", "-0.000", "(-5.000)", "-0.000", "(-2.000)",
+               "", "", "86", "", "", "123.0", "130.4", "-58.498")
+    expect_equal(raw[[8]], truth)
+
+})
+
