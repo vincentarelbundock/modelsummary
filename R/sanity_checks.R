@@ -2,6 +2,7 @@
 #'
 #' @return error if sanity checks fail
 #' @inheritParams modelsummary 
+#' @keywords internal
 sanity_checks <- function(models,
 						  statistic = 'std.error',
 						  statistic_override = NULL,

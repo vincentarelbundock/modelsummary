@@ -3,6 +3,7 @@
 #' @importFrom broom glance
 #' @inheritParams modelsummary
 #' @return tibble with goodness-of-fit  statistics
+#' @keywords internal
 extract_gof <- function(model, fmt, gof_map = NULL) {
 
     # define gof_map
