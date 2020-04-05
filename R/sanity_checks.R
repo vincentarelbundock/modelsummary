@@ -44,7 +44,7 @@ sanity_checks <- function(models,
     # statistic_vertical = FALSE: only one statistic can be displayed horizontally
     checkmate::assert_logical(statistic_vertical, len = 1, null.ok = FALSE)
     if (!statistic_vertical) {
-        if ((length(statistic_override)/length(models) > 1) | (length(statistic) > 1)) {
+        if (length(statistic) > 1 | (length(statistic_override) > 1) & !is.vector(statistic_override[1])) {
             stop("Only one statistic can be displayed next to the estimate. Check the statistic_vertical argument.")
         }
     }

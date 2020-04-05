@@ -67,10 +67,8 @@ extract_estimates <- function(model,
                                    est[[s]])
                 est[[paste0('statistic', i)]] <- est[[s]]
             } else if (is.character(est[[s]])) {
-            # renaming character columns - for later subsetting
+            # renaming character columns for later subsetting
                 est[[paste0('statistic', i)]] <- est[[s]]
-                message("A statistics vector is formatted as character -
-                        they will be printed as given")
             }
 
         }
