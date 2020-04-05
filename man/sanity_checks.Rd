@@ -16,7 +16,6 @@ sanity_checks(
   gof_omit = NULL,
   fmt = "\%.3f",
   stars = NULL,
-  stars_note = TRUE,
   title = NULL,
   subtitle = NULL,
   notes = NULL,
@@ -69,9 +68,6 @@ use exponential notation. See `?sprintf` for more options.}
 \item{stars}{FALSE for no significance stars. TRUE for default significance
 stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
 stars. For example, `c('*' = .1, '+' = .05)`}
-
-\item{stars_note}{logical include a note at the bottom of the table to describe
-the contents of the `stars` argument. The note will be omitted if `stars==NULL`}
 
 \item{title}{string}
 

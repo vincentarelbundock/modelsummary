@@ -16,7 +16,6 @@ msummary(
   gof_omit = NULL,
   fmt = "\%.3f",
   stars = FALSE,
-  stars_note = TRUE,
   title = NULL,
   subtitle = NULL,
   notes = NULL,
@@ -71,9 +70,6 @@ use exponential notation. See `?sprintf` for more options.}
 stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
 stars. For example, `c('*' = .1, '+' = .05)`}
 
-\item{stars_note}{logical include a note at the bottom of the table to describe
-the contents of the `stars` argument. The note will be omitted if `stars==NULL`}
-
 \item{title}{string}
 
 \item{subtitle}{string}
@@ -98,7 +94,7 @@ will produce an error.}
 a 'gt' table object.
 }
 \description{
-Beautiful, customizable summaries of statistical models
+`msummary()` is a shortcut to `modelsummary()`
 }
 \examples{
 \donttest{
