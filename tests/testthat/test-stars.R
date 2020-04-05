@@ -1,31 +1,43 @@
-#context('stars')
+context('stars')
 
-#library(modelsummary)
+library(modelsummary)
 
-#mod <- list()
-#mod$OLS <- lm(am ~ drat, data = mtcars)
-#mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
+mod <- list()
+mod$OLS <- lm(am ~ drat, data = mtcars)
+mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 
-#test_that("default stars", {
+test_that("stars = FALSE", {
 
-#modelsummary::extract(mod[[2]], stars = c('+' = .8, '*' = .1))
+    raw <- modelsummary::extract(mod, stars = FALSE)
 
-#msummary(mod, stars = TRUE)
+    truth <- c("-1.986", "(0.434)", "0.665", "(0.120)")
+    expect_equal(truth, unname(raw[[4]][1:4]))
 
-#test_that("custom stars", {
+    truth <- c("4.739", "(4.045)", "", "", "-0.288", "(0.228)")
+    expect_equal(truth, unname(raw[[5]][1:6]))
 
-    #raw <- msummary(models, stars =TRUE) %>% 
-           #gt::as_raw_html()
-    #expect_known_output(cat(raw), "known_output/stars_default.html")
+})
 
-    #raw <- msummary(models, stars = ) %>%
-           #gt::as_raw_html()
-    #expect_known_output(cat(raw), "known_output/stars_custom.html")
+test_that("stars = TRUE", {
 
+    raw <- modelsummary::extract(mod, stars = TRUE)
 
-    #raw <- modelsummary::extract(mod, coef_omit = c('drat|qsec'))
+    truth <- c("-1.986***", "(0.434)", "0.665***", "(0.120)")
+    expect_equal(truth, unname(raw[[4]][1:4]))
 
-    #truth <- c('(Intercept)', '(Intercept)', 'Num.Obs.')
-    #expect_equal(unname(raw[[2]][1:3]), truth)
+    truth <- c("4.739", "(4.045)", "", "", "-0.288", "(0.228)")
+    expect_equal(truth, unname(raw[[5]][1:6]))
 
-#})
+})
+
+test_that("custom stars", {
+
+    raw <- modelsummary::extract(mod, stars = c('+' = .8, '*' = .1))
+
+    truth <- c("-1.986*", "(0.434)", "0.665*", "(0.120)")
+    expect_equal(truth, unname(raw[[4]][1:4]))
+
+    truth <- c("4.739+", "(4.045)", "", "", "-0.288+", "(0.228)")
+    expect_equal(truth, unname(raw[[5]][1:6]))
+
+})

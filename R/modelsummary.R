@@ -20,8 +20,6 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param stars FALSE for no significance stars. TRUE for default significance
 #' stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
 #' stars. For example, `c('*' = .1, '+' = .05)`
-#' @param stars_note logical include a note at the bottom of the table to describe
-#' the contents of the `stars` argument. The note will be omitted if `stars==NULL`
 #' @param statistic string name of the statistic to include in parentheses
 #' below estimates. Must be either "conf.int", or one of the column names
 #' produced by the `broom::tidy` function. Typical values include: "std.error",
@@ -99,7 +97,6 @@ modelsummary <- function(models,
                          gof_omit = NULL,
                          fmt = '%.3f',
                          stars = FALSE,
-                         stars_note = TRUE,
                          title = NULL,
                          subtitle = NULL,
                          notes = NULL,
@@ -124,7 +121,6 @@ modelsummary <- function(models,
                   gof_omit = gof_omit,
                   fmt = fmt,
                   stars = stars,
-                  stars_note = stars_note,
                   title = title,
                   subtitle = subtitle,
                   notes = notes,
@@ -174,11 +170,9 @@ modelsummary <- function(models,
     }
 
     # stars note
-    if (stars_note & !is.null(stars)) {
-        stars_note <- paste0(names(stars), ' p < ', stars)
-        stars_note <- paste(stars_note, collapse = ', ')
-        tab = tab %>%
-              gt::tab_source_note(source_note = stars_note)
+    stars_note <- make_stars_note(stars)
+    if (!is.null(stars_note)) {
+        tab = tab %>% gt::tab_source_note(source_note = stars_note)
     }
 
     # user-supplied notes at the bottom of table
