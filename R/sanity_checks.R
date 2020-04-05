@@ -14,7 +14,6 @@ sanity_checks <- function(models,
 						  gof_omit = NULL,
 						  fmt = '%.3f',
 						  stars = NULL,
-						  stars_note = TRUE,
 						  title = NULL,
 						  subtitle = NULL,
 						  notes = NULL,
@@ -27,7 +26,6 @@ sanity_checks <- function(models,
     checkmate::assert_character(coef_omit, len = 1, null.ok = TRUE)
     checkmate::assert_character(gof_omit, len = 1, null.ok = TRUE)
     checkmate::assert_character(fmt, len = 1, null.ok = FALSE)
-    checkmate::assert_logical(stars_note, null.ok = FALSE)
     checkmate::assert_character(filename, len = 1, null.ok = TRUE)
 
 
