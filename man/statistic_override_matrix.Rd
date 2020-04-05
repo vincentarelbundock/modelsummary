@@ -23,3 +23,4 @@ tibble
 \description{
 Use the statistic_override matrix to extract std.error
 }
+\keyword{internal}

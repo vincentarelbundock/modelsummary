@@ -1,4 +1,4 @@
-# 0.2.0: 2020-03-31
+# 0.2.0: 2020-04-04
 
 * gt is now available on CRAN
 * new latex_env argument for knit_latex and clean_latex
@@ -11,6 +11,8 @@
 * Display uncertainty estimates next to the coefficient with statistic_vertical = FALSE
 * Better clean_latex function
 * Can display R2 and confidence intervals for mice-imputed lm-models
+* Internal functions have @keywords internal to avoid inclusion in docs
+* Statistic override accepts pre-formated character vectors
 
 # 0.1.0: 2019-06-30
 

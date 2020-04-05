@@ -23,3 +23,4 @@ tibble with goodness-of-fit  statistics
 \description{
 Extract goodness-of-fit statistics from a single model
 }
+\keyword{internal}

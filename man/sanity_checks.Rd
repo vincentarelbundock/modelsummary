@@ -95,3 +95,4 @@ error if sanity checks fail
 \description{
 internal function to check the sanity of user input
 }
+\keyword{internal}
