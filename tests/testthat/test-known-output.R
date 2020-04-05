@@ -1,4 +1,4 @@
-context("Test known output")
+context("known output")
 
 library(gt)
 library(MASS)
@@ -33,28 +33,6 @@ test_that("html_output: complex table", {
            gt::tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/complex_table.html")
-})
-
-test_that("html_output: uncertainty estimates", {
-    raw <- msummary(models, statistic = 'std.error',
-                     title = 'statistic = standard errors') %>%
-           gt::as_raw_html()
-    expect_known_output(cat(raw), "known_output/std.error.html")
-
-    raw <- msummary(models, statistic = 'p.value',
-                     title = 'statistic = p.value') %>%
-           gt::as_raw_html()
-    expect_known_output(cat(raw), "known_output/p.value.html")
-
-    raw <- msummary(models, statistic = 'statistic',
-                     title = 'statistic = statistic') %>%
-           gt::as_raw_html()
-    expect_known_output(cat(raw), "known_output/statistic.html")
-
-    raw <- msummary(models, statistic = 'conf.int', conf_level = .99,
-                     title = 'statistic = conf.int, conf_level = .99') %>%
-           gt::as_raw_html()
-    expect_known_output(cat(raw), "known_output/conf.int.html")
 })
 
 test_that("html_output: title and subtitle", {

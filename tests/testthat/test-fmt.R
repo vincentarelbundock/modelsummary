@@ -1,4 +1,4 @@
-context('Digits formatting with fmt argument')
+context('fmt')
 
 library(modelsummary)
 

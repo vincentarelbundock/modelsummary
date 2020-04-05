@@ -1,4 +1,4 @@
-context("Test bad input")
+context("bad input")
 
 if ('gt' %in% rownames(utils::installed.packages())) {
 
