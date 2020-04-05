@@ -64,8 +64,8 @@ tidy.mira <- function(x, ...) {
 #' @param conf.int Logical. Should confidence intervals be returned. Defaults to true.
 #' @param conf.level Confidence level for intervals. Defaults to .95
 #' @param ... extra arguments (not used)
-#' @export
 #'
+#' @keywords internal
 #' @note
 #' Available stats in result:
 #' \itemize{
