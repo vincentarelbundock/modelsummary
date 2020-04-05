@@ -77,12 +77,9 @@ extract_estimates <- function(model,
     }
 
     # stars
-    if (is.logical(stars) & stars) {
-		stars <- c('*' = .1, '**' = .05, '***' = .01)
-    }
+    stars <- clean_stars(stars)
 
-    if (is.numeric(stars)) {
-		stars <- sort(stars, decreasing = TRUE)
+    if (!is.null(stars)) {
         if (!'p.value' %in% colnames(est)) {
             stop('To use the `stars` argument, the `tidy` function must produce a column called "p.value"')
         }
