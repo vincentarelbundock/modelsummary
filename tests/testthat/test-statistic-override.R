@@ -44,9 +44,10 @@ test_that("sandwich::vcovHC p.value", {
     expect_equal(raw[[8]], truth)
 })
 
+    
 test_that("list of functions", {
     raw <- modelsummary::extract(models, statistic_override = list(vcov, vcovHC, vcovHAC, vcovHC, vcov), fmt = '%.5f')
-
+    
     truth <- c("64.11416", "(5.24690)", "-0.00158", "(0.00057)", "-0.00065",
                "(0.00020)", "", "", "86", "0.237", "0.218", "718.8", "728.6",
                "-355.382")
@@ -107,12 +108,13 @@ test_that("list of vcov matrices", {
 
 test_that("list of hardcoded numerical values", {
 
-    custom_stats <- list(`OLS 1` = c('(Intercept)' = 2, Crime_prop = 3, Infants = 4),
+
+    custom_stats <- list(`OLS 1` = c('(Intercept)' = 2, Crime_prop = 3, Infants = 4), 
                          `NBin 1` = c('(Intercept)' = 3, Crime_prop = -5, Donations = 3),
-                         `OLS 2` = c('(Intercept)' = 7, Crime_prop = -6, Infants = 9),
+                         `OLS 2` = c('(Intercept)' = 7, Crime_prop = -6, Infants = 9), 
                          `NBin 2` = c('(Intercept)' = 4, Crime_prop = -7, Donations = -9),
                          `Logit 1` = c('(Intercept)' = 1, Crime_prop = -5, Infants = -2))
-
+    
     raw <- modelsummary::extract(models, statistic_override = custom_stats)
 
     truth <- c("64.114", "(2.000)", "-0.002", "(3.000)", "-0.001", "(4.000)",
@@ -168,4 +170,3 @@ test_that("list of hardcoded character and possibly numeric values", {
     expect_equal(raw[[8]], truth)
 
 })
-

@@ -1,7 +1,7 @@
 #' internal function to check the sanity of user input
 #'
 #' @return error if sanity checks fail
-#' @inheritParams modelsummary
+#' @inheritParams modelsummary 
 #' @keywords internal
 sanity_checks <- function(models,
 						  statistic = 'std.error',
