@@ -6,6 +6,7 @@
 #' `sprintf` function. See ?sprintf for details.
 #'
 #' @return a rounded number as character
+#' @keywords internal
 rounding <- function(x, fmt = '%.3f') {
     out <- sprintf(fmt, x)
     out <- stringr::str_replace(out, 'NA|NaN|-Inf|Inf', '')
