@@ -193,6 +193,7 @@ modelsummary <- function(models,
 
 #' Beautiful, customizable summaries of statistical models
 #'
+#' `msummary()` is a shortcut to `modelsummary()`
 #' @inherit modelsummary
 #' @export
 msummary <- modelsummary

@@ -35,3 +35,4 @@ Available stats in result:
      \item conf.high (if called with conf.int = TRUE)
 }
 }
+\keyword{internal}
