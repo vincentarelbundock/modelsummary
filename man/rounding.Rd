@@ -20,3 +20,4 @@ a rounded number as character
 Convert numeric values to strings using the `sprintf` function. NA, NaN,
 -Inf, and Inf are replaced by an empty string.
 }
+\keyword{internal}

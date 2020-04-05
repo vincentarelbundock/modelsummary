@@ -31,3 +31,4 @@ a numeric vector of test statistics
 Allow users to override uncertainty estimates
 importFrom broom tidy
 }
+\keyword{internal}

@@ -23,3 +23,4 @@ tibble
 \description{
 Use the lmtest::coeftest function to extract uncertainty estimates
 }
+\keyword{internal}

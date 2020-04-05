@@ -8,7 +8,7 @@ extract_gof <- function(model, fmt, gof_map = NULL) {
 
     # define gof_map
     if (is.null(gof_map)) {
-        gof_map <- modelsummary:::gof_map 
+        gof_map <- modelsummary::gof_map 
     }
 
     # extract gof from model object
