@@ -51,3 +51,4 @@ data.frame with side-by-side model summaries
 \description{
 Extract estimates and statistics from a single model
 }
+\keyword{internal}

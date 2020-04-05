@@ -29,3 +29,4 @@ tibble
 \description{
 Use the statistic_override vector to extract std.error/p.value/statistic
 }
+\keyword{internal}
