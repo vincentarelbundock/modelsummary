@@ -1,8 +1,9 @@
 #' Extract estimates and statistics from a single model
 #' @importFrom generics tidy
 #' @param model object type with an available `tidy` method.
-#' @return data.frame with side-by-side model summaries
 #' @inheritParams modelsummary 
+#' @return data.frame with side-by-side model summaries
+#' @keywords internal
 extract_estimates <- function(model,
                               statistic = 'std.error',
                               statistic_override = NULL,

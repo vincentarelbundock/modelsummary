@@ -2,6 +2,7 @@
 #' importFrom broom tidy
 #' @param model object type with an available `tidy` method.
 #' @inheritParams modelsummary
+#' @keywords internal
 #' @return a numeric vector of test statistics
 extract_statistic_override <- function(model, statistic_override, statistic = 'std.error') {
     out <- NULL
@@ -44,6 +45,7 @@ extract_statistic_override <- function(model, statistic_override, statistic = 's
 #' @param model object type with an available `tidy` method.
 #' @inheritParams modelsummary
 #' @return tibble
+#' @keywords internal
 statistic_override_lmtest <- function(model, statistic_override) {
     out <- lmtest::coeftest(model, statistic_override) %>%
            generics::tidy()
@@ -54,6 +56,7 @@ statistic_override_lmtest <- function(model, statistic_override) {
 #' @param model object type with an available `tidy` method.
 #' @inheritParams modelsummary
 #' @return tibble
+#' @keywords internal
 statistic_override_function <- function(model, statistic_override) {
     out <- statistic_override(model) %>%
            base::diag() %>%
@@ -66,6 +69,7 @@ statistic_override_function <- function(model, statistic_override) {
 #' @param model object type with an available `tidy` method.
 #' @inheritParams modelsummary
 #' @return tibble
+#' @keywords internal
 statistic_override_matrix <- function(model, statistic_override) {
     if (is.null(names(statistic_override))) {
         stop('The colnames and row.names of the `statistic_override` matrix must correspond to term/coefficient names.')
@@ -81,6 +85,7 @@ statistic_override_matrix <- function(model, statistic_override) {
 #' @param model object type with an available `tidy` method.
 #' @inheritParams modelsummary
 #' @return tibble
+#' @keywords internal
 statistic_override_vector <- function(model, statistic_override, statistic) {
     if (is.null(names(statistic_override))) {
         stop('The names of the `statistic_override` vector must correspond to term/coefficient names.')
