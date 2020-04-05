@@ -51,7 +51,7 @@ clean_latex <- function(tab, label = NULL, latex_env = 'longtable', gof_regex = 
 
     # add empty title if label != NULL and there is no title in tab
     if (!is.null(label)) {
-        if (is.null(gt:::dt_heading_get(tab)$title)) {
+        if (is.null(tab$`_heading`$title)) {
             tab <- tab %>%
                    gt::tab_header(title = '')
         }
