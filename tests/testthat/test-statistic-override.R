@@ -168,4 +168,3 @@ test_that("list of hardcoded character and possibly numeric values", {
     expect_equal(raw[[8]], truth)
 
 })
-

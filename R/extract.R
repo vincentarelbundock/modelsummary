@@ -78,11 +78,13 @@ extract <- function(models,
             est[[i]] <- est[[i]] %>%
                         dplyr::filter(!stringr::str_detect(term, coef_omit))
         }
+
+        # set model name
+        colnames(est[[i]])[3] <- model_names[i]
     }
 
     est <- est %>% 
            purrr::reduce(dplyr::full_join, by = c('term', 'statistic'))  %>%
-           stats::setNames(c('term', 'statistic', model_names)) %>%
            dplyr::mutate(group = 'estimates') %>%
            dplyr::select(group, term, statistic, names(.))
 
