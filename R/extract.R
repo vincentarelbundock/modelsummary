@@ -148,7 +148,11 @@ extract <- function(models,
     }
 
     # combine estimates and gof
-    tab <- dplyr::bind_rows(est, gof)
+    if (nrow(gof) > 0) {
+        tab <- dplyr::bind_rows(est, gof)
+    } else {
+        tab <- est
+    }
 
     # empty cells
     tab[is.na(tab)] <- ''
