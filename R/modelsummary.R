@@ -25,12 +25,12 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' produced by the `broom::tidy` function. Typical values include: "std.error",
 #' "conf.int", "statistic", "p.value". A character vector will stack several
 #' uncertainty estimates on top of one another (in different rows).
-#' @param statistic_override manually override the uncertainy estimates. This 
+#' @param statistic_override manually override the uncertainy estimates. This
 #' argument accepts three types of input:
 #' \itemize{
 #'   \item a function or list of functions of length(models) which produce variance-covariance matrices with row and column names equal to the names of your coefficient estimates. For example, `R` supplies the `vcov` function, and the `sandwich` package supplies `vcovHC`, `vcovHAC`, etc.
 #'   \item a list of length(models) variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
-#'   \item a list of length(models) numeric vectors with names equal to the names of your coefficient estimates.
+#'   \item a list of length(models) vectors with names equal to the names of your coefficient estimates. Numeric vectors are formatted according to `fmt` and placed in brackets, character vectors printed as given.
 #' }
 #' @param statistic_vertical TRUE if statistics should be printed below
 #' estimates. FALSE if statistics should be printed beside estimates.
@@ -155,11 +155,11 @@ modelsummary <- function(models,
            dplyr::select(-statistic, -group) %>%
            # gt object
            dplyr::rename(`       ` = term) %>% # HACK: arbitrary 7 spaces to avoid name conflict
-           gt::gt() 
+           gt::gt()
 
     # horizontal rule to separate coef/gof
     if (!is.na(idx_row)) { # check if there are >0 GOF
-        tab <- tab %>% 
+        tab <- tab %>%
                gt::tab_style(style = gt::cell_borders(sides = 'bottom', color = '#000000'),
                              locations = gt::cells_body(columns = 1:idx_col, rows = (idx_row - 1)))
     }
