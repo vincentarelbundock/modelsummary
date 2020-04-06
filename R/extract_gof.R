@@ -30,37 +30,44 @@ extract_gof <- function(model, fmt, gof_map = NULL) {
     idx2 <- setdiff(colnames(gof), gof_map$raw)
     gof <- gof[c(idx1, idx2)]
 
-    for (i in seq_along(gof)) {
- 
-        idx <- match(colnames(gof)[i], gof_map$raw)
+    # if number of gof > 0
+    if (ncol(gof) > 0) {
 
-        if (!is.na(idx)) { # if gof in gof_map
+        for (i in seq_along(gof)) {
+     
+            idx <- match(colnames(gof)[i], gof_map$raw)
 
-            # rename
-            colnames(gof)[i] <- gof_map$clean[idx]
+            if (!is.na(idx)) { # if gof in gof_map
 
-            # round integer/numeric values
-            if (inherits(gof[[i]], 'numeric')) {
-                gof[[i]] <- rounding(gof[[i]], gof_map$fmt[idx])
-            } else {	
-                gof[[i]] <- as.character(gof[[i]])	
-            }
+                # rename
+                colnames(gof)[i] <- gof_map$clean[idx]
 
-        } else { # if gof is not in gof_map
+                # round integer/numeric values
+                if (inherits(gof[[i]], 'numeric')) {
+                    gof[[i]] <- rounding(gof[[i]], gof_map$fmt[idx])
+                } else {	
+                    gof[[i]] <- as.character(gof[[i]])	
+                }
 
-            # round integer/numeric values
-            if (inherits(gof[[i]], 'numeric')) {
-                gof[[i]] <- rounding(gof[[i]], fmt)
-            }
-            else {	
-                gof[[i]] <- as.character(gof[[i]])	
+            } else { # if gof is not in gof_map
+
+                # round integer/numeric values
+                if (inherits(gof[[i]], 'numeric')) {
+                    gof[[i]] <- rounding(gof[[i]], fmt)
+                }
+                else {	
+                    gof[[i]] <- as.character(gof[[i]])	
+                }
             }
         }
-    }
 
-    # reshape
-    out <- gof %>%
-           tidyr::pivot_longer(cols = 1:ncol(.), names_to = 'term')
+        # reshape
+        out <- gof %>%
+               tidyr::pivot_longer(cols = 1:ncol(.), names_to = 'term')
+
+    } else { # all gof are excluded return an empty tibble
+        out <- na.omit(tibble(term = NA, value = NA)) %>% drop_na
+    }
 
     # output
     return(out)
