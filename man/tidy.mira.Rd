@@ -2,23 +2,24 @@
 % Please edit documentation in R/tidiers.R
 \name{tidy.mira}
 \alias{tidy.mira}
-\title{Tidy a multiple imputation `mice` object}
+\title{Tidy  multiple imputation models created with `mice`}
 \usage{
-\method{tidy}{mira}(x, ...)
+\method{tidy}{mira}(x, conf.int = TRUE, conf.level = 0.95, ...)
 }
 \arguments{
-\item{x}{An object with multiply-imputed models from `mice` (class: `mira`)}
+\item{x}{A `mira` object containing multiple models based on `mice` imputations.}
 
-\item{...}{extra arguments (not used, unless confidence intervals are requested for multiple `lm` models)}
-}
-\value{
-a tibble with one row per term
+\item{conf.int}{Logical. Should confidence intervals be returned. Defaults to true.}
+
+\item{conf.level}{Confidence level for intervals. Defaults to .95}
+
+\item{...}{extra arguments (not used)}
 }
 \description{
-Tidy a multiple imputation `mice` object
+Tidy  multiple imputation models created with `mice`
 }
 \note{
-Available stats in mipo object:
+Available stats in result:
 \itemize{
      \item estimate
      \item ubar
@@ -29,27 +30,9 @@ Available stats in mipo object:
      \item riv
      \item lambda
      \item fmi
-}
-
-If `mira` object consists of `lm`-models, additional results can be returned to facilitate side-by-side tables with other `lm`-model:
-\itemize{
      \item p.value
      \item conf.low (if called with conf.int = TRUE)
      \item conf.high (if called with conf.int = TRUE)
 }
 }
-\examples{
-library(mice)
-data <- airquality
-data[4:10,3] <- rep(NA,7)
-data[1:5,4] <- NA
-tmp <- mice(data,m=5, seed=500, printFlag = FALSE)
-mod <- with(tmp, lm(Temp~ Ozone+Solar.R+Wind))
-tidy(mod)
-
-}
-\seealso{
-Other tidiers: 
-\code{\link{glance.mira}()}
-}
-\concept{tidiers}
+\keyword{internal}

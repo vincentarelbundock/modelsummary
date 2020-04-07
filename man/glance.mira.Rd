@@ -30,8 +30,5 @@ mod <- with(tmp, lm(Ozone ~ Solar.R + Wind))
 glance(mod)
 
 }
-\seealso{
-Other tidiers: 
-\code{\link{tidy.mira}()}
-}
 \concept{tidiers}
+\keyword{internal}
