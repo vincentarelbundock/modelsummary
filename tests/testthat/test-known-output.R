@@ -5,32 +5,34 @@ library(MASS)
 library(dplyr)
 library(sandwich)
 library(modelsummary)
-url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
-dat <- read.csv(url)
-dat$Clergy <- ifelse(dat$Clergy > 40, 1, 0) # binary variable for logit model
+
 models <- list()
-models[['OLS 1']] <- lm(Literacy ~ Crime_prop + Infants, dat)
-models[['NBin 1']] <- glm.nb(Literacy ~ Crime_prop + Donations, dat)
-models[['OLS 2']] <- lm(Desertion ~ Crime_prop + Infants, dat)
-models[['NBin 2']] <- glm.nb(Desertion ~ Crime_prop + Donations, dat)
-models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
+models[['OLS 1']] <- lm(hp ~ mpg + wt, mtcars)
+models[['NBin 1']] <- glm.nb(hp ~ mpg + drat, mtcars)
+models[['OLS 2']] <- lm(vs ~ hp + wt, mtcars)
+models[['Logit 1']] <- glm(vs ~ hp + drat, mtcars, family = binomial())
+models[['Logit 2']] <- glm(am ~ hp + disp, mtcars, family = binomial())
+
 
 test_that("html_output: complex table", {
-    cm <- c('Crime_prop' = 'Crime / Population',
-        'Donations' = 'Donations',
-        'Infants' = 'Infants',
-        '(Intercept)' = 'Constant')
+
+    cm <- c('hp' = 'Horsepower',
+            'mpg' = 'Miles/Gallon',
+            'wt' = 'Weight',
+            'drat' = 'Rear axle ratio',
+            'disp' = 'Displacement',
+            '(Intercept)' = 'Constant')
     raw <- msummary(models,
            coef_map = cm,
            stars = TRUE,
            gof_omit = "Statistics|^p$|Deviance|Resid|Sigma|Log.Lik|^DF$",
            title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
-           subtitle = 'Models estimated using the Guerry dataset.',
+           subtitle = 'Models estimated using the mtcars dataset.',
            notes = c('First custom note to contain text.',
                      'Second custom note with different content.')) %>%
-           gt::tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
-           gt::tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
-           gt::tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
+           gt::tab_spanner(label = 'Horsepower', columns = c('OLS 1', 'NBin 1')) %>%
+           gt::tab_spanner(label = 'V-Shape', columns = c('OLS 2', 'Logit 1')) %>%
+           gt::tab_spanner(label = 'Transmission', columns = 'Logit 2') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/complex_table.html")
 })
@@ -57,12 +59,12 @@ test_that("html_output: background color", {
            tab_style(style = cell_text(weight = "bold"),
                      locations = cells_body(columns = vars(`OLS 1`))) %>%
            tab_style(style = cell_text(style = "italic"),
-                     locations = cells_body(columns = vars(`NBin 2`), rows = 2:6)) %>%
+                     locations = cells_body(columns = vars(`NBin 1`), rows = 2:6)) %>%
            tab_style(style = cell_fill(color = "lightcyan"),
                      locations = cells_body(columns = vars(`OLS 1`))) %>%
            tab_style(style = cell_fill(color = "#F9E3D6"),
-                     locations = cells_body(columns = vars(`NBin 2`), rows = 2:6)) %>%
+                     locations = cells_body(columns = vars(`Logit 2`), rows = 2:6)) %>%
            as_raw_html()
-    expect_known_output(cat(raw), "known_output/background_color.html")
 
+    expect_known_output(cat(raw), "known_output/background_color.html")
 })
