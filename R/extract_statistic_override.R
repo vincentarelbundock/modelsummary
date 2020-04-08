@@ -1,5 +1,5 @@
 #' Allow users to override uncertainty estimates
-#' importFrom broom tidy
+#' @importFrom broom tidy
 #' @param model object type with an available `tidy` method.
 #' @inheritParams modelsummary
 #' @keywords internal

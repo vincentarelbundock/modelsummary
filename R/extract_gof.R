@@ -66,7 +66,7 @@ extract_gof <- function(model, fmt, gof_map = NULL) {
                tidyr::pivot_longer(cols = 1:ncol(.), names_to = 'term')
 
     } else { # all gof are excluded return an empty tibble
-        out <- tibble(term = NA, value = NA) %>% dplyr::drop_na
+        out <- tibble(term = NA, value = NA) %>% tidyr::drop_na
     }
 
     # output
