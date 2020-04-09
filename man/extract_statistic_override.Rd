@@ -2,8 +2,7 @@
 % Please edit documentation in R/extract_statistic_override.R
 \name{extract_statistic_override}
 \alias{extract_statistic_override}
-\title{Allow users to override uncertainty estimates
-importFrom broom tidy}
+\title{Allow users to override uncertainty estimates}
 \usage{
 extract_statistic_override(model, statistic_override, statistic = "std.error")
 }
@@ -29,6 +28,5 @@ a numeric vector of test statistics
 }
 \description{
 Allow users to override uncertainty estimates
-importFrom broom tidy
 }
 \keyword{internal}

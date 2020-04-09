@@ -1,7 +1,9 @@
-# 0.2.1: 2020-??-??
+# 0.2.1: 2020-04-04
 
 * Convenience function to render markdown in row/column labels
 * bug: breakage when all GOF were omitted
+* Clean up manual with @keywords internal
+* bug: tidyr import
 
 # 0.2.0: 2020-04-04
 
