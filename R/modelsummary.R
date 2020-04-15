@@ -82,7 +82,8 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' # notes at the bottom of the table (here, the second note includes markdown bold characters)
 #' msummary(models, notes = list('A first note', gt::md('A **bold** note')))
 #'
-#' # modify list of GOF statistics and their format using the built-in 'gof_map' data frame as a starting point
+#' # modify list of GOF statistics and their format using the built-in
+#' # 'gof_map' data frame as a starting point
 #' gof_custom <- modelsummary::gof_map 
 #' gof_custom$omit[gm$raw == 'deviance'] <- FALSE 
 #' gof_custom$fmt[gm$raw == 'r.squared'] <- "%.5f" 
