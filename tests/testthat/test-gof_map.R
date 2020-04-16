@@ -21,3 +21,17 @@ test_that('omit all gof', {
 })
 
 
+test_that('omit all gof from only a few models', {
+
+    mod1 <- glm(vs ~ mpg, data = mtcars, family = "binomial")
+    mod2 <- lm(vs ~ mpg, data = mtcars)
+    gof_map <- modelsummary::gof_map
+    gof_map$omit <- TRUE
+    gof_map$omit[gof_map$raw == "r.squared"] <- FALSE
+
+    tmp <- modelsummary::extract(list(mod1, mod2), gof_map = gof_map)
+
+    expect_equal(nrow(tmp), 5)
+    expect_equal(ncol(tmp), 5)
+
+})
