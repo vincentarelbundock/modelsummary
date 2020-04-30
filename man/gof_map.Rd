@@ -4,7 +4,9 @@
 \name{gof_map}
 \alias{gof_map}
 \title{Data.frame used to clean up and format goodness-of-fit statistics}
-\format{data.frame with 4 columns of character data: raw, clean, fmt, omit}
+\format{
+data.frame with 4 columns of character data: raw, clean, fmt, omit
+}
 \usage{
 gof_map
 }
