@@ -10,7 +10,8 @@ extract_estimates <- function(model,
                               statistic_vertical = TRUE,
                               conf_level = .95,
                               fmt = '%.3f',
-                              stars = FALSE) {
+                              stars = FALSE,
+                              exponentiate = FALSE) {
 
     # statistic override
     if (!is.null(statistic_override)) {
@@ -31,9 +32,9 @@ extract_estimates <- function(model,
 
         # extract estimates
         if ('conf.int' %in% statistic) {
-            est <- tidy(model, conf.int = TRUE, conf.level = conf_level)
+            est <- tidy(model, conf.int = TRUE, conf.level = conf_level, exponentiate = exponentiate)
         } else {
-            est <- tidy(model)
+            est <- tidy(model,exponentiate = exponentiate)
         }
     }
 

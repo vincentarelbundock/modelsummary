@@ -18,7 +18,8 @@ extract(
   add_rows = NULL,
   add_rows_location = NULL,
   stars = FALSE,
-  fmt = "\%.3f"
+  fmt = "\%.3f",
+  exponentiate = FALSE
 )
 }
 \arguments{
@@ -73,6 +74,8 @@ stars. For example, `c('*' = .1, '+' = .05)`}
 string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
 the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
 use exponential notation. See `?sprintf` for more options.}
+
+\item{exponentiate}{TRUE for exponentiated estimates. FALSE for default estimates.}
 }
 \value{
 tibble

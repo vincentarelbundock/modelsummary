@@ -20,6 +20,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param stars FALSE for no significance stars. TRUE for default significance
 #' stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
 #' stars. For example, `c('*' = .1, '+' = .05)`
+#' @param exponentiate TRUE for exponentiated estimates. FALSE for default estimates.
 #' @param statistic string name of the statistic to include in parentheses
 #' below estimates. Must be either "conf.int", or one of the column names
 #' produced by the `broom::tidy` function. Typical values include: "std.error",
@@ -84,9 +85,9 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #'
 #' # modify list of GOF statistics and their format using the built-in
 #' # 'gof_map' data frame as a starting point
-#' gof_custom <- modelsummary::gof_map 
-#' gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE 
-#' gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "%.5f" 
+#' gof_custom <- modelsummary::gof_map
+#' gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE
+#' gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "%.5f"
 #' msummary(models, gof_map = gof_custom)
 #' }
 #'
@@ -104,6 +105,7 @@ modelsummary <- function(models,
                          gof_omit = NULL,
                          fmt = '%.3f',
                          stars = FALSE,
+                         exponentiate = FALSE,
                          title = NULL,
                          subtitle = NULL,
                          notes = NULL,
@@ -147,7 +149,8 @@ modelsummary <- function(models,
                               stars = stars,
                               add_rows = add_rows,
                               add_rows_location = add_rows_location,
-                              fmt = fmt)
+                              fmt = fmt,
+                              exponentiate = exponentiate)
 
     # remove duplicate term labels
     idx <- stringr::str_detect(dat$statistic, 'statistic\\d*$')

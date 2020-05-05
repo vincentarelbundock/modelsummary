@@ -11,7 +11,8 @@ extract_estimates(
   statistic_vertical = TRUE,
   conf_level = 0.95,
   fmt = "\%.3f",
-  stars = FALSE
+  stars = FALSE,
+  exponentiate = FALSE
 )
 }
 \arguments{
@@ -44,6 +45,8 @@ use exponential notation. See `?sprintf` for more options.}
 \item{stars}{FALSE for no significance stars. TRUE for default significance
 stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
 stars. For example, `c('*' = .1, '+' = .05)`}
+
+\item{exponentiate}{TRUE for exponentiated estimates. FALSE for default estimates.}
 }
 \value{
 data.frame with side-by-side model summaries

@@ -16,6 +16,7 @@ modelsummary(
   gof_omit = NULL,
   fmt = "\%.3f",
   stars = FALSE,
+  exponentiate = FALSE,
   title = NULL,
   subtitle = NULL,
   notes = NULL,
@@ -69,6 +70,8 @@ use exponential notation. See `?sprintf` for more options.}
 \item{stars}{FALSE for no significance stars. TRUE for default significance
 stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
 stars. For example, `c('*' = .1, '+' = .05)`}
+
+\item{exponentiate}{TRUE for exponentiated estimates. FALSE for default estimates.}
 
 \item{title}{string}
 
@@ -126,9 +129,9 @@ msummary(models, notes = list('A first note', gt::md('A **bold** note')))
 
 # modify list of GOF statistics and their format using the built-in
 # 'gof_map' data frame as a starting point
-gof_custom <- modelsummary::gof_map 
-gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE 
-gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "\%.5f" 
+gof_custom <- modelsummary::gof_map
+gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE
+gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "\%.5f"
 msummary(models, gof_map = gof_custom)
 }
 

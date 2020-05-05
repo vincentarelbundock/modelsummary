@@ -24,10 +24,11 @@ extract <- function(models,
                     add_rows = NULL,
                     add_rows_location = NULL,
                     stars = FALSE,
-                    fmt = '%.3f') {
+                    fmt = '%.3f',
+                    exponentiate = FALSE) {
 
 
-    # models must be a list of models or a single model 
+    # models must be a list of models or a single model
     # TODO: this is code repetition from modelsummary(), but we need it over there
     # as well for sanity checks. This doesn't matter at all, but maybe there's
     # a more elegant solution.
@@ -59,7 +60,8 @@ extract <- function(models,
                                       statistic_override = statistic_override[[i]],
                                       statistic_vertical = statistic_vertical,
                                       conf_level = conf_level,
-                                      stars = stars)
+                                      stars = stars,
+                                      exponentiate = exponentiate)
 
         # coef_map: omit, rename (must be done before join to collapse rows)
         if (!is.null(coef_map)) {
@@ -83,7 +85,7 @@ extract <- function(models,
         colnames(est[[i]])[3] <- model_names[i]
     }
 
-    est <- est %>% 
+    est <- est %>%
            purrr::reduce(dplyr::full_join, by = c('term', 'statistic'))  %>%
            dplyr::mutate(group = 'estimates') %>%
            dplyr::select(group, term, statistic, names(.))
@@ -117,7 +119,7 @@ extract <- function(models,
 	gof_names[is.na(gof_names)] <- gof$term[is.na(gof_names)]
     gof$term <- gof_names
 	idx <- match(gof$term, gof_map$clean) # reorder
-    gof <- gof[order(idx, gof$term),] 
+    gof <- gof[order(idx, gof$term),]
 
     # add_rows: this needs to be done after sorting and combining to preserve
     # user-selected row order
