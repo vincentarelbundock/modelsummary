@@ -21,7 +21,8 @@ modelsummary(
   notes = NULL,
   add_rows = NULL,
   add_rows_location = NULL,
-  filename = NULL
+  filename = NULL,
+  ...
 )
 }
 \arguments{
@@ -89,6 +90,10 @@ compatible with the output types is provided (`.html`, `.tex`, `.ltx`,
 `modelsummary` is post-processed by another `gt` function, users need to use
 the `gtsave` function from the `gt` package; using the `filename` argument
 will produce an error.}
+
+\item{...}{all other arguments are passed to the `tidy` method used to
+extract estimates from the model. For example, this allows users to set
+`exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \value{
 a 'gt' table object.

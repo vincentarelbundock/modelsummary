@@ -53,6 +53,9 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param title string
 #' @param subtitle string
 #' @param notes list of notes to append to the bottom of the table.
+#' @param ... all other arguments are passed to the `tidy` method used to
+#' extract estimates from the model. For example, this allows users to set
+#' `exponentiate=TRUE` to exponentiate logistic regression coefficients.
 #' @return a 'gt' table object.
 #' @examples
 #' \donttest{
@@ -109,7 +112,8 @@ modelsummary <- function(models,
                          notes = NULL,
                          add_rows = NULL,
                          add_rows_location = NULL,
-                         filename = NULL) {
+                         filename = NULL,
+                         ...) {
 
     # models must be a list of models or a single model
     if (!'list' %in% class(models)) {
@@ -147,7 +151,8 @@ modelsummary <- function(models,
                               stars = stars,
                               add_rows = add_rows,
                               add_rows_location = add_rows_location,
-                              fmt = fmt)
+                              fmt = fmt,
+                              ...)
 
     # remove duplicate term labels
     idx <- stringr::str_detect(dat$statistic, 'statistic\\d*$')

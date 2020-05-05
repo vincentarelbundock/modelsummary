@@ -18,7 +18,8 @@ extract(
   add_rows = NULL,
   add_rows_location = NULL,
   stars = FALSE,
-  fmt = "\%.3f"
+  fmt = "\%.3f",
+  ...
 )
 }
 \arguments{
@@ -73,6 +74,10 @@ stars. For example, `c('*' = .1, '+' = .05)`}
 string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
 the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
 use exponential notation. See `?sprintf` for more options.}
+
+\item{...}{all other arguments are passed to the `tidy` method used to
+extract estimates from the model. For example, this allows users to set
+`exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \value{
 tibble

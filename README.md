@@ -19,6 +19,7 @@ The `modelsummary` package for `R` produces beautiful, customizable, publication
     * [Rename, reorder, and subset](https://github.com/vincentarelbundock/modelsummary#rename-reorder-and-subset)
     * [Stars](https://github.com/vincentarelbundock/modelsummary#stars-statistical-significance-markers)
     * [Digits, rounding, exponential notation](https://github.com/vincentarelbundock/modelsummary#digits-rounding-exponential-notation)
+    * [Extra tidy arguments (e.g., exponentiated coefficients)](https://github.com/vincentarelbundock/modelsummary#extra-tidy-arguments-eg-exponentiated-coefficients)
     * [Colors and styles](https://github.com/vincentarelbundock/modelsummary#colors-and-styles)
     * [Fancy text with markdown: bold, italics, etc.](https://github.com/vincentarelbundock/modelsummary#fancy-text-with-markdown-bold-italics-etc)
     * [Font size](https://github.com/vincentarelbundock/modelsummary#font-size)
@@ -307,6 +308,19 @@ Most users will just modify the `3` in `%.3f`, but this is a very powerful syste
 ```r
 msummary(models, fmt = '%.7f')
 ```
+
+## Extra tidy arguments (e.g., exponentiated coefficients)
+
+Users can pass any additional argument they want to the `tidy` method which is used to extract estimates from a model. For example, in logitistic or Cox proportional hazard models, many users want to exponentiate coefficients to faciliate interpretation. The `tidy` functions supplied by the `broom` package allow users to set `exponentiate=TRUE` to achieve this. In `modelsummary`, users can use the same argument:
+
+```r
+mod_logit <- glm(am ~ mpg, data = mtcars, family = binomial)
+msummary(mod_logit, exponentiate = TRUE)
+```
+
+Any argument supported by `tidy` is thus supported by `modelsummary`.
+
+Warning: at the moment (2020-05-05), `broom::tidy` still reports `std.error` on the original scale. See this [discussion on the `broom` GitHub page.](https://github.com/tidymodels/broom/issues/422)
 
 ## Colors and styles
 

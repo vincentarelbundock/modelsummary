@@ -24,7 +24,8 @@ extract <- function(models,
                     add_rows = NULL,
                     add_rows_location = NULL,
                     stars = FALSE,
-                    fmt = '%.3f') {
+                    fmt = '%.3f',
+                    ...) {
 
 
     # models must be a list of models or a single model 
@@ -59,7 +60,8 @@ extract <- function(models,
                                       statistic_override = statistic_override[[i]],
                                       statistic_vertical = statistic_vertical,
                                       conf_level = conf_level,
-                                      stars = stars)
+                                      stars = stars,
+                                      ...)
 
         # coef_map: omit, rename (must be done before join to collapse rows)
         if (!is.null(coef_map)) {
