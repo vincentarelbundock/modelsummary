@@ -11,6 +11,15 @@ The `modelsummary` package for `R` produces beautiful, customizable, publication
 + [Sales pitch](https://github.com/vincentarelbundock/modelsummary#sales-pitch)
 + [Installation](https://github.com/vincentarelbundock/modelsummary#installation)
 + [A simple example](https://github.com/vincentarelbundock/modelsummary#a-simple-example)
++ [Output formats](https://github.com/vincentarelbundock/modelsummary#output-formats)
+    - [`gt` vs. `kableExtra`](https://github.com/vincentarelbundock/modelsummary#output-formats)
+    - [HTML](https://github.com/vincentarelbundock/modelsummary#output-formats)
+    - [Images](https://github.com/vincentarelbundock/modelsummary#output-formats)
+    - [Markdown](https://github.com/vincentarelbundock/modelsummary#markdown)
+    - [LaTeX](https://github.com/vincentarelbundock/modelsummary#latex)
+    - [RTF and Word](https://github.com/vincentarelbundock/modelsummary#rtf-and-word)
+    - [`rmarkdown` and `knitr`](https://github.com/vincentarelbundock/modelsummary#rmarkdown-and-knitr)
+    - [`filename`: saving table to file](https://github.com/vincentarelbundock/modelsummary#filename-saving-table-to-file)
 + [Customizing your tables](https://github.com/vincentarelbundock/modelsummary#customizing-your-tables)
     * [Uncertainty estimates: SE, p, t, CI](https://github.com/vincentarelbundock/modelsummary#uncertainty-estimates-se-t-p-ci)
     * [Titles and subtitles](https://github.com/vincentarelbundock/modelsummary#titles-and-subtitles)
@@ -27,12 +36,11 @@ The `modelsummary` package for `R` produces beautiful, customizable, publication
     * [Images](https://github.com/vincentarelbundock/modelsummary#images)
 + [A complex example](https://github.com/vincentarelbundock/modelsummary#a-complex-example)
 + [Other useful features](https://github.com/vincentarelbundock/modelsummary#other-useful-features)
-    * [Output formats](https://github.com/vincentarelbundock/modelsummary#output-formats)
-    * [LaTeX output and dynamic documents with knitr](https://github.com/vincentarelbundock/modelsummary#latex-output-and-dynamic-documents-with-knitr)
     * [Unsupported models and custom tidiers](https://github.com/vincentarelbundock/modelsummary#unsupported-models-and-custom-tidiers)
     * [Pooled multiple imputation results](https://github.com/vincentarelbundock/modelsummary#pooled-multiple-imputation-results)
     * [Power users](https://github.com/vincentarelbundock/modelsummary#power-users)
 + [Alternative summary table packages for R](https://github.com/vincentarelbundock/modelsummary#alternative-summary-table-packages-for-r)
+
 
 # Sales pitch
 
@@ -118,6 +126,145 @@ Of course, `modelsummary` can also summarize single models:
 ```r
 mod <- lm(Clergy ~ Crime_prop, data = dat)
 msummary(mod)
+```
+
+# Output formats
+
+`modelsummary` can produce tables in the following formats: `gt` table objects, HTML documents, png images, ASCII/markdown, LaTeX, and RTF. It can also insert tables in HTML or PDF documents produced by `Rmarkdown`, and in PDF documents produced by `knitr` or `Sweave`. To change the output format, you need to use the `output` argument.
+
+```r
+msummary(models, output = 'markdown')
+```
+
+## `gt` vs. `kableExtra`
+
+To produce tables in these output formats, `modelsummary` relies on two external packages: `gt` and `kableExtra`. Each package has its own advantages and disadvantages. In my experience, `gt` is extremely powerful and easy to use for HTML tables, but its support for LaTeX and PDF outputs for Rmarkdown documents is immature. In contrast, `kableExtra` has mature and full-featured LaTeX and PDF rendering functions.
+
+The default value of the `output` argument is `msummary(output = "gt")`. By default, the function will thus produce a `gt` object which can be customized using the functions described in the [`gt` package documentation.](https://gt.rstudio.com) This object can then be saved to supported output formats with the `gtsave` function:
+
+```r
+msummary(models) %>% gtsave('table.tex')
+msummary(models) %>% gtsave('table.html')
+msummary(models) %>% gtsave('table.rtf')
+```
+
+To produce a table using `kableExtra`, users need to set the `output` argument to one of the output formats supported by `kableExtra`: "markdown", "latex", "html". For example:
+
+```r
+msummary(models, output = 'markdown')
+msummary(models, output = 'html')
+msummary(models, output = 'latex')
+```
+
+The tables produced by these commands can be customized using the functions described in the [`kableExtra` package documentation.](http://haozhu233.github.io/kableExtra/)
+
+## HTML
+
+Both `gt` and `kableExtra` allow endless customization of HTML tables. Users are encouraged to read the documents of both packages to see which syntax they prefer. 
+
+* [HTML tables with `gt`](https://gt.rstudio.com)
+* [HTML tables with `kableExtra`](http://haozhu233.github.io/kableExtra/)
+
+One selling point of `gt` is its excellent integration with the `RStudio` IDE. Calling `msummary` with the default `gt` output format should produce an HTML table that appears automagically in `RStudio`'s "Viewer" window.
+
+## Images
+
+`gt` allows users to save an image (PNG or JPG) of an HTML table automatically. To do this, use the `gtsave` function:
+
+```r
+msummary(models) %>% gtsave('table.png')
+msummary(models) %>% gtsave('table.jpg')
+```
+
+## Markdown
+
+Using `output = "markdown"` uses the `kableExtra` package to print a markdown/ASCII table to the console:
+
+```r
+> msummary(models, output = 'markdown')
+
+
+|            |OLS 1    |NBin 1   |OLS 2    |NBin 2   |Logit 1 |
+|:-----------|:--------|:--------|:--------|:--------|:-------|
+|(Intercept) |64.114   |4.218    |57.331   |4.384    |1.006   |
+|            |(5.247)  |(0.144)  |(8.315)  |(0.233)  |(0.710) |
+|Crime_prop  |-0.002   |-0.000   |-0.002   |-0.000   |-0.000  |
+|            |(0.001)  |(0.000)  |(0.001)  |(0.000)  |(0.000) |
+|Infants     |-0.001   |         |0.000    |         |-0.000  |
+|            |(0.000)  |         |(0.000)  |         |(0.000) |
+|Donations   |         |-0.000   |         |-0.000   |        |
+|            |         |(0.000)  |         |(0.000)  |        |
+|Num.Obs.    |86       |86       |86       |86       |86      |
+|R2          |0.237    |         |0.073    |         |        |
+|Adj.R2      |0.218    |         |0.051    |         |        |
+|AIC         |718.8    |720.2    |797.9    |803.2    |123.0   |
+|BIC         |728.6    |730.0    |807.8    |813.1    |130.4   |
+|Log.Lik.    |-355.382 |-356.106 |-394.974 |-397.620 |-58.498 |
+msummary(models, output = 'markdown')
+```
+
+## LaTeX
+
+The `gt` LaTeX render engine is still immature. Until it improves, I strongly recommend that users turn to `kableExtra` to produce LaTeX tables. This packages offers robust functions that allow a lot of customization. A simple LaTeX table can be produced as follows:
+
+```r
+msummary(models, output = 'latex')
+```
+
+We can use functions from the `kableExtra` package to customize this table, with bold and colored cells, column spans, and more. For example, this code produces the table below.
+
+```r
+msummary(mod, output = 'latex',
+         stars = TRUE,
+         title = "This is a fancy table \\label{lab2}",
+         notes = list('First note', 'Second note')) %>%
+    add_header_above(c(" " = 1, "Group A" = 1, "Group B" = 2)) %>%
+    row_spec(7, bold = TRUE, color = "white", background = "black") %>%
+    column_spec(1, bold = TRUE, color = "red")
+```
+
+![](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/kableExtra_latex.png)
+
+## RTF and Word
+
+[TODO]
+
+## `Rmarkdown`, `knitr`, and `Sweave`
+
+You can use `modelsummary` to produce LaTeX tables and to create dynamic documents with `knitr` or `rmarkdown`. The correct `modelsummary` command to use depends on the output format.
+
+* HTML documents: `modelsummary(models)` 
+* HTML documents: `modelsummary(models, output = 'latex')` 
+
+Please note that the tables produced by `modelsummary` require the following LaTeX packages to compile: booktabs, array, float, colortbl, xcolor. These packages need to be included in the your header or preamble if you want documents to compile properly (see example files below).
+
+Here are two minimal working examples of markdown files which can be converted to HTML or PDF using the `knitr` package. Just open one the `.Rmd` files in RStudio and click the "Knit" button:
+
+* [markdown_to_pdf.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_pdf.Rmd) / [markdown_to_pdf.pdf](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_pdf.pdf) 
+* [markdown_to_html.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_html.Rmd) / [markdown_to_html.html](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_html.html) 
+
+## `filename`
+
+`modelsummary` offers a convenience argument called `filename` to save your tables more easily to file. `modelsummary` guesses the output format based on the `filename` extension. The supported extensions are: `.tex`, `.rtf`, `.html` (ASCII/Text tables coming soon).
+
+```r
+msummary(models, filename = 'table.tex')
+msummary(models, filename = 'table.rtf')
+msummary(models, filename = 'table.html')
+msummary(models, filename = 'table.jpeg')
+msummary(models, filename = 'table.png')
+```
+
+If `filename` is not specified, `modelsummary` returns the type of object specified with the `output` argument, with a `gt` object as default. `gt` objects can be further customized and rendered by the `gtsave` function from the `gt` package. RStudio renders the html version of this object automatically.
+
+*Warning*: When creating complex tables by chaining multiple `gt` or `kableExtra` functions with the `%>%` pipe operator, the `filename` argument will not work. The problem is that `modelsummary` is trying to write-to-file immediately at the main `msummary()` call, before the rest of the functions in the chain are executed. In that case, it is better to use `gt::gtsave` explicitly at the very end of your chain. For example, 
+
+```r
+msummary(models) %>%
+       tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
+       tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
+       tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
+       gtsave('table.tex')
 ```
 
 # Customizing your tables
@@ -434,61 +581,6 @@ msummary(models,
 
 # Other useful features
 
-## Output formats
-
-To save a table to file, use the `filename` argument. `modelsummary` guesses the output format based on the `filename` extension. The supported extensions are: `.tex`, `.rtf`, `.html` (ASCII/Text tables coming soon).
-
-```r
-msummary(models, filename = 'table.tex')
-msummary(models, filename = 'table.rtf')
-msummary(models, filename = 'table.html')
-msummary(models, filename = 'table.jpeg')
-msummary(models, filename = 'table.png')
-```
-
-If `filename` is not specified, `modelsummary` returns a `gt` object which can be further customized and rendered by the `gtsave` function from the `gt` package. RStudio renders the html version of this object automatically.
-
-*Warning*: When creating complex tables by chaining multiple `gt` functions with the `%>%` pipe operator, the `filename` argument will not work. The problem is that `modelsummary` is trying to write-to-file immediately at the main `msummary()` call, before the rest of the functions in the chain are executed. In that case, it is better to use `gt::gtsave` explicitly at the very end of your chain. For example, 
-
-```r
-msummary(models) %>%
-       tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
-       tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
-       tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
-       gtsave('table.tex')
-```
-
-## LaTeX output and dynamic documents with `knitr`
-
-You can use `modelsummary` to produce LaTeX tables and to create dynamic documents with `knitr`. When knitting in html format, adding a `msummary(models)` call to a code chunk should work out of the box.
-
-When creating LaTeX tables to generate PDF document, things are slightly different. Indeed, the `gt` output functionality for LaTeX is still in development and it is somewhat limited. To avoid common sources of compilation errors, and to allow users to use `\label{}`, `modelsummary` includes two convencience function: 
-
-1. `clean_latex` returns a LaTeX table as a string.
-2. `knit_latex` returns an object of type `as_is`, which can be used directly by the `knitr` package.
-
-For instance, this code will produce a LaTeX table in as a string object:
-
-```r
-msummary(models, title = 'Model summary') %>% 
-    clean_latex(label = 'tab:example')
-```
-
-This code will produce a table inside a `knitr` PDF document:
-
-```r
-msummary(models, title = 'Model summary') %>% 
-    knit_latex(label = 'tab:example')
-```
-
-Please note that the tables produced by `modelsummary` require the following LaTeX packages to compile: caption, longtable, booktabs. You will need to include those in your header or preamble if you want documents to compile properly.
-
-Here are two minimal working examples of markdown files which can be converted to HTML or PDF using the `knitr` package. Just open one the `.Rmd` files in RStudio and click the "Knit" button:
-
-* [markdown_to_pdf.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_pdf.Rmd) / [markdown_to_pdf.pdf](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_pdf.pdf) 
-* [markdown_to_html.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_html.Rmd) / [markdown_to_html.html](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_html.html) 
-
-My goal is to deprecate the `clean_latex` and `knit_latex` functions when `gt` LaTeX export features improve. 
 
 ## Unsupported models and custom tidiers
 

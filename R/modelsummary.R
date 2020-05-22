@@ -7,16 +7,16 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #'
 #' @param models a single model object or a (potentially named) list of models
 #' to summarize
+#' @param output filename or object type (string)
+#' \itemize{
+#'   \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg. 
+#'   \item Supported object types: "gt", "html", "markdown", "latex". "gt" objects are created by the `gt` package; other object types are created by the `kableExtra` package.
+#'   \item When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.
+#' }
 #' @param fmt string which specifies how numeric values will be rounded. This
 #' string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
 #' the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
 #' use exponential notation. See `?sprintf` for more options.
-#' @param filename the file name to create on disk. Ensure that an extension
-#' compatible with the output types is provided (`.html`, `.tex`, `.ltx`,
-#' `.rtf`). Read `?gt::gtsave` for further details. When the table produced by
-#' `modelsummary` is post-processed by another `gt` function, users need to use
-#' the `gtsave` function from the `gt` package; using the `filename` argument
-#' will produce an error.
 #' @param stars FALSE for no significance stars. TRUE for default significance
 #' stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
 #' stars. For example, `c('*' = .1, '+' = .05)`
@@ -53,6 +53,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param title string
 #' @param subtitle string
 #' @param notes list of notes to append to the bottom of the table.
+#' @param filename This argument was deprecated in favor of the `output` argument.
 #' @param ... all other arguments are passed to the `tidy` method used to
 #' extract estimates from the model. For example, this allows users to set
 #' `exponentiate=TRUE` to exponentiate logistic regression coefficients.
@@ -97,6 +98,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #'
 #' @export
 modelsummary <- function(models,
+                         output = "gt",
                          statistic = 'std.error',
                          statistic_override = NULL,
                          statistic_vertical = TRUE,
@@ -114,6 +116,11 @@ modelsummary <- function(models,
                          add_rows_location = NULL,
                          filename = NULL,
                          ...) {
+
+    # deprecation warning
+    if (!is.null(filename)) {
+        stop('The `filename` argument has been deprecated. Please use `output` instead.') 
+    }
 
     # models must be a list of models or a single model
     if (!'list' %in% class(models)) {
@@ -136,7 +143,7 @@ modelsummary <- function(models,
                   subtitle = subtitle,
                   notes = notes,
                   add_rows = add_rows,
-                  filename = filename)
+                  output = output)
 
     # extract estimates and gof
     dat <- modelsummary::extract(models,
@@ -159,47 +166,30 @@ modelsummary <- function(models,
     tab <- dat %>%
            dplyr::mutate(term = ifelse(idx, '', term))
 
-    # create gt table object
-    idx_row <- match('gof', tab$group)
-    idx_col <- ncol(tab) - 2
-    tab <- tab %>%
-           # remove columns not fit for printing
-           dplyr::select(-statistic, -group) %>%
-           # gt object
-           dplyr::rename(`       ` = term) %>% # HACK: arbitrary 7 spaces to avoid name conflict
-           gt::gt()
-
-    # horizontal rule to separate coef/gof
-    if (!is.na(idx_row)) { # check if there are >0 GOF
-        tab <- tab %>%
-               gt::tab_style(style = gt::cell_borders(sides = 'bottom', color = '#000000'),
-                             locations = gt::cells_body(columns = 1:idx_col, rows = (idx_row - 1)))
-    }
-
-    # titles
-    if (!is.null(title)) {
-        tab <- tab %>% gt::tab_header(title = title, subtitle = subtitle)
-    }
-
-    # stars note
-    stars_note <- make_stars_note(stars)
-    if (!is.null(stars_note)) {
-        tab = tab %>% gt::tab_source_note(source_note = stars_note)
-    }
-
-    # user-supplied notes at the bottom of table
-    if (!is.null(notes)) {
-        for (n in notes) {
-            tab <- tab %>% gt::tab_source_note(source_note = n)
+    # write to file or console? with gt or kableExtra? 
+    if (output == 'gt') {
+        build_table <- build_gt
+    } else if (output %in% c('markdown', 'latex', 'html')) {
+        build_table <- build_kableExtra
+    } else {
+        ext <- tools::file_ext(output)
+        if (ext %in% c('html', 'jpg', 'png', 'rtf')) {
+            build_table <- build_gt
+        } else if (ext %in% c('tex', 'md', 'txt')) {
+            build_table <- build_kableExtra
         }
     }
 
-    # output
-    if (!is.null(filename)) {
-        gt::gtsave(tab, filename)
-    } else {
-        return(tab)
-    }
+    # build table
+    build_table(tab, 
+                title = title,
+                subtitle = subtitle,
+                stars = stars,
+                stars_note = stars_note,
+                notes = notes,
+                filename = filename,
+                output = output,
+                ...)
 
 }
 
@@ -209,3 +199,4 @@ modelsummary <- function(models,
 #' @inherit modelsummary
 #' @export
 msummary <- modelsummary
+

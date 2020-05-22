@@ -18,7 +18,7 @@ sanity_checks <- function(models,
 						  subtitle = NULL,
 						  notes = NULL,
 						  add_rows = NULL,
-						  filename = NULL) {
+                          output = NULL) {
 
     # simple parameters
     checkmate::assert_character(statistic, null.ok = FALSE)
@@ -26,8 +26,25 @@ sanity_checks <- function(models,
     checkmate::assert_character(coef_omit, len = 1, null.ok = TRUE)
     checkmate::assert_character(gof_omit, len = 1, null.ok = TRUE)
     checkmate::assert_character(fmt, len = 1, null.ok = FALSE)
-    checkmate::assert_character(filename, len = 1, null.ok = TRUE)
 
+    # output 
+    bad <- FALSE
+    checkmate::assert_character(output, null.ok = FALSE)
+    extension <- tools::file_ext(output)
+    if (extension == '') {
+        if (!output %in% c('gt', 'markdown', 'html', 'latex')) {
+            bad <- TRUE
+        }
+    } else {
+        if (!extension %in% c('', 'html', 'tex', 'jpg', 'png', 'md', 'txt', 'rtf')) {
+            bad <- TRUE
+        }
+    }
+    if (bad) {
+        stop('The `output` argument must be "gt", "markdown", "html", "latex",
+             or a valid file name with one of these extensions: ".html",
+             ".tex", ".rtf", ".md", ".txt", ".jpg", ".png"')
+    }
 
     # statistic_override
     checkmate::assert(checkmate::check_list(statistic_override, null.ok = TRUE),
@@ -49,11 +66,13 @@ sanity_checks <- function(models,
       }
     }
 
+
     # gof_map
     checkmate::assert(
         checkmate::check_data_frame(gof_map, null.ok = TRUE),
         checkmate::check_tibble(gof_map, null.ok = TRUE)
     )
+
 
     # title & subtitle
     checkmate::assert_character(title, len = 1, null.ok = TRUE)
@@ -61,6 +80,12 @@ sanity_checks <- function(models,
         checkmate::assert_character(subtitle, len = 1, null.ok = TRUE)
     } else {
         checkmate::assert_null(subtitle)
+    }
+
+    if (!is.null(subtitle)) {
+        if (output %in% c('latex', 'markdown', 'html')) {
+            stop('The subtitle argument is not supported for this output type. Use `output = "gt"` if you want to use a subtitle.')
+        }
     }
 
     # stars
