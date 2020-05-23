@@ -36,7 +36,7 @@ test_that("kable markdown: complex table", {
                      'Second custom note with different content.'),
            output = 'markdown')
 
-    expect_known_output(cat(tab), 'known_output/kableExtra_markdown_complex.md')
+    expect_known_output(tab, 'known_output/kableExtra_markdown_complex.md')
 
 })
 
@@ -47,7 +47,7 @@ test_that("kable markdown: rouding + custom stars", {
            fmt = '%.8f',
            output = 'markdown')
 
-    expect_known_output(cat(tab), 'known_output/kableExtra_markdown_rounding_stars.md')
+    expect_known_output(tab, 'known_output/kableExtra_markdown_rounding_stars.md')
     
 })
 

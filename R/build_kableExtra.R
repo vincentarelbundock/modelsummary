@@ -1,6 +1,8 @@
 #' Internal function to build table with `gt`
 #'
 #' @inheritParams modelsummary
+#' @param stars_note passed by `modelsummary()`
+#' @keywords internal
 #' @return tbl_gt object
 build_kableExtra <- function(tab,
                              title,

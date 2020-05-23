@@ -86,7 +86,10 @@ extract <- function(models,
     }
 
     est <- est %>% 
+           # full_join warns: Column `term` has different attributes on LHS and
+           # RHS of join
            purrr::reduce(dplyr::full_join, by = c('term', 'statistic'))  %>%
+           #purrr::reduce(merge, all = TRUE) %>%
            dplyr::mutate(group = 'estimates') %>%
            dplyr::select(group, term, statistic, names(.))
 

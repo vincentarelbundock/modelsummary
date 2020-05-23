@@ -25,6 +25,8 @@ build_kableExtra(
 stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
 stars. For example, `c('*' = .1, '+' = .05)`}
 
+\item{stars_note}{passed by `modelsummary()`}
+
 \item{notes}{list of notes to append to the bottom of the table.}
 
 \item{filename}{This argument was deprecated in favor of the `output` argument.}
@@ -46,3 +48,4 @@ tbl_gt object
 \description{
 Internal function to build table with `gt`
 }
+\keyword{internal}

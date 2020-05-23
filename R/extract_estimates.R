@@ -20,9 +20,14 @@ extract_estimates <- function(model,
         so <- extract_statistic_override(model,
                                          statistic = statistic,
                                          statistic_override = statistic_override)
+
         if (!statistic %in% colnames(so)) {
-            stop(paste0(statistic, " cannot be extracted through the `statistic_override` argument. You might want to look at the `modelsummary:::extract_statistic_override` function to diagnose the problem."))
+            stop(paste0(statistic, " cannot be extracted through the
+                        `statistic_override` argument. You might want to look
+                        at the `modelsummary:::extract_statistic_override`
+                        function to diagnose the problem."))
         }
+
         # extract estimates, but keep only columns that do not appear in so
         est <- tidy(model, ...)
         est <- est[, c('term', base::setdiff(colnames(est), colnames(so)))]
@@ -94,9 +99,12 @@ extract_estimates <- function(model,
     est <- est[, cols]
 
     # reshape to vertical
+    est %>% tidyr::pivot_longer(-term, names_to = 'statistic')
+
+
     if (statistic_vertical) {
         est <- est %>%
-               tidyr::gather(statistic, value, -term) %>%
+               tidyr::pivot_longer(-term, names_to = 'statistic') %>%
                dplyr::arrange(term, statistic)
     } else {
         est$statistic <- 'estimate'

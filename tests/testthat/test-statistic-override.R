@@ -42,9 +42,11 @@ test_that("sandwich::vcovHC p.value", {
                "-0.0000246", "(0.5278440)", "", "", "86", "", "", "123.0",
                "130.4", "-58.498")
     expect_equal(raw[[8]], truth)
+
 })
 
 test_that("list of functions", {
+
     raw <- modelsummary::extract(models, statistic_override = list(vcov, vcovHC, vcovHAC, vcovHC, vcov), fmt = '%.5f')
 
     truth <- c("64.11416", "(5.24690)", "-0.00158", "(0.00057)", "-0.00065",
@@ -149,22 +151,22 @@ test_that("list of hardcoded character and possibly numeric values", {
 
     truth <- c("64.114", "!!", "-0.002", "!!!", "-0.001", "!!!!",
                "", "", "86", "0.237", "0.218", "718.8", "728.6", "-355.382")
-    expect_equal(raw[[4]], truth)
+    expect_equal(unname(raw[[4]]), truth)
 
     truth <- c("4.218", "[1, 5]", "-0.000", "[-5, +5]", "", "", "-0.000",
                "95% CI[-2, -1]", "86", "", "", "720.2", "730.0", "-356.106")
-    expect_equal(raw[[5]], truth)
+    expect_equal(unname(raw[[5]]), truth)
 
     truth <- c("57.331", "7", "-0.002", "-6", "0.000", "9",
                "", "", "86", "0.073", "0.051", "797.9", "807.8", "-394.974")
-    expect_equal(raw[[6]], truth)
+    expect_equal(unname(raw[[6]]), truth)
 
     truth <- c("4.384", "\U03B5", "-0.000", "\U2135", "", "", "-0.000",
                "\U0414", "86", "", "", "803.2", "813.1", "-397.620")
-    expect_equal(raw[[7]], truth)
+    expect_equal(unname(raw[[7]]), truth)
 
     truth <- c("1.006", "(1.000)", "-0.000", "(-5.000)", "-0.000", "(-2.000)",
                "", "", "86", "", "", "123.0", "130.4", "-58.498")
-    expect_equal(raw[[8]], truth)
+    expect_equal(unname(raw[[8]]), truth)
 
 })

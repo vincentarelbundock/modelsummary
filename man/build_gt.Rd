@@ -15,6 +15,8 @@ build_gt(tab, title, subtitle, stars, stars_note, notes, output, ...)
 stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
 stars. For example, `c('*' = .1, '+' = .05)`}
 
+\item{stars_note}{argument passed by `modelsummary()`}
+
 \item{notes}{list of notes to append to the bottom of the table.}
 
 \item{output}{filename or object type (string)
@@ -34,3 +36,4 @@ tbl_gt object
 \description{
 Internal function to build table with `gt`
 }
+\keyword{internal}
