@@ -5,7 +5,7 @@
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/vincentarelbundock/modelsummary?branch=master&svg=true)](https://ci.appveyor.com/project/vincentarelbundock/modelsummary)
 <!-- badges: end -->
 
-The `modelsummary` package for `R` produces beautiful, customizable, publication-ready tables to summarize statistical models. Results from several models are presented side-by-side, with uncertainty estimates in parentheses (or brackets) underneath coefficient estimates. Tables can be saved to HTML, LaTeX and RTF (MS Word-ready) formats, or they can be fed to a dynamic report pipeline like `knitr` or `Sweave`.
+The `modelsummary` package for `R` produces beautiful, customizable, publication-ready tables to summarize statistical models. Results from several models are presented side-by-side. Tables can be echoed to the `R` console or viewed in the `RStudio` Viewer. They can be saved to HTML, LaTeX, Text/Markdown, JPG, PNG, and RTF (MS Word-ready) formats. Tables can be integrated in dynamic document pipelines like `Rmarkdown`, `knitr`, or `Sweave`.
 
 <img src="https://raw.githubusercontent.com/vincentarelbundock/modelsummary/master/examples/table_complex.png" width="40%">
 
@@ -13,54 +13,53 @@ The `modelsummary` package for `R` produces beautiful, customizable, publication
 
 + [Sales pitch](https://github.com/vincentarelbundock/modelsummary#sales-pitch)
 + [Installation](https://github.com/vincentarelbundock/modelsummary#installation)
-+ [A simple example](https://github.com/vincentarelbundock/modelsummary#a-simple-example)
++ [Simple example](https://github.com/vincentarelbundock/modelsummary#simple-example)
 + [Output formats: HTML, LaTeX, Text/Markdown, RTF, JPG, PNG, gt](https://github.com/vincentarelbundock/modelsummary#output-formats-html-latex-markdown-rtf-jpg-png-gt)
-    - [Save table to file](https://github.com/vincentarelbundock/modelsummary#save-to-file)
-    - [View table](https://github.com/vincentarelbundock/modelsummary#print-to-console)
-    - [Cutomizing tables](https://github.com/vincentarelbundock/modelsummary#customizing-tables)
-    - [`gt` vs. `kableExtra`](https://github.com/vincentarelbundock/modelsummary#gt-vs-kableextra)
-    - [LaTeX](https://github.com/vincentarelbundock/modelsummary#latex)
-    - [`rmarkdown`, `knitr`, and `Sweave`](https://github.com/vincentarelbundock/modelsummary#rmarkdown-knitr-and-sweave)
-+ [Customizing your tables](https://github.com/vincentarelbundock/modelsummary#customizing-your-tables)
-    * [Uncertainty estimates: SE, p, t, CI](https://github.com/vincentarelbundock/modelsummary#uncertainty-estimates-se-t-p-ci)
-    * [Titles and subtitles](https://github.com/vincentarelbundock/modelsummary#titles-and-subtitles)
-    * [Group columns (spanning labels)](https://github.com/vincentarelbundock/modelsummary#column-groups-spanning-labels)
-    * [Notes](https://github.com/vincentarelbundock/modelsummary#notes)
-    * [Rename, reorder, and subset](https://github.com/vincentarelbundock/modelsummary#rename-reorder-and-subset)
-    * [Stars](https://github.com/vincentarelbundock/modelsummary#stars-statistical-significance-markers)
-    * [Digits, rounding, exponential notation](https://github.com/vincentarelbundock/modelsummary#digits-rounding-exponential-notation)
-    * [Extra tidy arguments (e.g., exponentiated coefficients)](https://github.com/vincentarelbundock/modelsummary#extra-tidy-arguments-eg-exponentiated-coefficients)
-    * [Colors and styles](https://github.com/vincentarelbundock/modelsummary#colors-and-styles)
-    * [Fancy text with markdown: bold, italics, etc.](https://github.com/vincentarelbundock/modelsummary#fancy-text-with-markdown-bold-italics-etc)
-    * [Font size](https://github.com/vincentarelbundock/modelsummary#font-size)
-    * [Add rows manually](https://github.com/vincentarelbundock/modelsummary#add-rows-manually)
-    * [Images](https://github.com/vincentarelbundock/modelsummary#images)
-+ [A complex example](https://github.com/vincentarelbundock/modelsummary#a-complex-example)
-+ [Other useful features](https://github.com/vincentarelbundock/modelsummary#other-useful-features)
-    * [Unsupported models and custom tidiers](https://github.com/vincentarelbundock/modelsummary#unsupported-models-and-custom-tidiers)
+    - [Save table](https://github.com/vincentarelbundock/modelsummary#save-table)
+    - [View table](https://github.com/vincentarelbundock/modelsummary#view-table)
+    - [Customize table with `gt` or `kableExtra`](https://github.com/vincentarelbundock/modelsummary#customize-table-with-gt-or-kableextra)
+    - [Dynamic documents: `Rmarkdown` and `knitr`](https://github.com/vincentarelbundock/modelsummary#dynamic-documents-rmarkdown-and-knitr)
++ [Table content](https://github.com/vincentarelbundock/modelsummary#table-content)
+    - [Uncertainty estimates: SE, p, t, CI](https://github.com/vincentarelbundock/modelsummary#uncertainty-estimates-se-t-p-ci)
+    - [Titles](https://github.com/vincentarelbundock/modelsummary#titles)
+    - [Notes](https://github.com/vincentarelbundock/modelsummary#notes)
+    - [Rename, reorder, and subset](https://github.com/vincentarelbundock/modelsummary#rename-reorder-and-subset)
+    - [Stars](https://github.com/vincentarelbundock/modelsummary#stars-statistical-significance-markers)
+    - [Digits, rounding, exponential notation](https://github.com/vincentarelbundock/modelsummary#digits-rounding-exponential-notation)
+    - [Add rows manually](https://github.com/vincentarelbundock/modelsummary#add-rows-manually)
+    - [Extra tidy arguments (e.g., exponentiated coefficients)](https://github.com/vincentarelbundock/modelsummary#extra-tidy-arguments-eg-exponentiated-coefficients)
++ [Table look: HTML](https://github.com/vincentarelbundock/modelsummary#table-look-html)
+    - [Font, colors, and styles](https://github.com/vincentarelbundock/modelsummary#fonts-colors-and-styles-html)
+    - [Column groups](https://github.com/vincentarelbundock/modelsummary#column-groups-html)
+    - [Images](https://github.com/vincentarelbundock/modelsummary#images)
+    - [Complex example](https://github.com/vincentarelbundock/modelsummary#complex-example-html)
++ [Table look: LaTeX](https://github.com/vincentarelbundock/modelsummary#table-look-latex)
+    - [Font, colors, and styles](https://github.com/vincentarelbundock/modelsummary#fonts-colors-and-styles-latex)
+    - [Column groups](https://github.com/vincentarelbundock/modelsummary#column-groups-latex)
+    - [Complex example](https://github.com/vincentarelbundock/modelsummary#complex-example-latex)
++ [Unsupported models and custom tidiers](https://github.com/vincentarelbundock/modelsummary#unsupported-models-and-custom-tidiers)
     * [Pooled multiple imputation results](https://github.com/vincentarelbundock/modelsummary#pooled-multiple-imputation-results)
     * [Power users](https://github.com/vincentarelbundock/modelsummary#power-users)
 + [Alternative summary table packages for R](https://github.com/vincentarelbundock/modelsummary#alternative-summary-table-packages-for-r)
-
 
 # Sales pitch
 
 Here are a few benefits of `modelsummary` over some [alternative packages](https://github.com/vincentarelbundock/modelsummary#alternative-summary-table-packages-for-r):
 
 * Customizability
-    - Tables are endlessly customizable, thanks to the power of the [`gt` package.](https://gt.rstudio.com) In this README, you will find tables with colored cells, weird text, spanning column labels, row groups, titles and subtitles, global footnotes, cell-specific footnotes, significance stars, etc. This only scratches the surface of possibilities. For more, see [gt.rstudio.com](https://gt.rstudio.com) and the [Power Users](https://github.com/vincentarelbundock/modelsummary#power-users) section of this README.
+    - Tables are endlessly customizable, thanks to the power of the [`gt` package](https://gt.rstudio.com) and [`kableExtra`](https://haozhu233.github.io/kableExtra/). In this README, you will find tables with colored cells, weird text, spanning column labels, row groups, titles and subtitles, global footnotes, cell-specific footnotes, significance stars, etc. This README will explore many of the available options, but it only scratches the surface of possibilities.
 * Flexibility
-    - Tables can be saved to html, rtf, jpeg, png, pdf, or LaTeX files. (Coming soon: TXT/ASCII, and more.)
+    - Tables can be saved to HTML, LaTeX, Text/Markdown, RTF (Word-Compatible), JPG, or PNG formats.
 * Integration
     - `modelsummary` is extremely well integrated with RStudio. When you type `msummary(models)`, the summary table immediately appears in the Viewer window.
 * Transparency, replicability, and automation
-    - By combining `knitr` and `modelsummary`, you can easily produce beautiful, replicable, and automated documents and reports. [Click here for details.](https://github.com/vincentarelbundock/modelsummary#dynamic-documents-with-knitr)
+    - By combining `modelsummary` with `knitr` or `Rmarkdown`, you can easily produce beautiful, replicable, and automated documents and reports. [Click here for details.](https://github.com/vincentarelbundock/modelsummary#rmarkdown-knitr-and-sweave)
 * Community
-    - `modelsummary` does not try to do everything. It leverages the incredible work of the `R` community by building on top of the popular `broom` package. Thanks to the `broom` team, `modelsummary` already supports dozens of model types out of the box. Most importantly, as `broom` and `gt` improve, `modelsummary` also improves.
+    - `modelsummary` does not try to do everything. It leverages the incredible work of the `R` community by building on top of the popular `broom`, `gt`, and `kableExtra` packages. Thanks to the `broom` team, `modelsummary` already supports dozens of model types out of the box. Thanks to the `gt` and `kableExtra` authors, `modelsummary` can produce beautiful tables in a large number of formats. Most importantly, as these external packages improve, `modelsummary` improves as well.
 * Reliability
     - `modelsummary` is developed using a suite of unit tests. It (probably) won't break.
 * Simplicity
-    - By using the `broom` and `gt` packages for key operations, `modelsummary` has a massively simplified codebase. This should improve long term code maintainability, and allow contributors to participate through GitHub.
+    - By using the `broom`, `gt`, and `kableExtra` packages for key operations, `modelsummary` has a massively simplified codebase. This should improve long term code maintainability, and allow contributors to participate through GitHub.
 
 CFITCRS!
 
@@ -83,31 +82,36 @@ library(remotes)
 remotes::install_github('vincentarelbundock/modelsummary')
 ```
 
-`modelsummary` relies heavily on the `gt` package, which is not available on CRAN yet. You can install it from github:
+# Simple example
 
-```r
-remotes::install_github('rstudio/gt')
-```
+We begin by loading a few packages and by downloading data from the [RDatasets](https://vincentarelbundock.github.io/Rdatasets/) repository: 
 
-Make sure you also install `tidyverse`, as `modelsummary` depends on a lot of its packages (e.g., `stringr`, `dplyr`, `tidyr`, `purrr`):
-
-```r
-install.packages('tidyverse')
-```
-
-# A simple example
-
-Load packages and download some data from the [RDatasets](https://vincentarelbundock.github.io/Rdatasets/) repository. Then, estimate 5 different models and store them in a named list. The name of each model in that list will be used as a column label:
 
 ```r
 library(gt)
+library(kableExtra)
 library(MASS)
 library(modelsummary)
 
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
 dat <- read.csv(url) 
-dat$Clergy <- ifelse(dat$Clergy > 40, 1, 0) # binary variable for logit model
+dat$Clergy <- ifelse(dat$Clergy > 40, 1, 0) # binary variable for logit models
+```
 
+We estimate a linear model and use the `msummary` command to display the results:
+
+```r
+mod <- lm(Clergy ~ Crime_prop, data = dat)
+msummary(mod)
+```
+
+In `Rstudio`, this following image will automatically be displayed in the "Viewer" window. When running `R` from a terminal or from the basic `R` program, this table will appear in your default browser.
+
+<img src="https://github.com/vincentarelbundock/modelsummary/blob/master/examples/table_single.png" width="12%">
+
+To summarize multiple models side-by-side, we store them in a named list. The names will be used as column labels:
+
+```r
 models <- list()
 models[['OLS 1']] <- lm(Literacy ~ Crime_prop + Infants, dat)
 models[['NBin 1']] <- glm.nb(Literacy ~ Crime_prop + Donations, dat)
@@ -116,35 +120,22 @@ models[['NBin 2']] <- glm.nb(Desertion ~ Crime_prop + Donations, dat)
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 ```
 
-Produce a simple table:
-
-```r
-msummary(models)
-```
-
-Of course, `modelsummary` can also summarize single models:
-
-```r
-mod <- lm(Clergy ~ Crime_prop, data = dat)
-msummary(mod)
-```
+<img src="https://github.com/vincentarelbundock/modelsummary/blob/master/examples/table_multiple.png" width="40%">
 
 # Output formats: HTML, LaTeX, Markdown, RTF, JPG, PNG, gt
 
-`modelsummary` can produce tables in the following formats: 
+`modelsummary` can produce tables in these formats: 
 
 * HTML 
 * LaTeX 
 * Text / Markdown / ASCII
 * RTF (Microsoft Word-compatible)
-* .jpg and .png images 
+* JPG and PNG images 
 * `gt` table objects
 
-These output formats can be echoed to the `R` console, saved to file, or the tables can be further customized and post-processed using functions from the `gt` or `kableExtra` packages.
+Tables can be [saved to file](https://github.com/vincentarelbundock/modelsummary#save-table), or they can be [previewed in the `R` console the `Rstudio` Viewer, or a browser.](https://github.com/vincentarelbundock/modelsummary#view-table) Tables can be inserted in [dynamic `Rmarkdown` or `knitr` documents](https://github.com/vincentarelbundock/modelsummary#dynamic-documents-rmarkdown-and-knitr), or they can be [customized](https://github.com/vincentarelbundock/modelsummary#customize-table-with-gt-or-kableextra) using functions from the `gt` or `kableExtra` packages.
 
-`modelsummary` can also insert tables in "dynamic" documents produced by `Rmarkdown`, `knitr`, or `Sweave`.
-
-## Save to file
+## Save table
 
 To save a table to file, use the `output` argument. `modelsummary` will use the file name extension to guess what kind of file to save. For example,
 
@@ -158,19 +149,19 @@ msummary(models, output = 'table.jpg')
 msummary(models, output = 'table.rtf')
 ```
 
-By default, `modelsummary` uses the `gt` package to save HTML, JPG, and PNG files.  It uses `kableExtra` to save LaTeX and Markdown files.
+By default, `modelsummary` uses the `gt` package to save HTML, RTF, JPG, and PNG files.  It uses `kableExtra` to save LaTeX and Markdown files.
 
 ## View table
 
-To print the table, set the `output` argument to "gt", "html", "latex", or "markdown" (the default "gt" returns a `gt` object and displays the associated HTML table). For example,
+To view the table in the `R` Console or the `RStudio` Viewer, set the `output` argument to "gt", "html", "latex", or "markdown". The default is `output="gt"`, which returns a `gt` object and displays the associated HTML table in the `RStudio` Viewer or in your browser. For example,
 
 ```r
+msummary(models)
 msummary(models, output = 'latex')
 msummary(models, output = 'html')
-msummary(models, output = 'gt')
 ```
 
-Using `output = "markdown"` prints a markdown/ASCII table to the console:
+Using `output="markdown"` prints a markdown/ASCII table to the console:
 
 ```r
 > msummary(models, output = 'markdown')
@@ -195,76 +186,70 @@ Using `output = "markdown"` prints a markdown/ASCII table to the console:
 msummary(models, output = 'markdown')
 ```
 
-## Customizing tables
+## Customize table with `gt` or `kableExtra`
 
-Both `gt` and `kableExtra` allow endless customization of HTML and LaTeX tables. To customize a table, users generally *post-process* the outcome of `modelsummary()` using functions from the `gt` or `kableExtra` package. For example, to add a note to the bottom of an HTML table, users can type:
+Both `gt` and `kableExtra` allow endless customization of HTML and LaTeX tables. To customize a table, users generally *post-process* the output of `modelsummary()` using functions from `gt` or `kableExtra` package. 
+
+For example, to use red text in the first column of an HTML table created by the `gt` package, we type:
 
 ```r
-msummary(models) %>% tab_source_note('This is a note.')
+library(gt)
+msummary(models, output = 'gt') %>% 
+         tab_style(style = cell_text('red'), locations = cells_body(1))
 ```
 
-Users are encouraged to read the documents of both packages to see which syntax they prefer. 
-
-* [HTML tables with `gt`](https://gt.rstudio.com)
-* [HTML tables with `kableExtra`](http://haozhu233.github.io/kableExtra/)
-
-*Warning*: When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt` or `kableExtra`. To save a customized table, you should apply all the customization functions you need, and only then use `gt::gtsave` or `kableExtra::save_kable` to save the table to file. 
-
-## `gt` vs. `kableExtra`
-
-To build tables `modelsummary` relies on two external packages: `gt` and `kableExtra`. Each package has its own advantages and disadvantages. `gt` is extremely powerful for HTML tables, and it is extremely well integrated with the RStudio IDE. Typing `msummary(models)` produces an HTML table that is immediately visible in the `Rstudio` Viewer window. Unfortunately, `gt`'s support for LaTeX and PDF outputs for Rmarkdown documents is immature. In contrast, `kableExtra` has mature and full-featured LaTeX and PDF rendering functions. For this reason, `modelsummary` uses `gt` by default for HTML documents, and `kableExtra` by default for LaTeX documents.
-
-You can override these defaults like this:
+To use red text in the first column of a LaTeX table created by the `kableExtra` package, we type:
 
 ```r
-# kableExtra HTML table
-msummary(models, output = 'html') %>% cat(file = 'table.html')
-
-# gt LaTeX table
-msummary(models) %>% gtsave('table.tex')
-```
-
-## LaTeX
-
-The `gt` LaTeX render engine is still immature. Until it improves, I strongly recommend that users turn to `kableExtra` to produce LaTeX tables. This packages offers robust functions that allow a lot of customization. A simple LaTeX table can be produced as follows:
-
-```r
-msummary(models, output = 'latex')
-```
-
-We can use functions from the `kableExtra` package to customize this table, with bold and colored cells, column spans, and more. For example, this code produces the table below.
-
-```r
-msummary(mod, output = 'latex',
-         stars = TRUE,
-         title = "This is a fancy table \\label{lab2}",
-         notes = list('First note', 'Second note')) %>%
-    add_header_above(c(" " = 1, "Group A" = 1, "Group B" = 2)) %>%
-    row_spec(7, bold = TRUE, color = "white", background = "black") %>%
+library(kableExtra)
+msummary(models, output = 'latex') %>% 
     column_spec(1, bold = TRUE, color = "red")
 ```
 
-<img src="https://github.com/vincentarelbundock/modelsummary/blob/master/examples/kableExtra_latex.png" width="40%">
+Note that compiling this LaTeX table requires loading the `booktabs` and `xcolor` packages in the preamble of your LaTeX or Rmarkdown document.
 
-## `Rmarkdown`, `knitr`, and `Sweave`
+Users are encouraged to read the documentation of both packages to see which syntax they prefer. 
 
-You can use `modelsummary` to produce LaTeX tables and to create dynamic documents with `knitr` or `rmarkdown`. The correct `modelsummary` command to use depends on the output format.
+* [`gt` documentation](https://gt.rstudio.com)
+* [`kableExtra` documentation](http://haozhu233.github.io/kableExtra/)
+
+`gt` and `kableExtra` each have strengths and weaknesses. `gt`'s HTML output allows seemless integration with the RStudio IDE, but `kableExtra`'s LaTeX (and PDF) output is far more mature. 
+
+You can override the default package used by `modelsummary` using commands like these:
+
+```r
+# gt LaTeX table
+msummary(models) %>% gt::gtsave('table.tex')
+
+# kableExtra HTML table
+msummary(models, output = 'html') %>% cat(file = 'table.html')
+```
+
+*Warning*: When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt` or `kableExtra`. To save a customized table, you should apply all the customization functions you need before saving it using `gt::gtsave`, `kableExtra::save_kable`, or another appropriate helper function.
+
+## Dynamic documents: `Rmarkdown` and `knitr`
+
+You can use `modelsummary` to insert tables into dynamic documents with `knitr` or `Rmarkdown`. The correct `modelsummary` command to use depends on the output format.
 
 * HTML documents: `modelsummary(models)` 
 * PDF documents: `modelsummary(models, output = 'latex')` 
 
-Note that the tables produced by `modelsummary` require the following LaTeX packages to compile: booktabs, array, float, colortbl, xcolor. These packages need to be included in the your header or preamble if you want documents to compile properly (see example files below).
+Note that the tables produced by `modelsummary` require the following LaTeX packages to compile: booktabs, array, float, colortbl, xcolor. These packages need to be included in the header or preamble of your document (see example files below).
 
 Here are two minimal working examples of markdown files which can be converted to HTML or PDF using the `knitr` package. Just open one the `.Rmd` files in RStudio and click the "Knit" button:
 
-* [markdown_to_pdf.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_pdf.Rmd) / [markdown_to_pdf.pdf](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_pdf.pdf) 
-* [markdown_to_html.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_html.Rmd) / [markdown_to_html.html](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_html.html) 
+* [markdown_to_pdf.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_pdf.Rmd)
+    - [markdown_to_pdf.pdf](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_pdf.pdf)
+* [markdown_to_html.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_html.Rmd)
+    - [markdown_to_html.html](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_html.html)
 
-# Customizing your tables
+# Table content
 
 ## Uncertainty estimates: SE, t, p, CI
 
-`modelsummary` prints an uncertainty estimate in parentheses below the corresponding coefficient estimate. The `statistic` argument must be a string which is equal to `conf.int` or to one of the columns produced by the `broom::tidy` function. When using `conf.int`, users can specify a confidence level with the `conf_level` argument.
+By default, `modelsummary` prints an uncertainty estimate in parentheses below the corresponding coefficient estimate. The value of this estimate is determined by the `statistic` argument.
+
+`statistic` must be a string which equal to `conf.int` or to one of the columns produced by the `broom::tidy` function. When using `conf.int`, users can specify a confidence level with the `conf_level` argument.
 
 ```r
 msummary(models, statistic = 'std.error')
@@ -273,7 +258,7 @@ msummary(models, statistic = 'statistic')
 msummary(models, statistic = 'conf.int', conf_level = .99)
 ```
 
-Display the uncertainty estimate next to the coefficient instead of below it:
+You can display the uncertainty estimate next to the coefficient instead of below it:
 
 ```r
 msummary(models, statistic_vertical = FALSE)
@@ -321,14 +306,12 @@ Will produce something like this:
 
 <img src="https://imgur.com/yNLr5Nt.png" width="30%">
 
-## Titles and subtitles
+## Titles
 
-You can add titles and subtitles to your table as follows:
+You can add a title to your table as follows:
 
 ```r
-msummary(models, 
-   title = 'This is a title for my table.',
-   subtitle = 'And this is the subtitle.')
+msummary(models, title = 'This is a title for my table.')
 ```
 
 ## Notes
@@ -341,22 +324,9 @@ msummary(models,
                 'Text of the second note.'))
 ```
 
-Add numbered footnotes to a column, a row, or a cell:
-
-```r
-msummary(models) %>% 
-    tab_footnote(                                                                                                                                                                                  
-        footnote = md("This is a **very** important model, so we are pointing it out in a column-specific footnote."),                        
-        locations = cells_column_labels(columns = vars(`OLS 1`))) %>%  
-    tab_footnote(                                                                                                                                                                               
-        footnote = "This is the variable of interest.",                                                                                           
-        locations = cells_body(columns = 1, rows = 3)) %>%                                                                                                                                      
-    tab_footnote(                                                                                                                      
-        footnote = "Most important model + most important variable = most important estimate.",
-        locations = cells_body(columns = vars(`OLS 1`), rows = 3))
-```
-
 ## Rename, reorder, and subset
+
+`modelsummary` offers a powerful and innovative mechanism to rename, reorder, and subset coefficients and goodness-of-fit statistics.
 
 ### Coefficient estimates
 
@@ -400,18 +370,7 @@ msummary(models, gof_map = gm)
 
 The goodness-of-fit statistics will be printed in the table in the same order as in the `gof_map` data.frame.
 
-Notice the subtle difference between `coef_map` and `gof_map`. `coef_map` works as a "white list": any coefficient not explicitly entered will be omitted from the table. `gof_map` works as a "black list": statistics need to be explicitly marked for omission.
-
-## Column groups (spanning labels)
-
-Create spanning labels to group models (columns):
-
-```r
-msummary(models) %>%
-    tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
-    tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
-    tab_spanner(label = 'Clergy', columns = 'Logit 1')
-```
+Notice the subtle difference between `coef_map` and `gof_map`. On the one hand, `coef_map` works as a "white list": any coefficient not explicitly entered will be omitted from the table. On the other, `gof_map` works as a "black list": statistics need to be explicitly marked for omission.
 
 ## Stars: Statistical significance markers
 
@@ -449,59 +408,6 @@ Most users will just modify the `3` in `%.3f`, but this is a very powerful syste
 msummary(models, fmt = '%.7f')
 ```
 
-## Extra tidy arguments (e.g., exponentiated coefficients)
-
-Users can pass any additional argument they want to the `tidy` method which is used to extract estimates from a model. For example, in logitistic or Cox proportional hazard models, many users want to exponentiate coefficients to faciliate interpretation. The `tidy` functions supplied by the `broom` package allow users to set `exponentiate=TRUE` to achieve this. In `modelsummary`, users can use the same argument:
-
-```r
-mod_logit <- glm(am ~ mpg, data = mtcars, family = binomial)
-msummary(mod_logit, exponentiate = TRUE)
-```
-
-Any argument supported by `tidy` is thus supported by `modelsummary`.
-
-Warning: at the moment (2020-05-05), `broom::tidy` still reports `std.error` on the original scale. See this [discussion on the `broom` GitHub page.](https://github.com/tidymodels/broom/issues/422)
-
-## Colors and styles
-
-The power of the `gt` package makes `modelsummary` tables endlessly customizable. For instance, we can color columns and cells, and present values in bold or italics:
-
-```r
-msummary(models) %>%
-    tab_style(style = cell_fill(color = "lightcyan"), 
-			  locations = cells_body(columns = vars(`OLS 1`))) %>% 
-    tab_style(style = cell_fill(color = "#F9E3D6"),
-              locations = cells_data(columns = vars(`NBin 2`), rows = 2:6)) %>%
-    tab_style(style = cell_text(weight = "bold"), 
-		      locations = cells_body(columns = vars(`OLS 1`))) %>%
-	tab_style(style = cell_text(style = "italic"), 
-              locations = cells_data(columns = vars(`NBin 2`), rows = 2:6))
-```
-
-<img src="https://i.imgur.com/1u9hgm2.png" width="50%">
-
-## Fancy text with markdown: bold, italics, etc.
-
-Thanks to `gt`, `modelsummary` accepts markdown indications for emphasis and more:
-
-```r
-msummary(models, 
-   title = md('This is a **bolded series of words.**'),
-   notes = list(md('And an *emphasized note*.')))
-```
-
-## Font size
-
-This will produce a table with extra large variable names.
-
-```r
-msummary(models) %>%
-    tab_style(style = cell_text(size = 'x-large'),
-              locations = cells_body(columns = 1)) 
-```
-
-Note that `gt`'s `tab_style` function is more developed for HTML output than for RTF or LaTeX, so some styling options may not be availble yet. The `gt` package is under heavy development, so feel free to file an issue on github if you have a special request, and stay tuned for more!
-
 ## Add rows manually
 
 Use the `add_rows` argument to add rows manually to the bottom of the table.
@@ -524,6 +430,83 @@ This prints custom rows after the 2nd GOF statistic:
 msummary(models, add_rows = list(row1, row2), add_rows_location = 2)
 ```
 
+## Extra tidy arguments (e.g., exponentiated coefficients)
+
+Users can pass any additional argument they want to the `tidy` method which is used to extract estimates from a model. For example, in logitistic or Cox proportional hazard models, many users want to exponentiate coefficients to faciliate interpretation. The `tidy` functions supplied by the `broom` package allow users to set `exponentiate=TRUE` to achieve this. In `modelsummary`, users can use the same argument:
+
+```r
+mod_logit <- glm(am ~ mpg, data = mtcars, family = binomial)
+msummary(mod_logit, exponentiate = TRUE)
+```
+
+Any argument supported by `tidy` is thus supported by `modelsummary`.
+
+Warning: at the moment (2020-05-05), `broom::tidy` still reports `std.error` on the original scale. See this [discussion on the `broom` GitHub page.](https://github.com/tidymodels/broom/issues/422)
+
+# Table look: HTML
+
+## Fonts, colors, and styles: HTML
+
+Thanks to `gt`, `modelsummary` accepts markdown indications for emphasis and more:
+
+```r
+msummary(models, 
+   title = md('This is a **bolded series of words.**'),
+   notes = list(md('And an *emphasized note*.')))
+```
+
+We can modify the size of the text with `gt`'s `tab_style` function: 
+
+```r
+msummary(models) %>%
+    tab_style(style = cell_text(size = 'x-large'),
+              locations = cells_body(columns = 1)) 
+```
+
+We can also color columns and cells, and present values in bold or italics:
+
+```r
+msummary(models) %>%
+    tab_style(style = cell_fill(color = "lightcyan"), 
+              locations = cells_body(columns = vars(`OLS 1`))) %>% 
+    tab_style(style = cell_fill(color = "#F9E3D6"),
+              locations = cells_data(columns = vars(`NBin 2`), rows = 2:6)) %>%
+    tab_style(style = cell_text(weight = "bold"), 
+              locations = cells_body(columns = vars(`OLS 1`))) %>%
+    tab_style(style = cell_text(style = "italic"), 
+              locations = cells_data(columns = vars(`NBin 2`), rows = 2:6))
+```
+
+<img src="https://i.imgur.com/1u9hgm2.png" width="50%">
+
+## Footnotes: HTML
+
+Add numbered footnotes to a column, a row, or a cell:
+
+```r
+msummary(models) %>% 
+    tab_footnote(                                                                                                                                                                                  
+        footnote = md("This is a **very** important model, so we are pointing it out in a column-specific footnote."),                        
+        locations = cells_column_labels(columns = vars(`OLS 1`))) %>%  
+    tab_footnote(                                                                                                                                                                               
+        footnote = "This is the variable of interest.",                                                                                           
+        locations = cells_body(columns = 1, rows = 3)) %>%                                                                                                                                      
+    tab_footnote(                                                                                                                      
+        footnote = "Most important model + most important variable = most important estimate.",
+        locations = cells_body(columns = vars(`OLS 1`), rows = 3))
+```
+
+## Column groups: HTML
+
+Create spanning labels to group models (columns):
+
+```r
+msummary(models) %>%
+    tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
+    tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
+    tab_spanner(label = 'Clergy', columns = 'Logit 1')
+```
+
 ## Images
 
 Insert images in your tables using the `gt::text_transform` and `gt::local_image` functions.
@@ -536,7 +519,7 @@ msummary(models) %>%
     )
 ```
 
-# A complex example
+## Complex example: HTML
 
 This is the code I used to generate the "complex" table posted at the top of this README.
 
@@ -545,6 +528,7 @@ cm <- c('Crime_prop' = 'Crime / Population',
         'Donations' = 'Donations',
         'Infants' = 'Infants',
         '(Intercept)' = 'Constant')
+
 msummary(models,
    coef_map = cm,
    stars = TRUE,
@@ -559,23 +543,72 @@ msummary(models,
    tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
    # footnotes
    tab_footnote(
-       footnote = md("This is a **very** important model, so we are pointing it out in a column-specific footnote."),                        
-       locations = cells_column_labels(columns = vars(`OLS 1`))) %>%  
-    tab_footnote(                                                                                                                                                                               
-        footnote = "This is the variable of interest.",                                                                                           
-        locations = cells_body(rows =5)) %>%                                                                                                                                      
-    tab_footnote(                                                                                                                      
-        footnote = "Most important model + most important variable = most important estimate.",
-        locations = cells_body(columns = vars(`OLS 1`), rows = 5)) %>%   
-    # color and bold
-    tab_style(style = cell_text(color = "red", weight = "bold"),
-              locations = cells_body(columns = vars(`OLS 1`), rows = 5))
+       footnote = md("This is a **very** important model, so we are pointing it out in a column-specific footnote."),
+       locations = cells_column_labels(columns = vars(`OLS 1`))) %>%
+   tab_footnote(                                                                                                                      footnote = "This is the variable of interest.",                                                                                locations = cells_body(rows =5)) %>%                                                                                       tab_footnote(
+       footnote = "Most important model + most important variable = most important estimate.",
+       locations = cells_body(columns = vars(`OLS 1`), rows = 5)) %>%   
+   # color and bold
+   tab_style(
+       style = cell_text(color = "red", weight = "bold"),
+       locations = cells_body(columns = vars(`OLS 1`), rows = 5))
 ```
 
-# Other useful features
+<img src="https://github.com/vincentarelbundock/modelsummary/blob/master/examples/table_complex.png" width="40%">
+
+# Table look: LaTeX
+
+The `gt` LaTeX render engine is still immature. Until it improves, I strongly recommend that users turn to `kableExtra` to produce LaTeX tables. This package offers robust functions that allow a lot of customization. A simple LaTeX table can be produced as follows:
+
+```r
+msummary(models, output = 'latex')
+```
+
+We can use functions from the `kableExtra` package to customize this table, with bold and colored cells, column spans, and more. 
+
+## Fonts, colors and styles: LaTeX
+
+The `row_spec` and `column_spec` allow users to change the styling of their tables. For instance, this code creates a table where the first column is in bold blue text on pink background:
+
+```r
+msummary(models, output = 'latex') %>%
+    row_spec(1, bold = TRUE, color = 'blue', background = 'pink')
+```
+
+## Column groups: LaTeX
+
+You can define column group labels using `kableExtra`'s `add_header_above` function:
+
+```
+msummary(models, output = 'latex') %>%
+    add_header_above(c(" " = 1, "Literacy" = 2, "Desertion" = 2, 'Clergy = 1))
+```
 
 
-## Unsupported models and custom tidiers
+## Complex example: LaTeX
+
+```r
+cm <- c('Crime_prop' = 'Crime / Population',
+        'Donations' = 'Donations',
+        'Infants' = 'Infants',
+        '(Intercept)' = 'Constant')
+
+msummary(models,
+   coef_map = cm,
+   stars = TRUE,
+   gof_omit = "Deviance",
+   title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
+   notes = c('First custom note to contain text.',
+             'Second custom note with different content.')) %>%
+   # add spanning labels
+   add_header_above(c(" " = 1, "Literacy" = 2, "Desertion" = 2, 'Clergy = 1)) %>%
+   # color and bold
+   row_spec(3, bold = TRUE, color = 'blue', background = 'pink')
+```
+
+<img src="https://github.com/vincentarelbundock/modelsummary/blob/master/examples/table_complex_latex.png" width="40%">
+
+# Unsupported models and custom tidiers
 
 `modelsummary` relies on two functions from the `broom` package to extract model information: `tidy` and `glance`. If `broom` doesn't support the type of model you are trying to summarize, `modelsummary` won't support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.
 
@@ -648,8 +681,7 @@ The `statistic` argument can take any column name in the tidy data frame obtaine
 generics::tidy(mod[[1]])
 ```
 
-
-## Power users
+# Power users
 
 The `gt` package allows a bunch more customization and styling. Power users can use `modelsummary`'s `extract` function to produce a tibble which can easily be fed into `gt`.
 
@@ -679,4 +711,3 @@ There are several excellent alternative summary table packages for R:
 * [huxtable](https://cran.r-project.org/package=huxtable)
 * [stargazer](https://cran.r-project.org/package=stargazer)
 * [apsrtable](https://cran.r-project.org/package=apsrtable)
-
