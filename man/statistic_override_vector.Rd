@@ -18,10 +18,10 @@ argument accepts three types of input:
 }}
 
 \item{statistic}{string name of the statistic to include in parentheses
-below estimates. Must be either "conf.int", or one of the column names
-produced by the `broom::tidy` function. Typical values include: "std.error",
-"conf.int", "statistic", "p.value". A character vector will stack several
-uncertainty estimates on top of one another (in different rows).}
+\itemize{
+  \item Typical values: "conf.int", "std.error", "statistic", "p.value"
+  \item Alternative values: any column name produced by `broom::tidy(model)`
+}}
 }
 \value{
 tibble

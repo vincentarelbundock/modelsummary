@@ -87,7 +87,6 @@ remotes::install_github('vincentarelbundock/modelsummary')
 
 We begin by loading a few packages and by downloading data from the [RDatasets](https://vincentarelbundock.github.io/Rdatasets/) repository: 
 
-
 ```r
 library(gt)
 library(kableExtra)
@@ -106,7 +105,7 @@ mod <- lm(Clergy ~ Crime_prop, data = dat)
 msummary(mod)
 ```
 
-In `Rstudio`, this following image will automatically be displayed in the "Viewer" window. When running `R` from a terminal or from the basic `R` program, this table will appear in your default browser.
+In `Rstudio`, the image below will be displayed automatically in the "Viewer" window. When running `R` from a terminal or from the basic `R` interface, this table should appear in your browser.
 
 <img src="https://user-images.githubusercontent.com/987057/82732364-c4655400-9cda-11ea-82c4-120755a94042.png" width="12%">
 
@@ -119,6 +118,8 @@ models[['NBin 1']] <- glm.nb(Literacy ~ Crime_prop + Donations, dat)
 models[['OLS 2']] <- lm(Desertion ~ Crime_prop + Infants, dat)
 models[['NBin 2']] <- glm.nb(Desertion ~ Crime_prop + Donations, dat)
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
+
+msummary(models)
 ```
 
 <img src="https://user-images.githubusercontent.com/987057/82732360-c29b9080-9cda-11ea-9be7-ffc7fa3bd6dd.png" width="40%">
@@ -184,7 +185,6 @@ Using `output="markdown"` prints a markdown/ASCII table to the console:
 |AIC         |718.8    |720.2    |797.9    |803.2    |123.0   |
 |BIC         |728.6    |730.0    |807.8    |813.1    |130.4   |
 |Log.Lik.    |-355.382 |-356.106 |-394.974 |-397.620 |-58.498 |
-msummary(models, output = 'markdown')
 ```
 
 ## Customize table with `gt` or `kableExtra`

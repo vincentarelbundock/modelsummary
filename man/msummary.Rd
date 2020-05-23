@@ -7,20 +7,20 @@
 msummary(
   models,
   output = "gt",
+  fmt = "\%.3f",
   statistic = "std.error",
   statistic_override = NULL,
   statistic_vertical = TRUE,
   conf_level = 0.95,
+  stars = FALSE,
   coef_map = NULL,
   coef_omit = NULL,
   gof_map = modelsummary::gof_map,
   gof_omit = NULL,
-  fmt = "\%.3f",
-  stars = FALSE,
-  title = NULL,
-  notes = NULL,
   add_rows = NULL,
   add_rows_location = NULL,
+  title = NULL,
+  notes = NULL,
   filename = NULL,
   subtitle = NULL,
   ...
@@ -37,11 +37,16 @@ to summarize}
   \item When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.
 }}
 
+\item{fmt}{string which specifies how numeric values will be rounded. This
+string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
+the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
+use exponential notation. See `?sprintf` for more options.}
+
 \item{statistic}{string name of the statistic to include in parentheses
-below estimates. Must be either "conf.int", or one of the column names
-produced by the `broom::tidy` function. Typical values include: "std.error",
-"conf.int", "statistic", "p.value". A character vector will stack several
-uncertainty estimates on top of one another (in different rows).}
+\itemize{
+  \item Typical values: "conf.int", "std.error", "statistic", "p.value"
+  \item Alternative values: any column name produced by `broom::tidy(model)`
+}}
 
 \item{statistic_override}{manually override the uncertainy estimates. This
 argument accepts three types of input:
@@ -55,6 +60,13 @@ argument accepts three types of input:
 estimates. FALSE if statistics should be printed beside estimates.}
 
 \item{conf_level}{confidence level to use for confidence intervals}
+
+\item{stars}{to indicate statistical significance
+\itemize{
+  \item FALSE (default): no significance stars. 
+  \item TRUE: *=.1, **=.05, ***=.01
+  \item Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
+}}
 
 \item{coef_map}{named character vector. Names refer to the original variable
 names. Values refer to the variable names that will appear in the table.
@@ -70,25 +82,16 @@ from the table (using `stringr::str_detect`).}
 \item{gof_omit}{string regular expression. Omits all matching gof statistics from
 the table (using `stringr::str_detect`).}
 
-\item{fmt}{string which specifies how numeric values will be rounded. This
-string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
-the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
-use exponential notation. See `?sprintf` for more options.}
-
-\item{stars}{FALSE for no significance stars. TRUE for default significance
-stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
-stars. For example, `c('*' = .1, '+' = .05)`}
-
-\item{title}{string}
-
-\item{notes}{list of notes to append to the bottom of the table.}
-
 \item{add_rows}{list of character vectors, each of length equal to the number
 of models + 1.}
 
 \item{add_rows_location}{integer or NULL. custom rows will be added to the
 bottom of the table if this parameter is NULL, or after the position set by
 this integer.}
+
+\item{title}{string}
+
+\item{notes}{list of notes to append to the bottom of the table.}
 
 \item{filename}{This argument was deprecated in favor of the `output` argument.}
 

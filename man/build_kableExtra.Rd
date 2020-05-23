@@ -9,9 +9,12 @@ build_kableExtra(tab, title, stars, stars_note, notes, filename, output, ...)
 \arguments{
 \item{title}{string}
 
-\item{stars}{FALSE for no significance stars. TRUE for default significance
-stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
-stars. For example, `c('*' = .1, '+' = .05)`}
+\item{stars}{to indicate statistical significance
+\itemize{
+  \item FALSE (default): no significance stars. 
+  \item TRUE: *=.1, **=.05, ***=.01
+  \item Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
+}}
 
 \item{stars_note}{passed by `modelsummary()`}
 

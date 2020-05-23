@@ -27,10 +27,10 @@ extract(
 to summarize}
 
 \item{statistic}{string name of the statistic to include in parentheses
-below estimates. Must be either "conf.int", or one of the column names
-produced by the `broom::tidy` function. Typical values include: "std.error",
-"conf.int", "statistic", "p.value". A character vector will stack several
-uncertainty estimates on top of one another (in different rows).}
+\itemize{
+  \item Typical values: "conf.int", "std.error", "statistic", "p.value"
+  \item Alternative values: any column name produced by `broom::tidy(model)`
+}}
 
 \item{statistic_override}{manually override the uncertainy estimates. This
 argument accepts three types of input:
@@ -66,9 +66,12 @@ of models + 1.}
 bottom of the table if this parameter is NULL, or after the position set by
 this integer.}
 
-\item{stars}{FALSE for no significance stars. TRUE for default significance
-stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
-stars. For example, `c('*' = .1, '+' = .05)`}
+\item{stars}{to indicate statistical significance
+\itemize{
+  \item FALSE (default): no significance stars. 
+  \item TRUE: *=.1, **=.05, ***=.01
+  \item Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
+}}
 
 \item{fmt}{string which specifies how numeric values will be rounded. This
 string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after

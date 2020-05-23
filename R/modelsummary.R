@@ -17,14 +17,17 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
 #' the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
 #' use exponential notation. See `?sprintf` for more options.
-#' @param stars FALSE for no significance stars. TRUE for default significance
-#' stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
-#' stars. For example, `c('*' = .1, '+' = .05)`
+#' @param stars to indicate statistical significance
+#' \itemize{
+#'   \item FALSE (default): no significance stars. 
+#'   \item TRUE: *=.1, **=.05, ***=.01
+#'   \item Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
+#' }
 #' @param statistic string name of the statistic to include in parentheses
-#' below estimates. Must be either "conf.int", or one of the column names
-#' produced by the `broom::tidy` function. Typical values include: "std.error",
-#' "conf.int", "statistic", "p.value". A character vector will stack several
-#' uncertainty estimates on top of one another (in different rows).
+#' \itemize{
+#'   \item Typical values: "conf.int", "std.error", "statistic", "p.value"
+#'   \item Alternative values: any column name produced by `broom::tidy(model)`
+#' }
 #' @param statistic_override manually override the uncertainy estimates. This
 #' argument accepts three types of input:
 #' \itemize{
@@ -100,20 +103,20 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @export
 modelsummary <- function(models,
                          output = "gt",
+                         fmt = '%.3f',
                          statistic = 'std.error',
                          statistic_override = NULL,
                          statistic_vertical = TRUE,
                          conf_level = 0.95,
+                         stars = FALSE,
                          coef_map = NULL,
                          coef_omit = NULL,
                          gof_map = modelsummary::gof_map,
                          gof_omit = NULL,
-                         fmt = '%.3f',
-                         stars = FALSE,
-                         title = NULL,
-                         notes = NULL,
                          add_rows = NULL,
                          add_rows_location = NULL,
+                         title = NULL,
+                         notes = NULL,
                          filename = NULL,
                          subtitle = NULL,
                          ...) {
