@@ -9,7 +9,8 @@ build_gt(tab, title, subtitle, stars, stars_note, notes, output, ...)
 \arguments{
 \item{title}{string}
 
-\item{subtitle}{string}
+\item{subtitle}{This argument is deprecated. Use `title` or the `tab_header`
+function from the `gt` package.}
 
 \item{stars}{FALSE for no significance stars. TRUE for default significance
 stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance

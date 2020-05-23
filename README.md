@@ -7,7 +7,7 @@
 
 The `modelsummary` package for `R` produces beautiful, customizable, publication-ready tables to summarize statistical models. Results from several models are presented side-by-side. Tables can be echoed to the `R` console or viewed in the `RStudio` Viewer. They can be saved to HTML, LaTeX, Text/Markdown, JPG, PNG, and RTF (MS Word-ready) formats. Tables can be integrated in dynamic document pipelines like `Rmarkdown`, `knitr`, or `Sweave`.
 
-<img src="https://raw.githubusercontent.com/vincentarelbundock/modelsummary/master/examples/table_complex.png" width="40%">
+<img src="https://user-images.githubusercontent.com/987057/82732359-c0d1cd00-9cda-11ea-8924-ff599cb29273.png" width="40%">
 
 # Table of contents
 
@@ -41,6 +41,7 @@ The `modelsummary` package for `R` produces beautiful, customizable, publication
     * [Pooled multiple imputation results](https://github.com/vincentarelbundock/modelsummary#pooled-multiple-imputation-results)
     * [Power users](https://github.com/vincentarelbundock/modelsummary#power-users)
 + [Alternative summary table packages for R](https://github.com/vincentarelbundock/modelsummary#alternative-summary-table-packages-for-r)
+
 
 # Sales pitch
 
@@ -107,7 +108,7 @@ msummary(mod)
 
 In `Rstudio`, this following image will automatically be displayed in the "Viewer" window. When running `R` from a terminal or from the basic `R` program, this table will appear in your default browser.
 
-<img src="https://github.com/vincentarelbundock/modelsummary/blob/master/examples/table_single.png" width="12%">
+<img src="https://user-images.githubusercontent.com/987057/82732364-c4655400-9cda-11ea-82c4-120755a94042.png" width="12%">
 
 To summarize multiple models side-by-side, we store them in a named list. The names will be used as column labels:
 
@@ -120,7 +121,7 @@ models[['NBin 2']] <- glm.nb(Desertion ~ Crime_prop + Donations, dat)
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 ```
 
-<img src="https://github.com/vincentarelbundock/modelsummary/blob/master/examples/table_multiple.png" width="40%">
+<img src="https://user-images.githubusercontent.com/987057/82732360-c29b9080-9cda-11ea-9be7-ffc7fa3bd6dd.png" width="40%">
 
 # Output formats: HTML, LaTeX, Markdown, RTF, JPG, PNG, gt
 
@@ -470,14 +471,14 @@ msummary(models) %>%
     tab_style(style = cell_fill(color = "lightcyan"), 
               locations = cells_body(columns = vars(`OLS 1`))) %>% 
     tab_style(style = cell_fill(color = "#F9E3D6"),
-              locations = cells_data(columns = vars(`NBin 2`), rows = 2:6)) %>%
+              locations = cells_body(columns = vars(`NBin 2`), rows = 2:6)) %>%
     tab_style(style = cell_text(weight = "bold"), 
               locations = cells_body(columns = vars(`OLS 1`))) %>%
     tab_style(style = cell_text(style = "italic"), 
-              locations = cells_data(columns = vars(`NBin 2`), rows = 2:6))
+              locations = cells_body(columns = vars(`NBin 2`), rows = 2:6))
 ```
 
-<img src="https://i.imgur.com/1u9hgm2.png" width="50%">
+<img src="https://user-images.githubusercontent.com/987057/82732616-3c804980-9cdc-11ea-8968-02e45d53adab.png" width="40%">
 
 ## Footnotes: HTML
 
@@ -515,7 +516,7 @@ Insert images in your tables using the `gt::text_transform` and `gt::local_image
 msummary(models) %>%
     text_transform(
         locations = cells_body(columns = 1, rows = 1),
-        fn = function(x) {web_image(url = "https://raw.githubusercontent.com/vincentarelbundock/modelsummary/master/examples/squirrel.png", height = 120)}
+        fn = function(x) {web_image(url = "https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png", height = 120)}
     )
 ```
 
@@ -554,7 +555,7 @@ msummary(models,
        locations = cells_body(columns = vars(`OLS 1`), rows = 5))
 ```
 
-<img src="https://github.com/vincentarelbundock/modelsummary/blob/master/examples/table_complex.png" width="40%">
+<img src="https://user-images.githubusercontent.com/987057/82732359-c0d1cd00-9cda-11ea-8924-ff599cb29273.png" width="40%">
 
 # Table look: LaTeX
 
@@ -606,7 +607,7 @@ msummary(models,
    row_spec(3, bold = TRUE, color = 'blue', background = 'pink')
 ```
 
-<img src="https://github.com/vincentarelbundock/modelsummary/blob/master/examples/table_complex_latex.png" width="40%">
+<img src="https://user-images.githubusercontent.com/987057/82732382-e068f580-9cda-11ea-8924-331550f8f1e8.png" width="40%">
 
 # Unsupported models and custom tidiers
 

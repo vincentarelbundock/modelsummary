@@ -6,7 +6,6 @@
 #' @return tbl_gt object
 build_kableExtra <- function(tab,
                              title,
-                             subtitle,
                              stars,
                              stars_note,
                              notes,

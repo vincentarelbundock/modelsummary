@@ -18,11 +18,11 @@ modelsummary(
   fmt = "\%.3f",
   stars = FALSE,
   title = NULL,
-  subtitle = NULL,
   notes = NULL,
   add_rows = NULL,
   add_rows_location = NULL,
   filename = NULL,
+  subtitle = NULL,
   ...
 )
 }
@@ -81,8 +81,6 @@ stars. For example, `c('*' = .1, '+' = .05)`}
 
 \item{title}{string}
 
-\item{subtitle}{string}
-
 \item{notes}{list of notes to append to the bottom of the table.}
 
 \item{add_rows}{list of character vectors, each of length equal to the number
@@ -93,6 +91,9 @@ bottom of the table if this parameter is NULL, or after the position set by
 this integer.}
 
 \item{filename}{This argument was deprecated in favor of the `output` argument.}
+
+\item{subtitle}{This argument is deprecated. Use `title` or the `tab_header`
+function from the `gt` package.}
 
 \item{...}{all other arguments are passed to the `tidy` method used to
 extract estimates from the model. For example, this allows users to set
@@ -123,8 +124,8 @@ msummary(models, statistic = 'statistic', conf_level = 0.99)
 # rename and re-order coefficients
 msummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 
-# titles and subtitles
-msummary(models, title = 'This is the title', subtitle = 'And a subtitle')
+# titles 
+msummary(models, title = 'This is the title')
 
 # title with italicized text
 msummary(models, title = gt::md('This is *the* title'))

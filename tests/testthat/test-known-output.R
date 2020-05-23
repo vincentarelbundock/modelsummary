@@ -26,31 +26,34 @@ test_that("html_output: complex table", {
            coef_map = cm,
            stars = TRUE,
            gof_omit = "Statistics|^p$|Deviance|Resid|Sigma|Log.Lik|^DF$",
-           title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
-           subtitle = 'Models estimated using the mtcars dataset.',
            notes = c('First custom note to contain text.',
                      'Second custom note with different content.')) %>%
            gt::tab_spanner(label = 'Horsepower', columns = c('OLS 1', 'NBin 1')) %>%
            gt::tab_spanner(label = 'V-Shape', columns = c('OLS 2', 'Logit 1')) %>%
            gt::tab_spanner(label = 'Transmission', columns = 'Logit 2') %>%
+           gt::tab_header(title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
+                          subtitle = 'Models estimated using the mtcars dataset.') %>%
            gt::as_raw_html()
+
     expect_known_output(cat(raw), "known_output/complex_table.html")
 })
 
 test_that("html_output: title and subtitle", {
 
-    raw <- msummary(models,
-                     title = 'This is a title for my table.') %>%
+    raw <- msummary(models, title = 'This is a title for my table.') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/title.html")
 
-    raw <- msummary(models,
-                     title = 'This is a title for my table.',
-                     subtitle = 'And this is the subtitle.') %>%
+    raw <- msummary(models) %>%
+           gt::tab_header(title = 'This is a title for my table.',
+                          subtitle = 'And this is the subtitle.') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/title_subtitle.html")
 
+    # subtitle deprecated
+    expect_error(msummary(models, title = 'blah', subtitle = 'blahblah'))
     expect_error(msummary(models, subtitle = 'And this is the subtitle.'))
+
 })
 
 test_that("html_output: background color", {

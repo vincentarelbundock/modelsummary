@@ -4,22 +4,10 @@
 \alias{build_kableExtra}
 \title{Internal function to build table with `gt`}
 \usage{
-build_kableExtra(
-  tab,
-  title,
-  subtitle,
-  stars,
-  stars_note,
-  notes,
-  filename,
-  output,
-  ...
-)
+build_kableExtra(tab, title, stars, stars_note, notes, filename, output, ...)
 }
 \arguments{
 \item{title}{string}
-
-\item{subtitle}{string}
 
 \item{stars}{FALSE for no significance stars. TRUE for default significance
 stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance

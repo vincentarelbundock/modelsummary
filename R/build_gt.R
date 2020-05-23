@@ -32,7 +32,7 @@ build_gt <- function(tab,
 
     # titles
     if (!is.null(title)) {
-        tab <- tab %>% gt::tab_header(title = title, subtitle = subtitle)
+        tab <- tab %>% gt::tab_header(title = title)
     }
 
     # stars note

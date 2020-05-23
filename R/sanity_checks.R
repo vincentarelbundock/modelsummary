@@ -15,12 +15,12 @@ sanity_checks <- function(models,
 						  fmt = '%.3f',
 						  stars = NULL,
 						  title = NULL,
-						  subtitle = NULL,
 						  notes = NULL,
 						  add_rows = NULL,
                           output = NULL) {
 
     # simple parameters
+    checkmate::assert_character(title, len = 1, null.ok = TRUE)
     checkmate::assert_character(statistic, null.ok = FALSE)
     checkmate::assert_character(coef_map, null.ok = TRUE)
     checkmate::assert_character(coef_omit, len = 1, null.ok = TRUE)
@@ -74,19 +74,6 @@ sanity_checks <- function(models,
     )
 
 
-    # title & subtitle
-    checkmate::assert_character(title, len = 1, null.ok = TRUE)
-    if (!is.null(title)) {
-        checkmate::assert_character(subtitle, len = 1, null.ok = TRUE)
-    } else {
-        checkmate::assert_null(subtitle)
-    }
-
-    if (!is.null(subtitle)) {
-        if (output %in% c('latex', 'markdown', 'html')) {
-            stop('The subtitle argument is not supported for this output type. Use `output = "gt"` if you want to use a subtitle.')
-        }
-    }
 
     # stars
     checkmate::assert(

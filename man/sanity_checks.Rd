@@ -17,7 +17,6 @@ sanity_checks(
   fmt = "\%.3f",
   stars = NULL,
   title = NULL,
-  subtitle = NULL,
   notes = NULL,
   add_rows = NULL,
   output = NULL
@@ -70,8 +69,6 @@ stars (*=.1, **=.05, ***=.01). Named numeric vector for custom significance
 stars. For example, `c('*' = .1, '+' = .05)`}
 
 \item{title}{string}
-
-\item{subtitle}{string}
 
 \item{notes}{list of notes to append to the bottom of the table.}
 

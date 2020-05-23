@@ -1,3 +1,10 @@
+# 0.3.0: ????-??-??
+
+* kableExtra output format for LaTeX and Markdown
+* Deprecated arguments: filename, subtitle
+* Documentation improvements
+* New tests
+
 # 0.2.1: 2020-04-29
 
 * Convenience function to render markdown in row/column labels

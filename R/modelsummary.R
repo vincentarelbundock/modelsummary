@@ -51,9 +51,10 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' bottom of the table if this parameter is NULL, or after the position set by
 #' this integer.
 #' @param title string
-#' @param subtitle string
 #' @param notes list of notes to append to the bottom of the table.
 #' @param filename This argument was deprecated in favor of the `output` argument.
+#' @param subtitle This argument is deprecated. Use `title` or the `tab_header`
+#' function from the `gt` package.
 #' @param ... all other arguments are passed to the `tidy` method used to
 #' extract estimates from the model. For example, this allows users to set
 #' `exponentiate=TRUE` to exponentiate logistic regression coefficients.
@@ -77,8 +78,8 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' # rename and re-order coefficients
 #' msummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 #'
-#' # titles and subtitles
-#' msummary(models, title = 'This is the title', subtitle = 'And a subtitle')
+#' # titles 
+#' msummary(models, title = 'This is the title')
 #'
 #' # title with italicized text
 #' msummary(models, title = gt::md('This is *the* title'))
@@ -110,16 +111,19 @@ modelsummary <- function(models,
                          fmt = '%.3f',
                          stars = FALSE,
                          title = NULL,
-                         subtitle = NULL,
                          notes = NULL,
                          add_rows = NULL,
                          add_rows_location = NULL,
                          filename = NULL,
+                         subtitle = NULL,
                          ...) {
 
-    # deprecation warning
+    # deprecation warnings
     if (!is.null(filename)) {
-        stop('The `filename` argument has been deprecated. Please use `output` instead.') 
+        stop('The `filename` argument is deprecated. Please use `output` instead.') 
+    }
+    if (!is.null(subtitle)) {
+        stop('The `subtitle` argument is deprecated. If you want to add a subtitle to an HTML table, you can use the `tab_header` function from the `gt` package.') 
     }
 
     # models must be a list of models or a single model
@@ -140,7 +144,6 @@ modelsummary <- function(models,
                   fmt = fmt,
                   stars = stars,
                   title = title,
-                  subtitle = subtitle,
                   notes = notes,
                   add_rows = add_rows,
                   output = output)
