@@ -1,6 +1,9 @@
 # modelsummary: Beautiful, customizable, publication-ready model summaries in R.
 
+<!-- badges: start -->
 [![Travis-CI Build Status](https://travis-ci.org/vincentarelbundock/modelsummary.svg?branch=master)](https://travis-ci.org/vincentarelbundock/modelsummary)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/vincentarelbundock/modelsummary?branch=master&svg=true)](https://ci.appveyor.com/project/vincentarelbundock/modelsummary)
+<!-- badges: end -->
 
 The `modelsummary` package for `R` produces beautiful, customizable, publication-ready tables to summarize statistical models. Results from several models are presented side-by-side, with uncertainty estimates in parentheses (or brackets) underneath coefficient estimates. Tables can be saved to HTML, LaTeX and RTF (MS Word-ready) formats, or they can be fed to a dynamic report pipeline like `knitr` or `Sweave`.
 
@@ -205,7 +208,7 @@ Users are encouraged to read the documents of both packages to see which syntax 
 * [HTML tables with `gt`](https://gt.rstudio.com)
 * [HTML tables with `kableExtra`](http://haozhu233.github.io/kableExtra/)
 
-*Warning*: When users supply of file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using fuunctions from `gt` or `kableExtra`. To save a customized table, you should apply all the customization functions you need, and only then use `gt::gtsave` or `kableExtra::save_kable` to save the table to file. 
+*Warning*: When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt` or `kableExtra`. To save a customized table, you should apply all the customization functions you need, and only then use `gt::gtsave` or `kableExtra::save_kable` to save the table to file. 
 
 ## `gt` vs. `kableExtra`
 
