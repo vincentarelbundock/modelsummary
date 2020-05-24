@@ -49,7 +49,7 @@ build_gt <- function(tab,
     }
 
     # output
-    if (output == 'gt') {
+    if (output %in% c('default', 'gt', 'html', 'rtf', 'latex')) {
         return(tab)
     } else {
         gt::gtsave(tab, output)

@@ -6,7 +6,7 @@
 \usage{
 modelsummary(
   models,
-  output = "gt",
+  output = "default",
   fmt = "\%.3f",
   statistic = "std.error",
   statistic_override = NULL,

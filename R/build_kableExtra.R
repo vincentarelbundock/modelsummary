@@ -13,11 +13,6 @@ build_kableExtra <- function(tab,
                              output,
                              ...) {
 
-    # output type
-    output_latex <- (output == 'latex') | (tools::file_ext(output) == 'tex')
-    output_markdown <- (output == 'markdown') | (tools::file_ext(output) %in% c('md', 'txt'))
-    output_html <- (output == 'html') | (tools::file_ext(output) %in% c('htm', 'html'))
-
     # clean and measure table
     idx_row <- match('gof', tab$group)
     tab <- tab %>%
@@ -25,21 +20,26 @@ build_kableExtra <- function(tab,
            dplyr::rename(`       ` = term) # HACK: arbitrary 7 spaces to avoid name conflict
     idx_col <- ncol(tab)
 
-    # kable object type based on output 
+    # output type
+    if (output == 'default') {
+        output <- 'html'
+    }
+    ext <- tools::file_ext(output)
 
-    if (output_latex) {
+    # kable object type based on output 
+    if ((output == 'latex') | (ext == 'tex')) {
         tab <- kableExtra::kable(tab, format = 'latex', caption = title,
                                  booktabs = TRUE, linesep = "")
 
-    } else if (output_markdown) {
+    } else if ((output == 'markdown') | (ext %in% c('md', 'txt'))) {
         tab <- kableExtra::kable(tab, format = 'markdown', caption = title)
 
-    } else if (output_html) {
+    } else if ((output == 'html') | (ext %in% c('htm', 'html'))) {
         tab <- kableExtra::kable(tab, format = 'html', caption = title)
-    } 
+    }
 
     # horizontal rule to separate coef/gof
-    if (output_latex) {
+    if ((output == 'latex') | (ext == 'tex')) {
         if (!is.na(idx_row)) { # check if there are >0 GOF
             tab <- tab %>%
                    kableExtra::row_spec(idx_row - 1, extra_latex_after = '\\midrule')

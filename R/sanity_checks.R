@@ -32,7 +32,7 @@ sanity_checks <- function(models,
     checkmate::assert_character(output, null.ok = FALSE)
     extension <- tools::file_ext(output)
     if (extension == '') {
-        if (!output %in% c('gt', 'markdown', 'html', 'latex')) {
+        if (!output %in% c('default', 'gt', 'markdown', 'html', 'latex')) {
             bad <- TRUE
         }
     } else {

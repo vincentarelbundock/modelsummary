@@ -1,0 +1,612 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+
+
+{\pard \qc \f0 \sa180 \li0 \fi0 \b \fs36 Using {\f1 modelsummary} in an Rmarkdown document\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \par}
+{\pard \ql \f0 \sa180 \li0 \fi0 This file illustrates how to use {\f1 modelsummary} to produce PDF, HTML, and RTF (Microsoft Word-compatible) files from a single Rmarkdown document.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Header\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 At the top of every Rmarkdown document, there is a \u8220"header\u8221" enclosed between two \u8220"\u8212-\u8221" lines, and written in YAML markup syntax. The first important thing to note is that in the current document, we have including the following code in the header:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \f1 header-includes:\line
+- \\usepackage\{booktabs\}\line
+- \\usepackage\{xcolor\}\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 These lines are required for PDF documents with {\f1 modelsummary} tables. Under the hood, Rmarkdown uses LaTeX to create PDF documents. All the tables produced by {\f1 modelsummary} require the LaTeX {\f1 booktabs} package. In addition, features like colors require loading additional LaTeX packages {\f1 xcolor}. The {\field{\*\fldinst{HYPERLINK "https://haozhu233.github.io/kableExtra/"}}{\fldrslt{\ul
+{\f1 kableExtra} documentation
+}}}
+ explains which LaTeX packages may be required for different use cases.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 A first table\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 To begin we estimate three linear regression models using the {\f1 mtcars} data:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \f1 library(modelsummary)\line
+library(kableExtra)\line
+library(gt)\line
+models <- list()\line
+models[[1]] <- lm(mpg ~ cyl, mtcars)\line
+models[[2]] <- lm(mpg ~ cyl + drat, mtcars)\line
+models[[3]] <- lm(hp ~ cyl + drat, mtcars)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Then, we load the {\f1 modelsummary} package and call the {\f1 msummary} function:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \f1 msummary(models,\line
+         title = 'Determinants of Car Features',\line
+         statistic = 'conf.int')\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;
+}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\cssrgb\c37036\c37036\c37036;\csgray\c0\c0;
+}
+\deftab20
+\cf0
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clmgf \clvertalb \clshdrawnil \clheight340 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt100 \gaph\cellx935
+\clmrg \clvertalb \clshdrawnil \clheight340 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt100 \gaph\cellx1870
+\clmrg \clvertalb \clshdrawnil \clheight340 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt100 \gaph\cellx2805
+\clmrg \clvertalb \clshdrawnil \clheight340 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt100 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\f0\fs36 \expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 Determinants of Car Features
+\fs24  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\cell
+\pard\intbl\itap1\cell
+\pard\intbl\itap1\cell
+\row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clmgf \clvertalc \clshdrawnil \clheight240 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadb100 \gaph\cellx935
+\clmrg \clvertalc \clshdrawnil \clheight240 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadb100 \gaph\cellx1870
+\clmrg \clvertalc \clshdrawnil \clheight240 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadb100 \gaph\cellx2805
+\clmrg \clvertalc \clshdrawnil \clheight240 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadb100 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+
+\fs20 \expnd0\expndtw0\kerning0\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 
+\fs28  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell\pard\intbl\itap1\cell
+\pard\intbl\itap1\cell
+\pard\intbl\itap1\cell
+\row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clheight520 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \gaph\cellx935
+\clvertalc \clshdrawnil \clheight520 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \gaph\cellx1870
+\clvertalc \clshdrawnil \clheight520 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \gaph\cellx2805
+\clvertalc \clshdrawnil \clheight520 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2         \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 Model 1 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 Model 2 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 Model 3 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 (Intercept) \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 37.885 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 28.725 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 -215.768 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 [33.649, 42.120] \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 [13.197, 44.252] \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 [-396.489, -35.048] \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 cyl \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 -2.876 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 -2.484 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 39.012 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 [-3.534, -2.217] \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 [-3.398, -1.569] \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 [28.367, 49.657] \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 drat \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 1.872 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 33.662 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 [-1.183, 4.927] \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 [-1.893, 69.218] \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 Num.Obs. \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 32 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 32 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 32 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 R2 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 0.726 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 0.740 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 0.728 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 Adj.R2 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 0.717 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 0.722 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 0.709 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 AIC \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 169.3 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 169.6 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 326.7 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 BIC \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 173.7 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 175.5 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 332.6 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 Log.Lik. \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 -81.653 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 -80.809 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 -159.348 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 \cell \lastrow\row}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Without any modification, this code will produce a nice table, whether the document is compiled to PDF, HTML, or RTF.{\super\chftn}{\*\footnote\chftn\~\plain\pard {\pard \ql \f0 \sa180 \li0 \fi0 The Rmarkdown output in the header must be set to either \u8220"pdf_document\u8221", \u8220"html_document\u8221", or \u8220"rtf_document\u8221".\par}
+} In fact, tables produced using {\i any} of the {\f1 modelsummary} built-in options and arguments should compile correctly in all three formats.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 One major benefit of {\f1 modelsummary} is that regression tables can be customized using the powerful {\f1 gt} and {\f1 kableExtra} libraries. To achieve this, we {\i post-process} the output of {\f1 msummary()} using functions from the {\f1 gt} or {\f1 kableExtra} packages. Achieving this in an Rmarkdown file requires some slight, but very easy, tweaks to our code. The next two sections explain what those tweaks are.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Output formats: {\f1 gt} vs.\u160?{\f1 kableExtra}\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 The two external packages that {\f1 modelsummary} uses to create tables are {\f1 gt} and {\f1 kableExtra}. These packages are fantastic, but they each have (minor) disadvantages. In particular,\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\f1 gt}\u8217's LaTeX support is not yet mature, and creating PDF files often breaks in Rmarkdown.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab {\f1 kableExtra} does not support RTF output.\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 In the rest of this example file, we will demonstrate how to use {\f1 gt} and {\f1 kableExtra} functions to customize tables. However, we will not create tables using {\f1 gt} in PDF documents, and we will not create tables using {\f1 kableExtra} in RTF documents. To achieve this, we detect the Rmarkdown output format and create of two boolean variables:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \f1 is_rtf <- knitr::opts_knit$get("rmarkdown.pandoc.to") == 'rtf'\line
+is_latex <- knitr::opts_knit$get("rmarkdown.pandoc.to") == 'latex'\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 In chunks with {\f1 gt} code, we set {\f1 eval=!is_latex}. In code chunks with {\f1 kableExtra} code, we set {\f1 eval=!is_rtf}.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Customizing tables with {\f1 gt}\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 We can use functions from the {\f1 gt} package to post-process and customize a {\f1 modelsummary} table:{\super\chftn}{\*\footnote\chftn\~\plain\pard {\pard \ql \f0 \sa180 \li0 \fi0 The following code chunk is set to {\f1 eval=!is_latex}. It will not be executed when the Rmarkdown document is compiled to a PDF file.\par}
+}\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \f1 library(gt)\line
+\line
+msummary(models,\line
+         title = 'Table customized using `gt` functions.',\line
+         stars = TRUE,\line
+         notes = c('First custom note to contain text.',\line
+                   'Second custom note with different content.')) %>%\line
+   # spanning labels\line
+   tab_spanner(label = 'Miles / Gallon', columns = 2:3) %>%\line
+   tab_spanner(label = 'Horsepower', columns = 4) %>%\line
+   # color\line
+   tab_style(style = cell_text(color = "blue", weight = "bold"),\line
+             locations = cells_body(columns = 1)) %>%\line
+   tab_style(style = cell_fill(color = "pink"),\line
+             locations = cells_body(rows = 3))\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;
+}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\cssrgb\c37036\c37036\c37036;\csgray\c0\c0;
+}
+\deftab20
+\cf0
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clmgf \clvertalb \clshdrawnil \clheight340 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt100 \gaph\cellx935
+\clmrg \clvertalb \clshdrawnil \clheight340 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt100 \gaph\cellx1870
+\clmrg \clvertalb \clshdrawnil \clheight340 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt100 \gaph\cellx2805
+\clmrg \clvertalb \clshdrawnil \clheight340 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt100 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\f0\fs36 \expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 Table customized using `gt` functions.
+\fs24  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\cell
+\pard\intbl\itap1\cell
+\pard\intbl\itap1\cell
+\row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clmgf \clvertalc \clshdrawnil \clheight240 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadb100 \gaph\cellx935
+\clmrg \clvertalc \clshdrawnil \clheight240 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadb100 \gaph\cellx1870
+\clmrg \clvertalc \clshdrawnil \clheight240 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadb100 \gaph\cellx2805
+\clmrg \clvertalc \clshdrawnil \clheight240 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadb100 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+
+\fs20 \expnd0\expndtw0\kerning0\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 
+\fs28  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell\pard\intbl\itap1\cell
+\pard\intbl\itap1\cell
+\pard\intbl\itap1\cell
+\row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvmgf \clvertalc \clshdrawnil \clheight1100 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrs\brdrw20\brdrcf3 \clpadl100 \clpadr100 \gaph\cellx935
+\clmgf \clvertalc \clshdrawnil \clheight540 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrs\brdrw20\brdrcf3 \clbrdrb\brdrs\brdrw20\brdrcf3 \clbrdrr\brdrs\brdrw20\brdrcf3 \clpadl100 \clpadr100 \gaph\cellx1870
+\clmrg \clvertalc \clshdrawnil \clheight540 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrs\brdrw20\brdrcf3 \clbrdrb\brdrs\brdrw20\brdrcf3 \clbrdrr\brdrs\brdrw20\brdrcf3 \clpadl100 \clpadr100 \gaph\cellx2805
+\clvertalc \clshdrawnil \clheight540 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrs\brdrw20\brdrcf3 \clbrdrb\brdrs\brdrw20\brdrcf3 \clbrdrr\brdrs\brdrw20\brdrcf3 \clpadl100 \clpadr100 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\f0\fs24
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 \b        \b0  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 \b Miles / Gallon\b0  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 \b Horsepower\b0  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\row
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil
+\clvmrg \clvertalc \clshdrawnil \clheight1100 \clbrdrt\brdrs\brdrw40\brdrcf3 \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \gaph\cellx935
+\clvertalc \clshdrawnil \clheight540 \clbrdrt\brdrs\brdrw20\brdrcf3 \clbrdrl\brdrs\brdrw20\brdrcf3 \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \gaph\cellx1870
+\clvertalc \clshdrawnil \clheight540 \clbrdrt\brdrs\brdrw20\brdrcf3 \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrs\brdrw20\brdrcf3 \clpadl100 \clpadr100 \gaph\cellx2805
+\clvertalc \clshdrawnil \clheight540 \clbrdrt\brdrs\brdrw20\brdrcf3 \clbrdrl\brdrs\brdrw20\brdrcf3 \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrs\brdrw20\brdrcf3 \clpadl100 \clpadr100 \gaph\cellx3740
+\pard\intbl\itap1\cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 \b Model 1\b0  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 \b Model 2\b0  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 \b Model 3\b0  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 \cell
+\row
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 (Intercept) \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 37.885*** \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 28.725*** \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 -215.768** \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 (2.074) \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 (7.592) \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 (88.362) \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 cyl \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 -2.876*** \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 -2.484*** \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 39.012*** \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 (0.322) \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 (0.447) \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 (5.205) \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 drat \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 1.872 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 33.662* \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2  \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 (1.494) \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 (17.385) \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 Num.Obs. \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 32 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 32 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 32 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 R2 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 0.726 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 0.740 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 0.728 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 Adj.R2 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 0.717 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 0.722 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 0.709 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 AIC \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 169.3 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 169.6 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 326.7 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 BIC \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 173.7 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 175.5 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 332.6 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+ \row\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrnil \trbrdrr\brdrnil
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx935
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx1870
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx2805
+\clvertalc \clshdrawnil \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrs\brdrw40\brdrcf3 \clbrdrr\brdrnil \clpadl100 \clpadr100 \clpadt50 \clpadb50 \gaph\cellx3740
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 Log.Lik. \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 -81.653 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 -80.809 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0 \cell
+\pard\intbl\itap1\pardeftab20\qc\partightenfactor0
+\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 -159.348 \kerning1\expnd0\expndtw0 \up0 \nosupersub \ulnone \outl0\strokewidth0\expnd0\expndtw0\kerning0
+\up0 \nosupersub \ulnone \outl0\strokewidth0 \strokec2 \cell \lastrow\row\pard\pardeftab720\sl288\slmult1\partightenfactor0
+\cf0 \strokec2 * p &lt; 0.1, ** p &lt; 0.05, *** p &lt; 0.01\
+\cf0 \strokec2 First custom note to contain text.\
+\cf0 \strokec2 Second custom note with different content.\
+}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Customizing tables with {\f1 kableExtra}\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 In {\f1 modelsummary}, the default output format for HTML tables is {\f1 gt}. If we want to use {\f1 kableExtra} functions to customize our HTML tables instead, we must declare our preference by setting the {\f1 modelsummary_html} option:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \f1 library(kableExtra)\line
+\line
+options(modelsummary_html = 'kableExtra')\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 We can use functions from the {\f1 kableExtra} package to post-process and customize a {\f1 modelsummary} table:{\super\chftn}{\*\footnote\chftn\~\plain\pard {\pard \ql \f0 \sa180 \li0 \fi0 The following code chunk is set to {\f1 eval=!is_rtf}. It will not be executed when the Rmarkdown document is compiled to an RTF file.\par}
+}:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \f1 msummary(models,\line
+         title = 'Table customized using `kableExtra` functions.',\line
+         stars = TRUE,\line
+         notes = c('First custom note to contain text.',\line
+                   'Second custom note with different content.')) %>%\line
+    kable_styling %>%\line
+    # spanning labels\line
+    add_header_above(c(" " = 1, "Miles / Gallon" = 2, "Horsepower" = 1)) %>%\line
+    # color\line
+    row_spec(3, background = 'pink') %>%\line
+    column_spec(1, color = 'blue')\par}
+}

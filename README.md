@@ -48,7 +48,7 @@ The `modelsummary` package for `R` produces beautiful, customizable, publication
 Here are a few benefits of `modelsummary` over some [alternative packages](https://github.com/vincentarelbundock/modelsummary#alternative-summary-table-packages-for-r):
 
 * Customizability
-    - Tables are endlessly customizable, thanks to the power of the [`gt` package](https://gt.rstudio.com) and [`kableExtra`](https://haozhu233.github.io/kableExtra/). In this README, you will find tables with colored cells, weird text, spanning column labels, row groups, titles and subtitles, global footnotes, cell-specific footnotes, significance stars, etc. This README will explore many of the available options, but it only scratches the surface of possibilities.
+    - Tables are endlessly customizable, thanks to the power of the [`gt` package](https://gt.rstudio.com) and [`kableExtra`](https://haozhu233.github.io/kableExtra/). In this README, you will find tables with colored cells, weird text, spanning column labels, row groups, titles, global footnotes, cell-specific footnotes, significance stars, etc. This README will explore many of the available options, but it only scratches the surface of possibilities.
 * Flexibility
     - Tables can be saved to HTML, LaTeX, Text/Markdown, RTF (Word-Compatible), JPG, or PNG formats.
 * Integration
@@ -214,35 +214,32 @@ Users are encouraged to read the documentation of both packages to see which syn
 * [`gt` documentation](https://gt.rstudio.com)
 * [`kableExtra` documentation](http://haozhu233.github.io/kableExtra/)
 
-`gt` and `kableExtra` each have strengths and weaknesses. `gt`'s HTML output allows seemless integration with the RStudio IDE, but `kableExtra`'s LaTeX (and PDF) output is far more mature. 
+`gt` and `kableExtra` each have strengths and weaknesses. `gt`'s HTML output allows seamless integration with the RStudio IDE, but `kableExtra`'s LaTeX (and PDF) output is far more mature. Therefore, the default package to create HTML output in Rmarkdown is `gt`, and the default package to create PDF and LaTeX output in Rmarkdown is `kableExtra`. 
 
-You can override the default package used by `modelsummary` using commands like these:
+You can override these defaults by setting options:
 
 ```r
 # gt LaTeX table
-msummary(models) %>% gt::gtsave('table.tex')
+options(modelsummary_latex = 'gt')
+msummary(models, output = 'latex')
 
 # kableExtra HTML table
-msummary(models, output = 'html') %>% cat(file = 'table.html')
+options(modelsummary_html = 'kableExtra')
+msummary(models, output = 'html')
 ```
 
 *Warning*: When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt` or `kableExtra`. To save a customized table, you should apply all the customization functions you need before saving it using `gt::gtsave`, `kableExtra::save_kable`, or another appropriate helper function.
 
 ## Dynamic documents: `Rmarkdown` and `knitr`
 
-You can use `modelsummary` to insert tables into dynamic documents with `knitr` or `Rmarkdown`. The correct `modelsummary` command to use depends on the output format.
+You can use `modelsummary` to insert tables into dynamic documents with `knitr` or `Rmarkdown`. Here is a working example Rmarkdown file which can be converted to HTML, PDF, or RTF using the `knitr` package. 
 
-* HTML documents: `modelsummary(models)` 
-* PDF documents: `modelsummary(models, output = 'latex')` 
+* [modelsummary_example.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/modelsummary_example.Rmd)
+    - [modelsummary_example.pdf](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/modelsummary_example.pdf)
+    - [modelsummary_example.html](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/modelsummary_example.html)
+    - [modelsummary_example.rtf](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/modelsummary_example.rtf)
 
-Note that the tables produced by `modelsummary` require the following LaTeX packages to compile: booktabs, array, float, colortbl, xcolor. These packages need to be included in the header or preamble of your document (see example files below).
-
-Here are two minimal working examples of markdown files which can be converted to HTML or PDF using the `knitr` package. Just open one the `.Rmd` files in RStudio and click the "Knit" button:
-
-* [markdown_to_pdf.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_pdf.Rmd)
-    - [markdown_to_pdf.pdf](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_pdf.pdf)
-* [markdown_to_html.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_html.Rmd)
-    - [markdown_to_html.html](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/markdown_to_html.html)
+Open the `.Rmd` file in RStudio and click the "Knit" button. Note that for PDF output, you must include the `booktabs` package in your header (see the example file above).
 
 # Table content
 
@@ -535,7 +532,6 @@ msummary(models,
    stars = TRUE,
    gof_omit = "Deviance",
    title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
-   subtitle = 'Models estimated using the Guerry dataset.',
    notes = c('First custom note to contain text.',
              'Second custom note with different content.')) %>%
    # add spanning labels

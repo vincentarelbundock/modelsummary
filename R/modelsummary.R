@@ -102,7 +102,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #'
 #' @export
 modelsummary <- function(models,
-                         output = "gt",
+                         output = "default",
                          fmt = '%.3f',
                          statistic = 'std.error',
                          statistic_override = NULL,
@@ -128,6 +128,7 @@ modelsummary <- function(models,
     if (!is.null(subtitle)) {
         stop('The `subtitle` argument is deprecated. If you want to add a subtitle to an HTML table, you can use the `tab_header` function from the `gt` package.') 
     }
+
 
     # models must be a list of models or a single model
     if (!'list' %in% class(models)) {
@@ -172,18 +173,42 @@ modelsummary <- function(models,
     tab <- dat %>%
            dplyr::mutate(term = ifelse(idx, '', term))
 
-    # write to file or console? with gt or kableExtra? 
-    if (output == 'gt') {
-        build_table <- build_gt
-    } else if (output %in% c('markdown', 'latex', 'html')) {
-        build_table <- build_kableExtra
+    # get `output_type` from `output` or filename extension
+    ext <- tools::file_ext(output)
+    if (ext == '') {
+        output_type <- output
     } else {
-        ext <- tools::file_ext(output)
-        if (ext %in% c('html', 'jpg', 'png', 'rtf')) {
-            build_table <- build_gt
-        } else if (ext %in% c('tex', 'md', 'txt')) {
-            build_table <- build_kableExtra
-        }
+        output_type <- ext
+    }
+
+    # knitr compilation target as default
+    knitr_installed <- try(base::find.package('knitr'), silent = TRUE)
+    if (!inherits(knitr_installed, 'try-error')) {
+        knitr_target <- knitr::opts_knit$get("rmarkdown.pandoc.to")
+    } 
+    if (output_type == 'default') {
+        if (!is.null(knitr_target)) {
+            output <- output_type <- knitr_target
+        } 
+    }
+
+    # choose table builder
+    build_list <- list('default' = 'gt',
+                       'gt' = 'gt',
+                       'jpg' = 'gt',
+                       'png' = 'gt',
+                       'rtf' = 'gt',
+                       'markdown' = 'kableExtra',
+                       'md' = 'kableExtra',
+                       'txt' = 'kableExtra',
+                       'html' = getOption('modelsummary_html', default = 'gt'),
+                       'tex' = getOption('modelsummary_latex', default = 'kableExtra'),
+                       'latex' = getOption('modelsummary_latex', default = 'kableExtra'))
+
+    if (build_list[[output_type]] == 'gt') {
+        build_table <- build_gt
+    } else if (build_list[[output_type]] == 'kableExtra') {
+        build_table <- build_kableExtra
     }
 
     # build table
@@ -196,7 +221,7 @@ modelsummary <- function(models,
                 filename = filename,
                 output = output,
                 ...)
-
+  
 }
 
 #' Beautiful, customizable summaries of statistical models
