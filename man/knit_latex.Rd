@@ -2,30 +2,16 @@
 % Please edit documentation in R/clean_latex.R
 \name{knit_latex}
 \alias{knit_latex}
-\title{Utility function to cleanup LaTeX output from gt and ensures that it
-compiles with latex and that it knits well with `knitr`}
+\title{Deprecated function}
 \usage{
-knit_latex(tab, label = NULL, latex_env = "longtable")
+knit_latex(...)
 }
 \arguments{
-\item{tab}{table object produced by `modelsummary` or `gt`}
-
-\item{label}{string will be inserted as a `label`}
-
-\item{latex_env}{the default LaTeX environment is longtable. Fix this
-argument to 'table' if you want to use a tabular nested inside a table.}
-}
-\value{
-an object of class `knit_asis`. The first element of this object
-  (`x[[1]]`) contains raw LaTeX code.
+\item{...}{catch everything}
 }
 \description{
-The `gt::as_latex` function is still in development, rather feature poor, and
-prone to breakage when using `knitr`. This function is a stopgap measure
-which adds a little functionality and "cleans-up" some of the LaTeX output to
-avoid common compilation errors. In time, as upstream improves, the goal is
-to deprecate this function.
-}
-\details{
-LaTeX compilation requires the following packages: booktabs, caption, longtable
+The `gt::as_latex` function does not (yet) produce compilable LaTeX code.
+This function used to clean up LaTeX output to allow compilation to PDF.
+This function is now deprecated since `modelsummary` currently supports
+`kableExtra`, which has a mature LaTeX rendering engine.
 }

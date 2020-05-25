@@ -2,34 +2,16 @@
 % Please edit documentation in R/clean_latex.R
 \name{clean_latex}
 \alias{clean_latex}
-\title{Utility function to cleanup LaTeX output from gt and ensures that it
-compiles with latex}
+\title{Deprecated function}
 \usage{
-clean_latex(
-  tab,
-  label = NULL,
-  latex_env = "longtable",
-  gof_regex = "^Num Obs."
-)
+clean_latex(...)
 }
 \arguments{
-\item{tab}{table object produced by `modelsummary` or `gt`}
-
-\item{label}{string will be inserted as a `label`}
-
-\item{latex_env}{the default LaTeX environment is longtable. Fix this
-argument to 'table' if you want to use a tabular nested inside a table.}
-
-\item{gof_regex}{regex which identifies the first GOF statistic. Used to figure out
-where to insert a midrule to separate coefficients from GOFs.}
-}
-\value{
-a string object with LaTeX code
+\item{...}{catch everything}
 }
 \description{
-The `gt::as_latex` function is still in development, rather feature poor,
-and prone to breakage. This function is a stopgap measure which adds a
-little functionality and "cleans-up" some of the LaTeX output to avoid
-common compilation errors. In time, as upstream improves, the goal is to
-deprecate this function.
+The `gt::as_latex` function does not (yet) produce compilable LaTeX code.
+This function used to clean up LaTeX output to allow compilation to PDF.
+This function is now deprecated since `modelsummary` currently supports
+`kableExtra`, which has a mature LaTeX rendering engine.
 }
