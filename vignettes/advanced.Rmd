@@ -1,0 +1,116 @@
+---
+title: "advanced"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{advanced}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(modelsummary)
+```
+
+# Adding new models
+
+`modelsummary` relies on two functions from the `broom` package to extract model information: `tidy` and `glance`. If `broom` doesn't support the type of model you are trying to summarize, `modelsummary` won't support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.
+
+For example, models produced by the `MCMCglmm` package are not currently supported by `broom`. To add support, you simply need to create a `tidy` and a `glance` method:
+
+```r
+# load packages and data
+library(modelsummary)
+library(MCMCglmm)
+data(PlodiaPO)
+
+# add custom functions to extract estimates (tidy) and goodness-of-fit (glance) information
+tidy.MCMCglmm <- function(object, ...) {
+    s <- summary(object, ...)
+    ret <- tibble::tibble(term = row.names(s$solutions),
+                          estimate = s$solutions[, 1],
+                          conf.low = s$solutions[, 2],
+                          conf.high = s$solutions[, 3])
+    ret
+}
+glance.MCMCglmm <- function(object, ...) {
+    ret <- tibble::tibble(dic = object$DIC,
+                          n = nrow(object$X))
+    ret
+}
+
+# estimate a simple model
+model <- MCMCglmm(PO ~ 1 + plate, random = ~ FSfamily, data = PlodiaPO, verbose=FALSE, pr=TRUE)
+
+# summarize the model
+msummary(model, statistic = 'conf.int')
+```
+
+Two important things to note. First, the methods are named `tidy.MCMCglmm` and `glance.MCMCglmm` because the model object I am trying to summarize is of class `MCMCglmm`. You can find the class of a model by running: `class(model)`.
+
+Second, in the example above, we used the `statistic = 'conf.int'` argument. This is because the `tidy` method produces `conf.low` and `conf.high` columns. In most cases, users will define `std.error` column in their custom `tidy` methods, so the `statistic` argument will need to be adjusted.
+
+If you create new `tidy` and `glance` methods, please consider contributing them to `broom` so that the rest of the community can benefit from your work: https://github.com/tidymodels/broom
+
+# Customizing existing models
+
+# Raw data
+
+The `gt` package allows a bunch more customization and styling. Power users can use `modelsummary`'s `extract` function to produce a tibble which can easily be fed into `gt`.
+
+```r
+> modelsummary::extract(models)
+# A tibble: 21 x 8
+   group     term        statistic `OLS 1` `NBin 1` `OLS 2` `NBin 2` `Logit 1`
+   <chr>     <chr>       <chr>     <chr>   <chr>    <chr>   <chr>    <chr>
+ 1 estimates (Intercept) estimate  64.114  4.218    57.331  4.384    1.006
+ 2 estimates (Intercept) statistic (5.247) (0.144)  (8.315) (0.233)  (0.710)
+ 3 estimates Crime_prop  estimate  -0.002  -0.000   -0.002  -0.000   -0.000
+ 4 estimates Crime_prop  statistic (0.001) (0.000)  (0.001) (0.000)  (0.000)
+ 5 estimates Infants     estimate  -0.001  ""       0.000   ""       -0.000
+ 6 estimates Infants     statistic (0.000) ""       (0.000) ""       (0.000)
+ 7 estimates Donations   estimate  ""      -0.000   ""      -0.000   ""
+ 8 estimates Donations   statistic ""      (0.000)  ""      (0.000)  ""
+ 9 gof       R2          ""        0.237   ""       0.073   ""       ""
+10 gof       Adj.R2      ""        0.218   ""       0.051   ""       ""
+# … with 11 more rows
+```
+
+# Pooled multiple imputation results
+
+`modelsummary` can pool and display analyses on several datasets imputed using the `mice` package. For example:
+
+```r
+library(mice)
+
+# Create a new dataset with missing values
+url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
+tmp <- read.csv(url)[, c('Clergy', 'Donations', 'Literacy')]
+tmp$Clergy[sample(1:nrow(tmp), 3)] <- NA
+tmp$Donations[sample(1:nrow(tmp), 3)] <- NA
+tmp$Literacy[sample(1:nrow(tmp), 3)] <- NA
+
+# Impute dataset 5 times
+tmp <- mice(tmp, m = 5, printFlag = FALSE, seed = 1024)
+
+# Estimate models
+mod <- list()
+mod[[1]] <- with(tmp, lm(Clergy ~ Donations))
+mod[[2]] <- with(tmp, lm(Clergy ~ Donations + Literacy))
+
+# Summarize
+msummary(mod, statistic = 't')
+msummary(mod, statistic = 'ubar')
+```
+
+The `statistic` argument can take any column name in the tidy data frame obtained by:
+
+```r
+generics::tidy(mod[[1]])
+```

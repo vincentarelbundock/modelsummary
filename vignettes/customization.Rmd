@@ -1,0 +1,435 @@
+---
+title: "Customize your tables: information and appearance"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{customization}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(modelsummary)
+```
+
+`modelsummary` includes a powerful set of utilities to customize the *information* displayed in your model summary tables. You can easily rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to display; display various "robust" standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.
+
+In addition, users can customize the *look* of their summary tables using the powerful `gt` and `kableExtra` packages. These two packages open endless possibilities to customize the appearance of model summary tables. 
+
+# Output formats
+
+`modelsummary` supports both `gt` and `kableExtra`, because those two packages have different strengths and weaknesses. For instance, `gt` allows seamless integration with the RStudio IDE, but `kableExtra`'s LaTeX (and PDF) output is far more mature. The choice between `gt` and `kableExtra` should largely depend on the type of output format that users target:
+
+* `gt` is best for: HTML, RTF (MS Word-compatible), JPG, PNG
+    - [Documentation: https://gt.rstudio.com](https://gt.rstudio.com)
+* `kableExtra` is best for: HTML, LaTeX, Markdown/Text, Rmarkdown PDF
+    - [Documentation: http://haozhu233.github.io/kableExtra](http://haozhu233.github.io/kableExtra)
+
+Users are encouraged to read the documentation of both packages to see which syntax they prefer. 
+
+```{r, echo=FALSE}
+library(kableExtra)
+library(tibble)
+tmp <- tribble(~`Output format`, ~`Default package`,
+               "html"          , "gt",
+               "latex"         , "kableExtra",
+               "markdown"      , "kableExtra",
+               "filename.rtf"  , "gt",
+               "filename.tex"  , "kableExtra",
+               "filename.md"   , "kableExtra",
+               "filename.txt"  , "kableExtra",
+               "filename.png"  , "kableExtra",
+               "filename.jpg"  , "kableExtra",
+               "Rmarkdown PDF" , "kableExtra",
+               "Rmarkdown HTML", "gt")
+kable(tmp, format = 'markdown')
+```
+
+Both `gt` and `kableExtra` can produce LaTeX and HTML output. You can override the default settings for these two formats by setting these global options:
+
+```r
+options(modelsummary_latex = 'gt')
+
+options(modelsummary_html = 'kableExtra')
+```
+
+# Information with `modelsummary`
+
+## Uncertainty estimates: SE, t, p, CI
+
+By default, `modelsummary` prints an uncertainty estimate in parentheses below the corresponding coefficient estimate. The value of this estimate is determined by the `statistic` argument.
+
+`statistic` must be a string which equal to `conf.int` or to one of the columns produced by the `broom::tidy` function. When using `conf.int`, users can specify a confidence level with the `conf_level` argument.
+
+```r
+msummary(models, statistic = 'std.error')
+msummary(models, statistic = 'p.value')
+msummary(models, statistic = 'statistic')
+msummary(models, statistic = 'conf.int', conf_level = .99)
+```
+
+You can display the uncertainty estimate next to the coefficient instead of below it:
+
+```r
+msummary(models, statistic_vertical = FALSE)
+```
+
+You can override the uncertainty estimates in a number of ways. First, you can specify a function that produces variance-covariance matrices:
+
+```r
+library(sandwich)
+msummary(models, statistic_override = vcovHC, statistic = 'p.value')
+```
+
+You can supply a list of functions of the same length as your model list:
+
+```r
+msummary(models, 
+   statistic_override = list(vcov, vcovHC, vcovHAC, vcovHC, vcov))
+```
+
+You can supply a list of named variance-covariance matrices:
+
+```r
+vcov_matrices <- lapply(models, vcovHC)
+msummary(models, statistic_override = vcov_matrices)
+```
+
+You can supply a list of named vectors:
+
+```r
+custom_stats <- list(`OLS 1` = c(`(Intercept)` = 2, Crime_prop = 3, Infants = 4), 
+                     `NBin 1` = c(`(Intercept)` = 3, Crime_prop = -5, Donations = 3),
+                     `OLS 2` = c(`(Intercept)` = 7, Crime_prop = -6, Infants = 9), 
+                     `NBin 2` = c(`(Intercept)` = 4, Crime_prop = -7, Donations = -9),
+                     `Logit 1` = c(`(Intercept)` = 1, Crime_prop = -5, Infants = -2))
+msummary(models, statistic_override = custom_stats)
+```
+
+You can also display several different uncertainty estimates below the coefficient estimates. For example,
+
+```r
+msummary(models, statistic = c('std.error', 'p.value', 'conf.int'))
+```
+
+Will produce something like this:
+
+<img src="https://imgur.com/yNLr5Nt.png" width="30%">
+
+## Titles
+
+You can add a title to your table as follows:
+
+```r
+msummary(models, title = 'This is a title for my table.')
+```
+
+## Notes
+
+Add notes to the bottom of your table:
+
+```r
+msummary(models, 
+   notes = list('Text of the first note.', 
+                'Text of the second note.'))
+```
+
+## Rename, reorder, and subset
+
+`modelsummary` offers a powerful and innovative mechanism to rename, reorder, and subset coefficients and goodness-of-fit statistics.
+
+### Coefficient estimates
+
+The `coef_map` argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the "clean" variable name. Names of this vector correspond to the "raw" variable name. The table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.
+
+```r
+cm <- c('Crime_prop' = 'Crime / Population',
+        'Donations' = 'Donations',
+        '(Intercept)' = 'Constant')
+msummary(models, coef_map = cm)
+```
+
+An alternative mechanism to subset coefficients is to use the `coef_omit` argument. This string is a regular expression which will be fed to `stringr::str_detect` to detect the variable names which should be excluded from the table.
+
+```r
+msummary(models, coef_omit = 'Intercept|Donation')
+```
+
+### Goodness-of-fit and other statistics
+
+`gof_omit` is a regular expression which will be fed to `stringr::str_detect` to detect the names of the statistics which should be excluded from the table.
+
+```r
+msummary(models, gof_omit = 'DF|Deviance')
+```
+
+A more powerful mechanism is to supply a `data.frame` (or `tibble`) through the `gof_map` argument. This data.frame must include 4 columns:
+
+1. `raw`: a string with the name of a column produced by `broom::glance(model)`.
+2. `clean`: a string with the "clean" name of the statistic you want to appear in your final table.
+3. `fmt`: a string which will be used to round/format the string in question (e.g., `"%.3f"`). This follows the same standards as the `fmt` argument in `?modelsummary`.
+4. `omit`: `TRUE` if you want the statistic to be omitted from your final table.
+
+You can see an example of a valid data frame by typing `modelsummary::gof_map`. This is the default data.frame that `modelsummary` uses to subset and reorder goodness-of-fit statistics. As you can see, `omit == TRUE` for quite a number of statistics. You can include setting `omit == FALSE`: 
+
+```r
+gm <- modelsummary::gof_map
+gm$omit <- FALSE
+msummary(models, gof_map = gm)
+```
+
+The goodness-of-fit statistics will be printed in the table in the same order as in the `gof_map` data.frame.
+
+Notice the subtle difference between `coef_map` and `gof_map`. On the one hand, `coef_map` works as a "white list": any coefficient not explicitly entered will be omitted from the table. On the other, `gof_map` works as a "black list": statistics need to be explicitly marked for omission.
+
+## Stars: Statistical significance markers
+
+Some people like to add "stars" to their model summary tables to mark statistical significance. The `stars` argument can take three types of input:
+
+1. `NULL` omits any stars or special marks (default)
+2. `TRUE` uses these default values: `* p < 0.1, ** p < 0.05, *** p < 0.01`
+3. Named numeric vector for custom stars.
+
+```r
+msummary(models)
+msummary(models, stars = TRUE) 
+msummary(models, stars = c('+' = .1, '*' = .01)) 
+```
+
+Whenever `stars != NULL`, `modelsummary` adds a note at the bottom of the table automatically. If you would like to omit this note, just use the `stars_note` argument:
+
+```r
+msummary(models, stars = TRUE, stars_note = FALSE) 
+```
+
+If you want to create your own stars description, you can add custom notes with the [`notes`](https://github.com/vincentarelbundock/modelsummary#notes) argument.
+
+## Digits, rounding, exponential notation
+
+The `fmt` argument defines how numeric values are rounded and presented in the table. This argument follows the `sprintf` C-library standard. For example,
+
+* `%.3f` will keep 3 digits after the decimal point, including trailing zeros.
+* `%.5f` will keep 5 digits after the decimal point, including trailing zeros.
+* Changing the `f` for an `e` will use the exponential decimal representation.
+
+Most users will just modify the `3` in `%.3f`, but this is a very powerful system, and all users are encouraged to read the details: `?sprintf`
+
+```r
+msummary(models, fmt = '%.7f')
+```
+
+## Add rows manually
+
+Use the `add_rows` argument to add rows manually to the bottom of the table.
+
+```r
+row1 <- c('Custom row 1', 'a', 'b', 'c', 'd', 'e')
+row2 <- c('Custom row 2', 5:1)
+msummary(models, add_rows = list(row1, row2))
+```
+
+Use the `add_rows` argument to specify where the custom rows should be displayed in the bottom panel. For example, this prints custom rows after the coefficients, but at first position in the goodness of fit measures:
+
+```r
+msummary(models, add_rows = list(row1, row2), add_rows_location = 0)
+```
+
+This prints custom rows after the 2nd GOF statistic:
+
+```r
+msummary(models, add_rows = list(row1, row2), add_rows_location = 2)
+```
+
+## Extra tidy arguments (e.g., exponentiated coefficients)
+
+Users can pass any additional argument they want to the `tidy` method which is used to extract estimates from a model. For example, in logitistic or Cox proportional hazard models, many users want to exponentiate coefficients to faciliate interpretation. The `tidy` functions supplied by the `broom` package allow users to set `exponentiate=TRUE` to achieve this. In `modelsummary`, users can use the same argument:
+
+```r
+mod_logit <- glm(am ~ mpg, data = mtcars, family = binomial)
+msummary(mod_logit, exponentiate = TRUE)
+```
+
+Any argument supported by `tidy` is thus supported by `modelsummary`.
+
+Warning: at the moment (2020-05-05), `broom::tidy` still reports `std.error` on the original scale. See this [discussion on the `broom` GitHub page.](https://github.com/tidymodels/broom/issues/422)
+
+# Customizing by post-processing
+
+*Warning*: When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt` or `kableExtra`. To save a customized table, you should apply all the customization functions you need before saving it using `gt::gtsave`, `kableExtra::save_kable`, or another appropriate helper function.
+
+# Appearance with `gt`: HTML, RTF, JPG, PNG
+
+## Fonts, colors, and styles: HTML
+
+Thanks to `gt`, `modelsummary` accepts markdown indications for emphasis and more:
+
+```r
+msummary(models, 
+   title = md('This is a **bolded series of words.**'),
+   notes = list(md('And an *emphasized note*.')))
+```
+
+We can modify the size of the text with `gt`'s `tab_style` function: 
+
+```r
+msummary(models) %>%
+    tab_style(style = cell_text(size = 'x-large'),
+              locations = cells_body(columns = 1)) 
+```
+
+We can also color columns and cells, and present values in bold or italics:
+
+```r
+msummary(models) %>%
+    tab_style(style = cell_fill(color = "lightcyan"), 
+              locations = cells_body(columns = vars(`OLS 1`))) %>% 
+    tab_style(style = cell_fill(color = "#F9E3D6"),
+              locations = cells_body(columns = vars(`NBin 2`), rows = 2:6)) %>%
+    tab_style(style = cell_text(weight = "bold"), 
+              locations = cells_body(columns = vars(`OLS 1`))) %>%
+    tab_style(style = cell_text(style = "italic"), 
+              locations = cells_body(columns = vars(`NBin 2`), rows = 2:6))
+```
+
+<img src="https://user-images.githubusercontent.com/987057/82732616-3c804980-9cdc-11ea-8968-02e45d53adab.png" width="40%">
+
+## Footnotes: HTML
+
+Add numbered footnotes to a column, a row, or a cell:
+
+```r
+msummary(models) %>% 
+    tab_footnote(                                                                                                                                                                                  
+        footnote = md("This is a **very** important model, so we are pointing it out in a column-specific footnote."),                        
+        locations = cells_column_labels(columns = vars(`OLS 1`))) %>%  
+    tab_footnote(                                                                                                                                                                               
+        footnote = "This is the variable of interest.",                                                                                           
+        locations = cells_body(columns = 1, rows = 3)) %>%                                                                                                                                      
+    tab_footnote(                                                                                                                      
+        footnote = "Most important model + most important variable = most important estimate.",
+        locations = cells_body(columns = vars(`OLS 1`), rows = 3))
+```
+
+## Column groups: HTML
+
+Create spanning labels to group models (columns):
+
+```r
+msummary(models) %>%
+    tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
+    tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
+    tab_spanner(label = 'Clergy', columns = 'Logit 1')
+```
+
+## Images
+
+Insert images in your tables using the `gt::text_transform` and `gt::local_image` functions.
+
+```r
+msummary(models) %>%
+    text_transform(
+        locations = cells_body(columns = 1, rows = 1),
+        fn = function(x) {web_image(url = "https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png", height = 120)}
+    )
+
+
+f <- function(x) web_image(url = "https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png", height = 80)
+msummary(models) %>% text_transform(locations = cells_body(rows = 1, columns = 2:6), fn = f) %>% gt::gtsave('~/Downloads/table_squirrel.png')
+
+```
+
+## Complex example: HTML
+
+This is the code I used to generate the "complex" table posted at the top of this README.
+
+```r
+cm <- c('Crime_prop' = 'Crime / Population',
+        'Donations' = 'Donations',
+        'Infants' = 'Infants',
+        '(Intercept)' = 'Constant')
+
+msummary(models,
+   coef_map = cm,
+   stars = TRUE,
+   gof_omit = "Deviance",
+   title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
+   notes = c('First custom note to contain text.',
+             'Second custom note with different content.')) %>%
+   # add spanning labels
+   tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
+   tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
+   tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
+   # footnotes
+   tab_footnote(
+       footnote = md("This is a **very** important model, so we are pointing it out in a column-specific footnote."),
+       locations = cells_column_labels(columns = vars(`OLS 1`))) %>%
+   tab_footnote(                                                                                                                      footnote = "This is the variable of interest.",                                                                                locations = cells_body(rows =5)) %>%                                                                                       tab_footnote(
+       footnote = "Most important model + most important variable = most important estimate.",
+       locations = cells_body(columns = vars(`OLS 1`), rows = 5)) %>%   
+   # color and bold
+   tab_style(
+       style = cell_text(color = "red", weight = "bold"),
+       locations = cells_body(columns = vars(`OLS 1`), rows = 5))
+```
+
+<img src="https://user-images.githubusercontent.com/987057/82732359-c0d1cd00-9cda-11ea-8924-ff599cb29273.png" width="40%">
+
+# Appearance with `kableExtra`: HTML, LaTeX, PDF, Markdown/Text
+
+Note that compiling this LaTeX table requires loading the `booktabs` and `xcolor` packages in the preamble of your LaTeX or Rmarkdown document.
+
+The `gt` LaTeX render engine is still immature. Until it improves, I strongly recommend that users turn to `kableExtra` to produce LaTeX tables. This package offers robust functions that allow a lot of customization. A simple LaTeX table can be produced as follows:
+
+```r
+msummary(models, output = 'latex')
+```
+
+We can use functions from the `kableExtra` package to customize this table, with bold and colored cells, column spans, and more. 
+
+## Fonts, colors and styles: LaTeX
+
+The `row_spec` and `column_spec` allow users to change the styling of their tables. For instance, this code creates a table where the first column is in bold blue text on pink background:
+
+```r
+msummary(models, output = 'latex') %>%
+    row_spec(1, bold = TRUE, color = 'blue', background = 'pink')
+```
+
+## Column groups: LaTeX
+
+You can define column group labels using `kableExtra`'s `add_header_above` function:
+
+```
+msummary(models, output = 'latex') %>%
+    add_header_above(c(" " = 1, "Literacy" = 2, "Desertion" = 2, 'Clergy = 1))
+```
+
+
+## Complex example: LaTeX
+
+```r
+cm <- c('Crime_prop' = 'Crime / Population',
+        'Donations' = 'Donations',
+        'Infants' = 'Infants',
+        '(Intercept)' = 'Constant')
+
+msummary(models,
+   coef_map = cm,
+   stars = TRUE,
+   gof_omit = "Deviance",
+   title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
+   notes = c('First custom note to contain text.',
+             'Second custom note with different content.')) %>%
+   # add spanning labels
+   add_header_above(c(" " = 1, "Literacy" = 2, "Desertion" = 2, 'Clergy = 1)) %>%
+   # color and bold
+   row_spec(3, bold = TRUE, color = 'blue', background = 'pink')
+```
+
+<img src="https://user-images.githubusercontent.com/987057/82732382-e068f580-9cda-11ea-8924-331550f8f1e8.png" width="40%">
