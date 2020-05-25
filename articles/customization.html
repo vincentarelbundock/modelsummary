@@ -98,28 +98,24 @@
 
     
     
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)</pre></body></html></div>
-<p><code>modelsummary</code> includes a powerful set of utilities to customize the <em>information</em> displayed in your model summary tables. You can easily rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to display; display various “robust” standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.</p>
-<p>In addition, users can customize the <em>look</em> of their summary tables using the powerful <code>gt</code> and <code>kableExtra</code> packages. These two packages open endless possibilities to customize the appearance of model summary tables.</p>
-<div id="output-formats" class="section level1">
-<h1 class="hasAnchor">
-<a href="#output-formats" class="anchor"></a>Output formats</h1>
-<p><code>modelsummary</code> supports both <code>gt</code> and <code>kableExtra</code>, because those two packages have different strengths and weaknesses. For instance, <code>gt</code> allows seamless integration with the RStudio IDE, but <code>kableExtra</code>’s LaTeX (and PDF) output is far more mature. The choice between <code>gt</code> and <code>kableExtra</code> should largely depend on the type of output format that users target:</p>
+<p>When analysts create tables to summarize statistical models, they often want to customize the <em>information</em> that is displayed in those tables (parameters, statistics, significant digits, etc.). The <code>modelsummary</code> function includes a powerful and intuitive set of arguments which allow users to change the content of their tables.</p>
+<p>In addition, analysts often want to customize the <em>appearance</em> of their tables. To achieve this, <code>modelsummary</code> supports two table making packages: <code>gt</code> and <code>kableExtra</code>. These two packages open endless possibilities for customization. Each of them has different strengths and weaknesses. For instance, <code>gt</code> allows seamless integration with the RStudio IDE, but <code>kableExtra</code>’s LaTeX (and PDF) output is far more mature. The choice between <code>gt</code> and <code>kableExtra</code> should largely depend on the type of output format that users target:</p>
 <ul>
 <li>
-<code>gt</code> is best for: HTML, RTF (MS Word-compatible), JPG, PNG
+<code>gt</code> is best for HTML, RTF (MS Word-compatible), JPG, PNG
 <ul>
 <li><a href="https://gt.rstudio.com">Documentation: https://gt.rstudio.com</a></li>
 </ul>
 </li>
 <li>
-<code>kableExtra</code> is best for: HTML, LaTeX, Markdown/Text, Rmarkdown PDF
+<code>kableExtra</code> is best for HTML, LaTeX, Markdown/Text, Rmarkdown PDF
 <ul>
 <li><a href="http://haozhu233.github.io/kableExtra">Documentation: http://haozhu233.github.io/kableExtra</a></li>
 </ul>
 </li>
 </ul>
 <p>Users are encouraged to read the documentation of both packages to see which syntax they prefer.</p>
+<p><code>modelsummary</code> can produce tables in a large array of formats. This table shows which package is used by default to create tables in each output format:</p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Output format</th>
@@ -172,15 +168,154 @@
 </tr>
 </tbody>
 </table>
-<p>Both <code>gt</code> and <code>kableExtra</code> can produce LaTeX and HTML output. You can override the default settings for these two formats by setting these global options:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_latex</span> <span class="kw">=</span> <span class="st">'gt'</span>)
+<p>Both <code>gt</code> and <code>kableExtra</code> can produce LaTeX and HTML output. You can override the default settings by setting these global options:</p>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_latex</span> <span class="kw">=</span> <span class="st">'gt'</span>)
 
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_html</span> <span class="kw">=</span> <span class="st">'kableExtra'</span>)</pre></body></html></div>
-</div>
-<div id="information-with-modelsummary" class="section level1">
+<div id="information-modelsummary" class="section level1">
 <h1 class="hasAnchor">
-<a href="#information-with-modelsummary" class="anchor"></a>Information with <code>modelsummary</code>
+<a href="#information-modelsummary" class="anchor"></a>Information: <code>modelsummary</code>
 </h1>
+<p><code>modelsummary</code> includes a powerful set of utilities to customize the <em>information</em> displayed in your model summary tables. You can easily rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to display; display various “robust” standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
+
+<span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
+<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)
+
+<span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'Poisson 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 2'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'Poisson 2'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 3'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_prop</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+
+<span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="st">'markdown'</span>)</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left"></th>
+<th align="left">OLS 1</th>
+<th align="left">Poisson 1</th>
+<th align="left">OLS 2</th>
+<th align="left">Poisson 2</th>
+<th align="left">OLS 3</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="left">7948.667</td>
+<td align="left">8.241</td>
+<td align="left">16259.384</td>
+<td align="left">9.876</td>
+<td align="left">11243.544</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">(2078.276)</td>
+<td align="left">(0.006)</td>
+<td align="left">(2611.140)</td>
+<td align="left">(0.003)</td>
+<td align="left">(1011.240)</td>
+</tr>
+<tr class="odd">
+<td align="left">Clergy</td>
+<td align="left">15.257</td>
+<td align="left"></td>
+<td align="left">77.148</td>
+<td align="left"></td>
+<td align="left">-16.376</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">(25.735)</td>
+<td align="left"></td>
+<td align="left">(32.334)</td>
+<td align="left"></td>
+<td align="left">(12.522)</td>
+</tr>
+<tr class="odd">
+<td align="left">Literacy</td>
+<td align="left">-39.121</td>
+<td align="left">0.003</td>
+<td align="left">3.680</td>
+<td align="left">-0.000</td>
+<td align="left">-68.507</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">(37.052)</td>
+<td align="left">(0.000)</td>
+<td align="left">(46.552)</td>
+<td align="left">(0.000)</td>
+<td align="left">(18.029)</td>
+</tr>
+<tr class="odd">
+<td align="left">Commerce</td>
+<td align="left"></td>
+<td align="left">0.011</td>
+<td align="left"></td>
+<td align="left">0.001</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">(0.000)</td>
+<td align="left"></td>
+<td align="left">(0.000)</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Num.Obs.</td>
+<td align="left">86</td>
+<td align="left">86</td>
+<td align="left">86</td>
+<td align="left">86</td>
+<td align="left">86</td>
+</tr>
+<tr class="even">
+<td align="left">R2</td>
+<td align="left">0.020</td>
+<td align="left"></td>
+<td align="left">0.065</td>
+<td align="left"></td>
+<td align="left">0.152</td>
+</tr>
+<tr class="odd">
+<td align="left">Adj.R2</td>
+<td align="left">-0.003</td>
+<td align="left"></td>
+<td align="left">0.043</td>
+<td align="left"></td>
+<td align="left">0.132</td>
+</tr>
+<tr class="even">
+<td align="left">AIC</td>
+<td align="left">1740.8</td>
+<td align="left">274160.8</td>
+<td align="left">1780.0</td>
+<td align="left">257564.4</td>
+<td align="left">1616.9</td>
+</tr>
+<tr class="odd">
+<td align="left">BIC</td>
+<td align="left">1750.6</td>
+<td align="left">274168.2</td>
+<td align="left">1789.9</td>
+<td align="left">257571.7</td>
+<td align="left">1626.7</td>
+</tr>
+<tr class="even">
+<td align="left">Log.Lik.</td>
+<td align="left">-866.392</td>
+<td align="left">-137077.401</td>
+<td align="left">-886.021</td>
+<td align="left">-128779.186</td>
+<td align="left">-804.441</td>
+</tr>
+</tbody>
+</table>
 <div id="uncertainty-estimates-se-t-p-ci" class="section level2">
 <h2 class="hasAnchor">
 <a href="#uncertainty-estimates-se-t-p-ci" class="anchor"></a>Uncertainty estimates: SE, t, p, CI</h2>
@@ -325,73 +460,74 @@
 <a href="#customizing-by-post-processing" class="anchor"></a>Customizing by post-processing</h1>
 <p><em>Warning</em>: When users supply a file name to the <code>output</code> argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from <code>gt</code> or <code>kableExtra</code>. To save a customized table, you should apply all the customization functions you need before saving it using <code><a href="https://rdrr.io/pkg/gt/man/gtsave.html">gt::gtsave</a></code>, <code><a href="https://rdrr.io/pkg/kableExtra/man/save_kable.html">kableExtra::save_kable</a></code>, or another appropriate helper function.</p>
 </div>
-<div id="appearance-with-gt-html-rtf-jpg-png" class="section level1">
+<div id="appearance-gt" class="section level1">
 <h1 class="hasAnchor">
-<a href="#appearance-with-gt-html-rtf-jpg-png" class="anchor"></a>Appearance with <code>gt</code>: HTML, RTF, JPG, PNG</h1>
-<div id="fonts-colors-and-styles-html" class="section level2">
+<a href="#appearance-gt" class="anchor"></a>Appearance: <code>gt</code>
+</h1>
+<div id="fonts-colors-and-styles" class="section level2">
 <h2 class="hasAnchor">
-<a href="#fonts-colors-and-styles-html" class="anchor"></a>Fonts, colors, and styles: HTML</h2>
+<a href="#fonts-colors-and-styles" class="anchor"></a>Fonts, colors, and styles</h2>
 <p>Thanks to <code>gt</code>, <code>modelsummary</code> accepts markdown indications for emphasis and more:</p>
 <div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>,
-   <span class="kw">title</span> <span class="kw">=</span> <span class="fu">md</span>(<span class="st">'This is a **bolded series of words.**'</span>),
-   <span class="kw">notes</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu">md</span>(<span class="st">'And an *emphasized note*.'</span>)))</pre></body></html></div>
+   <span class="kw">title</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span>(<span class="st">'This is a **bolded series of words.**'</span>),
+   <span class="kw">notes</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span>(<span class="st">'And an *emphasized note*.'</span>)))</pre></body></html></div>
 <p>We can modify the size of the text with <code>gt</code>’s <code>tab_style</code> function:</p>
 <div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span>
-    <span class="fu">tab_style</span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu">cell_text</span>(<span class="kw">size</span> <span class="kw">=</span> <span class="st">'x-large'</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu">cells_body</span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">1</span>))</pre></body></html></div>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="kw">size</span> <span class="kw">=</span> <span class="st">'x-large'</span>),
+              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">1</span>))</pre></body></html></div>
 <p>We can also color columns and cells, and present values in bold or italics:</p>
 <div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span>
-    <span class="fu">tab_style</span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu">cell_fill</span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">"lightcyan"</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu">cells_body</span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">`OLS 1`</span>))) <span class="kw">%&gt;%</span>
-    <span class="fu">tab_style</span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu">cell_fill</span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">"#F9E3D6"</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu">cells_body</span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">`NBin 2`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">6</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu">tab_style</span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu">cell_text</span>(<span class="kw">weight</span> <span class="kw">=</span> <span class="st">"bold"</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu">cells_body</span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">`OLS 1`</span>))) <span class="kw">%&gt;%</span>
-    <span class="fu">tab_style</span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu">cell_text</span>(<span class="kw">style</span> <span class="kw">=</span> <span class="st">"italic"</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu">cells_body</span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">`NBin 2`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">6</span>))</pre></body></html></div>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_fill.html">cell_fill</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">"lightcyan"</span>),
+              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>))) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_fill.html">cell_fill</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">"#F9E3D6"</span>),
+              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`NBin 2`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">6</span>)) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="kw">weight</span> <span class="kw">=</span> <span class="st">"bold"</span>),
+              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>))) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="st">"italic"</span>),
+              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`NBin 2`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">6</span>))</pre></body></html></div>
 <p><img src="https://user-images.githubusercontent.com/987057/82732616-3c804980-9cdc-11ea-8968-02e45d53adab.png" width="40%"></p>
 </div>
-<div id="footnotes-html" class="section level2">
+<div id="footnotes" class="section level2">
 <h2 class="hasAnchor">
-<a href="#footnotes-html" class="anchor"></a>Footnotes: HTML</h2>
+<a href="#footnotes" class="anchor"></a>Footnotes</h2>
 <p>Add numbered footnotes to a column, a row, or a cell:</p>
 <div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span>
-    <span class="fu">tab_footnote</span>(
-        <span class="kw">footnote</span> <span class="kw">=</span> <span class="fu">md</span>(<span class="st">"This is a **very** important model, so we are pointing it out in a column-specific footnote."</span>),
-        <span class="kw">locations</span> <span class="kw">=</span> <span class="fu">cells_column_labels</span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">`OLS 1`</span>))) <span class="kw">%&gt;%</span>
-    <span class="fu">tab_footnote</span>(
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(
+        <span class="kw">footnote</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span>(<span class="st">"This is a **very** important model, so we are pointing it out in a column-specific footnote."</span>),
+        <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_column_labels.html">cells_column_labels</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>))) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(
         <span class="kw">footnote</span> <span class="kw">=</span> <span class="st">"This is the variable of interest."</span>,
-        <span class="kw">locations</span> <span class="kw">=</span> <span class="fu">cells_body</span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">3</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu">tab_footnote</span>(
+        <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">3</span>)) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(
         <span class="kw">footnote</span> <span class="kw">=</span> <span class="st">"Most important model + most important variable = most important estimate."</span>,
-        <span class="kw">locations</span> <span class="kw">=</span> <span class="fu">cells_body</span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">`OLS 1`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">3</span>))</pre></body></html></div>
+        <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">3</span>))</pre></body></html></div>
 </div>
-<div id="column-groups-html" class="section level2">
+<div id="column-groups" class="section level2">
 <h2 class="hasAnchor">
-<a href="#column-groups-html" class="anchor"></a>Column groups: HTML</h2>
+<a href="#column-groups" class="anchor"></a>Column groups</h2>
 <p>Create spanning labels to group models (columns):</p>
 <div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span>
-    <span class="fu">tab_spanner</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Literacy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 1'</span>, <span class="st">'NBin 1'</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu">tab_spanner</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Desertion'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 2'</span>, <span class="st">'NBin 2'</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu">tab_spanner</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Clergy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="st">'Logit 1'</span>)</pre></body></html></div>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Literacy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 1'</span>, <span class="st">'NBin 1'</span>)) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Desertion'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 2'</span>, <span class="st">'NBin 2'</span>)) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Clergy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="st">'Logit 1'</span>)</pre></body></html></div>
 </div>
 <div id="images" class="section level2">
 <h2 class="hasAnchor">
 <a href="#images" class="anchor"></a>Images</h2>
 <p>Insert images in your tables using the <code><a href="https://rdrr.io/pkg/gt/man/text_transform.html">gt::text_transform</a></code> and <code><a href="https://rdrr.io/pkg/gt/man/local_image.html">gt::local_image</a></code> functions.</p>
 <div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span>
-    <span class="fu">text_transform</span>(
-        <span class="kw">locations</span> <span class="kw">=</span> <span class="fu">cells_body</span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">1</span>),
-        <span class="kw">fn</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) {<span class="fu">web_image</span>(<span class="kw">url</span> <span class="kw">=</span> <span class="st">"https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png"</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="fl">120</span>)}
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/text_transform.html">text_transform</a></span>(
+        <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">1</span>),
+        <span class="kw">fn</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) {<span class="fu"><a href="https://rdrr.io/pkg/gt/man/web_image.html">web_image</a></span>(<span class="kw">url</span> <span class="kw">=</span> <span class="st">"https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png"</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="fl">120</span>)}
     )
 
 
-<span class="no">f</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu">web_image</span>(<span class="kw">url</span> <span class="kw">=</span> <span class="st">"https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png"</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="fl">80</span>)
-<span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span> <span class="fu">text_transform</span>(<span class="kw">locations</span> <span class="kw">=</span> <span class="fu">cells_body</span>(<span class="kw">rows</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">6</span>), <span class="kw">fn</span> <span class="kw">=</span> <span class="no">f</span>) <span class="kw">%&gt;%</span> <span class="kw pkg">gt</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/gt/man/gtsave.html">gtsave</a></span>(<span class="st">'~/Downloads/table_squirrel.png'</span>)</pre></body></html></div>
+<span class="no">f</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/pkg/gt/man/web_image.html">web_image</a></span>(<span class="kw">url</span> <span class="kw">=</span> <span class="st">"https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png"</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="fl">80</span>)
+<span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/text_transform.html">text_transform</a></span>(<span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">rows</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">6</span>), <span class="kw">fn</span> <span class="kw">=</span> <span class="no">f</span>) <span class="kw">%&gt;%</span> <span class="kw pkg">gt</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/gt/man/gtsave.html">gtsave</a></span>(<span class="st">'~/Downloads/table_squirrel.png'</span>)</pre></body></html></div>
 </div>
-<div id="complex-example-html" class="section level2">
+<div id="complex-example" class="section level2">
 <h2 class="hasAnchor">
-<a href="#complex-example-html" class="anchor"></a>Complex example: HTML</h2>
+<a href="#complex-example" class="anchor"></a>Complex example</h2>
 <p>This is the code I used to generate the “complex” table posted at the top of this README.</p>
 <div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Crime_prop'</span> <span class="kw">=</span> <span class="st">'Crime / Population'</span>,
         <span class="st">'Donations'</span> <span class="kw">=</span> <span class="st">'Donations'</span>,
@@ -406,47 +542,48 @@
    <span class="kw">notes</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'First custom note to contain text.'</span>,
              <span class="st">'Second custom note with different content.'</span>)) <span class="kw">%&gt;%</span>
    <span class="co"># add spanning labels</span>
-   <span class="fu">tab_spanner</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Literacy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 1'</span>, <span class="st">'NBin 1'</span>)) <span class="kw">%&gt;%</span>
-   <span class="fu">tab_spanner</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Desertion'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 2'</span>, <span class="st">'NBin 2'</span>)) <span class="kw">%&gt;%</span>
-   <span class="fu">tab_spanner</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Clergy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="st">'Logit 1'</span>) <span class="kw">%&gt;%</span>
+   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Literacy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 1'</span>, <span class="st">'NBin 1'</span>)) <span class="kw">%&gt;%</span>
+   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Desertion'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 2'</span>, <span class="st">'NBin 2'</span>)) <span class="kw">%&gt;%</span>
+   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Clergy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="st">'Logit 1'</span>) <span class="kw">%&gt;%</span>
    <span class="co"># footnotes</span>
-   <span class="fu">tab_footnote</span>(
-       <span class="kw">footnote</span> <span class="kw">=</span> <span class="fu">md</span>(<span class="st">"This is a **very** important model, so we are pointing it out in a column-specific footnote."</span>),
-       <span class="kw">locations</span> <span class="kw">=</span> <span class="fu">cells_column_labels</span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">`OLS 1`</span>))) <span class="kw">%&gt;%</span>
-   <span class="fu">tab_footnote</span>(                                                                                                                      <span class="kw">footnote</span> <span class="kw">=</span> <span class="st">"This is the variable of interest."</span>,                                                                                <span class="kw">locations</span> <span class="kw">=</span> <span class="fu">cells_body</span>(<span class="kw">rows</span> <span class="kw">=</span><span class="fl">5</span>)) <span class="kw">%&gt;%</span>                                                                                       <span class="fu">tab_footnote</span>(
+   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(
+       <span class="kw">footnote</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span>(<span class="st">"This is a **very** important model, so we are pointing it out in a column-specific footnote."</span>),
+       <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_column_labels.html">cells_column_labels</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>))) <span class="kw">%&gt;%</span>
+   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(                                                                                                                      <span class="kw">footnote</span> <span class="kw">=</span> <span class="st">"This is the variable of interest."</span>,                                                                                <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">rows</span> <span class="kw">=</span><span class="fl">5</span>)) <span class="kw">%&gt;%</span>                                                                                       <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(
        <span class="kw">footnote</span> <span class="kw">=</span> <span class="st">"Most important model + most important variable = most important estimate."</span>,
-       <span class="kw">locations</span> <span class="kw">=</span> <span class="fu">cells_body</span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">`OLS 1`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">5</span>)) <span class="kw">%&gt;%</span>
+       <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">5</span>)) <span class="kw">%&gt;%</span>
    <span class="co"># color and bold</span>
-   <span class="fu">tab_style</span>(
-       <span class="kw">style</span> <span class="kw">=</span> <span class="fu">cell_text</span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">"red"</span>, <span class="kw">weight</span> <span class="kw">=</span> <span class="st">"bold"</span>),
-       <span class="kw">locations</span> <span class="kw">=</span> <span class="fu">cells_body</span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu">vars</span>(<span class="no">`OLS 1`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">5</span>))</pre></body></html></div>
+   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(
+       <span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">"red"</span>, <span class="kw">weight</span> <span class="kw">=</span> <span class="st">"bold"</span>),
+       <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">5</span>))</pre></body></html></div>
 <p><img src="https://user-images.githubusercontent.com/987057/82732359-c0d1cd00-9cda-11ea-8924-ff599cb29273.png" width="40%"></p>
 </div>
 </div>
-<div id="appearance-with-kableextra-html-latex-pdf-markdowntext" class="section level1">
+<div id="appearance-kableextra" class="section level1">
 <h1 class="hasAnchor">
-<a href="#appearance-with-kableextra-html-latex-pdf-markdowntext" class="anchor"></a>Appearance with <code>kableExtra</code>: HTML, LaTeX, PDF, Markdown/Text</h1>
+<a href="#appearance-kableextra" class="anchor"></a>Appearance: <code>kableExtra</code>
+</h1>
 <p>Note that compiling this LaTeX table requires loading the <code>booktabs</code> and <code>xcolor</code> packages in the preamble of your LaTeX or Rmarkdown document.</p>
 <p>The <code>gt</code> LaTeX render engine is still immature. Until it improves, I strongly recommend that users turn to <code>kableExtra</code> to produce LaTeX tables. This package offers robust functions that allow a lot of customization. A simple LaTeX table can be produced as follows:</p>
 <div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'latex'</span>)</pre></body></html></div>
 <p>We can use functions from the <code>kableExtra</code> package to customize this table, with bold and colored cells, column spans, and more.</p>
-<div id="fonts-colors-and-styles-latex" class="section level2">
+<div id="fonts-colors-and-styles-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#fonts-colors-and-styles-latex" class="anchor"></a>Fonts, colors and styles: LaTeX</h2>
+<a href="#fonts-colors-and-styles-1" class="anchor"></a>Fonts, colors and styles</h2>
 <p>The <code>row_spec</code> and <code>column_spec</code> allow users to change the styling of their tables. For instance, this code creates a table where the first column is in bold blue text on pink background:</p>
 <div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'latex'</span>) <span class="kw">%&gt;%</span>
-    <span class="fu">row_spec</span>(<span class="fl">1</span>, <span class="kw">bold</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">'blue'</span>, <span class="kw">background</span> <span class="kw">=</span> <span class="st">'pink'</span>)</pre></body></html></div>
+    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span>(<span class="fl">1</span>, <span class="kw">bold</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">'blue'</span>, <span class="kw">background</span> <span class="kw">=</span> <span class="st">'pink'</span>)</pre></body></html></div>
 </div>
-<div id="column-groups-latex" class="section level2">
+<div id="column-groups-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#column-groups-latex" class="anchor"></a>Column groups: LaTeX</h2>
+<a href="#column-groups-1" class="anchor"></a>Column groups</h2>
 <p>You can define column group labels using <code>kableExtra</code>’s <code>add_header_above</code> function:</p>
 <pre><code>msummary(models, output = 'latex') %&gt;%
     add_header_above(c(" " = 1, "Literacy" = 2, "Desertion" = 2, 'Clergy = 1))</code></pre>
 </div>
-<div id="complex-example-latex" class="section level2">
+<div id="complex-example-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#complex-example-latex" class="anchor"></a>Complex example: LaTeX</h2>
+<a href="#complex-example-1" class="anchor"></a>Complex example</h2>
 <div class="sourceCode" id="cb33"><html><body><pre class="r">cm &lt;- c('Crime_prop' = 'Crime / Population',
         'Donations' = 'Donations',
         'Infants' = 'Infants',
