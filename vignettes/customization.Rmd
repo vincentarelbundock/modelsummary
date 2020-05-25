@@ -14,24 +14,18 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(modelsummary)
-```
+When analysts create tables to summarize statistical models, they often want to customize the *information* that is displayed in those tables (parameters, statistics, significant digits, etc.). The `modelsummary` function includes a powerful and intuitive set of arguments which allow users to change the content of their tables.
 
-`modelsummary` includes a powerful set of utilities to customize the *information* displayed in your model summary tables. You can easily rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to display; display various "robust" standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.
+In addition, analysts often want to customize the *appearance* of their tables. To achieve this, `modelsummary` supports two table making packages: `gt` and `kableExtra`. These two packages open endless possibilities for customization. Each of them has different strengths and weaknesses. For instance, `gt` allows seamless integration with the RStudio IDE, but `kableExtra`'s LaTeX (and PDF) output is far more mature. The choice between `gt` and `kableExtra` should largely depend on the type of output format that users target:
 
-In addition, users can customize the *look* of their summary tables using the powerful `gt` and `kableExtra` packages. These two packages open endless possibilities to customize the appearance of model summary tables. 
-
-# Output formats
-
-`modelsummary` supports both `gt` and `kableExtra`, because those two packages have different strengths and weaknesses. For instance, `gt` allows seamless integration with the RStudio IDE, but `kableExtra`'s LaTeX (and PDF) output is far more mature. The choice between `gt` and `kableExtra` should largely depend on the type of output format that users target:
-
-* `gt` is best for: HTML, RTF (MS Word-compatible), JPG, PNG
+* `gt` is best for HTML, RTF (MS Word-compatible), JPG, PNG
     - [Documentation: https://gt.rstudio.com](https://gt.rstudio.com)
-* `kableExtra` is best for: HTML, LaTeX, Markdown/Text, Rmarkdown PDF
+* `kableExtra` is best for HTML, LaTeX, Markdown/Text, Rmarkdown PDF
     - [Documentation: http://haozhu233.github.io/kableExtra](http://haozhu233.github.io/kableExtra)
 
 Users are encouraged to read the documentation of both packages to see which syntax they prefer. 
+
+`modelsummary` can produce tables in a large array of formats. This table shows which package is used by default to create tables in each output format:
 
 ```{r, echo=FALSE}
 library(kableExtra)
@@ -51,7 +45,7 @@ tmp <- tribble(~`Output format`, ~`Default package`,
 kable(tmp, format = 'markdown')
 ```
 
-Both `gt` and `kableExtra` can produce LaTeX and HTML output. You can override the default settings for these two formats by setting these global options:
+Both `gt` and `kableExtra` can produce LaTeX and HTML output. You can override the default settings by setting these global options:
 
 ```r
 options(modelsummary_latex = 'gt')
@@ -59,22 +53,45 @@ options(modelsummary_latex = 'gt')
 options(modelsummary_html = 'kableExtra')
 ```
 
-# Information with `modelsummary`
+# Information: `modelsummary`
+
+`modelsummary` includes a powerful set of utilities to customize the *information* displayed in your model summary tables. You can easily rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to display; display various "robust" standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.
+
+```{r}
+library(modelsummary)
+library(kableExtra)
+library(gt)
+
+url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
+dat <- read.csv(url)
+
+models <- list()
+models[['OLS 1']] <- lm(Donations ~ Literacy + Clergy, data = dat)
+models[['Poisson 1']] <- glm(Donations ~ Literacy + Commerce, family = poisson, data = dat)
+models[['OLS 2']] <- lm(Crime_pers ~ Literacy + Clergy, data = dat)
+models[['Poisson 2']] <- glm(Crime_pers ~ Literacy + Commerce, family = poisson, data = dat)
+models[['OLS 3']] <- lm(Crime_prop ~ Literacy + Clergy, data = dat)
+```
 
 ## Uncertainty estimates: SE, t, p, CI
 
 By default, `modelsummary` prints an uncertainty estimate in parentheses below the corresponding coefficient estimate. The value of this estimate is determined by the `statistic` argument.
 
-`statistic` must be a string which equal to `conf.int` or to one of the columns produced by the `broom::tidy` function. When using `conf.int`, users can specify a confidence level with the `conf_level` argument.
+`statistic` must be a string which equal to `conf.int` or to one of the columns produced by the `broom::tidy` function. 
 
 ```r
 msummary(models, statistic = 'std.error')
 msummary(models, statistic = 'p.value')
 msummary(models, statistic = 'statistic')
+```
+
+You can display confidence intervals in brackets by setting `statistic="conf.int"`:
+
+```{r}
 msummary(models, statistic = 'conf.int', conf_level = .99)
 ```
 
-You can display the uncertainty estimate next to the coefficient instead of below it:
+To display uncertainty estimates next to coefficients instead of below them:
 
 ```r
 msummary(models, statistic_vertical = FALSE)
@@ -263,9 +280,9 @@ Warning: at the moment (2020-05-05), `broom::tidy` still reports `std.error` on 
 
 *Warning*: When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt` or `kableExtra`. To save a customized table, you should apply all the customization functions you need before saving it using `gt::gtsave`, `kableExtra::save_kable`, or another appropriate helper function.
 
-# Appearance with `gt`: HTML, RTF, JPG, PNG
+# Appearance: `gt`
 
-## Fonts, colors, and styles: HTML
+## Fonts, colors, and styles
 
 Thanks to `gt`, `modelsummary` accepts markdown indications for emphasis and more:
 
@@ -299,7 +316,7 @@ msummary(models) %>%
 
 <img src="https://user-images.githubusercontent.com/987057/82732616-3c804980-9cdc-11ea-8968-02e45d53adab.png" width="40%">
 
-## Footnotes: HTML
+## Footnotes
 
 Add numbered footnotes to a column, a row, or a cell:
 
@@ -316,7 +333,7 @@ msummary(models) %>%
         locations = cells_body(columns = vars(`OLS 1`), rows = 3))
 ```
 
-## Column groups: HTML
+## Column groups
 
 Create spanning labels to group models (columns):
 
@@ -344,7 +361,7 @@ msummary(models) %>% text_transform(locations = cells_body(rows = 1, columns = 2
 
 ```
 
-## Complex example: HTML
+## Complex example
 
 This is the code I used to generate the "complex" table posted at the top of this README.
 
@@ -380,7 +397,7 @@ msummary(models,
 
 <img src="https://user-images.githubusercontent.com/987057/82732359-c0d1cd00-9cda-11ea-8924-ff599cb29273.png" width="40%">
 
-# Appearance with `kableExtra`: HTML, LaTeX, PDF, Markdown/Text
+# Appearance: `kableExtra`
 
 Note that compiling this LaTeX table requires loading the `booktabs` and `xcolor` packages in the preamble of your LaTeX or Rmarkdown document.
 
@@ -392,7 +409,7 @@ msummary(models, output = 'latex')
 
 We can use functions from the `kableExtra` package to customize this table, with bold and colored cells, column spans, and more. 
 
-## Fonts, colors and styles: LaTeX
+## Fonts, colors and styles
 
 The `row_spec` and `column_spec` allow users to change the styling of their tables. For instance, this code creates a table where the first column is in bold blue text on pink background:
 
@@ -401,7 +418,7 @@ msummary(models, output = 'latex') %>%
     row_spec(1, bold = TRUE, color = 'blue', background = 'pink')
 ```
 
-## Column groups: LaTeX
+## Column groups
 
 You can define column group labels using `kableExtra`'s `add_header_above` function:
 
@@ -410,8 +427,7 @@ msummary(models, output = 'latex') %>%
     add_header_above(c(" " = 1, "Literacy" = 2, "Desertion" = 2, 'Clergy = 1))
 ```
 
-
-## Complex example: LaTeX
+## Complex example
 
 ```r
 cm <- c('Crime_prop' = 'Crime / Population',

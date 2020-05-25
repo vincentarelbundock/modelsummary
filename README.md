@@ -5,7 +5,7 @@
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/vincentarelbundock/modelsummary?branch=master&svg=true)](https://ci.appveyor.com/project/vincentarelbundock/modelsummary)
 <!-- badges: end -->
 
-The `modelsummary` package for `R` produces beautiful and customizable tables to summarize statistical models. Results from several models are presented side-by-side. Tables can be echoed to the `R` console or viewed in the `RStudio` Viewer. They can be saved to HTML, PDF, Text/Markdown, LaTeX, RTF (MS Word-ready), JPG, and PNG formats. Tables can be integrated in dynamic document pipelines like `Rmarkdown`, `knitr`, or `Sweave`.
+The `modelsummary` package for `R` produces beautiful and customizable tables to summarize statistical models. Results from several models are presented side-by-side. Tables can be echoed to the `R` console or viewed in the `RStudio` Viewer. They can be saved to HTML, PDF, Text/Markdown, LaTeX, RTF (Microsoft Word-compatible), JPG, and PNG formats. Tables can be integrated in dynamic document pipelines like `Rmarkdown`, `knitr`, or `Sweave`.
 
 <center><img src="https://user-images.githubusercontent.com/987057/82732359-c0d1cd00-9cda-11ea-8924-ff599cb29273.png" width="40%"></center>
 
@@ -17,8 +17,8 @@ The `modelsummary` package for `R` produces beautiful and customizable tables to
 + [Saving and viewing: output formats](#saving-and-viewing-output-formats)
 + [Customizing tables](https://vincentarelbundock.github.io/modelsummary/articles/customization.html)
     - [Information with `modelsummary`](https://vincentarelbundock.github.io/modelsummary/articles/customization.html#information-with-modelsummary)
-    - [Appearance with `gt`: HTML, RTF (Microsoft Word-compatible), JPG, PNG](https://vincentarelbundock.github.io/modelsummary/articles/customization.html#appearance-with-gt-html-rtf-jpg-png)
-    - [Appearance with `kableExtra`: HTML, LaTeX, PDF, Markdown/Text](https://vincentarelbundock.github.io/modelsummary/articles/customization.html#appearance-with-kableextra-html-latex-pdf-markdown-text)
+    - [Appearance with `gt`: HTML, RTF (Microsoft Word-compatible), JPG, PNG](https://vincentarelbundock.github.io/modelsummary/articles/customization.html#appearance-gt)
+    - [Appearance with `kableExtra`: HTML, LaTeX, PDF, Markdown/Text](https://vincentarelbundock.github.io/modelsummary/articles/customization.html#appearance-kableextra)
 + [Dynamic documents with `Rmarkdown` and `knitr`](https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html)
 + [Advanced options](https://vincentarelbundock.github.io/modelsummary/articles/advanced.html)
 
@@ -53,13 +53,13 @@ msummary(mod, "markdown")
 
 #### Dangerous
 
-`modelsummary` is also dangerous! It allows users to do stupid stuff like [replacing all their intercepts by squirrels.](https://vincentarelbundock.github.io/modelsummary/articles/customization.html#images)
+`modelsummary` is dangerous! It allows users to do stupid stuff like [replacing their intercepts by squirrels.](https://vincentarelbundock.github.io/modelsummary/articles/customization.html#images)
 
 <center><img src="https://user-images.githubusercontent.com/987057/82818916-7a60a780-9e6d-11ea-96ed-04fa92874a23.png" width="40%"></center>
 
 #### Reliable
 
-`modelsummary` is *reliably* dangerous! Indeed, the package is developed using a [suite of unit tests.](https://github.com/vincentarelbundock/modelsummary/tree/master/tests/testthat) It (probably) won't break.
+`modelsummary` is *reliably* dangerous! The package is developed using a [suite of unit tests.](https://github.com/vincentarelbundock/modelsummary/tree/master/tests/testthat), so it (probably) won't break.
 
 #### Community
 
@@ -119,7 +119,7 @@ In `Rstudio`, the image below will be displayed automatically in the "Viewer" wi
 
 <center><img src="https://user-images.githubusercontent.com/987057/82816112-8eee7100-9e68-11ea-8bc7-30c0f2626539.png" width="40%"></center>
 
-The same table can be printed to the `R` Console by using this command:
+The same table can be printed in text-only format to the `R` Console:
 
 ```r
 msummary(models, 'markdown')
@@ -154,7 +154,7 @@ msummary(models, 'markdown')
 * Images: JPG and PNG 
 * `gt` table objects
 
-Tables can be saved to file, or they can be previewed in the `R` console the `Rstudio` Viewer, or a browser. Tables can be inserted in dynamic `Rmarkdown` or `knitr` documents, or they can be [customized](https://vincentarelbundock.github.io/modelsummary/articles/customization.html) using functions from the `gt` or `kableExtra` packages.
+Tables can be saved to file, or they can be previewed in the `R` console, the `Rstudio` Viewer, or a browser. Tables can be inserted in [dynamic `Rmarkdown` or `knitr` documents](https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html), or they can be [customized](https://vincentarelbundock.github.io/modelsummary/articles/customization.html) using functions from the `gt` or `kableExtra` packages.
 
 You can view tables in different formats by using the `output` argument:
 
@@ -166,7 +166,7 @@ msummary(models, output = 'latex')
 msummary(models, output = 'gt')
 ```
 
-You can save tables in even more formats by using the `output` argument. `modelsummary` will use the file name extension to guess what kind of file to save. For example,
+You can save tables in even more formats by using the same `output` argument. `modelsummary` will use the file name extension to guess what kind of file to save. For example,
 
 ```r
 msummary(models, output = 'table.html')
