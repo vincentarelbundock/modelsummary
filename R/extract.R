@@ -85,11 +85,13 @@ extract <- function(models,
         colnames(est[[i]])[3] <- model_names[i]
     }
 
+
+    # TODO: Remove suppressWarnings
+    # full_join warns: Column `term` has different attributes on LHS and RHS of join
+    f <- function(x, y) suppressWarnings(dplyr::full_join(x, y, by = c('term', 'statistic')))
     est <- est %>% 
-           # full_join warns: Column `term` has different attributes on LHS and
-           # RHS of join
-           purrr::reduce(dplyr::full_join, by = c('term', 'statistic'))  %>%
-           #purrr::reduce(merge, all = TRUE) %>%
+           #purrr::reduce(dplyr::full_join, by = c('term', 'statistic'))  %>%
+           purrr::reduce(f)  %>%
            dplyr::mutate(group = 'estimates') %>%
            dplyr::select(group, term, statistic, names(.))
 

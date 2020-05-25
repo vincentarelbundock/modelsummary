@@ -182,10 +182,7 @@ modelsummary <- function(models,
     }
 
     # knitr compilation target as default
-    knitr_installed <- try(base::find.package('knitr'), silent = TRUE)
-    if (!inherits(knitr_installed, 'try-error')) {
-        knitr_target <- knitr::opts_knit$get("rmarkdown.pandoc.to")
-    } 
+    knitr_target <- knitr::opts_knit$get("rmarkdown.pandoc.to")
     if (output_type == 'default') {
         if (!is.null(knitr_target)) {
             output <- output_type <- knitr_target

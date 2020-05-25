@@ -66,9 +66,13 @@ build_kableExtra <- function(tab,
     if (output %in% c('markdown', 'html', 'latex')) {
         return(tab)
     } else {
-        sink(output)
-        print(tab)
-        sink()
+        # function stolen from kableExtra (MIT license)
+        solve_enc <- function(x) {
+            out <- enc2utf8(as.character(base::format(x, trim = TRUE, justify = 'none')))
+            mostattributes(out) <- attributes(x)
+            return(out)
+        }
+        writeLines(solve_enc(output), con = output, useBytes = TRUE)
     } 
 
 }
