@@ -50,6 +50,24 @@
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/advanced.html">advanced</a>
+    </li>
+    <li>
+      <a href="articles/customization.html">Customize your tables: information and appearance</a>
+    </li>
+    <li>
+      <a href="articles/rmarkdown.html">Dynamic documents with `Rmarkdown` and `knitr`</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="news/index.html">Changelog</a>
 </li>
@@ -74,622 +92,168 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="modelsummary-beautiful-customizable-publication-ready-model-summaries-in-r" class="section level1">
+<div id="modelsummary-beautiful-and-customizable-model-summaries-in-r" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#modelsummary-beautiful-customizable-publication-ready-model-summaries-in-r" class="anchor"></a>modelsummary: Beautiful, customizable, publication-ready model summaries in R.</h1></div>
+<a href="#modelsummary-beautiful-and-customizable-model-summaries-in-r" class="anchor"></a>modelsummary: Beautiful and customizable model summaries in R.</h1></div>
 <!-- badges: start -->
 
-<p>The <code>modelsummary</code> package for <code>R</code> produces beautiful, customizable, publication-ready tables to summarize statistical models. Results from several models are presented side-by-side. Tables can be echoed to the <code>R</code> console or viewed in the <code>RStudio</code> Viewer. They can be saved to HTML, LaTeX, Text/Markdown, JPG, PNG, and RTF (MS Word-ready) formats. Tables can be integrated in dynamic document pipelines like <code>Rmarkdown</code>, <code>knitr</code>, or <code>Sweave</code>.</p>
-<p><img src="https://user-images.githubusercontent.com/987057/82732359-c0d1cd00-9cda-11ea-8924-ff599cb29273.png" width="40%"></p>
+<p>The <code>modelsummary</code> package for <code>R</code> produces beautiful and customizable tables to summarize statistical models. Results from several models are presented side-by-side. Tables can be echoed to the <code>R</code> console or viewed in the <code>RStudio</code> Viewer. They can be saved to HTML, PDF, Text/Markdown, LaTeX, RTF (MS Word-ready), JPG, and PNG formats. Tables can be integrated in dynamic document pipelines like <code>Rmarkdown</code>, <code>knitr</code>, or <code>Sweave</code>.</p>
+<center>
+<img src="https://user-images.githubusercontent.com/987057/82732359-c0d1cd00-9cda-11ea-8924-ff599cb29273.png" width="40%">
+</center>
 </div>
-<div id="table-of-contents" class="section level1">
+<div id="contents" class="section level1">
 <h1 class="hasAnchor">
-<a href="#table-of-contents" class="anchor"></a>Table of contents</h1>
+<a href="#contents" class="anchor"></a>Contents</h1>
 <ul>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#sales-pitch">Sales pitch</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#installation">Installation</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#simple-example">Simple example</a></li>
+<li><a href="#why-should-i-use-modelsummary">Why should I use <code>modelsummary</code></a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#getting-started">Getting started</a></li>
+<li><a href="#saving-and-viewing-output-formats">Saving and viewing: output formats</a></li>
 <li>
-<a href="https://github.com/vincentarelbundock/modelsummary#output-formats-html-latex-markdown-rtf-jpg-png-gt">Output formats: HTML, LaTeX, Text/Markdown, RTF, JPG, PNG, gt</a>
+<a href="articles/customization.html">Customizing tables</a>
 <ul>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#save-table">Save table</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#view-table">View table</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#customize-table-with-gt-or-kableextra">Customize table with <code>gt</code> or <code>kableExtra</code></a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#dynamic-documents-rmarkdown-and-knitr">Dynamic documents: <code>Rmarkdown</code> and <code>knitr</code></a></li>
+<li><a href="articles/customization.html#information-with-modelsummary">Information with <code>modelsummary</code></a></li>
+<li><a href="articles/customization.html#appearance-with-gt-html-rtf-jpg-png">Appearance with <code>gt</code>: HTML, RTF (Microsoft Word-compatible), JPG, PNG</a></li>
+<li><a href="articles/customization.html#appearance-with-kableextra-html-latex-pdf-markdown-text">Appearance with <code>kableExtra</code>: HTML, LaTeX, PDF, Markdown/Text</a></li>
 </ul>
 </li>
-<li>
-<a href="https://github.com/vincentarelbundock/modelsummary#table-content">Table content</a>
-<ul>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#uncertainty-estimates-se-t-p-ci">Uncertainty estimates: SE, p, t, CI</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#titles">Titles</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#notes">Notes</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#rename-reorder-and-subset">Rename, reorder, and subset</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#stars-statistical-significance-markers">Stars</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#digits-rounding-exponential-notation">Digits, rounding, exponential notation</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#add-rows-manually">Add rows manually</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#extra-tidy-arguments-eg-exponentiated-coefficients">Extra tidy arguments (e.g., exponentiated coefficients)</a></li>
-</ul>
-</li>
-<li>
-<a href="https://github.com/vincentarelbundock/modelsummary#table-look-html">Table look: HTML</a>
-<ul>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#fonts-colors-and-styles-html">Font, colors, and styles</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#column-groups-html">Column groups</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#images">Images</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#complex-example-html">Complex example</a></li>
-</ul>
-</li>
-<li>
-<a href="https://github.com/vincentarelbundock/modelsummary#table-look-latex">Table look: LaTeX</a>
-<ul>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#fonts-colors-and-styles-latex">Font, colors, and styles</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#column-groups-latex">Column groups</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#complex-example-latex">Complex example</a></li>
-</ul>
-</li>
-<li>
-<a href="https://github.com/vincentarelbundock/modelsummary#unsupported-models-and-custom-tidiers">Unsupported models and custom tidiers</a>
-<ul>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#pooled-multiple-imputation-results">Pooled multiple imputation results</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#power-users">Power users</a></li>
-</ul>
-</li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary#alternative-summary-table-packages-for-r">Alternative summary table packages for R</a></li>
+<li><a href="articles/rmarkdown.html">Dynamic documents with <code>Rmarkdown</code> and <code>knitr</code></a></li>
+<li><a href="articles/advanced.html">Advanced options</a></li>
 </ul>
 </div>
-<div id="sales-pitch" class="section level1">
+<div id="why-should-i-use-modelsummary" class="section level1">
 <h1 class="hasAnchor">
-<a href="#sales-pitch" class="anchor"></a>Sales pitch</h1>
-<p>Here are a few benefits of <code>modelsummary</code> over some <a href="https://github.com/vincentarelbundock/modelsummary#alternative-summary-table-packages-for-r">alternative packages</a>:</p>
-<ul>
-<li>Customizability
-<ul>
-<li>Tables are endlessly customizable, thanks to the power of the <a href="https://gt.rstudio.com"><code>gt</code> package</a> and <a href="https://haozhu233.github.io/kableExtra/"><code>kableExtra</code></a>. In this README, you will find tables with colored cells, weird text, spanning column labels, row groups, titles, global footnotes, cell-specific footnotes, significance stars, etc. This README will explore many of the available options, but it only scratches the surface of possibilities.</li>
-</ul>
-</li>
-<li>Flexibility
-<ul>
-<li>Tables can be saved to HTML, LaTeX, Text/Markdown, RTF (Word-Compatible), JPG, or PNG formats.</li>
-</ul>
-</li>
-<li>Integration
-<ul>
-<li>
-<code>modelsummary</code> is extremely well integrated with RStudio. When you type <code><a href="reference/msummary.html">msummary(models)</a></code>, the summary table immediately appears in the Viewer window.</li>
-</ul>
-</li>
-<li>Transparency, replicability, and automation
-<ul>
-<li>By combining <code>modelsummary</code> with <code>knitr</code> or <code>Rmarkdown</code>, you can easily produce beautiful, replicable, and automated documents and reports. <a href="https://github.com/vincentarelbundock/modelsummary#rmarkdown-knitr-and-sweave">Click here for details.</a>
-</li>
-</ul>
-</li>
-<li>Community
-<ul>
-<li>
-<code>modelsummary</code> does not try to do everything. It leverages the incredible work of the <code>R</code> community by building on top of the popular <code>broom</code>, <code>gt</code>, and <code>kableExtra</code> packages. Thanks to the <code>broom</code> team, <code>modelsummary</code> already supports dozens of model types out of the box. Thanks to the <code>gt</code> and <code>kableExtra</code> authors, <code>modelsummary</code> can produce beautiful tables in a large number of formats. Most importantly, as these external packages improve, <code>modelsummary</code> improves as well.</li>
-</ul>
-</li>
-<li>Reliability
-<ul>
-<li>
-<code>modelsummary</code> is developed using a suite of unit tests. It (probably) won’t break.</li>
-</ul>
-</li>
-<li>Simplicity
-<ul>
-<li>By using the <code>broom</code>, <code>gt</code>, and <code>kableExtra</code> packages for key operations, <code>modelsummary</code> has a massively simplified codebase. This should improve long term code maintainability, and allow contributors to participate through GitHub.</li>
-</ul>
-</li>
-</ul>
-<p>CFITCRS!</p>
-<p>At the <code>modelsummary</code> factory, we are <em>serious</em> about customizability. Are your bored of regression tables with good ol’ “Intercept”? If so, we have <a href="https://github.com/vincentarelbundock/modelsummary#images">a solution for you:</a></p>
-<p><img src="https://imgur.com/CQp4uXl.png" width="40%"></p>
+<a href="#why-should-i-use-modelsummary" class="anchor"></a>Why should I use <code>modelsummary</code>?</h1>
+<p>Here are a few benefits of <code>modelsummary</code> over some <a href="#alternative-packages">alternative packages</a>:</p>
+<div id="easy" class="section level4">
+<h4 class="hasAnchor">
+<a href="#easy" class="anchor"></a>Easy</h4>
+<p><code>modelsummary</code> is very easy to use. This simple call often suffices:</p>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+
+<span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">y</span> ~ <span class="no">x</span>, <span class="no">dat</span>)
+<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">mod</span>)</pre></div>
+<p>The command above will automatically display a summary table in the <code>Rstudio</code> Viewer or in a web browser. A text-only version of the table can also be printed to the Console by typing:</p>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">mod</span>, <span class="st">"markdown"</span>)</pre></div>
+</div>
+<div id="flexible" class="section level4">
+<h4 class="hasAnchor">
+<a href="#flexible" class="anchor"></a>Flexible</h4>
+<p><em>Information</em>: The package offers many intuitive and powerful utilities to <a href="articles/customization.html#information-with-modelsummary">customize the information</a> reported in a summary table. You can rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to include; display various “robust” standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.</p>
+<p><em>Appearance</em>: Thanks to the <a href="https://gt.rstudio.com"><code>gt</code></a> and <a href="https://haozhu233.github.io/kableExtra/"><code>kableExtra</code></a> packages, the appearance of summary tables is endlessly customizable. The <a href="articles/customization.html">appearance customization page</a> shows tables with colored cells, weird text, spanning column labels, row groups, titles, source notes, footnotes, significance stars, and more. This only scratches the surface of possibilities.</p>
+<p><em>Output formats</em>: <code>modelsummary</code> tables can be saved to HTML, LaTeX, Text/Markdown, RTF (Word-Compatible), JPG, or PNG formats. They can also be inserted seamlessly in Rmarkdown documents to produce <a href="articles/rmarkdown.html">automated documents and reports in PDF, HTML, or Microsoft Word-compatible formats.</a></p>
+</div>
+<div id="dangerous" class="section level4">
+<h4 class="hasAnchor">
+<a href="#dangerous" class="anchor"></a>Dangerous</h4>
+<p><code>modelsummary</code> is also dangerous! It allows users to do stupid stuff like <a href="articles/customization.html#images">replacing all their intercepts by squirrels.</a></p>
+<center>
+<img src="https://user-images.githubusercontent.com/987057/82818916-7a60a780-9e6d-11ea-96ed-04fa92874a23.png" width="40%">
+</center>
+</div>
+<div id="reliable" class="section level4">
+<h4 class="hasAnchor">
+<a href="#reliable" class="anchor"></a>Reliable</h4>
+<p><code>modelsummary</code> is <em>reliably</em> dangerous! Indeed, the package is developed using a <a href="https://github.com/vincentarelbundock/modelsummary/tree/master/tests/testthat">suite of unit tests.</a> It (probably) won’t break.</p>
+</div>
+<div id="community" class="section level4">
+<h4 class="hasAnchor">
+<a href="#community" class="anchor"></a>Community</h4>
+<p><code>modelsummary</code> does not try to do everything. Instead, it leverages the incredible work of the <code>R</code> community by building on top of the popular <code>broom</code>, <code>gt</code>, and <code>kableExtra</code> packages. Thanks to the <code>broom</code> team, <code>modelsummary</code> already supports dozens of model types out of the box. Thanks to the <code>gt</code> and <code>kableExtra</code> authors, <code>modelsummary</code> can produce beautiful tables in a large number of formats.</p>
+<p>One benefit of this community-focused approach is that when external packages improve, <code>modelsummary</code> improves as well. Another benefit is that leveraging external packages allows <code>modelsummary</code> to have a massively simplified codebase (relative to other similar packages). This should improve long term code maintainability, and allow contributors to participate through GitHub.</p>
+</div>
 </div>
 <div id="installation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h1>
 <p>You can install <code>modelsummary</code> from CRAN:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'modelsummary'</span>)</pre></div>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'modelsummary'</span>)</pre></div>
 <p>If you want the very latest version, install it from Github:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">remotes</span>)
+<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">remotes</span>)
 <span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">'vincentarelbundock/modelsummary'</span>)</pre></div>
 </div>
-<div id="simple-example" class="section level1">
+<div id="getting-started" class="section level1">
 <h1 class="hasAnchor">
-<a href="#simple-example" class="anchor"></a>Simple example</h1>
-<p>We begin by loading a few packages and by downloading data from the <a href="https://vincentarelbundock.github.io/Rdatasets/">RDatasets</a> repository:</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">MASS</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+<a href="#getting-started" class="anchor"></a>Getting started</h1>
+<p>We begin by loading the <code>modelsummary</code> package and by downloading data from the <a href="https://vincentarelbundock.github.io/Rdatasets/">RDatasets</a> repository:</p>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
 <span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
-<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)
-<span class="no">dat</span>$<span class="no">Clergy</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">dat</span>$<span class="no">Clergy</span> <span class="kw">&gt;</span> <span class="fl">40</span>, <span class="fl">1</span>, <span class="fl">0</span>) <span class="co"># binary variable for logit models</span></pre></div>
-<p>We estimate a linear model and use the <code>msummary</code> command to display the results:</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Crime_prop</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)</pre></div>
+<p>We estimate a linear model and call the <code>msummary</code> function to display the results:</p>
+<div class="sourceCode" id="cb6"><pre class="r"><span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Donations</span> ~ <span class="no">Crime_prop</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
 <span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">mod</span>)</pre></div>
-<p>In <code>Rstudio</code>, the image below will be displayed automatically in the “Viewer” window. When running <code>R</code> from a terminal or from the basic <code>R</code> interface, this table should appear in your browser.</p>
-<p><img src="https://user-images.githubusercontent.com/987057/82732364-c4655400-9cda-11ea-82c4-120755a94042.png" width="12%"></p>
-<p>To summarize multiple models side-by-side, we store them in a named list. The names will be used as column labels:</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
-<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Literacy</span> ~ <span class="no">Crime_prop</span> + <span class="no">Infants</span>, <span class="no">dat</span>)
-<span class="no">models</span><span class="kw">[[</span><span class="st">'NBin 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html">glm.nb</a></span>(<span class="no">Literacy</span> ~ <span class="no">Crime_prop</span> + <span class="no">Donations</span>, <span class="no">dat</span>)
-<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 2'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Desertion</span> ~ <span class="no">Crime_prop</span> + <span class="no">Infants</span>, <span class="no">dat</span>)
-<span class="no">models</span><span class="kw">[[</span><span class="st">'NBin 2'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html">glm.nb</a></span>(<span class="no">Desertion</span> ~ <span class="no">Crime_prop</span> + <span class="no">Donations</span>, <span class="no">dat</span>)
-<span class="no">models</span><span class="kw">[[</span><span class="st">'Logit 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Crime_prop</span> + <span class="no">Infants</span>, <span class="no">dat</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span>())
+<center>
+<img src="https://user-images.githubusercontent.com/987057/82819815-08895d80-9e6f-11ea-8f78-93a62df204b3.png" width="15%">
+</center>
+<p>To summarize multiple models side-by-side, we store them in a list. If the items in that list are named, the names will be used as column labels:</p>
+<div class="sourceCode" id="cb7"><pre class="r"><span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'Poisson 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 2'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'Poisson 2'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 3'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_prop</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
 
 <span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>)</pre></div>
-<p><img src="https://user-images.githubusercontent.com/987057/82732360-c29b9080-9cda-11ea-9be7-ffc7fa3bd6dd.png" width="40%"></p>
+<p>In <code>Rstudio</code>, the image below will be displayed automatically in the “Viewer” window. When running <code>R</code> from a terminal or from the basic <code>R</code> interface, this table should appear in your browser.</p>
+<center>
+<img src="https://user-images.githubusercontent.com/987057/82816112-8eee7100-9e68-11ea-8bc7-30c0f2626539.png" width="40%">
+</center>
+<p>The same table can be printed to the <code>R</code> Console by using this command:</p>
+<div class="sourceCode" id="cb8"><pre class="r">msummary(models, 'markdown')
+
+
+|            |OLS 1      |Poisson 1   |OLS 2      |Poisson 2   |OLS 3      |
+|:-----------|:----------|:-----------|:----------|:-----------|:----------|
+|(Intercept) |7948.667   |8.241       |16259.384  |9.876       |11243.544  |
+|            |(2078.276) |(0.006)     |(2611.140) |(0.003)     |(1011.240) |
+|Clergy      |15.257     |            |77.148     |            |-16.376    |
+|            |(25.735)   |            |(32.334)   |            |(12.522)   |
+|Literacy    |-39.121    |0.003       |3.680      |-0.000      |-68.507    |
+|            |(37.052)   |(0.000)     |(46.552)   |(0.000)     |(18.029)   |
+|Commerce    |           |0.011       |           |0.001       |           |
+|            |           |(0.000)     |           |(0.000)     |           |
+|Num.Obs.    |86         |86          |86         |86          |86         |
+|R2          |0.020      |            |0.065      |            |0.152      |
+|Adj.R2      |-0.003     |            |0.043      |            |0.132      |
+|AIC         |1740.8     |274160.8    |1780.0     |257564.4    |1616.9     |
+|BIC         |1750.6     |274168.2    |1789.9     |257571.7    |1626.7     |
+|Log.Lik.    |-866.392   |-137077.401 |-886.021   |-128779.186 |-804.441   |</pre></div>
 </div>
-<div id="output-formats-html-latex-markdown-rtf-jpg-png-gt" class="section level1">
+<div id="saving-and-viewing-output-formats" class="section level1">
 <h1 class="hasAnchor">
-<a href="#output-formats-html-latex-markdown-rtf-jpg-png-gt" class="anchor"></a>Output formats: HTML, LaTeX, Markdown, RTF, JPG, PNG, gt</h1>
+<a href="#saving-and-viewing-output-formats" class="anchor"></a>Saving and viewing: output formats</h1>
 <p><code>modelsummary</code> can produce tables in these formats:</p>
 <ul>
 <li>HTML</li>
 <li>LaTeX</li>
 <li>Text / Markdown / ASCII</li>
 <li>RTF (Microsoft Word-compatible)</li>
-<li>JPG and PNG images</li>
+<li>Images: JPG and PNG</li>
 <li>
 <code>gt</code> table objects</li>
 </ul>
-<p>Tables can be <a href="https://github.com/vincentarelbundock/modelsummary#save-table">saved to file</a>, or they can be <a href="https://github.com/vincentarelbundock/modelsummary#view-table">previewed in the <code>R</code> console the <code>Rstudio</code> Viewer, or a browser.</a> Tables can be inserted in <a href="https://github.com/vincentarelbundock/modelsummary#dynamic-documents-rmarkdown-and-knitr">dynamic <code>Rmarkdown</code> or <code>knitr</code> documents</a>, or they can be <a href="https://github.com/vincentarelbundock/modelsummary#customize-table-with-gt-or-kableextra">customized</a> using functions from the <code>gt</code> or <code>kableExtra</code> packages.</p>
-<div id="save-table" class="section level2">
-<h2 class="hasAnchor">
-<a href="#save-table" class="anchor"></a>Save table</h2>
-<p>To save a table to file, use the <code>output</code> argument. <code>modelsummary</code> will use the file name extension to guess what kind of file to save. For example,</p>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.html'</span>)
+<p>Tables can be saved to file, or they can be previewed in the <code>R</code> console the <code>Rstudio</code> Viewer, or a browser. Tables can be inserted in dynamic <code>Rmarkdown</code> or <code>knitr</code> documents, or they can be <a href="articles/customization.html">customized</a> using functions from the <code>gt</code> or <code>kableExtra</code> packages.</p>
+<p>You can view tables in different formats by using the <code>output</code> argument:</p>
+<div class="sourceCode" id="cb9"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>)
+<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'html'</span>)
+<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'markdown'</span>)
+<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'latex'</span>)
+<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'gt'</span>)</pre></div>
+<p>You can save tables in even more formats by using the <code>output</code> argument. <code>modelsummary</code> will use the file name extension to guess what kind of file to save. For example,</p>
+<div class="sourceCode" id="cb10"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.html'</span>)
 <span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.tex'</span>)
 <span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.md'</span>)
 <span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.txt'</span>)
 <span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.png'</span>)
 <span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.jpg'</span>)
 <span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.rtf'</span>)</pre></div>
-<p>By default, <code>modelsummary</code> uses the <code>gt</code> package to save HTML, RTF, JPG, and PNG files. It uses <code>kableExtra</code> to save LaTeX and Markdown files.</p>
 </div>
-<div id="view-table" class="section level2">
-<h2 class="hasAnchor">
-<a href="#view-table" class="anchor"></a>View table</h2>
-<p>To view the table in the <code>R</code> Console or the <code>RStudio</code> Viewer, set the <code>output</code> argument to “gt”, “html”, “latex”, or “markdown”. The default is <code>output="gt"</code>, which returns a <code>gt</code> object and displays the associated HTML table in the <code>RStudio</code> Viewer or in your browser. For example,</p>
-<div class="sourceCode" id="cb7"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'latex'</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'html'</span>)</pre></div>
-<p>Using <code>output="markdown"</code> prints a markdown/ASCII table to the console:</p>
-<div class="sourceCode" id="cb8"><pre class="r">&gt; msummary(models, output = 'markdown')
-
-
-|            |OLS 1    |NBin 1   |OLS 2    |NBin 2   |Logit 1 |
-|:-----------|:--------|:--------|:--------|:--------|:-------|
-|(Intercept) |64.114   |4.218    |57.331   |4.384    |1.006   |
-|            |(5.247)  |(0.144)  |(8.315)  |(0.233)  |(0.710) |
-|Crime_prop  |-0.002   |-0.000   |-0.002   |-0.000   |-0.000  |
-|            |(0.001)  |(0.000)  |(0.001)  |(0.000)  |(0.000) |
-|Infants     |-0.001   |         |0.000    |         |-0.000  |
-|            |(0.000)  |         |(0.000)  |         |(0.000) |
-|Donations   |         |-0.000   |         |-0.000   |        |
-|            |         |(0.000)  |         |(0.000)  |        |
-|Num.Obs.    |86       |86       |86       |86       |86      |
-|R2          |0.237    |         |0.073    |         |        |
-|Adj.R2      |0.218    |         |0.051    |         |        |
-|AIC         |718.8    |720.2    |797.9    |803.2    |123.0   |
-|BIC         |728.6    |730.0    |807.8    |813.1    |130.4   |
-|Log.Lik.    |-355.382 |-356.106 |-394.974 |-397.620 |-58.498 |</pre></div>
-</div>
-<div id="customize-table-with-gt-or-kableextra" class="section level2">
-<h2 class="hasAnchor">
-<a href="#customize-table-with-gt-or-kableextra" class="anchor"></a>Customize table with <code>gt</code> or <code>kableExtra</code>
-</h2>
-<p>Both <code>gt</code> and <code>kableExtra</code> allow endless customization of HTML and LaTeX tables. To customize a table, users generally <em>post-process</em> the output of <code><a href="reference/modelsummary.html">modelsummary()</a></code> using functions from <code>gt</code> or <code>kableExtra</code> package.</p>
-<p>For example, to use red text in the first column of an HTML table created by the <code>gt</code> package, we type:</p>
-<div class="sourceCode" id="cb9"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'gt'</span>) <span class="kw">%&gt;%</span>
-         <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="st">'red'</span>), <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="fl">1</span>))</pre></div>
-<p>To use red text in the first column of a LaTeX table created by the <code>kableExtra</code> package, we type:</p>
-<div class="sourceCode" id="cb10"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'latex'</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/column_spec.html">column_spec</a></span>(<span class="fl">1</span>, <span class="kw">bold</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">"red"</span>)</pre></div>
-<p>Note that compiling this LaTeX table requires loading the <code>booktabs</code> and <code>xcolor</code> packages in the preamble of your LaTeX or Rmarkdown document.</p>
-<p>Users are encouraged to read the documentation of both packages to see which syntax they prefer.</p>
-<ul>
-<li><a href="https://gt.rstudio.com"><code>gt</code> documentation</a></li>
-<li><a href="http://haozhu233.github.io/kableExtra/"><code>kableExtra</code> documentation</a></li>
-</ul>
-<p><code>gt</code> and <code>kableExtra</code> each have strengths and weaknesses. <code>gt</code>’s HTML output allows seamless integration with the RStudio IDE, but <code>kableExtra</code>’s LaTeX (and PDF) output is far more mature. Therefore, the default package to create HTML output in Rmarkdown is <code>gt</code>, and the default package to create PDF and LaTeX output in Rmarkdown is <code>kableExtra</code>.</p>
-<p>You can override these defaults by setting options:</p>
-<div class="sourceCode" id="cb11"><pre class="r"><span class="co"># gt LaTeX table</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_latex</span> <span class="kw">=</span> <span class="st">'gt'</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'latex'</span>)
-
-<span class="co"># kableExtra HTML table</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_html</span> <span class="kw">=</span> <span class="st">'kableExtra'</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'html'</span>)</pre></div>
-<p><em>Warning</em>: When users supply a file name to the <code>output</code> argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from <code>gt</code> or <code>kableExtra</code>. To save a customized table, you should apply all the customization functions you need before saving it using <code><a href="https://rdrr.io/pkg/gt/man/gtsave.html">gt::gtsave</a></code>, <code><a href="https://rdrr.io/pkg/kableExtra/man/save_kable.html">kableExtra::save_kable</a></code>, or another appropriate helper function.</p>
-</div>
-<div id="dynamic-documents-rmarkdown-and-knitr" class="section level2">
-<h2 class="hasAnchor">
-<a href="#dynamic-documents-rmarkdown-and-knitr" class="anchor"></a>Dynamic documents: <code>Rmarkdown</code> and <code>knitr</code>
-</h2>
-<p>You can use <code>modelsummary</code> to insert tables into dynamic documents with <code>knitr</code> or <code>Rmarkdown</code>. Here is a working example Rmarkdown file which can be converted to HTML, PDF, or RTF using the <code>knitr</code> package.</p>
-<ul>
-<li>
-<a href="https://github.com/vincentarelbundock/modelsummary/blob/master/examples/modelsummary_example.Rmd">modelsummary_example.Rmd</a>
-<ul>
-<li><a href="https://github.com/vincentarelbundock/modelsummary/blob/master/examples/modelsummary_example.pdf">modelsummary_example.pdf</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary/blob/master/examples/modelsummary_example.html">modelsummary_example.html</a></li>
-<li><a href="https://github.com/vincentarelbundock/modelsummary/blob/master/examples/modelsummary_example.rtf">modelsummary_example.rtf</a></li>
-</ul>
-</li>
-</ul>
-<p>Open the <code>.Rmd</code> file in RStudio and click the “Knit” button. Note that for PDF output, you must include the <code>booktabs</code> package in your header (see the example file above).</p>
-</div>
-</div>
-<div id="table-content" class="section level1">
+<div id="alternative-packages" class="section level1">
 <h1 class="hasAnchor">
-<a href="#table-content" class="anchor"></a>Table content</h1>
-<div id="uncertainty-estimates-se-t-p-ci" class="section level2">
-<h2 class="hasAnchor">
-<a href="#uncertainty-estimates-se-t-p-ci" class="anchor"></a>Uncertainty estimates: SE, t, p, CI</h2>
-<p>By default, <code>modelsummary</code> prints an uncertainty estimate in parentheses below the corresponding coefficient estimate. The value of this estimate is determined by the <code>statistic</code> argument.</p>
-<p><code>statistic</code> must be a string which equal to <code>conf.int</code> or to one of the columns produced by the <code><a href="https://rdrr.io/pkg/broom/man/reexports.html">broom::tidy</a></code> function. When using <code>conf.int</code>, users can specify a confidence level with the <code>conf_level</code> argument.</p>
-<div class="sourceCode" id="cb12"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'std.error'</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'p.value'</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'statistic'</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'conf.int'</span>, <span class="kw">conf_level</span> <span class="kw">=</span> <span class="fl">.99</span>)</pre></div>
-<p>You can display the uncertainty estimate next to the coefficient instead of below it:</p>
-<div class="sourceCode" id="cb13"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">statistic_vertical</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></div>
-<p>You can override the uncertainty estimates in a number of ways. First, you can specify a function that produces variance-covariance matrices:</p>
-<div class="sourceCode" id="cb14"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sandwich</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">statistic_override</span> <span class="kw">=</span> <span class="no">vcovHC</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'p.value'</span>)</pre></div>
-<p>You can supply a list of functions of the same length as your model list:</p>
-<div class="sourceCode" id="cb15"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>,
-   <span class="kw">statistic_override</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">vcov</span>, <span class="no">vcovHC</span>, <span class="no">vcovHAC</span>, <span class="no">vcovHC</span>, <span class="no">vcov</span>))</pre></div>
-<p>You can supply a list of named variance-covariance matrices:</p>
-<div class="sourceCode" id="cb16"><pre class="r"><span class="no">vcov_matrices</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">models</span>, <span class="no">vcovHC</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">statistic_override</span> <span class="kw">=</span> <span class="no">vcov_matrices</span>)</pre></div>
-<p>You can supply a list of named vectors:</p>
-<div class="sourceCode" id="cb17"><pre class="r"><span class="no">custom_stats</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">`OLS 1`</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">`(Intercept)`</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="kw">Crime_prop</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">Infants</span> <span class="kw">=</span> <span class="fl">4</span>),
-                     <span class="kw">`NBin 1`</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">`(Intercept)`</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">Crime_prop</span> <span class="kw">=</span> -<span class="fl">5</span>, <span class="kw">Donations</span> <span class="kw">=</span> <span class="fl">3</span>),
-                     <span class="kw">`OLS 2`</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">`(Intercept)`</span> <span class="kw">=</span> <span class="fl">7</span>, <span class="kw">Crime_prop</span> <span class="kw">=</span> -<span class="fl">6</span>, <span class="kw">Infants</span> <span class="kw">=</span> <span class="fl">9</span>),
-                     <span class="kw">`NBin 2`</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">`(Intercept)`</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">Crime_prop</span> <span class="kw">=</span> -<span class="fl">7</span>, <span class="kw">Donations</span> <span class="kw">=</span> -<span class="fl">9</span>),
-                     <span class="kw">`Logit 1`</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">`(Intercept)`</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">Crime_prop</span> <span class="kw">=</span> -<span class="fl">5</span>, <span class="kw">Infants</span> <span class="kw">=</span> -<span class="fl">2</span>))
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">statistic_override</span> <span class="kw">=</span> <span class="no">custom_stats</span>)</pre></div>
-<p>You can also display several different uncertainty estimates below the coefficient estimates. For example,</p>
-<div class="sourceCode" id="cb18"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'std.error'</span>, <span class="st">'p.value'</span>, <span class="st">'conf.int'</span>))</pre></div>
-<p>Will produce something like this:</p>
-<p><img src="https://imgur.com/yNLr5Nt.png" width="30%"></p>
-</div>
-<div id="titles" class="section level2">
-<h2 class="hasAnchor">
-<a href="#titles" class="anchor"></a>Titles</h2>
-<p>You can add a title to your table as follows:</p>
-<div class="sourceCode" id="cb19"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">title</span> <span class="kw">=</span> <span class="st">'This is a title for my table.'</span>)</pre></div>
-</div>
-<div id="notes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#notes" class="anchor"></a>Notes</h2>
-<p>Add notes to the bottom of your table:</p>
-<div class="sourceCode" id="cb20"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>,
-   <span class="kw">notes</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">'Text of the first note.'</span>,
-                <span class="st">'Text of the second note.'</span>))</pre></div>
-</div>
-<div id="rename-reorder-and-subset" class="section level2">
-<h2 class="hasAnchor">
-<a href="#rename-reorder-and-subset" class="anchor"></a>Rename, reorder, and subset</h2>
-<p><code>modelsummary</code> offers a powerful and innovative mechanism to rename, reorder, and subset coefficients and goodness-of-fit statistics.</p>
-<div id="coefficient-estimates" class="section level3">
-<h3 class="hasAnchor">
-<a href="#coefficient-estimates" class="anchor"></a>Coefficient estimates</h3>
-<p>The <code>coef_map</code> argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the “clean” variable name. Names of this vector correspond to the “raw” variable name. The table will be sorted in the order in which terms are presented in <code>coef_map</code>. Coefficients which are <em>not</em> included in <code>coef_map</code> will be excluded from the table.</p>
-<div class="sourceCode" id="cb21"><pre class="r"><span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Crime_prop'</span> <span class="kw">=</span> <span class="st">'Crime / Population'</span>,
-        <span class="st">'Donations'</span> <span class="kw">=</span> <span class="st">'Donations'</span>,
-        <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>)</pre></div>
-<p>An alternative mechanism to subset coefficients is to use the <code>coef_omit</code> argument. This string is a regular expression which will be fed to <code><a href="https://stringr.tidyverse.org/reference/str_detect.html">stringr::str_detect</a></code> to detect the variable names which should be excluded from the table.</p>
-<div class="sourceCode" id="cb22"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">coef_omit</span> <span class="kw">=</span> <span class="st">'Intercept|Donation'</span>)</pre></div>
-</div>
-<div id="goodness-of-fit-and-other-statistics" class="section level3">
-<h3 class="hasAnchor">
-<a href="#goodness-of-fit-and-other-statistics" class="anchor"></a>Goodness-of-fit and other statistics</h3>
-<p><code>gof_omit</code> is a regular expression which will be fed to <code><a href="https://stringr.tidyverse.org/reference/str_detect.html">stringr::str_detect</a></code> to detect the names of the statistics which should be excluded from the table.</p>
-<div class="sourceCode" id="cb23"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'DF|Deviance'</span>)</pre></div>
-<p>A more powerful mechanism is to supply a <code>data.frame</code> (or <code>tibble</code>) through the <code>gof_map</code> argument. This data.frame must include 4 columns:</p>
-<ol>
-<li>
-<code>raw</code>: a string with the name of a column produced by <code><a href="https://rdrr.io/pkg/broom/man/reexports.html">broom::glance(model)</a></code>.</li>
-<li>
-<code>clean</code>: a string with the “clean” name of the statistic you want to appear in your final table.</li>
-<li>
-<code>fmt</code>: a string which will be used to round/format the string in question (e.g., <code>"%.3f"</code>). This follows the same standards as the <code>fmt</code> argument in <code><a href="reference/modelsummary.html">?modelsummary</a></code>.</li>
-<li>
-<code>omit</code>: <code>TRUE</code> if you want the statistic to be omitted from your final table.</li>
-</ol>
-<p>You can see an example of a valid data frame by typing <code><a href="reference/gof_map.html">modelsummary::gof_map</a></code>. This is the default data.frame that <code>modelsummary</code> uses to subset and reorder goodness-of-fit statistics. As you can see, <code>omit == TRUE</code> for quite a number of statistics. You can include setting <code>omit == FALSE</code>:</p>
-<div class="sourceCode" id="cb24"><pre class="r"><span class="no">gm</span> <span class="kw">&lt;-</span> <span class="kw pkg">modelsummary</span><span class="kw ns">::</span><span class="no"><a href="reference/gof_map.html">gof_map</a></span>
-<span class="no">gm</span>$<span class="no">omit</span> <span class="kw">&lt;-</span> <span class="fl">FALSE</span>
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">gof_map</span> <span class="kw">=</span> <span class="no">gm</span>)</pre></div>
-<p>The goodness-of-fit statistics will be printed in the table in the same order as in the <code>gof_map</code> data.frame.</p>
-<p>Notice the subtle difference between <code>coef_map</code> and <code>gof_map</code>. On the one hand, <code>coef_map</code> works as a “white list”: any coefficient not explicitly entered will be omitted from the table. On the other, <code>gof_map</code> works as a “black list”: statistics need to be explicitly marked for omission.</p>
-</div>
-</div>
-<div id="stars-statistical-significance-markers" class="section level2">
-<h2 class="hasAnchor">
-<a href="#stars-statistical-significance-markers" class="anchor"></a>Stars: Statistical significance markers</h2>
-<p>Some people like to add “stars” to their model summary tables to mark statistical significance. The <code>stars</code> argument can take three types of input:</p>
-<ol>
-<li>
-<code>NULL</code> omits any stars or special marks (default)</li>
-<li>
-<code>TRUE</code> uses these default values: `* p &lt; 0.1, ** p &lt; 0.05, *** p &lt; 0.01`</li>
-<li>Named numeric vector for custom stars.</li>
-</ol>
-<div class="sourceCode" id="cb25"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'+'</span> <span class="kw">=</span> <span class="fl">.1</span>, <span class="st">'*'</span> <span class="kw">=</span> <span class="fl">.01</span>))</pre></div>
-<p>Whenever <code>stars != NULL</code>, <code>modelsummary</code> adds a note at the bottom of the table automatically. If you would like to omit this note, just use the <code>stars_note</code> argument:</p>
-<div class="sourceCode" id="cb26"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">stars_note</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></div>
-<p>If you want to create your own stars description, you can add custom notes with the <a href="https://github.com/vincentarelbundock/modelsummary#notes"><code>notes</code></a> argument.</p>
-</div>
-<div id="digits-rounding-exponential-notation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#digits-rounding-exponential-notation" class="anchor"></a>Digits, rounding, exponential notation</h2>
-<p>The <code>fmt</code> argument defines how numeric values are rounded and presented in the table. This argument follows the <code>sprintf</code> C-library standard. For example,</p>
-<ul>
-<li>
-<code>%.3f</code> will keep 3 digits after the decimal point, including trailing zeros.</li>
-<li>
-<code>%.5f</code> will keep 5 digits after the decimal point, including trailing zeros.</li>
-<li>Changing the <code>f</code> for an <code>e</code> will use the exponential decimal representation.</li>
-</ul>
-<p>Most users will just modify the <code>3</code> in <code>%.3f</code>, but this is a very powerful system, and all users are encouraged to read the details: <code><a href="https://rdrr.io/r/base/sprintf.html">?sprintf</a></code></p>
-<div class="sourceCode" id="cb27"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">fmt</span> <span class="kw">=</span> <span class="st">'%.7f'</span>)</pre></div>
-</div>
-<div id="add-rows-manually" class="section level2">
-<h2 class="hasAnchor">
-<a href="#add-rows-manually" class="anchor"></a>Add rows manually</h2>
-<p>Use the <code>add_rows</code> argument to add rows manually to the bottom of the table.</p>
-<div class="sourceCode" id="cb28"><pre class="r"><span class="no">row1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Custom row 1'</span>, <span class="st">'a'</span>, <span class="st">'b'</span>, <span class="st">'c'</span>, <span class="st">'d'</span>, <span class="st">'e'</span>)
-<span class="no">row2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Custom row 2'</span>, <span class="fl">5</span>:<span class="fl">1</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">add_rows</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">row1</span>, <span class="no">row2</span>))</pre></div>
-<p>Use the <code>add_rows</code> argument to specify where the custom rows should be displayed in the bottom panel. For example, this prints custom rows after the coefficients, but at first position in the goodness of fit measures:</p>
-<div class="sourceCode" id="cb29"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">add_rows</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">row1</span>, <span class="no">row2</span>), <span class="kw">add_rows_location</span> <span class="kw">=</span> <span class="fl">0</span>)</pre></div>
-<p>This prints custom rows after the 2nd GOF statistic:</p>
-<div class="sourceCode" id="cb30"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">add_rows</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">row1</span>, <span class="no">row2</span>), <span class="kw">add_rows_location</span> <span class="kw">=</span> <span class="fl">2</span>)</pre></div>
-</div>
-<div id="extra-tidy-arguments-eg-exponentiated-coefficients" class="section level2">
-<h2 class="hasAnchor">
-<a href="#extra-tidy-arguments-eg-exponentiated-coefficients" class="anchor"></a>Extra tidy arguments (e.g., exponentiated coefficients)</h2>
-<p>Users can pass any additional argument they want to the <code>tidy</code> method which is used to extract estimates from a model. For example, in logitistic or Cox proportional hazard models, many users want to exponentiate coefficients to faciliate interpretation. The <code>tidy</code> functions supplied by the <code>broom</code> package allow users to set <code>exponentiate=TRUE</code> to achieve this. In <code>modelsummary</code>, users can use the same argument:</p>
-<div class="sourceCode" id="cb31"><pre class="r"><span class="no">mod_logit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">am</span> ~ <span class="no">mpg</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">binomial</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">mod_logit</span>, <span class="kw">exponentiate</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
-<p>Any argument supported by <code>tidy</code> is thus supported by <code>modelsummary</code>.</p>
-<p>Warning: at the moment (2020-05-05), <code><a href="https://rdrr.io/pkg/broom/man/reexports.html">broom::tidy</a></code> still reports <code>std.error</code> on the original scale. See this <a href="https://github.com/tidymodels/broom/issues/422">discussion on the <code>broom</code> GitHub page.</a></p>
-</div>
-</div>
-<div id="table-look-html" class="section level1">
-<h1 class="hasAnchor">
-<a href="#table-look-html" class="anchor"></a>Table look: HTML</h1>
-<div id="fonts-colors-and-styles-html" class="section level2">
-<h2 class="hasAnchor">
-<a href="#fonts-colors-and-styles-html" class="anchor"></a>Fonts, colors, and styles: HTML</h2>
-<p>Thanks to <code>gt</code>, <code>modelsummary</code> accepts markdown indications for emphasis and more:</p>
-<div class="sourceCode" id="cb32"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>,
-   <span class="kw">title</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span>(<span class="st">'This is a **bolded series of words.**'</span>),
-   <span class="kw">notes</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span>(<span class="st">'And an *emphasized note*.'</span>)))</pre></div>
-<p>We can modify the size of the text with <code>gt</code>’s <code>tab_style</code> function:</p>
-<div class="sourceCode" id="cb33"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="kw">size</span> <span class="kw">=</span> <span class="st">'x-large'</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">1</span>))</pre></div>
-<p>We can also color columns and cells, and present values in bold or italics:</p>
-<div class="sourceCode" id="cb34"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_fill.html">cell_fill</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">"lightcyan"</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>))) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_fill.html">cell_fill</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">"#F9E3D6"</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`NBin 2`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">6</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="kw">weight</span> <span class="kw">=</span> <span class="st">"bold"</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>))) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="st">"italic"</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`NBin 2`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">6</span>))</pre></div>
-<p><img src="https://user-images.githubusercontent.com/987057/82732616-3c804980-9cdc-11ea-8968-02e45d53adab.png" width="40%"></p>
-</div>
-<div id="footnotes-html" class="section level2">
-<h2 class="hasAnchor">
-<a href="#footnotes-html" class="anchor"></a>Footnotes: HTML</h2>
-<p>Add numbered footnotes to a column, a row, or a cell:</p>
-<div class="sourceCode" id="cb35"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(
-        <span class="kw">footnote</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span>(<span class="st">"This is a **very** important model, so we are pointing it out in a column-specific footnote."</span>),
-        <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_column_labels.html">cells_column_labels</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>))) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(
-        <span class="kw">footnote</span> <span class="kw">=</span> <span class="st">"This is the variable of interest."</span>,
-        <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">3</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(
-        <span class="kw">footnote</span> <span class="kw">=</span> <span class="st">"Most important model + most important variable = most important estimate."</span>,
-        <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">3</span>))</pre></div>
-</div>
-<div id="column-groups-html" class="section level2">
-<h2 class="hasAnchor">
-<a href="#column-groups-html" class="anchor"></a>Column groups: HTML</h2>
-<p>Create spanning labels to group models (columns):</p>
-<div class="sourceCode" id="cb36"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Literacy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 1'</span>, <span class="st">'NBin 1'</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Desertion'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 2'</span>, <span class="st">'NBin 2'</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Clergy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="st">'Logit 1'</span>)</pre></div>
-</div>
-<div id="images" class="section level2">
-<h2 class="hasAnchor">
-<a href="#images" class="anchor"></a>Images</h2>
-<p>Insert images in your tables using the <code><a href="https://rdrr.io/pkg/gt/man/text_transform.html">gt::text_transform</a></code> and <code><a href="https://rdrr.io/pkg/gt/man/local_image.html">gt::local_image</a></code> functions.</p>
-<div class="sourceCode" id="cb37"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/text_transform.html">text_transform</a></span>(
-        <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">1</span>),
-        <span class="kw">fn</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) {<span class="fu"><a href="https://rdrr.io/pkg/gt/man/web_image.html">web_image</a></span>(<span class="kw">url</span> <span class="kw">=</span> <span class="st">"https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png"</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="fl">120</span>)}
-    )</pre></div>
-</div>
-<div id="complex-example-html" class="section level2">
-<h2 class="hasAnchor">
-<a href="#complex-example-html" class="anchor"></a>Complex example: HTML</h2>
-<p>This is the code I used to generate the “complex” table posted at the top of this README.</p>
-<div class="sourceCode" id="cb38"><pre class="r"><span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Crime_prop'</span> <span class="kw">=</span> <span class="st">'Crime / Population'</span>,
-        <span class="st">'Donations'</span> <span class="kw">=</span> <span class="st">'Donations'</span>,
-        <span class="st">'Infants'</span> <span class="kw">=</span> <span class="st">'Infants'</span>,
-        <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>)
-
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>,
-   <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>,
-   <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-   <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">"Deviance"</span>,
-   <span class="kw">title</span> <span class="kw">=</span> <span class="st">'Summarizing 5 statistical models using the `modelsummary` package for `R`.'</span>,
-   <span class="kw">notes</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'First custom note to contain text.'</span>,
-             <span class="st">'Second custom note with different content.'</span>)) <span class="kw">%&gt;%</span>
-   <span class="co"># add spanning labels</span>
-   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Literacy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 1'</span>, <span class="st">'NBin 1'</span>)) <span class="kw">%&gt;%</span>
-   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Desertion'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 2'</span>, <span class="st">'NBin 2'</span>)) <span class="kw">%&gt;%</span>
-   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Clergy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="st">'Logit 1'</span>) <span class="kw">%&gt;%</span>
-   <span class="co"># footnotes</span>
-   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(
-       <span class="kw">footnote</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span>(<span class="st">"This is a **very** important model, so we are pointing it out in a column-specific footnote."</span>),
-       <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_column_labels.html">cells_column_labels</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>))) <span class="kw">%&gt;%</span>
-   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(                                                                                                                      <span class="kw">footnote</span> <span class="kw">=</span> <span class="st">"This is the variable of interest."</span>,                                                                                <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">rows</span> <span class="kw">=</span><span class="fl">5</span>)) <span class="kw">%&gt;%</span>                                                                                       <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(
-       <span class="kw">footnote</span> <span class="kw">=</span> <span class="st">"Most important model + most important variable = most important estimate."</span>,
-       <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">5</span>)) <span class="kw">%&gt;%</span>
-   <span class="co"># color and bold</span>
-   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(
-       <span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">"red"</span>, <span class="kw">weight</span> <span class="kw">=</span> <span class="st">"bold"</span>),
-       <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">5</span>))</pre></div>
-<p><img src="https://user-images.githubusercontent.com/987057/82732359-c0d1cd00-9cda-11ea-8924-ff599cb29273.png" width="40%"></p>
-</div>
-</div>
-<div id="table-look-latex" class="section level1">
-<h1 class="hasAnchor">
-<a href="#table-look-latex" class="anchor"></a>Table look: LaTeX</h1>
-<p>The <code>gt</code> LaTeX render engine is still immature. Until it improves, I strongly recommend that users turn to <code>kableExtra</code> to produce LaTeX tables. This package offers robust functions that allow a lot of customization. A simple LaTeX table can be produced as follows:</p>
-<div class="sourceCode" id="cb39"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'latex'</span>)</pre></div>
-<p>We can use functions from the <code>kableExtra</code> package to customize this table, with bold and colored cells, column spans, and more.</p>
-<div id="fonts-colors-and-styles-latex" class="section level2">
-<h2 class="hasAnchor">
-<a href="#fonts-colors-and-styles-latex" class="anchor"></a>Fonts, colors and styles: LaTeX</h2>
-<p>The <code>row_spec</code> and <code>column_spec</code> allow users to change the styling of their tables. For instance, this code creates a table where the first column is in bold blue text on pink background:</p>
-<div class="sourceCode" id="cb40"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'latex'</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span>(<span class="fl">1</span>, <span class="kw">bold</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">'blue'</span>, <span class="kw">background</span> <span class="kw">=</span> <span class="st">'pink'</span>)</pre></div>
-</div>
-<div id="column-groups-latex" class="section level2">
-<h2 class="hasAnchor">
-<a href="#column-groups-latex" class="anchor"></a>Column groups: LaTeX</h2>
-<p>You can define column group labels using <code>kableExtra</code>’s <code>add_header_above</code> function:</p>
-<pre><code>msummary(models, output = 'latex') %&gt;%
-    add_header_above(c(" " = 1, "Literacy" = 2, "Desertion" = 2, 'Clergy = 1))</code></pre>
-</div>
-<div id="complex-example-latex" class="section level2">
-<h2 class="hasAnchor">
-<a href="#complex-example-latex" class="anchor"></a>Complex example: LaTeX</h2>
-<div class="sourceCode" id="cb42"><pre class="r">cm &lt;- c('Crime_prop' = 'Crime / Population',
-        'Donations' = 'Donations',
-        'Infants' = 'Infants',
-        '(Intercept)' = 'Constant')
-
-msummary(models,
-   coef_map = cm,
-   stars = TRUE,
-   gof_omit = "Deviance",
-   title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
-   notes = c('First custom note to contain text.',
-             'Second custom note with different content.')) %&gt;%
-   # add spanning labels
-   add_header_above(c(" " = 1, "Literacy" = 2, "Desertion" = 2, 'Clergy = 1)) %&gt;%
-   # color and bold
-   row_spec(3, bold = TRUE, color = 'blue', background = 'pink')</pre></div>
-<p><img src="https://user-images.githubusercontent.com/987057/82732382-e068f580-9cda-11ea-8924-331550f8f1e8.png" width="40%"></p>
-</div>
-</div>
-<div id="unsupported-models-and-custom-tidiers" class="section level1">
-<h1 class="hasAnchor">
-<a href="#unsupported-models-and-custom-tidiers" class="anchor"></a>Unsupported models and custom tidiers</h1>
-<p><code>modelsummary</code> relies on two functions from the <code>broom</code> package to extract model information: <code>tidy</code> and <code>glance</code>. If <code>broom</code> doesn’t support the type of model you are trying to summarize, <code>modelsummary</code> won’t support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.</p>
-<p>For example, models produced by the <code>MCMCglmm</code> package are not currently supported by <code>broom</code>. To add support, you simply need to create a <code>tidy</code> and a <code>glance</code> method:</p>
-<div class="sourceCode" id="cb43"><pre class="r"><span class="co"># load packages and data</span>
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">MCMCglmm</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">PlodiaPO</span>)
-
-<span class="co"># add custom functions to extract estimates (tidy) and goodness-of-fit (glance) information</span>
-<span class="no">tidy.MCMCglmm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">object</span>, <span class="no">...</span>) {
-    <span class="no">s</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">object</span>, <span class="no">...</span>)
-    <span class="no">ret</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">term</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="no">s</span>$<span class="no">solutions</span>),
-                          <span class="kw">estimate</span> <span class="kw">=</span> <span class="no">s</span>$<span class="no">solutions</span>[, <span class="fl">1</span>],
-                          <span class="kw">conf.low</span> <span class="kw">=</span> <span class="no">s</span>$<span class="no">solutions</span>[, <span class="fl">2</span>],
-                          <span class="kw">conf.high</span> <span class="kw">=</span> <span class="no">s</span>$<span class="no">solutions</span>[, <span class="fl">3</span>])
-    <span class="no">ret</span>
-}
-<span class="no">glance.MCMCglmm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">object</span>, <span class="no">...</span>) {
-    <span class="no">ret</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">dic</span> <span class="kw">=</span> <span class="no">object</span>$<span class="no">DIC</span>,
-                          <span class="kw">n</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">object</span>$<span class="no">X</span>))
-    <span class="no">ret</span>
-}
-
-<span class="co"># estimate a simple model</span>
-<span class="no">model</span> <span class="kw">&lt;-</span> <span class="fu">MCMCglmm</span>(<span class="no">PO</span> ~ <span class="fl">1</span> + <span class="no">plate</span>, <span class="kw">random</span> <span class="kw">=</span> ~ <span class="no">FSfamily</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">PlodiaPO</span>, <span class="kw">verbose</span><span class="kw">=</span><span class="fl">FALSE</span>, <span class="kw">pr</span><span class="kw">=</span><span class="fl">TRUE</span>)
-
-<span class="co"># summarize the model</span>
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">model</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'conf.int'</span>)</pre></div>
-<p>Two important things to note. First, the methods are named <code>tidy.MCMCglmm</code> and <code>glance.MCMCglmm</code> because the model object I am trying to summarize is of class <code>MCMCglmm</code>. You can find the class of a model by running: <code><a href="https://rdrr.io/r/base/class.html">class(model)</a></code>.</p>
-<p>Second, in the example above, we used the <code>statistic = 'conf.int'</code> argument. This is because the <code>tidy</code> method produces <code>conf.low</code> and <code>conf.high</code> columns. In most cases, users will define <code>std.error</code> column in their custom <code>tidy</code> methods, so the <code>statistic</code> argument will need to be adjusted.</p>
-<p>If you create new <code>tidy</code> and <code>glance</code> methods, please consider contributing them to <code>broom</code> so that the rest of the community can benefit from your work: <a href="https://github.com/tidymodels/broom" class="uri">https://github.com/tidymodels/broom</a></p>
-<div id="pooled-multiple-imputation-results" class="section level2">
-<h2 class="hasAnchor">
-<a href="#pooled-multiple-imputation-results" class="anchor"></a>Pooled multiple imputation results</h2>
-<p><code>modelsummary</code> can pool and display analyses on several datasets imputed using the <code>mice</code> package. For example:</p>
-<div class="sourceCode" id="cb44"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mice</span>)
-
-<span class="co"># Create a new dataset with missing values</span>
-<span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
-<span class="no">tmp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)[, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Clergy'</span>, <span class="st">'Donations'</span>, <span class="st">'Literacy'</span>)]
-<span class="no">tmp</span>$<span class="no">Clergy</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">tmp</span>), <span class="fl">3</span>)] <span class="kw">&lt;-</span> <span class="fl">NA</span>
-<span class="no">tmp</span>$<span class="no">Donations</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">tmp</span>), <span class="fl">3</span>)] <span class="kw">&lt;-</span> <span class="fl">NA</span>
-<span class="no">tmp</span>$<span class="no">Literacy</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">tmp</span>), <span class="fl">3</span>)] <span class="kw">&lt;-</span> <span class="fl">NA</span>
-
-<span class="co"># Impute dataset 5 times</span>
-<span class="no">tmp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="http://stefvanbuuren.github.io/mice/reference/mice.html">mice</a></span>(<span class="no">tmp</span>, <span class="kw">m</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">printFlag</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">seed</span> <span class="kw">=</span> <span class="fl">1024</span>)
-
-<span class="co"># Estimate models</span>
-<span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
-<span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span>(<span class="no">tmp</span>, <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Donations</span>))
-<span class="no">mod</span><span class="kw">[[</span><span class="fl">2</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span>(<span class="no">tmp</span>, <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Donations</span> + <span class="no">Literacy</span>))
-
-<span class="co"># Summarize</span>
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">mod</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'t'</span>)
-<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">mod</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'ubar'</span>)</pre></div>
-<p>The <code>statistic</code> argument can take any column name in the tidy data frame obtained by:</p>
-<div class="sourceCode" id="cb45"><pre class="r"><span class="kw pkg">generics</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]])</pre></div>
-</div>
-</div>
-<div id="power-users" class="section level1">
-<h1 class="hasAnchor">
-<a href="#power-users" class="anchor"></a>Power users</h1>
-<p>The <code>gt</code> package allows a bunch more customization and styling. Power users can use <code>modelsummary</code>’s <code>extract</code> function to produce a tibble which can easily be fed into <code>gt</code>.</p>
-<div class="sourceCode" id="cb46"><pre class="r">&gt; modelsummary::extract(models)
-# A tibble: 21 x 8
-   group     term        statistic `OLS 1` `NBin 1` `OLS 2` `NBin 2` `Logit 1`
-   &lt;chr&gt;     &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;
- 1 estimates (Intercept) estimate  64.114  4.218    57.331  4.384    1.006
- 2 estimates (Intercept) statistic (5.247) (0.144)  (8.315) (0.233)  (0.710)
- 3 estimates Crime_prop  estimate  -0.002  -0.000   -0.002  -0.000   -0.000
- 4 estimates Crime_prop  statistic (0.001) (0.000)  (0.001) (0.000)  (0.000)
- 5 estimates Infants     estimate  -0.001  ""       0.000   ""       -0.000
- 6 estimates Infants     statistic (0.000) ""       (0.000) ""       (0.000)
- 7 estimates Donations   estimate  ""      -0.000   ""      -0.000   ""
- 8 estimates Donations   statistic ""      (0.000)  ""      (0.000)  ""
- 9 gof       R2          ""        0.237   ""       0.073   ""       ""
-10 gof       Adj.R2      ""        0.218   ""       0.051   ""       ""
-# … with 11 more rows</pre></div>
-</div>
-<div id="alternative-summary-table-packages-for-r" class="section level1">
-<h1 class="hasAnchor">
-<a href="#alternative-summary-table-packages-for-r" class="anchor"></a>Alternative summary table packages for R</h1>
-<p>There are several excellent alternative summary table packages for R:</p>
+<a href="#alternative-packages" class="anchor"></a>Alternative packages</h1>
+<p>There are several excellent alternatives to draw model summary tables in <code>R</code>:</p>
 <ul>
 <li><a href="https://cran.r-project.org/package=texreg">texreg</a></li>
 <li><a href="https://cran.r-project.org/package=huxtable">huxtable</a></li>
@@ -722,7 +286,7 @@ msummary(models,
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Vincent Arel-Bundock <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Vincent Arel-Bundock <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-2042-7063" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
 
