@@ -1,11 +1,13 @@
-# modelsummary: Beautiful and customizable model summaries in R.
+# modelsummary <img src="https://user-images.githubusercontent.com/987057/82849698-05ba5700-9ec7-11ea-93a0-67dcd9151848.png" align="right" alt="" width="120" />
 
 <!-- badges: start -->
 [![Travis-CI Build Status](https://travis-ci.org/vincentarelbundock/modelsummary.svg?branch=master)](https://travis-ci.org/vincentarelbundock/modelsummary)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/vincentarelbundock/modelsummary?branch=master&svg=true)](https://ci.appveyor.com/project/vincentarelbundock/modelsummary)
 <!-- badges: end -->
 
-The `modelsummary` package for `R` produces beautiful and customizable tables to summarize statistical models. Results from several models are presented side-by-side. Tables can be echoed to the `R` console or viewed in the `RStudio` Viewer. They can be saved to HTML, PDF, Text/Markdown, LaTeX, RTF (Microsoft Word-compatible), JPG, and PNG formats. Tables can be integrated in dynamic document pipelines like `Rmarkdown`, `knitr`, or `Sweave`.
+`modelsummary` creates beautiful and customizable tables to summarize statistical models in `R`. 
+
+Results from several models are presented side-by-side. Tables can be echoed to the `R` console or viewed in the `RStudio` Viewer. They can be saved to HTML, PDF, Text/Markdown, LaTeX, RTF (Microsoft Word-compatible), JPG, and PNG formats. Tables can be integrated in dynamic document pipelines like `Rmarkdown`, `knitr`, or `Sweave`.
 
 <center><img src="https://user-images.githubusercontent.com/987057/82732359-c0d1cd00-9cda-11ea-8924-ff599cb29273.png" width="40%"></center>
 
