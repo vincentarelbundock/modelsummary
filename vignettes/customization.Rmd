@@ -121,11 +121,11 @@ msummary(models, statistic_override = vcov_matrices)
 You can supply a list of named vectors:
 
 ```r
-custom_stats <- list(`OLS 1` = c(`(Intercept)` = 2, Crime_prop = 3, Infants = 4), 
-                     `NBin 1` = c(`(Intercept)` = 3, Crime_prop = -5, Donations = 3),
-                     `OLS 2` = c(`(Intercept)` = 7, Crime_prop = -6, Infants = 9), 
-                     `NBin 2` = c(`(Intercept)` = 4, Crime_prop = -7, Donations = -9),
-                     `Logit 1` = c(`(Intercept)` = 1, Crime_prop = -5, Infants = -2))
+custom_stats <- list(`OLS 1` = c(`(Intercept)` = 2, Literacy = 3, Clergy = 4), 
+                     `Poisson 1` = c(`(Intercept)` = 3, Literacy = -5, Commerce = 3),
+                     `OLS 2` = c(`(Intercept)` = 7, Literacy = -6, Clergy = 9), 
+                     `Poisson 2` = c(`(Intercept)` = 4, Literacy = -7, Commerce = -9),
+                     `OLS 3` = c(`(Intercept)` = 1, Literacy = -5, Clergy = -2))
 msummary(models, statistic_override = custom_stats)
 ```
 
@@ -165,9 +165,9 @@ msummary(models,
 
 The `coef_map` argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the "clean" variable name. Names of this vector correspond to the "raw" variable name. The table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.
 
-```r
-cm <- c('Crime_prop' = 'Crime / Population',
-        'Donations' = 'Donations',
+```{r}
+cm <- c('Literacy' = 'Literacy (%)',
+        'Commerce' = 'Patents per capita',
         '(Intercept)' = 'Constant')
 msummary(models, coef_map = cm)
 ```
@@ -183,7 +183,7 @@ msummary(models, coef_omit = 'Intercept|Donation')
 `gof_omit` is a regular expression which will be fed to `stringr::str_detect` to detect the names of the statistics which should be excluded from the table.
 
 ```r
-msummary(models, gof_omit = 'DF|Deviance')
+msummary(models, gof_omit = 'DF|Deviance|R2|AIC|BIC')
 ```
 
 A more powerful mechanism is to supply a `data.frame` (or `tibble`) through the `gof_map` argument. This data.frame must include 4 columns:
@@ -216,10 +216,10 @@ Some people like to add "stars" to their model summary tables to mark statistica
 ```r
 msummary(models)
 msummary(models, stars = TRUE) 
-msummary(models, stars = c('+' = .1, '*' = .01)) 
+msummary(models, stars = c('+' = .1, '&' = .01)) 
 ```
 
-Whenever `stars != NULL`, `modelsummary` adds a note at the bottom of the table automatically. If you would like to omit this note, just use the `stars_note` argument:
+Whenever `stars != FALSE`, `modelsummary` adds a note at the bottom of the table automatically. If you would like to omit this note, just use the `stars_note` argument:
 
 ```r
 msummary(models, stars = TRUE, stars_note = FALSE) 
@@ -288,8 +288,8 @@ Thanks to `gt`, `modelsummary` accepts markdown indications for emphasis and mor
 
 ```r
 msummary(models, 
-   title = md('This is a **bolded series of words.**'),
-   notes = list(md('And an *emphasized note*.')))
+         title = md('This is a **bolded series of words.**'),
+         notes = list(md('And an *emphasized note*.')))
 ```
 
 We can modify the size of the text with `gt`'s `tab_style` function: 
@@ -302,35 +302,16 @@ msummary(models) %>%
 
 We can also color columns and cells, and present values in bold or italics:
 
-```r
+```{r}
 msummary(models) %>%
     tab_style(style = cell_fill(color = "lightcyan"), 
               locations = cells_body(columns = vars(`OLS 1`))) %>% 
     tab_style(style = cell_fill(color = "#F9E3D6"),
-              locations = cells_body(columns = vars(`NBin 2`), rows = 2:6)) %>%
+              locations = cells_body(columns = vars(`Poisson 2`), rows = 2:6)) %>%
     tab_style(style = cell_text(weight = "bold"), 
               locations = cells_body(columns = vars(`OLS 1`))) %>%
     tab_style(style = cell_text(style = "italic"), 
-              locations = cells_body(columns = vars(`NBin 2`), rows = 2:6))
-```
-
-<img src="https://user-images.githubusercontent.com/987057/82732616-3c804980-9cdc-11ea-8968-02e45d53adab.png" width="40%">
-
-## Footnotes
-
-Add numbered footnotes to a column, a row, or a cell:
-
-```r
-msummary(models) %>% 
-    tab_footnote(                                                                                                                                                                                  
-        footnote = md("This is a **very** important model, so we are pointing it out in a column-specific footnote."),                        
-        locations = cells_column_labels(columns = vars(`OLS 1`))) %>%  
-    tab_footnote(                                                                                                                                                                               
-        footnote = "This is the variable of interest.",                                                                                           
-        locations = cells_body(columns = 1, rows = 3)) %>%                                                                                                                                      
-    tab_footnote(                                                                                                                      
-        footnote = "Most important model + most important variable = most important estimate.",
-        locations = cells_body(columns = vars(`OLS 1`), rows = 3))
+              locations = cells_body(columns = vars(`Poisson 2`), rows = 2:6))
 ```
 
 ## Column groups
@@ -339,26 +320,20 @@ Create spanning labels to group models (columns):
 
 ```r
 msummary(models) %>%
-    tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
-    tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
-    tab_spanner(label = 'Clergy', columns = 'Logit 1')
+    tab_spanner(label = 'Literacy', columns = c('OLS 1', 'Poisson 1')) %>%
+    tab_spanner(label = 'Desertion', columns = c('OLS 2', 'Poisson 2')) %>%
+    tab_spanner(label = 'Clergy', columns = 'OLS 3')
 ```
 
 ## Images
 
 Insert images in your tables using the `gt::text_transform` and `gt::local_image` functions.
 
-```r
-msummary(models) %>%
-    text_transform(
-        locations = cells_body(columns = 1, rows = 1),
-        fn = function(x) {web_image(url = "https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png", height = 120)}
-    )
-
-
+```{r}
 f <- function(x) web_image(url = "https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png", height = 80)
-msummary(models) %>% text_transform(locations = cells_body(rows = 1, columns = 2:6), fn = f) %>% gt::gtsave('~/Downloads/table_squirrel.png')
 
+msummary(models) %>%
+    text_transform(locations = cells_body(columns = 2:6, rows = 1), fn = f)
 ```
 
 ## Complex example
@@ -366,36 +341,28 @@ msummary(models) %>% text_transform(locations = cells_body(rows = 1, columns = 2
 This is the code I used to generate the "complex" table posted at the top of this README.
 
 ```r
-cm <- c('Crime_prop' = 'Crime / Population',
-        'Donations' = 'Donations',
+cm <- c('Literacy' = 'Literacy (%)',
+        'Clergy' = 'Priests/capita',
+        'Commerce' = 'Patents/capita', 
         'Infants' = 'Infants',
         '(Intercept)' = 'Constant')
 
 msummary(models,
-   coef_map = cm,
-   stars = TRUE,
-   gof_omit = "Deviance",
-   title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
-   notes = c('First custom note to contain text.',
-             'Second custom note with different content.')) %>%
-   # add spanning labels
-   tab_spanner(label = 'Literacy', columns = c('OLS 1', 'NBin 1')) %>%
-   tab_spanner(label = 'Desertion', columns = c('OLS 2', 'NBin 2')) %>%
-   tab_spanner(label = 'Clergy', columns = 'Logit 1') %>%
-   # footnotes
-   tab_footnote(
-       footnote = md("This is a **very** important model, so we are pointing it out in a column-specific footnote."),
-       locations = cells_column_labels(columns = vars(`OLS 1`))) %>%
-   tab_footnote(                                                                                                                      footnote = "This is the variable of interest.",                                                                                locations = cells_body(rows =5)) %>%                                                                                       tab_footnote(
-       footnote = "Most important model + most important variable = most important estimate.",
-       locations = cells_body(columns = vars(`OLS 1`), rows = 5)) %>%   
-   # color and bold
-   tab_style(
-       style = cell_text(color = "red", weight = "bold"),
-       locations = cells_body(columns = vars(`OLS 1`), rows = 5))
+         coef_map = cm,
+         stars = TRUE,
+         gof_omit = "Deviance",
+         title = 'modelsummary package for R',
+         notes = c('The most important parameter is printed in red.')) %>%
+    tab_spanner(label = 'Donations', columns = 2:3) %>%
+    tab_spanner(label = 'Crimes (persons)', columns = 4:5) %>%
+    tab_spanner(label = 'Crimes (property)', columns = 6) %>%
+    tab_footnote(footnote = md("Very **important** variable."),
+                 locations = cells_body(rows = 3, columns = 1)) %>%
+    tab_style(style = cell_text(color = 'red'),
+              locations = cells_body(rows = 3, columns = 4))
 ```
 
-<img src="https://user-images.githubusercontent.com/987057/82732359-c0d1cd00-9cda-11ea-8924-ff599cb29273.png" width="40%">
+<img src="https://user-images.githubusercontent.com/987057/82853752-90558300-9ed4-11ea-88af-12cf20cb367f.png" width="40%">
 
 # Appearance: `kableExtra`
 
@@ -424,7 +391,10 @@ You can define column group labels using `kableExtra`'s `add_header_above` funct
 
 ```
 msummary(models, output = 'latex') %>%
-    add_header_above(c(" " = 1, "Literacy" = 2, "Desertion" = 2, 'Clergy = 1))
+    add_header_above(c(" " = 1, 
+                       "Donations" = 2, 
+                       "Crimes (person)" = 2, 
+                       "Crimes (property)" = 1))
 ```
 
 ## Complex example
@@ -436,15 +406,16 @@ cm <- c('Crime_prop' = 'Crime / Population',
         '(Intercept)' = 'Constant')
 
 msummary(models,
-   coef_map = cm,
-   stars = TRUE,
-   gof_omit = "Deviance",
-   title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
-   notes = c('First custom note to contain text.',
-             'Second custom note with different content.')) %>%
-   # add spanning labels
-   add_header_above(c(" " = 1, "Literacy" = 2, "Desertion" = 2, 'Clergy = 1)) %>%
-   # color and bold
+    coef_map = cm,
+    stars = TRUE,
+    gof_omit = "Deviance",
+    title = 'modelsummary package for R',
+    notes = c('First custom note to contain text.',
+              'Second custom note with different content.')) %>%
+    add_header_above(c(" " = 1, 
+                       "Donations" = 2, 
+                       "Crimes (person)" = 2, 
+                       "Crimes (property)" = 1))
    row_spec(3, bold = TRUE, color = 'blue', background = 'pink')
 ```
 
