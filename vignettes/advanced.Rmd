@@ -1,5 +1,5 @@
 ---
-title: "advanced"
+title: "`modelsummary` for advanced users"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{advanced}
@@ -82,35 +82,36 @@ The `gt` package allows a bunch more customization and styling. Power users can 
 # … with 11 more rows
 ```
 
-# Pooled multiple imputation results
+# Multiple imputation results
 
-`modelsummary` can pool and display analyses on several datasets imputed using the `mice` package. For example:
+`modelsummary` can pool and display analyses on several datasets imputed using the `mice` or `Amelia` packages. In this example, we use convenience functions from the `mitools` package to format our data: 
 
-```r
-library(mice)
+```{r}
+library(modelsummary)
+library(mitools)
+suppressMessages(library(mice))
+suppressMessages(library(Amelia))
 
-# Create a new dataset with missing values
+# Download data from `Rdatasets`
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
-tmp <- read.csv(url)[, c('Clergy', 'Donations', 'Literacy')]
-tmp$Clergy[sample(1:nrow(tmp), 3)] <- NA
-tmp$Donations[sample(1:nrow(tmp), 3)] <- NA
-tmp$Literacy[sample(1:nrow(tmp), 3)] <- NA
+dat <- read.csv(url)[, c('Clergy', 'Commerce', 'Literacy')]
 
-# Impute dataset 5 times
-tmp <- mice(tmp, m = 5, printFlag = FALSE, seed = 1024)
+# Insert missing values
+dat$Clergy[sample(1:nrow(dat), 10)] <- NA
+dat$Commerce[sample(1:nrow(dat), 10)] <- NA
+dat$Literacy[sample(1:nrow(dat), 10)] <- NA
+
+# Impute with `mice` and `Amelia`
+dat_mice <- mice(dat, m = 5, printFlag = FALSE)
+dat_amelia <- amelia(dat, m = 5, p2s = 0)
+dat_amelia <- imputationList(dat_amelia$imputations)
 
 # Estimate models
 mod <- list()
-mod[[1]] <- with(tmp, lm(Clergy ~ Donations))
-mod[[2]] <- with(tmp, lm(Clergy ~ Donations + Literacy))
+mod[['Listwise deletion']] <- lm(Clergy ~ Literacy + Commerce, dat)
+mod[['Mice']] <- with(dat_mice, lm(Clergy ~ Literacy + Commerce))
+mod[['Amelia']] <- MIcombine(with(dat_amelia, lm(Clergy ~ Literacy + Commerce)))
 
 # Summarize
-msummary(mod, statistic = 't')
-msummary(mod, statistic = 'ubar')
-```
-
-The `statistic` argument can take any column name in the tidy data frame obtained by:
-
-```r
-generics::tidy(mod[[1]])
+msummary(mod)
 ```

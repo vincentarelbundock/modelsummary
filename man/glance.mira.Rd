@@ -21,6 +21,7 @@ Glance a multiple imputation `mice` pooled object
 If x contains `lm` models, R2 is included in the output
 }
 \examples{
+\dontrun{
 library(mice)
 data <- airquality
 data[4:10,3] <- rep(NA,7)
@@ -28,7 +29,12 @@ data[1:5,4] <- NA
 tmp <- mice(data,m=5, seed=500, printFlag = FALSE)
 mod <- with(tmp, lm(Ozone ~ Solar.R + Wind))
 glance(mod)
+}
 
+}
+\seealso{
+Other tidiers: 
+\code{\link{glance.MIresult}()}
 }
 \concept{tidiers}
 \keyword{internal}

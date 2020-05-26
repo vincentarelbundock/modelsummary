@@ -2,9 +2,11 @@
 
 * Out-of-the-box Rmarkdown compilation to HTML, PDF, RTF
 * kableExtra output format for LaTeX and Markdown
+* Support for `threeparttable`, colors, and many other LaTeX options
 * Deprecated arguments: filename, subtitle
 * Deprecated functions: clean_latex, knit_latex
 * `pkgdown` website and doc improvements
+* `mitools` tidiers
 * New tests
 
 # modelsummary 0.2.1
