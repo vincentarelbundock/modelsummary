@@ -9,7 +9,12 @@
 
 Results from several models are presented side-by-side. Tables can be echoed to the `R` console or viewed in the `RStudio` Viewer. They can be saved to HTML, PDF, Text/Markdown, LaTeX, RTF (Microsoft Word-compatible), JPG, and PNG formats. Tables can be integrated in dynamic document pipelines like `Rmarkdown`, `knitr`, or `Sweave`.
 
-<center><img src="https://user-images.githubusercontent.com/987057/82853752-90558300-9ed4-11ea-88af-12cf20cb367f.png" width="40%"></center>
+These two tables were created using `modelsummary` without any manual editing at all. The first is an HTML table. The second is a LaTeX table.
+
+<center>
+<img src="https://user-images.githubusercontent.com/987057/82853752-90558300-9ed4-11ea-88af-12cf20cb367f.png" width="40%">
+<img src="https://user-images.githubusercontent.com/987057/82855711-0a3c3b00-9eda-11ea-8a81-1eebfbb7cb73.png" width="40%">
+</center>
 
 # Contents
 
