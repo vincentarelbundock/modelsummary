@@ -27,6 +27,7 @@ test_that("kable markdown: complex table", {
             'drat' = 'Rear axle ratio',
             'disp' = 'Displacement',
             '(Intercept)' = 'Constant')
+
     tab <- msummary(models,
            coef_map = cm,
            stars = TRUE,
@@ -34,9 +35,12 @@ test_that("kable markdown: complex table", {
            title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
            notes = c('First custom note to contain text.',
                      'Second custom note with different content.'),
-           output = 'markdown')
+           output = 'markdown') %>%
+           as.character
 
-    expect_known_output(tab, 'known_output/kableExtra_markdown_complex.md')
+    # don't use expect_known: https://github.com/vincentarelbundock/modelsummary/issues/70
+    tab_known <- readLines('known_output/kableExtra_markdown_complex.md')
+    expect_equal(tab, tab_known)
 
 })
 
@@ -45,9 +49,12 @@ test_that("kable markdown: rouding + custom stars", {
     tab <- msummary(models,
            stars = c('+' = .1, '*' = .01),
            fmt = '%.8f',
-           output = 'markdown')
+           output = 'markdown') %>%
+           as.character
 
-    expect_known_output(tab, 'known_output/kableExtra_markdown_rounding_stars.md')
-    
+    # don't use expect_known: https://github.com/vincentarelbundock/modelsummary/issues/70
+    tab_known <- readLines('known_output/kableExtra_markdown_rounding_stars.md')
+    expect_equal(tab, tab_known)
+
 })
 

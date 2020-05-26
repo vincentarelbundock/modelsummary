@@ -72,7 +72,9 @@ build_kableExtra <- function(tab,
             mostattributes(out) <- attributes(x)
             return(out)
         }
-        writeLines(solve_enc(output), con = output, useBytes = TRUE)
+        filecon <- file(output)
+        writeLines(solve_enc(tab), con = filecon, useBytes = TRUE)
+        close(filecon)
     } 
 
 }
