@@ -13,6 +13,8 @@ extract_estimates <- function(model,
                               stars = FALSE,
                               ...) {
 
+
+
     # statistic override
     if (!is.null(statistic_override)) {
 
@@ -28,8 +30,10 @@ extract_estimates <- function(model,
                         function to diagnose the problem."))
         }
 
-        # extract estimates, but keep only columns that do not appear in so
+        # extract estimates
         est <- tidy(model, ...)
+
+        # keep only columns that do not appear in so
         est <- est[, c('term', base::setdiff(colnames(est), colnames(so)))]
         est <- suppressWarnings(dplyr::left_join(est, so, by = 'term'))
 
@@ -41,6 +45,15 @@ extract_estimates <- function(model,
         } else {
             est <- tidy(model, ...)
         }
+    }
+
+    # make sure extracted estimates are supported by a `tidy` method
+    msg <- "`modelsummary` relies on the `broom` package's `tidy` function to extract parameter estimates. Applying `tidy` to one of your models did not produce a dataframe with one column named 'term'. Please check if `broom` supports your kind of model. If it does not, visit the `modelsummary` website to learn how to create your own `tidy` function."
+    if (!inherits(est, 'data.frame')) {
+        stop(msg)
+    } 
+    if (!'term' %in% names(est)) {
+        stop(msg)
     }
 
     # round estimates
