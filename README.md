@@ -18,7 +18,7 @@ These two tables were created using `modelsummary` without any manual editing at
 
 # Contents
 
-+ [Why should I use `modelsummary`](#why-should-i-use-modelsummary)
++ [Why should I use `modelsummary`?](#why-should-i-use-modelsummary)
 + [Installation](#installation)
 + [Getting started](#getting-started)
 + [Saving and viewing: output formats](#saving-and-viewing-output-formats)
@@ -44,7 +44,7 @@ mod <- lm(y ~ x, dat)
 msummary(mod)
 ```
 
-The command above will automatically display a summary table in the `Rstudio` Viewer or in a web browser. A text-only version of the table can also be printed to the Console by typing:
+The command above will automatically display a summary table in the `Rstudio` Viewer or in a web browser. All you need is one word to change the output format. For example, a text-only version of the table can also be printed to the Console by typing:
 
 ```r
 msummary(mod, "markdown")
@@ -55,6 +55,8 @@ msummary(mod, "markdown")
 *Information*: The package offers many intuitive and powerful utilities to [customize the information](https://vincentarelbundock.github.io/modelsummary/articles/customization.html#information-with-modelsummary) reported in a summary table. You can rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to include; display various “robust” standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.
 
 *Appearance*: Thanks to the [`gt`](https://gt.rstudio.com) and [`kableExtra`](https://haozhu233.github.io/kableExtra/) packages, the appearance of summary tables is endlessly customizable. The [appearance customization page](https://vincentarelbundock.github.io/modelsummary/articles/customization.html) shows tables with colored cells, weird text, spanning column labels, row groups, titles, source notes, footnotes, significance stars, and more. This only scratches the surface of possibilities.
+
+*Supported models*: Thanks to the [`broom` package](https://broom.tidymodels.org/), `modelsummary` supports dozens of statistical models out-of-the-box. Other packages (e.g., [`broom.mixed`](https://cran.r-project.org/web/packages/broom.mixed/index.html) extend the capabilities further. Importantly, it is *super* easy to [add or customize your own models.](https://vincentarelbundock.github.io/modelsummary/articles/advanced.html)
 
 *Output formats*: `modelsummary` tables can be saved to HTML, LaTeX, Text/Markdown, RTF (Word-Compatible), JPG, or PNG formats. They can also be inserted seamlessly in Rmarkdown documents to produce [automated documents and reports in PDF, HTML, or Microsoft Word-compatible formats.](https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html)
 
