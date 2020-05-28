@@ -55,6 +55,61 @@ If you create new `tidy` and `glance` methods, please consider contributing them
 
 # Customizing existing models
 
+The set of available statistics for any given model is determined by the output of the `broom::glance` function. Sometimes, you want to include information that is not included in `glance` output. For instance, you may want to display whether certain regression models include "fixed effects". 
+
+One way to circumvent the limitations of glance is to create a custom method for your models. To illustrate, we load the `lfe` package, which provides the `felm` function to estimate linear regression models with fixed effects. Then, we simulate some data:
+
+```{r, message=FALSE}
+library(lfe)
+library(broom)
+library(modelsummary)
+
+x <- rnorm(1000)
+x2 <- rnorm(length(x))
+id <- factor(sample(20,length(x),replace=TRUE))
+firm <- factor(sample(13,length(x),replace=TRUE))
+id.eff <- rnorm(nlevels(id))
+firm.eff <- rnorm(nlevels(firm))
+u <- rnorm(length(x))
+y <- x + 0.5*x2 + id.eff[id] + firm.eff[firm] + u
+```
+
+The models produced by `felm` store the names of fixed effects in an object called "fe". For example, if `x` is your models, then `x$fe` will be a character vector with the names of all your fixed effects variables.
+
+We create a custom `glance` method that extracts this information and returns it alongside the regular `glance` output:
+
+```{r}
+glance.felm_custom <- function(x, ...) {
+    out <- broom:::glance.felm(x, ...)
+    for (fe in names(x$fe)) {
+        out[[paste('Fixed effects:', fe)]] <- 'X'
+    }
+    out
+}
+```
+
+Then, we create a function to fit our models. This function passes all its arguments forward to `felm` using ellipses (`...`). Then, it assigns a new class name. This tells `modelsummary` that it should extract fixed effects names:
+
+```{r}
+felm_custom <- function(...) {
+    out <- felm(...)
+    class(out) <- c('felm_custom', class(out))
+    out
+}
+```
+
+Finally, we fit models and print the table:
+
+```{r}
+mod <- list()
+mod[[1]] <- lm(y ~ x + x2)
+mod[[2]] <- felm_custom(y ~ x + x2 | id)
+mod[[3]] <- felm_custom(y ~ x + x2 | firm)
+mod[[4]] <- felm_custom(y ~ x + x2 | id + firm)
+
+msummary(mod)
+```
+
 # Raw data
 
 The `gt` package allows a bunch more customization and styling. Power users can use `modelsummary`'s `extract` function to produce a tibble which can easily be fed into `gt`.
