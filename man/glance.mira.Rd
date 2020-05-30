@@ -34,7 +34,9 @@ glance(mod)
 }
 \seealso{
 Other tidiers: 
-\code{\link{glance.MIresult}()}
+\code{\link{glance.MIresult}()},
+\code{\link{glance.fixest}()},
+\code{\link{tidy.fixest}()}
 }
 \concept{tidiers}
 \keyword{internal}

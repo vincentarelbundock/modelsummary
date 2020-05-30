@@ -102,3 +102,59 @@ glance.MIresult <- function(x, ...) {
                       'nobs' = NA)
     out
 }
+
+#' Tidy a `fixest` model
+#'
+#' @param x A model object produced by the `fixest::feols` or `fixest::feglm` functions
+#' @param ... extra arguments (not used)
+#' @return a dataframe with one row per term
+#' @export
+#' @keywords internal
+#' @family tidiers
+tidy.fixest <- function(x, conf.int = FALSE, conf.level = .95, ...) {
+    out <- x$coeftable
+    cols <- c('estimate', 'std.error', 'statistic', 'p.value')
+    colnames(out) <- cols
+    out$term <- row.names(out)
+    out <- out[, c('term', cols)]
+    if (conf.int) {
+        ci <- confint(x, level = conf.level)
+        colnames(ci) <- c('conf.low', 'conf.high')
+        ci$term <- row.names(ci)
+        out <- merge(out, ci)
+    }
+    row.names(out) <- NULL
+    out
+}
+
+#' Glance a `fixest` model
+#'
+#' @param x A model object produced by the `fixest::feols` or `fixest::feglm` functions
+#' @param ... extra arguments (not used)
+#' @return a dataframe with one row
+#' @export
+#' @keywords internal
+#' @family tidiers
+glance.fixest <- function(x, ...) {
+    out <- data.frame('nobs' = x$nobs)
+	if(x$method == "feols"){
+        out$logLik <- logLik(x)
+        out$adj.r.squared <- fixest::r2(x, 'ar2')
+	    if(!is.null(x$fixef_sizes) && is.null(x$onlyFixef)){
+            out$r.squared.within <- fixest::r2(x, 'wr2')
+	    }
+	} else {
+		bic_ll = formatBicLL(BIC(x), x$loglik)
+        out$logLik <- bic_ll$bic
+        out$logLik <- bic_ll$ll
+        out$adj.pseudo.r.squared <- bic_ll$pseudo_r2
+        out$squared.cor <- bic_ll$sq.cor
+	}
+	out$std.error.type <- attr(x$coeftable, "type")
+    if ("fixef_vars" %in% names(x)) {
+        for (fe in x$fixef_vars) {
+            out[[paste('FE:', fe)]] <- 'X'
+        }
+    }
+    out
+}
