@@ -19,6 +19,7 @@ sanity_checks(
   title = NULL,
   notes = NULL,
   add_rows = NULL,
+  estimate = NULL,
   output = NULL
 )
 }
@@ -77,6 +78,10 @@ use exponential notation. See `?sprintf` for more options.}
 
 \item{add_rows}{list of character vectors, each of length equal to the number
 of models + 1.}
+
+\item{estimate}{character name of the estimate to display. Must be a column
+name in the dataframe produced by `tidy(model)`. In the vast majority of
+cases, the default value of this argument should not be changed.}
 
 \item{output}{filename or object type (string)
 \itemize{

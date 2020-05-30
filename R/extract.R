@@ -25,6 +25,7 @@ extract <- function(models,
                     add_rows_location = NULL,
                     stars = FALSE,
                     fmt = '%.3f',
+                    estimate = 'estimate',
                     ...) {
 
 
@@ -56,6 +57,7 @@ extract <- function(models,
     for (i in seq_along(models)) {
         est[[i]] <- extract_estimates(model = models[[i]],
                                       fmt = fmt,
+                                      estimate = estimate,
                                       statistic = statistic,
                                       statistic_override = statistic_override[[i]],
                                       statistic_vertical = statistic_vertical,

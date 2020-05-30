@@ -11,6 +11,7 @@ extract_estimates <- function(model,
                               conf_level = .95,
                               fmt = '%.3f',
                               stars = FALSE,
+                              estimate = 'estimate',
                               ...) {
 
 
@@ -47,17 +48,24 @@ extract_estimates <- function(model,
         }
     }
 
-    # make sure extracted estimates are supported by a `tidy` method
-    msg <- "`modelsummary` relies on the `broom` package's `tidy` function to extract parameter estimates. Applying `tidy` to one of your models did not produce a dataframe with one column named 'term'. Please check if `broom` supports your kind of model. If it does not, visit the `modelsummary` website to learn how to create your own `tidy` function."
+    # make sure tidy() produced useable output
     if (!inherits(est, 'data.frame')) {
-        stop(msg)
+        stop('`tidy(model)` did not produce a data.frame. Are you sure your model type has a `tidy` function or that it is supported by the `broom` package?')
     } 
     if (!'term' %in% names(est)) {
+        stop('The dataframe produced by `tidy(model)` does not include a "term" column. Are you sure this type of model is supported by `broom`?')
+    }
+    if (!estimate %in% names(est)) {
+        msg <- paste0('The dataframe produced by `tidy(model)` must include a column called "', estimate, '". If it does not, you can select a different estimate to display by changing the `estimate` argument of the `msummary` function. For example, in `mgcv::gam` models, you may want to set `msummary(estimate="edf")`')
+        stop(msg)
+    }
+    if ((statistic != 'conf.int') & (!statistic %in% names(est))) {
+        msg <- paste0('The dataframe produced by `tidy(model)` must include a column called ', statistic, '. If it does not, you can select a different statistic to display by changing the `statistic` argument of the `msummary` function.')
         stop(msg)
     }
 
     # round estimates
-    est$estimate <- rounding(est$estimate, fmt)
+    est[[estimate]] <- rounding(est[[estimate]], fmt)
 
     # extract statistics
     for (i in seq_along(statistic)) {
@@ -104,11 +112,11 @@ extract_estimates <- function(model,
         for (n in names(stars)) {
             est$stars <- ifelse(est$p.value < stars[n], n, est$stars)
         }
-        est$estimate <- paste0(est$estimate, est$stars)
+        est[[estimate]] <- paste0(est[[estimate]], est$stars)
     }
 
     # subset columns
-    cols <- c('term', 'estimate', paste0('statistic', seq_along(statistic)))
+    cols <- c('term', estimate, paste0('statistic', seq_along(statistic)))
     est <- est[, cols]
 
     # reshape to vertical
@@ -118,8 +126,8 @@ extract_estimates <- function(model,
                dplyr::arrange(term, statistic)
     } else {
         est$statistic <- 'estimate'
-        est$value <- paste(est$estimate, est$statistic1)
-        est$estimate <- est$statistic1 <- NULL
+        est$value <- paste(est[[estimate]], est$statistic1)
+        est[[estimate]] <- est$statistic1 <- NULL
     }
 
     # output

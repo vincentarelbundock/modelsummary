@@ -21,6 +21,7 @@ msummary(
   add_rows_location = NULL,
   title = NULL,
   notes = NULL,
+  estimate = "estimate",
   filename = NULL,
   subtitle = NULL,
   ...
@@ -92,6 +93,10 @@ this integer.}
 \item{title}{string}
 
 \item{notes}{list of notes to append to the bottom of the table.}
+
+\item{estimate}{character name of the estimate to display. Must be a column
+name in the dataframe produced by `tidy(model)`. In the vast majority of
+cases, the default value of this argument should not be changed.}
 
 \item{filename}{This argument was deprecated in favor of the `output` argument.}
 

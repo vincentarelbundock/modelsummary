@@ -12,6 +12,7 @@ extract_estimates(
   conf_level = 0.95,
   fmt = "\%.3f",
   stars = FALSE,
+  estimate = "estimate",
   ...
 )
 }
@@ -48,6 +49,10 @@ use exponential notation. See `?sprintf` for more options.}
   \item TRUE: *=.1, **=.05, ***=.01
   \item Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
 }}
+
+\item{estimate}{character name of the estimate to display. Must be a column
+name in the dataframe produced by `tidy(model)`. In the vast majority of
+cases, the default value of this argument should not be changed.}
 
 \item{...}{all other arguments are passed to the `tidy` method used to
 extract estimates from the model. For example, this allows users to set

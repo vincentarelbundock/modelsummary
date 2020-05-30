@@ -17,11 +17,13 @@ sanity_checks <- function(models,
 						  title = NULL,
 						  notes = NULL,
 						  add_rows = NULL,
+                          estimate = NULL,
                           output = NULL) {
 
     # simple parameters
     checkmate::assert_character(title, len = 1, null.ok = TRUE)
     checkmate::assert_character(statistic, null.ok = FALSE)
+    checkmate::assert_character(estimate, null.ok = FALSE)
     checkmate::assert_character(coef_map, null.ok = TRUE)
     checkmate::assert_character(coef_omit, len = 1, null.ok = TRUE)
     checkmate::assert_character(gof_omit, len = 1, null.ok = TRUE)

@@ -55,6 +55,9 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' this integer.
 #' @param title string
 #' @param notes list of notes to append to the bottom of the table.
+#' @param estimate character name of the estimate to display. Must be a column
+#' name in the dataframe produced by `tidy(model)`. In the vast majority of
+#' cases, the default value of this argument should not be changed.
 #' @param filename This argument was deprecated in favor of the `output` argument.
 #' @param subtitle This argument is deprecated. Use `title` or the `tab_header`
 #' function from the `gt` package.
@@ -117,6 +120,7 @@ modelsummary <- function(models,
                          add_rows_location = NULL,
                          title = NULL,
                          notes = NULL,
+                         estimate = 'estimate',
                          filename = NULL,
                          subtitle = NULL,
                          ...) {
@@ -150,6 +154,7 @@ modelsummary <- function(models,
                   title = title,
                   notes = notes,
                   add_rows = add_rows,
+                  estimate = estimate,
                   output = output)
 
     # extract estimates and gof
@@ -166,6 +171,7 @@ modelsummary <- function(models,
                               add_rows = add_rows,
                               add_rows_location = add_rows_location,
                               fmt = fmt,
+                              estimate = estimate,
                               ...)
 
     # remove duplicate term labels

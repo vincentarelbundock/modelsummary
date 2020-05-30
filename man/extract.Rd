@@ -19,6 +19,7 @@ extract(
   add_rows_location = NULL,
   stars = FALSE,
   fmt = "\%.3f",
+  estimate = "estimate",
   ...
 )
 }
@@ -77,6 +78,10 @@ this integer.}
 string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
 the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
 use exponential notation. See `?sprintf` for more options.}
+
+\item{estimate}{character name of the estimate to display. Must be a column
+name in the dataframe produced by `tidy(model)`. In the vast majority of
+cases, the default value of this argument should not be changed.}
 
 \item{...}{all other arguments are passed to the `tidy` method used to
 extract estimates from the model. For example, this allows users to set
