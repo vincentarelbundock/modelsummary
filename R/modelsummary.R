@@ -10,7 +10,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param output filename or object type (string)
 #' \itemize{
 #'   \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg. 
-#'   \item Supported object types: "default", "gt", "html", "markdown", "latex".
+#'   \item Supported object types: "default", "html", "markdown", "latex", "gt", "huxtable".
 #'   \item When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.
 #' }
 #' @param fmt string which specifies how numeric values will be rounded. This
@@ -180,12 +180,15 @@ modelsummary <- function(models,
                        'markdown' = 'kableExtra',
                        'md' = 'kableExtra',
                        'txt' = 'kableExtra',
+                       'huxtable' = 'huxtable',
                        'html' = getOption('modelsummary_html', default = 'gt'),
                        'tex' = getOption('modelsummary_latex', default = 'kableExtra'),
                        'latex' = getOption('modelsummary_latex', default = 'kableExtra'))
 
     if (build_list[[output_type]] == 'gt') {
         build_table <- build_gt
+    } else if (build_list[[output_type]] == 'huxtable') {
+        build_table <- build_huxtable
     } else if (build_list[[output_type]] == 'kableExtra') {
         build_table <- build_kableExtra
     }

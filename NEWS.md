@@ -1,3 +1,7 @@
+# modelsummary 0.4.0.9000
+
+* hutable support
+
 # modelsummary 0.3.0
 
 * Out-of-the-box Rmarkdown compilation to HTML, PDF, RTF

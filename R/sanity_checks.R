@@ -72,17 +72,41 @@ sanity_notes <- function(notes) {
 #'
 #' @keywords internal
 sanity_output <- function(output) {
+
+    object_types <- c('default', 'gt', 'huxtable', 'markdown', 'html', 'latex')
+    extension_types <- c('htm', 'html', 'tex', 'jpg', 'png', 'md', 'txt', 'rtf')
+
     checkmate::assert_string(output)
-    cond1 <- output %in% c('default', 'gt', 'markdown', 'html', 'latex')
+
+    cond1 <- output %in% object_types
     if (isFALSE(cond1)) {
         extension <- tools::file_ext(output)
-        cond2 <- extension %in% c('htm', 'html', 'tex', 'jpg', 'png', 'md', 'txt', 'rtf')
+        cond2 <- extension %in% extension_types
         if (isTRUE(cond2)) {
             checkmate::assert_path_for_output(output)
         } else {
-            msg <- stop('The `output` argument must be "gt", "markdown", "html", "latex", or a valid file name with one of these extensions: ".html", ".tex", ".rtf", ".md", ".txt", ".jpg", ".png"')
+            msg <- paste0('The `output` argument must be ', 
+                          paste(object_types, collapse = ', '),
+                          ', or a valid file path with one of these extensions: ',
+                          paste(extension_types, collapse = ', '))
+            stop(msg)
         }
     }
+
+    # is huxtable installed?
+    if (output == 'huxtable') {
+        if (!requireNamespace('huxtable', quietly = TRUE)) {
+            stop("The `huxtable` package must be installed when `modelsummary(output='huxtable')`.")
+        }
+    }
+
+    # is flextable is installed?
+    if (output == 'flextable') {
+        if (!requireNamespace('flextable', quietly = TRUE)) {
+            stop("The `flextable` package must be installed when `modelsummary(output='flextable')`.")
+        }
+    }
+
 }
 
 #' sanity check
