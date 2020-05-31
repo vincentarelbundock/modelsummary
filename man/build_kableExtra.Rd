@@ -18,7 +18,7 @@ build_kableExtra(tab, title, stars, stars_note, notes, filename, output, ...)
 
 \item{stars_note}{passed by `modelsummary()`}
 
-\item{notes}{list of notes to append to the bottom of the table.}
+\item{notes}{list or vector of notes to append to the bottom of the table.}
 
 \item{filename}{This argument was deprecated in favor of the `output` argument.}
 

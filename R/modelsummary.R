@@ -54,7 +54,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' bottom of the table if this parameter is NULL, or after the position set by
 #' this integer.
 #' @param title string
-#' @param notes list of notes to append to the bottom of the table.
+#' @param notes list or vector of notes to append to the bottom of the table.
 #' @param estimate character name of the estimate to display. Must be a column
 #' name in the dataframe produced by `tidy(model)`. In the vast majority of
 #' cases, the default value of this argument should not be changed.
@@ -125,54 +125,30 @@ modelsummary <- function(models,
                          subtitle = NULL,
                          ...) {
 
-    # deprecation warnings
-    if (!is.null(filename)) {
-        stop('The `filename` argument is deprecated. Please use `output` instead.') 
-    }
-    if (!is.null(subtitle)) {
-        stop('The `subtitle` argument is deprecated. If you want to add a subtitle to an HTML table, you can use the `tab_header` function from the `gt` package.') 
-    }
-
-
-    # models must be a list of models or a single model
-    if (!'list' %in% class(models)) {
-        models <- list(models)
-    }
-
-    # check sanity of user input
-    sanity_checks(models,
-                  statistic = statistic,
-                  statistic_override = statistic_override,
-                  statistic_vertical = statistic_vertical,
-                  conf_level = conf_level,
-                  coef_map = coef_map,
-                  coef_omit = coef_omit,
-                  gof_map = gof_map,
-                  gof_omit = gof_omit,
-                  fmt = fmt,
-                  stars = stars,
-                  title = title,
-                  notes = notes,
-                  add_rows = add_rows,
-                  estimate = estimate,
-                  output = output)
+    # sanity check functions are hosted in R/sanity_checks.R
+    # more sanity checks are conducted in modelsummary::extract()
+    sanity_output(output)
+    sanity_title(title)
+    sanity_notes(notes)
+    sanity_filename(filename)
+    sanity_subtitle(subtitle)
 
     # extract estimates and gof
     dat <- modelsummary::extract(models,
-                              statistic = statistic,
-                              statistic_override = statistic_override,
-                              statistic_vertical = statistic_vertical,
-                              conf_level = conf_level,
-                              coef_map = coef_map,
-                              coef_omit = coef_omit,
-                              gof_map = gof_map,
-                              gof_omit = gof_omit,
-                              stars = stars,
-                              add_rows = add_rows,
-                              add_rows_location = add_rows_location,
-                              fmt = fmt,
-                              estimate = estimate,
-                              ...)
+                                 statistic = statistic,
+                                 statistic_override = statistic_override,
+                                 statistic_vertical = statistic_vertical,
+                                 conf_level = conf_level,
+                                 coef_map = coef_map,
+                                 coef_omit = coef_omit,
+                                 gof_map = gof_map,
+                                 gof_omit = gof_omit,
+                                 stars = stars,
+                                 add_rows = add_rows,
+                                 add_rows_location = add_rows_location,
+                                 fmt = fmt,
+                                 estimate = estimate,
+                                 ...)
 
     # remove duplicate term labels
     idx <- stringr::str_detect(dat$statistic, 'statistic\\d*$')

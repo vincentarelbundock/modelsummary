@@ -28,14 +28,22 @@ extract <- function(models,
                     estimate = 'estimate',
                     ...) {
 
-
-    # models must be a list of models or a single model 
-    # TODO: this is code repetition from modelsummary(), but we need it over there
-    # as well for sanity checks. This doesn't matter at all, but maybe there's
-    # a more elegant solution.
+    # models must be a list of models
     if (!'list' %in% class(models)) {
         models <- list(models)
     }
+
+    # sanity check functions are hosted in R/sanity_checks.R
+    sanity_statistic(statistic, statistic_override, statistic_vertical, models)
+    sanity_conf_level(conf_level)
+    sanity_coef_map(coef_map)
+    sanity_coef_omit(coef_omit)
+    sanity_gof_map(gof_map)
+    sanity_gof_omit(gof_omit)
+    sanity_add_rows(add_rows, add_rows_location, models)
+    sanity_stars(stars)
+    sanity_fmt(fmt)
+    sanity_estimate(estimate)
 
     # model names
     if (is.null(names(models))) {

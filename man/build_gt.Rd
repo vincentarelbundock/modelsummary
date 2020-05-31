@@ -21,7 +21,7 @@ function from the `gt` package.}
 
 \item{stars_note}{argument passed by `modelsummary()`}
 
-\item{notes}{list of notes to append to the bottom of the table.}
+\item{notes}{list or vector of notes to append to the bottom of the table.}
 
 \item{output}{filename or object type (string)
 \itemize{

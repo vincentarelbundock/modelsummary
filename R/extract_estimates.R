@@ -48,21 +48,8 @@ extract_estimates <- function(model,
         }
     }
 
-    # make sure tidy() produced useable output
-    if (!inherits(est, 'data.frame')) {
-        stop('`tidy(model)` did not produce a data.frame. Are you sure your model type has a `tidy` function or that it is supported by the `broom` package?')
-    } 
-    if (!'term' %in% names(est)) {
-        stop('The dataframe produced by `tidy(model)` does not include a "term" column. Are you sure this type of model is supported by `broom`?')
-    }
-    if (!estimate %in% names(est)) {
-        msg <- paste0('The dataframe produced by `tidy(model)` must include a column called "', estimate, '". If it does not, you can select a different estimate to display by changing the `estimate` argument of the `msummary` function. For example, in `mgcv::gam` models, you may want to set `msummary(estimate="edf")`')
-        stop(msg)
-    }
-    if ((statistic != 'conf.int') & (!statistic %in% names(est))) {
-        msg <- paste0('The dataframe produced by `tidy(model)` must include a column called ', statistic, '. If it does not, you can select a different statistic to display by changing the `statistic` argument of the `msummary` function.')
-        stop(msg)
-    }
+    # did tidy(model) produce a useable data.frame?
+    sanity_tidy_output(est, estimate, statistic, class(model)[1])
 
     # round estimates
     est[[estimate]] <- rounding(est[[estimate]], fmt)
