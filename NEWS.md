@@ -1,6 +1,9 @@
 # modelsummary 0.4.0.9000
 
 * hutable support
+* estimate argument
+* fixest tidiers
+* vignette improvements
 
 # modelsummary 0.3.0
 

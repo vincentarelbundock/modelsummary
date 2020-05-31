@@ -1,5 +1,5 @@
 ---
-title: "`modelsummary` for advanced users"
+title: "Adding and customizing statistical models"
 ---
 
 ```{r, include = FALSE}
@@ -7,10 +7,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-```
-
-```{r setup}
-library(modelsummary)
 ```
 
 # Adding new models
@@ -107,61 +103,5 @@ mod[[2]] <- felm_custom(y ~ x + x2 | id)
 mod[[3]] <- felm_custom(y ~ x + x2 | firm)
 mod[[4]] <- felm_custom(y ~ x + x2 | id + firm)
 
-msummary(mod)
-```
-
-# Raw data
-
-The `gt` package allows a bunch more customization and styling. Power users can use `modelsummary`'s `extract` function to produce a tibble which can easily be fed into `gt`.
-
-```r
-> modelsummary::extract(models)
-# A tibble: 21 x 8
-   group     term        statistic `OLS 1` `NBin 1` `OLS 2` `NBin 2` `Logit 1`
-   <chr>     <chr>       <chr>     <chr>   <chr>    <chr>   <chr>    <chr>
- 1 estimates (Intercept) estimate  64.114  4.218    57.331  4.384    1.006
- 2 estimates (Intercept) statistic (5.247) (0.144)  (8.315) (0.233)  (0.710)
- 3 estimates Crime_prop  estimate  -0.002  -0.000   -0.002  -0.000   -0.000
- 4 estimates Crime_prop  statistic (0.001) (0.000)  (0.001) (0.000)  (0.000)
- 5 estimates Infants     estimate  -0.001  ""       0.000   ""       -0.000
- 6 estimates Infants     statistic (0.000) ""       (0.000) ""       (0.000)
- 7 estimates Donations   estimate  ""      -0.000   ""      -0.000   ""
- 8 estimates Donations   statistic ""      (0.000)  ""      (0.000)  ""
- 9 gof       R2          ""        0.237   ""       0.073   ""       ""
-10 gof       Adj.R2      ""        0.218   ""       0.051   ""       ""
-# … with 11 more rows
-```
-
-# Multiple imputation results
-
-`modelsummary` can pool and display analyses on several datasets imputed using the `mice` or `Amelia` packages. In this example, we use convenience functions from the `mitools` package to format our data: 
-
-```{r}
-library(modelsummary)
-library(mitools)
-suppressMessages(library(mice))
-suppressMessages(library(Amelia))
-
-# Download data from `Rdatasets`
-url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
-dat <- read.csv(url)[, c('Clergy', 'Commerce', 'Literacy')]
-
-# Insert missing values
-dat$Clergy[sample(1:nrow(dat), 10)] <- NA
-dat$Commerce[sample(1:nrow(dat), 10)] <- NA
-dat$Literacy[sample(1:nrow(dat), 10)] <- NA
-
-# Impute with `mice` and `Amelia`
-dat_mice <- mice(dat, m = 5, printFlag = FALSE)
-dat_amelia <- amelia(dat, m = 5, p2s = 0)
-dat_amelia <- imputationList(dat_amelia$imputations)
-
-# Estimate models
-mod <- list()
-mod[['Listwise deletion']] <- lm(Clergy ~ Literacy + Commerce, dat)
-mod[['Mice']] <- with(dat_mice, lm(Clergy ~ Literacy + Commerce))
-mod[['Amelia']] <- MIcombine(with(dat_amelia, lm(Clergy ~ Literacy + Commerce)))
-
-# Summarize
 msummary(mod)
 ```

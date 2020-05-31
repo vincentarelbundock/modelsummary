@@ -22,12 +22,12 @@ These two tables were created using `modelsummary` without any manual editing at
 + [Installation](#installation)
 + [Getting started](#getting-started)
 + [Saving and viewing: output formats](#saving-and-viewing-output-formats)
-+ [Customizing tables](https://vincentarelbundock.github.io/modelsummary/articles/customization.html)
-    - [Information with `modelsummary`](https://vincentarelbundock.github.io/modelsummary/articles/customization.html#information-with-modelsummary)
-    - [Appearance with `gt`: HTML, RTF (Microsoft Word-compatible), JPG, PNG](https://vincentarelbundock.github.io/modelsummary/articles/customization.html#appearance-gt)
-    - [Appearance with `kableExtra`: HTML, LaTeX, PDF, Markdown/Text](https://vincentarelbundock.github.io/modelsummary/articles/customization.html#appearance-kableextra)
++ [Customizing the information in your table](https://vincentarelbundock.github.io/modelsummary/articles/content.html)
++ [Customizing the look of your table](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html)
 + [Dynamic documents with `Rmarkdown` and `knitr`](https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html)
-+ [Advanced options](https://vincentarelbundock.github.io/modelsummary/articles/advanced.html)
++ [Adding and customizing models](https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html)
++ [Multiple imputation](https://vincentarelbundock.github.io/modelsummary/articles/multiple_impuation.html)
++ [Raw data](https://vincentarelbundock.github.io/modelsummary/articles/extract.html)
 
 # Why should I use `modelsummary`?
 
