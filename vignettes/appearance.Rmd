@@ -9,52 +9,23 @@ knitr::opts_chunk$set(
 )
 ```
 
-Analysts often want to customize the appearance of their tables. To achieve this, `modelsummary` supports two table making packages: `gt` and `kableExtra`. These two packages open endless possibilities for customization. Each of them has different strengths and weaknesses. For instance, `gt` allows seamless integration with the RStudio IDE, but `kableExtra`'s LaTeX (and PDF) output is far more mature. The choice between `gt` and `kableExtra` should largely depend on the type of output format that users target:
+To customize the appearance of tables, `modelsummary` supports four of the most popular table-making packages: 
 
-* `gt` is best for HTML, RTF (MS Word-compatible), JPG, PNG
-    - [Documentation: https://gt.rstudio.com](https://gt.rstudio.com)
-* `kableExtra` is best for HTML, LaTeX, Markdown/Text, Rmarkdown PDF
-    - [Documentation: http://haozhu233.github.io/kableExtra](http://haozhu233.github.io/kableExtra)
+1. [`gt` documentation: https://gt.rstudio.com](https://gt.rstudio.com)
+2. [`kableExtra` documentation: http://haozhu233.github.io/kableExtra](http://haozhu233.github.io/kableExtra)
+3. [`huxtable` documentation: https://hughjonesd.github.io/huxtable/](https://hughjonesd.github.io/huxtable/)
+4. [`flextable` documentation: https://davidgohel.github.io/flextable/](https://davidgohel.github.io/flextable/)
 
-Users are encouraged to read the documentation of both packages to see which syntax they prefer. 
-
-`modelsummary` can produce tables in a large array of formats. This table shows which package is used by default to create tables in each output format:
-
-```{r, echo=FALSE}
-library(kableExtra)
-library(tibble)
-tmp <- tribble(~`Output format`, ~`Default package`,
-               "html"          , "gt",
-               "latex"         , "kableExtra",
-               "markdown"      , "kableExtra",
-               "filename.rtf"  , "gt",
-               "filename.tex"  , "kableExtra",
-               "filename.md"   , "kableExtra",
-               "filename.txt"  , "kableExtra",
-               "filename.png"  , "kableExtra",
-               "filename.jpg"  , "kableExtra",
-               "Rmarkdown PDF" , "kableExtra",
-               "Rmarkdown HTML", "gt")
-kable(tmp, format = 'markdown')
-```
-
-Both `gt` and `kableExtra` can produce LaTeX and HTML output. You can override the default settings by setting these global options:
-
-```r
-options(modelsummary_latex = 'gt')
-
-options(modelsummary_html = 'kableExtra')
-```
+Users are encouraged to visit these websites to determine which package suits their needs best. Each of them has different strengths and weaknesses. For instance, `gt` allows seamless integration with the RStudio IDE, but `kableExtra`'s LaTeX (and PDF) output is far more mature.
 
 # Post-processing
 
-The typical workflow to customize the look of a table is to begin by creating the table using `modelsummary`, and to *post-process* the table using the `%>%` pipe operator and functions from one of the supported table making packages: `gt`, `kableExtra`, `huxtable`, `flextable`. 
+To create customized tables, the analyst begins by calling `msummary(models)` to create a summary table. Then, she *post-processes* the table by applying functions from one of the packages listed above. It is often convenient to use the `%>%` operator to do this.
 
 To illustrate, we download data from the [Rdatasets repository](https://vincentarelbundock.github.io/Rdatasets') and we estimate 5 models:
 
 ```{r}
 library(modelsummary)
-library(gt)
 
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
 dat <- read.csv(url)
@@ -70,8 +41,23 @@ models[['OLS 3']] <- lm(Crime_prop ~ Literacy + Clergy, data = dat)
 Then, we call `msummary()`, and we use the `tab_spanner` function from `gt` to add a spanning title which identifies the dependent variable in the first two models:
 
 ```{r, eval=FALSE}
+library(gt)
 msummary(models) %>%
-    tab_spanner(label = 'Literacy', columns = c('OLS 1', 'Poisson 1'))
+    tab_spanner(label = 'Donations', columns = c('OLS 1', 'Poisson 1'))
+```
+
+By default, `modelsummary` produces an HTML table compatible with the `gt` package. If users want to use customization functions from a different package, they can simply specify the output format they need. For example, the `add_header_above` function from the `kableExtra` package adds column spanning labels:
+
+```{r, eval=FALSE}
+library(kableExtra)
+msummary(models, output = 'kableExtra') %>%
+    add_header_above(c(" " = 1, "Donations" = 2, " " = 3))
+```
+
+The default output format can be changed by setting a global option:
+
+```{r, eval=FALSE}
+options(modelsummary_default = 'kableExtra')
 ```
 
 ## Warning: post-processing and the `output` argument
@@ -94,6 +80,10 @@ msummary(models, output = 'table.html') %>%
 To save a customized table, you should apply all the customization functions you need before saving it using `gt::gtsave`, `kableExtra::save_kable`, or the appropriate helper function from the package that you are using to customize your table.
  
 # `gt`
+
+```{r}
+library(gt)
+```
 
 ## Fonts, colors, and styles
 
@@ -179,7 +169,9 @@ msummary(models,
 
 # `kableExtra`
 
-Note that compiling this LaTeX table requires loading the `booktabs` and `xcolor` packages in the preamble of your LaTeX or Rmarkdown document.
+```{r}
+library(kableExtra)
+```
 
 The `gt` LaTeX render engine is still immature. Until it improves, I strongly recommend that users turn to `kableExtra` to produce LaTeX tables. This package offers robust functions that allow a lot of customization. A simple LaTeX table can be produced as follows:
 
@@ -187,7 +179,7 @@ The `gt` LaTeX render engine is still immature. Until it improves, I strongly re
 msummary(models, output = 'latex')
 ```
 
-We can use functions from the `kableExtra` package to customize this table, with bold and colored cells, column spans, and more. 
+`kableExtra` also produces very nice HTML tables. We can use functions from this package to customize this table, with bold and colored cells, column spans, and more. 
 
 ## Fonts, colors and styles
 
@@ -234,3 +226,11 @@ msummary(models,
 ```
 
 <img src="https://user-images.githubusercontent.com/987057/82732382-e068f580-9cda-11ea-8924-331550f8f1e8.png" width="40%">
+
+# `huxtable`
+
+TODO: Contributions welcome!
+
+# `flextable`
+
+TODO: Contributions welcome!
