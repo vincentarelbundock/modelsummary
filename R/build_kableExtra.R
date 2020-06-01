@@ -9,40 +9,57 @@ build_kableExtra <- function(tab,
                              stars,
                              stars_note,
                              notes,
-                             filename,
+                             gof_idx,
                              output,
                              ...) {
 
-    # clean and measure table
-    idx_row <- match('gof', tab$group)
-    tab <- tab %>%
-           dplyr::select(-statistic, -group) %>%
-           dplyr::rename(`       ` = term) # HACK: arbitrary 7 spaces to avoid name conflict
-    idx_col <- ncol(tab)
-
-    # output type
-    if (output == 'default') {
-        output <- 'html'
-    }
     ext <- tools::file_ext(output)
 
-    # kable object type based on output 
-    if ((output == 'latex') | (ext == 'tex')) {
-        tab <- kableExtra::kable(tab, format = 'latex', caption = title,
-                                 booktabs = TRUE, linesep = "")
+    # explicit user intervention
+    output_format <- NULL
+    if (output %in% c('html', 'latex', 'markdown')) {
+        output_format <- output
 
-    } else if ((output == 'markdown') | (ext %in% c('md', 'txt'))) {
-        tab <- kableExtra::kable(tab, format = 'markdown', caption = title)
+    } else if (ext == 'tex') {
+        output_format <- 'latex'
 
-    } else if ((output == 'html') | (ext %in% c('htm', 'html'))) {
-        tab <- kableExtra::kable(tab, format = 'html', caption = title)
+    } else if (ext %in% c('md', 'txt', 'Rmd')) {
+        output_format <- 'markdown'
+
+    } else if (ext %in% c('htm', 'html')) {
+        output_format <- 'html'
+
+    # global option
+    } else if (output == 'kableExtra') {
+        output_format <- getOption('knitr.table.format')
+
+    } else if (output == 'default') {
+        output_format <- getOption('knitr.table.format')
+    }
+    # otherwise let kableExtra guess
+
+    if (is.null(output_format)) {
+        tab <- kableExtra::kable(tab,
+                                 caption = title,
+                                 booktabs = TRUE, 
+                                 linesep = "")
+    } else {
+        tab <- kableExtra::kable(tab,
+                                 format = output_format,
+                                 caption = title,
+                                 booktabs = TRUE, 
+                                 linesep = "")
     }
 
     # horizontal rule to separate coef/gof
-    if ((output == 'latex') | (ext == 'tex')) {
-        if (!is.na(idx_row)) { # check if there are >0 GOF
-            tab <- tab %>%
-                   kableExtra::row_spec(idx_row - 1, extra_latex_after = '\\midrule')
+    if (output != 'markdown') {
+        if (!ext %in% c('md', 'Rmd', 'txt')) {
+            if (!is.na(gof_idx)) { # check if there are >0 GOF
+                tab <- tab %>%
+                       kableExtra::row_spec(gof_idx - 1, 
+                                            extra_latex_after = '\\midrule') %>%
+                       kableExtra::kable_styling()
+            }
         }
     }
 
@@ -62,8 +79,7 @@ build_kableExtra <- function(tab,
     }
 
     # output
-    ext <- tools::file_ext(output)
-    if (output %in% c('markdown', 'html', 'latex')) {
+    if (ext == '') {
         return(tab)
     } else {
         # function stolen from kableExtra (MIT license)

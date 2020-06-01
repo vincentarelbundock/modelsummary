@@ -10,24 +10,20 @@ build_gt <- function(tab,
                      stars,
                      stars_note,
                      notes,
+                     gof_idx,
                      output,
                      ...) {
 
     # create gt table object
-    idx_row <- match('gof', tab$group)
-    idx_col <- ncol(tab) - 2
-    tab <- tab %>%
-           # remove columns not fit for printing
-           dplyr::select(-statistic, -group) %>%
-           # gt object
-           dplyr::rename(`       ` = term) %>% # HACK: arbitrary 7 spaces to avoid name conflict
+    idx_col <- ncol(tab)
+    tab <- tab %>% 
            gt::gt()
 
     # horizontal rule to separate coef/gof
-    if (!is.na(idx_row)) { # check if there are >0 GOF
+    if (!is.na(gof_idx)) { # check if there are >0 GOF
         tab <- tab %>%
                gt::tab_style(style = gt::cell_borders(sides = 'bottom', color = '#000000'),
-                             locations = gt::cells_body(columns = 1:idx_col, rows = (idx_row - 1)))
+                             locations = gt::cells_body(columns = 1:idx_col, rows = (gof_idx - 1)))
     }
 
     # titles

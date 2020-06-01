@@ -43,6 +43,15 @@ sanity_conf_level <- function(conf_level) {
 #' sanity check
 #'
 #' @keywords internal
+sanity_factory <- function(factory) {
+    if (!factory %in% c('gt', 'kableExtra', 'huxtable', 'flextable')) {
+        stop('Global options modelsummary_default, modelsummary_html, and modelsummary_latex must be one of: gt, kableExtra, huxtable, flextable.')
+    }
+}
+
+#' sanity check
+#'
+#' @keywords internal
 sanity_stars <- function(stars) {
     checkmate::assert(
         checkmate::check_flag(stars),
@@ -73,8 +82,8 @@ sanity_notes <- function(notes) {
 #' @keywords internal
 sanity_output <- function(output) {
 
-    object_types <- c('default', 'gt', 'huxtable', 'markdown', 'html', 'latex')
-    extension_types <- c('htm', 'html', 'tex', 'jpg', 'png', 'md', 'txt', 'rtf')
+    object_types <- c('default', 'gt', 'kableExtra', 'huxtable', 'flextable', 'markdown', 'html', 'latex')
+    extension_types <- c('htm', 'html', 'tex', 'jpg', 'png', 'md', 'Rmd', 'txt', 'rtf')
 
     checkmate::assert_string(output)
 

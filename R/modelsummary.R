@@ -1,7 +1,8 @@
 # https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when#comment20826625_12429344
 # 2012 hadley says "globalVariables is a hideous hack and I will never use it"
 # 2014 hadley updates his own answer with globalVariables as one of "two solutions"
-globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'value', 'p.value', 'std.error', 'statistic', 'stars_note'))
+globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'value', 'p.value', 'std.error', 'statistic', 'stars_note', 'logLik', 'formatBicLL'))
+
 
 #' Beautiful, customizable summaries of statistical models
 #'
@@ -10,7 +11,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param output filename or object type (string)
 #' \itemize{
 #'   \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg. 
-#'   \item Supported object types: "default", "html", "markdown", "latex", "gt", "huxtable".
+#'   \item Supported object types: "default", "html", "markdown", "latex", "gt", "kableExtra", "huxtable", "flextable".
 #'   \item When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.
 #' }
 #' @param fmt string which specifies how numeric values will be rounded. This
@@ -125,6 +126,7 @@ modelsummary <- function(models,
                          subtitle = NULL,
                          ...) {
 
+
     # sanity check functions are hosted in R/sanity_checks.R
     # more sanity checks are conducted in modelsummary::extract()
     sanity_output(output)
@@ -155,55 +157,52 @@ modelsummary <- function(models,
     tab <- dat %>%
            dplyr::mutate(term = ifelse(idx, '', term))
 
-    # get `output_type` from `output` or filename extension
+    # choose table factory
+    factory_dict <- list('jpg' = 'gt',
+                         'png' = 'gt',
+                         'rtf' = 'gt',
+                         'markdown' = 'kableExtra',
+                         'md' = 'kableExtra',
+                         'Rmd' = 'kableExtra',
+                         'txt' = 'kableExtra',
+                         'gt' = 'gt',
+                         'huxtable' = 'huxtable',
+                         'flextable' = 'flextable',
+                         'kableExtra' = 'kableExtra',
+                         'default' = getOption('modelsummary_default', default = 'gt'),
+                         'htm' = getOption('modelsummary_html', default = 'gt'),
+                         'html' = getOption('modelsummary_html', default = 'gt'),
+                         'tex' = getOption('modelsummary_latex', default = 'kableExtra'),
+                         'latex' = getOption('modelsummary_latex', default = 'kableExtra'))
+    sapply(factory_dict, sanity_factory)
+
     ext <- tools::file_ext(output)
-    if (ext == '') {
-        output_type <- output
-    } else {
-        output_type <- ext
-    }
+    idx <- ifelse(ext == '', output, ext)
+    idx <- factory_dict[[idx]]
+    factory <- list('gt' = build_gt,
+                    'kableExtra' = build_kableExtra,
+                    'huxtable' = build_huxtable,
+                    'flextable' = build_flextable)[[idx]]
 
-    # knitr compilation target as default
-    knitr_target <- knitr::opts_knit$get("rmarkdown.pandoc.to")
-    if (output_type == 'default') {
-        if (!is.null(knitr_target)) {
-            output <- output_type <- knitr_target
-        } 
-    }
-
-    # choose table builder
-    build_list <- list('default' = 'gt',
-                       'gt' = 'gt',
-                       'jpg' = 'gt',
-                       'png' = 'gt',
-                       'rtf' = 'gt',
-                       'markdown' = 'kableExtra',
-                       'md' = 'kableExtra',
-                       'txt' = 'kableExtra',
-                       'huxtable' = 'huxtable',
-                       'html' = getOption('modelsummary_html', default = 'gt'),
-                       'tex' = getOption('modelsummary_latex', default = 'kableExtra'),
-                       'latex' = getOption('modelsummary_latex', default = 'kableExtra'))
-
-    if (build_list[[output_type]] == 'gt') {
-        build_table <- build_gt
-    } else if (build_list[[output_type]] == 'huxtable') {
-        build_table <- build_huxtable
-    } else if (build_list[[output_type]] == 'kableExtra') {
-        build_table <- build_kableExtra
-    }
+    # clean and measure table
+    gof_idx <- match('gof', tab$group)
+    tab <- tab %>%
+           dplyr::select(-statistic, -group) %>%
+           # HACK: arbitrary 7 spaces to avoid name conflict
+           dplyr::rename(`       ` = term)
 
     # build table
-    build_table(tab, 
-                title = title,
-                subtitle = subtitle,
-                stars = stars,
-                stars_note = stars_note,
-                notes = notes,
-                filename = filename,
-                output = output,
-                ...)
-  
+    factory(tab, 
+            title = title,
+            subtitle = subtitle,
+            stars = stars,
+            stars_note = stars_note,
+            notes = notes,
+            filename = filename,
+            gof_idx = gof_idx,
+            output = output,
+            ...)
+      
 }
 
 #' Beautiful, customizable summaries of statistical models

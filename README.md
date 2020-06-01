@@ -26,7 +26,7 @@ These two tables were created using `modelsummary` without any manual editing at
 + [Customizing the look of your table](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html)
 + [Dynamic documents with `Rmarkdown` and `knitr`](https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html)
 + [Adding and customizing models](https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html)
-+ [Multiple imputation](https://vincentarelbundock.github.io/modelsummary/articles/multiple_impuation.html)
++ [Multiple imputation](https://vincentarelbundock.github.io/modelsummary/articles/multiple_imputation.html)
 + [Raw data](https://vincentarelbundock.github.io/modelsummary/articles/extract.html)
 
 # Why should I use `modelsummary`?
@@ -156,10 +156,12 @@ msummary(models, 'markdown')
 
 `modelsummary` can produce tables in these formats: 
 
+
+
 * HTML 
 * LaTeX 
 * Text / Markdown / ASCII
-* RTF (Microsoft Word-compatible)
+* RTF
 * Images: JPG and PNG 
 * `gt` table objects
 

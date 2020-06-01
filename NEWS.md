@@ -1,6 +1,7 @@
 # modelsummary 0.4.0.9000
 
-* hutable support
+* huxtable support
+* flextable support
 * estimate argument
 * fixest tidiers
 * vignette improvements

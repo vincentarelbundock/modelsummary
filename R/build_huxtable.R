@@ -9,19 +9,12 @@ build_huxtable <- function(tab,
                            stars,
                            stars_note,
                            notes,
+                           gof_idx,
                            output,
                            ...) {
 
-    # clean and measure table
-    idx_row <- match('gof', tab$group)
-    tab <- tab %>%
-           dplyr::select(-statistic, -group) %>%
-           # HACK: arbitrary 7 spaces to avoid name conflict
-           dplyr::rename(`       ` = term)
-    idx_col <- ncol(tab)
-
     # huxtable object
-    out <- hux(tab)
+    out <- huxtable::hux(tab)
 
     # title
     if (!is.null(title)) {
@@ -30,7 +23,7 @@ build_huxtable <- function(tab,
 
     # horizontal rule to separate coef/gof
     out <- huxtable::set_bottom_border(out, 
-                                       row = idx_row, 
+                                       row = gof_idx, 
                                        col = 1:ncol(out),
                                        value = 1)
 
