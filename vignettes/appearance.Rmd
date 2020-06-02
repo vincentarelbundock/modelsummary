@@ -31,36 +31,139 @@ url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
 dat <- read.csv(url)
 
 models <- list()
-models[['OLS 1']] <- lm(Donations ~ Literacy + Clergy, data = dat)
-models[['Poisson 1']] <- glm(Donations ~ Literacy + Commerce, family = poisson, data = dat)
-models[['OLS 2']] <- lm(Crime_pers ~ Literacy + Clergy, data = dat)
-models[['Poisson 2']] <- glm(Crime_pers ~ Literacy + Commerce, family = poisson, data = dat)
+models[['OLS 1']] <- lm(Donations ~ Literacy, data = dat)
+models[['Poisson 1']] <- glm(Donations ~ Literacy + Clergy, family = poisson, data = dat)
+models[['OLS 2']] <- lm(Crime_pers ~ Literacy, data = dat)
+models[['Poisson 2']] <- glm(Crime_pers ~ Literacy + Clergy, family = poisson, data = dat)
 models[['OLS 3']] <- lm(Crime_prop ~ Literacy + Clergy, data = dat)
 ```
 
-Then, we call `msummary()`, and we use the `tab_spanner` function from `gt` to add a spanning title which identifies the dependent variable in the first two models:
+In the rest of this vignette, we will customize tables using tools supplied by the `gt`, `kableExtra`, `flextable`, and `huxtable` packages. In each case, the pattern will be similar. First, we create a table by calling `msummary` and by specifying the output format with the `output` parameter. Then, we will use functions from the four packages to customize the appearance of our tables.
 
-```{r, eval=FALSE}
+# `gt`
+
+To illustrate how to customize tables using the `gt` package we will use the following functions from the `gt` package:
+
+* `tab_spanner` creates labels to group columns.
+* `tab_footnote` adds a footnote and a matching marking in a specific cell.
+* `tab_style` can modify the text and color of rows, columns, or cells.
+
+To produce a "cleaner" look, we will also use `modelsummary`'s `stars`, `coef_map`, `gof_omit`, and `title` arguments.
+
+Note that in order to access `gt` functions, we must first load the library.
+
+```{r}
 library(gt)
-msummary(models) %>%
-    tab_spanner(label = 'Donations', columns = c('OLS 1', 'Poisson 1'))
+
+# build table with `modelsummary` 
+cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
+cap <- 'A modelsummary table customized with gt'
+
+tab <- msummary(models, 
+                coef_map = cm, stars = TRUE, 
+                title = cap, gof_omit = 'IC|Log|Adj') 
+
+# customize table with `gt`
+
+tab %>%
+
+    # column labels
+    tab_spanner(label = 'Donations', columns = 2:3) %>%
+    tab_spanner(label = 'Crimes (persons)', columns = 4:5) %>%
+    tab_spanner(label = 'Crimes (property)', columns = 6) %>%
+
+    # footnote
+    tab_footnote(footnote = md("A very **important** variable."),
+                 locations = cells_body(rows = 3, columns = 1)) %>%
+
+    # text and background color
+    tab_style(style = cell_text(color = 'red'),
+              locations = cells_body(rows = 3)) %>%
+    tab_style(style = cell_fill(color = 'lightblue'),
+              locations = cells_body(rows = 5))
 ```
 
-By default, `modelsummary` produces an HTML table compatible with the `gt` package. If users want to use customization functions from a different package, they can simply specify the output format they need. For example, the `add_header_above` function from the `kableExtra` package adds column spanning labels:
+The [`gt` website](https://gt.rstudio.com) offers many more examples. The possibilities are endless. For instance, `gt` allows you to embed images in your tables using the `text_transform` and `local_image` functions:
 
-```{r, eval=FALSE}
+```{r}
+f <- function(x) web_image(url = "https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png", height = 80)
+
+tab %>% 
+    text_transform(locations = cells_body(columns = 2:6, rows = 1), fn = f)
+```
+
+# `kableExtra`
+
+We will now illustrate how to customize tables using functions from the `kableExtra` package:
+
+* `add_header_above` creates labels to group columns.
+* `add_footnote` adds a footnote and a matching marking in a specific cell.
+* `row_spec` can modify the text and color of rows, columns, or cells.
+
+We use the same code as above, but specify `output='kableExtra'` in the `msummary()` call:
+
+```{r}
 library(kableExtra)
-msummary(models, output = 'kableExtra') %>%
-    add_header_above(c(" " = 1, "Donations" = 2, " " = 3))
+
+# build table with `modelsummary` 
+cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
+cap <- 'A modelsummary table customized with kableExtra'
+
+tab <- msummary(models, output = 'kableExtra',
+                coef_map = cm, stars = TRUE, 
+                title = cap, gof_omit = 'IC|Log|Adj') 
+
+# customize table with `kableExtra`
+tab %>%
+    
+    # column labels
+    add_header_above(c(" " = 1, "Donations" = 2, "Crimes (person)" = 2, "Crimes (property)" = 1)) %>%
+   
+    # text and background color
+    row_spec(3, color = 'red') %>%
+    row_spec(5, background = 'lightblue')
 ```
 
-The default output format can be changed by setting a global option:
+These `kableExtra` functions can be used to produce LaTeX / PDF tables such as this one:
 
-```{r, eval=FALSE}
-options(modelsummary_default = 'kableExtra')
+<img src="https://user-images.githubusercontent.com/987057/82732382-e068f580-9cda-11ea-8924-331550f8f1e8.png" width="40%">
+
+
+# `flextable`
+
+We will now illustrate how to customize tables using functions from the `flextable` package:
+
+* `add_header_above` creates labels to group columns.
+* `add_footnote` adds a footnote and a matching marking in a specific cell.
+* `row_spec` can modify the text and color of rows, columns, or cells.
+
+We use the same code as above, but specify `output='kableExtra'` in the `msummary()` call:
+
+```{r}
+library(flextable)
+
+# build table with `modelsummary` 
+cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
+cap <- 'A modelsummary table customized with flextable'
+
+tab <- msummary(models, output = 'flextable',
+                coef_map = cm, stars = TRUE, 
+                title = cap, gof_omit = 'IC|Log|Adj') 
+
+# customize table with `flextable`
+tab %>%
+   
+    # text and background color
+    color(3, color = 'red') %>%
+    bg(5, bg = 'lightblue')
 ```
 
-## Warning: post-processing and the `output` argument
+
+# `huxtable`
+
+TODO: Contributions welcome!
+    
+# Warning: Saving to file
 
 When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt`, `kableExtra`, `huxtable`, or `flextable`. When users specify a filename in the `output` argument, the `msummary()` call should be the *final* one in the chain.
 
@@ -78,159 +181,3 @@ msummary(models, output = 'table.html') %>%
 ```
 
 To save a customized table, you should apply all the customization functions you need before saving it using `gt::gtsave`, `kableExtra::save_kable`, or the appropriate helper function from the package that you are using to customize your table.
- 
-# `gt`
-
-```{r}
-library(gt)
-```
-
-## Fonts, colors, and styles
-
-Thanks to `gt`, `modelsummary` accepts markdown indications for emphasis and more:
-
-```r
-msummary(models, 
-         title = md('This is a **bolded series of words.**'),
-         notes = list(md('And an *emphasized note*.')))
-```
-
-We can modify the size of the text with `gt`'s `tab_style` function: 
-
-```r
-msummary(models) %>%
-    tab_style(style = cell_text(size = 'x-large'),
-              locations = cells_body(columns = 1)) 
-```
-
-We can also color columns and cells, and present values in bold or italics:
-
-```{r}
-msummary(models) %>%
-    tab_style(style = cell_fill(color = "lightcyan"), 
-              locations = cells_body(columns = vars(`OLS 1`))) %>% 
-    tab_style(style = cell_fill(color = "#F9E3D6"),
-              locations = cells_body(columns = vars(`Poisson 2`), rows = 2:6)) %>%
-    tab_style(style = cell_text(weight = "bold"), 
-              locations = cells_body(columns = vars(`OLS 1`))) %>%
-    tab_style(style = cell_text(style = "italic"), 
-              locations = cells_body(columns = vars(`Poisson 2`), rows = 2:6))
-```
-
-## Column groups
-
-Create spanning labels to group models (columns):
-
-```r
-msummary(models) %>%
-    tab_spanner(label = 'Literacy', columns = c('OLS 1', 'Poisson 1')) %>%
-    tab_spanner(label = 'Desertion', columns = c('OLS 2', 'Poisson 2')) %>%
-    tab_spanner(label = 'Clergy', columns = 'OLS 3')
-```
-
-## Images
-
-Insert images in your tables using the `gt::text_transform` and `gt::local_image` functions.
-
-```{r}
-f <- function(x) web_image(url = "https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png", height = 80)
-
-msummary(models) %>%
-    text_transform(locations = cells_body(columns = 2:6, rows = 1), fn = f)
-```
-
-## Complex example
-
-This is the code I used to generate the "complex" table posted at the top of this README.
-
-```r
-cm <- c('Literacy' = 'Literacy (%)',
-        'Clergy' = 'Priests/capita',
-        'Commerce' = 'Patents/capita', 
-        'Infants' = 'Infants',
-        '(Intercept)' = 'Constant')
-
-msummary(models,
-         coef_map = cm,
-         stars = TRUE,
-         gof_omit = "Deviance",
-         title = 'modelsummary package for R',
-         notes = c('The most important parameter is printed in red.')) %>%
-    tab_spanner(label = 'Donations', columns = 2:3) %>%
-    tab_spanner(label = 'Crimes (persons)', columns = 4:5) %>%
-    tab_spanner(label = 'Crimes (property)', columns = 6) %>%
-    tab_footnote(footnote = md("Very **important** variable."),
-                 locations = cells_body(rows = 3, columns = 1)) %>%
-    tab_style(style = cell_text(color = 'red'),
-              locations = cells_body(rows = 3, columns = 4))
-```
-
-<img src="https://user-images.githubusercontent.com/987057/82853752-90558300-9ed4-11ea-88af-12cf20cb367f.png" width="40%">
-
-# `kableExtra`
-
-```{r}
-library(kableExtra)
-```
-
-The `gt` LaTeX render engine is still immature. Until it improves, I strongly recommend that users turn to `kableExtra` to produce LaTeX tables. This package offers robust functions that allow a lot of customization. A simple LaTeX table can be produced as follows:
-
-```r
-msummary(models, output = 'latex')
-```
-
-`kableExtra` also produces very nice HTML tables. We can use functions from this package to customize this table, with bold and colored cells, column spans, and more. 
-
-## Fonts, colors and styles
-
-The `row_spec` and `column_spec` allow users to change the styling of their tables. For instance, this code creates a table where the first column is in bold blue text on pink background:
-
-```r
-msummary(models, output = 'latex') %>%
-    row_spec(1, bold = TRUE, color = 'blue', background = 'pink')
-```
-
-## Column groups
-
-You can define column group labels using `kableExtra`'s `add_header_above` function:
-
-```
-msummary(models, output = 'latex') %>%
-    add_header_above(c(" " = 1, 
-                       "Donations" = 2, 
-                       "Crimes (person)" = 2, 
-                       "Crimes (property)" = 1))
-```
-
-## Complex example
-
-```r
-cm <- c('Literacy' = 'Literacy (%)',
-        'Clergy' = 'Priests/capita',
-        'Commerce' = 'Patents/capita',
-        'Infants' = 'Infants',
-        '(Intercept)' = 'Constant')
-
-msummary(models,
-    coef_map = cm,
-    stars = TRUE,
-    gof_omit = "Deviance",
-    title = 'modelsummary package for R',
-    notes = c('First custom note to contain text.',
-              'Second custom note with different content.')) %>%
-    add_header_above(c(" " = 1, 
-                       "Donations" = 2, 
-                       "Crimes (person)" = 2, 
-                       "Crimes (property)" = 1))
-   row_spec(3, bold = TRUE, color = 'blue', background = 'pink')
-```
-
-<img src="https://user-images.githubusercontent.com/987057/82732382-e068f580-9cda-11ea-8924-331550f8f1e8.png" width="40%">
-
-# `huxtable`
-
-TODO: Contributions welcome!
-
-# `flextable`
-
-TODO: Contributions welcome!
