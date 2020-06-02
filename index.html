@@ -132,8 +132,11 @@
 
 <span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">y</span> ~ <span class="no">x</span>, <span class="no">dat</span>)
 <span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">mod</span>)</pre></div>
-<p>The command above will automatically display a summary table in the <code>Rstudio</code> Viewer or in a web browser. All you need is one word to change the output format. For example, a text-only version of the table can also be printed to the Console by typing:</p>
+<p>The command above will automatically display a summary table in the <code>Rstudio</code> Viewer or in a web browser. All you need is one word to change the output format. For example, a text-only version of the table can be printed to the Console by typing:</p>
 <div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">mod</span>, <span class="st">"markdown"</span>)</pre></div>
+<p>Tables in Microsoft Word and LaTeX formats can be saved to file by typing:</p>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">mod</span>, <span class="st">"table.docx"</span>)
+<span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">mod</span>, <span class="st">"table.tex"</span>)</pre></div>
 </div>
 <div id="flexible" class="section level4">
 <h4 class="hasAnchor">
@@ -167,27 +170,27 @@
 <h1 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h1>
 <p>You can install <code>modelsummary</code> from CRAN:</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'modelsummary'</span>)</pre></div>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'modelsummary'</span>)</pre></div>
 <p>If you want the very latest version, install it from Github:</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">remotes</span>)
+<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">remotes</span>)
 <span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">'vincentarelbundock/modelsummary'</span>)</pre></div>
 </div>
 <div id="getting-started" class="section level1">
 <h1 class="hasAnchor">
 <a href="#getting-started" class="anchor"></a>Getting started</h1>
 <p>We begin by loading the <code>modelsummary</code> package and by downloading data from the <a href="https://vincentarelbundock.github.io/Rdatasets/">RDatasets</a> repository:</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+<div class="sourceCode" id="cb6"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
 <span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
 <span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)</pre></div>
 <p>We estimate a linear model and call the <code>msummary</code> function to display the results:</p>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Donations</span> ~ <span class="no">Crime_prop</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<div class="sourceCode" id="cb7"><pre class="r"><span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Donations</span> ~ <span class="no">Crime_prop</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
 <span class="fu"><a href="reference/msummary.html">msummary</a></span>(<span class="no">mod</span>)</pre></div>
 <center>
 <p><img src="https://user-images.githubusercontent.com/987057/82819815-08895d80-9e6f-11ea-8f78-93a62df204b3.png" width="15%"></p>
 </center>
 <p>To summarize multiple models side-by-side, we store them in a list. If the items in that list are named, the names will be used as column labels:</p>
-<div class="sourceCode" id="cb7"><pre class="r"><span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+<div class="sourceCode" id="cb8"><pre class="r"><span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
 <span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
 <span class="no">models</span><span class="kw">[[</span><span class="st">'Poisson 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
 <span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 2'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
@@ -200,7 +203,7 @@
 <p><img src="https://user-images.githubusercontent.com/987057/82816112-8eee7100-9e68-11ea-8bc7-30c0f2626539.png" width="40%"></p>
 </center>
 <p>The same table can be printed in text-only format to the <code>R</code> Console:</p>
-<div class="sourceCode" id="cb8"><pre class="r">msummary(models, 'markdown')
+<div class="sourceCode" id="cb9"><pre class="r">msummary(models, 'markdown')
 
 
 |            |OLS 1      |Poisson 1   |OLS 2      |Poisson 2   |OLS 3      |
@@ -235,7 +238,7 @@
 <img src="https://user-images.githubusercontent.com/987057/83556122-5a6c5c00-a4dd-11ea-905d-b04f633c9844.png" width="50%">
 </center>
 <p>In the above table, checkmarks identify the default table-making package used for each output format. Dots identify supported alternatives. To use those alternatives, we set global options such as:</p>
-<div class="sourceCode" id="cb9"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_html</span> <span class="kw">=</span> <span class="st">'kableExtra'</span>)
+<div class="sourceCode" id="cb10"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_html</span> <span class="kw">=</span> <span class="st">'kableExtra'</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_latex</span> <span class="kw">=</span> <span class="st">'gt'</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_word</span> <span class="kw">=</span> <span class="st">'huxtable'</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_png</span> <span class="kw">=</span> <span class="st">'gt'</span>)</pre></div>
