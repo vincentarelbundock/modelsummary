@@ -82,7 +82,8 @@
 
       
 
-      </header><script src="appearance_files/header-attrs-2.2/header-attrs.js"></script><div class="row">
+      </header><script src="appearance_files/header-attrs-2.2/header-attrs.js"></script><script src="appearance_files/kePrint-0.0.1/kePrint.js"></script><link href="appearance_files/tabwid-1.0.0/tabwid.css" rel="stylesheet">
+<script src="appearance_files/tabwid-1.0.0/tabwid.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Customizing the look of your table</h1>
@@ -114,64 +115,61 @@
 <span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)
 
 <span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
-<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
-<span class="no">models</span><span class="kw">[[</span><span class="st">'Poisson 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
-<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 2'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
-<span class="no">models</span><span class="kw">[[</span><span class="st">'Poisson 2'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'Poisson 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 2'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'Poisson 2'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
 <span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 3'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_prop</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)</pre></body></html></div>
-<p>Then, we call <code><a href="../reference/msummary.html">msummary()</a></code>, and we use the <code>tab_spanner</code> function from <code>gt</code> to add a spanning title which identifies the dependent variable in the first two models:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
-<span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Donations'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 1'</span>, <span class="st">'Poisson 1'</span>))</pre></body></html></div>
-<p>By default, <code>modelsummary</code> produces an HTML table compatible with the <code>gt</code> package. If users want to use customization functions from a different package, they can simply specify the output format they need. For example, the <code>add_header_above</code> function from the <code>kableExtra</code> package adds column spanning labels:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)
-<span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'kableExtra'</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/add_header_above.html">add_header_above</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">" "</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="st">"Donations"</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="st">" "</span> <span class="kw">=</span> <span class="fl">3</span>))</pre></body></html></div>
-<p>The default output format can be changed by setting a global option:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_default</span> <span class="kw">=</span> <span class="st">'kableExtra'</span>)</pre></body></html></div>
-<div id="warning-post-processing-and-the-output-argument" class="section level2">
-<h2 class="hasAnchor">
-<a href="#warning-post-processing-and-the-output-argument" class="anchor"></a>Warning: post-processing and the <code>output</code> argument</h2>
-<p>When users supply a file name to the <code>output</code> argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from <code>gt</code>, <code>kableExtra</code>, <code>huxtable</code>, or <code>flextable</code>. When users specify a filename in the <code>output</code> argument, the <code><a href="../reference/msummary.html">msummary()</a></code> call should be the <em>final</em> one in the chain.</p>
-<p>This is OK:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.html'</span>)</pre></body></html></div>
-<p>This is <strong>not</strong> OK:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.html'</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Literacy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 1'</span>, <span class="st">'Poisson 1'</span>))</pre></body></html></div>
-<p>To save a customized table, you should apply all the customization functions you need before saving it using <code><a href="https://rdrr.io/pkg/gt/man/gtsave.html">gt::gtsave</a></code>, <code><a href="https://rdrr.io/pkg/kableExtra/man/save_kable.html">kableExtra::save_kable</a></code>, or the appropriate helper function from the package that you are using to customize your table.</p>
-</div>
+<p>In the rest of this vignette, we will customize tables using tools supplied by the <code>gt</code>, <code>kableExtra</code>, <code>flextable</code>, and <code>huxtable</code> packages. In each case, the pattern will be similar. First, we create a table by calling <code>msummary</code> and by specifying the output format with the <code>output</code> parameter. Then, we will use functions from the four packages to customize the appearance of our tables.</p>
 </div>
 <div id="gt" class="section level1">
 <h1 class="hasAnchor">
 <a href="#gt" class="anchor"></a><code>gt</code>
 </h1>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)</pre></body></html></div>
-<div id="fonts-colors-and-styles" class="section level2">
-<h2 class="hasAnchor">
-<a href="#fonts-colors-and-styles" class="anchor"></a>Fonts, colors, and styles</h2>
-<p>Thanks to <code>gt</code>, <code>modelsummary</code> accepts markdown indications for emphasis and more:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>,
-         <span class="kw">title</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span>(<span class="st">'This is a **bolded series of words.**'</span>),
-         <span class="kw">notes</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span>(<span class="st">'And an *emphasized note*.'</span>)))</pre></body></html></div>
-<p>We can modify the size of the text with <code>gt</code>’s <code>tab_style</code> function:</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="kw">size</span> <span class="kw">=</span> <span class="st">'x-large'</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">1</span>))</pre></body></html></div>
-<p>We can also color columns and cells, and present values in bold or italics:</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_fill.html">cell_fill</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">"lightcyan"</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>))) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_fill.html">cell_fill</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">"#F9E3D6"</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`Poisson 2`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">6</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="kw">weight</span> <span class="kw">=</span> <span class="st">"bold"</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`OLS 1`</span>))) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="st">"italic"</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/reexports.html">vars</a></span>(<span class="no">`Poisson 2`</span>), <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">6</span>))</pre></body></html></div>
+<p>To illustrate how to customize tables using the <code>gt</code> package we will use the following functions from the <code>gt</code> package:</p>
+<ul>
+<li>
+<code>tab_spanner</code> creates labels to group columns.</li>
+<li>
+<code>tab_footnote</code> adds a footnote and a matching marking in a specific cell.</li>
+<li>
+<code>tab_style</code> can modify the text and color of rows, columns, or cells.</li>
+</ul>
+<p>To produce a “cleaner” look, we will also use <code>modelsummary</code>’s <code>stars</code>, <code>coef_map</code>, <code>gof_omit</code>, and <code>title</code> arguments.</p>
+<p>Note that in order to access <code>gt</code> functions, we must first load the library.</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
+
+<span class="co"># build table with `modelsummary` </span>
+<span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>)
+<span class="no">cap</span> <span class="kw">&lt;-</span> <span class="st">'A modelsummary table customized with gt'</span>
+
+<span class="no">tab</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>,
+                <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
+                <span class="kw">title</span> <span class="kw">=</span> <span class="no">cap</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'IC|Log|Adj'</span>)
+
+<span class="co"># customize table with `gt`</span>
+
+<span class="no">tab</span> <span class="kw">%&gt;%</span>
+
+    <span class="co"># column labels</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Donations'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">3</span>) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Crimes (persons)'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">4</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Crimes (property)'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">6</span>) <span class="kw">%&gt;%</span>
+
+    <span class="co"># footnote</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(<span class="kw">footnote</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span>(<span class="st">"A very **important** variable."</span>),
+                 <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">rows</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">1</span>)) <span class="kw">%&gt;%</span>
+
+    <span class="co"># text and background color</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">'red'</span>),
+              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">rows</span> <span class="kw">=</span> <span class="fl">3</span>)) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_fill.html">cell_fill</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">'lightblue'</span>),
+              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">rows</span> <span class="kw">=</span> <span class="fl">5</span>))</pre></body></html></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#fqeermcxii .gt_table {
+#enaiihyxpi .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -194,7 +192,7 @@
   border-left-color: #D3D3D3;
 }
 
-#fqeermcxii .gt_heading {
+#enaiihyxpi .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -206,7 +204,7 @@
   border-right-color: #D3D3D3;
 }
 
-#fqeermcxii .gt_title {
+#enaiihyxpi .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -216,7 +214,7 @@
   border-bottom-width: 0;
 }
 
-#fqeermcxii .gt_subtitle {
+#enaiihyxpi .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -226,13 +224,13 @@
   border-top-width: 0;
 }
 
-#fqeermcxii .gt_bottom_border {
+#enaiihyxpi .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#fqeermcxii .gt_col_headings {
+#enaiihyxpi .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -247,7 +245,7 @@
   border-right-color: #D3D3D3;
 }
 
-#fqeermcxii .gt_col_heading {
+#enaiihyxpi .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -267,7 +265,7 @@
   overflow-x: hidden;
 }
 
-#fqeermcxii .gt_column_spanner_outer {
+#enaiihyxpi .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -279,15 +277,15 @@
   padding-right: 4px;
 }
 
-#fqeermcxii .gt_column_spanner_outer:first-child {
+#enaiihyxpi .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#fqeermcxii .gt_column_spanner_outer:last-child {
+#enaiihyxpi .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#fqeermcxii .gt_column_spanner {
+#enaiihyxpi .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -299,7 +297,7 @@
   width: 100%;
 }
 
-#fqeermcxii .gt_group_heading {
+#enaiihyxpi .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -321,7 +319,7 @@
   vertical-align: middle;
 }
 
-#fqeermcxii .gt_empty_group_heading {
+#enaiihyxpi .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -336,19 +334,19 @@
   vertical-align: middle;
 }
 
-#fqeermcxii .gt_striped {
+#enaiihyxpi .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#fqeermcxii .gt_from_md > :first-child {
+#enaiihyxpi .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#fqeermcxii .gt_from_md > :last-child {
+#enaiihyxpi .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#fqeermcxii .gt_row {
+#enaiihyxpi .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -367,7 +365,7 @@
   overflow-x: hidden;
 }
 
-#fqeermcxii .gt_stub {
+#enaiihyxpi .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -379,7 +377,7 @@
   padding-left: 12px;
 }
 
-#fqeermcxii .gt_summary_row {
+#enaiihyxpi .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -389,7 +387,7 @@
   padding-right: 5px;
 }
 
-#fqeermcxii .gt_first_summary_row {
+#enaiihyxpi .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -399,7 +397,7 @@
   border-top-color: #D3D3D3;
 }
 
-#fqeermcxii .gt_grand_summary_row {
+#enaiihyxpi .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -409,7 +407,7 @@
   padding-right: 5px;
 }
 
-#fqeermcxii .gt_first_grand_summary_row {
+#enaiihyxpi .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -419,7 +417,7 @@
   border-top-color: #D3D3D3;
 }
 
-#fqeermcxii .gt_table_body {
+#enaiihyxpi .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -428,7 +426,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#fqeermcxii .gt_footnotes {
+#enaiihyxpi .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -442,13 +440,13 @@
   border-right-color: #D3D3D3;
 }
 
-#fqeermcxii .gt_footnote {
+#enaiihyxpi .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#fqeermcxii .gt_sourcenotes {
+#enaiihyxpi .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -462,122 +460,128 @@
   border-right-color: #D3D3D3;
 }
 
-#fqeermcxii .gt_sourcenote {
+#enaiihyxpi .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#fqeermcxii .gt_left {
+#enaiihyxpi .gt_left {
   text-align: left;
 }
 
-#fqeermcxii .gt_center {
+#enaiihyxpi .gt_center {
   text-align: center;
 }
 
-#fqeermcxii .gt_right {
+#enaiihyxpi .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#fqeermcxii .gt_font_normal {
+#enaiihyxpi .gt_font_normal {
   font-weight: normal;
 }
 
-#fqeermcxii .gt_font_bold {
+#enaiihyxpi .gt_font_bold {
   font-weight: bold;
 }
 
-#fqeermcxii .gt_font_italic {
+#enaiihyxpi .gt_font_italic {
   font-style: italic;
 }
 
-#fqeermcxii .gt_super {
+#enaiihyxpi .gt_super {
   font-size: 65%;
 }
 
-#fqeermcxii .gt_footnote_marks {
+#enaiihyxpi .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="fqeermcxii" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
-<thead class="gt_col_headings"><tr>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">       </th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">OLS 1</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Poisson 1</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">OLS 2</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Poisson 2</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">OLS 3</th>
-    </tr></thead>
+<div id="enaiihyxpi" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<thead class="gt_header">
+<tr>
+<th colspan="6" class="gt_heading gt_title gt_font_normal" style>A modelsummary table customized with gt</th>
+    </tr>
+<tr>
+<th colspan="6" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style></th>
+    </tr>
+</thead>
+<thead class="gt_col_headings">
+<tr>
+<th class="gt_col_heading gt_center gt_columns_bottom_border" rowspan="2" colspan="1">       </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2">
+        <span class="gt_column_spanner">Donations</span>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2">
+        <span class="gt_column_spanner">Crimes (persons)</span>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="1">
+        <span class="gt_column_spanner">Crimes (property)</span>
+      </th>
+    </tr>
+<tr>
+<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">OLS 1</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Poisson 1</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">OLS 2</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Poisson 2</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">OLS 3</th>
+    </tr>
+</thead>
 <tbody class="gt_table_body">
 <tr>
-<td class="gt_row gt_left">(Intercept)</td>
-      <td class="gt_row gt_left" style="background-color: #E0FFFF; font-weight: bold;">7948.667</td>
-      <td class="gt_row gt_left">8.241</td>
-      <td class="gt_row gt_left">16259.384</td>
-      <td class="gt_row gt_left">9.876</td>
-      <td class="gt_row gt_left">11243.544</td>
+<td class="gt_row gt_left">Constant</td>
+      <td class="gt_row gt_left">8759.068***</td>
+      <td class="gt_row gt_left">8.986***</td>
+      <td class="gt_row gt_left">20357.309***</td>
+      <td class="gt_row gt_left">9.708***</td>
+      <td class="gt_row gt_left">11243.544***</td>
     </tr>
 <tr>
 <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left" style="background-color: #E0FFFF; font-weight: bold;">(2078.276)</td>
-      <td class="gt_row gt_left">(0.006)</td>
-      <td class="gt_row gt_left">(2611.140)</td>
-      <td class="gt_row gt_left" style="background-color: #F9E3D6; font-style: italic;">(0.003)</td>
+      <td class="gt_row gt_left">(1559.363)</td>
+      <td class="gt_row gt_left">(0.004)</td>
+      <td class="gt_row gt_left">(2020.980)</td>
+      <td class="gt_row gt_left">(0.003)</td>
       <td class="gt_row gt_left">(1011.240)</td>
     </tr>
 <tr>
-<td class="gt_row gt_left">Clergy</td>
-      <td class="gt_row gt_left" style="background-color: #E0FFFF; font-weight: bold;">15.257</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">77.148</td>
-      <td class="gt_row gt_left" style="background-color: #F9E3D6; font-style: italic;"></td>
-      <td class="gt_row gt_left">-16.376</td>
+<td class="gt_row gt_left" style="color: red;">Literacy (%)<sup class="gt_footnote_marks">1</sup>
+</td>
+      <td class="gt_row gt_left" style="color: red;">-42.886</td>
+      <td class="gt_row gt_left" style="color: red;">-0.006***</td>
+      <td class="gt_row gt_left" style="color: red;">-15.358</td>
+      <td class="gt_row gt_left" style="color: red;">0.000***</td>
+      <td class="gt_row gt_left" style="color: red;">-68.507***</td>
     </tr>
 <tr>
 <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left" style="background-color: #E0FFFF; font-weight: bold;">(25.735)</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">(32.334)</td>
-      <td class="gt_row gt_left" style="background-color: #F9E3D6; font-style: italic;"></td>
-      <td class="gt_row gt_left">(12.522)</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">Literacy</td>
-      <td class="gt_row gt_left" style="background-color: #E0FFFF; font-weight: bold;">-39.121</td>
-      <td class="gt_row gt_left">0.003</td>
-      <td class="gt_row gt_left">3.680</td>
-      <td class="gt_row gt_left" style="background-color: #F9E3D6; font-style: italic;">-0.000</td>
-      <td class="gt_row gt_left">-68.507</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left" style="background-color: #E0FFFF; font-weight: bold;">(37.052)</td>
+      <td class="gt_row gt_left">(36.362)</td>
       <td class="gt_row gt_left">(0.000)</td>
-      <td class="gt_row gt_left">(46.552)</td>
-      <td class="gt_row gt_left" style="background-color: #F9E3D6; font-style: italic;">(0.000)</td>
+      <td class="gt_row gt_left">(47.127)</td>
+      <td class="gt_row gt_left">(0.000)</td>
       <td class="gt_row gt_left">(18.029)</td>
     </tr>
 <tr>
-<td class="gt_row gt_left">Commerce</td>
-      <td class="gt_row gt_left" style="background-color: #E0FFFF; font-weight: bold;"></td>
-      <td class="gt_row gt_left">0.011</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">0.001</td>
-      <td class="gt_row gt_left"></td>
+<td class="gt_row gt_left" style="background-color: #ADD8E6;">Priests/capita</td>
+      <td class="gt_row gt_left" style="background-color: #ADD8E6;"></td>
+      <td class="gt_row gt_left" style="background-color: #ADD8E6;">0.002***</td>
+      <td class="gt_row gt_left" style="background-color: #ADD8E6;"></td>
+      <td class="gt_row gt_left" style="background-color: #ADD8E6;">0.004***</td>
+      <td class="gt_row gt_left" style="background-color: #ADD8E6;">-16.376</td>
     </tr>
 <tr>
 <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"></td>
-      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000; background-color: #E0FFFF; font-weight: bold;"></td>
-      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.000)</td>
       <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"></td>
       <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.000)</td>
       <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"></td>
+      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.000)</td>
+      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(12.522)</td>
     </tr>
 <tr>
 <td class="gt_row gt_left">Num.Obs.</td>
-      <td class="gt_row gt_left" style="background-color: #E0FFFF; font-weight: bold;">86</td>
+      <td class="gt_row gt_left">86</td>
       <td class="gt_row gt_left">86</td>
       <td class="gt_row gt_left">86</td>
       <td class="gt_row gt_left">86</td>
@@ -585,69 +589,37 @@
     </tr>
 <tr>
 <td class="gt_row gt_left">R2</td>
-      <td class="gt_row gt_left" style="background-color: #E0FFFF; font-weight: bold;">0.020</td>
+      <td class="gt_row gt_left">0.016</td>
       <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">0.065</td>
+      <td class="gt_row gt_left">0.001</td>
       <td class="gt_row gt_left"></td>
       <td class="gt_row gt_left">0.152</td>
     </tr>
-<tr>
-<td class="gt_row gt_left">Adj.R2</td>
-      <td class="gt_row gt_left" style="background-color: #E0FFFF; font-weight: bold;">-0.003</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">0.043</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">0.132</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">AIC</td>
-      <td class="gt_row gt_left" style="background-color: #E0FFFF; font-weight: bold;">1740.8</td>
-      <td class="gt_row gt_left">274160.8</td>
-      <td class="gt_row gt_left">1780.0</td>
-      <td class="gt_row gt_left">257564.4</td>
-      <td class="gt_row gt_left">1616.9</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">BIC</td>
-      <td class="gt_row gt_left" style="background-color: #E0FFFF; font-weight: bold;">1750.6</td>
-      <td class="gt_row gt_left">274168.2</td>
-      <td class="gt_row gt_left">1789.9</td>
-      <td class="gt_row gt_left">257571.7</td>
-      <td class="gt_row gt_left">1626.7</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">Log.Lik.</td>
-      <td class="gt_row gt_left" style="background-color: #E0FFFF; font-weight: bold;">-866.392</td>
-      <td class="gt_row gt_left">-137077.401</td>
-      <td class="gt_row gt_left">-886.021</td>
-      <td class="gt_row gt_left">-128779.186</td>
-      <td class="gt_row gt_left">-804.441</td>
-    </tr>
 </tbody>
+<tfoot class="gt_sourcenotes"><tr>
+<td class="gt_sourcenote" colspan="6">* p &lt; 0.1, ** p &lt; 0.05, *** p &lt; 0.01</td>
+    </tr></tfoot>
+<tfoot><tr class="gt_footnotes">
+<td colspan="6">
+        <p class="gt_footnote">
+          <sup class="gt_footnote_marks"><em>1</em>
+          </sup>
+           
+          A very <strong>important</strong> variable.
+          <br></p>
+      </td>
+    </tr></tfoot>
 </table></div>
-</div>
-<div id="column-groups" class="section level2">
-<h2 class="hasAnchor">
-<a href="#column-groups" class="anchor"></a>Column groups</h2>
-<p>Create spanning labels to group models (columns):</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Literacy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 1'</span>, <span class="st">'Poisson 1'</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Desertion'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 2'</span>, <span class="st">'Poisson 2'</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Clergy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="st">'OLS 3'</span>)</pre></body></html></div>
-</div>
-<div id="images" class="section level2">
-<h2 class="hasAnchor">
-<a href="#images" class="anchor"></a>Images</h2>
-<p>Insert images in your tables using the <code><a href="https://rdrr.io/pkg/gt/man/text_transform.html">gt::text_transform</a></code> and <code><a href="https://rdrr.io/pkg/gt/man/local_image.html">gt::local_image</a></code> functions.</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">f</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/pkg/gt/man/web_image.html">web_image</a></span>(<span class="kw">url</span> <span class="kw">=</span> <span class="st">"https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png"</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="fl">80</span>)
+<p>The <a href="https://gt.rstudio.com"><code>gt</code> website</a> offers many more examples. The possibilities are endless. For instance, <code>gt</code> allows you to embed images in your tables using the <code>text_transform</code> and <code>local_image</code> functions:</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">f</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/pkg/gt/man/web_image.html">web_image</a></span>(<span class="kw">url</span> <span class="kw">=</span> <span class="st">"https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png"</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="fl">80</span>)
 
-<span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>) <span class="kw">%&gt;%</span>
+<span class="no">tab</span> <span class="kw">%&gt;%</span>
     <span class="fu"><a href="https://rdrr.io/pkg/gt/man/text_transform.html">text_transform</a></span>(<span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">6</span>, <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">1</span>), <span class="kw">fn</span> <span class="kw">=</span> <span class="no">f</span>)</pre></body></html></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#bmvyxjovhg .gt_table {
+#pmtqlrsokk .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -670,7 +642,7 @@
   border-left-color: #D3D3D3;
 }
 
-#bmvyxjovhg .gt_heading {
+#pmtqlrsokk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -682,7 +654,7 @@
   border-right-color: #D3D3D3;
 }
 
-#bmvyxjovhg .gt_title {
+#pmtqlrsokk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -692,7 +664,7 @@
   border-bottom-width: 0;
 }
 
-#bmvyxjovhg .gt_subtitle {
+#pmtqlrsokk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -702,13 +674,13 @@
   border-top-width: 0;
 }
 
-#bmvyxjovhg .gt_bottom_border {
+#pmtqlrsokk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#bmvyxjovhg .gt_col_headings {
+#pmtqlrsokk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -723,7 +695,7 @@
   border-right-color: #D3D3D3;
 }
 
-#bmvyxjovhg .gt_col_heading {
+#pmtqlrsokk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -743,7 +715,7 @@
   overflow-x: hidden;
 }
 
-#bmvyxjovhg .gt_column_spanner_outer {
+#pmtqlrsokk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -755,15 +727,15 @@
   padding-right: 4px;
 }
 
-#bmvyxjovhg .gt_column_spanner_outer:first-child {
+#pmtqlrsokk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#bmvyxjovhg .gt_column_spanner_outer:last-child {
+#pmtqlrsokk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#bmvyxjovhg .gt_column_spanner {
+#pmtqlrsokk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -775,7 +747,7 @@
   width: 100%;
 }
 
-#bmvyxjovhg .gt_group_heading {
+#pmtqlrsokk .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -797,7 +769,7 @@
   vertical-align: middle;
 }
 
-#bmvyxjovhg .gt_empty_group_heading {
+#pmtqlrsokk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -812,19 +784,19 @@
   vertical-align: middle;
 }
 
-#bmvyxjovhg .gt_striped {
+#pmtqlrsokk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#bmvyxjovhg .gt_from_md > :first-child {
+#pmtqlrsokk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#bmvyxjovhg .gt_from_md > :last-child {
+#pmtqlrsokk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#bmvyxjovhg .gt_row {
+#pmtqlrsokk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -843,7 +815,7 @@
   overflow-x: hidden;
 }
 
-#bmvyxjovhg .gt_stub {
+#pmtqlrsokk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -855,7 +827,7 @@
   padding-left: 12px;
 }
 
-#bmvyxjovhg .gt_summary_row {
+#pmtqlrsokk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -865,7 +837,7 @@
   padding-right: 5px;
 }
 
-#bmvyxjovhg .gt_first_summary_row {
+#pmtqlrsokk .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -875,7 +847,7 @@
   border-top-color: #D3D3D3;
 }
 
-#bmvyxjovhg .gt_grand_summary_row {
+#pmtqlrsokk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -885,7 +857,7 @@
   padding-right: 5px;
 }
 
-#bmvyxjovhg .gt_first_grand_summary_row {
+#pmtqlrsokk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -895,7 +867,7 @@
   border-top-color: #D3D3D3;
 }
 
-#bmvyxjovhg .gt_table_body {
+#pmtqlrsokk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -904,7 +876,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#bmvyxjovhg .gt_footnotes {
+#pmtqlrsokk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -918,13 +890,13 @@
   border-right-color: #D3D3D3;
 }
 
-#bmvyxjovhg .gt_footnote {
+#pmtqlrsokk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#bmvyxjovhg .gt_sourcenotes {
+#pmtqlrsokk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -938,46 +910,54 @@
   border-right-color: #D3D3D3;
 }
 
-#bmvyxjovhg .gt_sourcenote {
+#pmtqlrsokk .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#bmvyxjovhg .gt_left {
+#pmtqlrsokk .gt_left {
   text-align: left;
 }
 
-#bmvyxjovhg .gt_center {
+#pmtqlrsokk .gt_center {
   text-align: center;
 }
 
-#bmvyxjovhg .gt_right {
+#pmtqlrsokk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#bmvyxjovhg .gt_font_normal {
+#pmtqlrsokk .gt_font_normal {
   font-weight: normal;
 }
 
-#bmvyxjovhg .gt_font_bold {
+#pmtqlrsokk .gt_font_bold {
   font-weight: bold;
 }
 
-#bmvyxjovhg .gt_font_italic {
+#pmtqlrsokk .gt_font_italic {
   font-style: italic;
 }
 
-#bmvyxjovhg .gt_super {
+#pmtqlrsokk .gt_super {
   font-size: 65%;
 }
 
-#bmvyxjovhg .gt_footnote_marks {
+#pmtqlrsokk .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="bmvyxjovhg" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="pmtqlrsokk" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<thead class="gt_header">
+<tr>
+<th colspan="6" class="gt_heading gt_title gt_font_normal" style>A modelsummary table customized with gt</th>
+    </tr>
+<tr>
+<th colspan="6" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style></th>
+    </tr>
+</thead>
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">       </th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">OLS 1</th>
@@ -988,7 +968,7 @@
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td class="gt_row gt_left">(Intercept)</td>
+<td class="gt_row gt_left">Constant</td>
       <td class="gt_row gt_left"><img src="https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png" style="height:80px;"></td>
       <td class="gt_row gt_left"><img src="https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png" style="height:80px;"></td>
       <td class="gt_row gt_left"><img src="https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png" style="height:80px;"></td>
@@ -997,51 +977,35 @@
     </tr>
 <tr>
 <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">(2078.276)</td>
-      <td class="gt_row gt_left">(0.006)</td>
-      <td class="gt_row gt_left">(2611.140)</td>
+      <td class="gt_row gt_left">(1559.363)</td>
+      <td class="gt_row gt_left">(0.004)</td>
+      <td class="gt_row gt_left">(2020.980)</td>
       <td class="gt_row gt_left">(0.003)</td>
       <td class="gt_row gt_left">(1011.240)</td>
     </tr>
 <tr>
-<td class="gt_row gt_left">Clergy</td>
-      <td class="gt_row gt_left">15.257</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">77.148</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">-16.376</td>
+<td class="gt_row gt_left">Literacy (%)</td>
+      <td class="gt_row gt_left">-42.886</td>
+      <td class="gt_row gt_left">-0.006***</td>
+      <td class="gt_row gt_left">-15.358</td>
+      <td class="gt_row gt_left">0.000***</td>
+      <td class="gt_row gt_left">-68.507***</td>
     </tr>
 <tr>
 <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">(25.735)</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">(32.334)</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">(12.522)</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">Literacy</td>
-      <td class="gt_row gt_left">-39.121</td>
-      <td class="gt_row gt_left">0.003</td>
-      <td class="gt_row gt_left">3.680</td>
-      <td class="gt_row gt_left">-0.000</td>
-      <td class="gt_row gt_left">-68.507</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">(37.052)</td>
+      <td class="gt_row gt_left">(36.362)</td>
       <td class="gt_row gt_left">(0.000)</td>
-      <td class="gt_row gt_left">(46.552)</td>
+      <td class="gt_row gt_left">(47.127)</td>
       <td class="gt_row gt_left">(0.000)</td>
       <td class="gt_row gt_left">(18.029)</td>
     </tr>
 <tr>
-<td class="gt_row gt_left">Commerce</td>
+<td class="gt_row gt_left">Priests/capita</td>
       <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">0.011</td>
+      <td class="gt_row gt_left">0.002***</td>
       <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">0.001</td>
-      <td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left">0.004***</td>
+      <td class="gt_row gt_left">-16.376</td>
     </tr>
 <tr>
 <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"></td>
@@ -1049,7 +1013,7 @@
       <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.000)</td>
       <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"></td>
       <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.000)</td>
-      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"></td>
+      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(12.522)</td>
     </tr>
 <tr>
 <td class="gt_row gt_left">Num.Obs.</td>
@@ -1061,121 +1025,370 @@
     </tr>
 <tr>
 <td class="gt_row gt_left">R2</td>
-      <td class="gt_row gt_left">0.020</td>
+      <td class="gt_row gt_left">0.016</td>
       <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">0.065</td>
+      <td class="gt_row gt_left">0.001</td>
       <td class="gt_row gt_left"></td>
       <td class="gt_row gt_left">0.152</td>
     </tr>
-<tr>
-<td class="gt_row gt_left">Adj.R2</td>
-      <td class="gt_row gt_left">-0.003</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">0.043</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">0.132</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">AIC</td>
-      <td class="gt_row gt_left">1740.8</td>
-      <td class="gt_row gt_left">274160.8</td>
-      <td class="gt_row gt_left">1780.0</td>
-      <td class="gt_row gt_left">257564.4</td>
-      <td class="gt_row gt_left">1616.9</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">BIC</td>
-      <td class="gt_row gt_left">1750.6</td>
-      <td class="gt_row gt_left">274168.2</td>
-      <td class="gt_row gt_left">1789.9</td>
-      <td class="gt_row gt_left">257571.7</td>
-      <td class="gt_row gt_left">1626.7</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">Log.Lik.</td>
-      <td class="gt_row gt_left">-866.392</td>
-      <td class="gt_row gt_left">-137077.401</td>
-      <td class="gt_row gt_left">-886.021</td>
-      <td class="gt_row gt_left">-128779.186</td>
-      <td class="gt_row gt_left">-804.441</td>
-    </tr>
 </tbody>
+<tfoot class="gt_sourcenotes"><tr>
+<td class="gt_sourcenote" colspan="6">* p &lt; 0.1, ** p &lt; 0.05, *** p &lt; 0.01</td>
+    </tr></tfoot>
 </table></div>
-</div>
-<div id="complex-example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#complex-example" class="anchor"></a>Complex example</h2>
-<p>This is the code I used to generate the “complex” table posted at the top of this README.</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>,
-        <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>,
-        <span class="st">'Commerce'</span> <span class="kw">=</span> <span class="st">'Patents/capita'</span>,
-        <span class="st">'Infants'</span> <span class="kw">=</span> <span class="st">'Infants'</span>,
-        <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>)
-
-<span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>,
-         <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>,
-         <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-         <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">"Deviance"</span>,
-         <span class="kw">title</span> <span class="kw">=</span> <span class="st">'modelsummary package for R'</span>,
-         <span class="kw">notes</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'The most important parameter is printed in red.'</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Donations'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">3</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Crimes (persons)'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">4</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Crimes (property)'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">6</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(<span class="kw">footnote</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span>(<span class="st">"Very **important** variable."</span>),
-                 <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">rows</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">1</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">'red'</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">rows</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">4</span>))</pre></body></html></div>
-<p><img src="https://user-images.githubusercontent.com/987057/82853752-90558300-9ed4-11ea-88af-12cf20cb367f.png" width="40%"></p>
-</div>
 </div>
 <div id="kableextra" class="section level1">
 <h1 class="hasAnchor">
 <a href="#kableextra" class="anchor"></a><code>kableExtra</code>
 </h1>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)</pre></body></html></div>
-<p>The <code>gt</code> LaTeX render engine is still immature. Until it improves, I strongly recommend that users turn to <code>kableExtra</code> to produce LaTeX tables. This package offers robust functions that allow a lot of customization. A simple LaTeX table can be produced as follows:</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'latex'</span>)</pre></body></html></div>
-<p><code>kableExtra</code> also produces very nice HTML tables. We can use functions from this package to customize this table, with bold and colored cells, column spans, and more.</p>
-<div id="fonts-colors-and-styles-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#fonts-colors-and-styles-1" class="anchor"></a>Fonts, colors and styles</h2>
-<p>The <code>row_spec</code> and <code>column_spec</code> allow users to change the styling of their tables. For instance, this code creates a table where the first column is in bold blue text on pink background:</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'latex'</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span>(<span class="fl">1</span>, <span class="kw">bold</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">'blue'</span>, <span class="kw">background</span> <span class="kw">=</span> <span class="st">'pink'</span>)</pre></body></html></div>
-</div>
-<div id="column-groups-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#column-groups-1" class="anchor"></a>Column groups</h2>
-<p>You can define column group labels using <code>kableExtra</code>’s <code>add_header_above</code> function:</p>
-<pre><code>msummary(models, output = 'latex') %&gt;%
-    add_header_above(c(" " = 1, 
-                       "Donations" = 2, 
-                       "Crimes (person)" = 2, 
-                       "Crimes (property)" = 1))</code></pre>
-</div>
-<div id="complex-example-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#complex-example-1" class="anchor"></a>Complex example</h2>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>,
-        <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>,
-        <span class="st">'Commerce'</span> <span class="kw">=</span> <span class="st">'Patents/capita'</span>,
-        <span class="st">'Infants'</span> <span class="kw">=</span> <span class="st">'Infants'</span>,
-        <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>)
+<p>We will now illustrate how to customize tables using functions from the <code>kableExtra</code> package:</p>
+<ul>
+<li>
+<code>add_header_above</code> creates labels to group columns.</li>
+<li>
+<code>add_footnote</code> adds a footnote and a matching marking in a specific cell.</li>
+<li>
+<code>row_spec</code> can modify the text and color of rows, columns, or cells.</li>
+</ul>
+<p>We use the same code as above, but specify <code>output='kableExtra'</code> in the <code><a href="../reference/msummary.html">msummary()</a></code> call:</p>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)
 
-<span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>,
-    <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>,
-    <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-    <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">"Deviance"</span>,
-    <span class="kw">title</span> <span class="kw">=</span> <span class="st">'modelsummary package for R'</span>,
-    <span class="kw">notes</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'First custom note to contain text.'</span>,
-              <span class="st">'Second custom note with different content.'</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/add_header_above.html">add_header_above</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">" "</span> <span class="kw">=</span> <span class="fl">1</span>,
-                       <span class="st">"Donations"</span> <span class="kw">=</span> <span class="fl">2</span>,
-                       <span class="st">"Crimes (person)"</span> <span class="kw">=</span> <span class="fl">2</span>,
-                       <span class="st">"Crimes (property)"</span> <span class="kw">=</span> <span class="fl">1</span>))
-   <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span>(<span class="fl">3</span>, <span class="kw">bold</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">'blue'</span>, <span class="kw">background</span> <span class="kw">=</span> <span class="st">'pink'</span>)</pre></body></html></div>
+<span class="co"># build table with `modelsummary` </span>
+<span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>)
+<span class="no">cap</span> <span class="kw">&lt;-</span> <span class="st">'A modelsummary table customized with kableExtra'</span>
+
+<span class="no">tab</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'kableExtra'</span>,
+                <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
+                <span class="kw">title</span> <span class="kw">=</span> <span class="no">cap</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'IC|Log|Adj'</span>)
+
+<span class="co"># customize table with `kableExtra`</span>
+<span class="no">tab</span> <span class="kw">%&gt;%</span>
+
+    <span class="co"># column labels</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/add_header_above.html">add_header_above</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">" "</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="st">"Donations"</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="st">"Crimes (person)"</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="st">"Crimes (property)"</span> <span class="kw">=</span> <span class="fl">1</span>)) <span class="kw">%&gt;%</span>
+
+    <span class="co"># text and background color</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span>(<span class="fl">3</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">'red'</span>) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span>(<span class="fl">5</span>, <span class="kw">background</span> <span class="kw">=</span> <span class="st">'lightblue'</span>)</pre></body></html></div>
+<table class="table table">
+<caption>
+A modelsummary table customized with kableExtra
+</caption>
+<thead>
+<tr>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Donations
+</div>
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Crimes (person)
+</div>
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Crimes (property)
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+OLS 1
+</th>
+<th style="text-align:left;">
+Poisson 1
+</th>
+<th style="text-align:left;">
+OLS 2
+</th>
+<th style="text-align:left;">
+Poisson 2
+</th>
+<th style="text-align:left;">
+OLS 3
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Constant
+</td>
+<td style="text-align:left;">
+8759.068***
+</td>
+<td style="text-align:left;">
+8.986***
+</td>
+<td style="text-align:left;">
+20357.309***
+</td>
+<td style="text-align:left;">
+9.708***
+</td>
+<td style="text-align:left;">
+11243.544***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+(1559.363)
+</td>
+<td style="text-align:left;">
+(0.004)
+</td>
+<td style="text-align:left;">
+(2020.980)
+</td>
+<td style="text-align:left;">
+(0.003)
+</td>
+<td style="text-align:left;">
+(1011.240)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;color: red !important;">
+Literacy (%)
+</td>
+<td style="text-align:left;color: red !important;">
+-42.886
+</td>
+<td style="text-align:left;color: red !important;">
+-0.006***
+</td>
+<td style="text-align:left;color: red !important;">
+-15.358
+</td>
+<td style="text-align:left;color: red !important;">
+0.000***
+</td>
+<td style="text-align:left;color: red !important;">
+-68.507***
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+(36.362)
+</td>
+<td style="text-align:left;">
+(0.000)
+</td>
+<td style="text-align:left;">
+(47.127)
+</td>
+<td style="text-align:left;">
+(0.000)
+</td>
+<td style="text-align:left;">
+(18.029)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;background-color: lightblue !important;">
+Priests/capita
+</td>
+<td style="text-align:left;background-color: lightblue !important;">
+</td>
+<td style="text-align:left;background-color: lightblue !important;">
+0.002***
+</td>
+<td style="text-align:left;background-color: lightblue !important;">
+</td>
+<td style="text-align:left;background-color: lightblue !important;">
+0.004***
+</td>
+<td style="text-align:left;background-color: lightblue !important;">
+-16.376
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+(0.000)
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+(0.000)
+</td>
+<td style="text-align:left;">
+(12.522)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Num.Obs.
+</td>
+<td style="text-align:left;">
+86
+</td>
+<td style="text-align:left;">
+86
+</td>
+<td style="text-align:left;">
+86
+</td>
+<td style="text-align:left;">
+86
+</td>
+<td style="text-align:left;">
+86
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R2
+</td>
+<td style="text-align:left;">
+0.016
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.001
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.152
+</td>
+</tr>
+</tbody>
+<tfoot><tr>
+<td style="padding: 0; border:0;" colspan="100%">
+<sup></sup> * p &lt; 0.1, ** p &lt; 0.05, *** p &lt; 0.01
+</td>
+</tr></tfoot>
+</table>
+<p>These <code>kableExtra</code> functions can be used to produce LaTeX / PDF tables such as this one:</p>
 <p><img src="https://user-images.githubusercontent.com/987057/82732382-e068f580-9cda-11ea-8924-331550f8f1e8.png" width="40%"></p>
 </div>
+<div id="flextable" class="section level1">
+<h1 class="hasAnchor">
+<a href="#flextable" class="anchor"></a><code>flextable</code>
+</h1>
+<p>We will now illustrate how to customize tables using functions from the <code>flextable</code> package:</p>
+<ul>
+<li>
+<code>add_header_above</code> creates labels to group columns.</li>
+<li>
+<code>add_footnote</code> adds a footnote and a matching marking in a specific cell.</li>
+<li>
+<code>row_spec</code> can modify the text and color of rows, columns, or cells.</li>
+</ul>
+<p>We use the same code as above, but specify <code>output='kableExtra'</code> in the <code><a href="../reference/msummary.html">msummary()</a></code> call:</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">flextable</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'flextable'</span>
+<span class="co">#&gt; The following objects are masked from 'package:kableExtra':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     as_image, footnote</span>
+
+<span class="co"># build table with `modelsummary` </span>
+<span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>)
+<span class="no">cap</span> <span class="kw">&lt;-</span> <span class="st">'A modelsummary table customized with flextable'</span>
+
+<span class="no">tab</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'flextable'</span>,
+                <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
+                <span class="kw">title</span> <span class="kw">=</span> <span class="no">cap</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'IC|Log|Adj'</span>)
+
+<span class="co"># customize table with `flextable`</span>
+<span class="no">tab</span> <span class="kw">%&gt;%</span>
+
+    <span class="co"># text and background color</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/flextable/man/color.html">color</a></span>(<span class="fl">3</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">'red'</span>) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/flextable/man/bg.html">bg</a></span>(<span class="fl">5</span>, <span class="kw">bg</span> <span class="kw">=</span> <span class="st">'lightblue'</span>)</pre></body></html></div>
+<div class="tabwid"><table class="table">
+<caption>A modelsummary table customized with flextable</caption>
+<thead><tr style="overflow-wrap:break-word;">
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">       </span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">OLS 1</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">Poisson 1</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">OLS 2</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">Poisson 2</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">OLS 3</span></p></td>
+</tr></thead>
+<tbody>
+<tr style="overflow-wrap:break-word;">
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">Constant</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">8759.068***</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">8.986***</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">20357.309***</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">9.708***</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">11243.544***</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;"></span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">(1559.363)</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">(0.004)</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">(2020.980)</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">(0.003)</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">(1011.240)</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(255, 0, 0, 1.00);background-color:transparent;">Literacy (%)</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(255, 0, 0, 1.00);background-color:transparent;">-42.886</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(255, 0, 0, 1.00);background-color:transparent;">-0.006***</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(255, 0, 0, 1.00);background-color:transparent;">-15.358</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(255, 0, 0, 1.00);background-color:transparent;">0.000***</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(255, 0, 0, 1.00);background-color:transparent;">-68.507***</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;"></span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">(36.362)</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">(0.000)</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">(47.127)</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">(0.000)</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">(18.029)</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td style="width:54px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">Priests/capita</span></p></td>
+<td style="width:54px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;"></span></p></td>
+<td style="width:54px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">0.002***</span></p></td>
+<td style="width:54px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;"></span></p></td>
+<td style="width:54px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">0.004***</span></p></td>
+<td style="width:54px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">-16.376</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;"></span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;"></span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">(0.000)</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;"></span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">(0.000)</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">(12.522)</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">Num.Obs.</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">86</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">86</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">86</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">86</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">86</span></p></td>
+</tr>
+<tr style="overflow-wrap:break-word;">
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">R2</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">0.016</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;"></span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">0.001</span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;"></span></p></td>
+<td style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;background-color:transparent;"><span style="font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;">0.152</span></p></td>
+</tr>
+</tbody>
+<tfoot><tr style="overflow-wrap:break-word;"><td colspan="6" style="width:54px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;"><p style="margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:0;padding-right:0;background-color:transparent;"><span style="font-family:'Arial';font-size:10px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;">* p &lt; 0.1, ** p &lt; 0.05, *** p &lt; 0.01</span></p></td></tr></tfoot>
+</table></div>
 </div>
 <div id="huxtable" class="section level1">
 <h1 class="hasAnchor">
@@ -1183,11 +1396,16 @@
 </h1>
 <p>TODO: Contributions welcome!</p>
 </div>
-<div id="flextable" class="section level1">
+<div id="warning-saving-to-file" class="section level1">
 <h1 class="hasAnchor">
-<a href="#flextable" class="anchor"></a><code>flextable</code>
-</h1>
-<p>TODO: Contributions welcome!</p>
+<a href="#warning-saving-to-file" class="anchor"></a>Warning: Saving to file</h1>
+<p>When users supply a file name to the <code>output</code> argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from <code>gt</code>, <code>kableExtra</code>, <code>huxtable</code>, or <code>flextable</code>. When users specify a filename in the <code>output</code> argument, the <code><a href="../reference/msummary.html">msummary()</a></code> call should be the <em>final</em> one in the chain.</p>
+<p>This is OK:</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.html'</span>)</pre></body></html></div>
+<p>This is <strong>not</strong> OK:</p>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.html'</span>) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Literacy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 1'</span>, <span class="st">'Poisson 1'</span>))</pre></body></html></div>
+<p>To save a customized table, you should apply all the customization functions you need before saving it using <code><a href="https://rdrr.io/pkg/gt/man/gtsave.html">gt::gtsave</a></code>, <code><a href="https://rdrr.io/pkg/kableExtra/man/save_kable.html">kableExtra::save_kable</a></code>, or the appropriate helper function from the package that you are using to customize your table.</p>
 </div>
   </div>
 
