@@ -134,7 +134,6 @@ modelsummary <- function(models,
     sanity_notes(notes)
     sanity_filename(filename)
     sanity_subtitle(subtitle)
-    sanity_global_options()
 
     # extract estimates and gof
     dat <- modelsummary::extract(models,
@@ -159,33 +158,47 @@ modelsummary <- function(models,
            dplyr::mutate(term = ifelse(idx, '', term))
 
     # choose table factory
-    factory_dict <- list('gt' = 'gt',
+    factory_dict <- list('default' = getOption('modelsummary_default', default = 'gt'),
+                         'gt' = 'gt',
                          'huxtable' = 'huxtable',
                          'flextable' = 'flextable',
                          'kableExtra' = 'kableExtra',
-                         'rtf' = 'gt',
-                         'docx' = 'flextable',
-                         'pptx' = 'flextable',
-                         'markdown' = 'kableExtra',
-                         'md' = 'kableExtra',
-                         'Rmd' = 'kableExtra',
-                         'txt' = 'kableExtra',
-                         'default' = getOption('modelsummary_default', default = 'gt'),
-                         'png' = getOption('modelsummary_png', default = 'gt'),
-                         'jpg' = getOption('modelsummary_jpg', default = 'flextable'),
-                         'htm' = getOption('modelsummary_html', default = 'gt'),
                          'html' = getOption('modelsummary_html', default = 'gt'),
-                         'tex' = getOption('modelsummary_latex', default = 'kableExtra'),
-                         'latex' = getOption('modelsummary_latex', default = 'kableExtra'))
-    sapply(factory_dict, sanity_factory)
+                         'rtf' = getOption('modelsummary_rtf', default = 'gt'),
+                         'latex' = getOption('modelsummary_latex', default = 'kableExtra'),
+                         'markdown' = 'kableExtra',
+                         'word' =  getOption('modelsummary_word', default = 'flextable'),
+                         'powerpoint' =  getOption('modelsummary_powerpoint', default = 'flextable'),
+                         'png' = getOption('modelsummary_png', default = 'flextable'),
+                         'jpg' = getOption('modelsummary_jpg', default = 'flextable'))
 
+    # sanity check: are user-supplied global options ok?
+    sanity_factory(factory_dict)
+
+    # decide which table factory to use based on user input
     ext <- tools::file_ext(output)
-    idx <- ifelse(ext == '', output, ext)
-    idx <- factory_dict[[idx]]
+    if (output %in% c('html', 'latex', 'markdown')) { # kableExtra produces minimal/readable code
+        idx <- 'kableExtra'
+    } else if (ext %in% c('htm', 'html')) {
+        idx <- 'html'
+    } else if (ext %in% c('md', 'Rmd', 'txt')) {
+        idx <- 'markdown'
+    } else if (ext %in% c('tex', 'ltx')) {
+        idx <- 'latex'
+    } else if (ext %in% c('docx', 'doc')) {
+        idx <- 'word'
+    } else if (ext %in% c('pptx', 'ppt')) {
+        idx <- 'powerpoint'
+    } else if (ext == '') {
+        idx <- output
+    } else {
+        idx <- ext
+    }
+    factory <- factory_dict[[idx]]
     factory <- list('gt' = build_gt,
                     'kableExtra' = build_kableExtra,
                     'huxtable' = build_huxtable,
-                    'flextable' = build_flextable)[[idx]]
+                    'flextable' = build_flextable)[[factory]]
 
     # clean and measure table
     gof_idx <- match('gof', tab$group)

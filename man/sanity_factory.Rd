@@ -4,7 +4,7 @@
 \alias{sanity_factory}
 \title{sanity check}
 \usage{
-sanity_factory(factory)
+sanity_factory(factory_dict)
 }
 \description{
 sanity check

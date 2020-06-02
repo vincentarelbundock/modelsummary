@@ -13,9 +13,10 @@ build_flextable <- function(tab,
                             output,
                             ...) {
 
-    # sanity: check if "Suggested" `flextable` is installed when the factory
-    # was assigned based on filename extension
-    sanity_output('flextable')
+    # is huxtable installed?
+    if (!requireNamespace('flextable', quietly = TRUE)) {
+        stop("Please install the `flextable` package.")
+    }
  
     table_width <- ncol(tab)
 

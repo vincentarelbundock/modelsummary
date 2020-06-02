@@ -43,10 +43,33 @@ sanity_conf_level <- function(conf_level) {
 #' sanity check
 #'
 #' @keywords internal
-sanity_factory <- function(factory) {
-    if (!factory %in% c('gt', 'kableExtra', 'huxtable', 'flextable')) {
-        stop('Global options modelsummary_default, modelsummary_html, and modelsummary_latex must be one of: gt, kableExtra, huxtable, flextable.')
+sanity_factory <- function(factory_dict) {
+    check_option <- function(output_type, valid) {
+        if (!factory_dict[[output_type]] %in% valid) {
+            msg <- paste0("`modelsummary` cannot write a table of type '",
+                          output_type,
+                          "' using the ",
+                          factory_dict[[output_type]],
+                          " package. You must use one of the following packages: ",
+                          paste(valid, collapse = ', '),
+                          ". Consider setting a global option such as: option(modelsummary_", 
+                          output_type,
+                          "='",
+                          valid[1],
+                          "')"
+                          )
+            stop(msg)
+        }
     }
+    check_option('default', c('gt', 'kableExtra', 'flextable', 'huxtable'))
+    check_option('html', c('gt', 'kableExtra', 'flextable', 'huxtable'))
+    check_option('rtf', c('gt', 'huxtable'))
+    check_option('latex', c('gt', 'kableExtra', 'huxtable'))
+    check_option('markdown', c('kableExtra'))
+    check_option('word', c('flextable', 'huxtable'))
+    check_option('powerpoint', c('flextable', 'huxtable'))
+    check_option('png', c('gt', 'flextable'))
+    check_option('jpg', c('flextable'))
 }
 
 #' sanity check
@@ -82,8 +105,8 @@ sanity_notes <- function(notes) {
 #' @keywords internal
 sanity_output <- function(output) {
 
-    object_types <- c('default', 'gt', 'kableExtra', 'huxtable', 'flextable', 'markdown', 'html', 'latex')
-    extension_types <- c('htm', 'html', 'tex', 'jpg', 'png', 'md', 'Rmd', 'txt', 'rtf', 'docx', 'pptx')
+    object_types <- c('default', 'gt', 'kableExtra', 'flextable', 'huxtable', 'html', 'latex', 'markdown')
+    extension_types <- c('html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf', 'jpg', 'png')
 
     checkmate::assert_string(output)
 
@@ -101,21 +124,6 @@ sanity_output <- function(output) {
             stop(msg)
         }
     }
-
-    # is huxtable installed?
-    if (output == 'huxtable') {
-        if (!requireNamespace('huxtable', quietly = TRUE)) {
-            stop("The `huxtable` package must be installed when `modelsummary(output='huxtable')`.")
-        }
-    }
-
-    # is flextable is installed?
-    if (output == 'flextable') {
-        if (!requireNamespace('flextable', quietly = TRUE)) {
-            stop("The `flextable` package must be installed when `modelsummary(output='flextable')`.")
-        }
-    }
-
 }
 
 #' sanity check
@@ -196,21 +204,3 @@ sanity_tidy_output <- function(tidy_output, estimate, statistic, modelclass) {
     }
 }
 
-#' sanity check
-#' 
-#' @keywords internal
-sanity_global_options <- function() {
-    check_option <- function(optionname, valid) {
-        tmp <- getOption(optionname)
-        if (!is.null(tmp)) {
-            if (!tmp %in% valid) {
-                stop(paste(optionname, 'must be NULL or one of:', paste(valid, collapse = ', ')))
-            }
-        }
-    }
-    check_option('modelsummary_default', c('gt', 'kableExtra', 'flextable', 'huxtable'))
-    check_option('modelsummary_png', c('gt', 'flextable'))
-    check_option('modelsummary_jpg', c('flextable'))
-    check_option('modelsummary_html', c('gt', 'kableExtra', 'flextable', 'huxtable'))
-    check_option('modelsummary_latex', c('gt', 'kableExtra', 'huxtable'))
-}

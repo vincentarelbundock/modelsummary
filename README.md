@@ -50,10 +50,17 @@ mod <- lm(y ~ x, dat)
 msummary(mod)
 ```
 
-The command above will automatically display a summary table in the `Rstudio` Viewer or in a web browser. All you need is one word to change the output format. For example, a text-only version of the table can also be printed to the Console by typing:
+The command above will automatically display a summary table in the `Rstudio` Viewer or in a web browser. All you need is one word to change the output format. For example, a text-only version of the table can be printed to the Console by typing:
 
 ``` r
 msummary(mod, "markdown")
+```
+
+Tables in Microsoft Word and LaTeX formats can be saved to file by typing:
+
+``` r
+msummary(mod, "table.docx")
+msummary(mod, "table.tex")
 ```
 
 #### Flexible
@@ -62,13 +69,13 @@ msummary(mod, "markdown")
 
 *Appearance*: Thanks to the [`gt`](https://gt.rstudio.com), [`kableExtra`](https://haozhu233.github.io/kableExtra/), [`huxtable`](https://hughjonesd.github.io/huxtable/), and [`flextable`](https://davidgohel.github.io/flextable/) packages, the appearance of `modelsummary` tables is endlessly customizable. The [appearance customization page](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html) shows tables with colored cells, weird text, spanning column labels, row groups, titles, source notes, footnotes, significance stars, and more.  This only scratches the surface of possibilities.
 
-*Supported models*: Thanks to the [`broom` package](https://broom.tidymodels.org/), `modelsummary` supports dozens of statistical models out-of-the-box. Installing other packages can extend the capabilities further (e.g., [`broom.mixed`](https://cran.r-project.org/web/packages/broom.mixed/index.html)). It is also very easy to [add or customize your own models.](https://vincentarelbundock.github.io/modelsummary/articles/advanced.html)
+*Supported models*: Thanks to the [`broom` package](https://broom.tidymodels.org/), `modelsummary` supports dozens of statistical models out-of-the-box. Installing other packages can extend the capabilities further (e.g., [`broom.mixed`](https://cran.r-project.org/web/packages/broom.mixed/index.html)). It is also very easy to [add or customize your own models.](https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html)
 
-*Output formats*: `modelsummary` tables can be saved to HTML, LaTeX, Text/Markdown, Microsoft Word, Powerpoint, RTF, JPG, or PNG formats.  They can also be inserted seamlessly in Rmarkdown documents to produce [automated documents and reports in PDF, HTML, or Microsoft Word-compatible formats.](https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html)
+*Output formats*: `modelsummary` tables can be saved to HTML, LaTeX, Text/Markdown, Microsoft Word, Powerpoint, RTF, JPG, or PNG formats.  They can also be inserted seamlessly in Rmarkdown documents to produce [automated documents and reports in PDF, HTML, RTF, or Microsoft Word formats.](https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html)
 
 #### Dangerous
 
-`modelsummary` is dangerous\! It allows users to do stupid stuff like [replacing their intercepts by squirrels.](https://vincentarelbundock.github.io/modelsummary/articles/customization.html#images)
+`modelsummary` is dangerous\! It allows users to do stupid stuff like [replacing their intercepts by squirrels.](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html#images)
 
 <center>
 <img src="https://user-images.githubusercontent.com/987057/82818916-7a60a780-9e6d-11ea-96ed-04fa92874a23.png" width="40%">
@@ -76,7 +83,7 @@ msummary(mod, "markdown")
 
 #### Reliable
 
-`modelsummary` is *reliably* dangerous\! The package is developed using a [suite of unit tests.](https://github.com/vincentarelbundock/modelsummary/tree/master/tests/testthat), so it (probably) won’t break.
+`modelsummary` is *reliably* dangerous\! The package is developed using a [suite of unit tests](https://github.com/vincentarelbundock/modelsummary/tree/master/tests/testthat), so it (probably) won’t break.
 
 #### Community
 
@@ -177,27 +184,29 @@ msummary(models, 'markdown')
 
 # Saving and viewing: output formats
 
-There are three ways to save and view `modelsummary` tables:
+There are four ways to display and save `modelsummary` tables.
 
-1. Display a table in the R Console or in the RStudio Viewer.
+1. Display in the R Console, the RStudio Viewer, or a web browser.
 2. Save a table to file.
 3. Insert a [table in `Rmarkdown` or `knitr` documents](https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html),
+4. Convert the table to human-readable html, latex, or markdown code.
 
-`modelsummary` can use four packages to display or save tables: `gt`, `kableExtra`, `huxtable`, `flextable`. These packages offer different levels of support for different output formats. To minimize friction for users, `modelsummary` makes opinionated choices about which table-making package to use for which output format:
+`modelsummary` uses sensible defaults to choose an appopriate table-making package for each output format (`gt`, `kableExtra`, `flextable`, or `huxtable`). This table summarizes how to modify `modelsummary`'s `output` argument to display and save tables: 
 
-<center><img src="https://user-images.githubusercontent.com/987057/83420788-1dc53580-a3f5-11ea-91ba-83efdda9a205.png" width="50%"></center>
+<center><img src="https://user-images.githubusercontent.com/987057/83556122-5a6c5c00-a4dd-11ea-905d-b04f633c9844.png" width="50%"></center>
 
-The default table-making packages can be overridden by setting global options such as:
+In the above table, checkmarks identify the default table-making package used for each output format. Dots identify supported alternatives. To use those alternatives, we set global options such as:
 
 ```r
 options(modelsummary_html = 'kableExtra')
 options(modelsummary_latex = 'gt')
+options(modelsummary_word = 'huxtable')
+options(modelsummary_png = 'gt')
 ```
 
 # Alternative packages
 
-There are several excellent alternatives to draw model summary tables in
-`R`:
+There are several excellent alternatives to draw model summary tables in `R`:
 
   - [texreg](https://cran.r-project.org/package=texreg)
   - [stargazer](https://cran.r-project.org/package=stargazer)
