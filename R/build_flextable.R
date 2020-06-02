@@ -12,6 +12,10 @@ build_flextable <- function(tab,
                             gof_idx,
                             output,
                             ...) {
+
+    # sanity: check if "Suggested" `flextable` is installed when the factory
+    # was assigned based on filename extension
+    sanity_output('flextable')
  
     table_width <- ncol(tab)
 
@@ -46,6 +50,17 @@ build_flextable <- function(tab,
                                          colwidths = table_width)
     }
 
-    return(out)
+    ext <- tools::file_ext(output)
+    if (output == 'flextable') {
+        return(out)
+    } else if (ext == 'docx') {
+        flextable::save_as_docx(out, path = output)
+    } else if (ext == 'pptx') {
+        flextable::save_as_pptx(out, path = output)
+    } else if (ext %in% c('png')) {
+        flextable::save_as_image(out, path = output)
+    } else if (ext %in% c('htm', 'html')) {
+        flextable::save_as_html(out, path = output)
+    }
 
 }

@@ -58,32 +58,25 @@ msummary(mod, "markdown")
 
 #### Flexible
 
-*Information*: The package offers many intuitive and powerful utilities to [customize the information](https://vincentarelbundock.github.io/modelsummary/articles/customization.html#information-with-modelsummary) reported in a summary table. You can rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to include; display various “robust” standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.
+*Information*: The package offers many intuitive and powerful utilities to [customize the information](https://vincentarelbundock.github.io/modelsummary/articles/content.html) reported in a summary table. You can rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to include; display various “robust” standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.
 
-*Appearance*: Thanks to the [`gt`](https://gt.rstudio.com), [`kableExtra`](https://haozhu233.github.io/kableExtra/), [`huxtable`](https://hughjonesd.github.io/huxtable/), and [`flextable`](https://davidgohel.github.io/flextable/) packages, the appearance of summary tables is endlessly customizable. The [appearance customization page](https://vincentarelbundock.github.io/modelsummary/articles/customization.html) shows tables with colored cells, weird text, spanning column labels, row groups, titles, source notes, footnotes, significance stars, and more.  This only scratches the surface of possibilities.
+*Appearance*: Thanks to the [`gt`](https://gt.rstudio.com), [`kableExtra`](https://haozhu233.github.io/kableExtra/), [`huxtable`](https://hughjonesd.github.io/huxtable/), and [`flextable`](https://davidgohel.github.io/flextable/) packages, the appearance of `modelsummary` tables is endlessly customizable. The [appearance customization page](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html) shows tables with colored cells, weird text, spanning column labels, row groups, titles, source notes, footnotes, significance stars, and more.  This only scratches the surface of possibilities.
 
-*Supported models*: Thanks to the [`broom` package](https://broom.tidymodels.org/), `modelsummary` supports dozens of statistical models out-of-the-box. Other packages (e.g., [`broom.mixed`](https://cran.r-project.org/web/packages/broom.mixed/index.html) extend the capabilities further. Importantly, it is *super* easy to [add or customize your own models.](https://vincentarelbundock.github.io/modelsummary/articles/advanced.html)
+*Supported models*: Thanks to the [`broom` package](https://broom.tidymodels.org/), `modelsummary` supports dozens of statistical models out-of-the-box. Installing other packages can extend the capabilities further (e.g., [`broom.mixed`](https://cran.r-project.org/web/packages/broom.mixed/index.html)). It is also very easy to [add or customize your own models.](https://vincentarelbundock.github.io/modelsummary/articles/advanced.html)
 
-*Output formats*: `modelsummary` tables can be saved to HTML, LaTeX, Text/Markdown, Microsoft Word and Powerpoint, RTF, JPG, or PNG formats.  They can also be inserted seamlessly in Rmarkdown documents to produce [automated documents and reports in PDF, HTML, or Microsoft Word-compatible formats.](https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html)
+*Output formats*: `modelsummary` tables can be saved to HTML, LaTeX, Text/Markdown, Microsoft Word, Powerpoint, RTF, JPG, or PNG formats.  They can also be inserted seamlessly in Rmarkdown documents to produce [automated documents and reports in PDF, HTML, or Microsoft Word-compatible formats.](https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html)
 
 #### Dangerous
 
-`modelsummary` is dangerous\! It allows users to do stupid stuff like
-[replacing their intercepts by
-squirrels.](https://vincentarelbundock.github.io/modelsummary/articles/customization.html#images)
+`modelsummary` is dangerous\! It allows users to do stupid stuff like [replacing their intercepts by squirrels.](https://vincentarelbundock.github.io/modelsummary/articles/customization.html#images)
 
 <center>
-
 <img src="https://user-images.githubusercontent.com/987057/82818916-7a60a780-9e6d-11ea-96ed-04fa92874a23.png" width="40%">
-
 </center>
 
 #### Reliable
 
-`modelsummary` is *reliably* dangerous\! The package is developed using
-a [suite of unit
-tests.](https://github.com/vincentarelbundock/modelsummary/tree/master/tests/testthat),
-so it (probably) won’t break.
+`modelsummary` is *reliably* dangerous\! The package is developed using a [suite of unit tests.](https://github.com/vincentarelbundock/modelsummary/tree/master/tests/testthat), so it (probably) won’t break.
 
 #### Community
 

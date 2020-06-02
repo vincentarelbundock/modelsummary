@@ -134,6 +134,7 @@ modelsummary <- function(models,
     sanity_notes(notes)
     sanity_filename(filename)
     sanity_subtitle(subtitle)
+    sanity_global_options()
 
     # extract estimates and gof
     dat <- modelsummary::extract(models,
@@ -158,18 +159,20 @@ modelsummary <- function(models,
            dplyr::mutate(term = ifelse(idx, '', term))
 
     # choose table factory
-    factory_dict <- list('jpg' = 'gt',
-                         'png' = 'gt',
+    factory_dict <- list('gt' = 'gt',
+                         'huxtable' = 'huxtable',
+                         'flextable' = 'flextable',
+                         'kableExtra' = 'kableExtra',
                          'rtf' = 'gt',
+                         'docx' = 'flextable',
+                         'pptx' = 'flextable',
                          'markdown' = 'kableExtra',
                          'md' = 'kableExtra',
                          'Rmd' = 'kableExtra',
                          'txt' = 'kableExtra',
-                         'gt' = 'gt',
-                         'huxtable' = 'huxtable',
-                         'flextable' = 'flextable',
-                         'kableExtra' = 'kableExtra',
                          'default' = getOption('modelsummary_default', default = 'gt'),
+                         'png' = getOption('modelsummary_png', default = 'gt'),
+                         'jpg' = getOption('modelsummary_jpg', default = 'flextable'),
                          'htm' = getOption('modelsummary_html', default = 'gt'),
                          'html' = getOption('modelsummary_html', default = 'gt'),
                          'tex' = getOption('modelsummary_latex', default = 'kableExtra'),

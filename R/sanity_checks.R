@@ -83,7 +83,7 @@ sanity_notes <- function(notes) {
 sanity_output <- function(output) {
 
     object_types <- c('default', 'gt', 'kableExtra', 'huxtable', 'flextable', 'markdown', 'html', 'latex')
-    extension_types <- c('htm', 'html', 'tex', 'jpg', 'png', 'md', 'Rmd', 'txt', 'rtf')
+    extension_types <- c('htm', 'html', 'tex', 'jpg', 'png', 'md', 'Rmd', 'txt', 'rtf', 'docx', 'pptx')
 
     checkmate::assert_string(output)
 
@@ -194,4 +194,23 @@ sanity_tidy_output <- function(tidy_output, estimate, statistic, modelclass) {
     if (!isTRUE(cond2)) {
         stop('You tried to summarize a model of class: ', modelclass, '. Unfortunately, `tidy(model)` did not produce a dataframe with columns terms, ', estimate, ', and ', statistic, '. Make you this kind of model is supported by `broom`, `broom.mixed`, or some other loaded R package. Alternatively, try modifying the `modelsummary` `estimate` and `statistic` argument to match a column name in `tidy(model)`')
     }
+}
+
+#' sanity check
+#' 
+#' @keywords internal
+sanity_global_options <- function() {
+    check_option <- function(optionname, valid) {
+        tmp <- getOption(optionname)
+        if (!is.null(tmp)) {
+            if (!tmp %in% valid) {
+                stop(paste(optionname, 'must be NULL or one of:', paste(valid, collapse = ', ')))
+            }
+        }
+    }
+    check_option('modelsummary_default', c('gt', 'kableExtra', 'flextable', 'huxtable'))
+    check_option('modelsummary_png', c('gt', 'flextable'))
+    check_option('modelsummary_jpg', c('flextable'))
+    check_option('modelsummary_html', c('gt', 'kableExtra', 'flextable', 'huxtable'))
+    check_option('modelsummary_latex', c('gt', 'kableExtra', 'huxtable'))
 }

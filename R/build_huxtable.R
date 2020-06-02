@@ -13,6 +13,11 @@ build_huxtable <- function(tab,
                            output,
                            ...) {
 
+    # sanity: check if "Suggested" `huxtable` is installed
+    # when the factory was assigned based on filename
+    # extension
+    sanity_output('huxtable')
+
     # huxtable object
     out <- huxtable::hux(tab)
 
@@ -41,6 +46,20 @@ build_huxtable <- function(tab,
         }
     }
 
-    return(out)
+    # output
+    ext <- tools::file <- ext(output)
+    if (output == 'huxtable') {
+        return(out)
+    } else if (ext == 'docx') {
+        huxtable::quick_docx(out, file = output)
+    } else if (ext == 'pptx') {
+        huxtable::quick_pptx(out, file = output)
+    } else if (ext %in% c('htm', 'html')) {
+        huxtable::quick_html(out, file = output)
+    } else if (ext %in% c('rtf')) {
+        huxtable::quick_rtf(out, file = output)
+    } else if (ext %in% c('tex')) {
+        huxtable::quick_rtf(out, file = output)
+    }
 
 }
