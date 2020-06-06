@@ -19,9 +19,7 @@ Glance a multiple imputation `mitools::MIcombine` pooled object
 }
 \seealso{
 Other tidiers: 
-\code{\link{glance.fixest}()},
-\code{\link{glance.mira}()},
-\code{\link{tidy.fixest}()}
+\code{\link{glance.mira}()}
 }
 \concept{tidiers}
 \keyword{internal}
