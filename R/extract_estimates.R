@@ -36,7 +36,7 @@ extract_estimates <- function(model,
 
         # keep only columns that do not appear in so
         est <- est[, c('term', base::setdiff(colnames(est), colnames(so)))]
-        est <- suppressWarnings(dplyr::left_join(est, so, by = 'term'))
+        est <- dplyr::left_join(est, so, by = 'term')
 
     } else { # if statistic_override is not used
 
@@ -108,8 +108,8 @@ extract_estimates <- function(model,
 
     # reshape to vertical
     if (statistic_vertical) {
-        est <- suppressWarnings(tidyr::pivot_longer(est, -term, names_to='statistic'))
-        est <- est %>% 
+        est <- est %>%
+               tidyr::pivot_longer(-term, names_to='statistic') %>%
                dplyr::arrange(term, statistic)
     } else {
         est$statistic <- 'estimate'
