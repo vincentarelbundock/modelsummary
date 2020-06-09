@@ -1,4 +1,4 @@
-# modelsummary 0.4.0.9000
+# modelsummary 0.4.0
 
 * huxtable support
 * flextable support
