@@ -4,16 +4,16 @@
 #' @param stars_note argument passed by `modelsummary()`
 #' @keywords internal
 #' @return tbl_gt object
-build_gt <- function(tab,
-                     title,
-                     subtitle,
-                     stars,
-                     stars_note,
-                     notes,
-                     gof_idx,
-                     output,
-                     ...) {
-
+factory_gt <- function(tab,
+                       title,
+                       subtitle,
+                       stars,
+                       stars_note,
+                       notes,
+                       gof_idx,
+                       output,
+                       ...) {
+  
     # create gt table object
     idx_col <- ncol(tab)
     tab <- tab %>% 

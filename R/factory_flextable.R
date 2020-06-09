@@ -4,15 +4,15 @@
 #' @param stars_note passed by `modelsummary()`
 #' @keywords internal
 #' @return flextable object
-build_flextable <- function(tab,
-                            title,
-                            stars,
-                            stars_note,
-                            notes,
-                            gof_idx,
-                            output,
-                            ...) {
-
+factory_flextable <- function(tab,
+                              title,
+                              stars,
+                              stars_note,
+                              notes,
+                              gof_idx,
+                              output,
+                              ...) {
+  
     # is huxtable installed?
     if (!requireNamespace('flextable', quietly = TRUE)) {
         stop("Please install the `flextable` package.")

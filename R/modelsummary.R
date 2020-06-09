@@ -177,10 +177,20 @@ modelsummary <- function(models,
 
     # decide which table factory to use based on user input
     ext <- tools::file_ext(output)
-    if (output %in% c('html', 'latex', 'markdown')) { # kableExtra produces minimal/readable code
+
+    # override default if knitting to latex. otherwise gt would break compilation
+    if (output == 'default') {
+        if (knitr::is_latex_output()) {
+            idx <- 'latex'
+        } else {
+            idx <- 'default'
+        }
+
+    # kableExtra produces minimal/readable code
+    } else if (output %in% c('html', 'latex', 'markdown')) { 
         idx <- 'kableExtra'
-    } else if (ext %in% c('htm', 'html')) {
-        idx <- 'html'
+
+    # file extensions to output format
     } else if (ext %in% c('md', 'Rmd', 'txt')) {
         idx <- 'markdown'
     } else if (ext %in% c('tex', 'ltx')) {
@@ -189,16 +199,22 @@ modelsummary <- function(models,
         idx <- 'word'
     } else if (ext %in% c('pptx', 'ppt')) {
         idx <- 'powerpoint'
+
+    # human-readable html, latex, markdown 
     } else if (ext == '') {
         idx <- output
+
+    # file extension is self-explanatory
     } else {
         idx <- ext
     }
+
+    # table factory
     factory <- factory_dict[[idx]]
-    factory <- list('gt' = build_gt,
-                    'kableExtra' = build_kableExtra,
-                    'huxtable' = build_huxtable,
-                    'flextable' = build_flextable)[[factory]]
+    factory <- list('gt' = factory_gt,
+                    'kableExtra' = factory_kableExtra,
+                    'huxtable' = factory_huxtable,
+                    'flextable' = factory_flextable)[[factory]]
 
     # clean and measure table
     gof_idx <- match('gof', tab$group)

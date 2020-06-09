@@ -4,15 +4,15 @@
 #' @param stars_note passed by `modelsummary()`
 #' @keywords internal
 #' @return tbl_gt object
-build_kableExtra <- function(tab,
-                             title,
-                             stars,
-                             stars_note,
-                             notes,
-                             gof_idx,
-                             output,
-                             ...) {
-
+factory_kableExtra <- function(tab,
+                               title,
+                               stars,
+                               stars_note,
+                               notes,
+                               gof_idx,
+                               output,
+                               ...) {
+  
     # kableExtra needs to know the output format ex ante 
     ext <- tools::file_ext(output)
 

@@ -4,14 +4,14 @@
 #' @param stars_note passed by `modelsummary()`
 #' @keywords internal
 #' @return huxtable object
-build_huxtable <- function(tab,
-                           title,
-                           stars,
-                           stars_note,
-                           notes,
-                           gof_idx,
-                           output,
-                           ...) {
+factory_huxtable <- function(tab,
+                             title,
+                             stars,
+                             stars_note,
+                             notes,
+                             gof_idx,
+                             output,
+                             ...) {
 
     # is huxtable installed?
     if (!requireNamespace('huxtable', quietly = TRUE)) {
