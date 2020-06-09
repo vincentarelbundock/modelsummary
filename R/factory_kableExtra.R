@@ -40,6 +40,7 @@ factory_kableExtra <- function(tab,
                 } else {
                     output_format <- 'html'
                 }
+
             }
 
         }

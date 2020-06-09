@@ -1,17 +1,16 @@
 ---
+title: Cross-references with `Rmarkdown`, `bookdown` and `modelsummary`
 output: 
-  bookdown::pdf_document2: default
-  bookdown::html_document2: default
-header-includes: \usepackage{booktabs}
+  bookdown::pdf_document2:
+    toc: false
 ---
 
-And see Table \@ref(tab:test)
+The `bookdown` package allows you to compile PDF documents with table numbers and cross references. To do this, you must include a title in your table, use the `\@ref{tab:name}` construct, and give a name to the `R` chunk where `modelsummary` is called. 
 
-```{r test, echo=FALSE}
-options(modelsummary_html = 'kableExtra')
+For example, see Table \@ref(tab:test).
+
+```{r test}
 library(modelsummary)
-library(kableExtra)
 mod <- lm(hp ~ mpg, mtcars)
-msummary(mod, title = 'This title describes the content of this table.') %>%
-    kable_styling()
+msummary(mod, title = 'This title describes the content of this table.')
 ```
