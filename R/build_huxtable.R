@@ -18,19 +18,29 @@ build_huxtable <- function(tab,
         stop("Please install the `huxtable` package.")
     }
 
-    # huxtable object
-    out <- huxtable::hux(tab)
+    # huxtable object with header 
+    out <- huxtable::hux(tab, add_colnames = TRUE) 
+
+    # horizontal rules
+    out <- out %>%
+           huxtable::set_bottom_border(row = 1, 
+                                       col = 1:ncol(.),
+                                       value = 1) %>%
+           huxtable::set_top_border(row = 1, 
+                                    col = 1:ncol(.),
+                                    value = 1) %>%
+           huxtable::set_bottom_border(row = nrow(.), 
+                                       col = 1:ncol(.),
+                                       value = 1) %>%
+           huxtable::set_bottom_border(row = gof_idx, 
+                                       col = 1:ncol(.),
+                                       value = 1)
 
     # title
     if (!is.null(title)) {
         out <- huxtable::set_caption(out, title)
     }
 
-    # horizontal rule to separate coef/gof
-    out <- huxtable::set_bottom_border(out, 
-                                       row = gof_idx, 
-                                       col = 1:ncol(out),
-                                       value = 1)
 
     # stars note
     stars_note <- make_stars_note(stars)

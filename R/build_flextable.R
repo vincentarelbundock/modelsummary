@@ -28,11 +28,10 @@ build_flextable <- function(tab,
         out <- flextable::set_caption(out, title)
     }
 
-    ## horizontal rule to separate coef/gof
-    #out <- flextable::border(out, 
-                              #row = gof_idx, 
-                              #col = 1:ncol(out),
-                              #value = 1)
+    # horizontal rule to separate coef/gof
+    out <- flextable::border(out, 
+                             i = gof_idx, 
+                             border.top = officer::fp_border())
 
     # user-supplied notes at the bottom of table
     if (!is.null(notes)) {
