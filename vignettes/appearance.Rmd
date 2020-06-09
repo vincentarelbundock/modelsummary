@@ -11,10 +11,10 @@ knitr::opts_chunk$set(
 
 To customize the appearance of tables, `modelsummary` supports four of the most popular table-making packages: 
 
-1. [`gt` documentation: https://gt.rstudio.com](https://gt.rstudio.com)
-2. [`kableExtra` documentation: http://haozhu233.github.io/kableExtra](http://haozhu233.github.io/kableExtra)
-3. [`huxtable` documentation: https://hughjonesd.github.io/huxtable/](https://hughjonesd.github.io/huxtable/)
-4. [`flextable` documentation: https://davidgohel.github.io/flextable/](https://davidgohel.github.io/flextable/)
+1. [`gt`: https://gt.rstudio.com](https://gt.rstudio.com)
+2. [`kableExtra`: http://haozhu233.github.io/kableExtra](http://haozhu233.github.io/kableExtra)
+3. [`huxtable`: https://hughjonesd.github.io/huxtable/](https://hughjonesd.github.io/huxtable/)
+4. [`flextable`: https://davidgohel.github.io/flextable/](https://davidgohel.github.io/flextable/)
 
 Users are encouraged to visit these websites to determine which package suits their needs best. Each of them has different strengths and weaknesses. For instance, `gt` allows seamless integration with the RStudio IDE, but `kableExtra`'s LaTeX (and PDF) output is far more mature.
 
@@ -133,11 +133,12 @@ These `kableExtra` functions can be used to produce LaTeX / PDF tables such as t
 
 We will now illustrate how to customize tables using functions from the `flextable` package:
 
-* `add_header_above` creates labels to group columns.
-* `add_footnote` adds a footnote and a matching marking in a specific cell.
-* `row_spec` can modify the text and color of rows, columns, or cells.
 
-We use the same code as above, but specify `output='kableExtra'` in the `msummary()` call:
+* `color` to modify the color of the text
+* `bg` to modify the color of the background
+* `autofit` sets column width to sensible values.
+
+We use the same code as above, but specify `output='flextable'` in the `msummary()` call:
 
 ```{r}
 library(flextable)
@@ -155,14 +156,39 @@ tab %>%
    
     # text and background color
     color(3, color = 'red') %>%
-    bg(5, bg = 'lightblue')
+    bg(5, bg = 'lightblue') %>%
+  
+    # column widths
+    autofit()
 ```
 
 
 # `huxtable`
 
-TODO: Contributions welcome!
-    
+We will now illustrate how to customize tables using functions from the `huxtable` package:
+
+* `set_text_color` to change the color of some entries
+
+We use the same code as above, but specify `output='huxtable'` in the `msummary()` call:
+
+```{r}
+library(huxtable)
+
+# build table with `modelsummary` 
+cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
+cap <- 'A modelsummary table customized with huxtable'
+
+tab <- msummary(models, output = 'huxtable',
+                coef_map = cm, stars = TRUE, 
+                title = cap, gof_omit = 'IC|Log|Adj') 
+
+# customize table with `huxtable`
+tab %>%
+   
+    # text color
+    set_text_color(row = 4, col = 1:ncol(.), value = 'red')
+```
+
 # Warning: Saving to file
 
 When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt`, `kableExtra`, `huxtable`, or `flextable`. When users specify a filename in the `output` argument, the `msummary()` call should be the *final* one in the chain.
