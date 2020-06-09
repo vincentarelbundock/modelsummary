@@ -16,7 +16,7 @@ build_kableExtra <- function(tab,
     # kableExtra needs to know the output format ex ante 
     ext <- tools::file_ext(output)
 
-    # explicit user intervention
+    # modelsummary call 
     if (output %in% c('html', 'latex', 'markdown')) {
         output_format <- output
     } else if (ext == 'tex') {
@@ -25,16 +25,25 @@ build_kableExtra <- function(tab,
         output_format <- 'markdown'
     } else if (ext %in% c('htm', 'html')) {
         output_format <- 'html'
-    # global option
+
+    # global options
     } else if (output %in% c('default', 'kableExtra')) {
-        output_format <- getOption('knitr.table.format')
+        output_format <- getOption('modelsummary_kableExtra')
+
         if (is.null(output_format)) {
-            output_format <- getOption('modelsummary_kableExtra')
+            output_format <- getOption('knitr.table.format')
+
+            if (is.null(output_format)) {
+
+                if (knitr::is_latex_output()) {
+                    output_format <- 'latex'
+                } else {
+                    output_format <- 'html'
+                }
+            }
+
         }
-    # otherwise let kableExtra guess
-    } else {
-        output_format <- NULL
-    }
+    } 
 
     if (!is.null(output_format)) {
         tab <- kableExtra::kable(tab,
@@ -42,9 +51,7 @@ build_kableExtra <- function(tab,
                                  caption = title,
                                  booktabs = TRUE, 
                                  linesep = "")
-    } else { 
-        output_format <- 'unknown' # to allow != comparison later
-    }
+    } 
 
     # horizontal rule to separate coef/gof
     if (output_format != 'markdown') {
