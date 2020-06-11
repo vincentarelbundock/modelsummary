@@ -5,6 +5,7 @@
 * estimate argument
 * fixest tidiers
 * vignette improvements
+* gof_map additions
 
 # modelsummary 0.3.0
 
