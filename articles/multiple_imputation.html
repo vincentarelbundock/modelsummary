@@ -95,11 +95,11 @@
 
     
     
-<p><code>modelsummary</code> can pool and display analyses on several datasets imputed using the <code>mice</code> or <code>Amelia</code> packages. In this example, we use convenience functions from the <code>mitools</code> package to format our data:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mitools</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mice</span>))
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">Amelia</span>))
+<p><em>Warning:</em> The code in this vignette relies on <code>tidy</code> and <code>glance</code> methods which were recently added to the <code>mice</code> package. As of 2020-06-12, they were only available in the development version of the package (&gt;3.9.0). The most recent version of <code>mice</code> can be installed by calling: <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github('stefvanbuuren/mice')</a></code></p>
+<p><code>modelsummary</code> can pool and display analyses on several datasets imputed using the <code>mice</code> or <code>Amelia</code> packages. This code illustrates how:</p>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mice</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">Amelia</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
 <span class="co"># Download data from `Rdatasets`</span>
 <span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
@@ -112,23 +112,25 @@
 
 <span class="co"># Impute with `mice` and `Amelia`</span>
 <span class="no">dat_mice</span> <span class="kw">&lt;-</span> <span class="fu"><a href="http://stefvanbuuren.github.io/mice/reference/mice.html">mice</a></span>(<span class="no">dat</span>, <span class="kw">m</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">printFlag</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="no">dat_amelia</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Amelia/man/amelia.html">amelia</a></span>(<span class="no">dat</span>, <span class="kw">m</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">p2s</span> <span class="kw">=</span> <span class="fl">0</span>)
-<span class="no">dat_amelia</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mitools/man/imputationList.html">imputationList</a></span>(<span class="no">dat_amelia</span>$<span class="no">imputations</span>)
+<span class="no">dat_amelia</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Amelia/man/amelia.html">amelia</a></span>(<span class="no">dat</span>, <span class="kw">m</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">p2s</span> <span class="kw">=</span> <span class="fl">0</span>)$<span class="no">imputations</span>
 
 <span class="co"># Estimate models</span>
 <span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
 <span class="no">mod</span><span class="kw">[[</span><span class="st">'Listwise deletion'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="no">dat</span>)
 <span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span>(<span class="no">dat_mice</span>, <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>))
-<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mitools/man/MIcombine.html">MIcombine</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span>(<span class="no">dat_amelia</span>, <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>)))
+<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">dat_amelia</span>, <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="no">x</span>))
+
+<span class="co"># Pool results</span>
+<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mice</span><span class="kw ns">::</span><span class="fu"><a href="http://stefvanbuuren.github.io/mice/reference/pool.html">pool</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]])
+<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mice</span><span class="kw ns">::</span><span class="fu"><a href="http://stefvanbuuren.github.io/mice/reference/pool.html">pool</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]])
 
 <span class="co"># Summarize</span>
-<span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">mod</span>)
-<span class="co">#&gt; Warning in sqrt(glanced$adj.r.squared[i]): NaNs produced</span></pre></body></html></div>
+<span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#eeqlsdfthm .gt_table {
+#ubirvpyzhx .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -151,7 +153,7 @@
   border-left-color: #D3D3D3;
 }
 
-#eeqlsdfthm .gt_heading {
+#ubirvpyzhx .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -163,7 +165,7 @@
   border-right-color: #D3D3D3;
 }
 
-#eeqlsdfthm .gt_title {
+#ubirvpyzhx .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -173,7 +175,7 @@
   border-bottom-width: 0;
 }
 
-#eeqlsdfthm .gt_subtitle {
+#ubirvpyzhx .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -183,13 +185,13 @@
   border-top-width: 0;
 }
 
-#eeqlsdfthm .gt_bottom_border {
+#ubirvpyzhx .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#eeqlsdfthm .gt_col_headings {
+#ubirvpyzhx .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -204,7 +206,7 @@
   border-right-color: #D3D3D3;
 }
 
-#eeqlsdfthm .gt_col_heading {
+#ubirvpyzhx .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -224,7 +226,7 @@
   overflow-x: hidden;
 }
 
-#eeqlsdfthm .gt_column_spanner_outer {
+#ubirvpyzhx .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -236,15 +238,15 @@
   padding-right: 4px;
 }
 
-#eeqlsdfthm .gt_column_spanner_outer:first-child {
+#ubirvpyzhx .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#eeqlsdfthm .gt_column_spanner_outer:last-child {
+#ubirvpyzhx .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#eeqlsdfthm .gt_column_spanner {
+#ubirvpyzhx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -256,7 +258,7 @@
   width: 100%;
 }
 
-#eeqlsdfthm .gt_group_heading {
+#ubirvpyzhx .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -278,7 +280,7 @@
   vertical-align: middle;
 }
 
-#eeqlsdfthm .gt_empty_group_heading {
+#ubirvpyzhx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -293,19 +295,19 @@
   vertical-align: middle;
 }
 
-#eeqlsdfthm .gt_striped {
+#ubirvpyzhx .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#eeqlsdfthm .gt_from_md > :first-child {
+#ubirvpyzhx .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#eeqlsdfthm .gt_from_md > :last-child {
+#ubirvpyzhx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#eeqlsdfthm .gt_row {
+#ubirvpyzhx .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -324,7 +326,7 @@
   overflow-x: hidden;
 }
 
-#eeqlsdfthm .gt_stub {
+#ubirvpyzhx .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -336,7 +338,7 @@
   padding-left: 12px;
 }
 
-#eeqlsdfthm .gt_summary_row {
+#ubirvpyzhx .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -346,7 +348,7 @@
   padding-right: 5px;
 }
 
-#eeqlsdfthm .gt_first_summary_row {
+#ubirvpyzhx .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -356,7 +358,7 @@
   border-top-color: #D3D3D3;
 }
 
-#eeqlsdfthm .gt_grand_summary_row {
+#ubirvpyzhx .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -366,7 +368,7 @@
   padding-right: 5px;
 }
 
-#eeqlsdfthm .gt_first_grand_summary_row {
+#ubirvpyzhx .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -376,7 +378,7 @@
   border-top-color: #D3D3D3;
 }
 
-#eeqlsdfthm .gt_table_body {
+#ubirvpyzhx .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -385,7 +387,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#eeqlsdfthm .gt_footnotes {
+#ubirvpyzhx .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -399,13 +401,13 @@
   border-right-color: #D3D3D3;
 }
 
-#eeqlsdfthm .gt_footnote {
+#ubirvpyzhx .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#eeqlsdfthm .gt_sourcenotes {
+#ubirvpyzhx .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -419,46 +421,46 @@
   border-right-color: #D3D3D3;
 }
 
-#eeqlsdfthm .gt_sourcenote {
+#ubirvpyzhx .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#eeqlsdfthm .gt_left {
+#ubirvpyzhx .gt_left {
   text-align: left;
 }
 
-#eeqlsdfthm .gt_center {
+#ubirvpyzhx .gt_center {
   text-align: center;
 }
 
-#eeqlsdfthm .gt_right {
+#ubirvpyzhx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#eeqlsdfthm .gt_font_normal {
+#ubirvpyzhx .gt_font_normal {
   font-weight: normal;
 }
 
-#eeqlsdfthm .gt_font_bold {
+#ubirvpyzhx .gt_font_bold {
   font-weight: bold;
 }
 
-#eeqlsdfthm .gt_font_italic {
+#ubirvpyzhx .gt_font_italic {
   font-style: italic;
 }
 
-#eeqlsdfthm .gt_super {
+#ubirvpyzhx .gt_super {
   font-size: 65%;
 }
 
-#eeqlsdfthm .gt_footnote_marks {
+#ubirvpyzhx .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="eeqlsdfthm" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="ubirvpyzhx" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">       </th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Listwise deletion</th>
@@ -468,81 +470,81 @@
 <tbody class="gt_table_body">
 <tr>
 <td class="gt_row gt_left">(Intercept)</td>
-      <td class="gt_row gt_left">62.502</td>
-      <td class="gt_row gt_left">68.626</td>
-      <td class="gt_row gt_left">70.710</td>
+      <td class="gt_row gt_left">77.043</td>
+      <td class="gt_row gt_left">77.750</td>
+      <td class="gt_row gt_left">74.130</td>
     </tr>
 <tr>
 <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">(14.152)</td>
-      <td class="gt_row gt_left">(14.754)</td>
-      <td class="gt_row gt_left">(15.363)</td>
+      <td class="gt_row gt_left">(12.751)</td>
+      <td class="gt_row gt_left">(12.545)</td>
+      <td class="gt_row gt_left">(11.161)</td>
     </tr>
 <tr>
 <td class="gt_row gt_left">Commerce</td>
-      <td class="gt_row gt_left">-0.268</td>
-      <td class="gt_row gt_left">-0.310</td>
-      <td class="gt_row gt_left">-0.308</td>
+      <td class="gt_row gt_left">-0.379</td>
+      <td class="gt_row gt_left">-0.325</td>
+      <td class="gt_row gt_left">-0.299</td>
     </tr>
 <tr>
 <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">(0.148)</td>
-      <td class="gt_row gt_left">(0.161)</td>
-      <td class="gt_row gt_left">(0.145)</td>
+      <td class="gt_row gt_left">(0.146)</td>
+      <td class="gt_row gt_left">(0.141)</td>
+      <td class="gt_row gt_left">(0.127)</td>
     </tr>
 <tr>
 <td class="gt_row gt_left">Literacy</td>
-      <td class="gt_row gt_left">-0.223</td>
-      <td class="gt_row gt_left">-0.306</td>
-      <td class="gt_row gt_left">-0.367</td>
+      <td class="gt_row gt_left">-0.511</td>
+      <td class="gt_row gt_left">-0.530</td>
+      <td class="gt_row gt_left">-0.474</td>
     </tr>
 <tr>
 <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"></td>
-      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.229)</td>
-      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.223)</td>
-      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.260)</td>
+      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.206)</td>
+      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.188)</td>
+      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.179)</td>
     </tr>
 <tr>
 <td class="gt_row gt_left">Num.Obs.</td>
-      <td class="gt_row gt_left">58</td>
+      <td class="gt_row gt_left">60</td>
       <td class="gt_row gt_left">86</td>
+      <td class="gt_row gt_left">86</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">Num.Imp.</td>
       <td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left">5</td>
+      <td class="gt_row gt_left">5</td>
     </tr>
 <tr>
 <td class="gt_row gt_left">R2</td>
-      <td class="gt_row gt_left">0.056</td>
-      <td class="gt_row gt_left">0.068</td>
-      <td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left">0.130</td>
+      <td class="gt_row gt_left">0.118</td>
+      <td class="gt_row gt_left">0.099</td>
     </tr>
 <tr>
 <td class="gt_row gt_left">R2 Adj.</td>
-      <td class="gt_row gt_left">0.021</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left">0.099</td>
+      <td class="gt_row gt_left">0.097</td>
+      <td class="gt_row gt_left">0.077</td>
     </tr>
 <tr>
 <td class="gt_row gt_left">AIC</td>
-      <td class="gt_row gt_left">540.1</td>
+      <td class="gt_row gt_left">558.9</td>
       <td class="gt_row gt_left"></td>
       <td class="gt_row gt_left"></td>
     </tr>
 <tr>
 <td class="gt_row gt_left">BIC</td>
-      <td class="gt_row gt_left">548.4</td>
+      <td class="gt_row gt_left">567.3</td>
       <td class="gt_row gt_left"></td>
       <td class="gt_row gt_left"></td>
     </tr>
 <tr>
 <td class="gt_row gt_left">Log.Lik.</td>
-      <td class="gt_row gt_left">-266.065</td>
+      <td class="gt_row gt_left">-275.448</td>
       <td class="gt_row gt_left"></td>
       <td class="gt_row gt_left"></td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">nimp</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">5</td>
-      <td class="gt_row gt_left">5</td>
     </tr>
 </tbody>
 </table></div>
