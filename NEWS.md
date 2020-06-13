@@ -4,8 +4,10 @@
 * flextable support
 * estimate argument
 * fixest tidiers
-* vignette improvements
+* website and vignette improvements
 * gof_map additions
+* glance_custom
+* tidy_custom
 
 # modelsummary 0.3.0
 
