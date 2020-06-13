@@ -5,7 +5,7 @@
 #' @inheritParams modelsummary
 #' @return tibble with goodness-of-fit  statistics
 #' @keywords internal
-extract_gof <- function(model, fmt, gof_map = NULL) {
+extract_gof <- function(model, fmt, gof_map = NULL, ...) {
 
     # define gof_map
     if (is.null(gof_map)) {
@@ -15,14 +15,23 @@ extract_gof <- function(model, fmt, gof_map = NULL) {
     # extract gof from model object
     gof <- generics::glance(model)
 
-    # extract nobs if not in glance but gof_maps says we want it
+    # extract nobs if not in glance but gof_map says we want it
     # TODO: This should be fixed upstream in broom
     if ((!'nobs' %in% names(gof)) & ('nobs' %in% gof_map$raw)) { 
         gof$nobs <- tryCatch(stats::nobs(model, use.fallback = TRUE), 
                              error = function(e) NULL)
     }
 
-    # drop if gof_map$omiot == TRUE
+    # glance_custom
+    gof_custom <- glance_custom(model)
+    sanity_gof(gof, gof_custom)
+    if (!is.null(gof_custom)) {
+        for (n in colnames(gof_custom)) {
+            gof[[n]] <- gof_custom[[n]]
+        }
+    }
+
+    # drop if gof_map$omit == TRUE
     bad <- gof_map$raw[gof_map$omit] 
     gof <- gof[setdiff(colnames(gof), bad)] 
 

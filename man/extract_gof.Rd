@@ -4,7 +4,7 @@
 \alias{extract_gof}
 \title{Extract goodness-of-fit statistics from a single model}
 \usage{
-extract_gof(model, fmt, gof_map = NULL)
+extract_gof(model, fmt, gof_map = NULL, ...)
 }
 \arguments{
 \item{model}{object type with an available `glance` method.}
@@ -16,6 +16,10 @@ use exponential notation. See `?sprintf` for more options.}
 
 \item{gof_map}{data.frame with four columns: `raw`, `clean`, `fmt`, and
 `omit`. See `modelsummary::gof_map`}
+
+\item{...}{all other arguments are passed to the `tidy` method used to
+extract estimates from the model. For example, this allows users to set
+`exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \value{
 tibble with goodness-of-fit  statistics

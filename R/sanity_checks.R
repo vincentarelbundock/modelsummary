@@ -192,15 +192,32 @@ sanity_subtitle <- function(subtitle) {
 #' sanity check
 #'
 #' @keywords internal
-sanity_tidy_output <- function(tidy_output, estimate, statistic, modelclass) {
-    cond1 <- checkmate::check_data_frame(tidy_output, min.rows = 1, min.cols = 3)
-    cond2 <- FALSE
-    statistic[statistic == 'conf.int'] <- 'conf.low'
-    if (isTRUE(cond1)) {
-        cond2 <- all(c('term', estimate, statistic) %in% colnames(tidy_output))
-    }
-    if (!isTRUE(cond2)) {
-        stop('You tried to summarize a model of class: ', modelclass, '. Unfortunately, `tidy(model)` did not produce a dataframe with columns terms, ', estimate, ', and ', statistic, '. Make you this kind of model is supported by `broom`, `broom.mixed`, or some other loaded R package. Alternatively, try modifying the `modelsummary` `estimate` and `statistic` argument to match a column name in `tidy(model)`')
-    }
+sanity_gof <- function(gof_output, gof_custom) {
+    checkmate::assert_data_frame(gof_output, nrows = 1, min.cols = 1, null.ok = FALSE)
+    checkmate::assert_data_frame(gof_custom, nrows = 1, null.ok = TRUE)
 }
 
+#' sanity check
+#'
+#' @keywords internal
+sanity_tidy <- function(tidy_output, tidy_custom, estimate, statistic, modelclass) {
+
+    # data.frame dimensions
+    checkmate::assert_data_frame(tidy_output, min.rows = 1, min.cols = 3)
+    checkmate::assert_data_frame(tidy_custom, nrows = nrow(tidy_output),
+                                 min.cols = 2, null.ok = TRUE)
+    # terms and rows 
+    checkmate::assert_true('term' %in% colnames(tidy_output))
+    if (!is.null(tidy_custom)) {
+        checkmate::assert_true('term' %in% colnames(tidy_custom))
+        checkmate::assert_true(all(tidy_output$term == tidy_custom$term))
+    }
+
+    # columns
+    statistic[statistic == 'conf.int'] <- 'conf.low'
+    cols <- c(colnames(tidy_output), colnames(tidy_custom))
+    valid <- all(c('term', estimate, statistic) %in% cols)
+    if (!valid) {
+        stop('You tried to summarize a model of class: ', modelclass, '. Unfortunately, neither `tidy(model)` nor `tidy_custom(model)` produced a dataframe with columns terms, ', estimate, ', and ', statistic, '. Please make sure you that this class of models is supported by `broom`, `broom.mixed`, or some other loaded R package. Alternatively, try modifying the `modelsummary` `estimate` and `statistic` argument to match a column name in `tidy(model)`. The `modelsummary` website explains how to add unsupported packages: https://vincentarelbundock.github.io/modelsummary')
+    }
+}

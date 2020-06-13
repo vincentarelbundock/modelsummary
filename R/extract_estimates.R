@@ -48,8 +48,18 @@ extract_estimates <- function(model,
         }
     }
 
-    # did tidy(model) produce a useable data.frame?
-    sanity_tidy_output(est, estimate, statistic, class(model)[1])
+    # tidy_custom if availablee
+    est_custom <- tidy_custom(model)
+
+    # did tidy and tidy_custom produce useable output?
+    sanity_tidy(est, est_custom, estimate, statistic, class(model)[1])
+
+    # combine (or overwrite) tidy and tidy_custom
+    if (!is.null(est_custom)) {
+        for (n in colnames(est_custom)) {
+            est[[n]] <- est_custom[[n]]
+        }
+    }
 
     # round estimates
     est[[estimate]] <- rounding(est[[estimate]], fmt)
