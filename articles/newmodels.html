@@ -99,7 +99,7 @@
 <h1 class="hasAnchor">
 <a href="#customizing-existing-models" class="anchor"></a>Customizing existing models</h1>
 <p>The information that <code>modelsummary</code> can display about a model is determined by the output of the <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::glance</a></code> and <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::tidy</a></code> functions. <code>glance</code> is used the extract the information at the the bottom of the table, where goodness-of-fit measures are displayed. <code>tidy</code> is used to extract the information in the body of the table: parameter and uncertainty estimates.</p>
-<p>Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new <code>glance_custom</code> and <code>tidy_custom</code>. To illustrate, we estimate two linear regression models using the <code>lm</code> function:</p>
+<p>Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new <code>glance_custom</code> and <code>tidy_custom</code> methods. To illustrate, we estimate two linear regression models using the <code>lm</code> function:</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
 <span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
@@ -108,7 +108,7 @@
 <p>In <code>R</code>, the <code>lm</code> function produces models of class “lm”:</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]])
 <span class="co">#&gt; [1] "lm"</span></pre></body></html></div>
-<p>Let’s say you would like to print the dependent variable for each of this particular class. All you need to do is define a new method called <code>glance_custom.lm</code>. This method should return a data.frame (or tibble) with 1 row, and 1 column per piece of information you want to display. For example:</p>
+<p>Let’s say you would like to print the dependent variable for each model of this particular class. All you need to do is define a new method called <code>glance_custom.lm</code>. This method should return a data.frame (or tibble) with 1 row, and 1 column per piece of information you want to display. For example:</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">glance_custom.lm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
     <span class="no">dv</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/formula.html">formula</a></span>(<span class="no">x</span>)[<span class="fl">2</span>])
     <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">`Dependent variable:`</span> <span class="kw">=</span> <span class="no">dv</span>)
@@ -128,7 +128,7 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#dmpkagpxyf .gt_table {
+#zyqpgkonnm .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -151,7 +151,7 @@
   border-left-color: #D3D3D3;
 }
 
-#dmpkagpxyf .gt_heading {
+#zyqpgkonnm .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -163,7 +163,7 @@
   border-right-color: #D3D3D3;
 }
 
-#dmpkagpxyf .gt_title {
+#zyqpgkonnm .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -173,7 +173,7 @@
   border-bottom-width: 0;
 }
 
-#dmpkagpxyf .gt_subtitle {
+#zyqpgkonnm .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -183,13 +183,13 @@
   border-top-width: 0;
 }
 
-#dmpkagpxyf .gt_bottom_border {
+#zyqpgkonnm .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#dmpkagpxyf .gt_col_headings {
+#zyqpgkonnm .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -204,7 +204,7 @@
   border-right-color: #D3D3D3;
 }
 
-#dmpkagpxyf .gt_col_heading {
+#zyqpgkonnm .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -224,7 +224,7 @@
   overflow-x: hidden;
 }
 
-#dmpkagpxyf .gt_column_spanner_outer {
+#zyqpgkonnm .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -236,15 +236,15 @@
   padding-right: 4px;
 }
 
-#dmpkagpxyf .gt_column_spanner_outer:first-child {
+#zyqpgkonnm .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#dmpkagpxyf .gt_column_spanner_outer:last-child {
+#zyqpgkonnm .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#dmpkagpxyf .gt_column_spanner {
+#zyqpgkonnm .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -256,7 +256,7 @@
   width: 100%;
 }
 
-#dmpkagpxyf .gt_group_heading {
+#zyqpgkonnm .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -278,7 +278,7 @@
   vertical-align: middle;
 }
 
-#dmpkagpxyf .gt_empty_group_heading {
+#zyqpgkonnm .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -293,19 +293,19 @@
   vertical-align: middle;
 }
 
-#dmpkagpxyf .gt_striped {
+#zyqpgkonnm .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#dmpkagpxyf .gt_from_md > :first-child {
+#zyqpgkonnm .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#dmpkagpxyf .gt_from_md > :last-child {
+#zyqpgkonnm .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#dmpkagpxyf .gt_row {
+#zyqpgkonnm .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -324,7 +324,7 @@
   overflow-x: hidden;
 }
 
-#dmpkagpxyf .gt_stub {
+#zyqpgkonnm .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -336,7 +336,7 @@
   padding-left: 12px;
 }
 
-#dmpkagpxyf .gt_summary_row {
+#zyqpgkonnm .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -346,7 +346,7 @@
   padding-right: 5px;
 }
 
-#dmpkagpxyf .gt_first_summary_row {
+#zyqpgkonnm .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -356,7 +356,7 @@
   border-top-color: #D3D3D3;
 }
 
-#dmpkagpxyf .gt_grand_summary_row {
+#zyqpgkonnm .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -366,7 +366,7 @@
   padding-right: 5px;
 }
 
-#dmpkagpxyf .gt_first_grand_summary_row {
+#zyqpgkonnm .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -376,7 +376,7 @@
   border-top-color: #D3D3D3;
 }
 
-#dmpkagpxyf .gt_table_body {
+#zyqpgkonnm .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -385,7 +385,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#dmpkagpxyf .gt_footnotes {
+#zyqpgkonnm .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -399,13 +399,13 @@
   border-right-color: #D3D3D3;
 }
 
-#dmpkagpxyf .gt_footnote {
+#zyqpgkonnm .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#dmpkagpxyf .gt_sourcenotes {
+#zyqpgkonnm .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -419,46 +419,46 @@
   border-right-color: #D3D3D3;
 }
 
-#dmpkagpxyf .gt_sourcenote {
+#zyqpgkonnm .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#dmpkagpxyf .gt_left {
+#zyqpgkonnm .gt_left {
   text-align: left;
 }
 
-#dmpkagpxyf .gt_center {
+#zyqpgkonnm .gt_center {
   text-align: center;
 }
 
-#dmpkagpxyf .gt_right {
+#zyqpgkonnm .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#dmpkagpxyf .gt_font_normal {
+#zyqpgkonnm .gt_font_normal {
   font-weight: normal;
 }
 
-#dmpkagpxyf .gt_font_bold {
+#zyqpgkonnm .gt_font_bold {
   font-weight: bold;
 }
 
-#dmpkagpxyf .gt_font_italic {
+#zyqpgkonnm .gt_font_italic {
   font-style: italic;
 }
 
-#dmpkagpxyf .gt_super {
+#zyqpgkonnm .gt_super {
   font-size: 65%;
 }
 
-#dmpkagpxyf .gt_footnote_marks {
+#zyqpgkonnm .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="dmpkagpxyf" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="zyqpgkonnm" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">       </th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Model 1</th>
@@ -546,7 +546,6 @@
 <div id="fixed-effects-regression" class="section level2">
 <h2 class="hasAnchor">
 <a href="#fixed-effects-regression" class="anchor"></a>Fixed effects regression</h2>
-<p><em>Note:</em> This example requires <code>broom&gt;=0.7.0</code>. On 2020-06-13, this version was only available on Github.</p>
 <p>One common use-case for <code>glance_custom</code> is to display the list of “fixed effects” included in a linear regression model.</p>
 <p>The <code>feols</code> function from the <code>fixest</code> package offers an extremely fast way to estimate fixed effects regression models. The <code>feols</code> function produces an object of class “fixest”, which stores the fixed effects variables in a character vector called “fixef_vars”. To display those fixed effects, we create a <code>glance_custom.fixest</code> and call <code>msummary</code>:</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">glance_custom.fixest</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
@@ -572,7 +571,7 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#nqswfxpntn .gt_table {
+#kvacgyietz .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -595,7 +594,7 @@
   border-left-color: #D3D3D3;
 }
 
-#nqswfxpntn .gt_heading {
+#kvacgyietz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -607,7 +606,7 @@
   border-right-color: #D3D3D3;
 }
 
-#nqswfxpntn .gt_title {
+#kvacgyietz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -617,7 +616,7 @@
   border-bottom-width: 0;
 }
 
-#nqswfxpntn .gt_subtitle {
+#kvacgyietz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -627,13 +626,13 @@
   border-top-width: 0;
 }
 
-#nqswfxpntn .gt_bottom_border {
+#kvacgyietz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#nqswfxpntn .gt_col_headings {
+#kvacgyietz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -648,7 +647,7 @@
   border-right-color: #D3D3D3;
 }
 
-#nqswfxpntn .gt_col_heading {
+#kvacgyietz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -668,7 +667,7 @@
   overflow-x: hidden;
 }
 
-#nqswfxpntn .gt_column_spanner_outer {
+#kvacgyietz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -680,15 +679,15 @@
   padding-right: 4px;
 }
 
-#nqswfxpntn .gt_column_spanner_outer:first-child {
+#kvacgyietz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#nqswfxpntn .gt_column_spanner_outer:last-child {
+#kvacgyietz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#nqswfxpntn .gt_column_spanner {
+#kvacgyietz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -700,7 +699,7 @@
   width: 100%;
 }
 
-#nqswfxpntn .gt_group_heading {
+#kvacgyietz .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -722,7 +721,7 @@
   vertical-align: middle;
 }
 
-#nqswfxpntn .gt_empty_group_heading {
+#kvacgyietz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -737,19 +736,19 @@
   vertical-align: middle;
 }
 
-#nqswfxpntn .gt_striped {
+#kvacgyietz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#nqswfxpntn .gt_from_md > :first-child {
+#kvacgyietz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#nqswfxpntn .gt_from_md > :last-child {
+#kvacgyietz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#nqswfxpntn .gt_row {
+#kvacgyietz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -768,7 +767,7 @@
   overflow-x: hidden;
 }
 
-#nqswfxpntn .gt_stub {
+#kvacgyietz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -780,7 +779,7 @@
   padding-left: 12px;
 }
 
-#nqswfxpntn .gt_summary_row {
+#kvacgyietz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -790,7 +789,7 @@
   padding-right: 5px;
 }
 
-#nqswfxpntn .gt_first_summary_row {
+#kvacgyietz .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -800,7 +799,7 @@
   border-top-color: #D3D3D3;
 }
 
-#nqswfxpntn .gt_grand_summary_row {
+#kvacgyietz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -810,7 +809,7 @@
   padding-right: 5px;
 }
 
-#nqswfxpntn .gt_first_grand_summary_row {
+#kvacgyietz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -820,7 +819,7 @@
   border-top-color: #D3D3D3;
 }
 
-#nqswfxpntn .gt_table_body {
+#kvacgyietz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -829,7 +828,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#nqswfxpntn .gt_footnotes {
+#kvacgyietz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -843,13 +842,13 @@
   border-right-color: #D3D3D3;
 }
 
-#nqswfxpntn .gt_footnote {
+#kvacgyietz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#nqswfxpntn .gt_sourcenotes {
+#kvacgyietz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -863,46 +862,46 @@
   border-right-color: #D3D3D3;
 }
 
-#nqswfxpntn .gt_sourcenote {
+#kvacgyietz .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#nqswfxpntn .gt_left {
+#kvacgyietz .gt_left {
   text-align: left;
 }
 
-#nqswfxpntn .gt_center {
+#kvacgyietz .gt_center {
   text-align: center;
 }
 
-#nqswfxpntn .gt_right {
+#kvacgyietz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#nqswfxpntn .gt_font_normal {
+#kvacgyietz .gt_font_normal {
   font-weight: normal;
 }
 
-#nqswfxpntn .gt_font_bold {
+#kvacgyietz .gt_font_bold {
   font-weight: bold;
 }
 
-#nqswfxpntn .gt_font_italic {
+#kvacgyietz .gt_font_italic {
   font-style: italic;
 }
 
-#nqswfxpntn .gt_super {
+#kvacgyietz .gt_super {
   font-size: 65%;
 }
 
-#nqswfxpntn .gt_footnote_marks {
+#kvacgyietz .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="nqswfxpntn" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="kvacgyietz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">       </th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Model 1</th>
