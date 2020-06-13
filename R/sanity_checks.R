@@ -202,22 +202,41 @@ sanity_gof <- function(gof_output, gof_custom) {
 #' @keywords internal
 sanity_tidy <- function(tidy_output, tidy_custom, estimate, statistic, modelclass) {
 
-    # data.frame dimensions
+    # tidy(model)
     checkmate::assert_data_frame(tidy_output, min.rows = 1, min.cols = 3)
+    checkmate::assert_true('term' %in% colnames(tidy_output))
+
+    # tidy_custom(model)
     checkmate::assert_data_frame(tidy_custom, nrows = nrow(tidy_output),
                                  min.cols = 2, null.ok = TRUE)
-    # terms and rows 
-    checkmate::assert_true('term' %in% colnames(tidy_output))
+
     if (!is.null(tidy_custom)) {
         checkmate::assert_true('term' %in% colnames(tidy_custom))
         checkmate::assert_true(all(tidy_output$term == tidy_custom$term))
     }
 
     # columns
+    available <- c(colnames(tidy_output), colnames(tidy_custom))
+
+    if (!estimate %in% available) {
+        msg <- paste0('For models of class ',
+                      modelclass,
+                      ' the `estimate` argument of the `modelsummary()` function must be one of: ',
+                      paste(available, collapse = ', '))
+        stop(msg)
+    }
+
     statistic[statistic == 'conf.int'] <- 'conf.low'
-    cols <- c(colnames(tidy_output), colnames(tidy_custom))
-    valid <- all(c('term', estimate, statistic) %in% cols)
-    if (!valid) {
-        stop('You tried to summarize a model of class: ', modelclass, '. Unfortunately, neither `tidy(model)` nor `tidy_custom(model)` produced a dataframe with columns terms, ', estimate, ', and ', statistic, '. Please make sure you that this class of models is supported by `broom`, `broom.mixed`, or some other loaded R package. Alternatively, try modifying the `modelsummary` `estimate` and `statistic` argument to match a column name in `tidy(model)`. The `modelsummary` website explains how to add unsupported packages: https://vincentarelbundock.github.io/modelsummary')
+    if (!all(statistic %in% available)) {
+        if ('conf.low' %in% available) {
+            available <- base::setdiff(available, c('conf.low', 'conf.high'))
+            available <- c('conf.int', available)
+        }
+        msg <- paste0('For models of class ',
+                      modelclass,
+                      ' the `statistic` argument of the `modelsummary()` function must be one of: ',
+                      paste(available, collapse = ', '),
+                      ' (or possibly conf.int)')
+        stop(msg)
     }
 }
