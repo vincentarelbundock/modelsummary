@@ -95,12 +95,915 @@
 
     
     
+<div id="customizing-existing-models" class="section level1">
+<h1 class="hasAnchor">
+<a href="#customizing-existing-models" class="anchor"></a>Customizing existing models</h1>
+<p>The information that <code>modelsummary</code> can display about a model is determined by the output of the <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::glance</a></code> and <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::tidy</a></code> functions. <code>glance</code> is used the extract the information at the the bottom of the table, where goodness-of-fit measures are displayed. <code>tidy</code> is used to extract the information in the body of the table: parameter and uncertainty estimates.</p>
+<p>Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new <code>glance_custom</code> and <code>tidy_custom</code>. To illustrate, we estimate two linear regression models using the <code>lm</code> function:</p>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+
+<span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+<span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">hp</span> ~ <span class="no">mpg</span> + <span class="no">drat</span>, <span class="no">mtcars</span>)
+<span class="no">mod</span><span class="kw">[[</span><span class="fl">2</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">wt</span> ~ <span class="no">mpg</span> + <span class="no">drat</span> + <span class="no">am</span>, <span class="no">mtcars</span>)</pre></body></html></div>
+<p>In <code>R</code>, the <code>lm</code> function produces models of class “lm”:</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]])
+<span class="co">#&gt; [1] "lm"</span></pre></body></html></div>
+<p>Let’s say you would like to print the dependent variable for each of this particular class. All you need to do is define a new method called <code>glance_custom.lm</code>. This method should return a data.frame (or tibble) with 1 row, and 1 column per piece of information you want to display. For example:</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">glance_custom.lm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
+    <span class="no">dv</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/formula.html">formula</a></span>(<span class="no">x</span>)[<span class="fl">2</span>])
+    <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">`Dependent variable:`</span> <span class="kw">=</span> <span class="no">dv</span>)
+    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
+}</pre></body></html></div>
+<p>Now, let’s customize the body of the table. The <code>statistic_override</code> argument already allows users to customize uncertainty estimates. But imagine you want to override the <em>coefficient estimates</em> of your “lm” models. Easy! All you need to do is define a <code>tidy_custom.lm</code> method which returns a data.frame (or tibble) with one column called “term” and one column called “estimate”.</p>
+<p>Here, we’ll substitute estimates by an up/down arrow which represents their signs:</p>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">tidy_custom.lm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
+    <span class="no">s</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">x</span>)$<span class="no">coefficients</span>
+    <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">term</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="no">s</span>),
+                          <span class="kw">estimate</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">s</span>[,<span class="fl">1</span>] <span class="kw">&gt;</span> <span class="fl">0</span>, <span class="st">'⭡'</span>, <span class="st">'⭣'</span>))
+    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
+}</pre></body></html></div>
+<p>After you define the <code>glance_custom</code> and <code>tidy_custom</code> methods, <code>msummary</code> will automatically display your customized model information:</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#akcstokqsa .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#akcstokqsa .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#akcstokqsa .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#akcstokqsa .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#akcstokqsa .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#akcstokqsa .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#akcstokqsa .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#akcstokqsa .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#akcstokqsa .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#akcstokqsa .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#akcstokqsa .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#akcstokqsa .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#akcstokqsa .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#akcstokqsa .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#akcstokqsa .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#akcstokqsa .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#akcstokqsa .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#akcstokqsa .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#akcstokqsa .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#akcstokqsa .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#akcstokqsa .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#akcstokqsa .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#akcstokqsa .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#akcstokqsa .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#akcstokqsa .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#akcstokqsa .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#akcstokqsa .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#akcstokqsa .gt_left {
+  text-align: left;
+}
+
+#akcstokqsa .gt_center {
+  text-align: center;
+}
+
+#akcstokqsa .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#akcstokqsa .gt_font_normal {
+  font-weight: normal;
+}
+
+#akcstokqsa .gt_font_bold {
+  font-weight: bold;
+}
+
+#akcstokqsa .gt_font_italic {
+  font-style: italic;
+}
+
+#akcstokqsa .gt_super {
+  font-size: 65%;
+}
+
+#akcstokqsa .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="akcstokqsa" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<thead class="gt_col_headings"><tr>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">       </th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Model 1</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Model 2</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td class="gt_row gt_left">(Intercept)</td>
+      <td class="gt_row gt_left">⭡</td>
+      <td class="gt_row gt_left">⭡</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left">(55.415)</td>
+      <td class="gt_row gt_left">(0.728)</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">drat</td>
+      <td class="gt_row gt_left">⭡</td>
+      <td class="gt_row gt_left">⭣</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left">(20.198)</td>
+      <td class="gt_row gt_left">(0.245)</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">mpg</td>
+      <td class="gt_row gt_left">⭣</td>
+      <td class="gt_row gt_left">⭣</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left">(1.792)</td>
+      <td class="gt_row gt_left">(0.019)</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">am</td>
+      <td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left">⭣</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"></td>
+      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"></td>
+      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.240)</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">Num.Obs.</td>
+      <td class="gt_row gt_left">32</td>
+      <td class="gt_row gt_left">32</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">R2</td>
+      <td class="gt_row gt_left">0.614</td>
+      <td class="gt_row gt_left">0.803</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">R2 Adj.</td>
+      <td class="gt_row gt_left">0.588</td>
+      <td class="gt_row gt_left">0.782</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">AIC</td>
+      <td class="gt_row gt_left">337.9</td>
+      <td class="gt_row gt_left">46.4</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">BIC</td>
+      <td class="gt_row gt_left">343.7</td>
+      <td class="gt_row gt_left">53.7</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">Log.Lik.</td>
+      <td class="gt_row gt_left">-164.940</td>
+      <td class="gt_row gt_left">-18.201</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">Dependent variable:</td>
+      <td class="gt_row gt_left">hp</td>
+      <td class="gt_row gt_left">wt</td>
+    </tr>
+</tbody>
+</table></div>
+<p>Note that you can define a <code>std.error</code> column in <code>tidy_custom.lm</code> to replace the uncertainty estimates instead of the coefficients.</p>
+<div id="fixed-effects-regression" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fixed-effects-regression" class="anchor"></a>Fixed effects regression</h2>
+<p><em>Note:</em> This example requires <code>broom&gt;=0.7.0</code>. On 2020-06-13, this version was only available on Github.</p>
+<p>One common use-case for <code>glance_custom</code> is to display the list of “fixed effects” included in a linear regression model.</p>
+<p>The <code>feols</code> function from the <code>fixest</code> package offers an extremely fast way to estimate fixed effects regression models. The <code>feols</code> function produces an object of class “fixest”, which stores the fixed effects variables in a character vector called “fixef_vars”. To display those fixed effects, we create a <code>glance_custom.fixest</code> and call <code>msummary</code>:</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">glance_custom.fixest</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>, <span class="no">...</span>) {
+    <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">.rows</span> <span class="kw">=</span> <span class="fl">1</span>)
+    <span class="kw">for</span> (<span class="no">n</span> <span class="kw">in</span> <span class="no">x</span>$<span class="no">fixef_vars</span>) {
+        <span class="no">out</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">'FE: '</span>, <span class="no">n</span>)]] <span class="kw">&lt;-</span> <span class="st">'X'</span>
+    }
+    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
+}
+
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">fixest</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+
+<span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/plm/EmplUK.csv'</span>
+<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)
+<span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+<span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span>(<span class="no">emp</span> ~ <span class="no">wage</span>, <span class="no">dat</span>)
+<span class="no">mod</span><span class="kw">[[</span><span class="fl">2</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span>(<span class="no">emp</span> ~ <span class="no">wage</span> <span class="kw">|</span> <span class="no">firm</span>, <span class="no">dat</span>)
+<span class="no">mod</span><span class="kw">[[</span><span class="fl">3</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span>(<span class="no">emp</span> ~ <span class="no">wage</span> <span class="kw">|</span> <span class="no">firm</span> + <span class="no">year</span>, <span class="no">dat</span>)
+
+<span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#pweujminga .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#pweujminga .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#pweujminga .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#pweujminga .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#pweujminga .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pweujminga .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#pweujminga .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#pweujminga .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#pweujminga .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#pweujminga .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#pweujminga .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#pweujminga .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#pweujminga .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#pweujminga .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#pweujminga .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#pweujminga .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#pweujminga .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#pweujminga .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#pweujminga .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pweujminga .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#pweujminga .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pweujminga .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#pweujminga .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pweujminga .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#pweujminga .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#pweujminga .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#pweujminga .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#pweujminga .gt_left {
+  text-align: left;
+}
+
+#pweujminga .gt_center {
+  text-align: center;
+}
+
+#pweujminga .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#pweujminga .gt_font_normal {
+  font-weight: normal;
+}
+
+#pweujminga .gt_font_bold {
+  font-weight: bold;
+}
+
+#pweujminga .gt_font_italic {
+  font-style: italic;
+}
+
+#pweujminga .gt_super {
+  font-size: 65%;
+}
+
+#pweujminga .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="pweujminga" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<thead class="gt_col_headings"><tr>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">       </th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Model 1</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Model 2</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Model 3</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td class="gt_row gt_left">(Intercept)</td>
+      <td class="gt_row gt_left">15.228</td>
+      <td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left"></td>
+    </tr>
+<tr>
+<td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left">(2.149)</td>
+      <td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left"></td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">wage</td>
+      <td class="gt_row gt_left">-0.307</td>
+      <td class="gt_row gt_left">-0.137</td>
+      <td class="gt_row gt_left">-0.062</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"></td>
+      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.087)</td>
+      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.065)</td>
+      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.054)</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">Num.Obs.</td>
+      <td class="gt_row gt_left">1031</td>
+      <td class="gt_row gt_left">1031</td>
+      <td class="gt_row gt_left">1031</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">R2</td>
+      <td class="gt_row gt_left">0.012</td>
+      <td class="gt_row gt_left">0.981</td>
+      <td class="gt_row gt_left">0.983</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">R2 Adj.</td>
+      <td class="gt_row gt_left">0.011</td>
+      <td class="gt_row gt_left">0.978</td>
+      <td class="gt_row gt_left">0.980</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">R2 Pseudo</td>
+      <td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left"></td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">R2 Within</td>
+      <td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left">0.016</td>
+      <td class="gt_row gt_left">0.003</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">AIC</td>
+      <td class="gt_row gt_left">8625.3</td>
+      <td class="gt_row gt_left">4825.0</td>
+      <td class="gt_row gt_left">4751.9</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">BIC</td>
+      <td class="gt_row gt_left">8649.0</td>
+      <td class="gt_row gt_left">6499.5</td>
+      <td class="gt_row gt_left">6521.5</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">Log.Lik.</td>
+      <td class="gt_row gt_left">-4310.633</td>
+      <td class="gt_row gt_left">-2271.475</td>
+      <td class="gt_row gt_left">-2226.949</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">FE:  firm</td>
+      <td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left">X</td>
+      <td class="gt_row gt_left">X</td>
+    </tr>
+<tr>
+<td class="gt_row gt_left">FE:  year</td>
+      <td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left"></td>
+      <td class="gt_row gt_left">X</td>
+    </tr>
+</tbody>
+</table></div>
+</div>
+</div>
 <div id="adding-new-models" class="section level1">
 <h1 class="hasAnchor">
 <a href="#adding-new-models" class="anchor"></a>Adding new models</h1>
 <p><code>modelsummary</code> relies on two functions from the <code>broom</code> package to extract model information: <code>tidy</code> and <code>glance</code>. If <code>broom</code> doesn’t support the type of model you are trying to summarize, <code>modelsummary</code> won’t support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.</p>
 <p>For example, models produced by the <code>MCMCglmm</code> package are not currently supported by <code>broom</code>. To add support, you simply need to create a <code>tidy</code> and a <code>glance</code> method:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="co"># load packages and data</span>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="co"># load packages and data</span>
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">MCMCglmm</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">PlodiaPO</span>)
@@ -128,490 +1031,6 @@
 <p>Two important things to note. First, the methods are named <code>tidy.MCMCglmm</code> and <code>glance.MCMCglmm</code> because the model object I am trying to summarize is of class <code>MCMCglmm</code>. You can find the class of a model by running: <code><a href="https://rdrr.io/r/base/class.html">class(model)</a></code>.</p>
 <p>Second, in the example above, we used the <code>statistic = 'conf.int'</code> argument. This is because the <code>tidy</code> method produces <code>conf.low</code> and <code>conf.high</code> columns. In most cases, users will define <code>std.error</code> column in their custom <code>tidy</code> methods, so the <code>statistic</code> argument will need to be adjusted.</p>
 <p>If you create new <code>tidy</code> and <code>glance</code> methods, please consider contributing them to <code>broom</code> so that the rest of the community can benefit from your work: <a href="https://github.com/tidymodels/broom" class="uri">https://github.com/tidymodels/broom</a></p>
-</div>
-<div id="customizing-existing-models" class="section level1">
-<h1 class="hasAnchor">
-<a href="#customizing-existing-models" class="anchor"></a>Customizing existing models</h1>
-<p>The set of available statistics for any given model is determined by the output of the <code><a href="https://rdrr.io/pkg/broom/man/reexports.html">broom::glance</a></code> function. Sometimes, you want to include information that is not included in <code>glance</code> output. For instance, you may want to display whether certain regression models include “fixed effects”.</p>
-<p>One way to circumvent the limitations of glance is to create a custom method for your models. To illustrate, we load the <code>lfe</code> package, which provides the <code>felm</code> function to estimate linear regression models with fixed effects. Then, we simulate some data:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">lfe</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">broom</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
-
-<span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">1000</span>)
-<span class="no">x2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">x</span>))
-<span class="no">id</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">20</span>,<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">x</span>),<span class="kw">replace</span><span class="kw">=</span><span class="fl">TRUE</span>))
-<span class="no">firm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">13</span>,<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">x</span>),<span class="kw">replace</span><span class="kw">=</span><span class="fl">TRUE</span>))
-<span class="no">id.eff</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nlevels.html">nlevels</a></span>(<span class="no">id</span>))
-<span class="no">firm.eff</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nlevels.html">nlevels</a></span>(<span class="no">firm</span>))
-<span class="no">u</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">x</span>))
-<span class="no">y</span> <span class="kw">&lt;-</span> <span class="no">x</span> + <span class="fl">0.5</span>*<span class="no">x2</span> + <span class="no">id.eff</span>[<span class="no">id</span>] + <span class="no">firm.eff</span>[<span class="no">firm</span>] + <span class="no">u</span></pre></body></html></div>
-<p>The models produced by <code>felm</code> store the names of fixed effects in an object called “fe”. For example, if <code>x</code> is your models, then <code>x$fe</code> will be a character vector with the names of all your fixed effects variables.</p>
-<p>We create a custom <code>glance</code> method that extracts this information and returns it alongside the regular <code>glance</code> output:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">glance.felm_custom</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>, <span class="no">...</span>) {
-    <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">broom</span><span class="kw ns">:::</span><span class="fu"><a href="https://rdrr.io/pkg/broom/man/glance.felm.html">glance.felm</a></span>(<span class="no">x</span>, <span class="no">...</span>)
-    <span class="kw">for</span> (<span class="no">fe</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">x</span>$<span class="no">fe</span>)) {
-        <span class="no">out</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">'Fixed effects:'</span>, <span class="no">fe</span>)]] <span class="kw">&lt;-</span> <span class="st">'X'</span>
-    }
-    <span class="no">out</span>
-}</pre></body></html></div>
-<p>Then, we create a function to fit our models. This function passes all its arguments forward to <code>felm</code> using ellipses (<code>...</code>). Then, it assigns a new class name. This tells <code>modelsummary</code> that it should extract fixed effects names:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">felm_custom</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">...</span>) {
-    <span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html">felm</a></span>(<span class="no">...</span>)
-    <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">out</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'felm_custom'</span>, <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">out</span>))
-    <span class="no">out</span>
-}</pre></body></html></div>
-<p>Finally, we fit models and print the table:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
-<span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">y</span> ~ <span class="no">x</span> + <span class="no">x2</span>)
-<span class="no">mod</span><span class="kw">[[</span><span class="fl">2</span>]] <span class="kw">&lt;-</span> <span class="fu">felm_custom</span>(<span class="no">y</span> ~ <span class="no">x</span> + <span class="no">x2</span> <span class="kw">|</span> <span class="no">id</span>)
-<span class="no">mod</span><span class="kw">[[</span><span class="fl">3</span>]] <span class="kw">&lt;-</span> <span class="fu">felm_custom</span>(<span class="no">y</span> ~ <span class="no">x</span> + <span class="no">x2</span> <span class="kw">|</span> <span class="no">firm</span>)
-<span class="no">mod</span><span class="kw">[[</span><span class="fl">4</span>]] <span class="kw">&lt;-</span> <span class="fu">felm_custom</span>(<span class="no">y</span> ~ <span class="no">x</span> + <span class="no">x2</span> <span class="kw">|</span> <span class="no">id</span> + <span class="no">firm</span>)
-
-<span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
-<style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
-}
-
-#wemzjnbdzz .gt_table {
-  display: table;
-  border-collapse: collapse;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#wemzjnbdzz .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#wemzjnbdzz .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#wemzjnbdzz .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 0;
-  padding-bottom: 4px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#wemzjnbdzz .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#wemzjnbdzz .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#wemzjnbdzz .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#wemzjnbdzz .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#wemzjnbdzz .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#wemzjnbdzz .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#wemzjnbdzz .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#wemzjnbdzz .gt_group_heading {
-  padding: 8px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#wemzjnbdzz .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#wemzjnbdzz .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#wemzjnbdzz .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#wemzjnbdzz .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#wemzjnbdzz .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#wemzjnbdzz .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 12px;
-}
-
-#wemzjnbdzz .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#wemzjnbdzz .gt_first_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-}
-
-#wemzjnbdzz .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#wemzjnbdzz .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#wemzjnbdzz .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#wemzjnbdzz .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#wemzjnbdzz .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding: 4px;
-}
-
-#wemzjnbdzz .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#wemzjnbdzz .gt_sourcenote {
-  font-size: 90%;
-  padding: 4px;
-}
-
-#wemzjnbdzz .gt_left {
-  text-align: left;
-}
-
-#wemzjnbdzz .gt_center {
-  text-align: center;
-}
-
-#wemzjnbdzz .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#wemzjnbdzz .gt_font_normal {
-  font-weight: normal;
-}
-
-#wemzjnbdzz .gt_font_bold {
-  font-weight: bold;
-}
-
-#wemzjnbdzz .gt_font_italic {
-  font-style: italic;
-}
-
-#wemzjnbdzz .gt_super {
-  font-size: 65%;
-}
-
-#wemzjnbdzz .gt_footnote_marks {
-  font-style: italic;
-  font-size: 65%;
-}
-</style>
-<div id="wemzjnbdzz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
-<thead class="gt_col_headings"><tr>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">       </th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Model 1</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Model 2</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Model 3</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Model 4</th>
-    </tr></thead>
-<tbody class="gt_table_body">
-<tr>
-<td class="gt_row gt_left">(Intercept)</td>
-      <td class="gt_row gt_left">-0.107</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left"></td>
-    </tr>
-<tr>
-<td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">(0.050)</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left"></td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">x</td>
-      <td class="gt_row gt_left">0.936</td>
-      <td class="gt_row gt_left">0.903</td>
-      <td class="gt_row gt_left">0.969</td>
-      <td class="gt_row gt_left">0.942</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">(0.049)</td>
-      <td class="gt_row gt_left">(0.040)</td>
-      <td class="gt_row gt_left">(0.044)</td>
-      <td class="gt_row gt_left">(0.032)</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">x2</td>
-      <td class="gt_row gt_left">0.432</td>
-      <td class="gt_row gt_left">0.460</td>
-      <td class="gt_row gt_left">0.441</td>
-      <td class="gt_row gt_left">0.464</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"></td>
-      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.050)</td>
-      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.041)</td>
-      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.045)</td>
-      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.032)</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">Num.Obs.</td>
-      <td class="gt_row gt_left">1000</td>
-      <td class="gt_row gt_left">1000</td>
-      <td class="gt_row gt_left">1000</td>
-      <td class="gt_row gt_left">1000</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">R2</td>
-      <td class="gt_row gt_left">0.306</td>
-      <td class="gt_row gt_left">0.561</td>
-      <td class="gt_row gt_left">0.462</td>
-      <td class="gt_row gt_left">0.725</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">R2 Adj.</td>
-      <td class="gt_row gt_left">0.305</td>
-      <td class="gt_row gt_left">0.552</td>
-      <td class="gt_row gt_left">0.455</td>
-      <td class="gt_row gt_left">0.716</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">AIC</td>
-      <td class="gt_row gt_left">3750.6</td>
-      <td class="gt_row gt_left">3330.6</td>
-      <td class="gt_row gt_left">3519.7</td>
-      <td class="gt_row gt_left">2886.3</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">BIC</td>
-      <td class="gt_row gt_left">3770.2</td>
-      <td class="gt_row gt_left">3443.4</td>
-      <td class="gt_row gt_left">3598.2</td>
-      <td class="gt_row gt_left">3058.1</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">Log.Lik.</td>
-      <td class="gt_row gt_left">-1871.284</td>
-      <td class="gt_row gt_left">-1642.285</td>
-      <td class="gt_row gt_left">-1743.841</td>
-      <td class="gt_row gt_left">-1408.156</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">Fixed effects: firm</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">X</td>
-      <td class="gt_row gt_left">X</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left">Fixed effects: id</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">X</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">X</td>
-    </tr>
-</tbody>
-</table></div>
 </div>
   </div>
 
