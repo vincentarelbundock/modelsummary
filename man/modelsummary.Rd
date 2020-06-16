@@ -18,12 +18,12 @@ modelsummary(
   gof_map = modelsummary::gof_map,
   gof_omit = NULL,
   add_rows = NULL,
-  add_rows_location = NULL,
   title = NULL,
   notes = NULL,
   estimate = "estimate",
   filename = NULL,
   subtitle = NULL,
+  add_rows_location = NULL,
   ...
 )
 }
@@ -83,12 +83,15 @@ from the table (using `stringr::str_detect`).}
 \item{gof_omit}{string regular expression. Omits all matching gof statistics from
 the table (using `stringr::str_detect`).}
 
-\item{add_rows}{list of character vectors, each of length equal to the number
-of models + 1.}
-
-\item{add_rows_location}{integer or NULL. custom rows will be added to the
-bottom of the table if this parameter is NULL, or after the position set by
-this integer.}
+\item{add_rows}{a data.frame (or tibble) with the following columns: 
+\itemize{
+  \item section (character): insert in "middle" or "bottom" section of the table
+  \item position (integer): row position in the section
+  \item term (character): string to display under coefficient names
+  \item one column per model with the same name as that model with the
+        values to insert (some models can be omitted). 
+  \item See the examples section of this documentation and an example.
+}}
 
 \item{title}{string}
 
@@ -100,8 +103,10 @@ cases, the default value of this argument should not be changed.}
 
 \item{filename}{This argument was deprecated in favor of the `output` argument.}
 
-\item{subtitle}{This argument is deprecated. Use `title` or the `tab_header`
-function from the `gt` package.}
+\item{subtitle}{This argument is deprecated. Use `title` or the `tab_header`}
+
+\item{add_rows_location}{This argument is deprecated. Use a data.frame as
+described in the documentation for the `add_rows` argument.}
 
 \item{...}{all other arguments are passed to the `tidy` method used to
 extract estimates from the model. For example, this allows users to set
@@ -115,6 +120,8 @@ Beautiful, customizable summaries of statistical models
 }
 \examples{
 \donttest{
+library(modelsummary)
+
 # load data and estimate models
 data(trees)
 models <- list()
@@ -137,6 +144,13 @@ msummary(models, title = 'This is the title')
 
 # title with italicized text
 msummary(models, title = gt::md('This is *the* title'))
+
+# add_rows: we use `tribble` from the `tibble` package to build a data.frame
+# more easily
+rows <- tibble::tribble(~term, ~section, ~position, ~Bivariate, ~Multivariate,
+                        'Empty row', 'middle', 3, '-', '-',
+                        'Another empty row', 'bottom', 1, '?', '?')
+msummary(models, add_rows = rows)
 
 # notes at the bottom of the table (here, the second note includes markdown bold characters)
 msummary(models, notes = list('A first note', gt::md('A **bold** note')))

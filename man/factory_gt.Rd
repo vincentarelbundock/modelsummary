@@ -19,8 +19,7 @@ factory_gt(
 \arguments{
 \item{title}{string}
 
-\item{subtitle}{This argument is deprecated. Use `title` or the `tab_header`
-function from the `gt` package.}
+\item{subtitle}{This argument is deprecated. Use `title` or the `tab_header`}
 
 \item{stars}{to indicate statistical significance
 \itemize{

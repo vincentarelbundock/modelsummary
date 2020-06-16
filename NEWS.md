@@ -1,3 +1,8 @@
+# modelsummary 0.5.0.9000
+
+* add_rows now accepts a data.frame with "position" and "section" columns
+* add_rows_location is deprecated
+
 # modelsummary 0.4.0
 
 * huxtable support

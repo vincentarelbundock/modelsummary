@@ -1,6 +1,33 @@
 #' sanity check
 #'
 #' @keywords internal
+sanity_filename <- function(filename) {
+    if (!is.null(filename)) {
+        stop('The `filename` argument is deprecated. Please use `output` instead.') 
+    }
+}
+
+#' sanity check
+#'
+#' @keywords internal
+sanity_subtitle <- function(subtitle) {
+    if (!is.null(subtitle)) {
+        stop('The `subtitle` argument is deprecated. If you want to add a subtitle to an HTML table, you can use the `tab_header` function from the `gt` package.') 
+    }
+}
+
+#' sanity check
+#'
+#' @keywords internal
+sanity_add_rows_location <- function(add_rows_location) {
+    if (!is.null(add_rows_location)) {
+        stop('The `add_rows_location` argument is deprecated. Please use a data.frame (or tibble) as described in the `add_rows` argument documentation.')
+    }
+}
+
+#' sanity check
+#'
+#' @keywords internal
 sanity_estimate <- function(estimate) checkmate::assert_character(estimate)
 
 #' sanity check
@@ -130,15 +157,17 @@ sanity_output <- function(output) {
 #' sanity check
 #'
 #' @keywords internal
-sanity_add_rows <- function(add_rows, add_rows_location, models) {
-    checkmate::assert_list(add_rows, null.ok = TRUE)
-    checkmate::assert_number(add_rows_location, null.ok = TRUE)
-    if ('list' %in% class(add_rows)) {
-        for (custom_row in add_rows) {
-            checkmate::assert_character(custom_row, null.ok = FALSE, len = (length(models) + 1))
+sanity_add_rows <- function(add_rows, models) {
+    if (inherits(add_rows, 'list')) {
+        for (i in seq_along(add_rows)) {
+            checkmate::assert_character(add_rows[[i]], null.ok = FALSE, len = (length(models) + 1))
         }
+    } else if (inherits(add_rows, 'data.frame')) {
+        checkmate::assert_true(all(c('section', 'position') %in% colnames(add_rows)))
+        checkmate::assert_true(all(colnames(add_rows) %in% c('term', 'section', 'position', names(models)))) 
     }
 }
+
 
 #' sanity check
 #'
@@ -169,24 +198,6 @@ sanity_statistic <- function(statistic,
         stop("Only one statistic can be displayed next to the estimate. Check the statistic_vertical argument.")
 
       }
-    }
-}
-
-#' sanity check
-#'
-#' @keywords internal
-sanity_filename <- function(filename) {
-    if (!is.null(filename)) {
-        stop('The `filename` argument is deprecated. Please use `output` instead.') 
-    }
-}
-
-#' sanity check
-#'
-#' @keywords internal
-sanity_subtitle <- function(subtitle) {
-    if (!is.null(subtitle)) {
-        stop('The `subtitle` argument is deprecated. If you want to add a subtitle to an HTML table, you can use the `tab_header` function from the `gt` package.') 
     }
 }
 

@@ -197,24 +197,23 @@ msummary(models, fmt = '%.7f')
 
 ## Add rows manually
 
-Use the `add_rows` argument to add rows manually to the bottom of the table.
+Use the `add_rows` argument to add rows manually to a table. For example, let's say you estimate two models with a factor variables and you want to insert (a) an empty line to identify the category of reference, and (b) cutomized information at the bottom of the table:
 
-```r
-row1 <- c('Custom row 1', 'a', 'b', 'c', 'd', 'e')
-row2 <- c('Custom row 2', 5:1)
-msummary(models, add_rows = list(row1, row2))
+```{r}
+models <- list()
+models[['OLS']] <- lm(mpg ~ factor(cyl), mtcars)
+models[['Logit']] <- glm(am ~ factor(cyl), mtcars, family = binomial)
 ```
 
-Use the `add_rows` argument to specify where the custom rows should be displayed in the bottom panel. For example, this prints custom rows after the coefficients, but at first position in the goodness of fit measures:
+We create a data.frame with the following columns: "term", "position", "section", and one column per model. "position" is an integer, and "section" is either "middle" or "bottom". To build this data.frame, it is useful to call the `tribble` (note the "r") from the `tibble` package:
 
-```r
-msummary(models, add_rows = list(row1, row2), add_rows_location = 0)
-```
+```{r}
+library(tibble)
+rows <- tribble(~term,          ~OLS,  ~Logit, ~section, ~position,
+                'factor(cyl)4', '-',   '-',    'middle', 3,
+                'Info',         '???', 'XYZ',  'bottom', 4)
 
-This prints custom rows after the 2nd GOF statistic:
-
-```r
-msummary(models, add_rows = list(row1, row2), add_rows_location = 2)
+msummary(models, add_rows = rows)
 ```
 
 ## Extra tidy arguments (e.g., exponentiated coefficients)

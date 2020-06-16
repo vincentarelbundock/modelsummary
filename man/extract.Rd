@@ -16,10 +16,10 @@ extract(
   gof_map = modelsummary::gof_map,
   gof_omit = NULL,
   add_rows = NULL,
-  add_rows_location = NULL,
   stars = FALSE,
   fmt = "\%.3f",
   estimate = "estimate",
+  add_rows_location = NULL,
   ...
 )
 }
@@ -60,12 +60,15 @@ from the table (using `stringr::str_detect`).}
 \item{gof_omit}{string regular expression. Omits all matching gof statistics from
 the table (using `stringr::str_detect`).}
 
-\item{add_rows}{list of character vectors, each of length equal to the number
-of models + 1.}
-
-\item{add_rows_location}{integer or NULL. custom rows will be added to the
-bottom of the table if this parameter is NULL, or after the position set by
-this integer.}
+\item{add_rows}{a data.frame (or tibble) with the following columns: 
+\itemize{
+  \item section (character): insert in "middle" or "bottom" section of the table
+  \item position (integer): row position in the section
+  \item term (character): string to display under coefficient names
+  \item one column per model with the same name as that model with the
+        values to insert (some models can be omitted). 
+  \item See the examples section of this documentation and an example.
+}}
 
 \item{stars}{to indicate statistical significance
 \itemize{
@@ -82,6 +85,9 @@ use exponential notation. See `?sprintf` for more options.}
 \item{estimate}{character name of the estimate to display. Must be a column
 name in the dataframe produced by `tidy(model)`. In the vast majority of
 cases, the default value of this argument should not be changed.}
+
+\item{add_rows_location}{This argument is deprecated. Use a data.frame as
+described in the documentation for the `add_rows` argument.}
 
 \item{...}{all other arguments are passed to the `tidy` method used to
 extract estimates from the model. For example, this allows users to set
