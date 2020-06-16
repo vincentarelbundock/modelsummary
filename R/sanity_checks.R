@@ -126,6 +126,7 @@ sanity_output <- function(output) {
     }
 }
 
+
 #' sanity check
 #'
 #' @keywords internal

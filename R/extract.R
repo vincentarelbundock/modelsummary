@@ -134,29 +134,33 @@ extract <- function(models,
     # add_rows: this needs to be done after sorting and combining to preserve
     # user-selected row order
     if (!is.null(add_rows)) {
-        add_rows <- lapply(add_rows, as.character) %>%  # TODO: remove once sanity checks are complete
-                    do.call('rbind', .) %>%
-                    data.frame(stringsAsFactors = FALSE) %>%
-                    stats::setNames(c('term', model_names)) %>%
-                    dplyr::mutate(group = 'gof', statistic = '')
-        add_rows <- add_rows[, colnames(gof)]
 
-        # sanity check add_rows_location
-        checkmate::assert_numeric(add_rows_location, null.ok = TRUE,
-                                  max.len = 1, lower = 0, upper = nrow(gof))
-        if (is.null(add_rows_location)) { # bottom if location is not specified
-            gof <- dplyr::bind_rows(gof, add_rows)
-        } else {
-            if (add_rows_location == 0) { # top if location is 0
-                gof <- dplyr::bind_rows(add_rows, gof)
-            } else if (add_rows_location == nrow(gof)) { # bottom if location is nrow(gof)
-                gof <- dplyr::bind_rows(gof, add_rows)
-            } else { # middle otherwise
-                top <- gof[1:add_rows_location,]
-                bot <- gof[(add_rows_location + 1):nrow(gof),]
-                gof <- dplyr::bind_rows(top, add_rows, bot)
-            }
+        if (is.null(attr(add_rows, 'section'))) {
+            loc <- 'bottom'
+        } else if (attr(add_rows, 'section') == 'bottom') {
+            loc <- 'bottom'
+        } else if (attr(add_rows, 'section') == 'middle') {
+            loc <- 'middle'
         }
+
+        rows <- do.call('rbind', add_rows) %>%
+                data.frame(stringsAsFactors = FALSE) %>%
+                setNames(colnames(gof)[2:ncol(gof)])
+ 
+        if (loc == 'middle') {
+            rows <- rows %>% 
+                    dplyr::mutate(group = 'estimate', statistic = 'estimate')
+            rows <- rows[, colnames(est)]
+            est <- est %>% 
+                   tibble::add_row(rows, .before = add_rows_location)
+        } else if (loc == 'bottom') {
+            rows <- rows %>% 
+                    dplyr::mutate(group = 'gof', statistic = '')
+            rows <- rows[, colnames(gof)]
+            gof <- gof %>% 
+                   tibble::add_row(rows, .before = add_rows_location)
+        }
+
     }
 
     # combine estimates and gof
