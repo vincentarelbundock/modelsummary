@@ -140,7 +140,7 @@ extract <- function(models,
         if (inherits(add_rows, 'list')) {
             add_rows <- do.call('rbind', add_rows) %>%
                         data.frame(stringsAsFactors = FALSE) %>%
-                        setNames(colnames(gof)[2:ncol(gof)]) %>%
+                        stats::setNames(colnames(gof)[2:ncol(gof)]) %>%
                         dplyr::mutate(section = 'bottom', position = 1e6)
         }
 
