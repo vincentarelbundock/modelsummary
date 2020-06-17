@@ -124,3 +124,15 @@ test_that("save to file", {
     expect_error(msummary(mod, filename), NA)
     unlink(filename)
 })
+
+
+test_that("overwrite file", {
+
+    random <- stringi::stri_rand_strings(1, 30)
+
+    filename <- paste0(random, '.html')
+    expect_error(msummary(mod, filename), NA)
+    expect_error(msummary(mod, filename), NA)
+    unlink(filename)
+
+})

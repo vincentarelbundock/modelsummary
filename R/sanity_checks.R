@@ -142,7 +142,7 @@ sanity_output <- function(output) {
         extension <- tools::file_ext(output)
         cond2 <- extension %in% extension_types
         if (isTRUE(cond2)) {
-            checkmate::assert_path_for_output(output)
+            checkmate::assert_path_for_output(output, overwrite=TRUE)
         } else {
             msg <- paste0('The `output` argument must be ', 
                           paste(object_types, collapse = ', '),
