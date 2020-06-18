@@ -252,3 +252,30 @@ sanity_tidy <- function(tidy_output, tidy_custom, estimate, statistic, modelclas
         stop(msg)
     }
 }
+
+#' sanity check: datasummary
+#' 
+# warn if a character or logical variable is nested (common mistake)
+#' @keywords internal
+sanity_ds_nesting_factor <- function(formula, data) {
+  idx <- sapply(data, function(x) is.character(x) | is.logical(x))
+  idx <- names(idx)[idx]
+  idx <- c(paste0('^', idx, ':'), paste0(':', idx, '$'))
+  termlabs <- labels(terms(formula))
+  warn <- any(sapply(idx, function(x) any(stringr::str_detect(x, termlabs))))
+  if (warn) {
+    warning(
+      'You are trying to create a nested table by applying the * operator to a character or a logical variable. It is usually a good idea to convert such variables to a factor before calling datasummary: dat$y<-as.factor(dat$y). Alternatively, you could wrap your categorical variable inside Factor() in the datasummary call itself: datasummary(x ~ Factor(y) * z, data)\n')
+  }
+}
+
+#' sanity check: datasummary_table1
+#' 
+#' right-handed formulae only
+sanity_ds_right_handed_formula <- function(formula) {
+    termlabels <- labels(terms(formula))
+    if (length(termlabels) > 1) {
+         stop("The 'table1' template for `datasummary` only accepts a single right-hand side variable of type factor, character, or logical. If you do not want to transform your variable in the original data, you can wrap it in a Factor() call: datasummary_table1(~Factor(x), data). the name of your variablePlease visit the `modelsummary` website to learn how to build your own, more complex, Table 1. It's easy, I promise! https://vincentarelbundock.github.io/modelsummary/datasummary.html")
+    }
+}
+

@@ -6,10 +6,10 @@
 \usage{
 factory_flextable(
   tab,
-  title,
-  stars,
-  notes,
-  hrule,
+  title = NULL,
+  stars = FALSE,
+  notes = NULL,
+  hrule = NULL,
   output_file,
   output_format,
   ...

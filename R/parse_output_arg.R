@@ -2,6 +2,7 @@
 #' format to use.
 #'
 #' @keywords internal
+#' @export
 parse_output_arg <- function(output) {
 
     ext <- tools::file_ext(output)

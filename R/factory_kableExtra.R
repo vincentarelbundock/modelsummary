@@ -17,7 +17,8 @@ factory_kableExtra <- function(tab,
                              format = output_format,
                              caption = title,
                              booktabs = TRUE, 
-                             linesep = "")
+                             linesep = "",
+                             ...)
 
     # horizontal rule to separate coef/gof not supported in markdown
     # TODO: support HTML
@@ -33,30 +34,35 @@ factory_kableExtra <- function(tab,
 
     # stars note
     if (!isFALSE(stars)) {
+        threeparttable <- knitr::is_latex_output()
         stars_note <- make_stars_note(stars)
         tab <- tab %>% 
-               kableExtra::add_footnote(label = stars_note, notation = 'none')
+               kableExtra::add_footnote(label = stars_note, notation = 'none', threeparttable = threeparttable)
     }
 
     # user-supplied notes at the bottom of table
     if (!is.null(notes)) {
+        threeparttable <- knitr::is_latex_output()
         for (n in notes) {
             tab <- tab %>% 
-                   kableExtra::add_footnote(label = n, notation = 'none')
+                   kableExtra::add_footnote(label = n, notation = 'none', threeparttable = threeparttable)
         }
     }
     
     if (!is.null(span)) {
-        span <- rev(span) # correct vertical order
-        for (s in span) {
-            tab <- tab %>%
-                   kableExtra::add_header_above(s)
+        # add_header_above not supported in markdown
+        if (output_format %in% c('latex', 'html')) {
+            span <- rev(span) # correct vertical order
+            for (s in span) {
+                tab <- tab %>%
+                    kableExtra::add_header_above(s)
+            }   
         }
     }
 
     # styling (can be overriden manually by calling again)
     if (output_format %in% c('latex', 'html')) {
-        tab <- tab %>% kableExtra::kable_styling()
+        tab <- tab %>% kableExtra::kable_styling(full_width = FALSE)
     }
     
     # output
