@@ -1,72 +1,39 @@
 #' Internal function to build table with `gt`
 #'
 #' @inheritParams modelsummary
-#' @param stars_note passed by `modelsummary()`
 #' @keywords internal
 #' @return tbl_gt object
 factory_kableExtra <- function(tab,
-                               title,
-                               stars,
-                               stars_note,
-                               notes,
-                               gof_idx,
-                               output,
+                               title = NULL,
+                               stars = FALSE,
+                               notes = NULL,
+                               hrule = NULL,
+                               span = NULL,
+                               output_file,
+                               output_format,
                                ...) {
-  
-    # kableExtra needs to know the output format ex ante 
-    ext <- tools::file_ext(output)
 
-    # modelsummary call 
-    if (output %in% c('html', 'latex', 'markdown')) {
-        output_format <- output
-    } else if (ext == 'tex') {
-        output_format <- 'latex'
-    } else if (ext %in% c('md', 'txt', 'Rmd')) {
-        output_format <- 'markdown'
-    } else if (ext %in% c('htm', 'html')) {
-        output_format <- 'html'
+    tab <- kableExtra::kable(tab,
+                             format = output_format,
+                             caption = title,
+                             booktabs = TRUE, 
+                             linesep = "")
 
-    # global options
-    } else if (output %in% c('default', 'kableExtra')) {
-        output_format <- getOption('modelsummary_kableExtra')
-
-        if (is.null(output_format)) {
-            output_format <- getOption('knitr.table.format')
-
-            if (is.null(output_format)) {
-
-                if (knitr::is_latex_output()) {
-                    output_format <- 'latex'
-                } else {
-                    output_format <- 'html'
-                }
-
+    # horizontal rule to separate coef/gof not supported in markdown
+    # TODO: support HTML
+    if (!is.null(hrule)) {
+        if (output_format %in% 'latex') {
+            for (pos in hrule) {
+                tab <- tab %>% 
+                       kableExtra::row_spec(row = pos - 1,  
+                                            extra_latex_after = '\\midrule')
             }
-
-        }
-    } 
-
-    if (!is.null(output_format)) {
-        tab <- kableExtra::kable(tab,
-                                 format = output_format,
-                                 caption = title,
-                                 booktabs = TRUE, 
-                                 linesep = "")
-    } 
-
-    # horizontal rule to separate coef/gof
-    if (output_format != 'markdown') {
-        if (!is.na(gof_idx)) { # check if there are >0 GOF
-            tab <- tab %>%
-                   kableExtra::row_spec(gof_idx - 1, 
-                                        extra_latex_after = '\\midrule') %>%
-                   kableExtra::kable_styling()
         }
     }
 
     # stars note
-    stars_note <- make_stars_note(stars)
-    if (!is.null(stars_note)) {
+    if (!isFALSE(stars)) {
+        stars_note <- make_stars_note(stars)
         tab <- tab %>% 
                kableExtra::add_footnote(label = stars_note, notation = 'none')
     }
@@ -78,9 +45,22 @@ factory_kableExtra <- function(tab,
                    kableExtra::add_footnote(label = n, notation = 'none')
         }
     }
+    
+    if (!is.null(span)) {
+        span <- rev(span) # correct vertical order
+        for (s in span) {
+            tab <- tab %>%
+                   kableExtra::add_header_above(s)
+        }
+    }
 
+    # styling (can be overriden manually by calling again)
+    if (output_format %in% c('latex', 'html')) {
+        tab <- tab %>% kableExtra::kable_styling()
+    }
+    
     # output
-    if (ext == '') {
+    if (is.null(output_file)){
         return(tab)
     } else {
         # function stolen from kableExtra (MIT license). Not exported and CRAN
@@ -90,7 +70,7 @@ factory_kableExtra <- function(tab,
             mostattributes(out) <- attributes(x)
             return(out)
         }
-        filecon <- file(output)
+        filecon <- file(output_file)
         writeLines(solve_enc(tab), con = filecon, useBytes = TRUE)
         close(filecon)
     } 

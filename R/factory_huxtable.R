@@ -7,10 +7,10 @@
 factory_huxtable <- function(tab,
                              title,
                              stars,
-                             stars_note,
                              notes,
-                             gof_idx,
-                             output,
+                             hrule,
+                             output_file,
+                             output_format,
                              ...) {
 
     # is huxtable installed?
@@ -31,10 +31,16 @@ factory_huxtable <- function(tab,
                                     value = 1) %>%
            huxtable::set_bottom_border(row = nrow(.), 
                                        col = 1:ncol(.),
-                                       value = 1) %>%
-           huxtable::set_bottom_border(row = gof_idx, 
-                                       col = 1:ncol(.),
                                        value = 1)
+
+    if (!is.null(hrule)) {
+        for (pos in hrule) {
+            out <- out %>% 
+                   huxtable::set_bottom_border(row = pos, 
+                                               col = 1:ncol(.),
+                                               value = 1)
+        }
+    }
 
     # title
     if (!is.null(title)) {
@@ -43,8 +49,8 @@ factory_huxtable <- function(tab,
 
 
     # stars note
-    stars_note <- make_stars_note(stars)
-    if (!is.null(stars_note)) {
+    if (!isFALSE(stars)) {
+        stars_note <- make_stars_note(stars)
         out <- huxtable::add_footnote(out,
                                       text = stars_note)
     }
@@ -57,19 +63,20 @@ factory_huxtable <- function(tab,
     }
 
     # output
-    ext <- tools::file_ext(output)
-    if (output == 'huxtable') {
+    if (is.null(output_file)) {
         return(out)
-    } else if (ext == 'docx') {
-        huxtable::quick_docx(out, file = output, open = FALSE)
-    } else if (ext == 'pptx') {
-        huxtable::quick_pptx(out, file = output, open = FALSE)
-    } else if (ext %in% c('htm', 'html')) {
-        huxtable::quick_html(out, file = output, open = FALSE)
-    } else if (ext %in% c('rtf')) {
-        huxtable::quick_rtf(out, file = output, open = FALSE)
-    } else if (ext %in% c('tex')) {
-        huxtable::quick_rtf(out, file = output, open = FALSE)
+    } else {
+        if (output_format == 'word') {
+            huxtable::quick_docx(out, file = output_file, open = FALSE)
+        } else if (output_format == 'powerpoint') {
+            huxtable::quick_pptx(out, file = output_file, open = FALSE)
+        } else if (output_format == 'html') {
+            huxtable::quick_html(out, file = output_file, open = FALSE)
+        } else if (output_format == 'rtf') {
+            huxtable::quick_rtf(out, file = output_file, open = FALSE)
+        } else if (output_format == 'latex') {
+            huxtable::quick_rtf(out, file = output_file, open = FALSE)
+        }
     }
 
 }

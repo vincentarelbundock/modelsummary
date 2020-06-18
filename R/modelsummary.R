@@ -171,82 +171,36 @@ modelsummary <- function(models,
     tab <- dat %>%
            dplyr::mutate(term = ifelse(idx, '', term))
 
-    # choose table factory
-    factory_dict <- list('default' = getOption('modelsummary_default', default = 'gt'),
-                         'gt' = 'gt',
-                         'huxtable' = 'huxtable',
-                         'flextable' = 'flextable',
-                         'kableExtra' = 'kableExtra',
-                         'html' = getOption('modelsummary_html', default = 'gt'),
-                         'rtf' = getOption('modelsummary_rtf', default = 'gt'),
-                         'latex' = getOption('modelsummary_latex', default = 'kableExtra'),
-                         'markdown' = 'kableExtra',
-                         'word' =  getOption('modelsummary_word', default = 'flextable'),
-                         'powerpoint' =  getOption('modelsummary_powerpoint', default = 'flextable'),
-                         'png' = getOption('modelsummary_png', default = 'flextable'),
-                         'jpg' = getOption('modelsummary_jpg', default = 'flextable'))
-
-    # sanity check: are user-supplied global options ok?
-    sanity_factory(factory_dict)
-
-    # decide which table factory to use based on user input
-    ext <- tools::file_ext(output)
-
-    # override default if knitting to latex. otherwise gt would break compilation
-    if (output == 'default') {
-        if (knitr::is_latex_output()) {
-            idx <- 'latex'
-        } else {
-            idx <- 'default'
-        }
-
-    # kableExtra produces minimal/readable code
-    } else if (output %in% c('html', 'latex', 'markdown')) { 
-        idx <- 'kableExtra'
-
-    # file extensions to output format
-    } else if (ext %in% c('md', 'Rmd', 'txt')) {
-        idx <- 'markdown'
-    } else if (ext %in% c('tex', 'ltx')) {
-        idx <- 'latex'
-    } else if (ext %in% c('docx', 'doc')) {
-        idx <- 'word'
-    } else if (ext %in% c('pptx', 'ppt')) {
-        idx <- 'powerpoint'
-
-    # human-readable html, latex, markdown 
-    } else if (ext == '') {
-        idx <- output
-
-    # file extension is self-explanatory
-    } else {
-        idx <- ext
-    }
-
-    # table factory
-    factory <- factory_dict[[idx]]
-    factory <- list('gt' = factory_gt,
-                    'kableExtra' = factory_kableExtra,
-                    'huxtable' = factory_huxtable,
-                    'flextable' = factory_flextable)[[factory]]
-
     # clean and measure table
-    gof_idx <- match('gof', tab$group)
+    hrule <- match('gof', tab$group)
     tab <- tab %>%
            dplyr::select(-statistic, -group) %>%
            # HACK: arbitrary 7 spaces to avoid name conflict
            dplyr::rename(`       ` = term)
+
+    # parse output
+    output_list <- parse_output_arg(output)
+
+    if (output_list$output_factory == 'gt') {
+        factory <- factory_gt
+    } else if (output_list$output_factory == 'kableExtra') {
+        factory <- factory_kableExtra
+    } else if (output_list$output_factory == 'flextable') {
+        factory <- factory_flextable
+    } else if (output_list$output_factory == 'huxtable') {
+        factory <- factory_huxtable
+    }
 
     # build table
     factory(tab, 
             title = title,
             subtitle = subtitle,
             stars = stars,
-            stars_note = stars_note,
             notes = notes,
             filename = filename,
-            gof_idx = gof_idx,
-            output = output,
+            hrule = hrule,
+            output_file = output_list$output_file,
+            output_format = output_list$output_format,
             ...)
       
 }
