@@ -38,21 +38,11 @@ test_that("html_output: complex table", {
     expect_known_output(cat(raw), "known_output/complex_table.html")
 })
 
-test_that("html_output: title and subtitle", {
+test_that("html_output: title", {
 
     raw <- msummary(models, title = 'This is a title for my table.') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/title.html")
-
-    raw <- msummary(models) %>%
-           gt::tab_header(title = 'This is a title for my table.',
-                          subtitle = 'And this is the subtitle.') %>%
-           gt::as_raw_html()
-    expect_known_output(cat(raw), "known_output/title_subtitle.html")
-
-    # subtitle deprecated
-    expect_error(msummary(models, title = 'blah', subtitle = 'blahblah'))
-    expect_error(msummary(models, subtitle = 'And this is the subtitle.'))
 
 })
 

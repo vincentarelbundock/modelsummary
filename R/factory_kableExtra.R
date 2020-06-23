@@ -10,15 +10,13 @@ factory_kableExtra <- function(tab,
                                hrule = NULL,
                                span = NULL,
                                output_file,
-                               output_format,
-                               ...) {
+                               output_format) {
 
     tab <- kableExtra::kable(tab,
-                             format = output_format,
-                             caption = title,
-                             booktabs = TRUE, 
-                             linesep = "",
-                             ...)
+                        format = output_format,
+                        caption = title,
+                        booktabs = TRUE, 
+                        linesep = "")
 
     # horizontal rule to separate coef/gof not supported in markdown
     # TODO: support HTML
@@ -37,15 +35,18 @@ factory_kableExtra <- function(tab,
         threeparttable <- knitr::is_latex_output()
         stars_note <- make_stars_note(stars)
         tab <- tab %>% 
-               kableExtra::add_footnote(label = stars_note, notation = 'none', threeparttable = threeparttable)
+               kableExtra::add_footnote(label = stars_note, notation = 'none', 
+                                        threeparttable = threeparttable)
     }
 
     # user-supplied notes at the bottom of table
     if (!is.null(notes)) {
-        threeparttable <- knitr::is_latex_output()
+        # threeparttable only works with 1 note
+        threeparttable <- knitr::is_latex_output() & (length(notes) == 1)
         for (n in notes) {
             tab <- tab %>% 
-                   kableExtra::add_footnote(label = n, notation = 'none', threeparttable = threeparttable)
+                   kableExtra::add_footnote(label = n, notation = 'none', 
+                                            threeparttable = threeparttable)
         }
     }
     
@@ -64,7 +65,13 @@ factory_kableExtra <- function(tab,
     if (output_format %in% c('latex', 'html')) {
         tab <- tab %>% kableExtra::kable_styling(full_width = FALSE)
     }
-    
+
+    # if knitting, keep the `kable` object. Otherwise, convert to
+    # human-readable character.
+    if (!knitr::is_latex_output() & !knitr::is_html_output()) {
+        tab <- as.character(tab)
+    }
+
     # output
     if (is.null(output_file)){
         return(tab)

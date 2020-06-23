@@ -1,7 +1,7 @@
 # https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when#comment20826625_12429344
 # 2012 hadley says "globalVariables is a hideous hack and I will never use it"
 # 2014 hadley updates his own answer with globalVariables as one of "two solutions"
-globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'value', 'p.value', 'std.error', 'statistic', 'stars_note', 'logLik', 'formatBicLL', 'section', 'position'))
+globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'value', 'p.value', 'std.error', 'statistic', 'stars_note', 'logLik', 'formatBicLL', 'section', 'position', 'where', 'ticks'))
 
 
 #' Beautiful, customizable summaries of statistical models
@@ -63,8 +63,6 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param estimate character name of the estimate to display. Must be a column
 #' name in the dataframe produced by `tidy(model)`. In the vast majority of
 #' cases, the default value of this argument should not be changed.
-#' @param filename This argument was deprecated in favor of the `output` argument.
-#' @param subtitle This argument is deprecated. Use `title` or the `tab_header`
 #' @param add_rows_location This argument is deprecated. Use a data.frame as
 #' described in the documentation for the `add_rows` argument.
 #' @param ... all other arguments are passed to the `tidy` method used to
@@ -135,8 +133,6 @@ modelsummary <- function(models,
                          title = NULL,
                          notes = NULL,
                          estimate = 'estimate',
-                         filename = NULL,
-                         subtitle = NULL,
                          add_rows_location = NULL,
                          ...) {
 
@@ -146,8 +142,6 @@ modelsummary <- function(models,
     sanity_output(output)
     sanity_title(title)
     sanity_notes(notes)
-    sanity_filename(filename)
-    sanity_subtitle(subtitle)
 
     # extract estimates and gof
     dat <- modelsummary::extract(models,
@@ -194,10 +188,8 @@ modelsummary <- function(models,
     # build table
     factory(tab, 
             title = title,
-            subtitle = subtitle,
             stars = stars,
             notes = notes,
-            filename = filename,
             hrule = hrule,
             output_file = output_list$output_file,
             output_format = output_list$output_format,

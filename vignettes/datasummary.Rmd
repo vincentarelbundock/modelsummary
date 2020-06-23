@@ -25,6 +25,7 @@ This tutorial will show you how to use the `datasummary` function to create a wi
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
+library(gt)
 library(modelsummary)
 library(kableExtra)
 options(modelsummary_default = 'kableExtra')
@@ -32,15 +33,15 @@ options(width = 120)
 
 training <- 'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv' %>%
             read.csv %>%
-            mutate(`Earnings pre-treatment` = re75,
-                   `Earnings post-treatment` = re78,
+            mutate(`Earnings Pre (1,000)` = re75  / 1000,
+                   `Earnings Post (1,000)` = re78 / 1000,
                    Treatment = ifelse(treat == TRUE, 'Treatment', 'Control'),
                    Married = ifelse(married == TRUE, 'Yes', 'No'),
                    Treatment = factor(Treatment),
                    Married = factor(Married),
                    Ethnicity = factor(ethn)) %>%
-            select(`Earnings pre-treatment`,
-                   `Earnings post-treatment`, 
+            select(`Earnings Pre (1,000)`,
+                   `Earnings Post (1,000)`, 
                    Treatment, 
                    Ethnicity, 
                    Age = age, 
@@ -54,10 +55,12 @@ datasummary_table1(~Treatment,
                    data = training,
                    title = caption,
                    notes = reference,
-                   fmt = "%.0f") %>%
-    kableExtra::row_spec(c(2, 7), bold = TRUE) %>%
-    kableExtra::row_spec(3, color = 'red') %>%
-    kableExtra::row_spec(4, color = 'green')
+                   #align ='llrlrl'
+                   fmt = "%.1f") %>%
+    kable_styling() %>%
+    kableExtra::row_spec(c(1, 6), bold = TRUE) %>%
+    kableExtra::row_spec(2, color = 'red') %>%
+    kableExtra::row_spec(3, color = 'green')
 ```
 
 `datasummary` is built around the *fantastic* [`tables` package for `R`.](https://cran.r-project.org/web/packages/tables/index.html) It is a thin "wrapper" which adds convenience functions and arguments; a user-interface consistent with `modelsummary`; cleaner html output; and the ability to export tables to more formats, including [`gt` tables](https://gt.rstudio.com), [`flextable` objects](https://davidgohel.github.io/flextable/), and Microsoft Word documents. 
@@ -157,8 +160,6 @@ The expression "Table 1" refers to a particular style of table which is often pr
 
 To illustrate how to build a Table 1 using the `datasummary_table1` function, we download data about a job training experiment published by Lalonde in 1986. Then, we clean up the data by renaming and recoding a few variables. 
 
-Finally, we convert all categorical variables to factors. When working with `datasummary`, it is often a good idea to do this before building your tables.
-
 ```{r}
 # Download and read data
 training <- 'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv' 
@@ -200,8 +201,8 @@ datasummary_table1(~Treatment,
                    data = training,
                    title = caption,
                    notes = reference,
-                   fmt = "%.0f") #%>%
-   # kableExtra::row_spec(c(2, 7), bold = TRUE)
+                   fmt = "%.0f") %>%
+   kableExtra::row_spec(c(2, 7), bold = TRUE)
 ```
 
 # `datasummary` with 2-Sided formulae
@@ -254,31 +255,24 @@ datasummary(flipper_length_mm + body_mass_g ~ Mean + SD,
             data = penguins)
 ```
 
-# Nesting factor variables with `*`
-
-`datasummary` can nest variables and statistics inside categorical variables using the `*` symbol. To achieve this, we must first convert the categorical variables in question to factors:
+Sometimes, it can be cumbersome to list all variables separated by `+` signs. The `All()` function is a useful shortcut:
 
 ```{r}
-penguins$island <- factor(penguins$island)
-penguins$species <- factor(penguins$species)
-penguins$sex <- factor(penguins$sex)
+datasummary(All(penguins) ~ Mean + SD,
+            data = penguins)
 ```
+By default, `All` selects all numeric variables. This behavior can be changed by modifying the function's arguments. See `?All` for details.
 
-Nesting with the `*` operator is easy. For instance, if we want to display separate means for each value of the variable `sex`, we use `mean * sex`:
+# Nesting factor variables with `*`
+
+`datasummary` can nest variables and statistics inside categorical variables using the `*` symbol. When applying the the `*` operator to factor, character, or logical variables, columns or rows will automatically be nested. For instance, if we want to display separate means for each value of the variable `sex`, we use `mean * sex`:
 
 ```{r}
 datasummary(flipper_length_mm + body_mass_g ~ mean * sex, 
             data = penguins)
 ```
 
-To get the table above, we transformed the variables to factors in the original dataset. An alternative approach would hav ebeen to wrap our categorical variables inside `Factor()` (with a capital "F") inside the `datasummary` call itself. This would have produced the same tables as the previous one:
-
-```{r, eval = FALSE}
-datasummary(flipper_length_mm + body_mass_g ~ mean * Factor(sex), 
-            data = penguins)
-```
-
-We can use parentheses to nest several terms inside another, using a call such as: `x * (y + z)`. Here is an example with nested columns:
+We can use parentheses to nest several terms inside one another, using a call of this form: `x * (y + z)`. Here is an example with nested columns:
 
 ```{r}
 datasummary(body_mass_g ~ sex * (mean + sd), 
@@ -292,16 +286,16 @@ datasummary(sex * (body_mass_g + flipper_length_mm) ~ mean + sd,
             data = penguins)
 ```
 
-The order in which terms enter the formula determines the order in which labels are displayed. For example, this will show the `island` values above `sex` values:
+The order in which terms enter the formula determines the order in which labels are displayed. For example, this shows `island` above `sex`:
 
-```{r, eval=FALSE}
+```{r}
 datasummary(flipper_length_mm + body_mass_g ~ mean * island * sex,
             data = penguins)
 ```
 
-This will show `sex` values above `island` values:
+This shows `sex` above `island` values:
 
-```{r, eval=FALSE}
+```{r}
 datasummary(flipper_length_mm + body_mass_g ~ mean * sex * island,
             data = penguins)
 ```
@@ -314,14 +308,14 @@ datasummary(flipper_length_mm + body_mass_g ~ mean * sex * island,
             sparse_header = FALSE)
 ```
 
-When using `sparse_header=FALSE`, it is often useful to call the `Heading()` function to rename or omit labels manually. Type `?tables::Heading` for details and examples.
+When using `sparse_header=FALSE`, it is often useful to insert `Heading() *` in the table formula, in order to rename or omit some of the labels manually. Type `?tables::Heading` for details and examples.
 
 # Renaming with `=`
 
 To rename a term, we wrap it in parentheses and use the equal `=` sign: `(NewName=OldName)`. 
 
 ```{r}
-datasummary((Flipper = flipper_length_mm) + (Mass = body_mass_g) ~ mean + sd,
+datasummary((Flipper = flipper_length_mm) + (Mass = body_mass_g) ~ Mean + SD,
             data = penguins)
 ```
 
@@ -329,60 +323,21 @@ To include spaces in the new term names, we wrap them in backticks:
 
 ```{r}
 datasummary((`Flipper length (mm)` = flipper_length_mm) + (`Body mass (g)` = body_mass_g) ~ 
-            island * ((Avg. = mean) + (Std.Dev. = sd)), 
+            island * ((Avg. = Mean) + (Std.Dev. = SD)), 
             data = penguins)
 ```
 
-# Missing values and empty cells
-
-For our purposes, we need to consider two types of missingness:
-
-1. `NA`s in variables
-2. Empty cells in crosstabs
-
-## `Arguments()`: `NA`s in variables
-
-At the top of this tutorial, we created a new dataset called `dat` which excluded all missing values from the `penguins` dataset. In `R`, missing values are "propagated", such that:
-
-```{r}
-mean(c(NA, 1, 2))
-mean(c(NA, 1, 2), na.rm = TRUE)
-```
-
-Likewise, if we apply the `mean` or `sd` functions to a dataset which includes `NA` values like `penguins`, we get no result:
-
-```{r}
-datasummary(body_mass_g + flipper_length_mm ~ mean + sd, 
-            data = penguins)
-```
-
-There are 3 main ways to deal with this:
-
-1. Remove missing values from your dataset before creating the table.
-2. Use one of the shortcut functions included in `modelsummary`: `Mean`, `Min`, `Max`, `Median`, `SD`, `Var`, `Unique`, `Q0`, `Q25`, `Q50`, `Q75`, `Q100`
-3. Append `Arguments(na.rm = TRUE)` to your table formula.
-
-```{r, eval = FALSE}
-# Strategy 2
-datasummary(body_mass_g + flipper_length_mm ~ Mean + SD, 
-            data = penguins)
-
-# Strategy 3
-datasummary(body_mass_g + flipper_length_mm ~ mean + sd * Arguments(na.rm = TRUE), 
-            data = penguins)
-```
-
-## `DropEmpty()`: Empty cells in crosstabs
+# `DropEmpty()`: Empty cells in crosstabs
 
 Sometimes, if we nest too much and the dataset is not large/diverse enough, we end up with empty cells. In that case, we add `*DropEmpty()` to produce something like this:
 
 ```{r}
-datasummary(island * species * body_mass_g ~ sex * (mean + sd), 
+datasummary(island * species * body_mass_g ~ sex * (Mean + SD), 
             data = penguins)
 ```
 
 ```{r}
-datasummary(island * species * body_mass_g ~ sex * (mean + sd) * DropEmpty(), 
+datasummary(island * species * body_mass_g ~ sex * (Mean + SD) * DropEmpty(), 
             data = penguins)
 ```
 
@@ -401,58 +356,135 @@ datasummary(species * sex + 1 ~ (N = 1) + Percent(),
 
 Note that the `Percent()` function accepts a `denom` argument to determine if percentages must be calculated row or column-wise.
 
-# `Factor` and `All`
+# `Arguments`
 
-`All`
+You can pass any argument to your summary function by including a call to `Arguments()`. For instance, there are missing values in the `flipper_length_mm` variable of the `penguins` dataset. Therefore, the standard `mean` function will produce no result, because its default argument is `na.rm=FALSE`. We can change that by calling:
 
-`Factor`
+```{r}
+datasummary(flipper_length_mm ~ mean + mean*Arguments(na.rm=TRUE),
+            data = penguins)
+```
 
 # Rounding
 
-# Captions and Notes
-
-# Subsets based on values
+The shortcut functions that ship with `modelsummary`, such as `Mean`, `SD`, `Median`, `P25` all include an argument called `fmt` which can be used to format numbers (see details in `?sprintf`). We can thus round numbers by using the `Arguments` approach described in the previous section:
 
 ```{r}
-# datasummary((bill_length_mm > 44.5) + (bill_length_mm <= 44.5) ~ 
-              # mean * flipper_length_mm, dat)
+datasummary(flipper_length_mm ~ Mean*Arguments(fmt = "%.4f") + SD*Arguments(fmt = "%.1f"),
+            data = penguins)
 ```
 
-# Save, Display, Customize
+We can apply the same argument to multiple functions by using parentheses:
 
-# t Test, chi-squared, and p-values
+```{r}
+datasummary(flipper_length_mm ~ (Mean + SD + P50) * Arguments(fmt = "%.1f"),
+            data = penguins)
+```
 
+# `Factor`
 
+The `*` nesting operator that we used above works automatically for factor, character, and logical variables. Sometimes, it is convenient to use it with other types of variables, such as binary numeric variables. In that case, we can wrap the variable name inside a call to `Factor()`. This allows us to treat a variable as factor, without having to modify it in the original data. For example, the `mtcars` data, there is a binary numeric variable call `am`. We nest statistics within categories of `am` by typing:
 
-# Last example
+```{r}
+datasummary(mpg + hp ~ Factor(am) * (mean + sd),
+            data = mtcars)
+```
 
-```{r eval=FALSE, echo=FALSE, message=FALSE, warning=FALSE}
-library(tidyverse)
-library(palmerpenguins)
-library(modelsummary)
+# Logical subsets
+
+Cool stuff is possible with logical subsets:
+
+```{r}
+datasummary((culmen_length_mm > 44.5) + (culmen_length_mm <= 44.5) ~ Mean * flipper_length_mm, 
+            data = penguins)
+```
+
+See the `tables` package documentation for more details and examples.
+
+# Titles and notes
+
+`datasummary` includes the same `title` and `notes` arguments as in `modelsummary`:
+
+```{r}
+datasummary(All(penguins) ~ Mean + SD,
+            data = penguins,
+            title = 'Statistics about the famous Palmer Penguins.',
+            notes = c('A note at the bottom Second note at the bottom'))
+```
+
+# Save and Display
+
+`datasummary` can save tables to a wide variety of file formats, using the `output` argument:
+
+```{r, eval=FALSE}
+f <- flipper_length_mm ~ island * (mean + sd)
+datasummary(f, data = penguins, output = 'table.html')
+datasummary(f, data = penguins, output = 'table.tex')
+datasummary(f, data = penguins, output = 'table.docx')
+datasummary(f, data = penguins, output = 'table.pptx')
+datasummary(f, data = penguins, output = 'table.md')
+datasummary(f, data = penguins, output = 'table.rtf')
+datasummary(f, data = penguins, output = 'table.jpg')
+datasummary(f, data = penguins, output = 'table.png')
+```
+
+`datasummary` can return human-readable markdown, html, or LaTeX code to the console:
+
+```{r, eval=FALSE}
+datasummary(f, data = penguins, output = 'markdown')
+datasummary(f, data = penguins, output = 'html')
+datasummary(f, data = penguins, output = 'latex')
+```
+
+`datasummary` can return objects compatible with the `gt`, `kableExtra`, `flextable`, and `huxtable` table creation and customization packages:
+
+```{r, eval=FALSE}
+datasummary(f, data = penguins, output = 'gt')
+datasummary(f, data = penguins, output = 'kableExtra')
+datasummary(f, data = penguins, output = 'flextable')
+datasummary(f, data = penguins, output = 'huxtable')
+```
+
+# Customize
+
+```{r, echo=FALSE}
+penguins$sex <- str_to_title(penguins$sex)
+```
+
+You can customize the tables produced by `datasummary` using the functions provided by `gt`, `kableExtra`, `flextable`, and `huxtable`. For instance, to customize tables using `kableExtra`, we can do:
+
+```{r}
 library(kableExtra)
 
-options(modelsummary_default = 'kableExtra')
-
-data(penguins)
-dat <- penguins %>%
-       mutate(sex = ifelse(sex == 'female', 'Female', 'Male'),
-              sex = factor(sex))
-colnames(dat) <- str_to_title(colnames(dat))
-colnames(dat) <- str_remove(colnames(dat), '_mm|_g')
-colnames(dat) <- str_replace(colnames(dat), '_', ' ')
-
-cap <- 'Penguin flipper lengths (mm) by location, species, and sex. This table was created using the "datasummary" function from the "modelsummary" package for R.'
-src <- 'Data source: Gorman, Williams & Fraser (2014). "palmerpenguins" package for R by Allison Horst https://github.com/allisonhorst/palmerpenguins'
-f <- Island * Species + 1 ~ 
-    Heading() *  Sex * Heading() * `Flipper length` * (
-    (N=1) * Format(digits=1) + 
-    Heading(`%`) * Percent(denom = 'col')  * Format(digits=3) + 
-    Heading('Mean') * mean  * Format(digits=3) + 
-    Heading('Std. Dev.') * sd * Format(digits=2) 
-    )  * DropEmpty('.')
-
-a <- paste0('ll', strrep('r', 8))
-datasummary(f, dat, title = cap, notes = src, align = a) %>%
-    kableExtra::row_spec(5, bold = TRUE, color = 'red')
+datasummary(All(penguins) ~ sex * (Mean + SD),
+            data = penguins,
+            output = 'kableExtra') %>%
+  row_spec(3, background = 'cyan', color = 'red')
 ```
+
+```{r, eval=knitr::is_html_output()}
+library(gt)
+
+adelie <- function(x) web_image('https://user-images.githubusercontent.com/987057/85402702-20b1d280-b52a-11ea-9950-f3a03133fd45.png', height = 100)
+gentoo <- function(x) web_image('https://user-images.githubusercontent.com/987057/85402718-27404a00-b52a-11ea-9ad3-dd7562f6438d.png', height = 100)
+chinstrap <- function(x) web_image('https://user-images.githubusercontent.com/987057/85402708-23acc300-b52a-11ea-9a77-de360a0d1f7d.png', height = 100)
+
+cap <- 'Flipper lengths (mm) of the famous penguins of Palmer Station, Antarctica.'
+f <- (`Species` = species) ~ (` ` = flipper_length_mm) * (`Distribution` = Histogram) + flipper_length_mm * sex * ((`Avg.` = Mean)*Arguments(fmt='%.0f') + (`Std. Dev.` = SD)*Arguments(fmt='%.1f'))
+datasummary(f,
+            data = penguins,
+            output = 'gt',
+            title = cap,
+            notes = 'Artwork by @allison_horst',
+            header_sparse = TRUE,
+            fmt = '%.0f') %>%
+    text_transform(locations = cells_body(columns = 1, rows = 1), fn = adelie) %>%
+    text_transform(locations = cells_body(columns = 1, rows = 2), fn = chinstrap) %>%
+    text_transform(locations = cells_body(columns = 1, rows = 3), fn = gentoo) %>%
+    tab_style(style = list(cell_text(color = "#FF6700", size = 'x-large')), locations = cells_body(rows = 1)) %>%
+    tab_style(style = list(cell_text(color = "#CD51D1", size = 'x-large')), locations = cells_body(rows = 2)) %>%
+    tab_style(style = list(cell_text(color = "#007377", size = 'x-large')), locations = cells_body(rows = 3)) %>%
+    tab_options(table_body.hlines.width = 0, table.border.top.width = 0, table.border.bottom.width = 0) %>%
+    cols_align('center', columns = 3:6)
+```
+

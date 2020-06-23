@@ -12,8 +12,7 @@ factory_kableExtra(
   hrule = NULL,
   span = NULL,
   output_file,
-  output_format,
-  ...
+  output_format
 )
 }
 \arguments{
@@ -27,10 +26,6 @@ factory_kableExtra(
 }}
 
 \item{notes}{list or vector of notes to append to the bottom of the table.}
-
-\item{...}{all other arguments are passed to the `tidy` method used to
-extract estimates from the model. For example, this allows users to set
-`exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \value{
 tbl_gt object

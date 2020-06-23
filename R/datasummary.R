@@ -27,9 +27,8 @@ datasummary <- function(formula,
     # output: factory, file, format
     output_list <- parse_output_arg(output)
 
-    # TODO: Interaction between this and datasummary_table1
-    # what about All() where each row has a character
-    # convenience: character and logical to factor
+    # convenience: transform logical and character to factor
+    # are there use-cases for character variables?
     data <- data %>%
             dplyr::mutate(dplyr::across(where(is.character) |
                                         where(is.logical),

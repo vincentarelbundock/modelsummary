@@ -5,6 +5,15 @@
 #' @export
 parse_output_arg <- function(output) {
 
+    # kableExtra produces human-readable code
+    if (output %in% c('markdown', 'html', 'latex')) {
+        out <- list('output_factory' = 'kableExtra',
+                    'output_file' = NULL,
+                    'output_format' = output)
+        return(out)
+    }
+
+    # file extension to guess format
     ext <- tools::file_ext(output)
 
     # output_file

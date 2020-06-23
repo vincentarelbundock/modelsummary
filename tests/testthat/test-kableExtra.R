@@ -12,13 +12,6 @@ models[['OLS 2']] <- lm(vs ~ hp + wt, mtcars)
 models[['Logit 1']] <- glm(vs ~ hp + drat, mtcars, family = binomial())
 models[['Logit 2']] <- glm(am ~ hp + disp, mtcars, family = binomial())
 
-test_that('kable: bad arguments', {
-
-    expect_error(msummary(models, output = 'markdown', title = 'test title',
-                          subtitle = 'test'))
-
-})
-
 test_that("kable markdown: complex table", {
 
     cm <- c('hp' = 'Horsepower',

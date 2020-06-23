@@ -12,6 +12,24 @@ datasummary_correlation(
   ...
 )
 }
+\arguments{
+\item{data}{A data.frame (or tibble)}
+
+\item{output}{filename or object type (string)
+\itemize{
+  \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg. 
+  \item Supported object types: "default", "html", "markdown", "latex", "gt", "kableExtra", "huxtable", "flextable".
+  \item When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.
+}}
+
+\item{title}{string}
+
+\item{notes}{list or vector of notes to append to the bottom of the table.}
+
+\item{...}{all other arguments are passed to the `tidy` method used to
+extract estimates from the model. For example, this allows users to set
+`exponentiate=TRUE` to exponentiate logistic regression coefficients.}
+}
 \description{
 datasummary template to create a correlation table
 }

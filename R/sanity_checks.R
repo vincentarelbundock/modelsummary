@@ -1,29 +1,12 @@
 #' sanity check
 #'
 #' @keywords internal
-sanity_filename <- function(filename) {
-    if (!is.null(filename)) {
-        stop('The `filename` argument is deprecated. Please use `output` instead.') 
-    }
-}
-
-#' sanity check
-#'
-#' @keywords internal
 sanity_model_names <- function(modelnames) {
     if (any(modelnames == '')) {
         stop('Model names cannot include empty strings. Please make sure that every object in the `models` list has a unique, non-empty name. If the `models` list has no names at all (NULL), `modelsummary` will create some automatically.')
 	}
 }
 
-#' sanity check
-#'
-#' @keywords internal
-sanity_subtitle <- function(subtitle) {
-    if (!is.null(subtitle)) {
-        stop('The `subtitle` argument is deprecated. If you want to add a subtitle to an HTML table, you can use the `tab_header` function from the `gt` package.') 
-    }
-}
 
 #' sanity check
 #'
@@ -274,7 +257,7 @@ sanity_ds_nesting_factor <- function(formula, data) {
   idx <- sapply(data, function(x) is.character(x) | is.logical(x))
   idx <- names(idx)[idx]
   idx <- c(paste0('^', idx, ':'), paste0(':', idx, '$'))
-  termlabs <- labels(terms(formula))
+  termlabs <- labels(stats::terms(formula))
   warn <- any(sapply(idx, function(x) any(stringr::str_detect(x, termlabs))))
   if (warn) {
     warning(
@@ -284,9 +267,10 @@ sanity_ds_nesting_factor <- function(formula, data) {
 
 #' sanity check: datasummary_table1
 #' 
+#' @param formula
 #' right-handed formulae only
 sanity_ds_right_handed_formula <- function(formula) {
-    termlabels <- labels(terms(formula))
+    termlabels <- labels(stats::terms(formula))
     if (length(termlabels) > 1) {
          stop("The 'table1' template for `datasummary` only accepts a single right-hand side variable of type factor, character, or logical. If you do not want to transform your variable in the original data, you can wrap it in a Factor() call: datasummary_table1(~Factor(x), data). the name of your variablePlease visit the `modelsummary` website to learn how to build your own, more complex, Table 1. It's easy, I promise! https://vincentarelbundock.github.io/modelsummary/datasummary.html")
     }

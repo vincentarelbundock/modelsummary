@@ -21,8 +21,6 @@ msummary(
   title = NULL,
   notes = NULL,
   estimate = "estimate",
-  filename = NULL,
-  subtitle = NULL,
   add_rows_location = NULL,
   ...
 )
@@ -100,10 +98,6 @@ the table (using `stringr::str_detect`).}
 \item{estimate}{character name of the estimate to display. Must be a column
 name in the dataframe produced by `tidy(model)`. In the vast majority of
 cases, the default value of this argument should not be changed.}
-
-\item{filename}{This argument was deprecated in favor of the `output` argument.}
-
-\item{subtitle}{This argument is deprecated. Use `title` or the `tab_header`}
 
 \item{add_rows_location}{This argument is deprecated. Use a data.frame as
 described in the documentation for the `add_rows` argument.}

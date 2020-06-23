@@ -15,6 +15,33 @@ datasummary_skim(
   ...
 )
 }
+\arguments{
+\item{data}{A data.frame (or tibble)}
+
+\item{type}{"numeric" or "categorical"}
+
+\item{output}{filename or object type (string)
+\itemize{
+  \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg. 
+  \item Supported object types: "default", "html", "markdown", "latex", "gt", "kableExtra", "huxtable", "flextable".
+  \item When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.
+}}
+
+\item{fmt}{string which specifies how numeric values will be rounded. This
+string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
+the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
+use exponential notation. See `?sprintf` for more options.}
+
+\item{title}{string}
+
+\item{notes}{list or vector of notes to append to the bottom of the table.}
+
+\item{histogram}{boolean TRUE to include a unicode character histogram}
+
+\item{...}{all other arguments are passed to the `tidy` method used to
+extract estimates from the model. For example, this allows users to set
+`exponentiate=TRUE` to exponentiate logistic regression coefficients.}
+}
 \description{
 datasummary template
 }

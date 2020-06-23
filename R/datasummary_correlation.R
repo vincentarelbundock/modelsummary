@@ -1,5 +1,6 @@
 #' datasummary template to create a correlation table
 #' 
+#' @inheritParams datasummary
 #' @export
 datasummary_correlation <- function(data,
                                     output = 'default',
@@ -20,7 +21,7 @@ datasummary_correlation <- function(data,
     nvar <- ncol(data)
     out <- data %>% 
            dplyr::select(where(is.numeric)) %>% 
-           cor(use = 'pairwise.complete.obs') %>% 
+           stats::cor(use = 'pairwise.complete.obs') %>% 
            data.frame %>%
            tibble::rownames_to_column() %>%
            dplyr::mutate(dplyr::across(where(is.numeric), clean_r))
@@ -49,7 +50,7 @@ datasummary_correlation <- function(data,
                    title = title, 
                    notes = notes, 
                    span = NULL,
-                   align = strrep('r', ncol(out)), # for kableExtra, ignored by others
+                   #align = strrep('r', ncol(out)), # for kableExtra, ignored by others
                    ...)
     
     return(out)

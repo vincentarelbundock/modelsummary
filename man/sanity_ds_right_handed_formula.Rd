@@ -6,6 +6,9 @@
 \usage{
 sanity_ds_right_handed_formula(formula)
 }
+\arguments{
+\item{formula}{right-handed formulae only}
+}
 \description{
-right-handed formulae only
+sanity check: datasummary_table1
 }
