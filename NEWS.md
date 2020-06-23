@@ -1,3 +1,7 @@
+# modelsummary 0.4.1.9000
+
+* bug: can't use coef_map with multiple statistics
+
 # modelsummary 0.4.1
 
 * add_rows now accepts a data.frame with "position" and "section" columns

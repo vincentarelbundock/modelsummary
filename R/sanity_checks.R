@@ -10,6 +10,15 @@ sanity_filename <- function(filename) {
 #' sanity check
 #'
 #' @keywords internal
+sanity_model_names <- function(modelnames) {
+    if (any(modelnames == '')) {
+        stop('Model names cannot include empty strings. Please make sure that every object in the `models` list has a unique, non-empty name. If the `models` list has no names at all (NULL), `modelsummary` will create some automatically.')
+	}
+}
+
+#' sanity check
+#'
+#' @keywords internal
 sanity_subtitle <- function(subtitle) {
     if (!is.null(subtitle)) {
         stop('The `subtitle` argument is deprecated. If you want to add a subtitle to an HTML table, you can use the `tab_header` function from the `gt` package.') 
@@ -38,7 +47,11 @@ sanity_title <- function(title) checkmate::assert_character(title, len = 1, null
 #' sanity check
 #'
 #' @keywords internal
-sanity_coef_map <- function(coef_map) checkmate::assert_character(coef_map, null.ok = TRUE)
+sanity_coef_map <- function(coef_map) {
+    checkmate::assert_character(coef_map, null.ok = TRUE)
+    checkmate::assert_character(names(coef_map), null.ok = TRUE,
+                                unique = TRUE)
+}
 
 #' sanity check
 #'

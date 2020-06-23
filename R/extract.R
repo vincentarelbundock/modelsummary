@@ -50,13 +50,12 @@ extract <- function(models,
     if (is.null(names(models))) {
         model_names <- paste('Model', 1:length(models))
     } else {
-        if (any(names(models) == '')) {
-            stop('Model names cannot include empty strings. Please make sure that every object in the `models` list has a unique, non-empty name. If the `models` list has no names at all, `modelsummary` will create some automatically.')
-        }
         model_names <- names(models)
     }
+    sanity_model_names(names(models))
 
-    # if statistics_override is a single function, repeat it in a list to allow map
+    # if statistics_override is a single function, repeat it in a list to allow
+    # map
     if (is.function(statistic_override)) {
         statistic_override <- rep(list(statistic_override), length(models))
     }
@@ -81,11 +80,15 @@ extract <- function(models,
             est[[i]]$term <- coef_map[idx] # rename
 
             # defensive programming
-            if (any(table(est[[i]]$term) > 2)) {
-                msg <- paste('You are trying to assign the same name to two different variables in model', i)
-                stop(msg)
+            # make sure no duplicate estimate names *within* a single model.
+            # this cannot be in input sanity checks. idx paste allows multiple
+            # statistics
+            idx <- paste(est[[i]]$term, est[[i]]$statistic)
+            if (anyDuplicated(idx) > 2) {
+                stop('Two coefficients from a single model cannot share the same name. Check model ', i)
             }
         }
+
         # coef_omit
         if (!is.null(coef_omit)) {
             est[[i]] <- est[[i]] %>%
