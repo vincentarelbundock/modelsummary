@@ -1,6 +1,7 @@
 context('coef_map')
 
 library(modelsummary)
+library(tibble)
 
 test_that("combine different regressors and collapse rows", {
 
@@ -29,3 +30,37 @@ test_that("reorder and omit", {
     expect_equal(unname(raw[[2]][1:5]), truth)
 
 })
+
+test_that("coef_map with multiple vertical statistics", {
+
+    cm <- c("(Intercept)" = "Intercept",
+            "factor(cyl)6" = "6-cylinder",
+            "factor(cyl)8" = "8-cylinder")
+    models <- list()
+    models[['OLS']] <- lm(mpg ~ factor(cyl), mtcars)
+    models[['Logit']] <- glm(am ~ factor(cyl), mtcars, family = binomial)
+
+    mat <- modelsummary::extract(models, coef_map = cm)
+    expect_s3_class(mat, 'tbl_df')
+    expect_equal(dim(mat), c(12, 5))
+
+    mat <- modelsummary::extract(models, 
+                                 statistic = c('std.error', 'conf.int'), 
+                                 coef_map = cm)
+    expect_s3_class(mat, 'tbl_df')
+    expect_equal(dim(mat), c(15, 5))
+
+    rows <- tibble::tribble(
+            ~term,        ~OLS, ~Logit, ~section, ~position,
+            '4-cylinder', '-',  '-',    'middle', 4,
+            '12-cylinder', '-',  '-',    'middle', 5)
+    mat <- modelsummary::extract(models, 
+                                 statistic = c('std.error', 'conf.int'), 
+                                 add_rows = rows, 
+                                 coef_map = cm)
+
+    expect_s3_class(mat, 'tbl_df')
+    expect_equal(dim(mat), c(17, 5))
+
+})
+
