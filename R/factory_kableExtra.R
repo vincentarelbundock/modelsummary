@@ -4,13 +4,13 @@
 #' @keywords internal
 #' @return tbl_gt object
 factory_kableExtra <- function(tab,
-                               title = NULL,
-                               stars = FALSE,
-                               notes = NULL,
                                hrule = NULL,
-                               span = NULL,
-                               output_file,
-                               output_format) {
+                               notes = NULL,
+                               output_file = NULL,
+                               output_format = 'kableExtra',
+                               span = span,
+                               title = NULL,
+                               ...) {
 
     tab <- kableExtra::kable(tab,
                         format = output_format,
@@ -28,15 +28,6 @@ factory_kableExtra <- function(tab,
                                             extra_latex_after = '\\midrule')
             }
         }
-    }
-
-    # stars note
-    if (!isFALSE(stars)) {
-        threeparttable <- knitr::is_latex_output()
-        stars_note <- make_stars_note(stars)
-        tab <- tab %>% 
-               kableExtra::add_footnote(label = stars_note, notation = 'none', 
-                                        threeparttable = threeparttable)
     }
 
     # user-supplied notes at the bottom of table

@@ -1,16 +1,15 @@
 #' Internal function to build table with `huxtable`
 #'
 #' @inheritParams modelsummary
-#' @param stars_note passed by `modelsummary()`
 #' @keywords internal
 #' @return huxtable object
 factory_huxtable <- function(tab,
-                             title = NULL,
-                             stars = FALSE,
-                             notes = NULL,
                              hrule = NULL,
-                             output_file,
-                             output_format,
+                             notes = NULL,
+                             output_file = NULL,
+                             output_format = 'huxtable',
+                             span = NULL,
+                             title = NULL,
                              ...) {
 
     # is huxtable installed?
@@ -45,14 +44,6 @@ factory_huxtable <- function(tab,
     # title
     if (!is.null(title)) {
         out <- huxtable::set_caption(out, title)
-    }
-
-
-    # stars note
-    if (!isFALSE(stars)) {
-        stars_note <- make_stars_note(stars)
-        out <- huxtable::add_footnote(out,
-                                      text = stars_note)
     }
 
     # user-supplied notes at the bottom of table

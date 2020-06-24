@@ -45,11 +45,9 @@ datasummary <- function(formula,
     
     # greenfield
     if (output_list$output_factory == 'gt') {
-        factory <- factory_gt
         main <- dse$gt$main
         span <- dse$gt$span
     } else if (output_list$output_factory == 'kableExtra') {
-        factory <- factory_kableExtra
         if (output_list$output_format == 'markdown') {
             main <- dse$kableExtra_markdown$main
             span <- dse$kableExtra_markdown$span
@@ -58,22 +56,19 @@ datasummary <- function(formula,
             span <- dse$kableExtra$span
         }
     } else if (output_list$output_factory == 'flextable') {
-        factory <- factory_flextable    
         main <- dse$flextable$main
         span <- dse$flextable$span
     } else if (output_list$output_factory == 'huxtable') {
-        factory <- factory_huxtable
         main <- dse$huxtable$main
         span <- dse$huxtable$span
     }
     
     out <- factory(main, 
-                   output_format = output_list$output_format,
-                   output_file = output_list$output_file,
-                   title = title, 
+                   hrule = NULL,
                    notes = notes, 
+                   output = output,
                    span = span,
-                   ...)
+                   title = title)
     
     return(out)
 

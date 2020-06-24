@@ -1,17 +1,13 @@
 #' Internal function to build table with `gt`
 #'
-#' @inheritParams modelsummary
-#' @param stars_note argument passed by `modelsummary()`
-#' @keywords internal
 #' @return tbl_gt object
 factory_gt <- function(tab,
-                       title = NULL,
-                       stars = FALSE,
-                       notes = NULL,
                        hrule = NULL,
+                       notes = NULL,
+                       output_file = NULL,
+                       output_format = 'gt',
                        span = NULL,
-                       output_file,
-                       output_format,
+                       title = NULL,
                        ...) {
   
     # create gt table object
@@ -31,12 +27,6 @@ factory_gt <- function(tab,
     # titles
     if (!is.null(title)) {
         tab <- tab %>% gt::tab_header(title = title)
-    }
-
-    # stars note
-    if (!isFALSE(stars)) {
-        stars_note <- make_stars_note(stars)
-        tab = tab %>% gt::tab_source_note(source_note = stars_note)
     }
 
     # user-supplied notes at the bottom of table

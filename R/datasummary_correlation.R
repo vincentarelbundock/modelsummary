@@ -5,11 +5,7 @@
 datasummary_correlation <- function(data,
                                     output = 'default',
                                     title = NULL,
-                                    notes = NULL,
-                                    ...) {
-                                        
-    # output: factory, file, format
-    output_list <- parse_output_arg(output)
+                                    notes = NULL) {
                                         
     clean_r <- function(x) {
         x <- sprintf("%.2f", x)
@@ -32,26 +28,12 @@ datasummary_correlation <- function(data,
         }
     }
     colnames(out)[1] <- ' '
-
-    # greenfield
-    if (output_list$output_factory == 'gt') {
-        factory <- factory_gt
-    } else if (output_list$output_factory == 'kableExtra') {
-        factory <- factory_kableExtra
-    } else if (output_list$output_factory == 'flextable') {
-        factory <- factory_flextable    
-    } else if (output_list$output_factory == 'huxtable') {
-        factory <- factory_huxtable
-    }
     
-    out <- factory(out, 
-                   output_format = output_list$output_format,
-                   output_file = output_list$output_file,
-                   title = title, 
-                   notes = notes, 
-                   span = NULL,
-                   #align = strrep('r', ncol(out)), # for kableExtra, ignored by others
-                   ...)
+    factory(out, 
+            hrule = NULL,
+            notes = notes, 
+            output = output,
+            span = NULL,
+            title = title)
     
-    return(out)
 }

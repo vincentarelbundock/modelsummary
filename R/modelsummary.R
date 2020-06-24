@@ -137,12 +137,6 @@ modelsummary <- function(models,
                          ...) {
 
 
-    # sanity check functions are hosted in R/sanity_checks.R
-    # more sanity checks are conducted in modelsummary::extract()
-    sanity_output(output)
-    sanity_title(title)
-    sanity_notes(notes)
-
     # extract estimates and gof
     dat <- modelsummary::extract(models,
                                  statistic = statistic,
@@ -172,28 +166,24 @@ modelsummary <- function(models,
            # HACK: arbitrary 7 spaces to avoid name conflict
            dplyr::rename(`       ` = term)
 
-    # parse output
-    output_list <- parse_output_arg(output)
 
-    if (output_list$output_factory == 'gt') {
-        factory <- factory_gt
-    } else if (output_list$output_factory == 'kableExtra') {
-        factory <- factory_kableExtra
-    } else if (output_list$output_factory == 'flextable') {
-        factory <- factory_flextable
-    } else if (output_list$output_factory == 'huxtable') {
-        factory <- factory_huxtable
+    # stars
+    if (!isFALSE(stars)) {
+        stars_note <- make_stars_note(stars)
+        if (is.null(notes)) {
+            notes <- stars_note
+        } else {
+            notes <- c(stars_note, notes)
+        }
     }
 
     # build table
     factory(tab, 
-            title = title,
-            stars = stars,
-            notes = notes,
             hrule = hrule,
-            output_file = output_list$output_file,
-            output_format = output_list$output_format,
-            ...)
+            notes = notes,
+            output = output,
+            span = NULL,
+            title = title)
       
 }
 

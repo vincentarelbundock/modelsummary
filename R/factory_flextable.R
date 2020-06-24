@@ -1,16 +1,15 @@
 #' Internal function to build table with `flextable`
 #'
 #' @inheritParams modelsummary
-#' @param stars_note passed by `modelsummary()`
 #' @keywords internal
 #' @return flextable object
 factory_flextable <- function(tab,
-                              title = NULL,
-                              stars = FALSE,
-                              notes = NULL,
                               hrule = NULL,
-                              output_file,
-                              output_format,
+                              notes = NULL,
+                              output_file = NULL,
+                              output_format = 'flextable',
+                              span = NULL,
+                              title = NULL,
                               ...) {
   
     # is huxtable installed?
@@ -39,19 +38,11 @@ factory_flextable <- function(tab,
 
     # user-supplied notes at the bottom of table
     if (!is.null(notes)) {
-        for (i in length(notes):1) {
+        for (i in seq_along(notes)) {
             out <- flextable::add_footer_row(out,
                                              values = notes[[i]],
                                              colwidths = table_width)
         }
-    }
-
-    # stars note
-    if (!isFALSE(stars)) {
-        stars_note <- make_stars_note(stars)
-        out <- flextable::add_footer_row(out,
-                                         values = stars_note,
-                                         colwidths = table_width)
     }
 
     if (is.null(output_file)) {

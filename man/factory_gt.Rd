@@ -6,33 +6,14 @@
 \usage{
 factory_gt(
   tab,
-  title = NULL,
-  stars = FALSE,
-  notes = NULL,
   hrule = NULL,
+  notes = NULL,
+  output_file = NULL,
+  output_format = "gt",
   span = NULL,
-  output_file,
-  output_format,
+  title = NULL,
   ...
 )
-}
-\arguments{
-\item{title}{string}
-
-\item{stars}{to indicate statistical significance
-\itemize{
-  \item FALSE (default): no significance stars. 
-  \item TRUE: *=.1, **=.05, ***=.01
-  \item Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
-}}
-
-\item{notes}{list or vector of notes to append to the bottom of the table.}
-
-\item{...}{all other arguments are passed to the `tidy` method used to
-extract estimates from the model. For example, this allows users to set
-`exponentiate=TRUE` to exponentiate logistic regression coefficients.}
-
-\item{stars_note}{argument passed by `modelsummary()`}
 }
 \value{
 tbl_gt object
@@ -40,4 +21,3 @@ tbl_gt object
 \description{
 Internal function to build table with `gt`
 }
-\keyword{internal}
