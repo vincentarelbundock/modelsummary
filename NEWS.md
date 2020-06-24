@@ -1,6 +1,7 @@
 # modelsummary 0.4.1.9000
 
-* bug: can't use coef_map with multiple statistics
+* bug: can't use coef_map with multiple statistics (thanks @sbw78)
+* bug: wrong number of stars w/ statistic='p.value' (thanks @torfason)
 
 # modelsummary 0.4.1
 

@@ -6,6 +6,22 @@ mod <- list()
 mod$OLS <- lm(am ~ drat, data = mtcars)
 mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 
+test_that("same stars with different statistics", {
+
+    m <- lm(dist~speed, data=cars)
+    tab1 <- modelsummary::extract(m, stars=TRUE)
+    tab2 <- modelsummary::extract(m, statistic='p.value',
+                                  stars=TRUE)
+    tab3 <- modelsummary::extract(m, 
+                                  statistic=c('p.value', 'conf.int'),
+                                  stars=TRUE)
+
+    expect_equal(tab1[c(1,3), 4], tab2[c(1,3), 4])
+    expect_equal(tab1[c(1,3), 4], tab3[c(1,4), 4])
+
+})
+
+
 test_that("stars = FALSE", {
 
     raw <- modelsummary::extract(mod, stars = FALSE)

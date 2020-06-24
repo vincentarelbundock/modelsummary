@@ -64,6 +64,20 @@ extract_estimates <- function(model,
     # round estimates
     est[[estimate]] <- rounding(est[[estimate]], fmt)
 
+    # stars
+    stars <- clean_stars(stars)
+
+    if (!is.null(stars)) {
+        if (!'p.value' %in% colnames(est)) {
+            stop('To use the `stars` argument, the `tidy` function must produce a column called "p.value"')
+        }
+        est$stars <- ''
+        for (n in names(stars)) {
+            est$stars <- ifelse(est$p.value < stars[n], n, est$stars)
+        }
+        est[[estimate]] <- paste0(est[[estimate]], est$stars)
+    }
+
     # extract statistics
     for (i in seq_along(statistic)) {
 
@@ -96,20 +110,6 @@ extract_estimates <- function(model,
             }
 
         }
-    }
-
-    # stars
-    stars <- clean_stars(stars)
-
-    if (!is.null(stars)) {
-        if (!'p.value' %in% colnames(est)) {
-            stop('To use the `stars` argument, the `tidy` function must produce a column called "p.value"')
-        }
-        est$stars <- ''
-        for (n in names(stars)) {
-            est$stars <- ifelse(est$p.value < stars[n], n, est$stars)
-        }
-        est[[estimate]] <- paste0(est[[estimate]], est$stars)
     }
 
     # subset columns

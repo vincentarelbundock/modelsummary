@@ -1,3 +1,5 @@
+Table: Summarizing 5 statistical models using the `modelsummary` package for `R`.
+
 |                |OLS 1      |NBin 1    |OLS 2     |Logit 1  |Logit 2  |
 |:---------------|:----------|:---------|:---------|:--------|:--------|
 |Horsepower      |           |          |-0.005*** |-0.089** |0.122*   |
