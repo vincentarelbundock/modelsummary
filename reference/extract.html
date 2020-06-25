@@ -39,6 +39,8 @@ statistical models. — extract • modelsummary</title>
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 
 <meta property="og:title" content="Extract and combine estimates and goodness-of-fit statistics from several
 statistical models. — extract" />
@@ -75,7 +77,7 @@ statistical models." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1.9000</span>
       </span>
     </div>
 
@@ -85,10 +87,10 @@ statistical models." />
   <a href="../articles/content.html">Information</a>
 </li>
 <li>
-  <a href="../articles/appearance.html">Look</a>
+  <a href="../articles/appearance.html">Appearance</a>
 </li>
 <li>
-  <a href="../articles/rmarkdown.html">Rmarkdown &amp; knitr</a>
+  <a href="../articles/datasummary.html">datasummary</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -97,6 +99,9 @@ statistical models." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/rmarkdown.html">Rmarkdown &amp; knitr</a>
+    </li>
     <li>
       <a href="../articles/newmodels.html">Adding and customizing models</a>
     </li>
@@ -151,10 +156,10 @@ statistical models.</p>
   <span class='kw'>gof_map</span> <span class='kw'>=</span> <span class='kw pkg'>modelsummary</span><span class='kw ns'>::</span><span class='no'><a href='gof_map.html'>gof_map</a></span>,
   <span class='kw'>gof_omit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>add_rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>add_rows_location</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>stars</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>fmt</span> <span class='kw'>=</span> <span class='st'>"%.3f"</span>,
   <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"estimate"</span>,
+  <span class='kw'>add_rows_location</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>...</span>
 )</pre>
 
@@ -215,14 +220,14 @@ the table (using `stringr::str_detect`).</p></td>
     </tr>
     <tr>
       <th>add_rows</th>
-      <td><p>list of character vectors, each of length equal to the number
-of models + 1.</p></td>
-    </tr>
-    <tr>
-      <th>add_rows_location</th>
-      <td><p>integer or NULL. custom rows will be added to the
-bottom of the table if this parameter is NULL, or after the position set by
-this integer.</p></td>
+      <td><p>a data.frame (or tibble) with the following columns:</p><ul>
+<li><p>section (character): insert in "middle" or "bottom" section of the table</p></li>
+<li><p>position (integer): row position in the section</p></li>
+<li><p>term (character): string to display under coefficient names</p></li>
+<li><p>one column per model with the same name as that model with the
+        values to insert (some models can be omitted).</p></li>
+<li><p>See the examples section of this documentation and an example.</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>stars</th>
@@ -242,8 +247,13 @@ use exponential notation. See `?sprintf` for more options.</p></td>
     <tr>
       <th>estimate</th>
       <td><p>character name of the estimate to display. Must be a column
-name in the dataframe produced by `tidy(model)`. In the vast majority of
+name in the data.frame produced by `tidy(model)`. In the vast majority of
 cases, the default value of this argument should not be changed.</p></td>
+    </tr>
+    <tr>
+      <th>add_rows_location</th>
+      <td><p>This argument is deprecated. Use a data.frame as
+described in the documentation for the `add_rows` argument.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -257,28 +267,6 @@ extract estimates from the model. For example, this allows users to set
 
     <p>tibble</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>modelsummary</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>trees</span>)
-<span class='no'>models</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-<span class='no'>models</span><span class='kw'>[[</span><span class='st'>'Bivariate'</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>Girth</span> ~ <span class='no'>Height</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>trees</span>)
-<span class='no'>models</span><span class='kw'>[[</span><span class='st'>'Multivariate'</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>Girth</span> ~ <span class='no'>Height</span> + <span class='no'>Volume</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>trees</span>)
-<span class='fu'>extract</span>(<span class='no'>models</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 12 x 5</span><span>
-#&gt;    group     term        statistic    Bivariate Multivariate
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>       
-#&gt; </span><span style='color: #555555;'> 1</span><span> estimates (Intercept) </span><span style='color: #555555;'>"</span><span>estimate</span><span style='color: #555555;'>"</span><span>   </span><span style='color: #555555;'>"</span><span>-6.188</span><span style='color: #555555;'>"</span><span>  10.816      
-#&gt; </span><span style='color: #555555;'> 2</span><span> estimates (Intercept) </span><span style='color: #555555;'>"</span><span>statistic1</span><span style='color: #555555;'>"</span><span> </span><span style='color: #555555;'>"</span><span>(5.960)</span><span style='color: #555555;'>"</span><span> (1.973)     
-#&gt; </span><span style='color: #555555;'> 3</span><span> estimates Height      </span><span style='color: #555555;'>"</span><span>estimate</span><span style='color: #555555;'>"</span><span>   </span><span style='color: #555555;'>"</span><span>0.256</span><span style='color: #555555;'>"</span><span>   -0.045      
-#&gt; </span><span style='color: #555555;'> 4</span><span> estimates Height      </span><span style='color: #555555;'>"</span><span>statistic1</span><span style='color: #555555;'>"</span><span> </span><span style='color: #555555;'>"</span><span>(0.078)</span><span style='color: #555555;'>"</span><span> (0.028)     
-#&gt; </span><span style='color: #555555;'> 5</span><span> estimates Volume      </span><span style='color: #555555;'>"</span><span>estimate</span><span style='color: #555555;'>"</span><span>   </span><span style='color: #555555;'>""</span><span>        0.195       
-#&gt; </span><span style='color: #555555;'> 6</span><span> estimates Volume      </span><span style='color: #555555;'>"</span><span>statistic1</span><span style='color: #555555;'>"</span><span> </span><span style='color: #555555;'>""</span><span>        (0.011)     
-#&gt; </span><span style='color: #555555;'> 7</span><span> gof       Num.Obs.    </span><span style='color: #555555;'>""</span><span>           </span><span style='color: #555555;'>"</span><span>31</span><span style='color: #555555;'>"</span><span>      31          
-#&gt; </span><span style='color: #555555;'> 8</span><span> gof       R2          </span><span style='color: #555555;'>""</span><span>           </span><span style='color: #555555;'>"</span><span>0.270</span><span style='color: #555555;'>"</span><span>   0.941       
-#&gt; </span><span style='color: #555555;'> 9</span><span> gof       R2 Adj.     </span><span style='color: #555555;'>""</span><span>           </span><span style='color: #555555;'>"</span><span>0.244</span><span style='color: #555555;'>"</span><span>   0.937       
-#&gt; </span><span style='color: #555555;'>10</span><span> gof       AIC         </span><span style='color: #555555;'>""</span><span>           </span><span style='color: #555555;'>"</span><span>154.1</span><span style='color: #555555;'>"</span><span>   78.2        
-#&gt; </span><span style='color: #555555;'>11</span><span> gof       BIC         </span><span style='color: #555555;'>""</span><span>           </span><span style='color: #555555;'>"</span><span>158.4</span><span style='color: #555555;'>"</span><span>   84.0        
-#&gt; </span><span style='color: #555555;'>12</span><span> gof       Log.Lik.    </span><span style='color: #555555;'>""</span><span>           </span><span style='color: #555555;'>"</span><span>-74.061</span><span style='color: #555555;'>"</span><span> -35.116     </div><div class='input'>
-</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
