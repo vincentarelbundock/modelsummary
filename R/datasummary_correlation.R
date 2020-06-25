@@ -28,8 +28,11 @@ datasummary_correlation <- function(data,
         }
     }
     colnames(out)[1] <- ' '
+
+    align <- paste0('l', strrep('r', ncol(out)-1))
     
     factory(out, 
+            align = align,
             hrule = NULL,
             notes = notes, 
             output = output,

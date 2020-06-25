@@ -6,6 +6,7 @@
 #' @keywords internal
 #' @return tbl_gt object
 factory_gt <- function(tab,
+                       align = NULL,
                        hrule = NULL,
                        notes = NULL,
                        output_file = NULL,
@@ -44,6 +45,18 @@ factory_gt <- function(tab,
         for (s in span) {
             tab <- tab %>% gt::tab_spanner(label = s$label, columns = s$position)
         }
+    }
+
+    # column alignment
+    if (!is.null(align)) {
+        align <- strsplit(align, '')[[1]]
+        left <- grep('l', align)
+        center <- grep('c', align)
+        right <- grep('r', align)
+        tab <- tab %>%
+               gt::cols_align('left', left) %>%
+               gt::cols_align('center', center) %>%
+               gt::cols_align('right', right)
     }
 
     # output

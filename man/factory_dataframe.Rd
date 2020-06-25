@@ -7,6 +7,7 @@ attributes. Useful for testing.}
 \usage{
 factory_dataframe(
   tab,
+  align = NULL,
   hrule = NULL,
   notes = NULL,
   output_file = NULL,

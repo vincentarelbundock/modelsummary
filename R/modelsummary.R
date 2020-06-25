@@ -177,8 +177,12 @@ modelsummary <- function(models,
         }
     }
 
+    # column alignment left
+    align <- strrep('l', ncol(tab))
+
     # build table
     factory(tab, 
+            align = align,
             hrule = hrule,
             notes = notes,
             output = output,

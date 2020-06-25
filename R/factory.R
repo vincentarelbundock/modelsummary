@@ -6,6 +6,7 @@
 #' @param span list of column label spans
 #' @inheritParams modelsummary
 factory <- function(tab,
+                    align = NULL,
                     hrule,
                     notes,
                     output,
@@ -15,6 +16,7 @@ factory <- function(tab,
 
     # sanity check functions are hosted in R/sanity_checks.R
     # more sanity checks are conducted in modelsummary:::extract()
+    sanity_align(align, tab)
     sanity_output(output)
     sanity_title(title)
     sanity_notes(notes)
@@ -39,6 +41,7 @@ factory <- function(tab,
 
     # build table
     f(tab, 
+      align = align,
       hrule = hrule,
       notes = notes,
       output_file = output_list$output_file,

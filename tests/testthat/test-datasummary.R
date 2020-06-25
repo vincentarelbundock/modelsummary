@@ -118,8 +118,8 @@ test_that('datasummary_correlation: output format do not produce errors', {
     # output formats do not produce errors
     expect_error(datasummary_correlation(mtcars, output='huxtable'), NA)
     expect_error(datasummary_correlation(mtcars, output='flextable'), NA)
-    expect_error(datasummary_correlation(mtcars, output='kableExtra'), NA)
     expect_error(datasummary_correlation(mtcars, output='huxtable'), NA)
+    expect_error(datasummary_correlation(mtcars, output='kableExtra'), NA)
     expect_error(datasummary_correlation(mtcars, output='dataframe'), NA)
     expect_error(datasummary_correlation(mtcars, output='markdown'), NA)
     expect_error(datasummary_correlation(mtcars, output='latex'), NA)
@@ -185,7 +185,7 @@ save_to_file <- function(ext = '.html') {
     
 }
 for (ext in c('.html', '.tex', '.rtf', '.docx', '.pptx', '.jpg', '.png')) {
-    save_to_file()
+    save_to_file(ext)
 }
 
 ############################################
@@ -206,5 +206,5 @@ save_to_file <- function(ext = '.html') {
     
 }
 for (ext in c('.html', '.tex', '.rtf', '.docx', '.pptx', '.jpg', '.png')) {
-    save_to_file()
+    save_to_file(ext)
 }

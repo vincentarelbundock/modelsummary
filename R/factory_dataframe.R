@@ -5,6 +5,7 @@
 #' @keywords internal
 #' @return data.frame 
 factory_dataframe <- function(tab,
+                              align = NULL,
                               hrule = NULL,
                               notes = NULL,
                               output_file = NULL,

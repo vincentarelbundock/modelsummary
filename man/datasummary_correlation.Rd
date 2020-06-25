@@ -2,7 +2,7 @@
 % Please edit documentation in R/datasummary_correlation.R
 \name{datasummary_correlation}
 \alias{datasummary_correlation}
-\title{Correlation table}
+\title{Generate a correlation table for all numeric variables in your dataset.}
 \usage{
 datasummary_correlation(data, output = "default", title = NULL, notes = NULL)
 }
@@ -21,5 +21,5 @@ datasummary_correlation(data, output = "default", title = NULL, notes = NULL)
 \item{notes}{list or vector of notes to append to the bottom of the table.}
 }
 \description{
-Correlation table
+Generate a correlation table for all numeric variables in your dataset.
 }

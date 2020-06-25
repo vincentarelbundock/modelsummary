@@ -7,6 +7,9 @@
 #' See the Examples section for a mini-tutorial and the Details section for
 #' more resources.
 #' @param data A data.frame (or tibble)
+#' @param align A character string of length equal to the number of columns in
+#' the table.  "lcr" means that the first column will be left-aligned, the 2nd
+#' column center-aligned, and the 3rd column right-aligned.
 #' @param sparse_header TRUE or FALSE. TRUE eliminates column headers which
 #' have a unique label across all columns, except for the row immediately above
 #' the data. FALSE keeps all headers. The order in which terms are entered in
@@ -112,6 +115,7 @@ datasummary <- function(formula,
                         output = 'default',
                         title = NULL,
                         notes = NULL,
+                        align = NULL,
                         sparse_header = TRUE) {
     
     # output: factory, file, format
@@ -157,6 +161,7 @@ datasummary <- function(formula,
     }
     
     out <- factory(main, 
+                   align = align,
                    hrule = NULL,
                    notes = notes, 
                    output = output,

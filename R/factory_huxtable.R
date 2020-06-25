@@ -4,12 +4,18 @@
 #' @keywords internal
 #' @return huxtable object
 factory_huxtable <- function(tab,
+                             align = NULL,
                              hrule = NULL,
                              notes = NULL,
                              output_file = NULL,
                              output_format = 'huxtable',
                              span = NULL,
                              title = NULL) {
+
+    ## warning on align
+    #if (!is.null(align)) {
+        #warning('The `align` argument is not supported yet for huxtable objects. Please file a request or (even better) a code submission on Github if you need that feature.')
+    #}
 
     # is huxtable installed?
     if (!requireNamespace('huxtable', quietly = TRUE)) {

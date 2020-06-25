@@ -5,7 +5,7 @@
 \title{Factory to create tables in different output formats using standardized
 inputs.}
 \usage{
-factory(tab, hrule, notes, output, span, title)
+factory(tab, align = NULL, hrule, notes, output, span, title)
 }
 \arguments{
 \item{tab}{table body (data.frame)}

@@ -7,6 +7,17 @@ sanity_model_names <- function(modelnames) {
 	}
 }
 
+#' sanity check
+#'
+#' @keywords internal
+sanity_align <- function(align, tab) {
+    checkmate::assert_string(align, null.ok = TRUE)
+    if (!is.null(align)) {
+        checkmate::assert_true(nchar(align) == ncol(tab))
+        align <- strsplit(align, '')[[1]]
+        checkmate::assert_true(all(align %in% c('l', 'c', 'r')))
+    }
+}
 
 #' sanity check
 #'

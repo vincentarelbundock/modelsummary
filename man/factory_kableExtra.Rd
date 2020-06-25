@@ -6,6 +6,7 @@
 \usage{
 factory_kableExtra(
   tab,
+  align = NULL,
   hrule = NULL,
   notes = NULL,
   output_file = NULL,

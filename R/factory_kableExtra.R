@@ -4,6 +4,7 @@
 #' @keywords internal
 #' @return tbl_gt object
 factory_kableExtra <- function(tab,
+                               align = NULL,
                                hrule = NULL,
                                notes = NULL,
                                output_file = NULL,
@@ -12,6 +13,7 @@ factory_kableExtra <- function(tab,
                                title = NULL) {
 
     tab <- kableExtra::kable(tab,
+                        align = align,
                         format = output_format,
                         caption = title,
                         booktabs = TRUE, 

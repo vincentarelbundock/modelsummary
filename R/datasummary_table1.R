@@ -4,6 +4,7 @@
 #' @param formula 1-side formula with a single factor, character, or logical
 #'   variable on the right-hand side.
 #' @inheritParams modelsummary
+#' @inheritParams datasummary
 #' @export
 #' @examples
 #' datasummary_table1(~am, mtcars)
@@ -14,6 +15,7 @@ datasummary_table1 <- function(formula,
                                fmt = '%.1f',
                                title = NULL,
                                notes = NULL,
+                               align = NULL,
                                ...) {
 
     # output: factory, file, format
@@ -110,8 +112,9 @@ datasummary_table1 <- function(formula,
         main <- dse$dataframe$main
         span <- dse$dataframe$main
     }
-    
+
     factory(main,
+            align = align,
             hrule = NULL,
             notes = notes, 
             output = output,

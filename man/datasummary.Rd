@@ -11,6 +11,7 @@ datasummary(
   output = "default",
   title = NULL,
   notes = NULL,
+  align = NULL,
   sparse_header = TRUE
 )
 }
@@ -31,6 +32,10 @@ more resources.}
 \item{title}{string}
 
 \item{notes}{list or vector of notes to append to the bottom of the table.}
+
+\item{align}{A character string of length equal to the number of columns in
+the table.  "lcr" means that the first column will be left-aligned, the 2nd
+column center-aligned, and the 3rd column right-aligned.}
 
 \item{sparse_header}{TRUE or FALSE. TRUE eliminates column headers which
 have a unique label across all columns, except for the row immediately above
