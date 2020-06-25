@@ -109,3 +109,4 @@ models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
 extract(models)
 
 }
+\keyword{internal}

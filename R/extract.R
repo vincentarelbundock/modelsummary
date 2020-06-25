@@ -3,6 +3,7 @@
 #'
 #' @inheritParams modelsummary
 #' @return tibble
+#' @keywords internal
 #' @examples
 #' library(modelsummary)
 #' data(trees)

@@ -38,6 +38,11 @@ datasummary_table1 <- function(formula,
         data[[rhs]] <- factor(data[[rhs]])
     }
 
+    # RHS must have fewer than 10 levels
+    if (length(unique(data[[rhs]])) > 10) {
+        stop('Each value of the ', rhs, ' variable will create two separate columns. This variable has too many different values to produce a readable table.')
+    }
+
     # data for All() must exclude RHS other wise it appears in rows and columns
     data_no_rhs <- data[, colnames(data) != rhs]
     
@@ -64,14 +69,16 @@ datasummary_table1 <- function(formula,
         tab_factor <- NULL
     }
 
-    # make sure both tables have same number of columns
-    checkmate::assert_true(ncol(tab_numeric) == 
-                              ncol(tab_factor))
-    checkmate::assert_true(ncol(attributes(tab_numeric)$colLabels) ==
-                              ncol(attributes(tab_factor)$colLabels))
+    if (!is.null(tab_numeric) & !is.null(tab_factor)) {
+        # make sure both tables have same number of columns
+        checkmate::assert_true(ncol(tab_numeric) == 
+                                  ncol(tab_factor))
+        checkmate::assert_true(ncol(attributes(tab_numeric)$colLabels) ==
+                                  ncol(attributes(tab_factor)$colLabels))
 
-    # hack: force both tables to have identical columns and join them
-    attributes(tab_numeric)$colLabels <- attributes(tab_factor)$colLabels
+        # hack: force both tables to have identical columns and join them
+        attributes(tab_numeric)$colLabels <- attributes(tab_factor)$colLabels
+    }
 
     tab <- rbind(tab_numeric, tab_factor)
 
@@ -80,11 +87,9 @@ datasummary_table1 <- function(formula,
     
     # greenfield
     if (output_list$output_factory == 'gt') {
-        factory <- factory_gt
         main <- dse$gt$main
         span <- dse$gt$span
     } else if (output_list$output_factory == 'kableExtra') {
-        factory <- factory_kableExtra
         if (output_list$output_format == 'markdown') {
             main <- dse$kableExtra_markdown$main
             span <- dse$kableExtra_markdown$span
@@ -93,23 +98,21 @@ datasummary_table1 <- function(formula,
             span <- dse$kableExtra$span
         }
     } else if (output_list$output_factory == 'flextable') {
-        factory <- factory_flextable    
         main <- dse$flextable$main
         span <- dse$flextable$span
     } else if (output_list$output_factory == 'huxtable') {
-        factory <- factory_huxtable
         main <- dse$huxtable$main
         span <- dse$huxtable$span
+    } else if (output_list$output_factory == 'data.frame') {
+        main <- dse$flextable$main
+        span <- NULL
     }
     
-    out <- factory(main, 
-                   output_format = output_list$output_format,
-                   output_file = output_list$output_file,
-                   title = title, 
-                   notes = notes, 
-                   span = span,
-                   ...)
+    factory(main,
+            hrule = NULL,
+            notes = notes, 
+            output = output,
+            span = span,
+            title = title)
     
-    return(out)
-        
 }

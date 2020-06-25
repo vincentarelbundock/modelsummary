@@ -45,15 +45,9 @@ datasummary_extract <- function(tab,
     }
     main <- data.frame(main)
     
-    # pad colnames with varying number of ' ' to allow duplicate (e.g., mean sd mean sd)
-    # factory_* will strip those automatically
-    # TODO: This makes it harder to tidyselect
-    cols <- clean_na(as.vector(mat[idx,]))
-    pad <- sapply(1:length(cols), function(k) strrep(' ', k))
-    colnames(main) <- paste(cols, pad)
+    # clean columns
+    colnames(main) <- clean_na(as.vector(mat[idx,]))
     
-    # columns spans
-
     # utility functions
     sparsify <- function(h) {
         unique_na <- function(x) length(unique(base::setdiff(x, ''))) > 1

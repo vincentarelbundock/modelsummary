@@ -29,6 +29,9 @@ factory <- function(tab,
         f <- factory_huxtable
     }
 
+    # de-duplicate columns with whitespace
+    colnames(tab) <- pad(colnames(tab))
+
     # build table
     f(tab, 
       hrule = hrule,

@@ -57,12 +57,6 @@ factory_kableExtra <- function(tab,
         tab <- tab %>% kableExtra::kable_styling(full_width = FALSE)
     }
 
-    # if knitting, keep the `kable` object. Otherwise, convert to
-    # human-readable character.
-    if (!knitr::is_latex_output() & !knitr::is_html_output()) {
-        tab <- as.character(tab)
-    }
-
     # output
     if (is.null(output_file)){
         return(tab)
