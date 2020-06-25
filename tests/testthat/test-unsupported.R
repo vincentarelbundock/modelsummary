@@ -1,4 +1,4 @@
-context("Unsupported models")
+context("unsupported models")
 
 test_that('Characters raise error', {
     mod <- list()

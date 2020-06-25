@@ -69,6 +69,7 @@ datasummary_extract <- function(tab,
         out$kableExtra_markdown <- 
         out$flextable <- 
         out$huxtable <- 
+        out$dataframe <- 
             list(main = main, span = NULL)
         return(out)
     }
@@ -125,6 +126,7 @@ datasummary_extract <- function(tab,
     out$kableExtra_markdown <- list(main = main_flat, span = NULL)
     out$flextable <- list(main = main_flat, span = NULL)
     out$huxtable <- list(main = main_flat, span = NULL)
+    out$dataframe <- list(main = main_flat, span = NULL)
 
     return(out)
 

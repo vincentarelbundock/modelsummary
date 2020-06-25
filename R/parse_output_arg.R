@@ -42,18 +42,19 @@ parse_output_arg <- function(output) {
 
     # output_factory
     factory_list <- c('default' = getOption('modelsummary_default', default = 'gt'),
-                      'gt' = 'gt',
-                      'huxtable' = 'huxtable',
+                      'dataframe' = 'dataframe',
                       'flextable' = 'flextable',
-                      'kableExtra' = 'kableExtra',
+                      'gt' = 'gt',
                       'html' = getOption('modelsummary_html', default = 'gt'),
-                      'rtf' = getOption('modelsummary_rtf', default = 'gt'),
+                      'huxtable' = 'huxtable',
+                      'jpg' = getOption('modelsummary_jpg', default = 'flextable'),
+                      'kableExtra' = 'kableExtra',
                       'latex' = getOption('modelsummary_latex', default = 'kableExtra'),
                       'markdown' = 'kableExtra',
-                      'word' =  getOption('modelsummary_word', default = 'flextable'),
-                      'powerpoint' =  getOption('modelsummary_powerpoint', default = 'flextable'),
                       'png' = getOption('modelsummary_png', default = 'flextable'),
-                      'jpg' = getOption('modelsummary_jpg', default = 'flextable'))
+                      'powerpoint' =  getOption('modelsummary_powerpoint', default = 'flextable'),
+                      'rtf' = getOption('modelsummary_rtf', default = 'gt'),
+                      'word' =  getOption('modelsummary_word', default = 'flextable'))
 
     # sanity check: are user-supplied global options ok?
     sanity_factory(factory_list)

@@ -96,7 +96,7 @@ the table (using `stringr::str_detect`).}
 \item{notes}{list or vector of notes to append to the bottom of the table.}
 
 \item{estimate}{character name of the estimate to display. Must be a column
-name in the dataframe produced by `tidy(model)`. In the vast majority of
+name in the data.frame produced by `tidy(model)`. In the vast majority of
 cases, the default value of this argument should not be changed.}
 
 \item{add_rows_location}{This argument is deprecated. Use a data.frame as

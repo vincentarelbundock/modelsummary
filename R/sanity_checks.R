@@ -128,7 +128,7 @@ sanity_notes <- function(notes) {
 #' @keywords internal
 sanity_output <- function(output) {
 
-    object_types <- c('default', 'gt', 'kableExtra', 'flextable', 'huxtable', 'html', 'latex', 'markdown')
+    object_types <- c('default', 'gt', 'kableExtra', 'flextable', 'huxtable', 'html', 'latex', 'markdown', 'dataframe')
     extension_types <- c('html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf', 'jpg', 'png')
 
     checkmate::assert_string(output)

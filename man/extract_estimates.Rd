@@ -51,7 +51,7 @@ use exponential notation. See `?sprintf` for more options.}
 }}
 
 \item{estimate}{character name of the estimate to display. Must be a column
-name in the dataframe produced by `tidy(model)`. In the vast majority of
+name in the data.frame produced by `tidy(model)`. In the vast majority of
 cases, the default value of this argument should not be changed.}
 
 \item{...}{all other arguments are passed to the `tidy` method used to

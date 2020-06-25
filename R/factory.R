@@ -27,6 +27,8 @@ factory <- function(tab,
         f <- factory_flextable
     } else if (output_list$output_factory == 'huxtable') {
         f <- factory_huxtable
+    } else if (output_list$output_factory == 'dataframe') {
+        f <- factory_dataframe
     }
 
     # de-duplicate columns with whitespace

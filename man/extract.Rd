@@ -83,7 +83,7 @@ the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
 use exponential notation. See `?sprintf` for more options.}
 
 \item{estimate}{character name of the estimate to display. Must be a column
-name in the dataframe produced by `tidy(model)`. In the vast majority of
+name in the data.frame produced by `tidy(model)`. In the vast majority of
 cases, the default value of this argument should not be changed.}
 
 \item{add_rows_location}{This argument is deprecated. Use a data.frame as

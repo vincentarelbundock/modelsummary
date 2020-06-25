@@ -24,14 +24,26 @@ datasummary_skim <-  function(data,
             f <- All(dat_new, numeric = TRUE, factor = FALSE) ~ 
                  (Mean + SD + P0 + P25 + P50 + P75 + P100) * Arguments(fmt = fmt)
         }
-   
+
+        nnumeric <- sum(sapply(dat_new, is.numeric))
+        if (nnumeric == 0) {
+            stop('datasummary_skim(type="numeric") only works with numeric variables. There is such variable in your dataset.')
+        }
+  
     # TODO error if there are no categorical
     } else if (type == 'categorical') {
         dat_new <- data %>%
-                   dplyr::mutate(dplyr::across(where(is.character) | where(is.logical), as.factor))
+                   dplyr::mutate(dplyr::across(where(is.character) | 
+                                               where(is.logical), as.factor))
         pctformat = function(x) sprintf("%.1f", x)
         f <- All(dat_new, numeric = FALSE, factor = TRUE) ~ 
             (N = 1) + (`%` = Percent()) * Format(pctformat())
+
+        nfactor <- sum(sapply(dat_new, is.factor))
+        if (nfactor == 0) {
+            stop('datasummary_skim(type="categorical") only works with logical, character, and factor variables. There is such variable in your dataset.')
+        }
+
     } else {
         stop('The `type` argument supports these values: "numeric", "categorical".')
     }

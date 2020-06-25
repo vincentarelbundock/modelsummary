@@ -103,9 +103,9 @@ datasummary_table1 <- function(formula,
     } else if (output_list$output_factory == 'huxtable') {
         main <- dse$huxtable$main
         span <- dse$huxtable$span
-    } else if (output_list$output_factory == 'data.frame') {
-        main <- dse$flextable$main
-        span <- NULL
+    } else if (output_list$output_factory == 'dataframe') {
+        main <- dse$dataframe$main
+        span <- dse$dataframe$main
     }
     
     factory(main,
