@@ -1,9 +1,12 @@
-#' table1 template
+#' Table 1: Summary statistics for different subsets of the data (e.g., control
+#' and treatment groups)
 #' 
 #' @param formula 1-side formula with a single factor, character, or logical
 #'   variable on the right-hand side.
 #' @inheritParams modelsummary
 #' @export
+#' @examples
+#' datasummary_table1(~am, mtcars)
 #' @keywords internal
 datasummary_table1 <- function(formula,
                                data,
@@ -44,7 +47,7 @@ datasummary_table1 <- function(formula,
     }
 
     # data for All() must exclude RHS other wise it appears in rows and columns
-    data_no_rhs <- data[, colnames(data) != rhs]
+    data_no_rhs <- data[, colnames(data) != rhs, drop = FALSE]
     
     # no factor variables
     any_factor <- any(sapply(data_no_rhs, is.factor))

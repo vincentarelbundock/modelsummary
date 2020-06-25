@@ -13,17 +13,26 @@ tbody {
 }
 </style>
 
-`datasummary` is a function from the `modelsummary` package which allows you to create data summaries, frequency tables, crosstabs, "Table 1s," and much more. It has many benefits:
+`datasummary` is a function from the `modelsummary` package which allows you to create data summaries, frequency tables, crosstabs, correlation tables, "Table 1s," and much more. It has many benefits:
 
 * Easy to use.
 * *Extremely* flexible.
 * Several output formats: HTML, LaTeX, Microsoft Word and Powerpoint, Text/Markdown, PDF, RTF, or Image files.
 * Embed tables in `Rmarkdown` or `knitr` dynamic documents.
-* [The appearance of your tables can be customized](articles/look.html) using the `gt`, `kableExtra` or `flextable` packages. The possibilities are endless.
+* [The appearance of your tables can be customized](#customize) using the `gt`, `kableExtra` or `flextable` packages. The possibilities are endless.
 
-This tutorial will show you how to use the `datasummary` function to create a wide range of summary tables, including this one:
+This tutorial will show you how to use the `datasummary` function to create summary tables like these (and more!):
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(gt)
+library(modelsummary)
+library(kableExtra)
+options(modelsummary_default = 'kableExtra')
+options(width = 120)
+```
+
+```{r eval=FALSE, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(gt)
 library(modelsummary)
@@ -63,16 +72,25 @@ datasummary_table1(~Treatment,
     kableExtra::row_spec(3, color = 'green')
 ```
 
+<center>
+<img src="https://user-images.githubusercontent.com/987057/85772916-50f49f00-b6eb-11ea-8873-f09f097bbea7.png" width="49%">
+<img src="https://user-images.githubusercontent.com/987057/85771538-045c9400-b6ea-11ea-99af-48363b132f1b.png" width="49%">
+<img src="https://user-images.githubusercontent.com/987057/85772292-b1cfa780-b6ea-11ea-8ae1-b95c6ddbf0a9.png" width="49%">
+<img src="https://user-images.githubusercontent.com/987057/85774118-8b127080-b6ec-11ea-913d-d0c13066cf6b.png" width="49%">
+</center>
+
+
 `datasummary` is built around the *fantastic* [`tables` package for `R`.](https://cran.r-project.org/web/packages/tables/index.html) It is a thin "wrapper" which adds convenience functions and arguments; a user-interface consistent with `modelsummary`; cleaner html output; and the ability to export tables to more formats, including [`gt` tables](https://gt.rstudio.com), [`flextable` objects](https://davidgohel.github.io/flextable/), and Microsoft Word documents. 
 
-`datasummary` is a general-purpose table-making tool. It allows you to build (nearly) any summary table you want by using [simple 2-sided formulae.](#datasummary-2-sided-formulae) For example, in the expression `x + y ~ mean + sd`, the left-hand side of the formula identifies the variables or statistics to display as rows, and the right-hand side defines the columns. Below, we will see how variables and statistics can be "nested" with the `*` operator to produce tables like this one:
+`datasummary` is a general-purpose table-making tool. It allows you to build (nearly) any summary table you want by using [simple 2-sided formulae.](#datasummary) For example, in the expression `x + y ~ mean + sd`, the left-hand side of the formula identifies the variables or statistics to display as rows, and the right-hand side defines the columns. Below, we will see how variables and statistics can be "nested" with the `*` operator to produce tables like this one.
 
-```{r, echo=FALSE, message=FALSE}
+
+```{r, echo=FALSE, message=FALSE, include=FALSE, eval=FALSE}
 library(modelsummary)
 library(tidyverse)
 
-cap <- 'Penguin flipper lengths (mm) by location, species, and sex. This table was created using the "datasummary" function from the "modelsummary" package for R.'
-src <- 'Data source: Gorman, Williams & Fraser (2014). "palmerpenguins" package for R by Allison Horst https://github.com/allisonhorst/palmerpenguins'
+cap <- 'Penguin flipper lengths (mm) by location, species, and sex. This table was created using the \\texttt{datasummary} function from the modelsummary package for R.'
+src <- 'Data source: Gorman, Williams & Fraser (2014) and  palmerpenguins package by @allison_horst.'
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv'
 penguins <- read.csv(url) %>%
             select(Species = species,
@@ -80,13 +98,12 @@ penguins <- read.csv(url) %>%
                    Sex = sex,
                    `Flipper length (mm)` = flipper_length_mm) %>%
             mutate(Sex = str_to_title(Sex))
-datasummary(Factor(Island) * Factor(Species) ~ Factor(Sex) * `Flipper length (mm)` * (Mean + SD) * DropEmpty(), penguins)#,
-#            title = cap,
-#            notes = src)
+datasummary(Factor(Island) * Factor(Species) ~ Factor(Sex) * `Flipper length (mm)` * (Mean + SD) * DropEmpty(), penguins,
+           title = cap,
+           notes = src)
 ```
 
-
-In addition to `datasummary`, the `modelsummary` package includes a "family" of companion functions named `datasummary_*`. These functions facilitate the production of standard, commonly used tables. Companions include:
+In addition to `datasummary`, the `modelsummary` package includes a "family" of companion functions named `datasummary_*`. These functions facilitate the production of standard, commonly used tables. This family currently includes:
 
 * `datasummary()`: Easy and flexible function to create custom tables using 2-sided formulae.
 * `datasummary_skim()`: Quick summary of your dataset.
@@ -95,7 +112,7 @@ In addition to `datasummary`, the `modelsummary` package includes a "family" of 
 
 In the next three sections, we illustrate how to use `datasummary_skim`, `datasummary_correlation`, and `datasummary_table1`. Then, we dive into `datasummary` itself to highlight its ease and flexibility.
 
-# Skim
+# `datasummary_skim`
 
 The first `datasummary` companion function is called `datasummary_skim`. It was *heavily* inspired by one of my favorite data exploration tools for `R`: the [`skimr` package.](https://docs.ropensci.org/skimr) The goal of this function is to give you a quick look at the data. 
 
@@ -144,7 +161,7 @@ datasummary(All(penguins) ~ Mean + SD + Histogram,
 
 Note that the `histogram` argument of the `datasummary_skim` function is `FALSE` by default, because printing histograms will not work on all computers. If you have issues with this option, try to change your computer's locale, or try using a different display font.
 
-# Correlation
+# `datasummary_correlation`
 
 The `datasummary_correlation` accepts a dataframe or tibble, it identifies all the numeric variables, and calculates the correlation between each of those variables:
 
@@ -154,7 +171,7 @@ datasummary_correlation(penguins)
 
 The values displayed in this table are equivalent to those obtained by calling: `cor(x, use='pairwise.complete.obs')`.
 
-# Table 1
+# `datasummary_table1`
 
 The expression "Table 1" refers to a particular style of table which is often printed in the opening pages of a scientific peer reviewed article. Typically, this table will include basic descriptive statistics about different subsets of the study population. For instance, analysts may want to display the socio-demographic characteristics of members of the Control and Treatement groups in a randomized control trial, or the flipper length and male and female penguins.
 
@@ -167,8 +184,8 @@ training <- read.csv(training)
 
 # Rename and recode variables
 training <- training %>%
-            mutate(`Earnings pre-treatment` = re75,
-                   `Earnings post-treatment` = re78,
+            mutate(`Earnings pre-treatment` = re75 / 1000,
+                   `Earnings post-treatment` = re78 / 1000,
                    Treatment = ifelse(treat == TRUE, 'Treatment', 'Control'),
                    Married = ifelse(married == TRUE, 'Yes', 'No')) %>%
             select(`Earnings pre-treatment`,
@@ -189,6 +206,7 @@ reference <- 'Source: Lalonde (1986) American Economic Review.'
 library(modelsummary)
 datasummary_table1(~Treatment, 
                    data = training,
+                   fmt = "%.0f",
                    title = caption,
                    notes = reference)
 ```
@@ -201,11 +219,12 @@ datasummary_table1(~Treatment,
                    data = training,
                    title = caption,
                    notes = reference,
-                   fmt = "%.0f") %>%
+                   fmt = "%.0f",
+                   output = 'kableExtra') %>%
    kableExtra::row_spec(c(2, 7), bold = TRUE)
 ```
 
-# `datasummary` with 2-Sided formulae
+# `datasummary`
 
 `datasummary` tables are specified using a 2-sided formula, divided by a tilde `~`. The left-hand side describes the rows; the right-hand side describes the columns. To illustrate how this works, we will again be using the [`palmerpenguins dataset`](https://allisonhorst.github.io/palmerpenguins/):
 
@@ -263,7 +282,7 @@ datasummary(All(penguins) ~ Mean + SD,
 ```
 By default, `All` selects all numeric variables. This behavior can be changed by modifying the function's arguments. See `?All` for details.
 
-# Nesting factor variables with `*`
+# Nesting categorical variables with `*`
 
 `datasummary` can nest variables and statistics inside categorical variables using the `*` symbol. When applying the the `*` operator to factor, character, or logical variables, columns or rows will automatically be nested. For instance, if we want to display separate means for each value of the variable `sex`, we use `mean * sex`:
 
@@ -327,20 +346,6 @@ datasummary((`Flipper length (mm)` = flipper_length_mm) + (`Body mass (g)` = bod
             data = penguins)
 ```
 
-# `DropEmpty()`: Empty cells in crosstabs
-
-Sometimes, if we nest too much and the dataset is not large/diverse enough, we end up with empty cells. In that case, we add `*DropEmpty()` to produce something like this:
-
-```{r}
-datasummary(island * species * body_mass_g ~ sex * (Mean + SD), 
-            data = penguins)
-```
-
-```{r}
-datasummary(island * species * body_mass_g ~ sex * (Mean + SD) * DropEmpty(), 
-            data = penguins)
-```
-
 # Counts and Percentages
 
 The `tables` package allows `datasummary` to use a three neat tricks to produce frequency tables:
@@ -356,7 +361,7 @@ datasummary(species * sex + 1 ~ (N = 1) + Percent(),
 
 Note that the `Percent()` function accepts a `denom` argument to determine if percentages must be calculated row or column-wise.
 
-# `Arguments`
+# `Arguments` and `NA`s
 
 You can pass any argument to your summary function by including a call to `Arguments()`. For instance, there are missing values in the `flipper_length_mm` variable of the `penguins` dataset. Therefore, the standard `mean` function will produce no result, because its default argument is `na.rm=FALSE`. We can change that by calling:
 
@@ -388,6 +393,21 @@ The `*` nesting operator that we used above works automatically for factor, char
 ```{r}
 datasummary(mpg + hp ~ Factor(am) * (mean + sd),
             data = mtcars)
+```
+
+
+# `DropEmpty()`: Empty cells in crosstabs
+
+Sometimes, if we nest too much and the dataset is not large/diverse enough, we end up with empty cells. In that case, we add `*DropEmpty()` to produce something like this:
+
+```{r}
+datasummary(island * species * body_mass_g ~ sex * (Mean + SD), 
+            data = penguins)
+```
+
+```{r}
+datasummary(island * species * body_mass_g ~ sex * (Mean + SD) * DropEmpty(), 
+            data = penguins)
 ```
 
 # Logical subsets
@@ -476,8 +496,7 @@ datasummary(f,
             output = 'gt',
             title = cap,
             notes = 'Artwork by @allison_horst',
-            header_sparse = TRUE,
-            fmt = '%.0f') %>%
+            sparse_header = TRUE) %>%
     text_transform(locations = cells_body(columns = 1, rows = 1), fn = adelie) %>%
     text_transform(locations = cells_body(columns = 1, rows = 2), fn = chinstrap) %>%
     text_transform(locations = cells_body(columns = 1, rows = 3), fn = gentoo) %>%

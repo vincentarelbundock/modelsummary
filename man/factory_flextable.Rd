@@ -11,18 +11,23 @@ factory_flextable(
   output_file = NULL,
   output_format = "flextable",
   span = NULL,
-  title = NULL,
-  ...
+  title = NULL
 )
 }
 \arguments{
+\item{tab}{table body (data.frame)}
+
+\item{hrule}{position of horizontal rules (integer vector)}
+
 \item{notes}{list or vector of notes to append to the bottom of the table.}
 
-\item{title}{string}
+\item{output_file}{file path (character or NULL)}
 
-\item{...}{all other arguments are passed to the `tidy` method used to
-extract estimates from the model. For example, this allows users to set
-`exponentiate=TRUE` to exponentiate logistic regression coefficients.}
+\item{output_format}{character}
+
+\item{span}{list of column label spans}
+
+\item{title}{string}
 }
 \value{
 flextable object

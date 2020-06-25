@@ -113,8 +113,8 @@ PercentMissing <- function(x, fmt = '%.1f', ...)
 #' @export
 #' @keywords internal
 Histogram <- function(x, bins = 10) {
-    ticks <- c(" ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█")
-    #ticks <- c(" ", "\\u2581", "\\u2582", "\\u2583", "\\u2584", "\\u2585", "\\u2586", "\\u2587", "\\u2588")
+    #ticks <- c(" ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█")
+    ticks <- c(" ", "\u2581", "\u2582", "\u2583", "\u2584", "\u2585", "\u2586", "\u2587", "\u2588")
     ticks_values <- seq(0, 1, length.out = length(ticks))
     barheight <- cut(x, breaks = bins, labels = FALSE) 
     barheight <- table(barheight)

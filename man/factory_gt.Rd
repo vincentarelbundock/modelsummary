@@ -11,9 +11,23 @@ factory_gt(
   output_file = NULL,
   output_format = "gt",
   span = NULL,
-  title = NULL,
-  ...
+  title = NULL
 )
+}
+\arguments{
+\item{tab}{table body (data.frame)}
+
+\item{hrule}{position of horizontal rules (integer vector)}
+
+\item{notes}{list or vector of notes to append to the bottom of the table.}
+
+\item{output_file}{file path (character or NULL)}
+
+\item{output_format}{character}
+
+\item{span}{list of column label spans}
+
+\item{title}{string}
 }
 \value{
 tbl_gt object
@@ -21,3 +35,4 @@ tbl_gt object
 \description{
 Internal function to build table with `gt`
 }
+\keyword{internal}

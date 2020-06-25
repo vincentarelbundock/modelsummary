@@ -1,7 +1,7 @@
 #' Internal function to build table with `data.frame` with other arguments as
 #' attributes. Useful for testing.
 #'
-#' @inheritParams modelsummary
+#' @inheritParams factory_gt
 #' @keywords internal
 #' @return data.frame 
 factory_dataframe <- function(tab,

@@ -138,21 +138,21 @@ modelsummary <- function(models,
 
 
     # extract estimates and gof
-    dat <- modelsummary::extract(models,
-                                 statistic = statistic,
-                                 statistic_override = statistic_override,
-                                 statistic_vertical = statistic_vertical,
-                                 conf_level = conf_level,
-                                 coef_map = coef_map,
-                                 coef_omit = coef_omit,
-                                 gof_map = gof_map,
-                                 gof_omit = gof_omit,
-                                 stars = stars,
-                                 add_rows = add_rows,
-                                 add_rows_location = add_rows_location,
-                                 fmt = fmt,
-                                 estimate = estimate,
-                                 ...)
+    dat <- extract(models,
+                   statistic = statistic,
+                   statistic_override = statistic_override,
+                   statistic_vertical = statistic_vertical,
+                   conf_level = conf_level,
+                   coef_map = coef_map,
+                   coef_omit = coef_omit,
+                   gof_map = gof_map,
+                   gof_omit = gof_omit,
+                   stars = stars,
+                   add_rows = add_rows,
+                   add_rows_location = add_rows_location,
+                   fmt = fmt,
+                   estimate = estimate,
+                   ...)
 
     # remove duplicate term labels
     idx <- stringr::str_detect(dat$statistic, 'statistic\\d*$')

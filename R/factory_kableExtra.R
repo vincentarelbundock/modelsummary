@@ -1,6 +1,6 @@
-#' Internal function to build table with `gt`
+#' Internal function to build table with `kableExtra`
 #'
-#' @inheritParams modelsummary
+#' @inheritParams factory_gt
 #' @keywords internal
 #' @return tbl_gt object
 factory_kableExtra <- function(tab,
@@ -9,8 +9,7 @@ factory_kableExtra <- function(tab,
                                output_file = NULL,
                                output_format = 'kableExtra',
                                span = span,
-                               title = NULL,
-                               ...) {
+                               title = NULL) {
 
     tab <- kableExtra::kable(tab,
                         format = output_format,

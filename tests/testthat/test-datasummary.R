@@ -75,6 +75,18 @@ test_that('logical and characters converted to factors automatically', {
 
 })
 
+test_that('datasummary_table1: various datasets', {
+
+    data(PlantGrowth)
+    tab <- datasummary_table1(~group, PlantGrowth, output = 'dataframe')
+    expect_equal(tab[, 3], c('', '5.0'))
+    expect_equal(tab[, 4], c('', '(0.6)'))
+    expect_equal(tab[, 5], c('', '4.7'))
+    expect_equal(tab[, 6], c('', '(0.8)'))
+    expect_equal(tab[, 7], c('', '5.5'))
+    expect_equal(tab[, 8], c('', '(0.4)'))
+
+})
 
 test_that('datasummary_table1: output format do not produce errors', {
 

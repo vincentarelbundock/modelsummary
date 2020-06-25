@@ -100,13 +100,4 @@ tibble
 Extract and combine estimates and goodness-of-fit statistics from several
 statistical models.
 }
-\examples{
-library(modelsummary)
-data(trees)
-models <- list()
-models[['Bivariate']] <- lm(Girth ~ Height, data = trees)
-models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
-extract(models)
-
-}
 \keyword{internal}

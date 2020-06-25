@@ -1,5 +1,9 @@
 #' Internal function to build table with `gt`
 #'
+#' @inheritParams factory
+#' @param output_file file path (character or NULL)
+#' @param output_format character
+#' @keywords internal
 #' @return tbl_gt object
 factory_gt <- function(tab,
                        hrule = NULL,
@@ -7,8 +11,7 @@ factory_gt <- function(tab,
                        output_file = NULL,
                        output_format = 'gt',
                        span = NULL,
-                       title = NULL,
-                       ...) {
+                       title = NULL) {
   
     # create gt table object
     idx_col <- ncol(tab)

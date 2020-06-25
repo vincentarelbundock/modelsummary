@@ -1,4 +1,4 @@
-#' datasummary template to create a correlation table
+#' Generate a correlation table for all numeric variables in your dataset.
 #' 
 #' @inheritParams datasummary
 #' @export

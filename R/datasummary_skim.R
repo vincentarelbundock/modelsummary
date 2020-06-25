@@ -1,9 +1,9 @@
-#' datasummary template
+#' Quick overview of numeric or categorical variables
 #' 
 #' @inheritParams datasummary
 #' @inheritParams modelsummary
-#' @param histogram boolean TRUE to include a unicode character histogram
-#' @param type "numeric" or "categorical"
+#' @param histogram TRUE to include a unicode character histogram (boolean)
+#' @param type of variables to summarize: "numeric" or "categorical" (character)
 #' @export
 datasummary_skim <-  function(data,
                               type = 'numeric',

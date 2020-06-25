@@ -35,7 +35,7 @@ extract_estimates <- function(model,
         est <- tidy(model, ...)
 
         # keep only columns that do not appear in so
-        est <- est[, c('term', base::setdiff(colnames(est), colnames(so)))]
+        est <- est[, c('term', base::setdiff(colnames(est), colnames(so))), drop = FALSE]
         est <- dplyr::left_join(est, so, by = 'term')
 
     } else { # if statistic_override is not used
@@ -114,7 +114,7 @@ extract_estimates <- function(model,
 
     # subset columns
     cols <- c('term', estimate, paste0('statistic', seq_along(statistic)))
-    est <- est[, cols]
+    est <- est[, cols, drop = FALSE]
 
     # reshape to vertical
     if (statistic_vertical) {

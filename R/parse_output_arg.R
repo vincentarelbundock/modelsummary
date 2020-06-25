@@ -2,7 +2,6 @@
 #' format to use.
 #'
 #' @keywords internal
-#' @export
 parse_output_arg <- function(output) {
 
     # kableExtra produces human-readable code

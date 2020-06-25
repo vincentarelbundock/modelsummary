@@ -2,7 +2,7 @@
 % Please edit documentation in R/datasummary_skim.R
 \name{datasummary_skim}
 \alias{datasummary_skim}
-\title{datasummary template}
+\title{Quick overview of numeric or categorical variables}
 \usage{
 datasummary_skim(
   data,
@@ -18,7 +18,7 @@ datasummary_skim(
 \arguments{
 \item{data}{A data.frame (or tibble)}
 
-\item{type}{"numeric" or "categorical"}
+\item{type}{of variables to summarize: "numeric" or "categorical" (character)}
 
 \item{output}{filename or object type (string)
 \itemize{
@@ -36,12 +36,12 @@ use exponential notation. See `?sprintf` for more options.}
 
 \item{notes}{list or vector of notes to append to the bottom of the table.}
 
-\item{histogram}{boolean TRUE to include a unicode character histogram}
+\item{histogram}{TRUE to include a unicode character histogram (boolean)}
 
 \item{...}{all other arguments are passed to the `tidy` method used to
 extract estimates from the model. For example, this allows users to set
 `exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \description{
-datasummary template
+Quick overview of numeric or categorical variables
 }

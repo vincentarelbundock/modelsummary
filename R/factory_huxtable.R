@@ -1,6 +1,6 @@
 #' Internal function to build table with `huxtable`
 #'
-#' @inheritParams modelsummary
+#' @inheritParams factory_gt
 #' @keywords internal
 #' @return huxtable object
 factory_huxtable <- function(tab,
@@ -9,8 +9,7 @@ factory_huxtable <- function(tab,
                              output_file = NULL,
                              output_format = 'huxtable',
                              span = NULL,
-                             title = NULL,
-                             ...) {
+                             title = NULL) {
 
     # is huxtable installed?
     if (!requireNamespace('huxtable', quietly = TRUE)) {

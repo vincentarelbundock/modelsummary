@@ -1,7 +1,10 @@
 #' Factory to create tables in different output formats using standardized
 #' inputs.
 #'
-#' @export
+#' @param tab table body (data.frame)
+#' @param hrule position of horizontal rules (integer vector)
+#' @param span list of column label spans
+#' @inheritParams modelsummary
 factory <- function(tab,
                     hrule,
                     notes,
@@ -11,7 +14,7 @@ factory <- function(tab,
 
 
     # sanity check functions are hosted in R/sanity_checks.R
-    # more sanity checks are conducted in modelsummary::extract()
+    # more sanity checks are conducted in modelsummary:::extract()
     sanity_output(output)
     sanity_title(title)
     sanity_notes(notes)

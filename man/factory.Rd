@@ -7,6 +7,24 @@ inputs.}
 \usage{
 factory(tab, hrule, notes, output, span, title)
 }
+\arguments{
+\item{tab}{table body (data.frame)}
+
+\item{hrule}{position of horizontal rules (integer vector)}
+
+\item{notes}{list or vector of notes to append to the bottom of the table.}
+
+\item{output}{filename or object type (string)
+\itemize{
+  \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg. 
+  \item Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
+  \item When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.
+}}
+
+\item{span}{list of column label spans}
+
+\item{title}{string}
+}
 \description{
 Factory to create tables in different output formats using standardized
 inputs.

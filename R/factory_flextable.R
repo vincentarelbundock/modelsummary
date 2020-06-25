@@ -1,6 +1,6 @@
 #' Internal function to build table with `flextable`
 #'
-#' @inheritParams modelsummary
+#' @inheritParams factory_gt
 #' @keywords internal
 #' @return flextable object
 factory_flextable <- function(tab,
@@ -9,8 +9,7 @@ factory_flextable <- function(tab,
                               output_file = NULL,
                               output_format = 'flextable',
                               span = NULL,
-                              title = NULL,
-                              ...) {
+                              title = NULL) {
   
     # is huxtable installed?
     if (!requireNamespace('flextable', quietly = TRUE)) {

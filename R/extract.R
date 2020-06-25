@@ -4,15 +4,6 @@
 #' @inheritParams modelsummary
 #' @return tibble
 #' @keywords internal
-#' @examples
-#' library(modelsummary)
-#' data(trees)
-#' models <- list()
-#' models[['Bivariate']] <- lm(Girth ~ Height, data = trees)
-#' models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
-#' extract(models)
-#'
-#' @export
 extract <- function(models,
                     statistic = 'std.error',
                     statistic_override = NULL,

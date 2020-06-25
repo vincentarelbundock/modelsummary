@@ -2,7 +2,8 @@
 % Please edit documentation in R/datasummary_table1.R
 \name{datasummary_table1}
 \alias{datasummary_table1}
-\title{table1 template}
+\title{Table 1: Summary statistics for different subsets of the data (e.g., control
+and treatment groups)}
 \usage{
 datasummary_table1(
   formula,
@@ -39,6 +40,10 @@ extract estimates from the model. For example, this allows users to set
 `exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \description{
-table1 template
+Table 1: Summary statistics for different subsets of the data (e.g., control
+and treatment groups)
+}
+\examples{
+datasummary_table1(~am, mtcars)
 }
 \keyword{internal}
