@@ -67,7 +67,7 @@ datasummary_table1 <- function(formula,
 
     if (any_factor) {
         cleanpct <- function(x, y) sprintf('(%.0f%%)', length(x) / length(y) * 100)
-        f <- 'Heading("") * 1 * Literal("N (%)") + All(data_no_rhs, numeric=FALSE, factor=TRUE) ~ RHS * ((` `=1) + (` `=Percent(fn=cleanpct)))'
+        f <- 'Heading("") * 1 * Literal("N (%)") + All(data_no_rhs, numeric=FALSE, factor=TRUE) ~ RHS * ((` `=1) + (` `=Percent(fn=cleanpct, denom="col")))'
         f <- formula(stringr::str_replace(f, 'RHS', rhs))
         tab_factor <- tabular(f, data)
     } else {

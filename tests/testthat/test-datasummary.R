@@ -48,6 +48,13 @@ test_that('numeric content of simple tables', {
 
 })
 
+test_that('Header carry-forward', {
+
+    tab <- datasummary(mpg + hp ~ Factor(cyl) * (mean + sd) + median,
+                       data = mtcars,
+                       output = 'dataframe')
+
+
 test_that('Factor() is equivalent to assign', {
 
     tab1 <- datasummary(Factor(am) * (mpg + hp) ~ mean + sd, 
