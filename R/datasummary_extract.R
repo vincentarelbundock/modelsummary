@@ -10,15 +10,17 @@ datasummary_extract <- function(tab,
     # NA to empty cells
     clean_na <- function(x) {
         out <- trimws(x)
+        out[is.na(out)] <- ''
         out <- ifelse(out %in% c('NA', 'NaN'), '', out)
         return(out)
     }
     
     # fill-in spanning column labels horizontally
     carry_forward <- function(x, empty = '') {
+        out <- trimws(x)
         if (length(x) > 1) {
             for (i in 2:length(x)) {
-                if (x[i] == empty) {
+                if (is.na(x[i])) {
                     x[i] <- x[i - 1]
                 }
             }
@@ -31,12 +33,15 @@ datasummary_extract <- function(tab,
     mat <- as.matrix(tab)
 
     # header
-    header <- mat[1:idx, , drop = FALSE]
-    
+    header <- as.matrix(tables::colLabels(tab))
     for (i in 1:nrow(header)) {
-        header[i, ] <- clean_na(header[i, ])
-        header[i, ] <- carry_forward(header[i, ])
+        header[i, ] <- carry_forward(header[i, , drop = TRUE])
+        header[i, ] <- clean_na(header[i, , drop = TRUE])
     }
+    pad_header <- matrix('',
+                         nrow = nrow(header),
+                         ncol = ncol(mat) - ncol(header))
+    header <- cbind(pad_header, header)
     
     # main --- TODO: test if main has only one row
     main <- mat[(idx + 1):nrow(mat), , drop = FALSE]

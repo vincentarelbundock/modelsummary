@@ -9,6 +9,7 @@
 #' @keywords internal
 pad <- function(x) {
     checkmate::assert_character(x)
+    x <- trimws(x)
 	dup <- duplicated(x)
     dup[x == ''] <- TRUE
     ndup <- sum(dup)
