@@ -65,13 +65,12 @@ found in the 'tables' package documentation: ?tables::tabular
 
 datasummary(mpg ~ mean, data = mtcars)
 
-# This table uses the "mean" function as a column and the "mpg" variable as a
-# row:
+# This table uses the "mean" function as a row and the "mpg" variable as a column:
 
-datasummary(mpg ~ mean, data = mtcars)
+datasummary(mean ~ mpg, data = mtcars)
 
 # Display several variables or functions of the data using the "+"
-# concatenation operator. This variable has 2 rows and 2 columns:
+# concatenation operator. This table has 2 rows and 2 columns:
 
 datasummary(hp + mpg ~ mean + sd, data = mtcars)
 
@@ -82,7 +81,8 @@ datasummary(hp + mpg ~ mean + sd, data = mtcars)
 mtcars$cyl <- as.factor(mtcars$cyl)
 datasummary(hp + mpg ~ cyl * mean, data = mtcars)
 
-# If you don't want to convert your data to factors, you can use the 'Factor()'
+# If you don't want to convert your original data
+to factors, you can use the 'Factor()'
 # function inside 'datasummary' to obtain an identical result:
 
 datasummary(hp + mpg ~ Factor(cyl) * mean, data = mtcars)
@@ -99,7 +99,7 @@ datasummary(All(mtcars) ~ mean + sd, data = mtcars)
 # Define custom summary statistics. Your custom function should accept a vector
 # of numeric values and return a single numeric or string value:
 
-minmax <- function(x) paste0('[', min(x), ', ', max(x), ']')
+minmax <- function(x) sprintf("[\%.2f, \%.2f]", min(x), max(x))
 mean_na <- function(x) mean(x, na.rm = TRUE)
 
 datasummary(hp + mpg ~ minmax + mean_na, data = mtcars)
@@ -135,7 +135,7 @@ datasummary(f, data = mtcars, output = 'html')
 datasummary(f, data = mtcars, output = 'markdown')
 datasummary(f, data = mtcars, output = 'latex')
 
-# Return a table object to customize using with various table-making packages
+# Return a table object to customize using a table-making package
 datasummary(f, data = mtcars, output = 'gt')
 datasummary(f, data = mtcars, output = 'kableExtra')
 datasummary(f, data = mtcars, output = 'flextable')

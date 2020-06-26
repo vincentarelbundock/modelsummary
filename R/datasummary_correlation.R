@@ -24,7 +24,7 @@ datasummary_correlation <- function(data,
     
     for (i in 1:nrow(out)) {
         for (j in 2:ncol(out)) {
-            out[i, j] <- ifelse(i + 1 < j, '', out[i, j])
+            out[i, j] <- ifelse(i + 1 < j, '.', out[i, j])
         }
     }
     colnames(out)[1] <- ' '

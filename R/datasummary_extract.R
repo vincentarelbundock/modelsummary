@@ -38,9 +38,12 @@ datasummary_extract <- function(tab,
         header[i, ] <- carry_forward(header[i, , drop = TRUE])
         header[i, ] <- clean_na(header[i, , drop = TRUE])
     }
+    
+    out$stub_width <- ncol(mat) - ncol(header)
+
     pad_header <- matrix('',
                          nrow = nrow(header),
-                         ncol = ncol(mat) - ncol(header))
+                         ncol = out$stub_width)
     header <- cbind(pad_header, header)
     
     # main --- TODO: test if main has only one row
@@ -132,7 +135,7 @@ datasummary_extract <- function(tab,
     out$flextable <- list(main = main_flat, span = NULL)
     out$huxtable <- list(main = main_flat, span = NULL)
     out$dataframe <- list(main = main_flat, span = NULL)
-
+    
     return(out)
 
 }

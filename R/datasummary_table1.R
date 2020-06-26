@@ -56,9 +56,10 @@ datasummary_table1 <- function(formula,
     any_numeric <- any(sapply(data_no_rhs, is.numeric))
 
     if (any_numeric) {
-        CleanSD <- function(x) paste0('(', SD(x, fmt = fmt), ')')
-        f <- '(` `=1) * Literal("Mean (Std.Dev.)") + All(data_no_rhs) ~ RHS * ((` ` = Mean) + (` `=CleanSD)) '
-        #f <- '1 * All(data_no_rhs) ~ RHS * (Mean + SD)'
+        fmt_sd <- paste0('(', fmt, ')')
+        CleanSD <- function(x) sprintf(fmt_sd, stats::sd(x, na.rm = TRUE))
+        CleanMean <- function(x) sprintf(fmt, mean(x, na.rm = TRUE))
+        f <- '(` `=1) * Literal("Mean (Std.Dev.)") + All(data_no_rhs) ~ RHS * ((` ` = CleanMean) + (` `=CleanSD)) '
         f <- formula(stringr::str_replace(f, 'RHS', rhs))
         tab_numeric <- tables::tabular(f, data)
     } else {

@@ -9,9 +9,10 @@ datasummary_skim <-  function(data,
                               type = 'numeric',
                               output = 'default',
                               fmt = '%.1f',
+                              histogram = FALSE,
                               title = NULL,
                               notes = NULL,
-                              histogram = FALSE,
+                              align = NULL,
                               ...) {
 
     # TODO error if there are no numeric
@@ -47,12 +48,13 @@ datasummary_skim <-  function(data,
     } else {
         stop('The `type` argument supports these values: "numeric", "categorical".')
     }
-    
+
     # create table
     out <- datasummary(formula = f, 
                        data = dat_new,
                        output = output,
                        title = title,
+                       align = align,
                        notes)
 
     # output

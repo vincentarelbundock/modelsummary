@@ -9,9 +9,10 @@ datasummary_skim(
   type = "numeric",
   output = "default",
   fmt = "\%.1f",
+  histogram = FALSE,
   title = NULL,
   notes = NULL,
-  histogram = FALSE,
+  align = NULL,
   ...
 )
 }
@@ -32,11 +33,15 @@ string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
 the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
 use exponential notation. See `?sprintf` for more options.}
 
+\item{histogram}{TRUE to include a unicode character histogram (boolean)}
+
 \item{title}{string}
 
 \item{notes}{list or vector of notes to append to the bottom of the table.}
 
-\item{histogram}{TRUE to include a unicode character histogram (boolean)}
+\item{align}{A character string of length equal to the number of columns in
+the table.  "lcr" means that the first column will be left-aligned, the 2nd
+column center-aligned, and the 3rd column right-aligned.}
 
 \item{...}{all other arguments are passed to the `tidy` method used to
 extract estimates from the model. For example, this allows users to set

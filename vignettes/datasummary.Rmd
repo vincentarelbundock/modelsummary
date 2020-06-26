@@ -1,5 +1,5 @@
 ---
-title: '`datasummary`: Crosstabs, Frequencies, Correlations, Table 1s, and much more'
+title: '`datasummary`: Crosstabs, frequencies, correlations, table 1s, and more'
 output:
   html_document: default
   pdf_document:
@@ -13,15 +13,15 @@ tbody {
 }
 </style>
 
-`datasummary` is a function from the `modelsummary` package which allows you to create data summaries, frequency tables, crosstabs, correlation tables, "Table 1s," and much more. It has many benefits:
+`datasummary` is a function from the `modelsummary` package. It allows you to create data summaries, frequency tables, crosstabs, correlation tables, "Table 1s," and more. It has many benefits:
 
 * Easy to use.
 * *Extremely* flexible.
-* Several output formats: HTML, LaTeX, Microsoft Word and Powerpoint, Text/Markdown, PDF, RTF, or Image files.
+* Many output formats: HTML, LaTeX, Microsoft Word and Powerpoint, Text/Markdown, PDF, RTF, or Image files.
 * Embed tables in `Rmarkdown` or `knitr` dynamic documents.
-* [The appearance of your tables can be customized](#customize) using the `gt`, `kableExtra` or `flextable` packages. The possibilities are endless.
+* [Customize the appearance of your tables](#customize) with the `gt`, `kableExtra` or `flextable` packages. The possibilities are endless!
 
-This tutorial will show you how to use the `datasummary` function to create summary tables like these (and more!):
+This tutorial will show you how to draw tables like these (and more!):
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -32,46 +32,6 @@ options(modelsummary_default = 'kableExtra')
 options(width = 120)
 ```
 
-```{r eval=FALSE, echo=FALSE, message=FALSE, warning=FALSE}
-library(tidyverse)
-library(gt)
-library(modelsummary)
-library(kableExtra)
-options(modelsummary_default = 'kableExtra')
-options(width = 120)
-
-training <- 'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv' %>%
-            read.csv %>%
-            mutate(`Earnings Pre (1,000)` = re75  / 1000,
-                   `Earnings Post (1,000)` = re78 / 1000,
-                   Treatment = ifelse(treat == TRUE, 'Treatment', 'Control'),
-                   Married = ifelse(married == TRUE, 'Yes', 'No'),
-                   Treatment = factor(Treatment),
-                   Married = factor(Married),
-                   Ethnicity = factor(ethn)) %>%
-            select(`Earnings Pre (1,000)`,
-                   `Earnings Post (1,000)`, 
-                   Treatment, 
-                   Ethnicity, 
-                   Age = age, 
-                   Education = educ, 
-                   Married)
-caption <- 'Descriptive statistics about participants in a job training experiment. This table was created using the "datasummary" function from the "modelsummary" package for R.'
-reference <- 'Source: Lalonde (1986) American Economic Review.'
-
-library(modelsummary)
-datasummary_table1(~Treatment, 
-                   data = training,
-                   title = caption,
-                   notes = reference,
-                   align ='llrlrl',
-                   fmt = "%.1f") %>%
-    kable_styling() %>%
-    kableExtra::row_spec(c(1, 6), bold = TRUE) %>%
-    kableExtra::row_spec(2, color = 'red') %>%
-    kableExtra::row_spec(3, color = 'green')
-```
-
 <center>
 <img src="https://user-images.githubusercontent.com/987057/85806599-769a9c00-b71d-11ea-8705-0be8435d9572.png" width="49%">
 <img src="https://user-images.githubusercontent.com/987057/85771538-045c9400-b6ea-11ea-99af-48363b132f1b.png" width="49%">
@@ -79,10 +39,11 @@ datasummary_table1(~Treatment,
 <img src="https://user-images.githubusercontent.com/987057/85774118-8b127080-b6ec-11ea-913d-d0c13066cf6b.png" width="49%">
 </center>
 
+# Background
 
 `datasummary` is built around the *fantastic* [`tables` package for `R`.](https://cran.r-project.org/web/packages/tables/index.html) It is a thin "wrapper" which adds convenience functions and arguments; a user-interface consistent with `modelsummary`; cleaner html output; and the ability to export tables to more formats, including [`gt` tables](https://gt.rstudio.com), [`flextable` objects](https://davidgohel.github.io/flextable/), and Microsoft Word documents. 
 
-`datasummary` is a general-purpose table-making tool. It allows you to build (nearly) any summary table you want by using [simple 2-sided formulae.](#datasummary) For example, in the expression `x + y ~ mean + sd`, the left-hand side of the formula identifies the variables or statistics to display as rows, and the right-hand side defines the columns. Below, we will see how variables and statistics can be "nested" with the `*` operator to produce tables like this one.
+`datasummary` is a general-purpose table-making tool. It allows you to build (nearly) any summary table you want by using [simple 2-sided formulae.](#datasummary) For example, in the expression `x + y ~ mean + sd`, the left-hand side of the formula identifies the variables or statistics to display as rows, and the right-hand side defines the columns. Below, we will see how variables and statistics can be "nested" with the `*` operator to produce tables like the ones above.
 
 
 ```{r, echo=FALSE, message=FALSE, include=FALSE, eval=FALSE}
@@ -105,7 +66,7 @@ datasummary(Factor(Island) * Factor(Species) ~ Factor(Sex) * `Flipper length (mm
 
 In addition to `datasummary`, the `modelsummary` package includes a "family" of companion functions named `datasummary_*`. These functions facilitate the production of standard, commonly used tables. This family currently includes:
 
-* `datasummary()`: Easy and flexible function to create custom tables using 2-sided formulae.
+* `datasummary()`: Flexible function to create custom tables using 2-sided formulae.
 * `datasummary_skim()`: Quick summary of your dataset.
 * `datasummary_correlation()`: Table of correlations.
 * `datasummary_table1()`: Group characteristics (e.g., control vs. treatment)
@@ -166,7 +127,7 @@ Note that the `histogram` argument of the `datasummary_skim` function is `FALSE`
 The `datasummary_correlation` accepts a dataframe or tibble, it identifies all the numeric variables, and calculates the correlation between each of those variables:
 
 ```{r}
-datasummary_correlation(penguins)
+datasummary_correlation(mtcars)
 ```
 
 The values displayed in this table are equivalent to those obtained by calling: `cor(x, use='pairwise.complete.obs')`.
@@ -175,7 +136,7 @@ The values displayed in this table are equivalent to those obtained by calling: 
 
 The expression "Table 1" refers to a particular style of table which is often printed in the opening pages of a scientific peer reviewed article. Typically, this table will include basic descriptive statistics about different subsets of the study population. For instance, analysts may want to display the socio-demographic characteristics of members of the Control and Treatement groups in a randomized control trial, or the flipper length and male and female penguins.
 
-To illustrate how to build a Table 1 using the `datasummary_table1` function, we download data about a job training experiment published by Lalonde in 1986. Then, we clean up the data by renaming and recoding a few variables. 
+To illustrate how to build a Table 1 using the `datasummary_table1` function, we download data about a job training experiment studies in Lalonde (1986). Then, we clean up the data by renaming and recoding a few variables. 
 
 ```{r}
 # Download and read data
@@ -184,12 +145,12 @@ training <- read.csv(training)
 
 # Rename and recode variables
 training <- training %>%
-            mutate(`Earnings pre-treatment` = re75 / 1000,
-                   `Earnings post-treatment` = re78 / 1000,
+            mutate(`Earnings pre-treatment (1,000USD)` = re75 / 1000,
+                   `Earnings post-treatment (1,000USD)` = re78 / 1000,
                    Treatment = ifelse(treat == TRUE, 'Treatment', 'Control'),
                    Married = ifelse(married == TRUE, 'Yes', 'No')) %>%
-            select(`Earnings pre-treatment`,
-                   `Earnings post-treatment`, 
+            select(`Earnings pre-treatment (1,000USD)`,
+                   `Earnings post-treatment (1,000USD)`, 
                    Treatment, 
                    Ethnicity = ethn, 
                    Age = age, 
@@ -199,29 +160,15 @@ training <- training %>%
 head(training)
 ```
 
-```{r, eval=FALSE}
+```{r}
 caption <- 'Descriptive statistics about participants in a job training experiment. This table was created using the "datasummary" function from the "modelsummary" package for R.'
 reference <- 'Source: Lalonde (1986) American Economic Review.'
 
 library(modelsummary)
 datasummary_table1(~Treatment, 
                    data = training,
-                   fmt = "%.0f",
                    title = caption,
                    notes = reference)
-```
-
-```{r, echo=FALSE}
-caption <- 'Participant characteristics in a job training experiment. This table was using the "datasummary" function from the "modelsummary" package.'
-reference <- 'Source: Lalonde (1986) American Economic Review.'
-
-datasummary_table1(~Treatment, 
-                   data = training,
-                   title = caption,
-                   notes = reference,
-                   fmt = "%.0f",
-                   output = 'kableExtra') %>%
-   kableExtra::row_spec(c(2, 7), bold = TRUE)
 ```
 
 # `datasummary`
@@ -348,9 +295,9 @@ datasummary((`Flipper length (mm)` = flipper_length_mm) + (`Body mass (g)` = bod
 
 # Counts and Percentages
 
-The `tables` package allows `datasummary` to use a three neat tricks to produce frequency tables:
+The `tables` package allows `datasummary` to use a neat tricks to produce frequency tables:
 
-2. Add a `1` to the right-hand side of the equation and rename it: `(N = 1)`. 
+1. Add a `1` to the right-hand side of the equation and rename it: `(N = 1)`. 
 2. Add `Percent()` to the right-hand side to calculate the percentage of observations in each cell.
 3. Add `1` to the left-hand side to include a row with the total number of observations:
 
@@ -359,7 +306,7 @@ datasummary(species * sex + 1 ~ (N = 1) + Percent(),
             data = penguins)
 ```
 
-Note that the `Percent()` function accepts a `denom` argument to determine if percentages must be calculated row or column-wise.
+Note that the `Percent()` function accepts a `denom` argument to determine if percentages should be calculated row or column-wise, or if they should take into account all cells.
 
 # `Arguments` and `NA`s
 
@@ -369,6 +316,8 @@ You can pass any argument to your summary function by including a call to `Argum
 datasummary(flipper_length_mm ~ mean + mean*Arguments(na.rm=TRUE),
             data = penguins)
 ```
+
+Notice that there is an empty cell (`NA`) under the normal `mean` function, but that the `mean` call with `Arguments(na.rm=TRUE)` produced a numeric result.
 
 # Rounding
 
@@ -388,7 +337,7 @@ datasummary(flipper_length_mm ~ (Mean + SD + P50) * Arguments(fmt = "%.1f"),
 
 # `Factor`
 
-The `*` nesting operator that we used above works automatically for factor, character, and logical variables. Sometimes, it is convenient to use it with other types of variables, such as binary numeric variables. In that case, we can wrap the variable name inside a call to `Factor()`. This allows us to treat a variable as factor, without having to modify it in the original data. For example, the `mtcars` data, there is a binary numeric variable call `am`. We nest statistics within categories of `am` by typing:
+The `*` nesting operator that we used above works automatically for factor, character, and logical variables. Sometimes, it is convenient to use it with other types of variables, such as binary numeric variables. In that case, we can wrap the variable name inside a call to `Factor()`. This allows us to treat a variable as factor, without having to modify it in the original data. For example, in the `mtcars` data, there is a binary numeric variable call `am`. We nest statistics within categories of `am` by typing:
 
 ```{r}
 datasummary(mpg + hp ~ Factor(am) * (mean + sd),
@@ -398,14 +347,11 @@ datasummary(mpg + hp ~ Factor(am) * (mean + sd),
 
 # `DropEmpty()`: Empty cells in crosstabs
 
-Sometimes, if we nest too much and the dataset is not large/diverse enough, we end up with empty cells. In that case, we add `*DropEmpty()` to produce something like this:
+Sometimes, if we nest too much and the dataset is not large/diverse enough, we end up with empty cells. In that case, we add `*DropEmpty()` to the formula:
 
 ```{r}
 datasummary(island * species * body_mass_g ~ sex * (Mean + SD), 
             data = penguins)
-```
-
-```{r}
 datasummary(island * species * body_mass_g ~ sex * (Mean + SD) * DropEmpty(), 
             data = penguins)
 ```
@@ -429,12 +375,12 @@ See the `tables` package documentation for more details and examples.
 datasummary(All(penguins) ~ Mean + SD,
             data = penguins,
             title = 'Statistics about the famous Palmer Penguins.',
-            notes = c('A note at the bottom Second note at the bottom'))
+            notes = c('A note at the bottom of the table.'))
 ```
 
 # Save and Display
 
-`datasummary` can save tables to a wide variety of file formats, using the `output` argument:
+`datasummary` can save tables to several file formats, using the `output` argument:
 
 ```{r, eval=FALSE}
 f <- flipper_length_mm ~ island * (mean + sd)
@@ -507,3 +453,46 @@ datasummary(f,
     cols_align('center', columns = 3:6)
 ```
 
+
+
+
+
+```{r eval=FALSE, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(gt)
+library(modelsummary)
+library(kableExtra)
+options(modelsummary_default = 'kableExtra')
+options(width = 120)
+
+training <- 'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv' %>%
+            read.csv %>%
+            mutate(`Earnings Pre (1,000)` = re75  / 1000,
+                   `Earnings Post (1,000)` = re78 / 1000,
+                   Treatment = ifelse(treat == TRUE, 'Treatment', 'Control'),
+                   Married = ifelse(married == TRUE, 'Yes', 'No'),
+                   Treatment = factor(Treatment),
+                   Married = factor(Married),
+                   Ethnicity = factor(ethn)) %>%
+            select(`Earnings Pre (1,000)`,
+                   `Earnings Post (1,000)`, 
+                   Treatment, 
+                   Ethnicity, 
+                   Age = age, 
+                   Education = educ, 
+                   Married)
+caption <- 'Descriptive statistics about participants in a job training experiment. This table was created using the "datasummary" function from the "modelsummary" package for R.'
+reference <- 'Source: Lalonde (1986) American Economic Review.'
+
+library(modelsummary)
+datasummary_table1(~Treatment, 
+                   data = training,
+                   title = caption,
+                   notes = reference,
+                   align ='llrlrl',
+                   fmt = "%.1f") %>%
+    kable_styling() %>%
+    kableExtra::row_spec(c(1, 6), bold = TRUE) %>%
+    kableExtra::row_spec(2, color = 'red') %>%
+    kableExtra::row_spec(3, color = 'green')
+```
