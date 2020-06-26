@@ -278,18 +278,39 @@ When using `sparse_header=FALSE`, it is often useful to insert `Heading() *` in 
 
 # Renaming with `=`
 
-To rename a term, we wrap it in parentheses and use the equal `=` sign: `(NewName=OldName)`. 
+Personally, I prefer to rename variables and values *before* drawing my tables, using backticks when variable names include whitespace. For example,
 
 ```{r}
-datasummary((Flipper = flipper_length_mm) + (Mass = body_mass_g) ~ Mean + SD,
-            data = penguins)
+tmp <- penguins %>% 
+       select(`Flipper length (mm)` = flipper_length_mm,
+              `Body mass (g)` = body_mass_g)
+
+datasummary(`Flipper length (mm)` + `Body mass (g)` ~ Mean + SD,
+            data = tmp)
 ```
 
-To include spaces in the new term names, we wrap them in backticks:
+However, thanks to the `tables` package, `datasummary` offers two additional mechanisms to rename. First, you can wrap a term in parentheses and use the equal `=` sign: `(NewName=OldName)`: 
 
 ```{r}
 datasummary((`Flipper length (mm)` = flipper_length_mm) + (`Body mass (g)` = body_mass_g) ~ 
             island * ((Avg. = Mean) + (Std.Dev. = SD)), 
+            data = penguins)
+```
+
+Second, we can use the `Heading()` function:
+
+```{r}
+datasummary(Heading("Flipper length (mm)") * flipper_length_mm + Heading("Body mass (g)") * body_mass_g ~ island * (Mean + SD), 
+            data = penguins)
+```
+
+The `Heading` function also has a `nearData` argument which can be useful in cases where some rows are nested but others are not. Compare the last row of these two tables:
+
+```{r}
+datasummary(sex * (flipper_length_mm + culmen_length_mm) + Heading("Body mass (g)") * body_mass_g ~ Mean + SD,
+            data = penguins)
+
+datasummary(sex * (flipper_length_mm + culmen_length_mm) + Heading("Body mass (g)", nearData=FALSE) * body_mass_g ~ Mean + SD,
             data = penguins)
 ```
 
@@ -308,7 +329,7 @@ datasummary(species * sex + 1 ~ (N = 1) + Percent(),
 
 Note that the `Percent()` function accepts a `denom` argument to determine if percentages should be calculated row or column-wise, or if they should take into account all cells.
 
-# `Arguments` and `NA`s
+# `Arguments`: Missing values & Rounding
 
 You can pass any argument to your summary function by including a call to `Arguments()`. For instance, there are missing values in the `flipper_length_mm` variable of the `penguins` dataset. Therefore, the standard `mean` function will produce no result, because its default argument is `na.rm=FALSE`. We can change that by calling:
 
@@ -319,9 +340,7 @@ datasummary(flipper_length_mm ~ mean + mean*Arguments(na.rm=TRUE),
 
 Notice that there is an empty cell (`NA`) under the normal `mean` function, but that the `mean` call with `Arguments(na.rm=TRUE)` produced a numeric result.
 
-# Rounding
-
-The shortcut functions that ship with `modelsummary`, such as `Mean`, `SD`, `Median`, `P25` all include an argument called `fmt` which can be used to format numbers (see details in `?sprintf`). We can thus round numbers by using the `Arguments` approach described in the previous section:
+The shortcut functions that ship with `modelsummary` (e.g., `Mean`, `SD`, `Median`, `P25`) all use `na.rm=TRUE` by default. They also include an argument called `fmt` which can be used to format numbers (see `?sprintf`). We can thus round numbers by calling `Arguments`:
 
 ```{r}
 datasummary(flipper_length_mm ~ Mean*Arguments(fmt = "%.4f") + SD*Arguments(fmt = "%.1f"),
@@ -345,7 +364,7 @@ datasummary(mpg + hp ~ Factor(am) * (mean + sd),
 ```
 
 
-# `DropEmpty()`: Empty cells in crosstabs
+# Empty cells in crosstabs
 
 Sometimes, if we nest too much and the dataset is not large/diverse enough, we end up with empty cells. In that case, we add `*DropEmpty()` to the formula:
 
@@ -410,6 +429,8 @@ datasummary(f, data = penguins, output = 'kableExtra')
 datasummary(f, data = penguins, output = 'flextable')
 datasummary(f, data = penguins, output = 'huxtable')
 ```
+
+Please note that hierarchical or "nested" column labels are only available for these output formats: kableExtra, gt, html, rtf, and LaTeX. When saving tables to other formats, nested labels will be combined to a "flat" header.
 
 # Customize
 

@@ -109,6 +109,10 @@
 #' The 'datasummary' function is a thin wrapper around the 'tabular' function
 #' from the 'tables' package. More details about table-making formulas can be
 #' found in the 'tables' package documentation: ?tables::tabular
+#' 
+#' Hierarchical or "nested" column labels are only available for these output
+#' formats: kableExtra, gt, html, rtf, and LaTeX. When saving tables to other
+#' formats, nested labels will be combined to a "flat" header.
 #' @export
 datasummary <- function(formula,
                         data,
