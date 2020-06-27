@@ -9,10 +9,9 @@ factory_kableExtra <- function(tab,
                                notes = NULL,
                                output_file = NULL,
                                output_format = 'kableExtra',
-                               span = span,
                                title = NULL) {
 
-    tab <- kableExtra::kable(tab,
+    out <- kableExtra::kable(tab,
                         align = align,
                         format = output_format,
                         caption = title,
@@ -24,7 +23,7 @@ factory_kableExtra <- function(tab,
     if (!is.null(hrule)) {
         if (output_format %in% 'latex') {
             for (pos in hrule) {
-                tab <- tab %>% 
+                out <- out %>% 
                        kableExtra::row_spec(row = pos - 1,  
                                             extra_latex_after = '\\midrule')
             }
@@ -36,31 +35,31 @@ factory_kableExtra <- function(tab,
         # threeparttable only works with 1 note
         threeparttable <- knitr::is_latex_output() & (length(notes) == 1)
         for (n in notes) {
-            tab <- tab %>% 
+            out <- out %>% 
                    kableExtra::add_footnote(label = n, notation = 'none', 
                                             threeparttable = threeparttable)
         }
     }
     
+    span <- attr(tab, 'span_kableExtra')
     if (!is.null(span)) {
         # add_header_above not supported in markdown
         if (output_format %in% c('latex', 'html')) {
             span <- rev(span) # correct vertical order
             for (s in span) {
-                tab <- tab %>%
-                    kableExtra::add_header_above(s)
+                out <- out %>% kableExtra::add_header_above(s)
             }   
         }
     }
 
     # styling (can be overriden manually by calling again)
     if (output_format %in% c('latex', 'html')) {
-        tab <- tab %>% kableExtra::kable_styling(full_width = FALSE)
+        out <- out %>% kableExtra::kable_styling(full_width = FALSE)
     }
 
     # output
     if (is.null(output_file)){
-        return(tab)
+        return(out)
     } else {
         # function stolen from kableExtra (MIT license). Not exported and CRAN
         # doesn't like :::
@@ -70,7 +69,7 @@ factory_kableExtra <- function(tab,
             return(out)
         }
         filecon <- file(output_file)
-        writeLines(solve_enc(tab), con = filecon, useBytes = TRUE)
+        writeLines(solve_enc(out), con = filecon, useBytes = TRUE)
         close(filecon)
     } 
 

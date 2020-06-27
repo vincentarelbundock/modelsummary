@@ -36,7 +36,6 @@ datasummary_correlation <- function(data,
             hrule = NULL,
             notes = notes, 
             output = output,
-            span = NULL,
             title = title)
     
 }

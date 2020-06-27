@@ -141,42 +141,18 @@ datasummary <- function(formula,
     # extract content
     dse <- datasummary_extract(tab, sparse_header = sparse_header)
     
-    # greenfield
-    if (output_list$output_factory == 'gt') {
-        main <- dse$gt$main
-        span <- dse$gt$span
-    } else if (output_list$output_factory == 'kableExtra') {
-        if (output_list$output_format == 'markdown') {
-            main <- dse$kableExtra_markdown$main
-            span <- dse$kableExtra_markdown$span
-        } else {
-            main <- dse$kableExtra$main
-            span <- dse$kableExtra$span
-        }
-    } else if (output_list$output_factory == 'flextable') {
-        main <- dse$flextable$main
-        span <- dse$flextable$span
-    } else if (output_list$output_factory == 'huxtable') {
-        main <- dse$huxtable$main
-        span <- dse$huxtable$span
-    } else if (output_list$output_factory == 'dataframe') {
-        main <- dse$dataframe$main
-        span <- dse$dataframe$span
-    }
-    
     # align stub l rest r
     if (is.null(align)) {
-        align <- paste0(strrep('l', dse$stub_width),
-                        strrep('r', ncol(main) - dse$stub_width))
+        align <- paste0(strrep('l', attr(dse, 'stub_width')),
+                        strrep('r', ncol(dse) - attr(dse, 'stub_width')))
     }
     
     # build
-    out <- factory(main, 
+    out <- factory(dse, 
                    align = align,
                    hrule = NULL,
                    notes = notes, 
                    output = output,
-                   span = span,
                    title = title)
     
     return(out)

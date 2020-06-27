@@ -12,7 +12,6 @@ factory_dataframe(
   notes = NULL,
   output_file = NULL,
   output_format = NULL,
-  span = NULL,
   title = NULL
 )
 }
@@ -30,8 +29,6 @@ column center-aligned, and the 3rd column right-aligned.}
 \item{output_file}{file path (character or NULL)}
 
 \item{output_format}{character}
-
-\item{span}{list of column label spans}
 
 \item{title}{string}
 }

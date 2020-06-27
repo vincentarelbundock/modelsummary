@@ -10,16 +10,20 @@ factory_dataframe <- function(tab,
                               notes = NULL,
                               output_file = NULL,
                               output_format = NULL,
-                              span = NULL,
                               title = NULL) {
 
 
     out <- tab
+    
+    if (!is.null(attr(tab, 'header_sparse_flat'))) {
+        colnames(out) <- attr(tab, 'header_sparse_flat')
+    }
+
+    attr(out, 'align') <- align
     attr(out, 'hrule') <- hrule
     attr(out, 'notes') <- notes
     attr(out, 'output_file') <- output_file
     attr(out, 'output_format') <- output_format
-    attr(out, 'span') <- span
     attr(out, 'title') <- title
 
     return(out)

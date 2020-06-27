@@ -9,17 +9,22 @@ factory_huxtable <- function(tab,
                              notes = NULL,
                              output_file = NULL,
                              output_format = 'huxtable',
-                             span = NULL,
                              title = NULL) {
+
+
+    # is huxtable installed?
+    if (!requireNamespace('huxtable', quietly = TRUE)) {
+        stop("Please install the `huxtable` package.")
+    }
 
     ## warning on align
     #if (!is.null(align)) {
         #warning('The `align` argument is not supported yet for huxtable objects. Please file a request or (even better) a code submission on Github if you need that feature.')
     #}
 
-    # is huxtable installed?
-    if (!requireNamespace('huxtable', quietly = TRUE)) {
-        stop("Please install the `huxtable` package.")
+    # nested column labels
+    if (!is.null(attr(tab, 'header_sparse_flat'))) {
+        colnames(tab) <- pad(attr(tab, 'header_sparse_flat'))
     }
 
     # huxtable object with header 

@@ -3,7 +3,6 @@
 #'
 #' @param tab table body (data.frame)
 #' @param hrule position of horizontal rules (integer vector)
-#' @param span list of column label spans
 #' @inheritParams modelsummary
 #' @inheritParams datasummary
 factory <- function(tab,
@@ -11,7 +10,6 @@ factory <- function(tab,
                     hrule,
                     notes,
                     output,
-                    span,
                     title) {
 
 
@@ -47,7 +45,6 @@ factory <- function(tab,
       notes = notes,
       output_file = output_list$output_file,
       output_format = output_list$output_format,
-      span = span,
       title = title)
       
 }

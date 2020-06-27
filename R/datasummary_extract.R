@@ -39,11 +39,11 @@ datasummary_extract <- function(tab,
         header[i, ] <- clean_na(header[i, , drop = TRUE])
     }
     
-    out$stub_width <- ncol(mat) - ncol(header)
+    stub_width <- ncol(mat) - ncol(header)
 
     pad_header <- matrix('',
                          nrow = nrow(header),
-                         ncol = out$stub_width)
+                         ncol = stub_width)
     header <- cbind(pad_header, header)
     
     # main --- TODO: test if main has only one row
@@ -68,18 +68,14 @@ datasummary_extract <- function(tab,
         out <- apply(h, 2, paste, collapse = ' ')
         return(out)
     }
+
+    # stub_width attribute before return
+    attr(main, 'stub_width') <- stub_width
     
     # 1 header level means colnames are sufficient. return output immediately.
     # this needs to go before definition of header_nocolnames
     if (nrow(header) == 1) {
-        out$gt <- 
-        out$kableExtra <- 
-        out$kableExtra_markdown <- 
-        out$flextable <- 
-        out$huxtable <- 
-        out$dataframe <- 
-            list(main = main, span = NULL)
-        return(out)
+        return(main)
     }
 
     # headers matrices without colnames
@@ -103,7 +99,7 @@ datasummary_extract <- function(tab,
             span[[length(span) + 1]] <- list(label = l, position = pos)
         }
     }
-    out$gt <- list(main = main, span = span)
+    attr(main, 'span_gt') <- span
 
     # kableExtra supports several span levels, so we use the matrix
     if (sparse_header) {
@@ -124,18 +120,17 @@ datasummary_extract <- function(tab,
     } else {
         span <- NULL
     }
+    attr(main, 'span_kableExtra') <- span
 
-    out$kableExtra <- list(main = main, span = span)
+    # attributes
+    attr(main, 'header_sparse') <- header_sparse
+    attr(main, 'header_sparse_flat') <- header_sparse_flat
+    attr(main, 'header_nocolnames') <- header_nocolnames
+    attr(main, 'header_nocolnames_sparse') <- header_nocolnames_sparse
+    attr(main, 'header_sparse_flat') <- header_sparse_flat
+    attr(main, 'header_nocolnames_sparse_flat') <- header_nocolnames_sparse_flat
 
-    # flextable, huxtable, and kableExtra markdown do not support spans,
-    # so we use the flat vector WITH colnames
-    main_flat <- main
-    colnames(main_flat) <- header_sparse_flat
-    out$kableExtra_markdown <- list(main = main_flat, span = NULL)
-    out$flextable <- list(main = main_flat, span = NULL)
-    out$huxtable <- list(main = main_flat, span = NULL)
-    out$dataframe <- list(main = main_flat, span = NULL)
-    
-    return(out)
+    # return
+    return(main)
 
 }

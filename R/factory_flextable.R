@@ -9,20 +9,26 @@ factory_flextable <- function(tab,
                               notes = NULL,
                               output_file = NULL,
                               output_format = 'flextable',
-                              span = NULL,
                               title = NULL) {
 
+
+  
+    # is flextable installed?
+    if (!requireNamespace('flextable', quietly = TRUE)) {
+        stop("Please install the `flextable` package.")
+    }
+ 
     ## warning on align
     #if (!is.null(align)) {
         #warning('The `align` argument is not supported yet for flextable objects. Please file a request or (even better) a code submission on Github if you need that feature.')
     #}
 
-  
-    # is huxtable installed?
-    if (!requireNamespace('flextable', quietly = TRUE)) {
-        stop("Please install the `flextable` package.")
+    # nested column labels
+    if (!is.null(attr(tab, 'header_sparse_flat'))) {
+      colnames(tab) <- pad(attr(tab, 'header_sparse_flat'))
     }
- 
+
+    # measurements 
     table_width <- ncol(tab)
 
     # flextable object
