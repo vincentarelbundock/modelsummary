@@ -4,7 +4,7 @@
 \alias{Max}
 \title{datasummary statistic shortcut}
 \usage{
-Max(x, fmt = "\%.1f", na.rm = TRUE, ...)
+Max(x, fmt = NULL, na.rm = TRUE, ...)
 }
 \description{
 datasummary statistic shortcut

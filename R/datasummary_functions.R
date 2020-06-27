@@ -2,50 +2,68 @@
 #' datasummary statistic shortcut
 #' @export
 #' @keywords internal
-Mean <- function(x, fmt = '%.1f', na.rm = TRUE, ...) 
-    sprintf(fmt, mean(x, na.rm = na.rm))
-
-#' datasummary statistic shortcut
-#' @export
-#' @keywords internal
-MeanSD <- function(x, fmt = '%.1f', na.rm = TRUE) {
-    m <- mean(x, na.rm = na.rm)
-    s <- stats::sd(x, na.rm = na.rm)
-    m <- sprintf(fmt, m)
-    s <- sprintf(fmt, s)
-    out <- paste0(m, ' (', s, ')')
+Mean <- function(x, fmt = NULL, na.rm = TRUE, ...) {
+    out <- mean(x, na.rm = na.rm)
+    if (!is.null(fmt)) {
+        out <- sprintf(fmt, out)
+    }
     return(out)
 }
 
 #' datasummary statistic shortcut
-#' @importFrom stats median
 #' @export
 #' @keywords internal
-Median <- function(x, fmt = '%.1f', na.rm = TRUE, ...) 
-    sprintf(fmt, median(x, na.rm = na.rm))
+Median <- function(x, fmt = NULL, na.rm = TRUE, ...) {
+    out <- median(x, na.rm = na.rm)
+    if (!is.null(fmt)) {
+        out <- sprintf(fmt, out)
+    }
+    return(out)
+}
 
 #' datasummary statistic shortcut
 #' @export
 #' @keywords internal
-Min <- function(x, fmt = '%.1f', na.rm = TRUE) sprintf(fmt, min(x, na.rm = TRUE))
+Min <- function(x, fmt = NULL, na.rm = TRUE, ...) {
+    out <- min(x, na.rm = na.rm)
+    if (!is.null(fmt)) {
+        out <- sprintf(fmt, out)
+    }
+    return(out)
+}
 
 #' datasummary statistic shortcut
 #' @export
 #' @keywords internal
-Max <- function(x, fmt = '%.1f', na.rm = TRUE, ...) 
-    sprintf(fmt, max(x, na.rm = na.rm))
+Max <- function(x, fmt = NULL, na.rm = TRUE, ...) {
+    out <- max(x, na.rm = na.rm)
+    if (!is.null(fmt)) {
+        out <- sprintf(fmt, out)
+    }
+    return(out)
+}
 
 #' datasummary statistic shortcut
 #' @export
 #' @keywords internal
-SD <- function(x, fmt = '%.1f', na.rm = TRUE, ...)
-    sprintf(fmt, stats::sd(x, na.rm = na.rm))
+SD <- function(x, fmt = NULL, na.rm = TRUE, ...) {
+    out <- sd(x, na.rm = na.rm)
+    if (!is.null(fmt)) {
+        out <- sprintf(fmt, out)
+    }
+    return(out)
+}
 
 #' datasummary statistic shortcut
 #' @export
 #' @keywords internal
-Var <- function(x, fmt = '%.1f', na.rm = TRUE, ...) 
-    sprintf(fmt, stats::var(x, na.rm = na.rm))
+Var <- function(x, fmt = NULL, na.rm = TRUE, ...) {
+    out <- var(x, na.rm = na.rm)
+    if (!is.null(fmt)) {
+        out <- sprintf(fmt, out)
+    }
+    return(out)
+}
 
 #' datasummary statistic shortcut
 #' @export
@@ -76,38 +94,68 @@ NUnique <- function(x, ...) length(unique(x))
 #' datasummary statistic shortcut
 #' @export
 #' @keywords internal
-P0 <- function(x, fmt = '%.1f', na.rm = TRUE, ...) 
-    sprintf(fmt, stats::quantile(x, prob = 0, na.rm = na.rm))
+P0 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
+    out <- stats::quantile(x, prob = 0, na.rm = na.rm)
+    if (!is.null(fmt)) {
+        out <- sprintf(fmt, out)
+    }
+    return(out)
+}
 
 #' datasummary statistic shortcut
 #' @export
 #' @keywords internal
-P25 <- function(x, fmt = '%.1f', na.rm = TRUE, ...) 
-    sprintf(fmt, stats::quantile(x, prob = .25, na.rm = na.rm))
+P25 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
+    out <- stats::quantile(x, prob = 0.25, na.rm = na.rm)
+    if (!is.null(fmt)) {
+        out <- sprintf(fmt, out)
+    }
+    return(out)
+}
 
 #' datasummary statistic shortcut
 #' @export
 #' @keywords internal
-P50 <- function(x, fmt = '%.1f', na.rm = TRUE) 
-    sprintf(fmt, stats::quantile(x, prob = .5, na.rm = na.rm))
+P50 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
+    out <- stats::quantile(x, prob = 0.50, na.rm = na.rm)
+    if (!is.null(fmt)) {
+        out <- sprintf(fmt, out)
+    }
+    return(out)
+}
 
 #' datasummary statistic shortcut
 #' @export
 #' @keywords internal
-P75 <- function(x, fmt = '%.1f', na.rm = TRUE, ...) 
-    sprintf(fmt, stats::quantile(x, prob = .75, na.rm = na.rm))
+P75 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
+    out <- stats::quantile(x, prob = 0.75, na.rm = na.rm)
+    if (!is.null(fmt)) {
+        out <- sprintf(fmt, out)
+    }
+    return(out)
+}
 
 #' datasummary statistic shortcut
 #' @export
 #' @keywords internal
-P100 <- function(x, fmt = '%.1f', na.rm = TRUE, ...) 
-    sprintf(fmt, stats::quantile(x, prob = 1, na.rm = na.rm))
+P100 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
+    out <- stats::quantile(x, prob = 1, na.rm = na.rm)
+    if (!is.null(fmt)) {
+        out <- sprintf(fmt, out)
+    }
+    return(out)
+}
 
 #' datasummary statistic shortcut
 #' @export
 #' @keywords internal
-PercentMissing <- function(x, fmt = '%.1f', ...) 
-    sprintf(fmt, mean(is.na(x)) * 100)
+PercentMissing <- function(x, fmt = NULL) { 
+    out <- mean(is.na(x)) * 100
+    if ((!is.null(fmt))) {
+        out <- sprintf(fmt, )
+    }
+    return(out)
+}
 
 #' datasummary statistic shortcut
 #' @export

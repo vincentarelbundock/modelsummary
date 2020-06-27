@@ -4,7 +4,7 @@
 \alias{Min}
 \title{datasummary statistic shortcut}
 \usage{
-Min(x, fmt = "\%.1f", na.rm = TRUE)
+Min(x, fmt = NULL, na.rm = TRUE, ...)
 }
 \description{
 datasummary statistic shortcut

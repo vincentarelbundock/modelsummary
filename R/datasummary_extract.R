@@ -3,10 +3,27 @@
 #' @export
 #' @keywords internal
 datasummary_extract <- function(tab,
+                                fmt = NULL,
                                 sparse_header = TRUE) {
 
-    out <- list()
 
+    # default formatting
+    if (!is.null(fmt)) {
+        # formatting specified in the tabular formula
+        idx <- unlist(attr(tab, 'format'))
+        for (i in seq_along(tab)) {
+            # use default where not specified in the tabular formula
+            if (is.na(idx[i])) {
+                if (is.numeric(tab[[i]])) {
+                    tab[[i]] <- sprintf(fmt, tab[[i]])
+                }
+            }
+        } 
+    }
+
+    # output object
+    out <- list()
+    
     # NA to empty cells
     clean_na <- function(x) {
         out <- trimws(x)

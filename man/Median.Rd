@@ -4,7 +4,7 @@
 \alias{Median}
 \title{datasummary statistic shortcut}
 \usage{
-Median(x, fmt = "\%.1f", na.rm = TRUE, ...)
+Median(x, fmt = NULL, na.rm = TRUE, ...)
 }
 \description{
 datasummary statistic shortcut

@@ -4,7 +4,7 @@
 \alias{P25}
 \title{datasummary statistic shortcut}
 \usage{
-P25(x, fmt = "\%.1f", na.rm = TRUE, ...)
+P25(x, fmt = NULL, na.rm = TRUE, ...)
 }
 \description{
 datasummary statistic shortcut

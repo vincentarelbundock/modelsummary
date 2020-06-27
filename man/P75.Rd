@@ -4,7 +4,7 @@
 \alias{P75}
 \title{datasummary statistic shortcut}
 \usage{
-P75(x, fmt = "\%.1f", na.rm = TRUE, ...)
+P75(x, fmt = NULL, na.rm = TRUE, ...)
 }
 \description{
 datasummary statistic shortcut

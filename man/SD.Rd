@@ -4,7 +4,7 @@
 \alias{SD}
 \title{datasummary statistic shortcut}
 \usage{
-SD(x, fmt = "\%.1f", na.rm = TRUE, ...)
+SD(x, fmt = NULL, na.rm = TRUE, ...)
 }
 \description{
 datasummary statistic shortcut

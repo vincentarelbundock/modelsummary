@@ -4,7 +4,7 @@
 \alias{P0}
 \title{datasummary statistic shortcut}
 \usage{
-P0(x, fmt = "\%.1f", na.rm = TRUE, ...)
+P0(x, fmt = NULL, na.rm = TRUE, ...)
 }
 \description{
 datasummary statistic shortcut

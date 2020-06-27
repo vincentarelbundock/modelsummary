@@ -117,6 +117,7 @@
 datasummary <- function(formula,
                         data,
                         output = 'default',
+                        fmt = "%.2f",
                         title = NULL,
                         notes = NULL,
                         align = NULL,
@@ -139,8 +140,10 @@ datasummary <- function(formula,
     tab <- tables::tabular(formula, data)
 
     # extract content
-    dse <- datasummary_extract(tab, sparse_header = sparse_header)
-    
+    dse <- datasummary_extract(tab, 
+                               fmt = fmt,
+                               sparse_header = sparse_header)
+
     # align stub l rest r
     if (is.null(align)) {
         align <- paste0(strrep('l', attr(dse, 'stub_width')),

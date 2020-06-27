@@ -330,7 +330,7 @@ datasummary(species * sex + 1 ~ (N = 1) + Percent(),
 
 Note that the `Percent()` function accepts a `denom` argument to determine if percentages should be calculated row or column-wise, or if they should take into account all cells.
 
-# `Arguments`: Missing values & Rounding
+# `Arguments`: Missing values
 
 You can pass any argument to your summary function by including a call to `Arguments()`. For instance, there are missing values in the `flipper_length_mm` variable of the `penguins` dataset. Therefore, the standard `mean` function will produce no result, because its default argument is `na.rm=FALSE`. We can change that by calling:
 
@@ -341,17 +341,34 @@ datasummary(flipper_length_mm ~ mean + mean*Arguments(na.rm=TRUE),
 
 Notice that there is an empty cell (`NA`) under the normal `mean` function, but that the `mean` call with `Arguments(na.rm=TRUE)` produced a numeric result.
 
-The shortcut functions that ship with `modelsummary` (e.g., `Mean`, `SD`, `Median`, `P25`) all use `na.rm=TRUE` by default. They also include an argument called `fmt` which can be used to format numbers (see `?sprintf`). We can thus round numbers by calling `Arguments`:
+You can pass the same arguments to muliple functions using the parentheses:
 
 ```{r}
-datasummary(flipper_length_mm ~ Mean*Arguments(fmt = "%.4f") + SD*Arguments(fmt = "%.1f"),
+datasummary(flipper_length_mm ~ (mean + sd) * Arguments(na.rm=TRUE),
             data = penguins)
 ```
 
-We can apply the same argument to multiple functions by using parentheses:
+Note that the shortcut functions that `modelsummary` supplies use `na.rm=TRUE` by default, so you can use them directly without arguments, even when there are missing values:
 
 ```{r}
-datasummary(flipper_length_mm ~ (Mean + SD + P50) * Arguments(fmt = "%.1f"),
+datasummary(flipper_length_mm ~ Mean + Var + P75 + Range,
+            data = penguins)
+```
+
+# Rounding
+
+The `fmt` argument allows you to set the printing format of numeric values. For instance, setting `fmt="%.4f"` will keep 4 digits after the period (see `?sprintf` for more options):
+
+```{r}
+datasummary(flipper_length_mm ~ Mean + SD,
+            fmt = "%.4f",
+            data = penguins)
+```
+
+You can set the formatting on a term-by-term basis by using the same `Arguments` function that we used to handle missing values in the previous section. The shortcut functions that ship with `modelsummary` (e.g., `Mean`, `SD`, `Median`, `P25`) all include a `fmt` argument: 
+
+```{r}
+datasummary(flipper_length_mm ~ Mean * Arguments(fmt = "%.4f") + SD * Arguments(fmt = "%.1f"),
             data = penguins)
 ```
 
@@ -396,6 +413,17 @@ datasummary(All(penguins) ~ Mean + SD,
             data = penguins,
             title = 'Statistics about the famous Palmer Penguins.',
             notes = c('A note at the bottom of the table.'))
+```
+
+# Align columns
+
+You can align columns using the `align` argument. `align` should be a string of length equal to the number of columns, and which includes only the letters "l", 
+"c", or "r":
+
+```{r}
+datasummary(flipper_length_mm + culmen_length_mm ~ Mean + SD + Range,
+            data = penguins,
+            align = 'lrcl')
 ```
 
 # Save and Display

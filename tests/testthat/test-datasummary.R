@@ -7,7 +7,7 @@ test_that('numeric content of simple tables', {
     # 2 rows 2 cols
     truth <- data.frame(c('mpg', 'hp'),
                         c("20.09", "146.69"), 
-                        c("6.027", "68.563"))
+                        c("6.03", "68.56"))
     tab <- datasummary(mpg + hp ~ mean + sd, 
                        output = 'dataframe',
                        data = mtcars) 
@@ -16,12 +16,13 @@ test_that('numeric content of simple tables', {
     # nested cols: 1 level
     truth <- data.frame(rows = c('mpg', 'hp'),
                         `0 mean` = c("17.15", "160.26"), 
-                        `0 sd` = c("3.834", "53.908"), 
+                        `0 sd` = c("3.83", "53.91"), 
                         `1 mean` = c("24.39", "126.85"), 
-                        `1 sd` = c("6.167", "84.062"))
+                        `1 sd` = c("6.17", "84.06"))
     tab <- datasummary(mpg + hp ~ Factor(am) * (mean + sd), 
                        output = 'dataframe',
-                       data = mtcars) 
+                       data = mtcars,
+                       fmt = "%.2f") 
     expect_true(all(truth == tab))
 
     # nested cols: 2 levels
@@ -34,10 +35,11 @@ test_that('numeric content of simple tables', {
     truth <- data.frame(am = c("0", "", "1", ""), 
                         b = c("mpg", "hp", "mpg", "hp"), 
                         mean = c("17.15", "160.26", "24.39", "126.85"), 
-                        sd = c("3.834", "53.908", "6.167", "84.062"))
+                        sd = c("3.83", "53.91", "6.17", "84.06"))
     tab <- datasummary(Factor(am) * (mpg + hp) ~ mean + sd, 
                        output = 'dataframe',
-                       data = mtcars) 
+                       data = mtcars,
+                       fmt = "%.2f") 
     expect_true(all(truth == tab))
 
     # nested rows: 2 levels

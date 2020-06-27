@@ -4,7 +4,7 @@
 \alias{P100}
 \title{datasummary statistic shortcut}
 \usage{
-P100(x, fmt = "\%.1f", na.rm = TRUE, ...)
+P100(x, fmt = NULL, na.rm = TRUE, ...)
 }
 \description{
 datasummary statistic shortcut

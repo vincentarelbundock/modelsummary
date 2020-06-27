@@ -4,11 +4,12 @@
 #' @export
 datasummary_correlation <- function(data,
                                     output = 'default',
+                                    fmt = "%.2f",
                                     title = NULL,
                                     notes = NULL) {
                                         
     clean_r <- function(x) {
-        x <- sprintf("%.2f", x)
+        x <- sprintf(fmt, x)
         x <- stringr::str_replace(x, '0\\.', '\\.')
         x <- stringr::str_replace(x, '1\\.00', '1')
         return(x)

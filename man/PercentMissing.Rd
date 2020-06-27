@@ -4,7 +4,7 @@
 \alias{PercentMissing}
 \title{datasummary statistic shortcut}
 \usage{
-PercentMissing(x, fmt = "\%.1f", ...)
+PercentMissing(x, fmt = NULL)
 }
 \description{
 datasummary statistic shortcut

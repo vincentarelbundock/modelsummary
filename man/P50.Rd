@@ -4,7 +4,7 @@
 \alias{P50}
 \title{datasummary statistic shortcut}
 \usage{
-P50(x, fmt = "\%.1f", na.rm = TRUE)
+P50(x, fmt = NULL, na.rm = TRUE, ...)
 }
 \description{
 datasummary statistic shortcut

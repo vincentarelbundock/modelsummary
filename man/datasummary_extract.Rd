@@ -4,7 +4,7 @@
 \alias{datasummary_extract}
 \title{Extract data from a `tables::tabular` object}
 \usage{
-datasummary_extract(tab, sparse_header = TRUE)
+datasummary_extract(tab, fmt = NULL, sparse_header = TRUE)
 }
 \description{
 Extract data from a `tables::tabular` object

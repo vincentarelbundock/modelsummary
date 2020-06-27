@@ -4,7 +4,7 @@
 \alias{Mean}
 \title{datasummary statistic shortcut}
 \usage{
-Mean(x, fmt = "\%.1f", na.rm = TRUE, ...)
+Mean(x, fmt = NULL, na.rm = TRUE, ...)
 }
 \description{
 datasummary statistic shortcut
