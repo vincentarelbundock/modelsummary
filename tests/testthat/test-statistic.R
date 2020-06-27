@@ -8,7 +8,7 @@ mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 
 test_that("std.error", {
 
-    raw <- modelsummary::extract(mod, statistic = 'std.error')
+    raw <- modelsummary:::extract(mod, statistic = 'std.error')
 
     truth <- c('(0.434)', '(0.120)')
     expect_equal(truth, unname(raw[[4]][c(2, 4)]))
@@ -19,7 +19,7 @@ test_that("std.error", {
 
 test_that("p.value", {
 
-    raw <- modelsummary::extract(mod, statistic = 'p.value', fmt = '%.6f')
+    raw <- modelsummary:::extract(mod, statistic = 'p.value', fmt = '%.6f')
 
     truth <- c('(0.000078)', '(0.000005)')
     expect_equal(truth, unname(raw[[4]][c(2, 4)]))
@@ -31,7 +31,7 @@ test_that("p.value", {
 
 test_that("conf.int", {
 
-    raw <- modelsummary::extract(mod, statistic = 'conf.int')
+    raw <- modelsummary:::extract(mod, statistic = 'conf.int')
 
     truth <- c("[-2.873, -1.099]", "[0.421, 0.909]")
     expect_equal(truth, unname(raw[[4]][c(2, 4)]))
@@ -43,7 +43,7 @@ test_that("conf.int", {
 
 test_that("conf.int, conf_level = 0.99", {
 
-    raw <- modelsummary::extract(mod, statistic = 'conf.int', conf_level = .99)
+    raw <- modelsummary:::extract(mod, statistic = 'conf.int', conf_level = .99)
 
     truth <- c("[-3.181, -0.791]", "[0.336, 0.994]")
     expect_equal(truth, unname(raw[[4]][c(2, 4)]))
