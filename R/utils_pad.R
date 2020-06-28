@@ -9,14 +9,17 @@
 #' @keywords internal
 pad <- function(x) {
     checkmate::assert_character(x)
-    x <- trimws(x)
-	dup <- duplicated(x)
-    dup[x == ''] <- TRUE
-    ndup <- sum(dup)
-    if (ndup > 0) {
-        pad <- sapply(1:ndup, function(k) strrep(' ', k))
-        x[dup] <- paste0(x[dup], pad)
+    out <- trimws(x)
+    out[out == ''] <- ' '
+    tab <- table(out)
+    for (i in seq_along(tab)) {
+        if (tab[i] > 1) {
+            idx <- which(out == names(tab)[i])
+            tmp <- sapply(0:(length(idx)-1), function(k)
+                          paste0(names(tab)[i], strrep(' ', k)))
+            out[idx] <- tmp
+        }
     }
-	x
+    return(out)
 }
 
