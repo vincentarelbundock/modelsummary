@@ -1,0 +1,130 @@
+---
+title: '`modelplot`: Plot model coefficients with confidence intervals'
+output:
+  html_document: default
+  pdf_document:
+      latex_engine: xelatex
+---
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<style>
+tbody {
+  font-family: 'DejaVu Sans', 'Roboto', 'Georgia', 'Times', 'Roboto', 'DejaVu Serif', serif;
+}
+</style>
+
+
+```{r, echo=FALSE, message=FALSE}
+library(modelsummary)
+library(tidyverse)
+options(modelsummary_default = 'kableExtra')
+```
+
+`modelplot` is a function from the `modelsummary` package. It allows you to plot model estimates and confidence intervals. It makes it easy to subset, rename, reorder, and customize plots using same mechanics as in `modelsummary`.
+
+To illustrate how the function works, we fit a linear model to data about the [Palmer Penguins](https://github.com/allisonhorst/palmerpenguins):
+
+```{r}
+url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv'
+dat <- read.csv(url)
+
+# rescale mm -> cm
+dat$culmen_length_cm <- dat$culmen_length_mm / 10
+dat$flipper_length_cm <- dat$flipper_length_mm / 10
+
+mod <- lm(culmen_length_cm ~ flipper_length_cm + species, data = dat)
+```
+
+Then, we load the `modelsummary` library and call `modelplot`:
+
+```{r, fig.height=2}
+library(modelsummary)
+
+modelplot(mod)
+```
+
+# Rename, reorder, subset
+
+`modelplot` uses the same mechanics as `modelsummary` to rename, reorder, and subset estimates. First, you can use the `coef_omit` argument. This will omit any coefficient that matches a string or regular expression. To omit the intercept, for example, we can type:
+
+```{r, fig.height=2}
+modelplot(mod, coef_omit = 'Interc')
+```
+
+Second, you can use the `coef_map` argument. `coef_map` is a named character vector, where names correpond to the original term names, and values correspond the names you want to assign. Any variable that is *not* included in `coef_map` will be excluded. Variables will also be drawn in the same order as in `coef_map`:
+
+```{r, fig.height=2}
+cm <- c('speciesChinstrap' = 'Chinstrap',
+        'speciesGentoo' = 'Gentoo', 
+        'flipper_length_cm' = 'Flipper length (cm)')
+
+modelplot(mod, coef_map = cm)
+```
+
+# Several models
+
+The main `modelsummary` functions allows you to create a table with the results of several models side-by-side, by storing them in a (potentially named) list:
+
+```{r, fig.height=3}
+models <- list()
+models[['Small model']] <- lm(culmen_length_cm ~ flipper_length_cm, data = dat)
+models[['Medium model']] <- lm(culmen_length_cm ~ flipper_length_cm + body_mass_g, data = dat)
+models[['Large model']] <- lm(culmen_length_cm ~ flipper_length_cm + body_mass_g + species, data = dat)
+
+modelsummary(models, statistic = 'conf.int')
+```
+
+`modelplot` works the same way:
+
+```{r, fig.height=2}
+modelplot(models, coef_omit = 'Interc')
+```
+
+Instead of displaying results with "dodged" side-by-side lines, you can also use `facet`:
+
+```{r, eval=FALSE, fig.height=2}
+modelplot(models, facet = TRUE)
+```
+
+
+# Customizing your plots
+
+The graphs produced by `modelplot` are simple `ggplot2` objects. You can thus post-process them using the normal suite of functions available for all objects of this type. Here, we change the axis labels, add a title and a caption, and use a color scheme inspired by Wes Anderson's *Darjeeling Limited*:
+
+```{r, eval=TRUE, fig.height=3.5}
+library(wesanderson)
+library(ggplot2)
+
+modelplot(models) +
+    labs(x = 'Coefficients', 
+         y = 'Term names',
+         title = 'Linear regression models of "Culmen Length (cm)"',
+         caption = "Data source: Gorman, Williams & Fraser (2014), packaged for R by @allison_horst") +
+    scale_color_manual(values = wes_palette('Darjeeling1'))
+
+  
+```
+
+In `ggplot2`, some visual choices must be made when calling the "geom", rather than with post-processing functions. For instance, the `size`, `color`, `fatten`, `linetype` arguments must all be specied inside the `geom_pointrange` function for them to take effect. `modelplot` will pass any unknown argument to `geom_pointrange`, so users can simply call:
+
+```{r, fig.height=2}
+modelplot(mod, size = 1, fatten = .7, color = 'darkgreen', linetype = 'dotted') + 
+    theme_classic()
+```
+
+# Confidence intervals: change or omit
+
+You can change the $\alpha$ level of your confidence intervals by changing the `conf_level` argument:
+
+```{r, fig.height=2}
+modelplot(mod, conf_level = .99)
+modelplot(mod, conf_level = NULL)
+```
+
+# Raw data
+
+If you would like to customize the plots even more than what `modelplot` allows, you can obtain the raw data used to draw the plots by setting `draw=FALSE`:
+
+```{r, fig.height=2}
+modelplot(models, draw = FALSE)
+```

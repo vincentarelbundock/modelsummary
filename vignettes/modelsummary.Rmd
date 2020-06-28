@@ -1,5 +1,5 @@
 ---
-title: "Customizing the information in your table"
+title: "modelsummary: regression tables with side-by-side models"
 ---
 
 ```{r, include = FALSE}
@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
 
 `modelsummary` includes a powerful set of utilities to customize the information displayed in your model summary tables. You can easily rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to display; display various "robust" standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.
 
-```{r}
+```{r, message = FALSE}
 library(modelsummary)
 library(kableExtra)
 library(gt)
@@ -27,7 +27,7 @@ models[['Poisson 2']] <- glm(Crime_pers ~ Literacy + Commerce, family = poisson,
 models[['OLS 3']] <- lm(Crime_prop ~ Literacy + Clergy, data = dat)
 ```
 
-## Uncertainty estimates: SE, t, p, CI
+# Uncertainty estimates: SE, t, p, CI
 
 By default, `modelsummary` prints an uncertainty estimate in parentheses below the corresponding coefficient estimate. The value of this estimate is determined by the `statistic` argument.
 
@@ -93,7 +93,7 @@ Will produce something like this:
 
 <img src="https://imgur.com/yNLr5Nt.png" width="30%">
 
-## Titles
+# Titles
 
 You can add a title to your table as follows:
 
@@ -101,7 +101,7 @@ You can add a title to your table as follows:
 msummary(models, title = 'This is a title for my table.')
 ```
 
-## Notes
+# Notes
 
 Add notes to the bottom of your table:
 
@@ -111,11 +111,11 @@ msummary(models,
                 'Text of the second note.'))
 ```
 
-## Rename, reorder, and subset
+# Rename, reorder, and subset
 
 `modelsummary` offers a powerful and innovative mechanism to rename, reorder, and subset coefficients and goodness-of-fit statistics.
 
-### Coefficient estimates
+## Coefficient estimates
 
 The `coef_map` argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the "clean" variable name. Names of this vector correspond to the "raw" variable name. The table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.
 
@@ -132,7 +132,7 @@ An alternative mechanism to subset coefficients is to use the `coef_omit` argume
 msummary(models, coef_omit = 'Intercept|Donation')
 ```
 
-### Goodness-of-fit and other statistics
+## Goodness-of-fit and other statistics
 
 `gof_omit` is a regular expression which will be fed to `stringr::str_detect` to detect the names of the statistics which should be excluded from the table.
 
@@ -159,7 +159,7 @@ The goodness-of-fit statistics will be printed in the table in the same order as
 
 Notice the subtle difference between `coef_map` and `gof_map`. On the one hand, `coef_map` works as a "white list": any coefficient not explicitly entered will be omitted from the table. On the other, `gof_map` works as a "black list": statistics need to be explicitly marked for omission.
 
-## Stars: Statistical significance markers
+# Stars: Statistical significance markers
 
 Some people like to add "stars" to their model summary tables to mark statistical significance. The `stars` argument can take three types of input:
 
@@ -181,7 +181,7 @@ msummary(models, stars = TRUE, stars_note = FALSE)
 
 If you want to create your own stars description, you can add custom notes with the [`notes`](https://github.com/vincentarelbundock/modelsummary#notes) argument.
 
-## Digits, rounding, exponential notation
+# Rounding
 
 The `fmt` argument defines how numeric values are rounded and presented in the table. This argument follows the `sprintf` C-library standard. For example,
 
@@ -195,7 +195,7 @@ Most users will just modify the `3` in `%.3f`, but this is a very powerful syste
 msummary(models, fmt = '%.7f')
 ```
 
-## Add rows manually
+# Add rows manually
 
 Use the `add_rows` argument to add rows manually to a table. For example, let's say you estimate two models with a factor variables and you want to insert (a) an empty line to identify the category of reference, and (b) cutomized information at the bottom of the table:
 
@@ -216,7 +216,7 @@ rows <- tribble(~term,          ~OLS,  ~Logit, ~section, ~position,
 msummary(models, add_rows = rows)
 ```
 
-## Extra tidy arguments (e.g., exponentiated coefficients)
+# Extra tidy arguments (e.g., exponentiated coefficients)
 
 Users can pass any additional argument they want to the `tidy` method which is used to extract estimates from a model. For example, in logitistic or Cox proportional hazard models, many users want to exponentiate coefficients to faciliate interpretation. The `tidy` functions supplied by the `broom` package allow users to set `exponentiate=TRUE` to achieve this. In `modelsummary`, users can use the same argument:
 
@@ -229,6 +229,201 @@ Any argument supported by `tidy` is thus supported by `modelsummary`.
 
 Warning: at the moment (2020-05-05), `broom::tidy` still reports `std.error` on the original scale. See this [discussion on the `broom` GitHub page.](https://github.com/tidymodels/broom/issues/422)
 
-# Customizing by post-processing
+# Customizing the look of your table
 
-*Warning*: When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt` or `kableExtra`. To save a customized table, you should apply all the customization functions you need before saving it using `gt::gtsave`, `kableExtra::save_kable`, or another appropriate helper function.
+To customize the appearance of tables, `modelsummary` supports four of the most popular table-making packages: 
+
+1. [`gt`: https://gt.rstudio.com](https://gt.rstudio.com)
+2. [`kableExtra`: http://haozhu233.github.io/kableExtra](http://haozhu233.github.io/kableExtra)
+3. [`huxtable`: https://hughjonesd.github.io/huxtable/](https://hughjonesd.github.io/huxtable/)
+4. [`flextable`: https://davidgohel.github.io/flextable/](https://davidgohel.github.io/flextable/)
+
+Users are encouraged to visit these websites to determine which package suits their needs best. Each of them has different strengths and weaknesses. For instance, `gt` allows seamless integration with the RStudio IDE, but `kableExtra`'s LaTeX (and PDF) output is far more mature.
+
+To create customized tables, the analyst begins by calling `msummary(models)` to create a summary table. Then, she *post-processes* the table by applying functions from one of the packages listed above. It is often convenient to use the `%>%` operator to do this.
+
+To illustrate, we download data from the [Rdatasets repository](https://vincentarelbundock.github.io/Rdatasets') and we estimate 5 models:
+
+```{r}
+library(modelsummary)
+
+url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
+dat <- read.csv(url)
+
+models <- list()
+models[['OLS 1']] <- lm(Donations ~ Literacy, data = dat)
+models[['Poisson 1']] <- glm(Donations ~ Literacy + Clergy, family = poisson, data = dat)
+models[['OLS 2']] <- lm(Crime_pers ~ Literacy, data = dat)
+models[['Poisson 2']] <- glm(Crime_pers ~ Literacy + Clergy, family = poisson, data = dat)
+models[['OLS 3']] <- lm(Crime_prop ~ Literacy + Clergy, data = dat)
+```
+
+In the rest of this vignette, we will customize tables using tools supplied by the `gt`, `kableExtra`, `flextable`, and `huxtable` packages. In each case, the pattern will be similar. First, we create a table by calling `msummary` and by specifying the output format with the `output` parameter. Then, we will use functions from the four packages to customize the appearance of our tables.
+
+## `gt`
+
+To illustrate how to customize tables using the `gt` package we will use the following functions from the `gt` package:
+
+* `tab_spanner` creates labels to group columns.
+* `tab_footnote` adds a footnote and a matching marking in a specific cell.
+* `tab_style` can modify the text and color of rows, columns, or cells.
+
+To produce a "cleaner" look, we will also use `modelsummary`'s `stars`, `coef_map`, `gof_omit`, and `title` arguments.
+
+Note that in order to access `gt` functions, we must first load the library.
+
+```{r}
+library(gt)
+
+# build table with `modelsummary` 
+cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
+cap <- 'A modelsummary table customized with gt'
+
+tab <- msummary(models, 
+                coef_map = cm, stars = TRUE, 
+                title = cap, gof_omit = 'IC|Log|Adj') 
+
+# customize table with `gt`
+
+tab %>%
+
+    # column labels
+    tab_spanner(label = 'Donations', columns = 2:3) %>%
+    tab_spanner(label = 'Crimes (persons)', columns = 4:5) %>%
+    tab_spanner(label = 'Crimes (property)', columns = 6) %>%
+
+    # footnote
+    tab_footnote(footnote = md("A very **important** variable."),
+                 locations = cells_body(rows = 3, columns = 1)) %>%
+
+    # text and background color
+    tab_style(style = cell_text(color = 'red'),
+              locations = cells_body(rows = 3)) %>%
+    tab_style(style = cell_fill(color = 'lightblue'),
+              locations = cells_body(rows = 5))
+```
+
+The [`gt` website](https://gt.rstudio.com) offers many more examples. The possibilities are endless. For instance, `gt` allows you to embed images in your tables using the `text_transform` and `local_image` functions:
+
+```{r}
+f <- function(x) web_image(url = "https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png", height = 80)
+
+tab %>% 
+    text_transform(locations = cells_body(columns = 2:6, rows = 1), fn = f)
+```
+
+## `kableExtra`
+
+We will now illustrate how to customize tables using functions from the `kableExtra` package:
+
+* `add_header_above` creates labels to group columns.
+* `add_footnote` adds a footnote and a matching marking in a specific cell.
+* `row_spec` can modify the text and color of rows, columns, or cells.
+
+We use the same code as above, but specify `output='kableExtra'` in the `msummary()` call:
+
+```{r}
+library(kableExtra)
+
+# build table with `modelsummary` 
+cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
+cap <- 'A modelsummary table customized with kableExtra'
+
+tab <- msummary(models, output = 'kableExtra',
+                coef_map = cm, stars = TRUE, 
+                title = cap, gof_omit = 'IC|Log|Adj') 
+
+# customize table with `kableExtra`
+tab %>%
+    
+    # column labels
+    add_header_above(c(" " = 1, "Donations" = 2, "Crimes (person)" = 2, "Crimes (property)" = 1)) %>%
+   
+    # text and background color
+    row_spec(3, color = 'red') %>%
+    row_spec(5, background = 'lightblue')
+```
+
+These `kableExtra` functions can be used to produce LaTeX / PDF tables such as this one:
+
+<img src="https://user-images.githubusercontent.com/987057/82732382-e068f580-9cda-11ea-8924-331550f8f1e8.png" width="40%">
+
+
+## `flextable`
+
+We will now illustrate how to customize tables using functions from the `flextable` package:
+
+
+* `color` to modify the color of the text
+* `bg` to modify the color of the background
+* `autofit` sets column width to sensible values.
+
+We use the same code as above, but specify `output='flextable'` in the `msummary()` call:
+
+```{r}
+library(flextable)
+
+# build table with `modelsummary` 
+cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
+cap <- 'A modelsummary table customized with flextable'
+
+tab <- msummary(models, output = 'flextable',
+                coef_map = cm, stars = TRUE, 
+                title = cap, gof_omit = 'IC|Log|Adj') 
+
+# customize table with `flextable`
+tab %>%
+   
+    # text and background color
+    color(3, color = 'red') %>%
+    bg(5, bg = 'lightblue') %>%
+  
+    # column widths
+    autofit()
+```
+
+
+## `huxtable`
+
+We will now illustrate how to customize tables using functions from the `huxtable` package:
+
+* `set_text_color` to change the color of some entries
+
+We use the same code as above, but specify `output='huxtable'` in the `msummary()` call:
+
+```{r}
+library(huxtable)
+
+# build table with `modelsummary` 
+cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
+cap <- 'A modelsummary table customized with huxtable'
+
+tab <- msummary(models, output = 'huxtable',
+                coef_map = cm, stars = TRUE, 
+                title = cap, gof_omit = 'IC|Log|Adj') 
+
+# customize table with `huxtable`
+tab %>%
+   
+    # text color
+    set_text_color(row = 4, col = 1:ncol(.), value = 'red')
+```
+
+## Warning: Saving to file
+
+When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt`, `kableExtra`, `huxtable`, or `flextable`. When users specify a filename in the `output` argument, the `msummary()` call should be the *final* one in the chain.
+
+This is OK:
+
+```{r, eval=FALSE}
+msummary(models, output = 'table.html')
+```
+
+This is **not** OK:
+
+```{r, eval=FALSE}
+msummary(models, output = 'table.html') %>%
+    tab_spanner(label = 'Literacy', columns = c('OLS 1', 'Poisson 1'))
+```
+
+To save a customized table, you should apply all the customization functions you need before saving it using `gt::gtsave`, `kableExtra::save_kable`, or the appropriate helper function from the package that you are using to customize your table.
