@@ -3,7 +3,7 @@
 #'
 #' @inheritParams modelsummary
 #' @return tibble
-#' @keywords internal
+#' @export
 extract <- function(models,
                     statistic = 'std.error',
                     statistic_override = NULL,
@@ -44,7 +44,7 @@ extract <- function(models,
     } else {
         model_names <- names(models)
     }
-    sanity_model_names(names(models))
+    model_names <- pad(model_names)
 
     # if statistics_override is a single function, repeat it in a list to allow
     # map

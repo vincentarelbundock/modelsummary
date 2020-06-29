@@ -5,6 +5,7 @@
 * datasummary_table1
 * datasummary_correlation
 * modelplot
+* allow duplicate model names
 * bug: can't use coef_map with multiple statistics (thanks @sbw78)
 * bug: wrong number of stars w/ statistic='p.value' (thanks @torfason)
 * output='data.frame'. `extract` is no longer documented.
