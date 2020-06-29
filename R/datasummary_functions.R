@@ -14,7 +14,7 @@ Mean <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @export
 #' @keywords internal
 Median <- function(x, fmt = NULL, na.rm = TRUE, ...) {
-    out <- median(x, na.rm = na.rm)
+    out <- stats::median(x, na.rm = na.rm)
     if (!is.null(fmt)) {
         out <- sprintf(fmt, out)
     }
@@ -47,7 +47,7 @@ Max <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @export
 #' @keywords internal
 SD <- function(x, fmt = NULL, na.rm = TRUE, ...) {
-    out <- sd(x, na.rm = na.rm)
+    out <- stats::sd(x, na.rm = na.rm)
     if (!is.null(fmt)) {
         out <- sprintf(fmt, out)
     }
@@ -58,7 +58,7 @@ SD <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @export
 #' @keywords internal
 Var <- function(x, fmt = NULL, na.rm = TRUE, ...) {
-    out <- var(x, na.rm = na.rm)
+    out <- stats::var(x, na.rm = na.rm)
     if (!is.null(fmt)) {
         out <- sprintf(fmt, out)
     }

@@ -28,16 +28,16 @@ table. The table will be ordered in the same order as this vector.}
 \item{coef_omit}{string regular expression. Omits all matching coefficients
 from the table (using `stringr::str_detect`).}
 
+\item{facet}{TRUE or FALSE. When the 'models' argument includes several
+model objects, TRUE draws terms in separate facets, and FALSE draws terms
+side-by-side (dodged).}
+
 \item{draw}{TRUE returns a 'ggplot2' object, FALSE returns the data.frame
 used to draw the plot.}
 
 \item{...}{all other arguments are passed to the `tidy` method used to
 extract estimates from the model. For example, this allows users to set
 `exponentiate=TRUE` to exponentiate logistic regression coefficients.}
-
-\item{TRUE}{or FALSE. When the 'models' argument includes several model
-objects, TRUE draws terms in separate facets, and FALSE draws terms
-side-by-side (dodged).}
 }
 \description{
 Plot model coefficients using points or point-ranges
