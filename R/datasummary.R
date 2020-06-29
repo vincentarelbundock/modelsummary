@@ -137,7 +137,16 @@ datasummary <- function(formula,
     sanity_ds_nesting_factor(formula, data)
     
     # create table
-    tab <- tables::tabular(formula, data)
+    tab <- tryCatch(tables::tabular(formula, data), error = function(e) e)
+
+    # informative error message
+    if (inherits(tab, 'error')) {
+        if (stringr::str_detect(tab$message, 'Duplicate values:')) {
+            message('This error often occurs when the "*" nesting operator is used, but none of the nested terms are categorical variables (factor, logical or character types).')
+        }
+        stop(tab$message)
+    }
+
 
     # extract content
     dse <- datasummary_extract(tab, 
