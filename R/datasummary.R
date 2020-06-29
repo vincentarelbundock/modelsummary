@@ -147,7 +147,6 @@ datasummary <- function(formula,
         stop(tab$message)
     }
 
-
     # extract content
     dse <- datasummary_extract(tab, 
                                fmt = fmt,
@@ -157,6 +156,14 @@ datasummary <- function(formula,
     if (is.null(align)) {
         align <- paste0(strrep('l', attr(dse, 'stub_width')),
                         strrep('r', ncol(dse) - attr(dse, 'stub_width')))
+    }
+
+    # convert to numeric if fmt==NULL
+    if (is.null(fmt)) {
+        idx <- attr(dse, 'stub_width')
+        for (i in (idx+1):ncol(dse)) {
+            dse[[i]] <- as.numeric(dse[[i]])
+        }
     }
     
     # build

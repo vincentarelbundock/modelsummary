@@ -371,6 +371,19 @@ datasummary(flipper_length_mm ~ Mean * Arguments(fmt = "%.4f") + SD * Arguments(
             data = penguins)
 ```
 
+If you do *not* want `datasummary` to format numbers, and you want to keep the numerical values instead of formatted strings, set `fmt=NULL`. This can be useful when post-processing tables with packages like `gt`, which allow you to transform cells based on their numerical content:
+
+```{r}
+library(gt)
+
+datasummary(All(mtcars) ~ Mean + SD, 
+            data = mtcars, 
+            fmt = NULL, 
+            output = 'gt') %>%
+    tab_style(style = cell_fill(color = "pink"), 
+              locations = cells_body(rows = Mean > 10, columns = 2))
+```
+
 # `Factor`
 
 The `*` nesting operator that we used above works automatically for factor, character, and logical variables. Sometimes, it is convenient to use it with other types of variables, such as binary numeric variables. In that case, we can wrap the variable name inside a call to `Factor()`. This allows us to treat a variable as factor, without having to modify it in the original data. For example, in the `mtcars` data, there is a binary numeric variable call `am`. We nest statistics within categories of `am` by typing:

@@ -7,19 +7,19 @@ datasummary_extract <- function(tab,
                                 sparse_header = TRUE) {
 
 
-    # default formatting
-    if (!is.null(fmt)) {
-        # formatting specified in the tabular formula
-        idx <- unlist(attr(tab, 'format'))
-        for (i in seq_along(tab)) {
-            # use default where not specified in the tabular formula
-            if (is.na(idx[i])) {
-                if (is.numeric(tab[[i]])) {
-                    tab[[i]] <- sprintf(fmt, tab[[i]])
-                }
+    # arbitrary length of no formatting requested
+    if (is.null(fmt)) fmt <- '%.50f'
+
+    # formatting specified in the tabular formula
+    idx <- unlist(attr(tab, 'format'))
+    for (i in seq_along(tab)) {
+        # use default where not specified in the tabular formula
+        if (is.na(idx[i])) {
+            if (is.numeric(tab[[i]])) {
+                tab[[i]] <- sprintf(fmt, tab[[i]])
             }
-        } 
-    }
+        }
+    } 
 
     # output object
     out <- list()
