@@ -32,12 +32,11 @@ factory_kableExtra <- function(tab,
 
     # user-supplied notes at the bottom of table
     if (!is.null(notes)) {
-        # threeparttable only works with 1 note
-        threeparttable <- knitr::is_latex_output() & (length(notes) == 1)
+        # threeparttable only works with 1 note. But it creates a weird bug
+        # when using coef_map and stars in Rmarkdown PDF output
         for (n in notes) {
             out <- out %>% 
-                   kableExtra::add_footnote(label = n, notation = 'none', 
-                                            threeparttable = threeparttable)
+                   kableExtra::add_footnote(label = n, notation = 'none') 
         }
     }
     
