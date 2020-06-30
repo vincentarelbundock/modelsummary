@@ -405,11 +405,28 @@ Log.Lik.
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span>(<span class="no">mod</span>, <span class="kw">conf_level</span> <span class="kw">=</span> <span class="kw">NULL</span>)</pre></body></html></div>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-11-2.png" width="700"></p>
 </div>
+<div id="background-annotations" class="section level1">
+<h1 class="hasAnchor">
+<a href="#background-annotations" class="anchor"></a>Background annotations</h1>
+<p>Sometimes, you want to display annotations on a plot, but you would like to draw these annotations <em>behind</em> the <code>geom_pointrange</code> which displays the estimates. Since <code>modelplot</code> draws the <code>geom_pointrange</code> automatically, any <code>ggplot2</code> annotation you add to the plot using <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> will be added on <em>top</em> of the existing ones.</p>
+<p>To add your annotations in the background, you can pass them as a list of <code>ggplot2</code> “geoms”:</p>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
+
+<span class="no">b</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span>(<span class="kw">xintercept</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">'orange'</span>),
+          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html">annotate</a></span>(<span class="st">"rect"</span>, <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">.1</span>,
+                   <span class="kw">xmin</span> <span class="kw">=</span> -<span class="fl">.5</span>, <span class="kw">xmax</span> <span class="kw">=</span> <span class="fl">.5</span>,
+                   <span class="kw">ymin</span> <span class="kw">=</span> -<span class="fl">Inf</span>, <span class="kw">ymax</span> <span class="kw">=</span> <span class="fl">Inf</span>),
+          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">term</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="no">estimate</span>), <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">.3</span>,
+                     <span class="kw">size</span> <span class="kw">=</span> <span class="fl">10</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">'red'</span>, <span class="kw">shape</span> <span class="kw">=</span> <span class="st">'square'</span>))
+
+<span class="fu"><a href="../reference/modelplot.html">modelplot</a></span>(<span class="no">mod</span>, <span class="kw">background</span> <span class="kw">=</span> <span class="no">b</span>)</pre></body></html></div>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+</div>
 <div id="raw-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#raw-data" class="anchor"></a>Raw data</h1>
 <p>If you would like to customize the plots even more than what <code>modelplot</code> allows, you can obtain the raw data used to draw the plots by setting <code>draw=FALSE</code>:</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span>(<span class="no">models</span>, <span class="kw">draw</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span>(<span class="no">models</span>, <span class="kw">draw</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
 <pre><code>## # A tibble: 10 x 5
 ##    term              model          estimate   conf.low conf.high
 ##    &lt;fct&gt;             &lt;fct&gt;             &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;
