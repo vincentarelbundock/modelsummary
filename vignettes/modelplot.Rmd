@@ -121,6 +121,26 @@ modelplot(mod, conf_level = .99)
 modelplot(mod, conf_level = NULL)
 ```
 
+# Background annotations
+
+Sometimes, you want to display annotations on a plot, but you would like to draw these annotations *behind* the `geom_pointrange` which displays the estimates. Since `modelplot` draws the `geom_pointrange` automatically, any `ggplot2` annotation you add to the plot using `+` will be added on *top* of the existing ones.
+
+To add your annotations in the background, you can pass them as a list of `ggplot2` "geoms":
+
+```{r}
+library(ggplot2)
+
+b <- list(geom_vline(xintercept = 0, color = 'orange'),
+          annotate("rect", alpha = .1,
+                   xmin = -.5, xmax = .5, 
+                   ymin = -Inf, ymax = Inf),
+          geom_point(aes(y = term, x = estimate), alpha = .3, 
+                     size = 10, color = 'red', shape = 'square'))
+
+modelplot(mod, background = b)
+```
+
+
 # Raw data
 
 If you would like to customize the plots even more than what `modelplot` allows, you can obtain the raw data used to draw the plots by setting `draw=FALSE`:
@@ -128,3 +148,4 @@ If you would like to customize the plots even more than what `modelplot` allows,
 ```{r, fig.height=2}
 modelplot(models, draw = FALSE)
 ```
+
