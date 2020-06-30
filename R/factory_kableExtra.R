@@ -9,14 +9,16 @@ factory_kableExtra <- function(tab,
                                notes = NULL,
                                output_file = NULL,
                                output_format = 'kableExtra',
-                               title = NULL) {
+                               title = NULL,
+                               ...) {
 
     out <- kableExtra::kable(tab,
                         align = align,
                         format = output_format,
                         caption = title,
                         booktabs = TRUE, 
-                        linesep = "")
+                        linesep = "",
+                        ...)
 
     # horizontal rule to separate coef/gof not supported in markdown
     # TODO: support HTML

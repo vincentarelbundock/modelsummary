@@ -5,7 +5,7 @@
 \title{Factory to create tables in different output formats using standardized
 inputs.}
 \usage{
-factory(tab, align = NULL, hrule, notes, output, title)
+factory(tab, align = NULL, hrule, notes, output, title, ...)
 }
 \arguments{
 \item{tab}{table body (data.frame)}
@@ -26,6 +26,10 @@ column center-aligned, and the 3rd column right-aligned.}
 }}
 
 \item{title}{string}
+
+\item{...}{all other arguments are passed to the `tidy` method used to
+extract estimates from the model. For example, this allows users to set
+`exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \description{
 Factory to create tables in different output formats using standardized

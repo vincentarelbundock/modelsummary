@@ -9,7 +9,8 @@ factory_flextable <- function(tab,
                               notes = NULL,
                               output_file = NULL,
                               output_format = 'flextable',
-                              title = NULL) {
+                              title = NULL,
+                              ...) {
 
 
   

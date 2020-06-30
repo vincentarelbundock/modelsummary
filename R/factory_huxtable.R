@@ -9,7 +9,8 @@ factory_huxtable <- function(tab,
                              notes = NULL,
                              output_file = NULL,
                              output_format = 'huxtable',
-                             title = NULL) {
+                             title = NULL,
+                             ...) {
 
 
     # is huxtable installed?

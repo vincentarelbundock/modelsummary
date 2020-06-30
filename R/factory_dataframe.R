@@ -10,7 +10,8 @@ factory_dataframe <- function(tab,
                               notes = NULL,
                               output_file = NULL,
                               output_format = NULL,
-                              title = NULL) {
+                              title = NULL,
+                              ...) {
 
 
     out <- tab

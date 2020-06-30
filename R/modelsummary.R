@@ -186,7 +186,8 @@ modelsummary <- function(models,
             hrule = hrule,
             notes = notes,
             output = output,
-            title = title)
+            title = title,
+            ...)
       
 }
 

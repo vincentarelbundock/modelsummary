@@ -11,7 +11,8 @@ factory_gt <- function(tab,
                        notes = NULL,
                        output_file = NULL,
                        output_format = 'gt',
-                       title = NULL) {
+                       title = NULL,
+                       ...) {
   
     # create gt table object
     idx_col <- ncol(tab)

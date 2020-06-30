@@ -11,7 +11,8 @@ factory_gt(
   notes = NULL,
   output_file = NULL,
   output_format = "gt",
-  title = NULL
+  title = NULL,
+  ...
 )
 }
 \arguments{
@@ -30,6 +31,10 @@ column center-aligned, and the 3rd column right-aligned.}
 \item{output_format}{character}
 
 \item{title}{string}
+
+\item{...}{all other arguments are passed to the `tidy` method used to
+extract estimates from the model. For example, this allows users to set
+`exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \value{
 tbl_gt object

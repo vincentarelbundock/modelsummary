@@ -10,7 +10,8 @@ factory <- function(tab,
                     hrule,
                     notes,
                     output,
-                    title) {
+                    title,
+                    ...) {
 
 
     # sanity check functions are hosted in R/sanity_checks.R
@@ -45,6 +46,7 @@ factory <- function(tab,
       notes = notes,
       output_file = output_list$output_file,
       output_format = output_list$output_format,
-      title = title)
+      title = title,
+      ...)
       
 }
