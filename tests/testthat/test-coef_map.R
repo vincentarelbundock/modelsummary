@@ -51,16 +51,17 @@ test_that("coef_map with multiple vertical statistics", {
     expect_equal(dim(mat), c(15, 5))
 
     rows <- tibble::tribble(
-            ~term,        ~OLS, ~Logit, ~section, ~position,
-            '4-cylinder', '-',  '-',    'middle', 4,
-            '12-cylinder', '-',  '-',    'middle', 5)
-    mat <- modelsummary:::extract(models, 
-                                 statistic = c('std.error', 'conf.int'), 
-                                 add_rows = rows, 
-                                 coef_map = cm)
+            ~term,        ~OLS, ~Logit,
+            '4-cylinder', '-',  '-', 
+            '12-cylinder', '-',  '-')
+    mat <- modelsummary(models, 
+                        output = 'dataframe',
+                        statistic = c('std.error', 'conf.int'), 
+                        add_rows = rows, 
+                        coef_map = cm)
 
     expect_s3_class(mat, 'tbl_df')
-    expect_equal(dim(mat), c(17, 5))
+    expect_equal(dim(mat), c(17, 3))
 
 })
 

@@ -16,6 +16,8 @@ datasummary_table1 <- function(formula,
                                title = NULL,
                                notes = NULL,
                                align = NULL,
+                               add_columns = NULL,
+                               add_rows = NULL,
                                ...) {
 
     # output: factory, file, format
@@ -118,7 +120,10 @@ datasummary_table1 <- function(formula,
             align = align,
             hrule = hrule,
             notes = notes, 
+            fmt = fmt,
             output = output,
+            add_rows = add_rows,
+            add_columns = add_columns,
             title = title)
     
 }

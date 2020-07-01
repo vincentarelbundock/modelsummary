@@ -21,7 +21,6 @@ msummary(
   title = NULL,
   notes = NULL,
   estimate = "estimate",
-  add_rows_location = NULL,
   ...
 )
 }
@@ -81,15 +80,10 @@ from the table (using `stringr::str_detect`).}
 \item{gof_omit}{string regular expression. Omits all matching gof statistics from
 the table (using `stringr::str_detect`).}
 
-\item{add_rows}{a data.frame (or tibble) with the following columns: 
-\itemize{
-  \item section (character): insert in "middle" or "bottom" section of the table
-  \item position (integer): row position in the section
-  \item term (character): string to display under coefficient names
-  \item one column per model with the same name as that model with the
-        values to insert (some models can be omitted). 
-  \item See the examples section of this documentation and an example.
-}}
+\item{add_rows}{a data.frame (or tibble) with the same number of columns as
+your main table. By default, rows are appended to the bottom of the table.
+You can define a "position" attribute of integers to set the row positions.
+See examples.}
 
 \item{title}{string}
 
@@ -98,9 +92,6 @@ the table (using `stringr::str_detect`).}
 \item{estimate}{character name of the estimate to display. Must be a column
 name in the data.frame produced by `tidy(model)`. In the vast majority of
 cases, the default value of this argument should not be changed.}
-
-\item{add_rows_location}{This argument is deprecated. Use a data.frame as
-described in the documentation for the `add_rows` argument.}
 
 \item{...}{all other arguments are passed to the `tidy` method used to
 extract estimates from the model. For example, this allows users to set
@@ -140,10 +131,11 @@ msummary(models, title = 'This is the title')
 msummary(models, title = gt::md('This is *the* title'))
 
 # add_rows: we use `tribble` from the `tibble` package to build a data.frame
-# more easily
-rows <- tibble::tribble(~term, ~section, ~position, ~Bivariate, ~Multivariate,
-                        'Empty row', 'middle', 3, '-', '-',
-                        'Another empty row', 'bottom', 1, '?', '?')
+# more easily. Then, we assign an attribute to determine each row's position.
+rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,
+                        'Empty row', '-', '-',
+                        'Another empty row', '?', '?')
+attr(rows, 'position') <- c(1, 3)
 msummary(models, add_rows = rows)
 
 # notes at the bottom of the table (here, the second note includes markdown bold characters)

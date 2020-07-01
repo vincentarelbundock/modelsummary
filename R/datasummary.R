@@ -10,6 +10,8 @@
 #' @param align A character string of length equal to the number of columns in
 #' the table.  "lcr" means that the first column will be left-aligned, the 2nd
 #' column center-aligned, and the 3rd column right-aligned.
+#' @param add_columns a data.frame (or tibble) with the same number of rows as
+#' your main table.
 #' @param sparse_header TRUE or FALSE. TRUE eliminates column headers which
 #' have a unique label across all columns, except for the row immediately above
 #' the data. FALSE keeps all headers. The order in which terms are entered in
@@ -100,6 +102,11 @@
 #' datasummary(f, data = mtcars, output = 'kableExtra')
 #' datasummary(f, data = mtcars, output = 'flextable')
 #' datasummary(f, data = mtcars, output = 'huxtable')
+#' 
+#' # add_rows
+#' new_rows <- data.frame(a = 1:2, b = 2:3, c = 4:5)
+#' attr(new_rows, 'position') <- c(1, 3)
+#' datasummary(mpg + hp ~ mean + sd, data = mtcars, add_rows = new_rows)
 #' }
 #'
 #' @details
@@ -121,6 +128,8 @@ datasummary <- function(formula,
                         title = NULL,
                         notes = NULL,
                         align = NULL,
+                        add_columns = NULL,
+                        add_rows = NULL,
                         sparse_header = TRUE) {
     
     # output: factory, file, format
@@ -169,10 +178,13 @@ datasummary <- function(formula,
     # build
     out <- factory(dse, 
                    align = align,
+                   fmt = fmt,
                    hrule = NULL,
                    notes = notes, 
                    output = output,
-                   title = title)
+                   title = title,
+                   add_columns = add_columns,
+                   add_rows = add_rows)
     
     return(out)
 

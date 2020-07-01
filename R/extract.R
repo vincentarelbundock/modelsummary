@@ -13,11 +13,9 @@ extract <- function(models,
                     coef_omit = NULL,
                     gof_map = modelsummary::gof_map,
                     gof_omit = NULL,
-                    add_rows = NULL,
                     stars = FALSE,
                     fmt = '%.3f',
                     estimate = 'estimate',
-                    add_rows_location = NULL,
                     ...) {
 
     # models must be a list of models
@@ -32,8 +30,6 @@ extract <- function(models,
     sanity_coef_omit(coef_omit)
     sanity_gof_map(gof_map)
     sanity_gof_omit(gof_omit)
-    sanity_add_rows_location(add_rows_location) # deprecated 
-    sanity_add_rows(add_rows, models)
     sanity_stars(stars)
     sanity_fmt(fmt)
     sanity_estimate(estimate)
@@ -126,35 +122,6 @@ extract <- function(models,
     gof$term <- gof_names
 	idx <- match(gof$term, gof_map$clean) # reorder
     gof <- gof[order(idx, gof$term),] 
-
-    # add_rows: this needs to be done after sorting and combining to preserve
-    # user-selected row order. We need the 'section' information otherwise we
-    # won't know where to draw the line which separates estimates from gof. 
-    if (!is.null(add_rows)) {
-
-        if (inherits(add_rows, 'list')) {
-            add_rows <- do.call('rbind', add_rows) %>%
-                        data.frame(stringsAsFactors = FALSE) %>%
-                        stats::setNames(colnames(gof)[2:ncol(gof)]) %>%
-                        dplyr::mutate(section = 'bottom', position = 1e6)
-        }
-
-        for (i in 1:nrow(add_rows)) {
-            newrow <- add_rows[i, ] %>% dplyr::select(-section, -position)
-            if (add_rows$section[i] == 'bottom') {
-                newrow <- newrow %>% dplyr::mutate(group = 'gof') 
-                gof <- gof %>%
-                       tibble::add_row(newrow, .before = add_rows$position[i])
-            } else {
-                newrow <- newrow %>% 
-                          dplyr::mutate(group = 'estimates',
-                                 statistic = 'estimate') 
-                est <- est %>%
-                       tibble::add_row(newrow, .before = add_rows$position[i])
-            }
-        }
-
-    }
 
     # combine estimates and gof
     if (nrow(gof) > 0) {

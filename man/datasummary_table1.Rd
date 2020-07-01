@@ -13,6 +13,8 @@ datasummary_table1(
   title = NULL,
   notes = NULL,
   align = NULL,
+  add_columns = NULL,
+  add_rows = NULL,
   ...
 )
 }
@@ -41,6 +43,14 @@ use exponential notation. See `?sprintf` for more options.}
 \item{align}{A character string of length equal to the number of columns in
 the table.  "lcr" means that the first column will be left-aligned, the 2nd
 column center-aligned, and the 3rd column right-aligned.}
+
+\item{add_columns}{a data.frame (or tibble) with the same number of rows as
+your main table.}
+
+\item{add_rows}{a data.frame (or tibble) with the same number of columns as
+your main table. By default, rows are appended to the bottom of the table.
+You can define a "position" attribute of integers to set the row positions.
+See examples.}
 
 \item{...}{all other arguments are passed to the `tidy` method used to
 extract estimates from the model. For example, this allows users to set

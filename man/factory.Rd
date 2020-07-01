@@ -5,7 +5,18 @@
 \title{Factory to create tables in different output formats using standardized
 inputs.}
 \usage{
-factory(tab, align = NULL, hrule, notes, output, title, ...)
+factory(
+  tab,
+  align = NULL,
+  fmt = "\%.3f",
+  hrule = NULL,
+  notes = NULL,
+  output = NULL,
+  title = NULL,
+  add_rows = NULL,
+  add_columns = NULL,
+  ...
+)
 }
 \arguments{
 \item{tab}{table body (data.frame)}
@@ -13,6 +24,11 @@ factory(tab, align = NULL, hrule, notes, output, title, ...)
 \item{align}{A character string of length equal to the number of columns in
 the table.  "lcr" means that the first column will be left-aligned, the 2nd
 column center-aligned, and the 3rd column right-aligned.}
+
+\item{fmt}{string which specifies how numeric values will be rounded. This
+string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
+the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
+use exponential notation. See `?sprintf` for more options.}
 
 \item{hrule}{position of horizontal rules (integer vector)}
 
@@ -26,6 +42,14 @@ column center-aligned, and the 3rd column right-aligned.}
 }}
 
 \item{title}{string}
+
+\item{add_rows}{a data.frame (or tibble) with the same number of columns as
+your main table. By default, rows are appended to the bottom of the table.
+You can define a "position" attribute of integers to set the row positions.
+See examples.}
+
+\item{add_columns}{a data.frame (or tibble) with the same number of rows as
+your main table.}
 
 \item{...}{all other arguments are passed to the `tidy` method used to
 extract estimates from the model. For example, this allows users to set

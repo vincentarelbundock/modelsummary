@@ -22,15 +22,6 @@ sanity_align <- function(align, tab) {
 #' sanity check
 #'
 #' @keywords internal
-sanity_add_rows_location <- function(add_rows_location) {
-    if (!is.null(add_rows_location)) {
-        stop('The `add_rows_location` argument is deprecated. Please use a data.frame (or tibble) as described in the `add_rows` argument documentation.')
-    }
-}
-
-#' sanity check
-#'
-#' @keywords internal
 sanity_estimate <- function(estimate) checkmate::assert_character(estimate)
 
 #' sanity check

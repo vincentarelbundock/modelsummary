@@ -49,22 +49,15 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' `omit`. See `modelsummary::gof_map`
 #' @param gof_omit string regular expression. Omits all matching gof statistics from
 #' the table (using `stringr::str_detect`).
-#' @param add_rows a data.frame (or tibble) with the following columns: 
-#' \itemize{
-#'   \item section (character): insert in "middle" or "bottom" section of the table
-#'   \item position (integer): row position in the section
-#'   \item term (character): string to display under coefficient names
-#'   \item one column per model with the same name as that model with the
-#'         values to insert (some models can be omitted). 
-#'   \item See the examples section of this documentation and an example.
-#' }
+#' @param add_rows a data.frame (or tibble) with the same number of columns as
+#' your main table. By default, rows are appended to the bottom of the table.
+#' You can define a "position" attribute of integers to set the row positions.
+#' See examples.
 #' @param title string
 #' @param notes list or vector of notes to append to the bottom of the table.
 #' @param estimate character name of the estimate to display. Must be a column
 #' name in the data.frame produced by `tidy(model)`. In the vast majority of
 #' cases, the default value of this argument should not be changed.
-#' @param add_rows_location This argument is deprecated. Use a data.frame as
-#' described in the documentation for the `add_rows` argument.
 #' @param ... all other arguments are passed to the `tidy` method used to
 #' extract estimates from the model. For example, this allows users to set
 #' `exponentiate=TRUE` to exponentiate logistic regression coefficients.
@@ -97,10 +90,11 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' msummary(models, title = gt::md('This is *the* title'))
 #' 
 #' # add_rows: we use `tribble` from the `tibble` package to build a data.frame
-#' # more easily
-#' rows <- tibble::tribble(~term, ~section, ~position, ~Bivariate, ~Multivariate,
-#'                         'Empty row', 'middle', 3, '-', '-',
-#'                         'Another empty row', 'bottom', 1, '?', '?')
+#' # more easily. Then, we assign an attribute to determine each row's position.
+#' rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,
+#'                         'Empty row', '-', '-',
+#'                         'Another empty row', '?', '?')
+#' attr(rows, 'position') <- c(1, 3)
 #' msummary(models, add_rows = rows)
 #'
 #' # notes at the bottom of the table (here, the second note includes markdown bold characters)
@@ -133,7 +127,6 @@ modelsummary <- function(models,
                          title = NULL,
                          notes = NULL,
                          estimate = 'estimate',
-                         add_rows_location = NULL,
                          ...) {
 
 
@@ -148,8 +141,6 @@ modelsummary <- function(models,
                    gof_map = gof_map,
                    gof_omit = gof_omit,
                    stars = stars,
-                   add_rows = add_rows,
-                   add_rows_location = add_rows_location,
                    fmt = fmt,
                    estimate = estimate,
                    ...)
@@ -159,8 +150,13 @@ modelsummary <- function(models,
     tab <- dat %>%
            dplyr::mutate(term = ifelse(idx, '', term))
 
-    # clean and measure table
+    # measure table
     hrule <- match('gof', tab$group)
+    if (!is.null(add_rows) && !is.null(attr(add_rows, 'position'))) {
+        hrule <- hrule + sum(attr(add_rows, 'position') < hrule)
+    }
+
+    # clean table
     tab <- tab %>%
            dplyr::select(-statistic, -group) %>%
            # HACK: arbitrary 7 spaces to avoid name conflict
@@ -183,10 +179,12 @@ modelsummary <- function(models,
     # build table
     factory(tab, 
             align = align,
+            fmt = fmt,
             hrule = hrule,
             notes = notes,
             output = output,
             title = title,
+            add_rows = add_rows,
             ...)
       
 }

@@ -13,6 +13,8 @@ datasummary(
   title = NULL,
   notes = NULL,
   align = NULL,
+  add_columns = NULL,
+  add_rows = NULL,
   sparse_header = TRUE
 )
 }
@@ -42,6 +44,14 @@ use exponential notation. See `?sprintf` for more options.}
 \item{align}{A character string of length equal to the number of columns in
 the table.  "lcr" means that the first column will be left-aligned, the 2nd
 column center-aligned, and the 3rd column right-aligned.}
+
+\item{add_columns}{a data.frame (or tibble) with the same number of rows as
+your main table.}
+
+\item{add_rows}{a data.frame (or tibble) with the same number of columns as
+your main table. By default, rows are appended to the bottom of the table.
+You can define a "position" attribute of integers to set the row positions.
+See examples.}
 
 \item{sparse_header}{TRUE or FALSE. TRUE eliminates column headers which
 have a unique label across all columns, except for the row immediately above
@@ -150,6 +160,11 @@ datasummary(f, data = mtcars, output = 'gt')
 datasummary(f, data = mtcars, output = 'kableExtra')
 datasummary(f, data = mtcars, output = 'flextable')
 datasummary(f, data = mtcars, output = 'huxtable')
+
+# add_rows
+new_rows <- data.frame(a = 1:2, b = 2:3, c = 4:5)
+attr(new_rows, 'position') <- c(1, 3)
+datasummary(mpg + hp ~ mean + sd, data = mtcars, add_rows = new_rows)
 }
 
 }
