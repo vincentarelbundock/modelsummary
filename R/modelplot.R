@@ -97,7 +97,7 @@ modelplot <- function(models,
         }
         out <- out %>%
                dplyr::mutate(term = factor(term, rev(unique(term))),
-                             model = factor(model, rev(unique(model))))
+                             model = factor(model, unique(model)))
         return(out)
     }
 
