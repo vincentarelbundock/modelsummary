@@ -40,6 +40,9 @@ test_that('datasummary_table1: output format do not produce errors', {
 })
 
 
+##################
+#  save to file  #
+##################
 tmp <- mtcars
 tmp$cyl <- as.factor(tmp$cyl)
 tmp$vs <- as.logical(tmp$vs)
@@ -55,5 +58,24 @@ save_to_file <- function(ext) {
 }
 for (ext in c('.html', '.tex', '.rtf', '.docx', '.pptx', '.jpg', '.png')) {
     save_to_file(ext)
+}
+
+
+#####################################
+#  add_columns output formats work  #
+#####################################
+tmp <- mtcars
+tmp$cyl <- as.character(tmp$cyl)
+tmp$vs <- as.logical(tmp$vs)
+custom <- data.frame('a' = 1:2, 'b' = 1:2)
+
+output_formats <- c('gt', 'kableExtra', 'flextable', 'huxtable', 'latex',
+                    'markdown', 'html')
+for (o in output_formats) {
+    testname <- paste('add_columns with', o)
+    test_that(testname, {
+        expect_error(datasummary_table1(~am, tmp, add_columns = custom,
+                                        output = o), NA)
+    })
 }
 

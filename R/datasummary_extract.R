@@ -140,12 +140,7 @@ datasummary_extract <- function(tab,
     attr(main, 'span_kableExtra') <- span
 
     # attributes
-    attr(main, 'header_sparse') <- header_sparse
     attr(main, 'header_sparse_flat') <- header_sparse_flat
-    attr(main, 'header_nocolnames') <- header_nocolnames
-    attr(main, 'header_nocolnames_sparse') <- header_nocolnames_sparse
-    attr(main, 'header_sparse_flat') <- header_sparse_flat
-    attr(main, 'header_nocolnames_sparse_flat') <- header_nocolnames_sparse_flat
 
     # return
     return(main)

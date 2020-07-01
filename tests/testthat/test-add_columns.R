@@ -1,8 +1,6 @@
 context('add_rows')
 
 library(modelsummary)
-library(tibble)
-
 
 test_that("datasummary add_columns", {
 
@@ -19,13 +17,13 @@ test_that("datasummary add_columns", {
 
     truth <- structure(list(first = c("blah", "junk"), ` ` = c("mpg", "hp"
     ), mean = c("20.09", "146.69"), sd = c("6.03", "68.56"), last = c("2.00",
-    "4.00")), row.names = c(NA, -2L), class = "data.frame", stub_width = 1L, align = "lrr", output_format = "dataframe")
+    "4.00")), row.names = c(NA, -2L), class = "data.frame", stub_width = 1L, align = "lrrrr", output_format = "dataframe")
 
     expect_identical(tab, truth)
 
 })
 
-test_that("error", {
+test_that("too many rows in add_columns", {
 
     ac <- tibble::tribble(~first, ~last,
                           'blah', 2,

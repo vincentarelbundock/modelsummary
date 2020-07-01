@@ -23,11 +23,6 @@ factory_huxtable <- function(tab,
         #warning('The `align` argument is not supported yet for huxtable objects. Please file a request or (even better) a code submission on Github if you need that feature.')
     #}
 
-    # nested column labels
-    if (!is.null(attr(tab, 'header_sparse_flat'))) {
-        colnames(tab) <- pad(attr(tab, 'header_sparse_flat'))
-    }
-
     # huxtable object with header 
     out <- huxtable::hux(tab, add_colnames = TRUE) 
 

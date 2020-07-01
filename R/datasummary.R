@@ -162,9 +162,14 @@ datasummary <- function(formula,
                                sparse_header = sparse_header)
 
     # align stub l rest r
+    stub_width <- attr(dse, 'stub_width')
+    tab_width <- ncol(dse)
+    if (inherits(add_columns, 'data.frame')) {
+        tab_width <- tab_width + ncol(add_columns)
+    }
     if (is.null(align)) {
-        align <- paste0(strrep('l', attr(dse, 'stub_width')),
-                        strrep('r', ncol(dse) - attr(dse, 'stub_width')))
+        align <- paste0(strrep('l', stub_width),
+                        strrep('r', tab_width - stub_width))
     }
 
     # convert to numeric if fmt==NULL

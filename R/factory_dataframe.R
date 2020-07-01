@@ -15,10 +15,6 @@ factory_dataframe <- function(tab,
 
 
     out <- tab
-    
-    if (!is.null(attr(tab, 'header_sparse_flat'))) {
-        colnames(out) <- attr(tab, 'header_sparse_flat')
-    }
 
     attr(out, 'align') <- align
     attr(out, 'hrule') <- hrule

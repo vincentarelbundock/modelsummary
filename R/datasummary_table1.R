@@ -108,12 +108,7 @@ datasummary_table1 <- function(formula,
         colnames(tab) <- colnames(header) <- pad(colnames(tab))
         tab <- dplyr::add_row(tab, header, .after = nrow(tab_numeric))
     }
-    
-    if (is.null(align)) {
-        idx <- attr(tab, 'stub_width')
-        align <- paste0(strrep('l', idx), 
-                        strrep('rl', (ncol(tab) - idx) / 2))
-    }
+
     hrule <- nrow(tab_numeric) + 1
 
     factory(tab,
