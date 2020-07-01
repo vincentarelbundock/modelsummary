@@ -66,11 +66,13 @@ datasummary_table1 <- function(formula,
     any_numeric <- any(sapply(data_no_rhs, is.numeric))
 
     if (any_factor) {
-        cleanpct <- function(x, y) sprintf('(%.0f)', length(x) / length(y) * 100)
+        cleanpct <- function(x, y) sprintf(' (%.0f) ', length(x) / length(y) * 100)
         if (any_numeric) {
-            f <- All(data_no_rhs, numeric=FALSE, factor=TRUE) ~ dsgroupvarn * ((Mean=1) + (`(SD)`=Percent(fn=cleanpct, denom="col")))
+            f <- All(data_no_rhs, numeric=FALSE, factor=TRUE) ~ 
+                 dsgroupvarn * ((Mean=1)*Format(digits=1) + (`(SD)`=Percent(fn=cleanpct, denom="col")))
         } else {
-            f <- All(data_no_rhs, numeric=FALSE, factor=TRUE) ~ dsgroupvarn * ((N=1) + (`(%)`=Percent(fn=cleanpct, denom="col")))
+            f <- All(data_no_rhs, numeric=FALSE, factor=TRUE) ~ 
+                 dsgroupvarn * ((N=1)*Format(digits=1) + (`(%)`=Percent(fn=cleanpct, denom="col")))
         }
         tab_factor <- tabular(f, data)
     } else {
@@ -112,11 +114,11 @@ datasummary_table1 <- function(formula,
     }
     hrule <- nrow(tab_numeric) + 1
 
-    out <- factory(tab,
-                   align = align,
-                   hrule = hrule,
-                   notes = notes, 
-                   output = output,
-                   title = title)
+    factory(tab,
+            align = align,
+            hrule = hrule,
+            notes = notes, 
+            output = output,
+            title = title)
     
 }
