@@ -28,8 +28,9 @@ datasummary_correlation <- function(data,
             out[i, j] <- ifelse(i + 1 < j, '.', out[i, j])
         }
     }
-    colnames(out)[1] <- ' '
 
+    colnames(out) <- c(' ', out[[1]])
+    
     align <- paste0('l', strrep('r', ncol(out)-1))
     
     factory(out, 

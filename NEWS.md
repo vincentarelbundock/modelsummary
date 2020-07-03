@@ -2,7 +2,7 @@
 
 * datasummary
 * datasummary_skim
-* datasummary_table1
+* datasummary_balance
 * datasummary_correlation
 * modelplot
 * allow duplicate model names

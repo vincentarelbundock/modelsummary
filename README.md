@@ -11,18 +11,29 @@ status](https://ci.appveyor.com/api/projects/status/github/vincentarelbundock/mo
 [![Codecov test coverage](https://codecov.io/gh/vincentarelbundock/modelsummary/branch/master/graph/badge.svg)](https://codecov.io/gh/vincentarelbundock/modelsummary?branch=master)
 <!-- badges: end -->
 
-`modelsummary` creates beautiful and customizable tables to summarize statistical models in `R`.
+`modelsummary` creates tables and plots to summarize statistical models and data in `R`. 
 
-Results from several models are presented side-by-side. Tables can be echoed to the `R` console or viewed in the `RStudio` Viewer. They can be saved to HTML, PDF, Text/Markdown, LaTeX, MS Word, RTF, JPG, and PNG formats. Tables can easily be embedded in dynamic document pipelines like `Rmarkdown`, `knitr`, or `Sweave`.
+The tables produced `modelsummary` are beautiful and highly customizable. They can be echoed to the `R` console or displayed in the `RStudio` Viewer. They can be saved to a wide variety of formats, including HTML, PDF, Text/Markdown, LaTeX, MS Word, RTF, JPG, and PNG. Tables can easily be embedded in dynamic document pipelines like `Rmarkdown`, `knitr`, or `Sweave`. `modelsummary` supports dozens of types of statistical models.
 
-These two tables were created using `modelsummary` without any manual editing at all. The first is an HTML table. The second is a LaTeX table.
+`modelsummary` includes three families of functions:
 
-<center>
+1. `modelsummary`: Display results from several statistical models side-by-side
+2. `modelplot`: Plot model coefficients and confidence intervals
+3. `datasummary`: Extremely flexible crosstabs and data summaries
+    - `datasummary_balance`: Balance table (aka "Table 1") with subgroup statistics and difference in means
+    - `datasummary_correlation`: Correlation table
+    - `datasummary_skim`: Quick overview of a dataset
+    
+Click on the links at the top of this page to see how these functions are used: https://vincentarelbundock.github.io/modelsummary
 
-<img src="https://user-images.githubusercontent.com/987057/82853752-90558300-9ed4-11ea-88af-12cf20cb367f.png" width="40%">
-<img src="https://user-images.githubusercontent.com/987057/82855711-0a3c3b00-9eda-11ea-8a81-1eebfbb7cb73.png" width="40%">
+These tables and plots were created using `modelsummary` programmatically, without any manual editing at all:
 
-</center>
+| | |
+|:-------------------------:|:-------------------------:|
+|<img src="https://user-images.githubusercontent.com/987057/82853752-90558300-9ed4-11ea-88af-12cf20cb367f.png">|<img src="https://user-images.githubusercontent.com/987057/86502414-d671f200-bd70-11ea-9f4b-48970bc51a0d.png">
+|<img src="https://user-images.githubusercontent.com/987057/82855711-0a3c3b00-9eda-11ea-8a81-1eebfbb7cb73.png">|<img src="https://user-images.githubusercontent.com/987057/85772292-b1cfa780-b6ea-11ea-8ae1-b95c6ddbf0a9.png">|
+|<img src="https://user-images.githubusercontent.com/987057/86502482-9eb77a00-bd71-11ea-80da-dc935c1fbd90.jpeg">|<img src="https://user-images.githubusercontent.com/987057/86502637-55682a00-bd73-11ea-9d9b-5c3059cbc31e.png">|
+
 
 # Contents
 

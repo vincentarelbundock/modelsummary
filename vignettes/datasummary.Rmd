@@ -1,5 +1,5 @@
 ---
-title: '`datasummary`: Crosstabs, frequencies, correlations, table 1s, and more'
+title: '`datasummary`: Crosstabs, frequencies, correlations, balance (a.k.a. "table 1"), and more'
 output:
   html_document: default
   pdf_document:
@@ -13,7 +13,7 @@ tbody {
 }
 </style>
 
-`datasummary` is a function from the `modelsummary` package. It allows you to create data summaries, frequency tables, crosstabs, correlation tables, "Table 1s," and more. It has many benefits:
+`datasummary` is a function from the `modelsummary` package. It allows you to create data summaries, frequency tables, crosstabs, correlation tables, balance tables (aka "Table 1"), and more. It has many benefits:
 
 * Easy to use.
 * *Extremely* flexible.
@@ -69,9 +69,9 @@ In addition to `datasummary`, the `modelsummary` package includes a "family" of 
 * `datasummary()`: Flexible function to create custom tables using 2-sided formulae.
 * `datasummary_skim()`: Quick summary of your dataset.
 * `datasummary_correlation()`: Table of correlations.
-* `datasummary_table1()`: Group characteristics (e.g., control vs. treatment)
+* `datasummary_balance()`: Group characteristics (e.g., control vs. treatment)
 
-In the next three sections, we illustrate how to use `datasummary_skim`, `datasummary_correlation`, and `datasummary_table1`. Then, we dive into `datasummary` itself to highlight its ease and flexibility.
+In the next three sections, we illustrate how to use `datasummary_skim`, `datasummary_correlation`, and `datasummary_balance`. Then, we dive into `datasummary` itself to highlight its ease and flexibility.
 
 # `datasummary_skim`
 
@@ -132,11 +132,11 @@ datasummary_correlation(mtcars)
 
 The values displayed in this table are equivalent to those obtained by calling: `cor(x, use='pairwise.complete.obs')`.
 
-# `datasummary_table1`
+# `datasummary_balance`
 
-The expression "Table 1" refers to a particular style of table which is often printed in the opening pages of a scientific peer reviewed article. Typically, this table will include basic descriptive statistics about different subsets of the study population. For instance, analysts may want to display the socio-demographic characteristics of members of the Control and Treatement groups in a randomized control trial, or the flipper length and male and female penguins.
+A "balance table" or "Table 1" refers to a particular style of table which is often printed in the opening pages of a scientific peer reviewed article. Typically, this table will include basic descriptive statistics about different subsets of the study population. For instance, analysts may want to display the socio-demographic characteristics of members of the Control and Treatement groups in a randomized control trial, or the flipper length and male and female penguins. In addition, balance tables often include difference in means tests.
 
-To illustrate how to build a Table 1 using the `datasummary_table1` function, we download data about a job training experiment studies in Lalonde (1986). Then, we clean up the data by renaming and recoding a few variables. 
+To illustrate how to build a balance table using the `datasummary_balance` function, we download data about a job training experiment studies in Lalonde (1986). Then, we clean up the data by renaming and recoding a few variables. 
 
 ```{r}
 # Download and read data
@@ -156,22 +156,37 @@ training <- training %>%
                    Age = age, 
                    Education = educ, 
                    Married)
-
-head(training)
 ```
+
+Now, we execute the `datasummary_balance` function. If the `estimatr` package is installed on your computer, `datasummary_balance` will calculate a difference in means.
 
 ```{r, eval=FALSE}
 caption <- 'Descriptive statistics about participants in a job training experiment. This table was created using the "datasummary" function from the "modelsummary" package for R.'
 reference <- 'Source: Lalonde (1986) American Economic Review.'
 
 library(modelsummary)
-datasummary_table1(~Treatment, 
-                   data = training,
-                   title = caption,
-                   notes = reference)
+datasummary_balance(~Treatment,
+                    data = training,
+                    title = caption,
+                    notes = reference)
 ```
 
-<img src="https://user-images.githubusercontent.com/987057/86256074-dcf04600-bb85-11ea-9f9a-6cc08dc8e8e9.png" width="60%">
+```{r, eval=TRUE, echo=FALSE}
+caption <- 'Descriptive statistics about participants in a job training experiment. This table was created using the "datasummary" function from the "modelsummary" package for R.'
+reference <- 'Source: Lalonde (1986) American Economic Review.'
+
+library(modelsummary)
+datasummary_balance(~Treatment,
+                    data = training,
+                    title = caption,
+                    notes = reference) %>%
+  row_spec(5, bold = TRUE) %>%
+  row_spec(1, color = 'green') %>%
+  row_spec(2, color = 'red')
+
+```
+
+Note that if your dataset includes columns called "blocks", "clusters", or "weights", these information will automatically be taken into consideration by `estimatr` when calculating the difference in means and the associated statistics.
 
 # `datasummary`
 
@@ -373,9 +388,9 @@ datasummary(flipper_length_mm ~ Mean * Arguments(fmt = "%.4f") + SD * Arguments(
             data = penguins)
 ```
 
-If you do *not* want `datasummary` to format numbers, and you want to keep the numerical values instead of formatted strings, set `fmt=NULL`. This can be useful when post-processing tables with packages like `gt`, which allow you to transform cells based on their numerical content:
+If you do *not* want `datasummary` to format numbers, and you want to keep the numerical values instead of formatted strings, set `fmt=NULL`. This can be useful when post-processing tables with packages like `gt`, which allow you to transform cells based on their numerical content (this `gt` table will be omitted from PDF output):
 
-```{r}
+```{r, eval = !knitr::is_latex_output()}
 library(gt)
 
 datasummary(All(mtcars) ~ Mean + SD, 
@@ -540,44 +555,65 @@ datasummary(f,
     cols_align('center', columns = 3:6)
 ```
 
+# Case study: Balance table
 
+```{r}
+dat <- 'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv' %>%
+        read.csv %>%
+        mutate(`Earnings pre-treatment` = re75,
+               `Earnings post-treatment` = re78,
+               condition = ifelse(treat == TRUE, 'Treatment', 'Control'),
+               Married = as.numeric(married)) %>%
+        select(`Earnings pre-treatment`,
+               `Earnings post-treatment`, 
+               Age = age, 
+               Education = educ, 
+               Married,
+               condition)
+```
 
+Now, we define a new function called `DiM`, which computes statistics using the `difference_in_means` function from the `estimatr` package. In this function, we assume that the dataset includes a variable named "condition". In addition, if the dataset includes columns called "clusters", "weights", or "blocks", `DiM` will calculate design-aware statistics:
 
+```{r}
+DiM <- function(x, data, statistic = 'estimate') {
+    # make sure there is a column called "condition"
+    if (!'condition' %in% colnames(data)) stop('To use the DiM function, your dataset must include a column named "condition".')
+  
+    # if clusters, weights, or blocks are absent, we set them to NULL
+    if (!'clusters' %in% colnames(data)) clusters <- NULL
+    if (!'weights' %in% colnames(data)) weights <- NULL
+    if (!'blocks' %in% colnames(data)) blocks <- NULL
+    
+    # datasummary supplies a numeric vector. we use it as outcome
+    data$outcome_variable <- x
+    
+    # compute statistics
+    out <- estimatr::difference_in_means(outcome_variable ~ condition, 
+                                         data = data, 
+                                         blocks = blocks,
+                                         clusters = clusters, 
+                                         weights = weights)
+    
+    # extract result using estimatr's `tidy` function
+    out <- estimatr::tidy(out)[[statistic]]
+    return(out)
+}
+```
 
-```{r eval=FALSE, echo=FALSE, message=FALSE, warning=FALSE}
-library(tidyverse)
-library(gt)
-library(modelsummary)
-library(kableExtra)
-options(modelsummary_default = 'kableExtra')
-options(width = 120)
+Now, we 
 
-training <- 'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv' %>%
-            read.csv %>%
-            mutate(`Earnings Pre (1,000)` = re75  / 1000,
-                   `Earnings Post (1,000)` = re78 / 1000,
-                   Treatment = ifelse(treat == TRUE, 'Treatment', 'Control'),
-                   Married = ifelse(married == TRUE, 'Yes', 'No'),
-                   Treatment = factor(Treatment),
-                   Married = factor(Married),
-                   Ethnicity = factor(ethn)) %>%
-            select(`Earnings Pre (1,000)`,
-                   `Earnings Post (1,000)`, 
-                   Treatment, 
-                   Ethnicity, 
-                   Age = age, 
-                   Education = educ, 
-                   Married)
+```{r}
 caption <- 'Descriptive statistics about participants in a job training experiment. This table was created using the "datasummary" function from the "modelsummary" package for R.'
 reference <- 'Source: Lalonde (1986) American Economic Review.'
 
-library(modelsummary)
-datasummary_table1(~Treatment, 
-                   data = training,
-                   title = caption,
-                   notes = reference) %>%
-    kable_styling() %>%
-    kableExtra::row_spec(5, bold = TRUE) %>%
-    kableExtra::row_spec(1, color = 'red') %>%
-    kableExtra::row_spec(2, color = 'green')
+f <- All(dat) ~ 
+     condition * (Mean + SD) + 
+      (`Difference in Means` = DiM * Arguments(data = dat, statistic = 'estimate')) +
+      (`Std.Error` = DiM * Arguments(data = dat, statistic = 'std.error')) +
+      (`p` = DiM * Arguments(data = dat, statistic = 'p.value'))
+
+datasummary(f, 
+            data = dat,
+            title = caption,
+            notes = reference)
 ```
