@@ -195,7 +195,7 @@ Most users will just modify the `3` in `%.3f`, but this is a very powerful syste
 msummary(models, fmt = '%.7f')
 ```
 
-# Add rows manually
+# `add_rows`
 
 Use the `add_rows` argument to add rows manually to a table. For example, let's say you estimate two models with a factor variables and you want to insert (a) an empty line to identify the category of reference, and (b) cutomized information at the bottom of the table:
 
@@ -205,13 +205,14 @@ models[['OLS']] <- lm(mpg ~ factor(cyl), mtcars)
 models[['Logit']] <- glm(am ~ factor(cyl), mtcars, family = binomial)
 ```
 
-We create a data.frame with the following columns: "term", "position", "section", and one column per model. "position" is an integer, and "section" is either "middle" or "bottom". To build this data.frame, it is useful to call the `tribble` (note the "r") from the `tibble` package:
+We create a data.frame with the same number of columns as the summary table. Then, we define a "position" attribute to specify where the new rows should be inserted in the table. Finally, we pass this data.frame to the `add_rows` argument:
 
 ```{r}
 library(tibble)
 rows <- tribble(~term,          ~OLS,  ~Logit,
                 'factor(cyl)4', '-',   '-',
                 'Info',         '???', 'XYZ')
+attr(rows, 'position') <- c(3, 9)
 
 msummary(models, add_rows = rows)
 ```
