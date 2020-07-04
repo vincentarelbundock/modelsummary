@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Data.frame used to clean up and format goodness-of-fit statistics — gof_map • modelsummary</title>
+<title>Balance table: Summary statistics for different subsets of the data (e.g.,
+control and treatment groups) — datasummary_balance • modelsummary</title>
 
 
 <!-- jquery -->
@@ -41,11 +42,10 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Data.frame used to clean up and format goodness-of-fit statistics — gof_map" />
-<meta property="og:description" content="By default, this data frame is passed to the 'gof_map' argument of the
-'msummary' or 'modelsummary' functions. Users can modify this data frame to
-customize the list of statistics to display and their format. See example
-below." />
+<meta property="og:title" content="Balance table: Summary statistics for different subsets of the data (e.g.,
+control and treatment groups) — datasummary_balance" />
+<meta property="og:description" content="Balance table: Summary statistics for different subsets of the data (e.g.,
+control and treatment groups)" />
 
 
 
@@ -134,36 +134,96 @@ below." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Data.frame used to clean up and format goodness-of-fit statistics</h1>
-    <small class="dont-index">Source: <a href='https://github.com/vincentarelbundock/modelsummary/blob/master/R/gof_map.R'><code>R/gof_map.R</code></a></small>
-    <div class="hidden name"><code>gof_map.Rd</code></div>
+    <h1>Balance table: Summary statistics for different subsets of the data (e.g.,
+control and treatment groups)</h1>
+    <small class="dont-index">Source: <a href='https://github.com/vincentarelbundock/modelsummary/blob/master/R/datasummary_balance.R'><code>R/datasummary_balance.R</code></a></small>
+    <div class="hidden name"><code>datasummary_balance.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>By default, this data frame is passed to the 'gof_map' argument of the
-'msummary' or 'modelsummary' functions. Users can modify this data frame to
-customize the list of statistics to display and their format. See example
-below.</p>
+    <p>Balance table: Summary statistics for different subsets of the data (e.g.,
+control and treatment groups)</p>
     </div>
 
-    <pre class="usage"><span class='no'>gof_map</span></pre>
+    <pre class="usage"><span class='fu'>datasummary_balance</span>(
+  <span class='no'>formula</span>,
+  <span class='no'>data</span>,
+  <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"default"</span>,
+  <span class='kw'>fmt</span> <span class='kw'>=</span> <span class='st'>"%.1f"</span>,
+  <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>notes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>align</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>add_columns</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>dinm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>dinm_statistic</span> <span class='kw'>=</span> <span class='st'>"std.error"</span>,
+  <span class='no'>...</span>
+)</pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>formula</th>
+      <td><p>a one-sided formula with the column variable on the right-hand
+side.</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>A data.frame (or tibble) with one required column called
+"condition", and optional columns called "blocks", "clusters", and/or
+"weights". The data in these columns must compatible with the corresponding
+arguments of the 'difference_in_means' function from the 'estimatr'
+package.</p></td>
+    </tr>
+    <tr>
+      <th>output</th>
+      <td><p>filename or object type (string)</p><ul>
+<li><p>Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.</p></li>
+<li><p>Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".</p></li>
+<li><p>When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.</p></li>
+</ul></td>
+    </tr>
+    <tr>
+      <th>fmt</th>
+      <td><p>string which specifies how numeric values will be rounded. This
+string is passed to the `sprintf` function. '%.3f' will keep 3 digits after
+the decimal point with trailing zero. '%.5f' will keep 5 digits. '%.3e' will
+use exponential notation. See `?sprintf` for more options.</p></td>
+    </tr>
+    <tr>
+      <th>title</th>
+      <td><p>string</p></td>
+    </tr>
+    <tr>
+      <th>notes</th>
+      <td><p>list or vector of notes to append to the bottom of the table.</p></td>
+    </tr>
+    <tr>
+      <th>align</th>
+      <td><p>A character string of length equal to the number of columns in
+the table.  "lcr" means that the first column will be left-aligned, the 2nd
+column center-aligned, and the 3rd column right-aligned.</p></td>
+    </tr>
+    <tr>
+      <th>add_columns</th>
+      <td><p>a data.frame (or tibble) with the same number of rows as
+your main table.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>all other arguments are passed to the `tidy` method used to
+extract estimates from the model. For example, this allows users to set
+`exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>data.frame with 4 columns of character data: raw, clean, fmt, omit</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>modelsummary</span>)
-<span class='no'>mod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>wt</span> ~ <span class='no'>drat</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='no'>gm</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>modelsummary</span><span class='kw ns'>::</span><span class='no'>gof_map</span>
-<span class='no'>gm</span>$<span class='no'>omit</span>[<span class='no'>gm</span>$<span class='no'>raw</span> <span class='kw'>==</span> <span class='st'>'deviance'</span>] <span class='kw'>&lt;-</span> <span class='fl'>FALSE</span>
-<span class='no'>gm</span>$<span class='no'>fmt</span>[<span class='no'>gm</span>$<span class='no'>raw</span> <span class='kw'>==</span> <span class='st'>'r.squared'</span>] <span class='kw'>&lt;-</span> <span class='st'>"%.5f"</span>
-<span class='fu'><a href='msummary.html'>msummary</a></span>(<span class='no'>mod</span>, <span class='kw'>gof_map</span> <span class='kw'>=</span> <span class='no'>gm</span>)</div><div class='output co'>#&gt; &lt;style&gt;html {
+    <pre class="examples"><div class='input'><span class='fu'>datasummary_balance</span>(~<span class='no'>am</span>, <span class='no'>mtcars</span>)</div><div class='output co'>#&gt; &lt;style&gt;html {
 #&gt;   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_table {
+#&gt; #rewkadgwxb .gt_table {
 #&gt;   display: table;
 #&gt;   border-collapse: collapse;
 #&gt;   margin-left: auto;
@@ -186,7 +246,7 @@ below.</p>
 #&gt;   border-left-color: #D3D3D3;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_heading {
+#&gt; #rewkadgwxb .gt_heading {
 #&gt;   background-color: #FFFFFF;
 #&gt;   text-align: center;
 #&gt;   border-bottom-color: #FFFFFF;
@@ -198,7 +258,7 @@ below.</p>
 #&gt;   border-right-color: #D3D3D3;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_title {
+#&gt; #rewkadgwxb .gt_title {
 #&gt;   color: #333333;
 #&gt;   font-size: 125%;
 #&gt;   font-weight: initial;
@@ -208,7 +268,7 @@ below.</p>
 #&gt;   border-bottom-width: 0;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_subtitle {
+#&gt; #rewkadgwxb .gt_subtitle {
 #&gt;   color: #333333;
 #&gt;   font-size: 85%;
 #&gt;   font-weight: initial;
@@ -218,13 +278,13 @@ below.</p>
 #&gt;   border-top-width: 0;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_bottom_border {
+#&gt; #rewkadgwxb .gt_bottom_border {
 #&gt;   border-bottom-style: solid;
 #&gt;   border-bottom-width: 2px;
 #&gt;   border-bottom-color: #D3D3D3;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_col_headings {
+#&gt; #rewkadgwxb .gt_col_headings {
 #&gt;   border-top-style: solid;
 #&gt;   border-top-width: 2px;
 #&gt;   border-top-color: #D3D3D3;
@@ -239,7 +299,7 @@ below.</p>
 #&gt;   border-right-color: #D3D3D3;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_col_heading {
+#&gt; #rewkadgwxb .gt_col_heading {
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
 #&gt;   font-size: 100%;
@@ -259,7 +319,7 @@ below.</p>
 #&gt;   overflow-x: hidden;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_column_spanner_outer {
+#&gt; #rewkadgwxb .gt_column_spanner_outer {
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
 #&gt;   font-size: 100%;
@@ -271,15 +331,15 @@ below.</p>
 #&gt;   padding-right: 4px;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_column_spanner_outer:first-child {
+#&gt; #rewkadgwxb .gt_column_spanner_outer:first-child {
 #&gt;   padding-left: 0;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_column_spanner_outer:last-child {
+#&gt; #rewkadgwxb .gt_column_spanner_outer:last-child {
 #&gt;   padding-right: 0;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_column_spanner {
+#&gt; #rewkadgwxb .gt_column_spanner {
 #&gt;   border-bottom-style: solid;
 #&gt;   border-bottom-width: 2px;
 #&gt;   border-bottom-color: #D3D3D3;
@@ -291,7 +351,7 @@ below.</p>
 #&gt;   width: 100%;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_group_heading {
+#&gt; #rewkadgwxb .gt_group_heading {
 #&gt;   padding: 8px;
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
@@ -313,7 +373,7 @@ below.</p>
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_empty_group_heading {
+#&gt; #rewkadgwxb .gt_empty_group_heading {
 #&gt;   padding: 0.5px;
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
@@ -328,19 +388,19 @@ below.</p>
 #&gt;   vertical-align: middle;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_striped {
+#&gt; #rewkadgwxb .gt_striped {
 #&gt;   background-color: rgba(128, 128, 128, 0.05);
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_from_md &gt; :first-child {
+#&gt; #rewkadgwxb .gt_from_md &gt; :first-child {
 #&gt;   margin-top: 0;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_from_md &gt; :last-child {
+#&gt; #rewkadgwxb .gt_from_md &gt; :last-child {
 #&gt;   margin-bottom: 0;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_row {
+#&gt; #rewkadgwxb .gt_row {
 #&gt;   padding-top: 8px;
 #&gt;   padding-bottom: 8px;
 #&gt;   padding-left: 5px;
@@ -359,7 +419,7 @@ below.</p>
 #&gt;   overflow-x: hidden;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_stub {
+#&gt; #rewkadgwxb .gt_stub {
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
 #&gt;   font-size: 100%;
@@ -371,7 +431,7 @@ below.</p>
 #&gt;   padding-left: 12px;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_summary_row {
+#&gt; #rewkadgwxb .gt_summary_row {
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
 #&gt;   text-transform: inherit;
@@ -381,7 +441,7 @@ below.</p>
 #&gt;   padding-right: 5px;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_first_summary_row {
+#&gt; #rewkadgwxb .gt_first_summary_row {
 #&gt;   padding-top: 8px;
 #&gt;   padding-bottom: 8px;
 #&gt;   padding-left: 5px;
@@ -391,7 +451,7 @@ below.</p>
 #&gt;   border-top-color: #D3D3D3;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_grand_summary_row {
+#&gt; #rewkadgwxb .gt_grand_summary_row {
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
 #&gt;   text-transform: inherit;
@@ -401,7 +461,7 @@ below.</p>
 #&gt;   padding-right: 5px;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_first_grand_summary_row {
+#&gt; #rewkadgwxb .gt_first_grand_summary_row {
 #&gt;   padding-top: 8px;
 #&gt;   padding-bottom: 8px;
 #&gt;   padding-left: 5px;
@@ -411,7 +471,7 @@ below.</p>
 #&gt;   border-top-color: #D3D3D3;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_table_body {
+#&gt; #rewkadgwxb .gt_table_body {
 #&gt;   border-top-style: solid;
 #&gt;   border-top-width: 2px;
 #&gt;   border-top-color: #D3D3D3;
@@ -420,7 +480,7 @@ below.</p>
 #&gt;   border-bottom-color: #D3D3D3;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_footnotes {
+#&gt; #rewkadgwxb .gt_footnotes {
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
 #&gt;   border-bottom-style: none;
@@ -434,13 +494,13 @@ below.</p>
 #&gt;   border-right-color: #D3D3D3;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_footnote {
+#&gt; #rewkadgwxb .gt_footnote {
 #&gt;   margin: 0px;
 #&gt;   font-size: 90%;
 #&gt;   padding: 4px;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_sourcenotes {
+#&gt; #rewkadgwxb .gt_sourcenotes {
 #&gt;   color: #333333;
 #&gt;   background-color: #FFFFFF;
 #&gt;   border-bottom-style: none;
@@ -454,97 +514,156 @@ below.</p>
 #&gt;   border-right-color: #D3D3D3;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_sourcenote {
+#&gt; #rewkadgwxb .gt_sourcenote {
 #&gt;   font-size: 90%;
 #&gt;   padding: 4px;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_left {
+#&gt; #rewkadgwxb .gt_left {
 #&gt;   text-align: left;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_center {
+#&gt; #rewkadgwxb .gt_center {
 #&gt;   text-align: center;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_right {
+#&gt; #rewkadgwxb .gt_right {
 #&gt;   text-align: right;
 #&gt;   font-variant-numeric: tabular-nums;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_font_normal {
+#&gt; #rewkadgwxb .gt_font_normal {
 #&gt;   font-weight: normal;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_font_bold {
+#&gt; #rewkadgwxb .gt_font_bold {
 #&gt;   font-weight: bold;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_font_italic {
+#&gt; #rewkadgwxb .gt_font_italic {
 #&gt;   font-style: italic;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_super {
+#&gt; #rewkadgwxb .gt_super {
 #&gt;   font-size: 65%;
 #&gt; }
 #&gt; 
-#&gt; #hisifmmyuc .gt_footnote_marks {
+#&gt; #rewkadgwxb .gt_footnote_marks {
 #&gt;   font-style: italic;
 #&gt;   font-size: 65%;
 #&gt; }
 #&gt; &lt;/style&gt;
-#&gt; &lt;div id="hisifmmyuc" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"&gt;&lt;table class="gt_table"&gt;
+#&gt; &lt;div id="rewkadgwxb" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"&gt;&lt;table class="gt_table"&gt;
 #&gt;   
 #&gt;   &lt;thead class="gt_col_headings"&gt;
 #&gt;     &lt;tr&gt;
-#&gt;       &lt;th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"&gt; &lt;/th&gt;
-#&gt;       &lt;th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"&gt;Model 1&lt;/th&gt;
+#&gt;       &lt;th class="gt_col_heading gt_center gt_columns_bottom_border" rowspan="2" colspan="1"&gt; &lt;/th&gt;
+#&gt;       &lt;th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2"&gt;
+#&gt;         &lt;span class="gt_column_spanner"&gt;0 (N=19)&lt;/span&gt;
+#&gt;       &lt;/th&gt;
+#&gt;       &lt;th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2"&gt;
+#&gt;         &lt;span class="gt_column_spanner"&gt;1 (N=13)&lt;/span&gt;
+#&gt;       &lt;/th&gt;
+#&gt;       &lt;th class="gt_col_heading gt_center gt_columns_bottom_border" rowspan="2" colspan="1"&gt;Diff. in Means&lt;/th&gt;
+#&gt;       &lt;th class="gt_col_heading gt_center gt_columns_bottom_border" rowspan="2" colspan="1"&gt;Std. Error&lt;/th&gt;
+#&gt;     &lt;/tr&gt;
+#&gt;     &lt;tr&gt;
+#&gt;       &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;Mean&lt;/th&gt;
+#&gt;       &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;Std. Dev.&lt;/th&gt;
+#&gt;       &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;Mean &lt;/th&gt;
+#&gt;       &lt;th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"&gt;Std. Dev. &lt;/th&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;   &lt;/thead&gt;
 #&gt;   &lt;tbody class="gt_table_body"&gt;
 #&gt;     &lt;tr&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;(Intercept)&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;7.906&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_left"&gt;mpg&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;17.1&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;3.8&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;24.4&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;6.2&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;7.2&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;1.9&lt;/td&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;     &lt;tr&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;(0.852)&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_left"&gt;cyl&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;6.9&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;1.5&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;5.1&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;1.6&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;-1.9&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.6&lt;/td&gt;
+#&gt;     &lt;/tr&gt;
+#&gt;     &lt;tr&gt;
+#&gt;       &lt;td class="gt_row gt_left"&gt;disp&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;290.4&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;110.2&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;143.5&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;87.2&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;-146.8&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;35.0&lt;/td&gt;
+#&gt;     &lt;/tr&gt;
+#&gt;     &lt;tr&gt;
+#&gt;       &lt;td class="gt_row gt_left"&gt;hp&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;160.3&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;53.9&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;126.8&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;84.1&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;-33.4&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;26.4&lt;/td&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;     &lt;tr&gt;
 #&gt;       &lt;td class="gt_row gt_left"&gt;drat&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;-1.304&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;3.3&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.4&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;4.0&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.4&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.8&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.1&lt;/td&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;     &lt;tr&gt;
-#&gt;       &lt;td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"&gt;&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"&gt;(0.234)&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_left"&gt;wt&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;3.8&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.8&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;2.4&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.6&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;-1.4&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.2&lt;/td&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;     &lt;tr&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;Num.Obs.&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;32&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_left"&gt;qsec&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;18.2&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;1.8&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;17.4&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;1.8&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;-0.8&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.6&lt;/td&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;     &lt;tr&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;R2&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;0.50757&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_left"&gt;vs&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.4&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.5&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.5&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.5&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.2&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.2&lt;/td&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;     &lt;tr&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;R2 Adj.&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;0.491&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_left"&gt;gear&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;3.2&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.4&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;4.4&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.5&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;1.2&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.2&lt;/td&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;     &lt;tr&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;AIC&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;71.7&lt;/td&gt;
-#&gt;     &lt;/tr&gt;
-#&gt;     &lt;tr&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;BIC&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;76.1&lt;/td&gt;
-#&gt;     &lt;/tr&gt;
-#&gt;     &lt;tr&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;Log.Lik.&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;-32.867&lt;/td&gt;
-#&gt;     &lt;/tr&gt;
-#&gt;     &lt;tr&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;Deviance&lt;/td&gt;
-#&gt;       &lt;td class="gt_row gt_left"&gt;14.61&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_left"&gt;carb&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;2.7&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;1.1&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;2.9&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;2.2&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.2&lt;/td&gt;
+#&gt;       &lt;td class="gt_row gt_right"&gt;0.7&lt;/td&gt;
 #&gt;     &lt;/tr&gt;
 #&gt;   &lt;/tbody&gt;
 #&gt;   

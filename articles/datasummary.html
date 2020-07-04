@@ -134,9 +134,9 @@ tbody {
 <li>
 <code><a href="../reference/datasummary_correlation.html">datasummary_correlation()</a></code>: Table of correlations.</li>
 <li>
-<code><a href="../reference/datasummary_table1.html">datasummary_table1()</a></code>: Group characteristics (e.g., control vs. treatment)</li>
+<code><a href="../reference/datasummary_balance.html">datasummary_balance()</a></code>: Group characteristics (e.g., control vs. treatment)</li>
 </ul>
-<p>In the next three sections, we illustrate how to use <code>datasummary_skim</code>, <code>datasummary_correlation</code>, and <code>datasummary_table1</code>. Then, we dive into <code>datasummary</code> itself to highlight its ease and flexibility.</p>
+<p>In the next three sections, we illustrate how to use <code>datasummary_skim</code>, <code>datasummary_correlation</code>, and <code>datasummary_balance</code>. Then, we dive into <code>datasummary</code> itself to highlight its ease and flexibility.</p>
 </div>
 <div id="datasummary_skim" class="section level1">
 <h1 class="hasAnchor">
@@ -904,12 +904,12 @@ carb
 </table>
 <p>The values displayed in this table are equivalent to those obtained by calling: <code><a href="https://rdrr.io/r/stats/cor.html">cor(x, use='pairwise.complete.obs')</a></code>.</p>
 </div>
-<div id="datasummary_table1" class="section level1">
+<div id="datasummary_balance" class="section level1">
 <h1 class="hasAnchor">
-<a href="#datasummary_table1" class="anchor"></a><code>datasummary_table1</code>
+<a href="#datasummary_balance" class="anchor"></a><code>datasummary_balance</code>
 </h1>
 <p>The expression “Table 1” refers to a particular style of table which is often printed in the opening pages of a scientific peer reviewed article. Typically, this table will include basic descriptive statistics about different subsets of the study population. For instance, analysts may want to display the socio-demographic characteristics of members of the Control and Treatement groups in a randomized control trial, or the flipper length and male and female penguins.</p>
-<p>To illustrate how to build a Table 1 using the <code>datasummary_table1</code> function, we download data about a job training experiment studies in Lalonde (1986). Then, we clean up the data by renaming and recoding a few variables.</p>
+<p>To illustrate how to build a Table 1 using the <code>datasummary_balance</code> function, we download data about a job training experiment studies in Lalonde (1986). Then, we clean up the data by renaming and recoding a few variables.</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="co"># Download and read data</span>
 <span class="no">training</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv'</span>
 <span class="no">training</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">training</span>)
@@ -940,10 +940,10 @@ carb
 <span class="no">reference</span> <span class="kw">&lt;-</span> <span class="st">'Source: Lalonde (1986) American Economic Review.'</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
-<span class="fu"><a href="../reference/datasummary_table1.html">datasummary_table1</a></span>(~<span class="no">Treatment</span>,
-                   <span class="kw">data</span> <span class="kw">=</span> <span class="no">training</span>,
-                   <span class="kw">title</span> <span class="kw">=</span> <span class="no">caption</span>,
-                   <span class="kw">notes</span> <span class="kw">=</span> <span class="no">reference</span>)</pre></body></html></div>
+<span class="fu"><a href="../reference/datasummary_balance.html">datasummary_balance</a></span>(~<span class="no">Treatment</span>,
+                    <span class="kw">data</span> <span class="kw">=</span> <span class="no">training</span>,
+                    <span class="kw">title</span> <span class="kw">=</span> <span class="no">caption</span>,
+                    <span class="kw">notes</span> <span class="kw">=</span> <span class="no">reference</span>)</pre></body></html></div>
 <table class="table table">
 <caption>
 Descriptive statistics about participants in a job training experiment. This table was created using the “datasummary” function from the “modelsummary” package for R.
@@ -962,6 +962,8 @@ Control (N=2490)
 Treatment (N=185)
 </div>
 </th>
+<th style="border-bottom:hidden" colspan="2">
+</th>
 </tr>
 <tr>
 <th style="text-align:left;">
@@ -971,14 +973,20 @@ Treatment (N=185)
 <th style="text-align:right;">
 Mean
 </th>
-<th style="text-align:left;">
-(SD)
+<th style="text-align:right;">
+Std. Dev.
 </th>
 <th style="text-align:right;">
 Mean
 </th>
-<th style="text-align:left;">
-(SD)
+<th style="text-align:right;">
+Std. Dev.
+</th>
+<th style="text-align:right;">
+Diff. in Means
+</th>
+<th style="text-align:right;">
+Std. Error
 </th>
 </tr>
 </thead>
@@ -992,14 +1000,20 @@ Earnings pre-treatment (1,000USD)
 <td style="text-align:right;">
 19.1
 </td>
-<td style="text-align:left;">
-(13.6)
+<td style="text-align:right;">
+13.6
 </td>
 <td style="text-align:right;">
 1.5
 </td>
-<td style="text-align:left;">
-(3.2)
+<td style="text-align:right;">
+3.2
+</td>
+<td style="text-align:right;">
+-17.5
+</td>
+<td style="text-align:right;">
+0.4
 </td>
 </tr>
 <tr>
@@ -1011,14 +1025,20 @@ Earnings post-treatment (1,000USD)
 <td style="text-align:right;">
 21.6
 </td>
-<td style="text-align:left;">
-(15.6)
+<td style="text-align:right;">
+15.6
 </td>
 <td style="text-align:right;">
 6.3
 </td>
-<td style="text-align:left;">
-(7.9)
+<td style="text-align:right;">
+7.9
+</td>
+<td style="text-align:right;">
+-15.2
+</td>
+<td style="text-align:right;">
+0.7
 </td>
 </tr>
 <tr>
@@ -1030,14 +1050,20 @@ Age
 <td style="text-align:right;">
 34.9
 </td>
-<td style="text-align:left;">
-(10.4)
+<td style="text-align:right;">
+10.4
 </td>
 <td style="text-align:right;">
 25.8
 </td>
-<td style="text-align:left;">
-(7.2)
+<td style="text-align:right;">
+7.2
+</td>
+<td style="text-align:right;">
+-9.0
+</td>
+<td style="text-align:right;">
+0.6
 </td>
 </tr>
 <tr>
@@ -1049,32 +1075,42 @@ Education
 <td style="text-align:right;">
 12.1
 </td>
-<td style="text-align:left;">
-(3.1)
+<td style="text-align:right;">
+3.1
 </td>
 <td style="text-align:right;">
 10.3
 </td>
-<td style="text-align:left;">
-(2.0)
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+-1.8
+</td>
+<td style="text-align:right;">
+0.2
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;font-weight: bold;">
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;font-weight: bold;">
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 N
 </td>
-<td style="text-align:left;">
-(%)
+<td style="text-align:right;font-weight: bold;">
+%
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 N
 </td>
-<td style="text-align:left;">
-(%)
+<td style="text-align:right;font-weight: bold;">
+%
+</td>
+<td style="text-align:right;font-weight: bold;">
+</td>
+<td style="text-align:right;font-weight: bold;">
 </td>
 </tr>
 <tr>
@@ -1085,16 +1121,20 @@ Ethnicity
 black
 </td>
 <td style="text-align:right;">
-624.00000000000000000000000000000000000000000000000000
-</td>
-<td style="text-align:left;">
-<ol start="25" style="list-style-type: decimal"><li></ol>
+624
 </td>
 <td style="text-align:right;">
-156.00000000000000000000000000000000000000000000000000
+25
 </td>
-<td style="text-align:left;">
-<ol start="84" style="list-style-type: decimal"><li></ol>
+<td style="text-align:right;">
+156
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
 </td>
 </tr>
 <tr>
@@ -1104,16 +1144,20 @@ black
 hispanic
 </td>
 <td style="text-align:right;">
-81.00000000000000000000000000000000000000000000000000
-</td>
-<td style="text-align:left;">
-<ol start="3" style="list-style-type: decimal"><li></ol>
+81
 </td>
 <td style="text-align:right;">
-11.00000000000000000000000000000000000000000000000000
+3
 </td>
-<td style="text-align:left;">
-<ol start="6" style="list-style-type: decimal"><li></ol>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
 </td>
 </tr>
 <tr>
@@ -1123,16 +1167,20 @@ hispanic
 other
 </td>
 <td style="text-align:right;">
-1785.00000000000000000000000000000000000000000000000000
-</td>
-<td style="text-align:left;">
-<ol start="72" style="list-style-type: decimal"><li></ol>
+1785
 </td>
 <td style="text-align:right;">
-18.00000000000000000000000000000000000000000000000000
+72
 </td>
-<td style="text-align:left;">
-<ol start="10" style="list-style-type: decimal"><li></ol>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
 </td>
 </tr>
 <tr>
@@ -1143,16 +1191,20 @@ Married
 No
 </td>
 <td style="text-align:right;">
-333.00000000000000000000000000000000000000000000000000
-</td>
-<td style="text-align:left;">
-<ol start="13" style="list-style-type: decimal"><li></ol>
+333
 </td>
 <td style="text-align:right;">
-150.00000000000000000000000000000000000000000000000000
+13
 </td>
-<td style="text-align:left;">
-<ol start="81" style="list-style-type: decimal"><li></ol>
+<td style="text-align:right;">
+150
+</td>
+<td style="text-align:right;">
+81
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
 </td>
 </tr>
 <tr>
@@ -1162,16 +1214,20 @@ No
 Yes
 </td>
 <td style="text-align:right;">
-2157.00000000000000000000000000000000000000000000000000
-</td>
-<td style="text-align:left;">
-<ol start="87" style="list-style-type: decimal"><li></ol>
+2157
 </td>
 <td style="text-align:right;">
-35.00000000000000000000000000000000000000000000000000
+87
 </td>
-<td style="text-align:left;">
-<ol start="19" style="list-style-type: decimal"><li></ol>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
 </td>
 </tr>
 </tbody>
@@ -2565,7 +2621,7 @@ flipper_length_mm
 </td>
 </tr></tbody>
 </table>
-<p>If you do <em>not</em> want <code>datasummary</code> to format numbers, and you want to keep the numerical values instead of formatted strings, set <code>fmt=NULL</code>. This can be useful when post-processing tables with packages like <code>gt</code>, which allow you to transform cells based on their numerical content:</p>
+<p>If you do <em>not</em> want <code>datasummary</code> to format numbers, and you want to keep the numerical values instead of formatted strings, set <code>fmt=NULL</code>. This can be useful when post-processing tables with packages like <code>gt</code>, which allow you to transform cells based on their numerical content (this <code>gt</code> table will be omitted from PDF output):</p>
 <div class="sourceCode" id="cb35"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
 
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="fu"><a href="../reference/All.html">All</a></span>(<span class="no">mtcars</span>) ~ <span class="no">Mean</span> + <span class="no">SD</span>,
@@ -2578,7 +2634,7 @@ flipper_length_mm
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#erqlqymhcr .gt_table {
+#wtdmmpswcs .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2601,7 +2657,7 @@ flipper_length_mm
   border-left-color: #D3D3D3;
 }
 
-#erqlqymhcr .gt_heading {
+#wtdmmpswcs .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2613,7 +2669,7 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#erqlqymhcr .gt_title {
+#wtdmmpswcs .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2623,7 +2679,7 @@ flipper_length_mm
   border-bottom-width: 0;
 }
 
-#erqlqymhcr .gt_subtitle {
+#wtdmmpswcs .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2633,13 +2689,13 @@ flipper_length_mm
   border-top-width: 0;
 }
 
-#erqlqymhcr .gt_bottom_border {
+#wtdmmpswcs .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#erqlqymhcr .gt_col_headings {
+#wtdmmpswcs .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2654,7 +2710,7 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#erqlqymhcr .gt_col_heading {
+#wtdmmpswcs .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2674,7 +2730,7 @@ flipper_length_mm
   overflow-x: hidden;
 }
 
-#erqlqymhcr .gt_column_spanner_outer {
+#wtdmmpswcs .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2686,15 +2742,15 @@ flipper_length_mm
   padding-right: 4px;
 }
 
-#erqlqymhcr .gt_column_spanner_outer:first-child {
+#wtdmmpswcs .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#erqlqymhcr .gt_column_spanner_outer:last-child {
+#wtdmmpswcs .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#erqlqymhcr .gt_column_spanner {
+#wtdmmpswcs .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2706,7 +2762,7 @@ flipper_length_mm
   width: 100%;
 }
 
-#erqlqymhcr .gt_group_heading {
+#wtdmmpswcs .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2728,7 +2784,7 @@ flipper_length_mm
   vertical-align: middle;
 }
 
-#erqlqymhcr .gt_empty_group_heading {
+#wtdmmpswcs .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2743,19 +2799,19 @@ flipper_length_mm
   vertical-align: middle;
 }
 
-#erqlqymhcr .gt_striped {
+#wtdmmpswcs .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#erqlqymhcr .gt_from_md > :first-child {
+#wtdmmpswcs .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#erqlqymhcr .gt_from_md > :last-child {
+#wtdmmpswcs .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#erqlqymhcr .gt_row {
+#wtdmmpswcs .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2774,7 +2830,7 @@ flipper_length_mm
   overflow-x: hidden;
 }
 
-#erqlqymhcr .gt_stub {
+#wtdmmpswcs .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2786,7 +2842,7 @@ flipper_length_mm
   padding-left: 12px;
 }
 
-#erqlqymhcr .gt_summary_row {
+#wtdmmpswcs .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2796,7 +2852,7 @@ flipper_length_mm
   padding-right: 5px;
 }
 
-#erqlqymhcr .gt_first_summary_row {
+#wtdmmpswcs .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2806,7 +2862,7 @@ flipper_length_mm
   border-top-color: #D3D3D3;
 }
 
-#erqlqymhcr .gt_grand_summary_row {
+#wtdmmpswcs .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2816,7 +2872,7 @@ flipper_length_mm
   padding-right: 5px;
 }
 
-#erqlqymhcr .gt_first_grand_summary_row {
+#wtdmmpswcs .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2826,7 +2882,7 @@ flipper_length_mm
   border-top-color: #D3D3D3;
 }
 
-#erqlqymhcr .gt_table_body {
+#wtdmmpswcs .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2835,7 +2891,7 @@ flipper_length_mm
   border-bottom-color: #D3D3D3;
 }
 
-#erqlqymhcr .gt_footnotes {
+#wtdmmpswcs .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2849,13 +2905,13 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#erqlqymhcr .gt_footnote {
+#wtdmmpswcs .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#erqlqymhcr .gt_sourcenotes {
+#wtdmmpswcs .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2869,46 +2925,46 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#erqlqymhcr .gt_sourcenote {
+#wtdmmpswcs .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#erqlqymhcr .gt_left {
+#wtdmmpswcs .gt_left {
   text-align: left;
 }
 
-#erqlqymhcr .gt_center {
+#wtdmmpswcs .gt_center {
   text-align: center;
 }
 
-#erqlqymhcr .gt_right {
+#wtdmmpswcs .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#erqlqymhcr .gt_font_normal {
+#wtdmmpswcs .gt_font_normal {
   font-weight: normal;
 }
 
-#erqlqymhcr .gt_font_bold {
+#wtdmmpswcs .gt_font_bold {
   font-weight: bold;
 }
 
-#erqlqymhcr .gt_font_italic {
+#wtdmmpswcs .gt_font_italic {
   font-style: italic;
 }
 
-#erqlqymhcr .gt_super {
+#wtdmmpswcs .gt_super {
   font-size: 65%;
 }
 
-#erqlqymhcr .gt_footnote_marks {
+#wtdmmpswcs .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="erqlqymhcr" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="wtdmmpswcs" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"> </th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Mean</th>
@@ -3605,11 +3661,250 @@ culmen_length_mm
 </tbody>
 </table>
 </div>
+<div id="add_columns-and-add_rows" class="section level1">
+<h1 class="hasAnchor">
+<a href="#add_columns-and-add_rows" class="anchor"></a><code>add_columns</code> and <code>add_rows</code>
+</h1>
+<div class="sourceCode" id="cb42"><html><body><pre class="r"><span class="no">new_rows</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="st">'Does'</span>,
+                       <span class="fl">2</span>,
+                       <span class="st">'plus'</span>,
+                       <span class="fl">2</span>,
+                       <span class="st">'equals'</span>,
+                       <span class="fl">5</span>,
+                       <span class="st">'?'</span>)
+<span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">flipper_length_mm</span> + <span class="no">body_mass_g</span> ~ <span class="no">species</span> * (<span class="no">Mean</span> + <span class="no">SD</span>),
+            <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>,
+            <span class="kw">add_rows</span> <span class="kw">=</span> <span class="no">new_rows</span>)</pre></body></html></div>
+<table class="table table">
+<thead>
+<tr>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Adelie
+</div>
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Chinstrap
+</div>
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Gentoo
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+SD
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+SD
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+SD
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+flipper_length_mm
+</td>
+<td style="text-align:right;">
+189.95
+</td>
+<td style="text-align:right;">
+6.54
+</td>
+<td style="text-align:right;">
+195.82
+</td>
+<td style="text-align:right;">
+7.13
+</td>
+<td style="text-align:right;">
+217.19
+</td>
+<td style="text-align:right;">
+6.48
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+body_mass_g
+</td>
+<td style="text-align:right;">
+3700.66
+</td>
+<td style="text-align:right;">
+458.57
+</td>
+<td style="text-align:right;">
+3733.09
+</td>
+<td style="text-align:right;">
+384.34
+</td>
+<td style="text-align:right;">
+5076.02
+</td>
+<td style="text-align:right;">
+504.12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Does
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+plus
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+equals
+</td>
+<td style="text-align:right;">
+5.00
+</td>
+<td style="text-align:right;">
+?
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="no">new_cols</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="st">'New Stat'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span>(<span class="fl">2</span>))
+<span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">flipper_length_mm</span> + <span class="no">body_mass_g</span> ~ <span class="no">species</span> * (<span class="no">Mean</span> + <span class="no">SD</span>),
+            <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>,
+            <span class="kw">add_columns</span> <span class="kw">=</span> <span class="no">new_cols</span>)</pre></body></html></div>
+<table class="table table">
+<thead>
+<tr>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Adelie
+</div>
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Chinstrap
+</div>
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Gentoo
+</div>
+</th>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+SD
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+SD
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+SD
+</th>
+<th style="text-align:right;">
+New.Stat
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+flipper_length_mm
+</td>
+<td style="text-align:right;">
+189.95
+</td>
+<td style="text-align:right;">
+6.54
+</td>
+<td style="text-align:right;">
+195.82
+</td>
+<td style="text-align:right;">
+7.13
+</td>
+<td style="text-align:right;">
+217.19
+</td>
+<td style="text-align:right;">
+6.48
+</td>
+<td style="text-align:right;">
+0.63
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+body_mass_g
+</td>
+<td style="text-align:right;">
+3700.66
+</td>
+<td style="text-align:right;">
+458.57
+</td>
+<td style="text-align:right;">
+3733.09
+</td>
+<td style="text-align:right;">
+384.34
+</td>
+<td style="text-align:right;">
+5076.02
+</td>
+<td style="text-align:right;">
+504.12
+</td>
+<td style="text-align:right;">
+0.28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div id="save-and-display" class="section level1">
 <h1 class="hasAnchor">
 <a href="#save-and-display" class="anchor"></a>Save and Display</h1>
 <p><code>datasummary</code> can save tables to several file formats, using the <code>output</code> argument:</p>
-<div class="sourceCode" id="cb42"><html><body><pre class="r"><span class="no">f</span> <span class="kw">&lt;-</span> <span class="no">flipper_length_mm</span> ~ <span class="no">island</span> * (<span class="no">mean</span> + <span class="no">sd</span>)
+<div class="sourceCode" id="cb44"><html><body><pre class="r"><span class="no">f</span> <span class="kw">&lt;-</span> <span class="no">flipper_length_mm</span> ~ <span class="no">island</span> * (<span class="no">mean</span> + <span class="no">sd</span>)
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">f</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.html'</span>)
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">f</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.tex'</span>)
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">f</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.docx'</span>)
@@ -3619,11 +3914,11 @@ culmen_length_mm
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">f</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.jpg'</span>)
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">f</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.png'</span>)</pre></body></html></div>
 <p><code>datasummary</code> can return human-readable markdown, html, or LaTeX code to the console:</p>
-<div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">f</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'markdown'</span>)
+<div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">f</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'markdown'</span>)
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">f</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'html'</span>)
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">f</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'latex'</span>)</pre></body></html></div>
 <p><code>datasummary</code> can return objects compatible with the <code>gt</code>, <code>kableExtra</code>, <code>flextable</code>, and <code>huxtable</code> table creation and customization packages:</p>
-<div class="sourceCode" id="cb44"><html><body><pre class="r"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">f</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'gt'</span>)
+<div class="sourceCode" id="cb46"><html><body><pre class="r"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">f</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'gt'</span>)
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">f</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'kableExtra'</span>)
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">f</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'flextable'</span>)
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">f</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'huxtable'</span>)</pre></body></html></div>
@@ -3633,7 +3928,7 @@ culmen_length_mm
 <h1 class="hasAnchor">
 <a href="#customize" class="anchor"></a>Customize</h1>
 <p>You can customize the tables produced by <code>datasummary</code> using the functions provided by <code>gt</code>, <code>kableExtra</code>, <code>flextable</code>, and <code>huxtable</code>. For instance, to customize tables using <code>kableExtra</code>, we can do:</p>
-<div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)
+<div class="sourceCode" id="cb47"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)
 
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="fu"><a href="../reference/All.html">All</a></span>(<span class="no">penguins</span>) ~ <span class="no">sex</span> * (<span class="no">Mean</span> + <span class="no">SD</span>),
             <span class="kw">data</span> <span class="kw">=</span> <span class="no">penguins</span>,
@@ -3743,7 +4038,7 @@ body_mass_g
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb46"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
+<div class="sourceCode" id="cb48"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
 
 <span class="no">adelie</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/pkg/gt/man/web_image.html">web_image</a></span>(<span class="st">'https://user-images.githubusercontent.com/987057/85402702-20b1d280-b52a-11ea-9950-f3a03133fd45.png'</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="fl">100</span>)
 <span class="no">gentoo</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/pkg/gt/man/web_image.html">web_image</a></span>(<span class="st">'https://user-images.githubusercontent.com/987057/85402718-27404a00-b52a-11ea-9ad3-dd7562f6438d.png'</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="fl">100</span>)
@@ -3769,7 +4064,7 @@ body_mass_g
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#ufucocfflh .gt_table {
+#egpnxxcprs .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -3792,7 +4087,7 @@ body_mass_g
   border-left-color: #D3D3D3;
 }
 
-#ufucocfflh .gt_heading {
+#egpnxxcprs .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3804,7 +4099,7 @@ body_mass_g
   border-right-color: #D3D3D3;
 }
 
-#ufucocfflh .gt_title {
+#egpnxxcprs .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3814,7 +4109,7 @@ body_mass_g
   border-bottom-width: 0;
 }
 
-#ufucocfflh .gt_subtitle {
+#egpnxxcprs .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3824,13 +4119,13 @@ body_mass_g
   border-top-width: 0;
 }
 
-#ufucocfflh .gt_bottom_border {
+#egpnxxcprs .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ufucocfflh .gt_col_headings {
+#egpnxxcprs .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3845,7 +4140,7 @@ body_mass_g
   border-right-color: #D3D3D3;
 }
 
-#ufucocfflh .gt_col_heading {
+#egpnxxcprs .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3865,7 +4160,7 @@ body_mass_g
   overflow-x: hidden;
 }
 
-#ufucocfflh .gt_column_spanner_outer {
+#egpnxxcprs .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3877,15 +4172,15 @@ body_mass_g
   padding-right: 4px;
 }
 
-#ufucocfflh .gt_column_spanner_outer:first-child {
+#egpnxxcprs .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ufucocfflh .gt_column_spanner_outer:last-child {
+#egpnxxcprs .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ufucocfflh .gt_column_spanner {
+#egpnxxcprs .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3897,7 +4192,7 @@ body_mass_g
   width: 100%;
 }
 
-#ufucocfflh .gt_group_heading {
+#egpnxxcprs .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3919,7 +4214,7 @@ body_mass_g
   vertical-align: middle;
 }
 
-#ufucocfflh .gt_empty_group_heading {
+#egpnxxcprs .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3934,19 +4229,19 @@ body_mass_g
   vertical-align: middle;
 }
 
-#ufucocfflh .gt_striped {
+#egpnxxcprs .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ufucocfflh .gt_from_md > :first-child {
+#egpnxxcprs .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ufucocfflh .gt_from_md > :last-child {
+#egpnxxcprs .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ufucocfflh .gt_row {
+#egpnxxcprs .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3965,7 +4260,7 @@ body_mass_g
   overflow-x: hidden;
 }
 
-#ufucocfflh .gt_stub {
+#egpnxxcprs .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3977,7 +4272,7 @@ body_mass_g
   padding-left: 12px;
 }
 
-#ufucocfflh .gt_summary_row {
+#egpnxxcprs .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3987,7 +4282,7 @@ body_mass_g
   padding-right: 5px;
 }
 
-#ufucocfflh .gt_first_summary_row {
+#egpnxxcprs .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3997,7 +4292,7 @@ body_mass_g
   border-top-color: #D3D3D3;
 }
 
-#ufucocfflh .gt_grand_summary_row {
+#egpnxxcprs .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4007,7 +4302,7 @@ body_mass_g
   padding-right: 5px;
 }
 
-#ufucocfflh .gt_first_grand_summary_row {
+#egpnxxcprs .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4017,7 +4312,7 @@ body_mass_g
   border-top-color: #D3D3D3;
 }
 
-#ufucocfflh .gt_table_body {
+#egpnxxcprs .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4026,7 +4321,7 @@ body_mass_g
   border-bottom-color: #D3D3D3;
 }
 
-#ufucocfflh .gt_footnotes {
+#egpnxxcprs .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4040,13 +4335,13 @@ body_mass_g
   border-right-color: #D3D3D3;
 }
 
-#ufucocfflh .gt_footnote {
+#egpnxxcprs .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#ufucocfflh .gt_sourcenotes {
+#egpnxxcprs .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4060,46 +4355,46 @@ body_mass_g
   border-right-color: #D3D3D3;
 }
 
-#ufucocfflh .gt_sourcenote {
+#egpnxxcprs .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#ufucocfflh .gt_left {
+#egpnxxcprs .gt_left {
   text-align: left;
 }
 
-#ufucocfflh .gt_center {
+#egpnxxcprs .gt_center {
   text-align: center;
 }
 
-#ufucocfflh .gt_right {
+#egpnxxcprs .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ufucocfflh .gt_font_normal {
+#egpnxxcprs .gt_font_normal {
   font-weight: normal;
 }
 
-#ufucocfflh .gt_font_bold {
+#egpnxxcprs .gt_font_bold {
   font-weight: bold;
 }
 
-#ufucocfflh .gt_font_italic {
+#egpnxxcprs .gt_font_italic {
   font-style: italic;
 }
 
-#ufucocfflh .gt_super {
+#egpnxxcprs .gt_super {
   font-size: 65%;
 }
 
-#ufucocfflh .gt_footnote_marks {
+#egpnxxcprs .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="ufucocfflh" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="egpnxxcprs" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_header">
 <tr>
 <th colspan="6" class="gt_heading gt_title gt_font_normal" style>Flipper lengths (mm) of the famous penguins of Palmer Station, Antarctica.</th>
@@ -4156,6 +4451,245 @@ body_mass_g
 <td class="gt_sourcenote" colspan="6">Artwork by @allison_horst</td>
     </tr></tfoot>
 </table></div>
+</div>
+<div id="case-study-balance-table" class="section level1">
+<h1 class="hasAnchor">
+<a href="#case-study-balance-table" class="anchor"></a>Case study: Balance table</h1>
+<div class="sourceCode" id="cb49"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv'</span> <span class="kw">%&gt;%</span>
+        <span class="no">read.csv</span> <span class="kw">%&gt;%</span>
+        <span class="fu">mutate</span>(<span class="kw">`Earnings pre-treatment`</span> <span class="kw">=</span> <span class="no">re75</span>,
+               <span class="kw">`Earnings post-treatment`</span> <span class="kw">=</span> <span class="no">re78</span>,
+               <span class="kw">condition</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">treat</span> <span class="kw">==</span> <span class="fl">TRUE</span>, <span class="st">'Treatment'</span>, <span class="st">'Control'</span>),
+               <span class="kw">Married</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="no">married</span>)) <span class="kw">%&gt;%</span>
+        <span class="fu">select</span>(<span class="no">`Earnings pre-treatment`</span>,
+               <span class="no">`Earnings post-treatment`</span>,
+               <span class="kw">Age</span> <span class="kw">=</span> <span class="no">age</span>,
+               <span class="kw">Education</span> <span class="kw">=</span> <span class="no">educ</span>,
+               <span class="no">Married</span>,
+               <span class="no">condition</span>)</pre></body></html></div>
+<p>Now, we define a new function called <code>DiM</code>, which computes statistics using the <code>difference_in_means</code> function from the <code>estimatr</code> package. In this function, we assume that the dataset includes a variable named “condition”. In addition, if the dataset includes columns called “clusters”, “weights”, or “blocks”, <code>DiM</code> will calculate design-aware statistics:</p>
+<div class="sourceCode" id="cb50"><html><body><pre class="r"><span class="no">DiM</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>, <span class="no">data</span>, <span class="no">statistic</span> <span class="kw">=</span> <span class="st">'estimate'</span>) {
+    <span class="co"># make sure there is a column called "condition"</span>
+    <span class="kw">if</span> (!<span class="st">'condition'</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">data</span>)) <span class="fu"><a href="https://rdrr.io/r/base/stop.html">stop</a></span>(<span class="st">'To use the DiM function, your dataset must include a column named "condition".'</span>)
+
+    <span class="co"># if clusters, weights, or blocks are absent, we set them to NULL</span>
+    <span class="kw">if</span> (!<span class="st">'clusters'</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">data</span>)) <span class="no">clusters</span> <span class="kw">&lt;-</span> <span class="kw">NULL</span>
+    <span class="kw">if</span> (!<span class="st">'weights'</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">data</span>)) <span class="no">weights</span> <span class="kw">&lt;-</span> <span class="kw">NULL</span>
+    <span class="kw">if</span> (!<span class="st">'blocks'</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">data</span>)) <span class="no">blocks</span> <span class="kw">&lt;-</span> <span class="kw">NULL</span>
+
+    <span class="co"># datasummary supplies a numeric vector. we use it as outcome</span>
+    <span class="no">data</span>$<span class="no">outcome_variable</span> <span class="kw">&lt;-</span> <span class="no">x</span>
+
+    <span class="co"># compute statistics</span>
+    <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">estimatr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/estimatr/man/difference_in_means.html">difference_in_means</a></span>(<span class="no">outcome_variable</span> ~ <span class="no">condition</span>,
+                                         <span class="kw">data</span> <span class="kw">=</span> <span class="no">data</span>,
+                                         <span class="kw">blocks</span> <span class="kw">=</span> <span class="no">blocks</span>,
+                                         <span class="kw">clusters</span> <span class="kw">=</span> <span class="no">clusters</span>,
+                                         <span class="kw">weights</span> <span class="kw">=</span> <span class="no">weights</span>)
+
+    <span class="co"># extract result using estimatr's `tidy` function</span>
+    <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">estimatr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/estimatr/man/reexports.html">tidy</a></span>(<span class="no">out</span>)<span class="kw">[[</span><span class="no">statistic</span>]]
+    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
+}</pre></body></html></div>
+<p>Now, we</p>
+<div class="sourceCode" id="cb51"><html><body><pre class="r"><span class="no">caption</span> <span class="kw">&lt;-</span> <span class="st">'Descriptive statistics about participants in a job training experiment. This table was created using the "datasummary" function from the "modelsummary" package for R.'</span>
+<span class="no">reference</span> <span class="kw">&lt;-</span> <span class="st">'Source: Lalonde (1986) American Economic Review.'</span>
+
+<span class="no">f</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/All.html">All</a></span>(<span class="no">dat</span>) ~
+     <span class="no">condition</span> * (<span class="no">Mean</span> + <span class="no">SD</span>) +
+      (<span class="no">`Difference in Means`</span> <span class="kw">=</span> <span class="no">DiM</span> * <span class="fu">Arguments</span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'estimate'</span>)) +
+      (<span class="no">`Std.Error`</span> <span class="kw">=</span> <span class="no">DiM</span> * <span class="fu">Arguments</span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'std.error'</span>)) +
+      (<span class="no">`p`</span> <span class="kw">=</span> <span class="no">DiM</span> * <span class="fu">Arguments</span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'p.value'</span>))
+
+<span class="fu"><a href="../reference/datasummary.html">datasummary</a></span>(<span class="no">f</span>,
+            <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>,
+            <span class="kw">title</span> <span class="kw">=</span> <span class="no">caption</span>,
+            <span class="kw">notes</span> <span class="kw">=</span> <span class="no">reference</span>)</pre></body></html></div>
+<table class="table table">
+<caption>
+Descriptive statistics about participants in a job training experiment. This table was created using the “datasummary” function from the “modelsummary” package for R.
+</caption>
+<thead>
+<tr>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Control
+</div>
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Treatment
+</div>
+</th>
+<th style="border-bottom:hidden" colspan="3">
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+SD
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+SD
+</th>
+<th style="text-align:right;">
+Difference in Means
+</th>
+<th style="text-align:right;">
+Std.Error
+</th>
+<th style="text-align:right;">
+p
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Earnings pre-treatment
+</td>
+<td style="text-align:right;">
+19063.34
+</td>
+<td style="text-align:right;">
+13596.95
+</td>
+<td style="text-align:right;">
+1532.06
+</td>
+<td style="text-align:right;">
+3219.25
+</td>
+<td style="text-align:right;">
+-17531.28
+</td>
+<td style="text-align:right;">
+360.93
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Earnings post-treatment
+</td>
+<td style="text-align:right;">
+21553.92
+</td>
+<td style="text-align:right;">
+15555.35
+</td>
+<td style="text-align:right;">
+6349.15
+</td>
+<td style="text-align:right;">
+7867.40
+</td>
+<td style="text-align:right;">
+-15204.78
+</td>
+<td style="text-align:right;">
+657.08
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Age
+</td>
+<td style="text-align:right;">
+34.85
+</td>
+<td style="text-align:right;">
+10.44
+</td>
+<td style="text-align:right;">
+25.82
+</td>
+<td style="text-align:right;">
+7.16
+</td>
+<td style="text-align:right;">
+-9.03
+</td>
+<td style="text-align:right;">
+0.57
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Education
+</td>
+<td style="text-align:right;">
+12.12
+</td>
+<td style="text-align:right;">
+3.08
+</td>
+<td style="text-align:right;">
+10.35
+</td>
+<td style="text-align:right;">
+2.01
+</td>
+<td style="text-align:right;">
+-1.77
+</td>
+<td style="text-align:right;">
+0.16
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Married
+</td>
+<td style="text-align:right;">
+0.87
+</td>
+<td style="text-align:right;">
+0.34
+</td>
+<td style="text-align:right;">
+0.19
+</td>
+<td style="text-align:right;">
+0.39
+</td>
+<td style="text-align:right;">
+-0.68
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+</tbody>
+<tfoot><tr>
+<td style="padding: 0; border:0;" colspan="100%">
+<sup></sup> Source: Lalonde (1986) American Economic Review.
+</td>
+</tr></tfoot>
+</table>
 </div>
   </div>
 
