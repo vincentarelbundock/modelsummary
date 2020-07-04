@@ -13,15 +13,15 @@ tbody {
 }
 </style>
 
-`datasummary` is a function from the `modelsummary` package. It allows you to create data summaries, frequency tables, crosstabs, correlation tables, balance tables (aka "Table 1"), and more. It has many benefits:
+`datasummary` is a function from the `modelsummary` package. It allows us to create data summaries, frequency tables, crosstabs, correlation tables, balance tables (aka "Table 1"), and more. It has many benefits:
 
 * Easy to use.
 * *Extremely* flexible.
 * Many output formats: HTML, LaTeX, Microsoft Word and Powerpoint, Text/Markdown, PDF, RTF, or Image files.
 * Embed tables in `Rmarkdown` or `knitr` dynamic documents.
-* [Customize the appearance of your tables](#customize) with the `gt`, `kableExtra` or `flextable` packages. The possibilities are endless!
+* [Customize the appearance of tables](#customize) with the `gt`, `kableExtra` or `flextable` packages. The possibilities are endless!
 
-This tutorial will show you how to draw tables like these (and more!):
+This tutorial will show how to draw tables like these (and more!):
 
 ```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -33,7 +33,7 @@ options(width = 120)
 ```
 
 <center>
-<img src="https://user-images.githubusercontent.com/987057/85949018-2c363c80-b922-11ea-8fdf-4d60d0ab90d5.png" width="49%">
+<img src="https://user-images.githubusercontent.com/987057/86512021-50839480-bdcc-11ea-893c-8c1e7a277895.png" width="49%">
 <img src="https://user-images.githubusercontent.com/987057/85771538-045c9400-b6ea-11ea-99af-48363b132f1b.png" width="49%">
 <img src="https://user-images.githubusercontent.com/987057/85772292-b1cfa780-b6ea-11ea-8ae1-b95c6ddbf0a9.png" width="49%">
 <img src="https://user-images.githubusercontent.com/987057/85774118-8b127080-b6ec-11ea-913d-d0c13066cf6b.png" width="49%">
@@ -43,7 +43,7 @@ options(width = 120)
 
 `datasummary` is built around the *fantastic* [`tables` package for `R`.](https://cran.r-project.org/web/packages/tables/index.html) It is a thin "wrapper" which adds convenience functions and arguments; a user-interface consistent with `modelsummary`; cleaner html output; and the ability to export tables to more formats, including [`gt` tables](https://gt.rstudio.com), [`flextable` objects](https://davidgohel.github.io/flextable/), and Microsoft Word documents. 
 
-`datasummary` is a general-purpose table-making tool. It allows you to build (nearly) any summary table you want by using [simple 2-sided formulae.](#datasummary) For example, in the expression `x + y ~ mean + sd`, the left-hand side of the formula identifies the variables or statistics to display as rows, and the right-hand side defines the columns. Below, we will see how variables and statistics can be "nested" with the `*` operator to produce tables like the ones above.
+`datasummary` is a general-purpose table-making tool. It allows us to build (nearly) any summary table we want by using [simple 2-sided formulae.](#datasummary) For example, in the expression `x + y ~ mean + sd`, the left-hand side of the formula identifies the variables or statistics to display as rows, and the right-hand side defines the columns. Below, we will see how variables and statistics can be "nested" with the `*` operator to produce tables like the ones above.
 
 
 ```{r, echo=FALSE, message=FALSE, include=FALSE, eval=FALSE}
@@ -67,15 +67,15 @@ datasummary(Factor(Island) * Factor(Species) ~ Factor(Sex) * `Flipper length (mm
 In addition to `datasummary`, the `modelsummary` package includes a "family" of companion functions named `datasummary_*`. These functions facilitate the production of standard, commonly used tables. This family currently includes:
 
 * `datasummary()`: Flexible function to create custom tables using 2-sided formulae.
-* `datasummary_skim()`: Quick summary of your dataset.
-* `datasummary_correlation()`: Table of correlations.
 * `datasummary_balance()`: Group characteristics (e.g., control vs. treatment)
+* `datasummary_correlation()`: Table of correlations.
+* `datasummary_skim()`: Quick summary of a dataset.
 
-In the next three sections, we illustrate how to use `datasummary_skim`, `datasummary_correlation`, and `datasummary_balance`. Then, we dive into `datasummary` itself to highlight its ease and flexibility.
+In the next three sections, we illustrate how to use `datasummary_balance`, `datasummary_correlation`, and `datasummary_skim`. Then, we dive into `datasummary` itself to highlight its ease and flexibility.
 
 # `datasummary_skim`
 
-The first `datasummary` companion function is called `datasummary_skim`. It was *heavily* inspired by one of my favorite data exploration tools for `R`: the [`skimr` package.](https://docs.ropensci.org/skimr) The goal of this function is to give you a quick look at the data. 
+The first `datasummary` companion function is called `datasummary_skim`. It was *heavily* inspired by one of my favorite data exploration tools for `R`: the [`skimr` package.](https://docs.ropensci.org/skimr) The goal of this function is to give us a quick look at the data. 
 
 To illustrate, we download data from the cool new [`palmerpenguins` package](https://github.com/allisonhorst/palmerpenguins) by Allison Horst. These data were collected at the Palmer Station in Antarctica by Gorman, Williams & Fraser (2014), and they include 3 categorical variables and 4 numeric variables.
 
@@ -112,15 +112,15 @@ datasummary(All(penguins) ~ Mean + SD + Histogram,
 ```
 
 ```
-|                  |Mean    |SD     |Histogram      
-|:-----------------|:-------|:------|:--------------
-|culmen_length_mm  |43.9    |5.5    |▁▅▆▆▆▇▇▂▁      
-|culmen_depth_mm   |17.2    |2.0    |▃▄▄▄▇▆▇▅▂▁     
-|flipper_length_mm |200.9   |14.1   |▂▅▇▄▁▄▄▂▁      
-|body_mass_g       |4201.8  |802.0  |▁▄▇▅▄▄▃▃▂▁     
+|                  |    Mean|     SD|  Histogram|
+|:-----------------|-------:|------:|----------:|
+|bill_length_mm    |   43.92|   5.46|  ▁▅▆▆▆▇▇▂▁|
+|bill_depth_mm     |   17.15|   1.97| ▃▄▄▄▇▆▇▅▂▁|
+|flipper_length_mm |  200.92|  14.06|  ▂▅▇▄▁▄▄▂▁|
+|body_mass_g       | 4201.75| 801.95| ▁▄▇▅▄▄▃▃▂▁|
 ```
 
-Note that the `histogram` argument of the `datasummary_skim` function is `FALSE` by default, because printing histograms will not work on all computers. If you have issues with this option, try to change your computer's locale, or try using a different display font.
+Note that the `histogram` argument of the `datasummary_skim` function is `FALSE` by default, because printing histograms will not work on all computers. If you have issues with this option, try changing your computer's locale, or try using a different display font.
 
 # `datasummary_correlation`
 
@@ -134,7 +134,7 @@ The values displayed in this table are equivalent to those obtained by calling: 
 
 # `datasummary_balance`
 
-A "balance table" or "Table 1" refers to a particular style of table which is often printed in the opening pages of a scientific peer reviewed article. Typically, this table will include basic descriptive statistics about different subsets of the study population. For instance, analysts may want to display the socio-demographic characteristics of members of the Control and Treatement groups in a randomized control trial, or the flipper length and male and female penguins. In addition, balance tables often include difference in means tests.
+The expressions "balance table" or "Table 1" refer to a type of table which is often printed in the opening pages of a scientific peer-reviewed article. Typically, this table includes basic descriptive statistics about different subsets of the study population. For instance, analysts may want to compare the socio-demographic characteristics of members of the "control" and "treatement" groups in a randomized control trial, or the flipper lengths of male and female penguins. In addition, balance tables often include difference in means tests.
 
 To illustrate how to build a balance table using the `datasummary_balance` function, we download data about a job training experiment studies in Lalonde (1986). Then, we clean up the data by renaming and recoding a few variables. 
 
@@ -145,12 +145,12 @@ training <- read.csv(training)
 
 # Rename and recode variables
 training <- training %>%
-            mutate(`Earnings pre-treatment (1,000USD)` = re75 / 1000,
-                   `Earnings post-treatment (1,000USD)` = re78 / 1000,
+            mutate(`Earnings Before` = re75 / 1000,
+                   `Earnings After` = re78 / 1000,
                    Treatment = ifelse(treat == TRUE, 'Treatment', 'Control'),
                    Married = ifelse(married == TRUE, 'Yes', 'No')) %>%
-            select(`Earnings pre-treatment (1,000USD)`,
-                   `Earnings post-treatment (1,000USD)`, 
+            select(`Earnings Before`,
+                   `Earnings After`, 
                    Treatment, 
                    Ethnicity = ethn, 
                    Age = age, 
@@ -158,10 +158,10 @@ training <- training %>%
                    Married)
 ```
 
-Now, we execute the `datasummary_balance` function. If the `estimatr` package is installed on your computer, `datasummary_balance` will calculate a difference in means.
+Now, we execute the `datasummary_balance` function. If the `estimatr` package is installed, `datasummary_balance` will calculate the difference in means and test statistics.
 
 ```{r, eval=FALSE}
-caption <- 'Descriptive statistics about participants in a job training experiment. This table was created using the "datasummary" function from the "modelsummary" package for R.'
+caption <- 'Descriptive statistics about participants in a job training experiment. The earnings are displayed in 1000s of USD. This table was created using the "datasummary" function from the "modelsummary" package for R.'
 reference <- 'Source: Lalonde (1986) American Economic Review.'
 
 library(modelsummary)
@@ -172,21 +172,23 @@ datasummary_balance(~Treatment,
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
-caption <- 'Descriptive statistics about participants in a job training experiment. This table was created using the "datasummary" function from the "modelsummary" package for R.'
+caption <- 'Descriptive statistics about participants in a job training experiment. Earnings are displayed in 1000s of USD. This table was created using the "datasummary" function from the "modelsummary" package for R.'
 reference <- 'Source: Lalonde (1986) American Economic Review.'
 
 library(modelsummary)
+library(kableExtra)
 datasummary_balance(~Treatment,
                     data = training,
                     title = caption,
-                    notes = reference) %>%
+                    notes = reference,
+                    output = 'kableExtra') %>%
   row_spec(5, bold = TRUE) %>%
   row_spec(1, color = 'green') %>%
   row_spec(2, color = 'red')
 
 ```
 
-Note that if your dataset includes columns called "blocks", "clusters", or "weights", these information will automatically be taken into consideration by `estimatr` when calculating the difference in means and the associated statistics.
+Note that if the dataset includes columns called "blocks", "clusters", or "weights", this information will automatically be taken into consideration by `estimatr` when calculating the difference in means and the associated statistics.
 
 # `datasummary`
 
@@ -283,7 +285,7 @@ datasummary(flipper_length_mm + body_mass_g ~ mean * sex * island,
             data = penguins)
 ```
 
-By default, `datasummary` omits column headers with a single value/label across all columns, except for the header that sits just above the data. If the header you want to see is not displayed, you may want to reorder the terms of your formula. To show all headers, set `sparse_header=FALSE`:
+By default, `datasummary` omits column headers with a single value/label across all columns, except for the header that sits just above the data. If the header we want to see is not displayed, we may want to reorder the terms of the formula. To show all headers, set `sparse_header=FALSE`:
   
 ```{r}
 datasummary(flipper_length_mm + body_mass_g ~ mean * sex * island,
@@ -306,7 +308,7 @@ datasummary(`Flipper length (mm)` + `Body mass (g)` ~ Mean + SD,
             data = tmp)
 ```
 
-However, thanks to the `tables` package, `datasummary` offers two additional mechanisms to rename. First, you can wrap a term in parentheses and use the equal `=` sign: `(NewName=OldName)`: 
+However, thanks to the `tables` package, `datasummary` offers two additional mechanisms to rename. First, we can wrap a term in parentheses and use the equal `=` sign: `(NewName=OldName)`: 
 
 ```{r}
 datasummary((`Flipper length (mm)` = flipper_length_mm) + (`Body mass (g)` = body_mass_g) ~ 
@@ -324,10 +326,10 @@ datasummary(Heading("Flipper length (mm)") * flipper_length_mm + Heading("Body m
 The `Heading` function also has a `nearData` argument which can be useful in cases where some rows are nested but others are not. Compare the last row of these two tables:
 
 ```{r}
-datasummary(sex * (flipper_length_mm + culmen_length_mm) + Heading("Body mass (g)") * body_mass_g ~ Mean + SD,
+datasummary(sex * (flipper_length_mm + bill_length_mm) + Heading("Body mass (g)") * body_mass_g ~ Mean + SD,
             data = penguins)
 
-datasummary(sex * (flipper_length_mm + culmen_length_mm) + Heading("Body mass (g)", nearData=FALSE) * body_mass_g ~ Mean + SD,
+datasummary(sex * (flipper_length_mm + bill_length_mm) + Heading("Body mass (g)", nearData=FALSE) * body_mass_g ~ Mean + SD,
             data = penguins)
 ```
 
@@ -348,7 +350,7 @@ Note that the `Percent()` function accepts a `denom` argument to determine if pe
 
 # `Arguments`: Missing values
 
-You can pass any argument to your summary function by including a call to `Arguments()`. For instance, there are missing values in the `flipper_length_mm` variable of the `penguins` dataset. Therefore, the standard `mean` function will produce no result, because its default argument is `na.rm=FALSE`. We can change that by calling:
+We can pass any argument to the summary function by including a call to `Arguments()`. For instance, there are missing values in the `flipper_length_mm` variable of the `penguins` dataset. Therefore, the standard `mean` function will produce no result, because its default argument is `na.rm=FALSE`. We can change that by calling:
 
 ```{r}
 datasummary(flipper_length_mm ~ mean + mean*Arguments(na.rm=TRUE),
@@ -357,14 +359,14 @@ datasummary(flipper_length_mm ~ mean + mean*Arguments(na.rm=TRUE),
 
 Notice that there is an empty cell (`NA`) under the normal `mean` function, but that the `mean` call with `Arguments(na.rm=TRUE)` produced a numeric result.
 
-You can pass the same arguments to muliple functions using the parentheses:
+We can pass the same arguments to muliple functions using the parentheses:
 
 ```{r}
 datasummary(flipper_length_mm ~ (mean + sd) * Arguments(na.rm=TRUE),
             data = penguins)
 ```
 
-Note that the shortcut functions that `modelsummary` supplies use `na.rm=TRUE` by default, so you can use them directly without arguments, even when there are missing values:
+Note that the shortcut functions that `modelsummary` supplies use `na.rm=TRUE` by default, so we can use them directly without arguments, even when there are missing values:
 
 ```{r}
 datasummary(flipper_length_mm ~ Mean + Var + P75 + Range,
@@ -373,7 +375,7 @@ datasummary(flipper_length_mm ~ Mean + Var + P75 + Range,
 
 # Rounding
 
-The `fmt` argument allows you to set the printing format of numeric values. For instance, setting `fmt="%.4f"` will keep 4 digits after the period (see `?sprintf` for more options):
+The `fmt` argument allows us to set the printing format of numeric values. For instance, setting `fmt="%.4f"` will keep 4 digits after the period (see `?sprintf` for more options):
 
 ```{r}
 datasummary(flipper_length_mm ~ Mean + SD,
@@ -381,14 +383,14 @@ datasummary(flipper_length_mm ~ Mean + SD,
             data = penguins)
 ```
 
-You can set the formatting on a term-by-term basis by using the same `Arguments` function that we used to handle missing values in the previous section. The shortcut functions that ship with `modelsummary` (e.g., `Mean`, `SD`, `Median`, `P25`) all include a `fmt` argument: 
+We can set the formatting on a term-by-term basis by using the same `Arguments` function that we used to handle missing values in the previous section. The shortcut functions that ship with `modelsummary` (e.g., `Mean`, `SD`, `Median`, `P25`) all include a `fmt` argument: 
 
 ```{r}
 datasummary(flipper_length_mm ~ Mean * Arguments(fmt = "%.4f") + SD * Arguments(fmt = "%.1f"),
             data = penguins)
 ```
 
-If you do *not* want `datasummary` to format numbers, and you want to keep the numerical values instead of formatted strings, set `fmt=NULL`. This can be useful when post-processing tables with packages like `gt`, which allow you to transform cells based on their numerical content (this `gt` table will be omitted from PDF output):
+If we do *not* want `datasummary` to format numbers, and we want to keep the numerical values instead of formatted strings, set `fmt=NULL`. This can be useful when post-processing tables with packages like `gt`, which allow us to transform cells based on their numerical content (this `gt` table will be omitted from PDF output):
 
 ```{r, eval = !knitr::is_latex_output()}
 library(gt)
@@ -427,7 +429,7 @@ datasummary(island * species * body_mass_g ~ sex * (Mean + SD) * DropEmpty(),
 Cool stuff is possible with logical subsets:
 
 ```{r}
-datasummary((culmen_length_mm > 44.5) + (culmen_length_mm <= 44.5) ~ Mean * flipper_length_mm, 
+datasummary((bill_length_mm > 44.5) + (bill_length_mm <= 44.5) ~ Mean * flipper_length_mm, 
             data = penguins)
 ```
 
@@ -446,11 +448,11 @@ datasummary(All(penguins) ~ Mean + SD,
 
 # Align columns
 
-You can align columns using the `align` argument. `align` should be a string of length equal to the number of columns, and which includes only the letters "l", 
+We can align columns using the `align` argument. `align` should be a string of length equal to the number of columns, and which includes only the letters "l", 
 "c", or "r":
 
 ```{r}
-datasummary(flipper_length_mm + culmen_length_mm ~ Mean + SD + Range,
+datasummary(flipper_length_mm + bill_length_mm ~ Mean + SD + Range,
             data = penguins,
             align = 'lrcl')
 ```
@@ -519,7 +521,7 @@ Please note that hierarchical or "nested" column labels are only available for t
 penguins$sex <- str_to_title(penguins$sex)
 ```
 
-You can customize the tables produced by `datasummary` using the functions provided by `gt`, `kableExtra`, `flextable`, and `huxtable`. For instance, to customize tables using `kableExtra`, we can do:
+We can customize the tables produced by `datasummary` using the functions provided by `gt`, `kableExtra`, `flextable`, and `huxtable`. For instance, to customize tables using `kableExtra`, we can do:
 
 ```{r}
 library(kableExtra)
@@ -553,67 +555,4 @@ datasummary(f,
     tab_style(style = list(cell_text(color = "#007377", size = 'x-large')), locations = cells_body(rows = 3)) %>%
     tab_options(table_body.hlines.width = 0, table.border.top.width = 0, table.border.bottom.width = 0) %>%
     cols_align('center', columns = 3:6)
-```
-
-# Case study: Balance table
-
-```{r}
-dat <- 'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv' %>%
-        read.csv %>%
-        mutate(`Earnings pre-treatment` = re75,
-               `Earnings post-treatment` = re78,
-               condition = ifelse(treat == TRUE, 'Treatment', 'Control'),
-               Married = as.numeric(married)) %>%
-        select(`Earnings pre-treatment`,
-               `Earnings post-treatment`, 
-               Age = age, 
-               Education = educ, 
-               Married,
-               condition)
-```
-
-Now, we define a new function called `DiM`, which computes statistics using the `difference_in_means` function from the `estimatr` package. In this function, we assume that the dataset includes a variable named "condition". In addition, if the dataset includes columns called "clusters", "weights", or "blocks", `DiM` will calculate design-aware statistics:
-
-```{r}
-DiM <- function(x, data, statistic = 'estimate') {
-    # make sure there is a column called "condition"
-    if (!'condition' %in% colnames(data)) stop('To use the DiM function, your dataset must include a column named "condition".')
-  
-    # if clusters, weights, or blocks are absent, we set them to NULL
-    if (!'clusters' %in% colnames(data)) clusters <- NULL
-    if (!'weights' %in% colnames(data)) weights <- NULL
-    if (!'blocks' %in% colnames(data)) blocks <- NULL
-    
-    # datasummary supplies a numeric vector. we use it as outcome
-    data$outcome_variable <- x
-    
-    # compute statistics
-    out <- estimatr::difference_in_means(outcome_variable ~ condition, 
-                                         data = data, 
-                                         blocks = blocks,
-                                         clusters = clusters, 
-                                         weights = weights)
-    
-    # extract result using estimatr's `tidy` function
-    out <- estimatr::tidy(out)[[statistic]]
-    return(out)
-}
-```
-
-Now, we 
-
-```{r}
-caption <- 'Descriptive statistics about participants in a job training experiment. This table was created using the "datasummary" function from the "modelsummary" package for R.'
-reference <- 'Source: Lalonde (1986) American Economic Review.'
-
-f <- All(dat) ~ 
-     condition * (Mean + SD) + 
-      (`Difference in Means` = DiM * Arguments(data = dat, statistic = 'estimate')) +
-      (`Std.Error` = DiM * Arguments(data = dat, statistic = 'std.error')) +
-      (`p` = DiM * Arguments(data = dat, statistic = 'p.value'))
-
-datasummary(f, 
-            data = dat,
-            title = caption,
-            notes = reference)
 ```

@@ -55,7 +55,7 @@ datasummary_skim <-  function(data,
                        output = output,
                        title = title,
                        align = align,
-                       notes)
+                       notes = notes)
 
     # output
     return(out)

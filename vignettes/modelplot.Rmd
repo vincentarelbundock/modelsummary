@@ -29,10 +29,10 @@ url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/pengui
 dat <- read.csv(url)
 
 # rescale mm -> cm
-dat$culmen_length_cm <- dat$culmen_length_mm / 10
+dat$bill_length_cm <- dat$bill_length_mm / 10
 dat$flipper_length_cm <- dat$flipper_length_mm / 10
 
-mod <- lm(culmen_length_cm ~ flipper_length_cm + species, data = dat)
+mod <- lm(bill_length_cm ~ flipper_length_cm + species, data = dat)
 ```
 
 Then, we load the `modelsummary` library and call `modelplot`:
@@ -67,9 +67,9 @@ The main `modelsummary` functions allows you to create a table with the results 
 
 ```{r, fig.height=3}
 models <- list()
-models[['Small model']] <- lm(culmen_length_cm ~ flipper_length_cm, data = dat)
-models[['Medium model']] <- lm(culmen_length_cm ~ flipper_length_cm + body_mass_g, data = dat)
-models[['Large model']] <- lm(culmen_length_cm ~ flipper_length_cm + body_mass_g + species, data = dat)
+models[['Small model']] <- lm(bill_length_cm ~ flipper_length_cm, data = dat)
+models[['Medium model']] <- lm(bill_length_cm ~ flipper_length_cm + body_mass_g, data = dat)
+models[['Large model']] <- lm(bill_length_cm ~ flipper_length_cm + body_mass_g + species, data = dat)
 
 modelsummary(models, statistic = 'conf.int')
 ```
@@ -98,7 +98,7 @@ library(ggplot2)
 modelplot(models) +
     labs(x = 'Coefficients', 
          y = 'Term names',
-         title = 'Linear regression models of "Culmen Length (cm)"',
+         title = 'Linear regression models of "Bill Length (cm)"',
          caption = "Data source: Gorman, Williams & Fraser (2014), packaged for R by @allison_horst") +
     scale_color_manual(values = wes_palette('Darjeeling1'))
 
