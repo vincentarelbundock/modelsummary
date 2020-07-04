@@ -146,8 +146,9 @@
 <li><a href="#installation">Installation</a></li>
 <li><a href="#getting-started">Getting started</a></li>
 <li><a href="#saving-and-viewing-output-formats">Saving and viewing: output formats</a></li>
-<li><a href="https://vincentarelbundock.github.io/modelsummary/articles/content.html">Customizing the information in your table</a></li>
-<li><a href="https://vincentarelbundock.github.io/modelsummary/articles/appearance.html">Customizing the look of your table</a></li>
+<li><a href="https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html">modelsummary</a></li>
+<li><a href="https://vincentarelbundock.github.io/modelsummary/articles/modelplot.html">modelplot</a></li>
+<li><a href="https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html">datasummary</a></li>
 <li><a href="https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html">Dynamic documents with <code>Rmarkdown</code> and <code>knitr</code></a></li>
 <li><a href="https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html">Adding and customizing models</a></li>
 <li><a href="https://vincentarelbundock.github.io/modelsummary/articles/multiple_imputation.html">Multiple imputation</a></li>
@@ -267,12 +268,28 @@
 <li>Insert a <a href="https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html">table in <code>Rmarkdown</code> or <code>knitr</code> documents</a>,</li>
 <li>Convert the table to human-readable html, latex, or markdown code.</li>
 </ol>
+<p>To display, simply choose the output format. For example,</p>
+<pre class="{r}"><code><a href="reference/msummary.html">msummary(models, output = 'latex')
+msummary(models, output = 'markdown')
+msummary(models, output = 'gt')
+msummary(models, output = 'kableExtra')
+msummary(models, output = 'flextable')</a></code></pre>
+<p>To save a table, choose the file path with the extension you want. For example,</p>
+<pre class="{r}"><code><a href="reference/msummary.html">msummary(models, output = 'table.tex')
+msummary(models, output = 'table.docx')
+msummary(models, output = 'table.html')
+msummary(models, output = 'table.md')</a></code></pre>
+<p>To customize a table with the <code>gt</code>, <code>kableExtra</code>, <code>flextable</code>, or <code>huxtable</code> packages, choose the output format. Then, you can use functions from those packages to modify the resulting objects:</p>
+<pre class="{r}"><code><a href="https://rdrr.io/pkg/kableExtra/man">library(kableExtra)
+
+tab &lt;- msummary(models, output = 'kableExtra')
+tab %&gt;% row_spec(3, bold = TRUE, color = 'green')</a></code></pre>
 <p><code>modelsummary</code> uses sensible defaults to choose an appopriate table-making package for each output format (<code>gt</code>, <code>kableExtra</code>, <code>flextable</code>, or <code>huxtable</code>). This table summarizes how to modify <code>modelsummary</code>’s <code>output</code> argument to display and save tables:</p>
 <center>
 <img src="https://user-images.githubusercontent.com/987057/83556122-5a6c5c00-a4dd-11ea-905d-b04f633c9844.png" width="50%">
 </center>
 <p>In the above table, checkmarks identify the default table-making package used for each output format. Dots identify supported alternatives. To use those alternatives, we set global options such as:</p>
-<div class="sourceCode" id="cb10"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_html</span> <span class="kw">=</span> <span class="st">'kableExtra'</span>)
+<div class="sourceCode" id="cb13"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_html</span> <span class="kw">=</span> <span class="st">'kableExtra'</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_latex</span> <span class="kw">=</span> <span class="st">'gt'</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_word</span> <span class="kw">=</span> <span class="st">'huxtable'</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_png</span> <span class="kw">=</span> <span class="st">'gt'</span>)</pre></div>
