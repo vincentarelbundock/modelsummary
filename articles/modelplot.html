@@ -112,10 +112,10 @@ tbody {
 <span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)
 
 <span class="co"># rescale mm -&gt; cm</span>
-<span class="no">dat</span>$<span class="no">culmen_length_cm</span> <span class="kw">&lt;-</span> <span class="no">dat</span>$<span class="no">culmen_length_mm</span> / <span class="fl">10</span>
+<span class="no">dat</span>$<span class="no">bill_length_cm</span> <span class="kw">&lt;-</span> <span class="no">dat</span>$<span class="no">bill_length_mm</span> / <span class="fl">10</span>
 <span class="no">dat</span>$<span class="no">flipper_length_cm</span> <span class="kw">&lt;-</span> <span class="no">dat</span>$<span class="no">flipper_length_mm</span> / <span class="fl">10</span>
 
-<span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">culmen_length_cm</span> ~ <span class="no">flipper_length_cm</span> + <span class="no">species</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)</pre></body></html></div>
+<span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">bill_length_cm</span> ~ <span class="no">flipper_length_cm</span> + <span class="no">species</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)</pre></body></html></div>
 <p>Then, we load the <code>modelsummary</code> library and call <code>modelplot</code>:</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
@@ -140,9 +140,9 @@ tbody {
 <a href="#several-models" class="anchor"></a>Several models</h1>
 <p>The main <code>modelsummary</code> functions allows you to create a table with the results of several models side-by-side, by storing them in a (potentially named) list:</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
-<span class="no">models</span><span class="kw">[[</span><span class="st">'Small model'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">culmen_length_cm</span> ~ <span class="no">flipper_length_cm</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
-<span class="no">models</span><span class="kw">[[</span><span class="st">'Medium model'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">culmen_length_cm</span> ~ <span class="no">flipper_length_cm</span> + <span class="no">body_mass_g</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
-<span class="no">models</span><span class="kw">[[</span><span class="st">'Large model'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">culmen_length_cm</span> ~ <span class="no">flipper_length_cm</span> + <span class="no">body_mass_g</span> + <span class="no">species</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'Small model'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">bill_length_cm</span> ~ <span class="no">flipper_length_cm</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'Medium model'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">bill_length_cm</span> ~ <span class="no">flipper_length_cm</span> + <span class="no">body_mass_g</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'Large model'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">bill_length_cm</span> ~ <span class="no">flipper_length_cm</span> + <span class="no">body_mass_g</span> + <span class="no">species</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
 
 <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'conf.int'</span>)</pre></body></html></div>
 <table class="table table">
@@ -387,7 +387,7 @@ Log.Lik.
 <span class="fu"><a href="../reference/modelplot.html">modelplot</a></span>(<span class="no">models</span>) +
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="st">'Coefficients'</span>,
          <span class="kw">y</span> <span class="kw">=</span> <span class="st">'Term names'</span>,
-         <span class="kw">title</span> <span class="kw">=</span> <span class="st">'Linear regression models of "Culmen Length (cm)"'</span>,
+         <span class="kw">title</span> <span class="kw">=</span> <span class="st">'Linear regression models of "Bill Length (cm)"'</span>,
          <span class="kw">caption</span> <span class="kw">=</span> <span class="st">"Data source: Gorman, Williams &amp; Fraser (2014), packaged for R by @allison_horst"</span>) +
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="kw">values</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/wesanderson/man/wes_palette.html">wes_palette</a></span>(<span class="st">'Darjeeling1'</span>))</pre></body></html></div>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
