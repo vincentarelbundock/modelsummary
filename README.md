@@ -41,8 +41,9 @@ These tables and plots were created using `modelsummary` programmatically, witho
   - [Installation](#installation)
   - [Getting started](#getting-started)
   - [Saving and viewing: output formats](#saving-and-viewing-output-formats)
-  - [Customizing the information in your table](https://vincentarelbundock.github.io/modelsummary/articles/content.html)
-  - [Customizing the look of your table](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html)
+  - [modelsummary](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html)
+  - [modelplot](https://vincentarelbundock.github.io/modelsummary/articles/modelplot.html)
+  - [datasummary](https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html)
   - [Dynamic documents with `Rmarkdown` and `knitr`](https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html)
   - [Adding and customizing models](https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html)
   - [Multiple imputation](https://vincentarelbundock.github.io/modelsummary/articles/multiple_imputation.html)
@@ -203,6 +204,34 @@ There are four ways to display and save `modelsummary` tables.
 2. Save a table to file.
 3. Insert a [table in `Rmarkdown` or `knitr` documents](https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html),
 4. Convert the table to human-readable html, latex, or markdown code.
+
+To display, simply choose the output format. For example,
+
+```{r}
+msummary(models, output = 'latex')
+msummary(models, output = 'markdown')
+msummary(models, output = 'gt')
+msummary(models, output = 'kableExtra')
+msummary(models, output = 'flextable')
+```
+
+To save a table, choose the file path with the extension you want. For example,
+
+```{r}
+msummary(models, output = 'table.tex')
+msummary(models, output = 'table.docx')
+msummary(models, output = 'table.html')
+msummary(models, output = 'table.md')
+```
+
+To customize a table with the `gt`, `kableExtra`, `flextable`, or `huxtable` packages, choose the output format. Then, you can use functions from those packages to modify the resulting objects:
+
+```{r}
+library(kableExtra)
+
+tab <- msummary(models, output = 'kableExtra')
+tab %>% row_spec(3, bold = TRUE, color = 'green')
+```
 
 `modelsummary` uses sensible defaults to choose an appopriate table-making package for each output format (`gt`, `kableExtra`, `flextable`, or `huxtable`). This table summarizes how to modify `modelsummary`'s `output` argument to display and save tables: 
 
