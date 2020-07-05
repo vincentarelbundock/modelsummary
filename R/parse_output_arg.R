@@ -42,6 +42,7 @@ parse_output_arg <- function(output) {
     # output_factory
     factory_list <- c('default' = getOption('modelsummary_default', default = 'gt'),
                       'dataframe' = 'dataframe',
+                      'data.frame' = 'dataframe',
                       'flextable' = 'flextable',
                       'gt' = 'gt',
                       'html' = getOption('modelsummary_html', default = 'gt'),

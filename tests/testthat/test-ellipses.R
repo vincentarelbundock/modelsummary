@@ -1,4 +1,4 @@
-context('fmt')
+context('ellipses')
 
 library(modelsummary)
 
