@@ -51,7 +51,7 @@ parse_output_arg <- function(output) {
                       'kableExtra' = 'kableExtra',
                       'latex' = getOption('modelsummary_latex', default = 'kableExtra'),
                       'markdown' = 'kableExtra',
-                      'png' = getOption('modelsummary_png', default = 'flextable'),
+                      'png' = getOption('modelsummary_png', default = 'gt'),
                       'powerpoint' =  getOption('modelsummary_powerpoint', default = 'flextable'),
                       'rtf' = getOption('modelsummary_rtf', default = 'gt'),
                       'word' =  getOption('modelsummary_word', default = 'flextable'))
