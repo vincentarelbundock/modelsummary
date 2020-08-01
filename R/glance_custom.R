@@ -20,3 +20,14 @@ glance_custom <- function(x) {
 #' @export
 glance_custom.default <- function(x) NULL
 
+
+#' @inherit glance_custom
+#' @keywords internal
+#' @export
+glance_custom.fixest <- function(x) {
+    out <- tibble::tibble(.rows = 1)
+    for (n in x$fixef_vars) {
+        out[[paste('FE: ', n)]] <- 'X'
+    }
+    return(out)
+}

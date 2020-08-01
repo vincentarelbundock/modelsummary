@@ -1,4 +1,8 @@
-# modelsummary 0.4.1.9000
+# modelsummary 0.5.1
+
+* glance_custom.fixest ships with modelsummary
+
+# modelsummary 0.5.0
 
 * datasummary
 * datasummary_skim
