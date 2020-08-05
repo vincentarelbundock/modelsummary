@@ -21,10 +21,11 @@ to summarize}
 
 \item{conf_level}{confidence level to use for confidence intervals}
 
-\item{coef_map}{named character vector. Names refer to the original variable
-names. Values refer to the variable names that will appear in the table.
-Coefficients which are omitted from this vector will be omitted from the
-table. The table will be ordered in the same order as this vector.}
+\item{coef_map}{named character vector.  Values refer to the variable names
+that will appear in the table. Names refer to the original term names stored
+in the model object (e.g., "hp:mpg" for an interaction term). Coefficients
+that are omitted from this vector will be omitted from the table. The table
+will be ordered in the same order as this vector.}
 
 \item{coef_omit}{string regular expression. Omits all matching coefficients
 from the table (using `stringr::str_detect`).}

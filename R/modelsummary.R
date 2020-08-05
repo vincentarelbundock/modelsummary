@@ -39,10 +39,11 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param statistic_vertical TRUE if statistics should be printed below
 #' estimates. FALSE if statistics should be printed beside estimates.
 #' @param conf_level confidence level to use for confidence intervals
-#' @param coef_map named character vector. Names refer to the original variable
-#' names. Values refer to the variable names that will appear in the table.
-#' Coefficients which are omitted from this vector will be omitted from the
-#' table. The table will be ordered in the same order as this vector.
+#' @param coef_map named character vector.  Values refer to the variable names
+#' that will appear in the table. Names refer to the original term names stored
+#' in the model object (e.g., "hp:mpg" for an interaction term). Coefficients
+#' that are omitted from this vector will be omitted from the table. The table
+#' will be ordered in the same order as this vector.
 #' @param coef_omit string regular expression. Omits all matching coefficients
 #' from the table (using `stringr::str_detect`).
 #' @param gof_map data.frame with four columns: `raw`, `clean`, `fmt`, and
@@ -149,6 +150,14 @@ modelsummary <- function(models,
     idx <- stringr::str_detect(dat$statistic, 'statistic\\d*$')
     tab <- dat %>%
            dplyr::mutate(term = ifelse(idx, '', term))
+
+    # interaction : becomes ×
+    if (is.null(coef_map)) {
+        if (parse_output_arg(output)$output_format != 'rtf') {
+            tab <- tab %>%
+                   dplyr::mutate(term = gsub(':', ' \u00d7 ', term))
+        }
+    }
 
     # measure table
     hrule <- match('gof', tab$group)

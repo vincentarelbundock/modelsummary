@@ -1,3 +1,7 @@
+# modelsummary 0.5.1.9000
+
+* interaction : gsubbed by \u00d7
+
 # modelsummary 0.5.1
 
 * glance_custom.fixest ships with modelsummary
