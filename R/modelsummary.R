@@ -154,8 +154,8 @@ modelsummary <- function(models,
     # interaction : becomes ×
     if (is.null(coef_map)) {
         if (parse_output_arg(output)$output_format != 'rtf') {
-            tab <- tab %>%
-                   dplyr::mutate(term = gsub(':', ' \u00d7 ', term))
+            idx <- tab$group != 'gof'
+            tab$term <- ifelse(idx, gsub(':', ' \u00d7 ', tab$term), tab$term)
         }
     }
 
