@@ -87,8 +87,8 @@ extract <- function(models,
         colnames(est[[i]])[3] <- model_names[i]
     }
 
-    est <- est %>% 
-           purrr::reduce(dplyr::full_join, by = c('term', 'statistic'))  %>%
+    f <- function(x, y) dplyr::full_join(x, y, by = c('term', 'statistic'))
+    est <- Reduce(f, est) %>% 
            dplyr::mutate(group = 'estimates') %>%
            dplyr::select(group, term, statistic, names(.))
 
@@ -99,9 +99,10 @@ extract <- function(models,
     }
 
     # extract and combine gof
+    f <- function(x, y) dplyr::full_join(x, y, by = 'term')
     gof <- models %>%
-           purrr::map(extract_gof, fmt = fmt, gof_map = gof_map)  %>%
-           purrr::reduce(dplyr::full_join, by = 'term') %>%
+           lapply(extract_gof, fmt = fmt, gof_map = gof_map)  %>%
+           Reduce(f, .) %>%
            stats::setNames(c('term', model_names))
 
     # add gof row identifier

@@ -77,7 +77,8 @@ extract_gof <- function(model, fmt, gof_map = NULL, ...) {
                                    names_to = 'term')
 
     } else { # all gof are excluded return an empty tibble (needs character to match merge type)
-        out <- tibble::tibble(term = NA_character_, value = NA_character_) %>% tidyr::drop_na()
+        out <- tibble::tibble(term = NA_character_, value = NA_character_) %>% 
+               na.omit
     }
 
     # output

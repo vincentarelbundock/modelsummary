@@ -13,8 +13,7 @@ All(
   factor = FALSE,
   complex = FALSE,
   raw = FALSE,
-  other = FALSE,
-  texify = getOption("tables.texify", FALSE)
+  other = FALSE
 )
 }
 \description{

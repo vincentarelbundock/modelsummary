@@ -4,8 +4,7 @@
 #' @export
 #' @keywords internal
 All <- function(df, numeric=TRUE, character=FALSE, logical=FALSE, factor=FALSE,
-		    complex=FALSE, raw=FALSE, other=FALSE,
-		    texify=getOption("tables.texify", FALSE)) {
+		    complex=FALSE, raw=FALSE, other=FALSE) {
 
     if (is.character(numeric)) numeric <- get(numeric, mode="function", 
     	envir=parent.frame())
@@ -25,8 +24,6 @@ All <- function(df, numeric=TRUE, character=FALSE, logical=FALSE, factor=FALSE,
         envir=parent.frame())
         
     names <- colnames(df)
-    if (texify)
-    	names <- Hmisc::latexTranslate(names)
     
     f <- NULL
     for (i in seq_along(names)) {
