@@ -2,7 +2,7 @@
 #' tibble with a single row.
 #'
 #' glance_custom methods always return either a one-row data frame (except on
-#'  `NULL`, which returns an empty data frame). This 
+#'  `NULL`, which returns an empty data frame). This
 #'
 #' @param x model or other R object to convert to single-row data frame
 #'
@@ -29,5 +29,6 @@ glance_custom.fixest <- function(x) {
     for (n in x$fixef_vars) {
         out[[paste('FE: ', n)]] <- 'X'
     }
+    out[['Std. errors']] <- attr(coeftable(x), "type")
     return(out)
 }
