@@ -141,6 +141,9 @@ datasummary <- function(formula,
             dplyr::mutate(dplyr::across(where(is.character) |
                                         where(is.logical),
                                         factor))
+
+    # tibble -> data.frame (for All())
+    data <- as.data.frame(data)
     
     # factor check
     sanity_ds_nesting_factor(formula, data)

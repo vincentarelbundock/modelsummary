@@ -29,6 +29,6 @@ glance_custom.fixest <- function(x) {
     for (n in x$fixef_vars) {
         out[[paste('FE: ', n)]] <- 'X'
     }
-    out[['Std. errors']] <- attr(coeftable(x), "type")
+    out[['Std. errors']] <- attr(fixest::coeftable(x), "type")
     return(out)
 }

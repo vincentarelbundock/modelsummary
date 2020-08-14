@@ -78,7 +78,7 @@ extract_gof <- function(model, fmt, gof_map = NULL, ...) {
 
     } else { # all gof are excluded return an empty tibble (needs character to match merge type)
         out <- tibble::tibble(term = NA_character_, value = NA_character_) %>% 
-               na.omit
+               stats::na.omit()
     }
 
     # output
