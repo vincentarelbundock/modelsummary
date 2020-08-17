@@ -13,6 +13,6 @@ rounding <- function(x, fmt = '%.3f') {
     } else {
         out <- x
     }
-    out <- stringr::str_replace(out, '^NA$|^NaN$|^-Inf$|^Inf$', '')
+    out <- gsub('^NA$|^NaN$|^-Inf$|^Inf$', '', out) 
     return(out)
 }

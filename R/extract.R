@@ -80,7 +80,7 @@ extract <- function(models,
         # coef_omit
         if (!is.null(coef_omit)) {
             est[[i]] <- est[[i]] %>%
-                        dplyr::filter(!stringr::str_detect(term, coef_omit))
+                        dplyr::filter(!grepl(coef_omit, term))
         }
 
         # set model name
@@ -113,7 +113,7 @@ extract <- function(models,
     # omit gof using regex
     if (!is.null(gof_omit)) {
         gof <- gof %>%
-               dplyr::filter(!stringr::str_detect(term, gof_omit))
+               dplyr::filter(!grepl(gof_omit, term))
     }
 
     # gof_map: omit, reorder, rename

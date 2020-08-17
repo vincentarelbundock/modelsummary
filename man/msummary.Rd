@@ -73,13 +73,13 @@ that are omitted from this vector will be omitted from the table. The table
 will be ordered in the same order as this vector.}
 
 \item{coef_omit}{string regular expression. Omits all matching coefficients
-from the table (using `stringr::str_detect`).}
+from the table (using `grepl`).}
 
 \item{gof_map}{data.frame with four columns: `raw`, `clean`, `fmt`, and
 `omit`. See `modelsummary::gof_map`}
 
 \item{gof_omit}{string regular expression. Omits all matching gof statistics from
-the table (using `stringr::str_detect`).}
+the table (using `grepl`).}
 
 \item{add_rows}{a data.frame (or tibble) with the same number of columns as
 your main table. By default, rows are appended to the bottom of the table.

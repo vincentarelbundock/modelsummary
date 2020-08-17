@@ -260,7 +260,7 @@ sanity_ds_nesting_factor <- function(formula, data) {
   idx <- names(idx)[idx]
   idx <- c(paste0('^', idx, ':'), paste0(':', idx, '$'))
   termlabs <- labels(stats::terms(formula))
-  warn <- any(sapply(idx, function(x) any(stringr::str_detect(x, termlabs))))
+  warn <- any(sapply(idx, function(x) any(grepl(x, termlabs))))
   if (warn) {
     warning(
       'You are trying to create a nested table by applying the * operator to a character or a logical variable. It is usually a good idea to convert such variables to a factor before calling datasummary: dat$y<-as.factor(dat$y). Alternatively, you could wrap your categorical variable inside Factor() in the datasummary call itself: datasummary(x ~ Factor(y) * z, data)\n')

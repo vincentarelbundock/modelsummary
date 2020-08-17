@@ -28,7 +28,7 @@ that are omitted from this vector will be omitted from the table. The table
 will be ordered in the same order as this vector.}
 
 \item{coef_omit}{string regular expression. Omits all matching coefficients
-from the table (using `stringr::str_detect`).}
+from the table (using `grepl`).}
 
 \item{facet}{TRUE or FALSE. When the 'models' argument includes several
 model objects, TRUE draws terms in separate facets, and FALSE draws terms

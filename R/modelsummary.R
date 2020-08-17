@@ -45,11 +45,11 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' that are omitted from this vector will be omitted from the table. The table
 #' will be ordered in the same order as this vector.
 #' @param coef_omit string regular expression. Omits all matching coefficients
-#' from the table (using `stringr::str_detect`).
+#' from the table (using `grepl`).
 #' @param gof_map data.frame with four columns: `raw`, `clean`, `fmt`, and
 #' `omit`. See `modelsummary::gof_map`
 #' @param gof_omit string regular expression. Omits all matching gof statistics from
-#' the table (using `stringr::str_detect`).
+#' the table (using `grepl`).
 #' @param add_rows a data.frame (or tibble) with the same number of columns as
 #' your main table. By default, rows are appended to the bottom of the table.
 #' You can define a "position" attribute of integers to set the row positions.
@@ -147,7 +147,7 @@ modelsummary <- function(models,
                    ...)
 
     # remove duplicate term labels
-    idx <- stringr::str_detect(dat$statistic, 'statistic\\d*$')
+    idx <- grepl('statistic\\d*$', dat$statistic)
     tab <- dat %>%
            dplyr::mutate(term = ifelse(idx, '', term))
 

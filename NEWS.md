@@ -1,6 +1,7 @@
 # modelsummary 0.5.1.9000
 
 * interaction : gsubbed by \u00d7
+* removed 4 dependencies
 
 # modelsummary 0.5.1
 

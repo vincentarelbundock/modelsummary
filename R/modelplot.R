@@ -66,8 +66,7 @@ modelplot <- function(models,
                                   coef_map,
                                   coef_omit) {
         clean <- function(x) {
-            x %>% stringr::str_remove_all('\\[|\\]|,') %>%
-                  as.numeric
+            as.numeric(gsub('\\[|\\]|,', '', x))
         }
         if (!is.null(conf_level)) {
             out <- extract(models, 

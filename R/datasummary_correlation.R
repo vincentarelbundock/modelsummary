@@ -10,8 +10,8 @@ datasummary_correlation <- function(data,
                                         
     clean_r <- function(x) {
         x <- sprintf(fmt, x)
-        x <- stringr::str_replace(x, '0\\.', '\\.')
-        x <- stringr::str_replace(x, '1\\.00', '1')
+        x <- gsub('0\\.', '\\.', x)
+        x <- gsub('1\\.00', '1', x)
         return(x)
     }
     

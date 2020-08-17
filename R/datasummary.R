@@ -153,7 +153,7 @@ datasummary <- function(formula,
 
     # informative error message
     if (inherits(tab, 'error')) {
-        if (stringr::str_detect(tab$message, 'Duplicate values:')) {
+        if (grepl('Duplicate values:', tab$message)) {
             message('This error often occurs when the "*" nesting operator is used, but none of the nested terms are categorical variables (factor, logical or character types). You can transform your variable in the original data, or wrap it in a Factor() function in the `datasummary` formula.')
         }
         stop(tab$message)
