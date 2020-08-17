@@ -15,13 +15,6 @@ extract_gof <- function(model, fmt, gof_map = NULL, ...) {
     # extract gof from model object
     gof <- generics::glance(model)
 
-    # extract nobs if not in glance but gof_map says we want it
-    # TODO: This should be fixed upstream in broom
-    if ((!'nobs' %in% names(gof)) & ('nobs' %in% gof_map$raw)) { 
-        gof$nobs <- tryCatch(stats::nobs(model, use.fallback = TRUE), 
-                             error = function(e) NULL)
-    }
-
     # glance_custom
     gof_custom <- glance_custom(model)
     sanity_gof(gof, gof_custom)
