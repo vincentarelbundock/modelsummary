@@ -42,13 +42,13 @@ test_that("coef_map with multiple vertical statistics", {
 
     mat <- modelsummary:::extract(models, coef_map = cm)
     expect_s3_class(mat, 'tbl_df')
-    expect_equal(dim(mat), c(12, 5))
+    expect_equal(dim(mat), c(13, 5))
 
     mat <- modelsummary:::extract(models, 
                                  statistic = c('std.error', 'conf.int'), 
                                  coef_map = cm)
     expect_s3_class(mat, 'tbl_df')
-    expect_equal(dim(mat), c(15, 5))
+    expect_equal(dim(mat), c(16, 5))
 
     rows <- tibble::tribble(
             ~term,        ~OLS, ~Logit,
@@ -61,7 +61,7 @@ test_that("coef_map with multiple vertical statistics", {
                         coef_map = cm)
 
     expect_s3_class(mat, 'tbl_df')
-    expect_equal(dim(mat), c(17, 3))
+    expect_equal(dim(mat), c(18, 3))
 
 })
 

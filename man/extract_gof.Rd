@@ -4,7 +4,7 @@
 \alias{extract_gof}
 \title{Extract goodness-of-fit statistics from a single model}
 \usage{
-extract_gof(model, fmt, gof_map = NULL, ...)
+extract_gof(model, fmt, gof_map, ...)
 }
 \arguments{
 \item{model}{object type with an available `glance` method.}
@@ -15,7 +15,8 @@ the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
 use exponential notation. See `?sprintf` for more options.}
 
 \item{gof_map}{data.frame with four columns: `raw`, `clean`, `fmt`, and
-`omit`. See `modelsummary::gof_map`}
+`omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame
+by default: `modelsummary::gof_map`}
 
 \item{...}{all other arguments are passed to the `tidy` method used to
 extract estimates from the model. For example, this allows users to set

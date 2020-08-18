@@ -47,7 +47,8 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param coef_omit string regular expression. Omits all matching coefficients
 #' from the table (using `grepl`).
 #' @param gof_map data.frame with four columns: `raw`, `clean`, `fmt`, and
-#' `omit`. See `modelsummary::gof_map`
+#' `omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame
+#' by default: `modelsummary::gof_map`
 #' @param gof_omit string regular expression. Omits all matching gof statistics from
 #' the table (using `grepl`).
 #' @param add_rows a data.frame (or tibble) with the same number of columns as
@@ -122,7 +123,7 @@ modelsummary <- function(models,
                          stars = FALSE,
                          coef_map = NULL,
                          coef_omit = NULL,
-                         gof_map = modelsummary::gof_map,
+                         gof_map = NULL,
                          gof_omit = NULL,
                          add_rows = NULL,
                          title = NULL,

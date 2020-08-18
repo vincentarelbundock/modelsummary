@@ -15,7 +15,7 @@ msummary(
   stars = FALSE,
   coef_map = NULL,
   coef_omit = NULL,
-  gof_map = modelsummary::gof_map,
+  gof_map = NULL,
   gof_omit = NULL,
   add_rows = NULL,
   title = NULL,
@@ -76,7 +76,8 @@ will be ordered in the same order as this vector.}
 from the table (using `grepl`).}
 
 \item{gof_map}{data.frame with four columns: `raw`, `clean`, `fmt`, and
-`omit`. See `modelsummary::gof_map`}
+`omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame
+by default: `modelsummary::gof_map`}
 
 \item{gof_omit}{string regular expression. Omits all matching gof statistics from
 the table (using `grepl`).}

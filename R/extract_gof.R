@@ -5,11 +5,15 @@
 #' @inheritParams modelsummary
 #' @return tibble with goodness-of-fit  statistics
 #' @keywords internal
-extract_gof <- function(model, fmt, gof_map = NULL, ...) {
+extract_gof <- function(model, fmt, gof_map, ...) {
 
-    # define gof_map
+    # define gof_map if not supplied
     if (is.null(gof_map)) {
         gof_map <- modelsummary::gof_map 
+        if (isTRUE(inherits(model, "lm"))) {
+            gof_map$clean[gof_map$raw == "statistic"] <- "F"
+            gof_map$omit[gof_map$raw == "statistic"] <- FALSE
+        }
     }
 
     # extract gof from model object

@@ -20,7 +20,7 @@ test_that("tibble", {
 
     raw <- modelsummary(mod, add_rows = rows, output = 'dataframe')
 
-	truth <- c("cyl4", "NEW GOF 1", "(Intercept)", "", "cyl6", "", "cyl8", "", "NEW GOF 2", "NEW GOF 3", "Num.Obs.", "R2", "R2 Adj.", "AIC", "BIC", "Log.Lik.")
+	truth <- c("cyl4", "NEW GOF 1", "(Intercept)", "", "cyl6", "", "cyl8", "", "NEW GOF 2", "NEW GOF 3", "Num.Obs.", "R2", "R2 Adj.", "AIC", "BIC", "Log.Lik.", "F")
 
     expect_equal(truth, unname(raw[[1]]))
 

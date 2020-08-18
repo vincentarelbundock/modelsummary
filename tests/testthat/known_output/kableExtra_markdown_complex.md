@@ -19,6 +19,7 @@ Table: Summarizing 5 statistical models using the `modelsummary` package for `R`
 |R2 Adj.         |0.576      |          |0.502     |         |         |
 |AIC             |338.8      |323.5     |29.5      |21.9     |22.7     |
 |BIC             |344.6      |329.4     |35.4      |26.3     |27.1     |
+|F               |22.053     |          |16.601    |         |         |
 
 __Note:__
 ^^ * p < 0.1, ** p < 0.05, *** p < 0.01

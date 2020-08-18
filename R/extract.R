@@ -11,7 +11,7 @@ extract <- function(models,
                     conf_level = 0.95,
                     coef_map = NULL,
                     coef_omit = NULL,
-                    gof_map = modelsummary::gof_map,
+                    gof_map = NULL,
                     gof_omit = NULL,
                     stars = FALSE,
                     fmt = '%.3f',
@@ -114,6 +114,11 @@ extract <- function(models,
     if (!is.null(gof_omit)) {
         gof <- gof %>%
                dplyr::filter(!grepl(gof_omit, term))
+    }
+
+    # otherwise defined at the model level in extract_gof
+    if (is.null(gof_map)) {
+        gof_map <- modelsummary::gof_map
     }
 
     # gof_map: omit, reorder, rename
