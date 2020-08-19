@@ -110,3 +110,13 @@ test_that('failure after move from tables Depends to re-export', {
   expect_equal(dim(tmp), c(2, 3))
 })
 
+
+test_that('datasummary: return numeric values', {
+     tmp <- datasummary(flipper_length_mm + body_mass_g ~ mean * sex, 
+                     output = "data.frame",
+                     fmt = NULL,
+                     data = penguins)
+     expect_is(tmp$female, "numeric")
+     expect_is(tmp$male, "numeric")
+})
+

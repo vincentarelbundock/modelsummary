@@ -69,9 +69,7 @@ extract_gof <- function(model, fmt, gof_map, ...) {
         }
 
         # reshape
-        out <- gof %>%
-               tidyr::pivot_longer(cols = 1:ncol(.), 
-                                   names_to = 'term')
+        out <- tibble::tibble(term=names(gof), value=unlist(gof))
 
     } else { # all gof are excluded return an empty tibble (needs character to match merge type)
         out <- tibble::tibble(term = NA_character_, value = NA_character_) %>% 
