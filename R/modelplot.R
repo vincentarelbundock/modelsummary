@@ -80,7 +80,7 @@ modelplot <- function(models,
                    tidyr::pivot_longer(3:ncol(.),  names_to = 'model') %>%
                    tidyr::pivot_wider(names_from = 'statistic') %>%
                    dplyr::mutate(estimate = clean(estimate)) %>%
-                   tidyr::drop_na() %>%
+                   stats::na.omit() %>%
                    tidyr::separate(statistic1, into = c('conf.low', 'conf.high'), sep = ', ') %>%
                    dplyr::mutate(dplyr::across(c(conf.low, conf.high), clean))
         } else {
@@ -92,7 +92,7 @@ modelplot <- function(models,
                    dplyr::select(-group, -statistic) %>%
                    tidyr::pivot_longer(-term, names_to = 'model', values_to = 'estimate') %>%
                    dplyr::mutate(estimate = clean(estimate)) %>%
-                   tidyr::drop_na()
+                   stats::na.omit()
         }
         out <- out %>%
                dplyr::mutate(term = factor(term, rev(unique(term))),
