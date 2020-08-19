@@ -1,4 +1,5 @@
 library(modelsummary)
+library(palmerpenguins)
 
 context('datasummary')
 
@@ -102,8 +103,10 @@ test_that('datasummary: output format do not produce errors', {
 
 })
 
-
-
-
-
+test_that('failure after move from tables Depends to re-export', {
+  tmp <- datasummary(flipper_length_mm + body_mass_g ~ mean * sex, 
+                     output = "data.frame",
+                     data = penguins)
+  expect_equal(dim(tmp), c(2, 3))
+})
 
