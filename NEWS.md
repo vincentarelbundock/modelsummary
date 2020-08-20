@@ -2,6 +2,7 @@
 
 * interaction : gsubbed by \u00d7
 * removed 4 dependencies
+* bug with datasummary_balance and tibbles
 
 # modelsummary 0.5.1
 

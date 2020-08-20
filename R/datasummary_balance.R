@@ -26,6 +26,9 @@ datasummary_balance <- function(formula,
                                 dinm_statistic = 'std.error',
                                 ...) {
     
+    # tables does not play well with tibbles
+    data <- as.data.frame(data)
+
     # functions with formatting: str_replace(fmt) doesn't get picked-up by tabular
     MeanF <- function(x) sprintf(fmt, mean(x, na.rm = TRUE))
     SDF <- function(x) sprintf(fmt, stats::sd(x, na.rm = TRUE))

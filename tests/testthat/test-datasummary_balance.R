@@ -147,6 +147,16 @@ test_that('estimatr: clusters, blocks, weights', {
     
 })
 
+
+test_that('words with tibbles', {
+  res <- dplyr::starwars %>% 
+    filter(species=='Human') %>%
+    select(height:gender) %>% 
+    datasummary_balance(~gender, data=., output="data.frame")
+  expect_equal(dim(res), c(28, 8))
+})
+
+
 ##################
 #  save to file  #
 ##################
@@ -196,3 +206,5 @@ test_that('datasummary_balance: various datasets', {
     expect_equal(tab[1, 6], '5.5')
     expect_equal(tab[1, 7], '0.4')
 })
+
+
