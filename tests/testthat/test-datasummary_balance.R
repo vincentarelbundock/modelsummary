@@ -1,7 +1,6 @@
 library(modelsummary)
-library(fabricatr)
-library(randomizr)
 library(estimatr)
+library(randomizr)
 
 context('datasummary_balance')
 
@@ -107,24 +106,21 @@ test_that('fmt', {
 
 
 test_that('too many factor levels', {
-    dat <- fabricate(
-        N = 100,
-        Y = rnorm(100),
-        Z_comp = complete_ra(N, prob = 0.4),
-    )
+
+    dat <- data.frame(ID = as.character(1:100),
+                      Y = rnorm(100),
+                      Z_comp = sample(0:1, 100, replace=TRUE))
     expect_error(datasummary_balance(~Z_comp, dat))
 })
     
 test_that('estimatr: clusters, blocks, weights', {
     
     # clusters
-    dat <- fabricate(
-        N = 100,
-        Y = rnorm(100),
-        Z_comp = complete_ra(N, prob = 0.4),
-    )     
+    dat <- data.frame(ID = as.character(1:100),
+                      Y = rnorm(100),
+                      Z_comp = sample(0:1, 100, replace=TRUE))
     dat$clusters <- sample(20, size = nrow(dat), replace = TRUE)
-    dat$Z_clust <- cluster_ra(dat$clust, prob = 0.6)
+    dat$Z_clust <- randomizr::cluster_ra(dat$clust, prob = 0.6)
     dat$ID <- NULL
     
     truth <- difference_in_means(Y ~ Z_clust, clusters = clusters, data = dat)
@@ -135,7 +131,7 @@ test_that('estimatr: clusters, blocks, weights', {
     
     # blocks
     dat$block <- rep(1:10, each = 10)
-    dat$Z_block <- block_ra(dat$block, prob = 0.5)
+    dat$Z_block <- randomizr::block_ra(dat$block, prob = 0.5)
     dat$blocks <- dat$block
     dat$clusters <- NULL
     

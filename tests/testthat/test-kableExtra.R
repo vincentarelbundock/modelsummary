@@ -1,8 +1,8 @@
 context("kableExtra")
 
-library(MASS)
 library(dplyr)
 library(modelsummary)
+library(MASS)
 library(kableExtra)
 
 models <- list()

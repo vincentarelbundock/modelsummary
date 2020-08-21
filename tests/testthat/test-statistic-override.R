@@ -1,8 +1,8 @@
 context("statistic_override")
 
 library(gt)
-library(MASS)
 library(dplyr)
+library(MASS)
 library(sandwich)
 library(modelsummary)
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'

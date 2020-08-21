@@ -16,7 +16,7 @@ factory_flextable <- function(tab,
   
     # is flextable installed?
     if (!requireNamespace('flextable', quietly = TRUE)) {
-        stop("Please install the `flextable` package.")
+        stop("Please install the `flextable` and the `officer` package.")
     }
 
     # measurements 

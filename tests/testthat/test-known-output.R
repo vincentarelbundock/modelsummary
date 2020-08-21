@@ -1,10 +1,10 @@
 context("known output")
 
 library(gt)
-library(MASS)
 library(dplyr)
 library(sandwich)
 library(modelsummary)
+library(MASS)
 
 models <- list()
 models[['OLS 1']] <- lm(hp ~ mpg + wt, mtcars)
