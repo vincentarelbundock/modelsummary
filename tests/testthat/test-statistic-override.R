@@ -15,6 +15,20 @@ models[['OLS 2']] <- lm(Desertion ~ Crime_prop + Infants, dat)
 models[['NBin 2']] <- glm.nb(Desertion ~ Crime_prop + Donations, dat)
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 
+test_that("bad function", {
+    expect_error(msummary(models, statistic="junk", statistic_override=na.omit))
+})
+
+test_that("bad matrix", {
+    mat <- matrix(1, ncol=2, nrow=2)
+    expect_error(msummary(models, statistic="junk", statistic_override=mat))
+})
+
+test_that("vector must be named", {
+    vec <- as.numeric(1:3) 
+    expect_error(msummary(models[[1]], statistic="junk", statistic_override=vec))
+})
+
 test_that("sandwich::vcovHC p.value", {
     raw <- modelsummary:::extract(models, statistic_override = sandwich::vcovHC, statistic = 'p.value', fmt = '%.7f')
 

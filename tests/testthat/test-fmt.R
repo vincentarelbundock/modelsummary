@@ -17,3 +17,10 @@ test_that("rounding 5 decimals", {
     expect_equal(truth, unname(raw[[5]])[1:6])
 
 })
+
+test_that("rounding internal function", {
+  expect_equal(modelsummary:::rounding(2), "2.000")
+  expect_equal(modelsummary:::rounding("2"), "2")
+})
+
+

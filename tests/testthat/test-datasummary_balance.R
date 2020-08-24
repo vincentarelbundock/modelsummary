@@ -146,8 +146,8 @@ test_that('estimatr: clusters, blocks, weights', {
 
 test_that('words with tibbles', {
   res <- dplyr::starwars %>% 
-    filter(species=='Human') %>%
-    select(height:gender) %>% 
+    dplyr::filter(species=='Human') %>%
+    dplyr::select(height:gender) %>% 
     datasummary_balance(~gender, data=., output="data.frame")
   expect_equal(dim(res), c(28, 8))
 })

@@ -3,8 +3,7 @@ library(ggplot2)
 
 context("modelplot")
 
-
-test_that("modelplot: single model", {
+test_that("single model", {
 
   mod <- lm(hp ~ mpg + drat, data = mtcars)
   p <- modelplot(mod)
@@ -27,7 +26,7 @@ test_that("modelplot: single model", {
 
 })
 
-test_that("modelplot: multiple model", {
+test_that("multiple models", {
 
   mod <- list(lm(hp ~ mpg + drat, data = mtcars),
               lm(hp ~ mpg, data = mtcars))
@@ -39,4 +38,11 @@ test_that("modelplot: multiple model", {
   p <- modelplot(mod, facet=TRUE)
   vdiffr::expect_doppelganger("multiple plots facet", p)
 
+})
+
+test_that("conf_level=NULL", {
+  mod <- lm(hp ~ mpg + drat, data = mtcars)
+  p <- modelplot(mod, draw=FALSE, conf_level=NULL)
+  expect_is(p, "data.frame")
+  expect_equal(dim(p), c(3, 3))
 })
