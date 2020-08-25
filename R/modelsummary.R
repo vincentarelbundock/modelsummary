@@ -165,6 +165,7 @@ modelsummary <- function(models,
     if (!is.null(add_rows) && !is.null(attr(add_rows, 'position'))) {
         hrule <- hrule + sum(attr(add_rows, 'position') < hrule)
     }
+    if (is.na(hrule)) hrule <- NULL
 
     # clean table
     tab <- tab %>%
