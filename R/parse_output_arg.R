@@ -15,6 +15,7 @@ parse_output_arg <- function(output) {
     # file extension to guess format
     ext <- tools::file_ext(output)
 
+
     # output_file
     if (ext == '') {
         output_file <- NULL
@@ -37,6 +38,14 @@ parse_output_arg <- function(output) {
         output_format <- 'html'
     } else {
         output_format <- output
+    }
+
+    # if knit to word
+    fmt <- try(rmarkdown::default_output_format(knitr::current_input())$name, silent=TRUE)
+    if (!inherits(fmt, "try-error")) {
+      if ("word_document" %in% fmt) {
+        output_format <- "word"
+      }
     }
 
     # output_factory
