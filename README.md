@@ -233,11 +233,26 @@ tab <- msummary(models, output = 'kableExtra')
 tab %>% row_spec(3, bold = TRUE, color = 'green')
 ```
 
-`modelsummary` uses sensible defaults to choose an appopriate table-making package for each output format (`gt`, `kableExtra`, `flextable`, or `huxtable`). This table summarizes how to modify `modelsummary`'s `output` argument to display and save tables: 
+# Default table-making backends
 
-<center><img src="https://user-images.githubusercontent.com/987057/83556122-5a6c5c00-a4dd-11ea-905d-b04f633c9844.png" width="50%"></center>
+The table-making backends supported by `modelsummary` have overlaping capabilities (e.g., several of them can produce HTML tables). These are the default packages used for different outputs:
 
-In the above table, checkmarks identify the default table-making package used for each output format. Dots identify supported alternatives. To use those alternatives, we set global options such as:
+`kableExtra`:
+
+* HTML
+* LaTeX / PDF
+
+`flextable`:
+
+* Word
+* Powerpoint
+
+`gt`:
+
+* jpg
+* png
+
+You can modify these defaults by setting global options such as:
 
 ```r
 options(modelsummary_html = 'kableExtra')

@@ -22,7 +22,7 @@ test_that("html_output: complex table", {
             'drat' = 'Rear axle ratio',
             'disp' = 'Displacement',
             '(Intercept)' = 'Constant')
-    raw <- msummary(models,
+    raw <- msummary(models, output="gt",
            coef_map = cm,
            stars = TRUE,
            gof_omit = "Statistics|^p$|Deviance|Resid|Sigma|Log.Lik|^DF$",
@@ -40,7 +40,7 @@ test_that("html_output: complex table", {
 
 test_that("html_output: title", {
 
-    raw <- msummary(models, title = 'This is a title for my table.') %>%
+    raw <- msummary(models, output="gt", title = 'This is a title for my table.') %>%
            gt::as_raw_html()
     expect_known_output(cat(raw), "known_output/title.html")
 
@@ -48,7 +48,7 @@ test_that("html_output: title", {
 
 test_that("html_output: background color", {
 
-    raw <- msummary(models, title = 'colors') %>%
+    raw <- msummary(models, output="gt", title = 'colors') %>%
            tab_style(style = cell_text(weight = "bold"),
                      locations = cells_body(columns = vars(`OLS 1`))) %>%
            tab_style(style = cell_text(style = "italic"),

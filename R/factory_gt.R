@@ -13,6 +13,8 @@ factory_gt <- function(tab,
                        output_format = 'gt',
                        title = NULL,
                        ...) {
+
+    check_dependency("gt")
   
     # create gt table object
     idx_col <- ncol(tab)

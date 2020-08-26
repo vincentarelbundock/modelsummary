@@ -13,10 +13,7 @@ factory_huxtable <- function(tab,
                              ...) {
 
 
-    # is huxtable installed?
-    if (!requireNamespace('huxtable', quietly = TRUE)) {
-        stop("Please install the `huxtable` package.")
-    }
+    check_dependency("huxtable")
 
     ## warning on align
     #if (!is.null(align)) {

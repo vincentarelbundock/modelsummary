@@ -17,7 +17,7 @@ test_that("coef_map: two variables with the same name within or between models",
     mod <- list()
     mod[[1]] <- lm(y ~ x)
     mod[[2]] <- lm(y ~ z)
-    tab <- msummary(mod, coef_map = c('x' = 'X', 'z' = 'X'))
+    tab <- msummary(mod, output="gt", coef_map = c('x' = 'X', 'z' = 'X'))
     checkmate::expect_class(tab, 'gt_tbl')
 
 

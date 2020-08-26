@@ -12,12 +12,7 @@ factory_flextable <- function(tab,
                               title = NULL,
                               ...) {
 
-
-  
-    # is flextable installed?
-    if (!requireNamespace('flextable', quietly = TRUE)) {
-        stop("Please install the `flextable` and the `officer` package.")
-    }
+    check_dependency("flextable")
 
     # measurements 
     table_width <- ncol(tab)

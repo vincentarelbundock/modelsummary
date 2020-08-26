@@ -49,12 +49,12 @@ parse_output_arg <- function(output) {
     }
 
     # output_factory
-    factory_list <- c('default' = getOption('modelsummary_default', default = 'gt'),
+    factory_list <- c('default' = getOption('modelsummary_default', default = 'kableExtra'),
                       'dataframe' = 'dataframe',
                       'data.frame' = 'dataframe',
                       'flextable' = 'flextable',
                       'gt' = 'gt',
-                      'html' = getOption('modelsummary_html', default = 'gt'),
+                      'html' = getOption('modelsummary_html', default = 'kableExtra'),
                       'huxtable' = 'huxtable',
                       'jpg' = getOption('modelsummary_jpg', default = 'flextable'),
                       'kableExtra' = 'kableExtra',
