@@ -102,8 +102,8 @@ sanity_factory <- function(factory_dict) {
     check_option('markdown', c('kableExtra'))
     check_option('word', c('flextable', 'huxtable'))
     check_option('powerpoint', c('flextable', 'huxtable'))
-    check_option('png', c('gt', 'flextable'))
-    check_option('jpg', c('flextable'))
+    check_option('png', c('gt', 'flextable', 'kableExtra'))
+    check_option('jpg', c('flextable', 'kableExtra'))
 }
 
 #' sanity check
