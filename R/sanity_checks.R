@@ -2,30 +2,30 @@
 #'
 #' @keywords internal
 check_dependency <- function(library_name) {
-    if (!requireNamespace(library_name, quietly = TRUE)) {
-        stop(sprintf("Please install the %s package.", library_name))
-    }
+  if (!requireNamespace(library_name, quietly = TRUE)) {
+    stop(sprintf("Please install the %s package.", library_name))
+  }
 }
 
 #' sanity check
 #'
 #' @keywords internal
 sanity_model_names <- function(modelnames) {
-    if (any(modelnames == '')) {
-        stop('Model names cannot include empty strings. Please make sure that every object in the `models` list has a unique, non-empty name. If the `models` list has no names at all (NULL), `modelsummary` will create some automatically.')
-	}
+  if (any(modelnames == '')) {
+    stop('Model names cannot include empty strings. Please make sure that every object in the `models` list has a unique, non-empty name. If the `models` list has no names at all (NULL), `modelsummary` will create some automatically.')
+  }
 }
 
 #' sanity check
 #'
 #' @keywords internal
 sanity_align <- function(align, tab) {
-    checkmate::assert_string(align, null.ok = TRUE)
-    if (!is.null(align)) {
-        checkmate::assert_true(nchar(align) == ncol(tab))
-        align <- strsplit(align, '')[[1]]
-        checkmate::assert_true(all(align %in% c('l', 'c', 'r')))
-    }
+  checkmate::assert_string(align, null.ok = TRUE)
+  if (!is.null(align)) {
+    checkmate::assert_true(nchar(align) == ncol(tab))
+    align <- strsplit(align, '')[[1]]
+    checkmate::assert_true(all(align %in% c('l', 'c', 'r')))
+  }
 }
 
 #' sanity check
@@ -42,9 +42,9 @@ sanity_title <- function(title) checkmate::assert_character(title, len = 1, null
 #'
 #' @keywords internal
 sanity_coef_map <- function(coef_map) {
-    checkmate::assert_character(coef_map, null.ok = TRUE)
-    checkmate::assert_character(names(coef_map), null.ok = TRUE,
-                                unique = TRUE)
+  checkmate::assert_character(coef_map, null.ok = TRUE)
+  checkmate::assert_character(names(coef_map), null.ok = TRUE,
+                              unique = TRUE)
 }
 
 #' sanity check
@@ -71,67 +71,67 @@ sanity_fmt <- function(fmt) checkmate::assert_string(fmt, null.ok = FALSE)
 #'
 #' @keywords internal
 sanity_conf_level <- function(conf_level) {
-    checkmate::assert_number(conf_level, lower = 0, upper = .999999999999)
+  checkmate::assert_number(conf_level, lower = 0, upper = .999999999999)
 }
 
 #' sanity check
 #'
 #' @keywords internal
 sanity_factory <- function(factory_dict) {
-    check_option <- function(output_type, valid) {
-        if (!factory_dict[[output_type]] %in% valid) {
-            msg <- paste0("`modelsummary` cannot write a table of type '",
-                          output_type,
-                          "' using the ",
-                          factory_dict[[output_type]],
-                          " package. You must use one of the following packages: ",
-                          paste(valid, collapse = ', '),
-                          ". Consider setting a global option such as: option(modelsummary_", 
-                          output_type,
-                          "='",
-                          valid[1],
-                          "')"
-                          )
-            stop(msg)
-        }
+  check_option <- function(output_type, valid) {
+    if (!factory_dict[[output_type]] %in% valid) {
+      msg <- paste0("`modelsummary` cannot write a table of type '",
+                    output_type,
+                    "' using the ",
+                    factory_dict[[output_type]],
+                    " package. You must use one of the following packages: ",
+                    paste(valid, collapse = ', '),
+                    ". Consider setting a global option such as: option(modelsummary_", 
+                    output_type,
+                    "='",
+                    valid[1],
+                    "')"
+      )
+      stop(msg)
     }
-    check_option('default', c('gt', 'kableExtra', 'flextable', 'huxtable'))
-    check_option('html', c('gt', 'kableExtra', 'flextable', 'huxtable'))
-    check_option('rtf', c('gt', 'huxtable'))
-    check_option('latex', c('gt', 'kableExtra', 'huxtable'))
-    check_option('markdown', c('kableExtra'))
-    check_option('word', c('flextable', 'huxtable'))
-    check_option('powerpoint', c('flextable', 'huxtable'))
-    check_option('png', c('gt', 'flextable'))
-    check_option('jpg', c('flextable'))
+  }
+  check_option('default', c('gt', 'kableExtra', 'flextable', 'huxtable'))
+  check_option('html', c('gt', 'kableExtra', 'flextable', 'huxtable'))
+  check_option('rtf', c('gt', 'huxtable'))
+  check_option('latex', c('gt', 'kableExtra', 'huxtable'))
+  check_option('markdown', c('kableExtra'))
+  check_option('word', c('flextable', 'huxtable'))
+  check_option('powerpoint', c('flextable', 'huxtable'))
+  check_option('png', c('gt', 'flextable'))
+  check_option('jpg', c('flextable'))
 }
 
 #' sanity check
 #'
 #' @keywords internal
 sanity_stars <- function(stars) {
-    checkmate::assert(
-        checkmate::check_flag(stars),
-        checkmate::check_numeric(stars, lower = 0, upper = 1, names = 'unique')
-    )
+  checkmate::assert(
+                    checkmate::check_flag(stars),
+                    checkmate::check_numeric(stars, lower = 0, upper = 1, names = 'unique')
+  )
 }
 
 #' sanity check
 #'
 #' @keywords internal
 sanity_notes <- function(notes) {
-    checkmate::assert(
-        checkmate::check_list(notes, null.ok = TRUE),
-        checkmate::check_character(notes)
-    )
-    if ('list' %in% class(notes)) {
-        for (note in notes) {
-            checkmate::assert(
-                checkmate::check_character(note),
-                checkmate::check_class(note, 'from_markdown')
-            )
-        }
+  checkmate::assert(
+                    checkmate::check_list(notes, null.ok = TRUE),
+                    checkmate::check_character(notes)
+  )
+  if ('list' %in% class(notes)) {
+    for (note in notes) {
+      checkmate::assert(
+                        checkmate::check_character(note),
+                        checkmate::check_class(note, 'from_markdown')
+      )
     }
+  }
 }
 
 #' sanity check
@@ -139,25 +139,25 @@ sanity_notes <- function(notes) {
 #' @keywords internal
 sanity_output <- function(output) {
 
-    object_types <- c('default', 'gt', 'kableExtra', 'flextable', 'huxtable', 'html', 'latex', 'markdown', 'dataframe', 'data.frame')
-    extension_types <- c('html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf', 'jpg', 'png')
+  object_types <- c('default', 'gt', 'kableExtra', 'flextable', 'huxtable', 'html', 'latex', 'markdown', 'dataframe', 'data.frame')
+  extension_types <- c('html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf', 'jpg', 'png')
 
-    checkmate::assert_string(output)
+  checkmate::assert_string(output)
 
-    cond1 <- output %in% object_types
-    if (isFALSE(cond1)) {
-        extension <- tools::file_ext(output)
-        cond2 <- extension %in% extension_types
-        if (isTRUE(cond2)) {
-            checkmate::assert_path_for_output(output, overwrite=TRUE)
-        } else {
-            msg <- paste0('The `output` argument must be ', 
-                          paste(object_types, collapse = ', '),
-                          ', or a valid file path with one of these extensions: ',
-                          paste(extension_types, collapse = ', '))
-            stop(msg)
-        }
+  cond1 <- output %in% object_types
+  if (isFALSE(cond1)) {
+    extension <- tools::file_ext(output)
+    cond2 <- extension %in% extension_types
+    if (isTRUE(cond2)) {
+      checkmate::assert_path_for_output(output, overwrite=TRUE)
+    } else {
+      msg <- paste0('The `output` argument must be ', 
+                    paste(object_types, collapse = ', '),
+                    ', or a valid file path with one of these extensions: ',
+                    paste(extension_types, collapse = ', '))
+      stop(msg)
     }
+  }
 }
 
 
@@ -165,14 +165,14 @@ sanity_output <- function(output) {
 #'
 #' @keywords internal
 sanity_add_rows <- function(add_rows, models) {
-    if (inherits(add_rows, 'list')) {
-        for (i in seq_along(add_rows)) {
-            checkmate::assert_character(add_rows[[i]], null.ok = FALSE, len = (length(models) + 1))
-        }
-    } else if (inherits(add_rows, 'data.frame')) {
-        checkmate::assert_true(all(c('section', 'position') %in% colnames(add_rows)))
-        checkmate::assert_true(all(colnames(add_rows) %in% c('term', 'section', 'position', names(models)))) 
+  if (inherits(add_rows, 'list')) {
+    for (i in seq_along(add_rows)) {
+      checkmate::assert_character(add_rows[[i]], null.ok = FALSE, len = (length(models) + 1))
     }
+  } else if (inherits(add_rows, 'data.frame')) {
+    checkmate::assert_true(all(c('section', 'position') %in% colnames(add_rows)))
+    checkmate::assert_true(all(colnames(add_rows) %in% c('term', 'section', 'position', names(models)))) 
+  }
 }
 
 
@@ -184,36 +184,36 @@ sanity_statistic <- function(statistic,
                              statistic_vertical,
                              models) {
 
-    checkmate::assert_character(statistic)
+  checkmate::assert_character(statistic)
 
-    checkmate::assert(checkmate::check_list(statistic_override, null.ok = TRUE),
-                      checkmate::check_function(statistic_override, null.ok = TRUE))
+  checkmate::assert(checkmate::check_list(statistic_override, null.ok = TRUE),
+                    checkmate::check_function(statistic_override, null.ok = TRUE))
 
-    if (is.list(statistic_override)) {
-        checkmate::assert_true(length(statistic_override) == length(models))
-        checkmate::assert(checkmate::check_true(all(sapply(statistic_override, is.function))),
-                          checkmate::check_true(all(sapply(statistic_override, is.vector))),
-                          checkmate::check_true(all(sapply(statistic_override, is.matrix))))
-    } else if (is.function(statistic_override)) {
-        statistic_override <- lapply(models, function(x) statistic_override)
+  if (is.list(statistic_override)) {
+    checkmate::assert_true(length(statistic_override) == length(models))
+    checkmate::assert(checkmate::check_true(all(sapply(statistic_override, is.function))),
+                      checkmate::check_true(all(sapply(statistic_override, is.vector))),
+                      checkmate::check_true(all(sapply(statistic_override, is.matrix))))
+  } else if (is.function(statistic_override)) {
+    statistic_override <- lapply(models, function(x) statistic_override)
+  }
+
+  # statistic_vertical = FALSE: only one statistic can be displayed horizontally
+  checkmate::assert_logical(statistic_vertical, len = 1, null.ok = FALSE)
+  if (!statistic_vertical) {
+    if (length(statistic) > 1 | (length(statistic_override) > 1) & !is.vector(statistic_override[1])) {
+      stop("Only one statistic can be displayed next to the estimate. Check the statistic_vertical argument.")
+
     }
-
-    # statistic_vertical = FALSE: only one statistic can be displayed horizontally
-    checkmate::assert_logical(statistic_vertical, len = 1, null.ok = FALSE)
-    if (!statistic_vertical) {
-      if (length(statistic) > 1 | (length(statistic_override) > 1) & !is.vector(statistic_override[1])) {
-        stop("Only one statistic can be displayed next to the estimate. Check the statistic_vertical argument.")
-
-      }
-    }
+  }
 }
 
 #' sanity check
 #'
 #' @keywords internal
 sanity_gof <- function(gof_output, gof_custom) {
-    checkmate::assert_data_frame(gof_output, nrows = 1, min.cols = 1, null.ok = FALSE)
-    checkmate::assert_data_frame(gof_custom, nrows = 1, null.ok = TRUE)
+  checkmate::assert_data_frame(gof_output, nrows = 1, min.cols = 1, null.ok = FALSE)
+  checkmate::assert_data_frame(gof_custom, nrows = 1, null.ok = TRUE)
 }
 
 #' sanity check
@@ -221,43 +221,43 @@ sanity_gof <- function(gof_output, gof_custom) {
 #' @keywords internal
 sanity_tidy <- function(tidy_output, tidy_custom, estimate, statistic, modelclass) {
 
-    # tidy(model)
-    checkmate::assert_data_frame(tidy_output, min.rows = 1, min.cols = 3)
-    checkmate::assert_true('term' %in% colnames(tidy_output))
+  # tidy(model)
+  checkmate::assert_data_frame(tidy_output, min.rows = 1, min.cols = 3)
+  checkmate::assert_true('term' %in% colnames(tidy_output))
 
-    # tidy_custom(model)
-    checkmate::assert_data_frame(tidy_custom, nrows = nrow(tidy_output),
-                                 min.cols = 2, null.ok = TRUE)
+  # tidy_custom(model)
+  checkmate::assert_data_frame(tidy_custom, nrows = nrow(tidy_output),
+                               min.cols = 2, null.ok = TRUE)
 
-    if (!is.null(tidy_custom)) {
-        checkmate::assert_true('term' %in% colnames(tidy_custom))
-        checkmate::assert_true(all(tidy_output$term == tidy_custom$term))
+  if (!is.null(tidy_custom)) {
+    checkmate::assert_true('term' %in% colnames(tidy_custom))
+    checkmate::assert_true(all(tidy_output$term == tidy_custom$term))
+  }
+
+  # columns
+  available <- c(colnames(tidy_output), colnames(tidy_custom))
+
+  if (!estimate %in% available) {
+    msg <- paste0('For models of class ',
+                  modelclass,
+                  ' the `estimate` argument of the `modelsummary()` function must be one of: ',
+                  paste(available, collapse = ', '))
+    stop(msg)
+  }
+
+  statistic[statistic == 'conf.int'] <- 'conf.low'
+  if (!all(statistic %in% available)) {
+    if ('conf.low' %in% available) {
+      available <- base::setdiff(available, c('conf.low', 'conf.high'))
+      available <- c('conf.int', available)
     }
-
-    # columns
-    available <- c(colnames(tidy_output), colnames(tidy_custom))
-
-    if (!estimate %in% available) {
-        msg <- paste0('For models of class ',
-                      modelclass,
-                      ' the `estimate` argument of the `modelsummary()` function must be one of: ',
-                      paste(available, collapse = ', '))
-        stop(msg)
-    }
-
-    statistic[statistic == 'conf.int'] <- 'conf.low'
-    if (!all(statistic %in% available)) {
-        if ('conf.low' %in% available) {
-            available <- base::setdiff(available, c('conf.low', 'conf.high'))
-            available <- c('conf.int', available)
-        }
-        msg <- paste0('For models of class ',
-                      modelclass,
-                      ' the `statistic` argument of the `modelsummary()` function must be one of: ',
-                      paste(available, collapse = ', '),
-                      ' (or possibly conf.int)')
-        stop(msg)
-    }
+    msg <- paste0('For models of class ',
+                  modelclass,
+                  ' the `statistic` argument of the `modelsummary()` function must be one of: ',
+                  paste(available, collapse = ', '),
+                  ' (or possibly conf.int)')
+    stop(msg)
+  }
 }
 
 #' sanity check: datasummary
@@ -272,7 +272,7 @@ sanity_ds_nesting_factor <- function(formula, data) {
   warn <- any(sapply(idx, function(x) any(grepl(x, termlabs))))
   if (warn) {
     warning(
-      'You are trying to create a nested table by applying the * operator to a character or a logical variable. It is usually a good idea to convert such variables to a factor before calling datasummary: dat$y<-as.factor(dat$y). Alternatively, you could wrap your categorical variable inside Factor() in the datasummary call itself: datasummary(x ~ Factor(y) * z, data)\n')
+            'You are trying to create a nested table by applying the * operator to a character or a logical variable. It is usually a good idea to convert such variables to a factor before calling datasummary: dat$y<-as.factor(dat$y). Alternatively, you could wrap your categorical variable inside Factor() in the datasummary call itself: datasummary(x ~ Factor(y) * z, data)\n')
   }
 }
 
