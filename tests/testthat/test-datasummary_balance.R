@@ -134,7 +134,7 @@ test_that('estimatr: clusters, blocks, weights', {
     dat$block <- rep(1:5, each = 20) # hardcoded name in estimatr
     dat <- dat %>%
            dplyr::group_by(block) %>%
-           dplyr::mutate(Z_block = rbinom(n(), 1, .5))
+           dplyr::mutate(Z_block = rbinom(dplyr::n(), 1, .5))
     dat$blocks <- dat$block # hardcoded name in datasummary_balance
     dat$clusters <- NULL
     
