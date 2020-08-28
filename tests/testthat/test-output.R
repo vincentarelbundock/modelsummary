@@ -72,14 +72,10 @@ test_that("unsupported global options", {
     expect_error(msummary(mod, 'test.pptx'))
     options(modelsummary_powerpoint = 'flextable')
 
-    options(modelsummary_png = 'kableExtra')
-    expect_error(msummary(mod, 'test.png'))
     options(modelsummary_png = 'huxtable')
     expect_error(msummary(mod, 'test.png'))
     options(modelsummary_png = 'flextable')
 
-    options(modelsummary_jpg = 'kableExtra')
-    expect_error(msummary(mod, 'test.jpg'))
     options(modelsummary_jpg = 'huxtable')
     expect_error(msummary(mod, 'test.jpg'))
     options(modelsummary_jpg = 'gt')

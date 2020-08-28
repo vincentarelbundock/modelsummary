@@ -2,7 +2,7 @@
 #'
 #' @inheritParams factory_gt
 #' @keywords internal
-#' @return tbl_gt object
+#' @return kableExtra object
 factory_kableExtra <- function(tab,
                                align = NULL,
                                hrule = NULL,
@@ -11,6 +11,11 @@ factory_kableExtra <- function(tab,
                                output_format = 'kableExtra',
                                title = NULL,
                                ...) {
+
+    if (is.null(output_format) || 
+        !output_format %in% c("latex", "markdown")) {
+      output_format <- "html"
+    }
 
     out <- kableExtra::kbl(
         tab,
@@ -55,8 +60,8 @@ factory_kableExtra <- function(tab,
     }
 
     # styling (can be overriden manually by calling again)
-    if (output_format %in% c('latex', 'html')) {
-        out <- out %>% kableExtra::kable_styling(full_width = FALSE)
+    if (output_format %in% c("latex", "html")) {
+      out <- out %>% kableExtra::kable_styling(full_width = FALSE)
     }
 
     # output
