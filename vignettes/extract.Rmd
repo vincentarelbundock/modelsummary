@@ -1,30 +1,11 @@
 ---
-title: "Raw data with `modelsummary::extract`"
+title: "Raw data with `modelsummary(output="data.frame")"
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
+Power users may want to export raw data from `modelsummary` for further post-processing before creating their tables. They can achieve that by setting the `output` argument to `data.frame`:
 
-The `gt` package allows a bunch more customization and styling. Power users can use `modelsummary`'s `extract` function to produce a tibble which can easily be fed to other table making packages.
-
-```r
-> modelsummary:::extract(models)
-# A tibble: 21 x 8
-   group     term        statistic `OLS 1` `NBin 1` `OLS 2` `NBin 2` `Logit 1`
-   <chr>     <chr>       <chr>     <chr>   <chr>    <chr>   <chr>    <chr>
- 1 estimates (Intercept) estimate  64.114  4.218    57.331  4.384    1.006
- 2 estimates (Intercept) statistic (5.247) (0.144)  (8.315) (0.233)  (0.710)
- 3 estimates Crime_prop  estimate  -0.002  -0.000   -0.002  -0.000   -0.000
- 4 estimates Crime_prop  statistic (0.001) (0.000)  (0.001) (0.000)  (0.000)
- 5 estimates Infants     estimate  -0.001  ""       0.000   ""       -0.000
- 6 estimates Infants     statistic (0.000) ""       (0.000) ""       (0.000)
- 7 estimates Donations   estimate  ""      -0.000   ""      -0.000   ""
- 8 estimates Donations   statistic ""      (0.000)  ""      (0.000)  ""
- 9 gof       R2          ""        0.237   ""       0.073   ""       ""
-10 gof       Adj.R2      ""        0.218   ""       0.051   ""       ""
-# … with 11 more rows
+```{r}
+library(modelsummary)
+mod <- lm(mpg ~ hp, mtcars)
+modelsummary(mod)
 ```

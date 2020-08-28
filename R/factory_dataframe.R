@@ -10,9 +10,9 @@ factory_dataframe <- function(tab,
                               notes = NULL,
                               output_file = NULL,
                               output_format = NULL,
+                              add_rows = NULL,
                               title = NULL,
                               ...) {
-
 
     out <- tab
 

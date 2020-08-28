@@ -58,11 +58,12 @@ results[['hardcoded arbitrary']] <- msummary(
 
 # we are not interested in GOFs in this test
 for (i in seq_along(results)) {
-  idx <- match("Num.Obs.", results[[i]][[1]])
-  results[[i]] <- results[[i]][1:(idx-1),]
+  results[[i]] <- results[[i]] %>%
+                  dplyr::filter(group == "estimates") %>%
+                  dplyr::select(-group, -statistic)
 }
 
-# # save known values (comment out until new manual check)
+# save known values (comment out until new manual check)
 # saveRDS(results, file="known_output/statistic-override.rds")
 
 # load reference values (comment out when updating)

@@ -10,7 +10,7 @@ test_that("combine different regressors and collapse rows", {
     mod$OLS <- lm(am ~ drat, data = mtcars)
     mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 
-    raw <- modelsummary:::extract(mod, coef_map = cmap)
+    raw <- modelsummary:::extract_models(mod, output="data.frame", coef_map = cmap)
 
     truth <- c('Constant', 'Constant', 'Combined', 'Combined', 'Num.Obs.')
     expect_equal(unname(raw[[2]][1:5]), truth)
@@ -24,7 +24,7 @@ test_that("reorder and omit", {
     mod$OLS <- lm(am ~ drat, data = mtcars)
     mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 
-    raw <- modelsummary:::extract(mod, coef_map = cmap)
+    raw <- modelsummary:::extract_models(mod, coef_map = cmap)
 
     truth <- c('qsec', 'qsec', 'drat', 'drat', 'Num.Obs.')
     expect_equal(unname(raw[[2]][1:5]), truth)
@@ -40,11 +40,11 @@ test_that("coef_map with multiple vertical statistics", {
     models[['OLS']] <- lm(mpg ~ factor(cyl), mtcars)
     models[['Logit']] <- glm(am ~ factor(cyl), mtcars, family = binomial)
 
-    mat <- modelsummary:::extract(models, coef_map = cm)
+    mat <- modelsummary:::extract_models(models, coef_map = cm)
     expect_s3_class(mat, 'tbl_df')
     expect_equal(dim(mat), c(13, 5))
 
-    mat <- modelsummary:::extract(models, 
+    mat <- modelsummary:::extract_models(models, 
                                  statistic = c('std.error', 'conf.int'), 
                                  coef_map = cm)
     expect_s3_class(mat, 'tbl_df')
@@ -61,7 +61,7 @@ test_that("coef_map with multiple vertical statistics", {
                         coef_map = cm)
 
     expect_s3_class(mat, 'tbl_df')
-    expect_equal(dim(mat), c(18, 3))
+    expect_equal(dim(mat), c(18, 5))
 
 })
 

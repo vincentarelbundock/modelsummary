@@ -20,7 +20,7 @@
 ## test
 #test_that("ols and logit", {
 
-    #raw <- modelsummary:::extract(mod)
+    #raw <- modelsummary:::extract_models(mod)
 
     #truth <- c("1.568", "(0.231)", "0.002", "(0.001)", "-0.449", "(0.097)", "32", "0.536", "0.504", "5")
     #expect_equal(truth, unname(raw[[4]]))

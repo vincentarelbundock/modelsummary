@@ -133,19 +133,20 @@ modelsummary <- function(models,
 
 
     # extract estimates and gof
-    dat <- extract(models,
-                   statistic = statistic,
-                   statistic_override = statistic_override,
-                   statistic_vertical = statistic_vertical,
-                   conf_level = conf_level,
-                   coef_map = coef_map,
-                   coef_omit = coef_omit,
-                   gof_map = gof_map,
-                   gof_omit = gof_omit,
-                   stars = stars,
-                   fmt = fmt,
-                   estimate = estimate,
-                   ...)
+    dat <- extract_models(
+      models,
+      statistic = statistic,
+      statistic_override = statistic_override,
+      statistic_vertical = statistic_vertical,
+      conf_level = conf_level,
+      coef_map = coef_map,
+      coef_omit = coef_omit,
+      gof_map = gof_map,
+      gof_omit = gof_omit,
+      stars = stars,
+      fmt = fmt,
+      estimate = estimate,
+      ...)
 
     # remove duplicate term labels
     idx <- grepl('statistic\\d*$', dat$statistic)
@@ -170,12 +171,13 @@ modelsummary <- function(models,
       hrule <- NULL
     }
 
-    # clean table
-    tab <- tab %>%
-           dplyr::select(-statistic, -group) %>%
-           # HACK: arbitrary 7 spaces to avoid name conflict
-           dplyr::rename(`       ` = term)
-
+    # clean table but keep metadata for data.frame output
+    if (parse_output_arg(output)$output_format != "dataframe") {
+      tab <- tab %>%
+             dplyr::select(-statistic, -group) %>%
+             # HACK: arbitrary 7 spaces to avoid name conflict
+             dplyr::rename(`       ` = term)
+    }
 
     # stars
     if (!isFALSE(stars)) {

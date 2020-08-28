@@ -39,6 +39,11 @@ parse_output_arg <- function(output) {
         output_format <- output
     }
 
+    # different spellings
+    if (output_format == "data.frame") {
+      output_format <- "dataframe"
+    }
+
     # if knit to word
     fmt <- try(rmarkdown::default_output_format(knitr::current_input())$name,
                silent=TRUE)

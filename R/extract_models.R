@@ -3,20 +3,20 @@
 #'
 #' @inheritParams modelsummary
 #' @return tibble
-#' @export
-extract <- function(models,
-                    statistic = 'std.error',
-                    statistic_override = NULL,
-                    statistic_vertical = TRUE,
-                    conf_level = 0.95,
-                    coef_map = NULL,
-                    coef_omit = NULL,
-                    gof_map = NULL,
-                    gof_omit = NULL,
-                    stars = FALSE,
-                    fmt = '%.3f',
-                    estimate = 'estimate',
-                    ...) {
+#' @keywords internal
+extract_models <- function(models,
+                           statistic = 'std.error',
+                           statistic_override = NULL,
+                           statistic_vertical = TRUE,
+                           conf_level = 0.95,
+                           coef_map = NULL,
+                           coef_omit = NULL,
+                           gof_map = NULL,
+                           gof_omit = NULL,
+                           stars = FALSE,
+                           fmt = '%.3f',
+                           estimate = 'estimate',
+                           ...) {
 
     # models must be a list of models
     if (!'list' %in% class(models)) {

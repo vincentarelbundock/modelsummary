@@ -18,7 +18,7 @@ factory <- function(tab,
 
 
     # sanity check functions are hosted in R/sanity_checks.R
-    # more sanity checks are conducted in modelsummary:::extract()
+    # more sanity checks are conducted in modelsummary:::extract_models()
     sanity_output(output)
     sanity_title(title)
     sanity_notes(notes)
@@ -100,6 +100,17 @@ factory <- function(tab,
 
     # add_rows
     if (!is.null(add_rows)) {
+
+        # data.frame includes metadata columns
+        if (output_list$output_format == "dataframe") {
+          # only for modelsummary, not for datasummary
+          if (all(c("term", "statistic") %in% colnames(tab))) {
+            add_rows <- add_rows %>% 
+                        dplyr::mutate(group = "manual", statistic = "") %>%
+                        dplyr::relocate(group, .before = term) %>%
+                        dplyr::relocate(statistic, .after = term)
+          }
+        }
 
         # sanity check
         checkmate::assert_data_frame(add_rows, min.rows = 1, ncols = ncol(tab))
