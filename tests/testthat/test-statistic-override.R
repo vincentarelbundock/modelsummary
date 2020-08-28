@@ -1,6 +1,5 @@
 context("statistic_override")
 
-library(sandwich)
 library(modelsummary)
 
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
@@ -19,20 +18,20 @@ results <- list()
 results[['one sandwich']] <- msummary(
   models, 
   output="data.frame",
-  statistic_override=sandwich::vcovHC, 
+  statistic_override=vcov, 
   statistic='p.value',
   fmt = "%.7f")
 
 results[['many sandwiches']] <- msummary(
   models, 
   output="data.frame",
-  statistic_override=list(vcov, vcovHC, vcovHAC, vcovHC, vcov), 
+  statistic_override=list(vcov, vcov, vcov, vcov, vcov), 
   fmt="%.7f")
 
 results[['list of matrices']] <- msummary(
   models,
   output="data.frame",
-  statistic_override=lapply(models, sandwich::vcovHC),
+  statistic_override=lapply(models, vcov),
   fmt="%.7f")
 
 results[['hardcoded numerical']] <- msummary(
