@@ -69,7 +69,7 @@ factory_huxtable <- function(tab,
         } else if (output_format == 'rtf') {
             huxtable::quick_rtf(out, file = output_file, open = FALSE)
         } else if (output_format == 'latex') {
-            huxtable::quick_rtf(out, file = output_file, open = FALSE)
+            huxtable::quick_latex(out, file = output_file, open = FALSE)
         }
     }
 
