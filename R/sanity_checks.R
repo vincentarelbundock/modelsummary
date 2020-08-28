@@ -94,16 +94,15 @@ sanity_factory <- function(factory_dict) {
       )
       stop(msg)
     }
-  }
-  check_option('default', c('gt', 'kableExtra', 'flextable', 'huxtable'))
-  check_option('html', c('gt', 'kableExtra', 'flextable', 'huxtable'))
-  check_option('rtf', c('gt', 'huxtable'))
-  check_option('latex', c('gt', 'kableExtra', 'huxtable'))
-  check_option('markdown', c('kableExtra'))
-  check_option('word', c('flextable', 'huxtable'))
-  check_option('powerpoint', c('flextable', 'huxtable'))
-  check_option('png', c('gt', 'flextable'))
-  check_option('jpg', c('flextable'))
+    check_option('default', c('gt', 'kableExtra', 'flextable', 'huxtable'))
+    check_option('html', c('gt', 'kableExtra', 'flextable', 'huxtable'))
+    check_option('rtf', c('gt', 'huxtable'))
+    check_option('latex', c('gt', 'kableExtra', 'huxtable'))
+    check_option('markdown', c('kableExtra'))
+    check_option('word', c('flextable', 'huxtable'))
+    check_option('powerpoint', c('flextable', 'huxtable'))
+    check_option('png', c('gt', 'flextable', 'kableExtra'))
+    check_option('jpg', c('flextable', 'kableExtra'))
 }
 
 #' sanity check
