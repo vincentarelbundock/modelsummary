@@ -87,3 +87,4 @@ tibble
 Extract and combine estimates and goodness-of-fit statistics from several
 statistical models.
 }
+\keyword{internal}

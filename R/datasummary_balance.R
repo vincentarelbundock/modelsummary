@@ -6,7 +6,11 @@
 #' @param data A data.frame (or tibble). If this data includes columns called
 #'   "blocks", "clusters", and/or "weights", the 'estimatr' package will
 #'   consider them when calculating the difference in means.
-#' @param dinm TRUE calculates a difference in means with uncertainty estimates
+#' @param dinm TRUE calculates a difference in means with uncertainty
+#'   estimates. This option is only available if the `estimatr` package is
+#'   installed. If `data` includes columns named "blocks", "clusters", or
+#'   "weights", this information will be taken into account automatically by
+#'   `estimatr::difference_in_means`.
 #' @param dinm_statistic string: "std.error" or "p.value"
 #' @inheritParams modelsummary
 #' @inheritParams datasummary

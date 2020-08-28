@@ -50,7 +50,11 @@ column center-aligned, and the 3rd column right-aligned.}
 \item{add_columns}{a data.frame (or tibble) with the same number of rows as
 your main table.}
 
-\item{dinm}{TRUE calculates a difference in means with uncertainty estimates}
+\item{dinm}{TRUE calculates a difference in means with uncertainty
+estimates. This option is only available if the `estimatr` package is
+installed. If `data` includes columns named "blocks", "clusters", or
+"weights", this information will be taken into account automatically by
+`estimatr::difference_in_means`.}
 
 \item{dinm_statistic}{string: "std.error" or "p.value"}
 
