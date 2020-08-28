@@ -1,6 +1,5 @@
 library(modelsummary)
 library(estimatr)
-library(randomizr)
 
 context('datasummary_balance')
 
@@ -115,12 +114,14 @@ test_that('too many factor levels', {
     
 test_that('estimatr: clusters, blocks, weights', {
     
+    set.seed(286342)
     # clusters
     dat <- data.frame(ID = as.character(1:100),
                       Y = rnorm(100),
                       Z_comp = sample(0:1, 100, replace=TRUE))
     dat$clusters <- sample(20, size = nrow(dat), replace = TRUE)
-    dat$Z_clust <- randomizr::cluster_ra(dat$clust, prob = 0.6)
+    idx <- sample(unique(dat$clusters), 12)
+    dat$Z_clust <- as.numeric(dat$clusters %in% idx)
     dat$ID <- NULL
     
     truth <- difference_in_means(Y ~ Z_clust, clusters = clusters, data = dat)
@@ -130,9 +131,11 @@ test_that('estimatr: clusters, blocks, weights', {
     expect_equal(tab[1, ncol(tab)], sprintf("%.6f", truth$std.error))
     
     # blocks
-    dat$block <- rep(1:10, each = 10)
-    dat$Z_block <- randomizr::block_ra(dat$block, prob = 0.5)
-    dat$blocks <- dat$block
+    dat$block <- rep(1:5, each = 20) # hardcoded name in estimatr
+    dat <- dat %>%
+           dplyr::group_by(block) %>%
+           dplyr::mutate(Z_block = rbinom(n(), 1, .5))
+    dat$blocks <- dat$block # hardcoded name in datasummary_balance
     dat$clusters <- NULL
     
     truth <- difference_in_means(Y ~ Z_block, blocks = block, data = dat)

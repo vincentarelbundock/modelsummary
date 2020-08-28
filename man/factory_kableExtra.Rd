@@ -37,7 +37,7 @@ extract estimates from the model. For example, this allows users to set
 `exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \value{
-tbl_gt object
+kableExtra object
 }
 \description{
 Internal function to build table with `kableExtra`
