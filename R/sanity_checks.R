@@ -94,15 +94,16 @@ sanity_factory <- function(factory_dict) {
       )
       stop(msg)
     }
-    check_option('default', c('gt', 'kableExtra', 'flextable', 'huxtable'))
-    check_option('html', c('gt', 'kableExtra', 'flextable', 'huxtable'))
-    check_option('rtf', c('gt', 'huxtable'))
-    check_option('latex', c('gt', 'kableExtra', 'huxtable'))
-    check_option('markdown', c('kableExtra'))
-    check_option('word', c('flextable', 'huxtable'))
-    check_option('powerpoint', c('flextable', 'huxtable'))
-    check_option('png', c('gt', 'flextable', 'kableExtra'))
-    check_option('jpg', c('flextable', 'kableExtra'))
+  }
+  check_option('default', c('gt', 'kableExtra', 'flextable', 'huxtable'))
+  check_option('html', c('gt', 'kableExtra', 'flextable', 'huxtable'))
+  check_option('rtf', c('gt', 'huxtable'))
+  check_option('latex', c('gt', 'kableExtra', 'huxtable'))
+  check_option('markdown', c('kableExtra'))
+  check_option('word', c('flextable', 'huxtable'))
+  check_option('powerpoint', c('flextable', 'huxtable'))
+  check_option('png', c('gt', 'flextable', 'kableExtra'))
+  check_option('jpg', c('flextable', 'kableExtra'))
 }
 
 #' sanity check
@@ -285,3 +286,4 @@ sanity_ds_right_handed_formula <- function(formula) {
     stop("The 'table1' template for `datasummary` only accepts a single right-hand side variable of type factor, character, or logical. If you do not want to transform your variable in the original data, you can wrap it in a Factor() call: datasummary_table1(~Factor(x), data). the name of your variablePlease visit the `modelsummary` website to learn how to build your own, more complex, Table 1. It's easy, I promise! https://vincentarelbundock.github.io/modelsummary/datasummary.html")
   }
 }
+
