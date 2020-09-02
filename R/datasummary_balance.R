@@ -16,7 +16,9 @@
 #' @inheritParams datasummary
 #' @export
 #' @examples
+#' \dontrun{
 #' datasummary_balance(~am, mtcars)
+#' }
 #' @keywords internal
 datasummary_balance <- function(formula,
                                 data,

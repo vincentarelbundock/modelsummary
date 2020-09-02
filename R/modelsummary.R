@@ -65,7 +65,8 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' `exponentiate=TRUE` to exponentiate logistic regression coefficients.
 #' @return a 'gt' table object.
 #' @examples
-#' \donttest{
+#' \dontrun{
+#' 
 #' library(modelsummary)
 #'
 #' # load data and estimate models
@@ -108,6 +109,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE 
 #' gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "%.5f" 
 #' msummary(models, gof_map = gof_custom)
+#'
 #' }
 #'
 # see the README on github for a lot more examples: https://github.com/vincentarelbundock/modelsummary

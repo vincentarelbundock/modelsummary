@@ -17,11 +17,17 @@ customize the list of statistics to display and their format. See example
 below.
 }
 \examples{
+\donttest{
+if (interactive()) {
+
 library(modelsummary)
 mod <- lm(wt ~ drat, data = mtcars)
 gm <- modelsummary::gof_map
 gm$omit[gm$raw == 'deviance'] <- FALSE
 gm$fmt[gm$raw == 'r.squared'] <- "\%.5f"
 msummary(mod, gof_map = gm)
+
+} # if (interactive()){}
+} # donttest{}
 }
 \keyword{datasets}

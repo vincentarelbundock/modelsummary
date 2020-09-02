@@ -1,4 +1,4 @@
-# modelsummary 0.5.1.9000
+# modelsummary 0.6.0
 
 * default HTML output factory is now kableExtra
 * interaction ":" gsubbed by "\u00d7"

@@ -10,12 +10,17 @@
 #' @format data.frame with 4 columns of character data: raw, clean, fmt, omit
 #' @importFrom dplyr tribble
 #' @examples
+#' \dontrun{
+#' 
 #' library(modelsummary)
 #' mod <- lm(wt ~ drat, data = mtcars)
 #' gm <- modelsummary::gof_map
 #' gm$omit[gm$raw == 'deviance'] <- FALSE
 #' gm$fmt[gm$raw == 'r.squared'] <- "%.5f"
 #' msummary(mod, gof_map = gm)
+#' 
+#' } 
+
 #' @export
 gof_map <- dplyr::tribble(
 ~raw,               ~clean,           ~fmt,   ~omit,

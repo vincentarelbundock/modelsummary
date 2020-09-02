@@ -49,6 +49,8 @@ extract estimates from the model. For example, this allows users to set
 Plot model coefficients using points or point-ranges
 }
 \examples{
+\dontrun{
+
 library(modelsummary)
 
 # single model
@@ -88,5 +90,7 @@ b <- list(geom_vline(xintercept = 0, color = 'orange'),
           geom_point(aes(y = term, x = estimate), alpha = .3,
                      size = 10, color = 'red', shape = 'square'))
 modelplot(mod, background = b)
+
+}
 
 }

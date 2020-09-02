@@ -67,6 +67,8 @@ Balance table: Summary statistics for different subsets of the data (e.g.,
 control and treatment groups)
 }
 \examples{
+\dontrun{
 datasummary_balance(~am, mtcars)
+}
 }
 \keyword{internal}

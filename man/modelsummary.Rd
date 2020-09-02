@@ -106,7 +106,8 @@ a 'gt' table object.
 Beautiful, customizable summaries of statistical models
 }
 \examples{
-\donttest{
+\dontrun{
+
 library(modelsummary)
 
 # load data and estimate models
@@ -149,6 +150,7 @@ gof_custom <- modelsummary::gof_map
 gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE 
 gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "\%.5f" 
 msummary(models, gof_map = gof_custom)
+
 }
 
 

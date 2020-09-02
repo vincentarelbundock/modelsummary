@@ -11,6 +11,8 @@
 #' 'geom_pointrange' that 'modelplot' draws.
 #' @importFrom ggplot2 ggplot theme_minimal theme element_blank geom_pointrange geom_point aes facet_grid position_dodge labs
 #' @examples
+#' \dontrun{
+#' 
 #' library(modelsummary)
 #' 
 #' # single model
@@ -50,6 +52,8 @@
 #'           geom_point(aes(y = term, x = estimate), alpha = .3,
 #'                      size = 10, color = 'red', shape = 'square'))
 #' modelplot(mod, background = b)
+#'
+#' }
 #' 
 #' @export
 modelplot <- function(models, 
