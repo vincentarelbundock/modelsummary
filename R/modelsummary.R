@@ -164,13 +164,11 @@ modelsummary <- function(models,
     }
 
     # measure table
-    hrule <- match('gof', tab$group)
+    hrule <- match('gof', tab$group, nomatch=NULL)
     if (!is.na(hrule) &&
         !is.null(add_rows) && 
         !is.null(attr(add_rows, 'position'))) {
         hrule <- hrule + sum(attr(add_rows, 'position') < hrule)
-    } else {
-      hrule <- NULL
     }
 
     # clean table but keep metadata for data.frame output
