@@ -85,10 +85,10 @@ test_that("vector must be named", {
 })
 
 test_that("statistic_override content", {
-  expect_equal(results[["one sandwich"]], reference[["one sandwich"]])
-  expect_equal(results[["many sandwiches"]], reference[["many sandwiches"]])
-  expect_equal(results[["list of matrices"]], reference[["list of matrices"]])
-  expect_equal(results[["hardcoded numerical"]], reference[["hardcoded numerical"]])
-  expect_equal(results[["hardcoded arbitrary"]], reference[["hardcoded arbitrary"]])
+  expect_equivalent(results[["one sandwich"]], reference[["one sandwich"]])
+  expect_equivalent(results[["many sandwiches"]], reference[["many sandwiches"]])
+  expect_equivalent(results[["list of matrices"]], reference[["list of matrices"]])
+  expect_equivalent(results[["hardcoded numerical"]], reference[["hardcoded numerical"]])
+  expect_equivalent(results[["hardcoded arbitrary"]], reference[["hardcoded arbitrary"]])
 })
 
