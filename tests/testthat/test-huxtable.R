@@ -2,7 +2,6 @@ context("huxtable")
 
 library(dplyr)
 library(modelsummary)
-library(kableExtra)
 
 models <- list()
 models[['OLS 1']] <- lm(hp ~ mpg + wt, mtcars)
@@ -10,6 +9,15 @@ models[['Poisson 1']] <- glm(hp ~ mpg + drat, mtcars, family=poisson())
 models[['OLS 2']] <- lm(vs ~ hp + wt, mtcars)
 models[['Logit 1']] <- glm(vs ~ hp + drat, mtcars, family = binomial())
 models[['Logit 2']] <- glm(am ~ hp + disp, mtcars, family = binomial())
+
+test_that("markdown caption and notes", {
+  unknown <- expect_warning(
+               msummary(models, "huxtable", title="test title", notes="test note",
+                        stars=TRUE) %>%
+               huxtable::to_md())
+  expect_known_output(cat(unknown), "known_output/huxtable-title-notes.md")
+})
+
 
 test_that("save to file", {
 
