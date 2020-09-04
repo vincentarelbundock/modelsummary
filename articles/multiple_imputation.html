@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
       </span>
     </div>
 
@@ -86,7 +86,8 @@
 
       
 
-      </header><script src="multiple_imputation_files/header-attrs-2.3.3/header-attrs.js"></script><div class="row">
+      </header><script src="multiple_imputation_files/header-attrs-2.3.3/header-attrs.js"></script><script src="multiple_imputation_files/kePrint-0.0.1/kePrint.js"></script><link href="multiple_imputation_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Multiple imputation</h1>
@@ -115,7 +116,7 @@
 <span class="no">dat</span>$<span class="no">Literacy</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">dat</span>), <span class="fl">10</span>)] <span class="kw">&lt;-</span> <span class="fl">NA</span>
 
 <span class="co"># Impute with `mice` and `Amelia`</span>
-<span class="no">dat_mice</span> <span class="kw">&lt;-</span> <span class="fu"><a href="http://stefvanbuuren.github.io/mice/reference/mice.html">mice</a></span>(<span class="no">dat</span>, <span class="kw">m</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">printFlag</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="no">dat_mice</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mice/man/mice.html">mice</a></span>(<span class="no">dat</span>, <span class="kw">m</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">printFlag</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="no">dat_amelia</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Amelia/man/amelia.html">amelia</a></span>(<span class="no">dat</span>, <span class="kw">m</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">p2s</span> <span class="kw">=</span> <span class="fl">0</span>)$<span class="no">imputations</span>
 
 <span class="co"># Estimate models</span>
@@ -125,434 +126,213 @@
 <span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">dat_amelia</span>, <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="no">x</span>))
 
 <span class="co"># Pool results</span>
-<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mice</span><span class="kw ns">::</span><span class="fu"><a href="http://stefvanbuuren.github.io/mice/reference/pool.html">pool</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]])
-<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mice</span><span class="kw ns">::</span><span class="fu"><a href="http://stefvanbuuren.github.io/mice/reference/pool.html">pool</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]])
+<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mice</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/mice/man/pool.html">pool</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]])
+<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mice</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/mice/man/pool.html">pool</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]])
 
 <span class="co"># Summarize</span>
 <span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
-<style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
-}
-
-#nnltosvbwt .gt_table {
-  display: table;
-  border-collapse: collapse;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#nnltosvbwt .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#nnltosvbwt .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#nnltosvbwt .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 0;
-  padding-bottom: 4px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#nnltosvbwt .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#nnltosvbwt .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#nnltosvbwt .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#nnltosvbwt .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#nnltosvbwt .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#nnltosvbwt .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#nnltosvbwt .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#nnltosvbwt .gt_group_heading {
-  padding: 8px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#nnltosvbwt .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#nnltosvbwt .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#nnltosvbwt .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#nnltosvbwt .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#nnltosvbwt .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#nnltosvbwt .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 12px;
-}
-
-#nnltosvbwt .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#nnltosvbwt .gt_first_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-}
-
-#nnltosvbwt .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#nnltosvbwt .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#nnltosvbwt .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#nnltosvbwt .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#nnltosvbwt .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding: 4px;
-}
-
-#nnltosvbwt .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#nnltosvbwt .gt_sourcenote {
-  font-size: 90%;
-  padding: 4px;
-}
-
-#nnltosvbwt .gt_left {
-  text-align: left;
-}
-
-#nnltosvbwt .gt_center {
-  text-align: center;
-}
-
-#nnltosvbwt .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#nnltosvbwt .gt_font_normal {
-  font-weight: normal;
-}
-
-#nnltosvbwt .gt_font_bold {
-  font-weight: bold;
-}
-
-#nnltosvbwt .gt_font_italic {
-  font-style: italic;
-}
-
-#nnltosvbwt .gt_super {
-  font-size: 65%;
-}
-
-#nnltosvbwt .gt_footnote_marks {
-  font-style: italic;
-  font-size: 65%;
-}
-</style>
-<div id="nnltosvbwt" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
-<thead class="gt_col_headings"><tr>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"> </th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Listwise deletion</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Mice</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Amelia</th>
-    </tr></thead>
-<tbody class="gt_table_body">
+<table class="table table">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+Listwise deletion
+</th>
+<th style="text-align:left;">
+Mice
+</th>
+<th style="text-align:left;">
+Amelia
+</th>
+</tr></thead>
+<tbody>
 <tr>
-<td class="gt_row gt_left">(Intercept)</td>
-      <td class="gt_row gt_left">92.836</td>
-      <td class="gt_row gt_left">83.015</td>
-      <td class="gt_row gt_left">86.965</td>
-    </tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+93.982
+</td>
+<td style="text-align:left;">
+85.987
+</td>
+<td style="text-align:left;">
+95.685
+</td>
+</tr>
 <tr>
-<td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">(15.654)</td>
-      <td class="gt_row gt_left">(12.204)</td>
-      <td class="gt_row gt_left">(13.510)</td>
-    </tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+(14.371)
+</td>
+<td style="text-align:left;">
+(13.618)
+</td>
+<td style="text-align:left;">
+(15.766)
+</td>
+</tr>
 <tr>
-<td class="gt_row gt_left">Commerce</td>
-      <td class="gt_row gt_left">-0.434</td>
-      <td class="gt_row gt_left">-0.385</td>
-      <td class="gt_row gt_left">-0.395</td>
-    </tr>
+<td style="text-align:left;">
+Commerce
+</td>
+<td style="text-align:left;">
+-0.432
+</td>
+<td style="text-align:left;">
+-0.396
+</td>
+<td style="text-align:left;">
+-0.516
+</td>
+</tr>
 <tr>
-<td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">(0.167)</td>
-      <td class="gt_row gt_left">(0.133)</td>
-      <td class="gt_row gt_left">(0.148)</td>
-    </tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+(0.156)
+</td>
+<td style="text-align:left;">
+(0.143)
+</td>
+<td style="text-align:left;">
+(0.150)
+</td>
+</tr>
 <tr>
-<td class="gt_row gt_left">Literacy</td>
-      <td class="gt_row gt_left">-0.761</td>
-      <td class="gt_row gt_left">-0.577</td>
-      <td class="gt_row gt_left">-0.653</td>
-    </tr>
+<td style="text-align:left;">
+Literacy
+</td>
+<td style="text-align:left;">
+-0.807
+</td>
+<td style="text-align:left;">
+-0.668
+</td>
+<td style="text-align:left;">
+-0.788
+</td>
+</tr>
 <tr>
-<td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"></td>
-      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.247)</td>
-      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.198)</td>
-      <td class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">(0.212)</td>
-    </tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+(0.232)
+</td>
+<td style="text-align:left;">
+(0.211)
+</td>
+<td style="text-align:left;">
+(0.254)
+</td>
+</tr>
 <tr>
-<td class="gt_row gt_left">Num.Obs.</td>
-      <td class="gt_row gt_left">60</td>
-      <td class="gt_row gt_left">86</td>
-      <td class="gt_row gt_left">86</td>
-    </tr>
+<td style="text-align:left;">
+Num.Obs.
+</td>
+<td style="text-align:left;">
+60
+</td>
+<td style="text-align:left;">
+86
+</td>
+<td style="text-align:left;">
+86
+</td>
+</tr>
 <tr>
-<td class="gt_row gt_left">Num.Imp.</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left">5</td>
-      <td class="gt_row gt_left">5</td>
-    </tr>
+<td style="text-align:left;">
+Num.Imp.
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+5
+</td>
+</tr>
 <tr>
-<td class="gt_row gt_left">R2</td>
-      <td class="gt_row gt_left">0.151</td>
-      <td class="gt_row gt_left">0.117</td>
-      <td class="gt_row gt_left">0.134</td>
-    </tr>
+<td style="text-align:left;">
+R2
+</td>
+<td style="text-align:left;">
+0.185
+</td>
+<td style="text-align:left;">
+0.144
+</td>
+<td style="text-align:left;">
+0.207
+</td>
+</tr>
 <tr>
-<td class="gt_row gt_left">R2 Adj.</td>
-      <td class="gt_row gt_left">0.121</td>
-      <td class="gt_row gt_left">0.096</td>
-      <td class="gt_row gt_left">0.113</td>
-    </tr>
+<td style="text-align:left;">
+R2 Adj.
+</td>
+<td style="text-align:left;">
+0.156
+</td>
+<td style="text-align:left;">
+0.123
+</td>
+<td style="text-align:left;">
+0.187
+</td>
+</tr>
 <tr>
-<td class="gt_row gt_left">AIC</td>
-      <td class="gt_row gt_left">558.1</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left"></td>
-    </tr>
+<td style="text-align:left;">
+AIC
+</td>
+<td style="text-align:left;">
+557.0
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
 <tr>
-<td class="gt_row gt_left">BIC</td>
-      <td class="gt_row gt_left">566.5</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left"></td>
-    </tr>
+<td style="text-align:left;">
+BIC
+</td>
+<td style="text-align:left;">
+565.3
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
 <tr>
-<td class="gt_row gt_left">Log.Lik.</td>
-      <td class="gt_row gt_left">-275.066</td>
-      <td class="gt_row gt_left"></td>
-      <td class="gt_row gt_left"></td>
-    </tr>
+<td style="text-align:left;">
+Log.Lik.
+</td>
+<td style="text-align:left;">
+-274.475
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+F
+</td>
+<td style="text-align:left;">
+6.453
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
 </tbody>
-</table></div>
-  </div>
+</table>
+</div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
