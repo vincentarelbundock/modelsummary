@@ -129,3 +129,41 @@ Second, in the example above, we used the `statistic = 'conf.int'` argument. Thi
 If you create new `tidy` and `glance` methods, please consider contributing them to `broom` so that the rest of the community can benefit from your work: https://github.com/tidymodels/broom
 
 
+# 2-stage instrumental variable estimation 
+
+2-stage instrumental variable (IV) estimators are popular in many disciplines. Analysts often want to draw tables that include:
+
+1. The 2nd stage estimates
+2. The 1st stage estimates, but only for variables *not* included in the 2nd stage (i.e., the "instruments").
+
+The problem is that many IV regression packages do not supply results for the 1st stage. Even when these results are accessible, the `tidy` methods supplied by `broom` only return the 2nd stage results.
+
+To achieve our goal, we will:
+
+1. Define a new `tidy.iv` method which extracts information about both stages of the IV estimation.
+2. Change the class of our model objects to `iv`. This ensure that the new `tidy` method is triggered by `modelsummary`.
+3. Sort the coefficients using the `coef_map` argument, to ensure that 1st stage results are displayed below 2nd stage results.
+
+For convenience, `modelsummary` includes two unexported functions which can do most this for you. Reading [the annotated code for these two functions](https://github.com/vincentarelbundock/modelsummary/blob/master/R/convenience.R) could be an instructive exercise for those who wish to exploit everything that `modelsummary` has to offer.
+
+To print IV regression results from `lfe::felm` models, we execute this code:
+
+```{r, message=FALSE}
+library(lfe)
+
+models <- list(
+  felm(wt ~ drat | 0 | (disp ~ hp), data = mtcars),
+  felm(wt ~ drat + vs | 0 | (disp ~ hp), data = mtcars)
+  )
+
+# define a new method to combine tidy information about both stages
+tidy.iv <- modelsummary:::tidy_felm_iv
+
+# change the model classes to trigger the new method
+class(models[[1]]) <- class(models[[2]]) <- c('iv', class(models[[1]]))
+
+# use helper function to sort coefficients with 1st stage last
+cm <- modelsummary:::coef_map_felm_iv(models)
+
+modelsummary(models, coef_map=cm)
+```
