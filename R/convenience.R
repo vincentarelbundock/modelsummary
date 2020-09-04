@@ -82,5 +82,5 @@ coef_map_felm_iv <- function(x) {
 
   # display stage1 results after stage2
   out <- c(stage2, stage1)
-  setNames(out, out)
+  stats::setNames(out, out)
 }

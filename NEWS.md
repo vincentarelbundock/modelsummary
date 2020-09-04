@@ -1,4 +1,4 @@
-# modelsummary 0.6.0.9000
+# modelsummary 0.6.1
 
 * bug fixes
 
