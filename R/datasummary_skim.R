@@ -15,6 +15,9 @@ datasummary_skim <-  function(data,
                               align = NULL,
                               ...) {
 
+    # tables does not play well with tibbles
+    data <- as.data.frame(data)
+
     # TODO error if there are no numeric
     if (type == 'numeric') {
         dat_new <- data

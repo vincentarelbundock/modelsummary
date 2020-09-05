@@ -1,7 +1,12 @@
 library(modelsummary)
-library(palmerpenguins)
+library(tibble)
 
 context('datasummary')
+
+test_that("tibble input does not error", {
+  dat <- as_tibble(mtcars)
+  expect_error(datasummary_skim(dat, histogram=TRUE), NA)
+})
 
 test_that('numeric content of simple tables', {
 
