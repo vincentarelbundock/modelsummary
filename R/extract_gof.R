@@ -17,7 +17,7 @@ extract_gof <- function(model, fmt, gof_map, ...) {
     }
 
     # extract gof from model object
-    gof <- generics::glance(model)
+    gof <- generics::glance(model, ...)
 
     # glance_custom
     gof_custom <- glance_custom(model)

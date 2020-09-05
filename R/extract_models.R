@@ -101,7 +101,7 @@ extract_models <- function(models,
     # extract and combine gof
     f <- function(x, y) dplyr::full_join(x, y, by = 'term')
     gof <- models %>%
-           lapply(extract_gof, fmt = fmt, gof_map = gof_map)  %>%
+           lapply(extract_gof, fmt = fmt, gof_map = gof_map, ...)  %>%
            Reduce(f, .) %>%
            stats::setNames(c('term', model_names))
 

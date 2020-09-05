@@ -60,10 +60,10 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param estimate character name of the estimate to display. Must be a column
 #' name in the data.frame produced by `tidy(model)`. In the vast majority of
 #' cases, the default value of this argument should not be changed.
-#' @param ... all other arguments are passed to the `tidy` method used to
-#' extract estimates from the model. For example, this allows users to set
-#' `exponentiate=TRUE` to exponentiate logistic regression coefficients.
-#' @return a 'gt' table object.
+#' @param ... all other arguments are passed to the `tidy` and `glance` methods
+#' used to extract estimates from the model. For example, this allows users to
+#' set `exponentiate=TRUE` to exponentiate logistic regression coefficients.
+#' @return a regression table in a format determined by the `output` argument.
 #' @examples
 #' \dontrun{
 #' 
