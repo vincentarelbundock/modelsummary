@@ -2,13 +2,15 @@
 # modelsummary <img src="https://user-images.githubusercontent.com/987057/82849698-05ba5700-9ec7-11ea-93a0-67dcd9151848.png" align="right" alt="" width="120" />
 
 <!-- badges: start -->
-
 [![Travis-CI Build
 Status](https://travis-ci.org/vincentarelbundock/modelsummary.svg?branch=master)](https://travis-ci.org/vincentarelbundock/modelsummary)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/vincentarelbundock/modelsummary?branch=master&svg=true)](https://ci.appveyor.com/project/vincentarelbundock/modelsummary)
 [![R build status](https://github.com/vincentarelbundock/modelsummary/workflows/R-CMD-check/badge.svg)](https://github.com/vincentarelbundock/modelsummary/actions)
-[![codecov test coverage](https://codecov.io/gh/vincentarelbundock/modelsummary/branch/master/graph/badge.svg)](https://codecov.io/gh/vincentarelbundock/modelsummary)
+<a href="https://codecov.io/gh/vincentarelbundock/modelsummary">
+  <img src="https://codecov.io/gh/vincentarelbundock/modelsummary/branch/master/graph/badge.svg" />
+</a>
+
 <!-- badges: end -->
 
 `modelsummary` creates tables and plots to summarize statistical models and data in `R`. 
