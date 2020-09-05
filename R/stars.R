@@ -15,6 +15,20 @@ clean_stars <- function(stars) {
   return(out)
 }
 
+
+#' Internal function to prepare stars
+#'
+#' @keywords internal
+make_stars <- function(x, pvalues, stars) {
+  stars <- clean_stars(stars)
+  tmp <- ""
+  for (n in names(stars)) {
+    tmp <- ifelse(pvalues <= stars[n], n, tmp)
+  }
+  paste0(x, tmp)
+}
+
+
 #' Internal function to prepare stars footnote
 #'
 #' @keywords internal
