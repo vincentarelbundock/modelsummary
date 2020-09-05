@@ -45,7 +45,7 @@
 #' datasummary(hp + mpg ~ cyl * mean, data = mtcars)
 #' 
 #' # If you don't want to convert your original data
-#' to factors, you can use the 'Factor()'
+#' # to factors, you can use the 'Factor()'
 #' # function inside 'datasummary' to obtain an identical result:
 #' 
 #' datasummary(hp + mpg ~ Factor(cyl) * mean, data = mtcars)
