@@ -9,7 +9,7 @@
 # core functions.
 
 #' A convenience function to render markdown to html in row and column labels
-#' 
+#'
 #' @param tab a `gt` table object
 #' @param position character string determines wither row, column or both
 #'   labels should be rendered.
@@ -17,15 +17,15 @@
 #' @note This function only works for HTML output, since the `gt` render tools
 #' are less developed for LaTeX and RTF output.
 fmt_labels_md <- function(tab, position = c('both', 'row', 'column')) {
-    out <- tab
-    if (match.arg(position) %in% c('both', 'row')) {
-        out <- out %>% gt::fmt_markdown(columns = 1)
-    }
-    if (match.arg(position) %in% c('both', 'column')) {
-        f <- function(x) stats::setNames(lapply(names(x$`_data`), gt::md), names(x$`_data`))
-        out <- out %>% gt::cols_label(.list = f(.))
-    }
-    return(out)
+  out <- tab
+  if (match.arg(position) %in% c('both', 'row')) {
+    out <- out %>% gt::fmt_markdown(columns = 1)
+  }
+  if (match.arg(position) %in% c('both', 'column')) {
+    f <- function(x) stats::setNames(lapply(names(x$`_data`), gt::md), names(x$`_data`))
+    out <- out %>% gt::cols_label(.list = f(.))
+  }
+  return(out)
 }
 
 
@@ -41,10 +41,10 @@ tidy_felm_iv <- function(x, ...) {
   # extract results
   stage2 <- generics::tidy(x, ...)
   stage1 <- generics::tidy(x$stage1, ...) %>%
-            # keep only the stage1 terms if they are not in stage2
-            dplyr::filter(!(term %in% stage2$term)) %>%
-            # label
-            dplyr::mutate(term = paste("Stage 1", term))
+    # keep only the stage1 terms if they are not in stage2
+    dplyr::filter(!(term %in% stage2$term)) %>%
+    # label
+    dplyr::mutate(term = paste("Stage 1", term))
 
   # combine stage1 and stage2 results
   out <- dplyr::bind_rows(stage1, stage2)
@@ -68,7 +68,7 @@ coef_map_felm_iv <- function(x) {
     stage2 <- get_stage2(x)
     stage1 <- get_stage1(x)
 
-  # list of models
+    # list of models
   } else {
     stage2 <- unique(unlist(lapply(x, get_stage2)))
     stage1 <- unique(unlist(lapply(x, get_stage1)))

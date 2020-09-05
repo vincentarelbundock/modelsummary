@@ -45,7 +45,7 @@ use exponential notation. See `?sprintf` for more options.}
 
 \item{stars}{to indicate statistical significance
 \itemize{
-  \item FALSE (default): no significance stars. 
+  \item FALSE (default): no significance stars.
   \item TRUE: *=.1, **=.05, ***=.01
   \item Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
 }}
@@ -54,9 +54,9 @@ use exponential notation. See `?sprintf` for more options.}
 name in the data.frame produced by `tidy(model)`. In the vast majority of
 cases, the default value of this argument should not be changed.}
 
-\item{...}{all other arguments are passed to the `tidy` method used to
-extract estimates from the model. For example, this allows users to set
-`exponentiate=TRUE` to exponentiate logistic regression coefficients.}
+\item{...}{all other arguments are passed to the `tidy` and `glance` methods
+used to extract estimates from the model. For example, this allows users to
+set `exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \value{
 data.frame with side-by-side model summaries

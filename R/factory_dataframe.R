@@ -3,7 +3,7 @@
 #'
 #' @inheritParams factory_gt
 #' @keywords internal
-#' @return data.frame 
+#' @return data.frame
 factory_dataframe <- function(tab,
                               align = NULL,
                               hrule = NULL,
@@ -14,15 +14,15 @@ factory_dataframe <- function(tab,
                               title = NULL,
                               ...) {
 
-    out <- tab
+  out <- tab
 
-    attr(out, 'align') <- align
-    attr(out, 'hrule') <- hrule
-    attr(out, 'notes') <- notes
-    attr(out, 'output_file') <- output_file
-    attr(out, 'output_format') <- output_format
-    attr(out, 'title') <- title
+  attr(out, 'align') <- align
+  attr(out, 'hrule') <- hrule
+  attr(out, 'notes') <- notes
+  attr(out, 'output_file') <- output_file
+  attr(out, 'output_format') <- output_format
+  attr(out, 'title') <- title
 
-    return(out)
+  return(out)
 
 }

@@ -32,9 +32,9 @@ column center-aligned, and the 3rd column right-aligned.}
 
 \item{title}{string}
 
-\item{...}{all other arguments are passed to the `tidy` method used to
-extract estimates from the model. For example, this allows users to set
-`exponentiate=TRUE` to exponentiate logistic regression coefficients.}
+\item{...}{all other arguments are passed to the `tidy` and `glance` methods
+used to extract estimates from the model. For example, this allows users to
+set `exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \value{
 flextable object

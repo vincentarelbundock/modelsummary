@@ -5,63 +5,62 @@ library(tibble)
 
 test_that("combine different regressors and collapse rows", {
 
-    cmap <- c('(Intercept)' = 'Constant', 'drat' = 'Combined', 'qsec' = 'Combined')
-    mod <- list()
-    mod$OLS <- lm(am ~ drat, data = mtcars)
-    mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
+  cmap <- c('(Intercept)' = 'Constant', 'drat' = 'Combined', 'qsec' = 'Combined')
+  mod <- list()
+  mod$OLS <- lm(am ~ drat, data = mtcars)
+  mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 
-    raw <- modelsummary:::extract_models(mod, output="data.frame", coef_map = cmap)
+  raw <- modelsummary:::extract_models(mod, output = "data.frame", coef_map = cmap)
 
-    truth <- c('Constant', 'Constant', 'Combined', 'Combined', 'Num.Obs.')
-    expect_equal(unname(raw[[2]][1:5]), truth)
+  truth <- c('Constant', 'Constant', 'Combined', 'Combined', 'Num.Obs.')
+  expect_equal(unname(raw[[2]][1:5]), truth)
 
 })
 
 test_that("reorder and omit", {
 
-    cmap <- c('qsec' = 'qsec', 'drat' = 'drat')
-    mod <- list()
-    mod$OLS <- lm(am ~ drat, data = mtcars)
-    mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
+  cmap <- c('qsec' = 'qsec', 'drat' = 'drat')
+  mod <- list()
+  mod$OLS <- lm(am ~ drat, data = mtcars)
+  mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 
-    raw <- modelsummary:::extract_models(mod, coef_map = cmap)
+  raw <- modelsummary:::extract_models(mod, coef_map = cmap)
 
-    truth <- c('qsec', 'qsec', 'drat', 'drat', 'Num.Obs.')
-    expect_equal(unname(raw[[2]][1:5]), truth)
+  truth <- c('qsec', 'qsec', 'drat', 'drat', 'Num.Obs.')
+  expect_equal(unname(raw[[2]][1:5]), truth)
 
 })
 
 test_that("coef_map with multiple vertical statistics", {
 
-    cm <- c("(Intercept)" = "Intercept",
-            "factor(cyl)6" = "6-cylinder",
-            "factor(cyl)8" = "8-cylinder")
-    models <- list()
-    models[['OLS']] <- lm(mpg ~ factor(cyl), mtcars)
-    models[['Logit']] <- glm(am ~ factor(cyl), mtcars, family = binomial)
+  cm <- c("(Intercept)" = "Intercept",
+    "factor(cyl)6" = "6-cylinder",
+    "factor(cyl)8" = "8-cylinder")
+  models <- list()
+  models[['OLS']] <- lm(mpg ~ factor(cyl), mtcars)
+  models[['Logit']] <- glm(am ~ factor(cyl), mtcars, family = binomial)
 
-    mat <- modelsummary:::extract_models(models, coef_map = cm)
-    expect_s3_class(mat, 'tbl_df')
-    expect_equal(dim(mat), c(13, 5))
+  mat <- modelsummary:::extract_models(models, coef_map = cm)
+  expect_s3_class(mat, 'tbl_df')
+  expect_equal(dim(mat), c(13, 5))
 
-    mat <- modelsummary:::extract_models(models, 
-                                 statistic = c('std.error', 'conf.int'), 
-                                 coef_map = cm)
-    expect_s3_class(mat, 'tbl_df')
-    expect_equal(dim(mat), c(16, 5))
+  mat <- modelsummary:::extract_models(models,
+    statistic = c('std.error', 'conf.int'),
+    coef_map = cm)
+  expect_s3_class(mat, 'tbl_df')
+  expect_equal(dim(mat), c(16, 5))
 
-    rows <- tibble::tribble(
-            ~term,        ~OLS, ~Logit,
-            '4-cylinder', '-',  '-', 
-            '12-cylinder', '-',  '-')
-    mat <- modelsummary(models, 
-                        output = 'dataframe',
-                        statistic = c('std.error', 'conf.int'), 
-                        add_rows = rows, 
-                        coef_map = cm)
+  rows <- tibble::tribble(
+    ~term, ~OLS, ~Logit,
+    '4-cylinder', '-', '-',
+    '12-cylinder', '-', '-')
+  mat <- modelsummary(models,
+    output = 'dataframe',
+    statistic = c('std.error', 'conf.int'),
+    add_rows = rows,
+    coef_map = cm)
 
-    expect_s3_class(mat, 'tbl_df')
-    expect_equal(dim(mat), c(18, 5))
+  expect_s3_class(mat, 'tbl_df')
+  expect_equal(dim(mat), c(18, 5))
 
 })
-

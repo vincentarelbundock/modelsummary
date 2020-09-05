@@ -16,16 +16,16 @@ override_statistic.numeric <- function(x, statistic, ...) {
   # vector
   if (is.vector(x)) {
     out <- tibble::tibble(term = names(x), statistic = x)
-  # matrix
+    # matrix
   } else {
-    out <- try(lmtest::coeftest(model, vcov=x), silent=TRUE)
+    out <- try(lmtest::coeftest(model, vcov = x), silent = TRUE)
     if (!inherits(out, "try-error")) {
       out <- generics::tidy(out)[, c("term", statistic)]
     } else {
       out <- x %>%
-             base::diag() %>%
-             sqrt %>%
-             tibble::tibble(term = names(.), statistic = .)
+        base::diag() %>%
+        sqrt %>%
+        tibble::tibble(term = names(.), statistic = .)
     }
   }
   return(out)
@@ -59,22 +59,22 @@ override_statistic.character <- function(x, ...) {
 #' @keywords internal
 override_statistic.function <- function(x, model, statistic, ...) {
 
-  out <- try(lmtest::coeftest(model, vcov=x), silent=TRUE)
+  out <- try(lmtest::coeftest(model, vcov = x), silent = TRUE)
 
   if (inherits(out, "coeftest")) {
     out <- generics::tidy(out)[, c("term", statistic)]
   }
 
   if (inherits(out, "try-error")) {
-    out <- try(x(model), silent=TRUE)
+    out <- try(x(model), silent = TRUE)
   }
 
   if (inherits(out, "matrix") || inherits(out, "numeric")) {
-    out <- override_statistic.numeric(out, model=model, statistic=statistic) 
+    out <- override_statistic.numeric(out, model = model, statistic = statistic)
   }
 
   if (inherits(out, "character")) {
-    out <- override_statistic.character(out, model=model, statistic=statistic)
+    out <- override_statistic.character(out, model = model, statistic = statistic)
   }
 
   if (inherits(out, "try-error")) {
@@ -93,14 +93,14 @@ override_statistic.function <- function(x, model, statistic, ...) {
 #' @keywords internal
 #' @return a numeric vector of test statistics
 extract_statistic_override <- function(model, statistic_override,
-                                       statistic="std.error") {
+                                       statistic = "std.error") {
 
   checkmate::assert(
     checkmate::check_function(statistic_override),
     checkmate::check_matrix(statistic_override),
     checkmate::check_atomic_vector(statistic_override),
-    combine="or")
-  
+    combine = "or")
+
   if (is.vector(statistic_override)) {
     checkmate::assert_true(all(names(statistic_override) == names(statistic_override)))
   }
@@ -109,8 +109,8 @@ extract_statistic_override <- function(model, statistic_override,
     checkmate::assert_true(all(colnames(statistic_override) == names(statistic_override)))
   }
 
-  out <- override_statistic(x=statistic_override, model=model,
-                            statistic=statistic)
+  out <- override_statistic(x = statistic_override, model = model,
+    statistic = statistic)
   colnames(out)[2] <- statistic
 
   return(out)

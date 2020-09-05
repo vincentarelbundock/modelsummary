@@ -8,11 +8,11 @@
 #' @return a rounded number as character
 #' @keywords internal
 rounding <- function(x, fmt = '%.3f') {
-    if (!is.character(x)) {
-        out <- sprintf(fmt, x)
-    } else {
-        out <- x
-    }
-    out <- gsub('^NA$|^NaN$|^-Inf$|^Inf$', '', out) 
-    return(out)
+  if (!is.character(x)) {
+    out <- sprintf(fmt, x)
+  } else {
+    out <- x
+  }
+  out <- gsub('^NA$|^NaN$|^-Inf$|^Inf$', '', out)
+  return(out)
 }

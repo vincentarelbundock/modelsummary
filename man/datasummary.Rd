@@ -27,7 +27,7 @@ more resources.}
 
 \item{output}{filename or object type (string)
 \itemize{
-  \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg. 
+  \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
   \item Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
   \item When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.
 }}
@@ -103,7 +103,7 @@ mtcars$cyl <- as.factor(mtcars$cyl)
 datasummary(hp + mpg ~ cyl * mean, data = mtcars)
 
 # If you don't want to convert your original data
-to factors, you can use the 'Factor()'
+# to factors, you can use the 'Factor()'
 # function inside 'datasummary' to obtain an identical result:
 
 datasummary(hp + mpg ~ Factor(cyl) * mean, data = mtcars)
@@ -166,7 +166,6 @@ datasummary(f, data = mtcars, output = 'huxtable')
 new_rows <- data.frame(a = 1:2, b = 2:3, c = 4:5)
 attr(new_rows, 'position') <- c(1, 3)
 datasummary(mpg + hp ~ mean + sd, data = mtcars, add_rows = new_rows)
-
 }
 
 }

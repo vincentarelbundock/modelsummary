@@ -10,7 +10,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' to summarize
 #' @param output filename or object type (string)
 #' \itemize{
-#'   \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg. 
+#'   \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
 #'   \item Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
 #'   \item When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.
 #' }
@@ -20,7 +20,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' use exponential notation. See `?sprintf` for more options.
 #' @param stars to indicate statistical significance
 #' \itemize{
-#'   \item FALSE (default): no significance stars. 
+#'   \item FALSE (default): no significance stars.
 #'   \item TRUE: *=.1, **=.05, ***=.01
 #'   \item Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
 #' }
@@ -66,7 +66,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @return a regression table in a format determined by the `output` argument.
 #' @examples
 #' \dontrun{
-#' 
+#'
 #' library(modelsummary)
 #'
 #' # load data and estimate models
@@ -86,17 +86,17 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' # rename and re-order coefficients
 #' msummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 #'
-#' # titles 
+#' # titles
 #' msummary(models, title = 'This is the title')
 #'
 #' # title with italicized text
 #' msummary(models, title = gt::md('This is *the* title'))
-#' 
+#'
 #' # add_rows: we use `tribble` from the `tibble` package to build a data.frame
 #' # more easily. Then, we assign an attribute to determine each row's position.
 #' rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,
-#'                         'Empty row', '-', '-',
-#'                         'Another empty row', '?', '?')
+#'   'Empty row', '-', '-',
+#'   'Another empty row', '?', '?')
 #' attr(rows, 'position') <- c(1, 3)
 #' msummary(models, add_rows = rows)
 #'
@@ -105,15 +105,14 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #'
 #' # modify list of GOF statistics and their format using the built-in
 #' # 'gof_map' data frame as a starting point
-#' gof_custom <- modelsummary::gof_map 
-#' gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE 
-#' gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "%.5f" 
+#' gof_custom <- modelsummary::gof_map
+#' gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE
+#' gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "%.5f"
 #' msummary(models, gof_map = gof_custom)
-#'
 #' }
 #'
-# see the README on github for a lot more examples: https://github.com/vincentarelbundock/modelsummary
-#'
+#' # see the README on github for a lot more examples:
+#' # https://github.com/vincentarelbundock/modelsummary
 #' @export
 modelsummary <- function(models,
                          output = "default",
@@ -134,78 +133,78 @@ modelsummary <- function(models,
                          ...) {
 
 
-    # extract estimates and gof
-    dat <- extract_models(
-      models,
-      statistic = statistic,
-      statistic_override = statistic_override,
-      statistic_vertical = statistic_vertical,
-      conf_level = conf_level,
-      coef_map = coef_map,
-      coef_omit = coef_omit,
-      gof_map = gof_map,
-      gof_omit = gof_omit,
-      stars = stars,
-      fmt = fmt,
-      estimate = estimate,
-      ...)
+  # extract estimates and gof
+  dat <- extract_models(
+    models,
+    statistic = statistic,
+    statistic_override = statistic_override,
+    statistic_vertical = statistic_vertical,
+    conf_level = conf_level,
+    coef_map = coef_map,
+    coef_omit = coef_omit,
+    gof_map = gof_map,
+    gof_omit = gof_omit,
+    stars = stars,
+    fmt = fmt,
+    estimate = estimate,
+    ...)
 
-    # remove duplicate term labels
-    idx <- grepl('statistic\\d*$', dat$statistic)
-    tab <- dat %>%
-           dplyr::mutate(term = ifelse(idx, '', term))
+  # remove duplicate term labels
+  idx <- grepl('statistic\\d*$', dat$statistic)
+  tab <- dat %>%
+    dplyr::mutate(term = ifelse(idx, '', term))
 
-    # interaction : becomes ×
-    if (is.null(coef_map)) {
-        if (parse_output_arg(output)$output_format != 'rtf') {
-            idx <- tab$group != 'gof'
-            tab$term <- ifelse(idx, gsub(':', ' \u00d7 ', tab$term), tab$term)
-        }
+  # interaction : becomes ×
+  if (is.null(coef_map)) {
+    if (parse_output_arg(output)$output_format != 'rtf') {
+      idx <- tab$group != 'gof'
+      tab$term <- ifelse(idx, gsub(':', ' \u00d7 ', tab$term), tab$term)
     }
+  }
 
-    # measure table
-    hrule <- match('gof', tab$group)
-    if (!is.na(hrule) &&
-        !is.null(add_rows) && 
-        !is.null(attr(add_rows, 'position'))) {
-        hrule <- hrule + sum(attr(add_rows, 'position') < hrule)
+  # measure table
+  hrule <- match('gof', tab$group)
+  if (!is.na(hrule) &&
+    !is.null(add_rows) &&
+    !is.null(attr(add_rows, 'position'))) {
+    hrule <- hrule + sum(attr(add_rows, 'position') < hrule)
+  }
+  if (is.na(hrule)) {
+    hrule <- NULL
+  }
+
+  # clean table but keep metadata for data.frame output
+  if (parse_output_arg(output)$output_format != "dataframe") {
+    tab <- tab %>%
+      dplyr::select(-statistic, -group) %>%
+      # HACK: arbitrary 7 spaces to avoid name conflict
+      dplyr::rename(`       ` = term)
+  }
+
+  # stars
+  if (!isFALSE(stars)) {
+    stars_note <- make_stars_note(stars)
+    if (is.null(notes)) {
+      notes <- stars_note
+    } else {
+      notes <- c(stars_note, notes)
     }
-    if (is.na(hrule)) { 
-        hrule <- NULL
-    }
+  }
 
-    # clean table but keep metadata for data.frame output
-    if (parse_output_arg(output)$output_format != "dataframe") {
-      tab <- tab %>%
-             dplyr::select(-statistic, -group) %>%
-             # HACK: arbitrary 7 spaces to avoid name conflict
-             dplyr::rename(`       ` = term)
-    }
+  # column alignment left
+  align <- strrep('l', ncol(tab))
 
-    # stars
-    if (!isFALSE(stars)) {
-        stars_note <- make_stars_note(stars)
-        if (is.null(notes)) {
-            notes <- stars_note
-        } else {
-            notes <- c(stars_note, notes)
-        }
-    }
+  # build table
+  factory(tab,
+    align = align,
+    fmt = fmt,
+    hrule = hrule,
+    notes = notes,
+    output = output,
+    title = title,
+    add_rows = add_rows,
+    ...)
 
-    # column alignment left
-    align <- strrep('l', ncol(tab))
-
-    # build table
-    factory(tab, 
-            align = align,
-            fmt = fmt,
-            hrule = hrule,
-            notes = notes,
-            output = output,
-            title = title,
-            add_rows = add_rows,
-            ...)
-      
 }
 
 #' Beautiful, customizable summaries of statistical models
@@ -214,4 +213,3 @@ modelsummary <- function(models,
 #' @inherit modelsummary
 #' @export
 msummary <- modelsummary
-

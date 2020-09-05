@@ -23,7 +23,7 @@ datasummary_skim(
 
 \item{output}{filename or object type (string)
 \itemize{
-  \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg. 
+  \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
   \item Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
   \item When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.
 }}
@@ -43,9 +43,9 @@ use exponential notation. See `?sprintf` for more options.}
 the table.  "lcr" means that the first column will be left-aligned, the 2nd
 column center-aligned, and the 3rd column right-aligned.}
 
-\item{...}{all other arguments are passed to the `tidy` method used to
-extract estimates from the model. For example, this allows users to set
-`exponentiate=TRUE` to exponentiate logistic regression coefficients.}
+\item{...}{all other arguments are passed to the `tidy` and `glance` methods
+used to extract estimates from the model. For example, this allows users to
+set `exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \description{
 Quick overview of numeric or categorical variables

@@ -25,10 +25,10 @@ glance_custom.default <- function(x) NULL
 #' @keywords internal
 #' @export
 glance_custom.fixest <- function(x) {
-    out <- tibble::tibble(.rows = 1)
-    for (n in x$fixef_vars) {
-        out[[paste('FE: ', n)]] <- 'X'
-    }
-    out[['Std. errors']] <- attr(fixest::coeftable(x), "type")
-    return(out)
+  out <- tibble::tibble(.rows = 1)
+  for (n in x$fixef_vars) {
+    out[[paste('FE: ', n)]] <- 'X'
+  }
+  out[['Std. errors']] <- attr(fixest::coeftable(x), "type")
+  return(out)
 }

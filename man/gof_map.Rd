@@ -25,7 +25,7 @@ gm <- modelsummary::gof_map
 gm$omit[gm$raw == 'deviance'] <- FALSE
 gm$fmt[gm$raw == 'r.squared'] <- "\%.5f"
 msummary(mod, gof_map = gm)
+}
 
-} 
 }
 \keyword{datasets}

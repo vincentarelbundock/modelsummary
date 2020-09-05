@@ -30,7 +30,7 @@ to summarize}
 
 \item{output}{filename or object type (string)
 \itemize{
-  \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg. 
+  \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
   \item Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
   \item When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.
 }}
@@ -61,7 +61,7 @@ estimates. FALSE if statistics should be printed beside estimates.}
 
 \item{stars}{to indicate statistical significance
 \itemize{
-  \item FALSE (default): no significance stars. 
+  \item FALSE (default): no significance stars.
   \item TRUE: *=.1, **=.05, ***=.01
   \item Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
 }}
@@ -95,12 +95,12 @@ See examples.}
 name in the data.frame produced by `tidy(model)`. In the vast majority of
 cases, the default value of this argument should not be changed.}
 
-\item{...}{all other arguments are passed to the `tidy` method used to
-extract estimates from the model. For example, this allows users to set
-`exponentiate=TRUE` to exponentiate logistic regression coefficients.}
+\item{...}{all other arguments are passed to the `tidy` and `glance` methods
+used to extract estimates from the model. For example, this allows users to
+set `exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \value{
-a 'gt' table object.
+a regression table in a format determined by the `output` argument.
 }
 \description{
 Beautiful, customizable summaries of statistical models
@@ -127,7 +127,7 @@ msummary(models, statistic = 'statistic', conf_level = 0.99)
 # rename and re-order coefficients
 msummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 
-# titles 
+# titles
 msummary(models, title = 'This is the title')
 
 # title with italicized text
@@ -136,8 +136,8 @@ msummary(models, title = gt::md('This is *the* title'))
 # add_rows: we use `tribble` from the `tibble` package to build a data.frame
 # more easily. Then, we assign an attribute to determine each row's position.
 rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,
-                        'Empty row', '-', '-',
-                        'Another empty row', '?', '?')
+  'Empty row', '-', '-',
+  'Another empty row', '?', '?')
 attr(rows, 'position') <- c(1, 3)
 msummary(models, add_rows = rows)
 
@@ -146,12 +146,12 @@ msummary(models, notes = list('A first note', gt::md('A **bold** note')))
 
 # modify list of GOF statistics and their format using the built-in
 # 'gof_map' data frame as a starting point
-gof_custom <- modelsummary::gof_map 
-gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE 
-gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "\%.5f" 
+gof_custom <- modelsummary::gof_map
+gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE
+gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "\%.5f"
 msummary(models, gof_map = gof_custom)
-
 }
 
-
+# see the README on github for a lot more examples:
+# https://github.com/vincentarelbundock/modelsummary
 }
