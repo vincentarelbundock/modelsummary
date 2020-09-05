@@ -4,12 +4,9 @@
 <!-- badges: start -->
 [![Travis-CI Build
 Status](https://travis-ci.org/vincentarelbundock/modelsummary.svg?branch=master)](https://travis-ci.org/vincentarelbundock/modelsummary)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/vincentarelbundock/modelsummary?branch=master&svg=true)](https://ci.appveyor.com/project/vincentarelbundock/modelsummary)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/vincentarelbundock/modelsummary?branch=master&svg=true)](https://ci.appveyor.com/project/vincentarelbundock/modelsummary)
 [![R build status](https://github.com/vincentarelbundock/modelsummary/workflows/R-CMD-check/badge.svg)](https://github.com/vincentarelbundock/modelsummary/actions)
-<a href="https://codecov.io/gh/vincentarelbundock/modelsummary">
-  <img src="https://codecov.io/gh/vincentarelbundock/modelsummary/branch/master/graph/badge.svg" />
-</a>
+[![codecov](https://codecov.io/gh/vincentarelbundock/modelsummary/branch/master/graph/badge.svg)](https://codecov.io/gh/vincentarelbundock/modelsummary)
 
 <!-- badges: end -->
 
