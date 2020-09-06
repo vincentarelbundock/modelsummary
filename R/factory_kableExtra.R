@@ -17,14 +17,21 @@ factory_kableExtra <- function(tab,
     output_format <- "html"
   }
 
-  out <- kableExtra::kbl(
-    tab,
-    align = align,
-    format = output_format,
-    caption = title,
-    booktabs = TRUE,
-    linesep = "",
-    ...)
+  # kbl arguments
+  valid <- c("x", "align", "caption", "format", "booktabs", "linesep",
+             "format.args", "escape", "table.attr", "longtable", "valign",
+             "position", "centering", "vline", "toprule", "bottomrule",
+             "midrule", "caption.short", "table.envir") 
+  arguments <- c(
+    list(...),
+    "align"    = align,
+    "caption"  = title,
+    "format"   = output_format,
+    "booktabs" = TRUE,
+    "linesep"  = "")
+  arguments <- arguments[base::intersect(names(arguments), valid)]
+  arguments <- c(list(tab), arguments)
+  out <- do.call(kableExtra::kbl, arguments)
 
   # horizontal rule to separate coef/gof not supported in markdown
   # TODO: support HTML
