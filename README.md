@@ -2,6 +2,7 @@
 # modelsummary <img src="https://user-images.githubusercontent.com/987057/82849698-05ba5700-9ec7-11ea-93a0-67dcd9151848.png" align="right" alt="" width="120" />
 
 <!-- badges: start -->
+[![CRAN status](https://cranchecks.info/badges/flavor/release/modelsummary)](https://cran.r-project.org/web/checks/check_results_modelsummary.html)
 [![Travis-CI Build
 Status](https://travis-ci.org/vincentarelbundock/modelsummary.svg?branch=master)](https://travis-ci.org/vincentarelbundock/modelsummary)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/vincentarelbundock/modelsummary?branch=master&svg=true)](https://ci.appveyor.com/project/vincentarelbundock/modelsummary)
