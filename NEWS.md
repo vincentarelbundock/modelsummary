@@ -1,3 +1,7 @@
+# modelsummary 0.6.1.9000
+
+* new argument: coef_rename
+
 # modelsummary 0.6.1
 
 * bug fixes

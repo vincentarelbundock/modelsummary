@@ -11,6 +11,7 @@ extract_models <- function(models,
                            conf_level = 0.95,
                            coef_map = NULL,
                            coef_omit = NULL,
+                           coef_rename = NULL,
                            gof_map = NULL,
                            gof_omit = NULL,
                            stars = FALSE,
@@ -21,6 +22,10 @@ extract_models <- function(models,
   # models must be a list of models
   if (!'list' %in% class(models)) {
     models <- list(models)
+  }
+
+  if (!is.null(coef_rename) & !is.null(coef_map)) {
+    stop("coef_map and coef_rename cannot be used together.")
   }
 
   # sanity check functions are hosted in R/sanity_checks.R
@@ -60,6 +65,14 @@ extract_models <- function(models,
       conf_level = conf_level,
       stars = stars,
       ...)
+
+    # coef_rename
+    if (!is.null(coef_rename)) {
+      for (n in names(coef_rename)) {
+        idx <- est[[i]]$term == n
+        est[[i]]$term[idx] <- coef_rename[n]
+      }
+    }
 
     # coef_map: omit, rename (must be done before join to collapse rows)
     if (!is.null(coef_map)) {

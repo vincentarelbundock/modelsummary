@@ -13,6 +13,7 @@ extract_models(
   conf_level = 0.95,
   coef_map = NULL,
   coef_omit = NULL,
+  coef_rename = NULL,
   gof_map = NULL,
   gof_omit = NULL,
   stars = FALSE,
@@ -44,14 +45,18 @@ estimates. FALSE if statistics should be printed beside estimates.}
 
 \item{conf_level}{confidence level to use for confidence intervals}
 
-\item{coef_map}{named character vector.  Values refer to the variable names
+\item{coef_map}{named character vector. Values refer to the variable names
 that will appear in the table. Names refer to the original term names stored
-in the model object (e.g., "hp:mpg" for an interaction term). Coefficients
-that are omitted from this vector will be omitted from the table. The table
-will be ordered in the same order as this vector.}
+in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
+Coefficients that are omitted from this vector will be omitted from the
+table. The table will be ordered in the same order as this vector.}
 
 \item{coef_omit}{string regular expression. Omits all matching coefficients
 from the table (using `grepl`).}
+
+\item{coef_rename}{named character vector. Values refer to the variable names
+that will appear in the table. Names refer to the original term names stored
+in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
 
 \item{gof_map}{data.frame with four columns: `raw`, `clean`, `fmt`, and
 `omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame

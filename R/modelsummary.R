@@ -39,13 +39,16 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param statistic_vertical TRUE if statistics should be printed below
 #' estimates. FALSE if statistics should be printed beside estimates.
 #' @param conf_level confidence level to use for confidence intervals
-#' @param coef_map named character vector.  Values refer to the variable names
+#' @param coef_map named character vector. Values refer to the variable names
 #' that will appear in the table. Names refer to the original term names stored
-#' in the model object (e.g., "hp:mpg" for an interaction term). Coefficients
-#' that are omitted from this vector will be omitted from the table. The table
-#' will be ordered in the same order as this vector.
+#' in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
+#' Coefficients that are omitted from this vector will be omitted from the
+#' table. The table will be ordered in the same order as this vector.
 #' @param coef_omit string regular expression. Omits all matching coefficients
 #' from the table (using `grepl`).
+#' @param coef_rename named character vector. Values refer to the variable names
+#' that will appear in the table. Names refer to the original term names stored
+#' in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
 #' @param gof_map data.frame with four columns: `raw`, `clean`, `fmt`, and
 #' `omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame
 #' by default: `modelsummary::gof_map`
@@ -83,7 +86,10 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' msummary(models, statistic = 'p.value', conf_level = 0.99)
 #' msummary(models, statistic = 'statistic', conf_level = 0.99)
 #'
-#' # rename and re-order coefficients
+#' # coef_rename: rename coefficients
+#' msummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
+#'
+#' # coef_map: rename, re-order, and omit coefficients
 #' msummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 #'
 #' # titles
@@ -124,6 +130,7 @@ modelsummary <- function(models,
                          stars = FALSE,
                          coef_map = NULL,
                          coef_omit = NULL,
+                         coef_rename = NULL,
                          gof_map = NULL,
                          gof_omit = NULL,
                          add_rows = NULL,
@@ -142,6 +149,7 @@ modelsummary <- function(models,
     conf_level = conf_level,
     coef_map = coef_map,
     coef_omit = coef_omit,
+    coef_rename = coef_rename,
     gof_map = gof_map,
     gof_omit = gof_omit,
     stars = stars,
