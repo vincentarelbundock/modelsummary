@@ -11,9 +11,8 @@ models[['OLS 2']] <- lm(vs ~ hp + wt, mtcars)
 models[['Logit 1']] <- glm(vs ~ hp + drat, mtcars, family = binomial())
 models[['Logit 2']] <- glm(am ~ hp + disp, mtcars, family = binomial())
 
-
-test_that("knitr::kable_latex does not accept arbitrary args through ...", {
-  expect_error(msummary(models, output="latex", badarg=TRUE))
+test_that("knitr::kable_latex ignores bad arguments passed through ...", {
+  expect_error(msummary(models, output="latex", badarg=TRUE), NA)
 })
 
 
