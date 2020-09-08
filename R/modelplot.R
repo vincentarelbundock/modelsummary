@@ -9,7 +9,6 @@
 #' @param background A list of 'ggplot2' geoms to add to the background of the
 #' plot.  This is especially useful to display annotations "behind" the
 #' 'geom_pointrange' that 'modelplot' draws.
-#' @importFrom ggplot2 ggplot theme_minimal theme element_blank geom_pointrange geom_point aes facet_grid position_dodge labs
 #' @examples
 #' \dontrun{
 #'
@@ -59,6 +58,7 @@ modelplot <- function(models,
                       conf_level = .95,
                       coef_map = NULL,
                       coef_omit = NULL,
+                      coef_rename = NULL,
                       facet = FALSE,
                       draw = TRUE,
                       background = NULL,
@@ -67,7 +67,8 @@ modelplot <- function(models,
   modelplot_extract <- function(models,
                                 conf_level,
                                 coef_map,
-                                coef_omit) {
+                                coef_omit,
+                                coef_rename) {
     clean <- function(x) {
       as.numeric(gsub('\\[|\\]|,', '', x))
     }
@@ -77,6 +78,7 @@ modelplot <- function(models,
         conf_level = conf_level,
         coef_map = coef_map,
         coef_omit = coef_omit,
+        coef_rename = coef_rename,
         fmt = '%.50f') %>%
         dplyr::filter(group == 'estimates') %>%
         dplyr::select(-group) %>%
@@ -106,13 +108,18 @@ modelplot <- function(models,
   dat <- modelplot_extract(models,
     coef_map = coef_map,
     coef_omit = coef_omit,
+    coef_rename = coef_rename,
     conf_level = conf_level)
 
-  if (!draw) return(dat)
+  if (!draw) {
+    return(dat)
+  } else {
+    check_dependency("ggplot2", "Please install %s or set `modelplot(draw=FALSE)`")
+  }
 
-  p <- ggplot(dat) +
-    theme_minimal() +
-    theme(legend.title = element_blank())
+  p <- ggplot2::ggplot(dat) +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(legend.title = ggplot2::element_blank())
 
   # background geoms
   if (is.list(background)) {
@@ -126,31 +133,38 @@ modelplot <- function(models,
   # geom_pointrange: with confidence interval
   if (!is.null(conf_level)) {
     if (length(unique(dat$model)) == 1) {
-      p <- p + geom_pointrange(aes(y = term, x = estimate, xmin = conf.low, xmax = conf.high), ...)
+      p <- p + 
+        ggplot2::geom_pointrange(
+          ggplot2::aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high), ...)
     } else {
       if (facet) {
-        p <- p + geom_pointrange(aes(y = model, x = estimate, xmin = conf.low, xmax = conf.high), ...) +
-          facet_grid(term ~ ., scales = 'free_y')
+        p <- p + 
+          ggplot2::geom_pointrange(ggplot2::aes(y=model, x=estimate, xmin=conf.low, xmax=conf.high), ...) +
+          ggplot2::facet_grid(term ~ ., scales='free_y')
       } else {
-        p <- p + geom_pointrange(aes(y = term, x = estimate, xmin = conf.low, xmax = conf.high, color = model),
-          position = position_dodge(width = .5), ...)
+        p <- p + 
+          ggplot2::geom_pointrange(
+            ggplot2::aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high, color=model),
+            position=ggplot2::position_dodge(width=.5), ...)
       }
     }
     tmp <- sprintf('Coefficient estimates and %s%% confidence intervals', conf_level * 100)
-    p <- p + labs(x = tmp, y = '')
+    p <- p + ggplot2::labs(x=tmp, y='')
     # geom_point: without confidence interval
   } else {
     if (length(unique(dat$model)) == 1) {
-      p <- p + geom_point(aes(y = term, x = estimate), ...)
+      p <- p + ggplot2::geom_point(ggplot2::aes(y=term, x=estimate), ...)
     } else {
       if (facet) {
-        p <- p + geom_point(aes(y = model, x = estimate), ...) +
-          facet_grid(term ~ ., scales = 'free_y')
+        p <- p + 
+          ggplot2::geom_point(ggplot2::aes(y=model, x=estimate), ...) +
+          ggplot2::facet_grid(term ~ ., scales='free_y')
       } else {
-        p <- p + geom_point(aes(y = term, x = estimate), position = position_dodge(width = .5), ...)
+        p <- p + ggplot2::geom_point(ggplot2::aes(y=term, x=estimate), 
+                                     position=ggplot2::position_dodge(width=.5), ...)
       }
     }
-    p <- p + labs(x = 'Coefficient estimates', y = '')
+    p <- p + ggplot2::labs(x='Coefficient estimates', y='')
   }
   p
 }

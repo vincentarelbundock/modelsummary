@@ -9,6 +9,7 @@ modelplot(
   conf_level = 0.95,
   coef_map = NULL,
   coef_omit = NULL,
+  coef_rename = NULL,
   facet = FALSE,
   draw = TRUE,
   background = NULL,
@@ -29,6 +30,10 @@ table. The table will be ordered in the same order as this vector.}
 
 \item{coef_omit}{string regular expression. Omits all matching coefficients
 from the table (using `grepl`).}
+
+\item{coef_rename}{named character vector. Values refer to the variable names
+that will appear in the table. Names refer to the original term names stored
+in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
 
 \item{facet}{TRUE or FALSE. When the 'models' argument includes several
 model objects, TRUE draws terms in separate facets, and FALSE draws terms
