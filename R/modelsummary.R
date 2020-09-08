@@ -140,6 +140,9 @@ modelsummary <- function(models,
                          ...) {
 
 
+  # sanity checks for arguments not present in extract_models
+  sanity_output(output)
+
   # extract estimates and gof
   dat <- extract_models(
     models,
