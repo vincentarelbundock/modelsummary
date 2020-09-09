@@ -139,6 +139,7 @@ modelsummary <- function(models,
                          estimate = 'estimate',
                          ...) {
 
+  ellipsis <- list(...)
 
   # sanity checks for arguments not present in extract_models
   sanity_output(output)
@@ -202,8 +203,12 @@ modelsummary <- function(models,
     }
   }
 
-  # column alignment left
-  align <- strrep('l', ncol(tab))
+  # column alignment
+  if ("align" %in% names(ellipsis)) {
+    align <- ellipsis[["align"]]
+  } else {
+    align <- strrep("l", ncol(tab))
+  }
 
   # build table
   factory(tab,
