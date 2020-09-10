@@ -20,9 +20,9 @@ extract_estimates <- function(model,
   if (!is.null(statistic_override)) {
 
     # extract overriden statistics
-    so <- extract_statistic_override(model,
-      statistic = statistic,
-      statistic_override = statistic_override)
+    so <- modelsummary:::extract_statistic_override(model,
+      statistic_override=statistic_override,
+      conf_level=conf_level)
 
     if (!statistic %in% colnames(so)) {
       stop(paste0(statistic, " cannot be extracted through the

@@ -4,7 +4,7 @@
 \alias{extract_statistic_override}
 \title{Allow users to override uncertainty estimates}
 \usage{
-extract_statistic_override(model, statistic_override, statistic = "std.error")
+extract_statistic_override(model, statistic_override, conf_level = NULL)
 }
 \arguments{
 \item{model}{object type with an available `tidy` method.}
@@ -17,11 +17,7 @@ argument accepts three types of input:
   \item a list of length(models) vectors with names equal to the names of your coefficient estimates. Numeric vectors are formatted according to `fmt` and placed in brackets, character vectors printed as given.
 }}
 
-\item{statistic}{string name of the statistic to include in parentheses
-\itemize{
-  \item Typical values: "conf.int", "std.error", "statistic", "p.value"
-  \item Alternative values: any column name produced by `broom::tidy(model)`
-}}
+\item{conf_level}{confidence level to use for confidence intervals}
 }
 \value{
 a numeric vector of test statistics

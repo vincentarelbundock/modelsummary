@@ -54,7 +54,7 @@ results[['hardcoded arbitrary']] <- msummary(
     `NBin 1` = c('(Intercept)' = "[1, 5]", Crime_prop = "[-5, +5]", Donations = "95% CI[-2, -1]"),
     `OLS 2` = c('(Intercept)' = "7", Crime_prop = "-6", Infants = "9"),
     `NBin 2` = c('(Intercept)' = "\U03B5", Crime_prop = "\U2135", Donations = "\U0414"),
-    `Logit 1` = c('(Intercept)' = 1, Crime_prop = -5, Infants = -2)))
+    `Logit 1` = c('(Intercept)' = 1, Crime_prop = -5, Infants = -2)) )
 
 # we are not interested in GOFs in this test
 for (i in seq_along(results)) {

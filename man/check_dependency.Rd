@@ -4,7 +4,7 @@
 \alias{check_dependency}
 \title{check if dependency is installed}
 \usage{
-check_dependency(library_name)
+check_dependency(library_name, msg = NULL)
 }
 \description{
 check if dependency is installed
