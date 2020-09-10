@@ -59,57 +59,51 @@ modelplot <- function(models,
                       coef_map = NULL,
                       coef_omit = NULL,
                       coef_rename = NULL,
+                      statistic_override = NULL,
                       facet = FALSE,
                       draw = TRUE,
                       background = NULL,
                       ...) {
 
-  modelplot_extract <- function(models,
-                                conf_level,
-                                coef_map,
-                                coef_omit,
-                                coef_rename) {
-    clean <- function(x) {
-      as.numeric(gsub('\\[|\\]|,', '', x))
-    }
-    if (!is.null(conf_level)) {
-      out <- extract_models(models,
-        statistic = 'conf.int',
-        conf_level = conf_level,
-        coef_map = coef_map,
-        coef_omit = coef_omit,
-        coef_rename = coef_rename,
-        fmt = '%.50f') %>%
-        dplyr::filter(group == 'estimates') %>%
-        dplyr::select(-group) %>%
-        tidyr::pivot_longer(3:ncol(.), names_to = 'model') %>%
-        tidyr::pivot_wider(names_from = 'statistic') %>%
-        dplyr::mutate(estimate = clean(estimate)) %>%
-        stats::na.omit() %>%
-        tidyr::separate(statistic1, into = c('conf.low', 'conf.high'), sep = ', ') %>%
-        dplyr::mutate(dplyr::across(c(conf.low, conf.high), clean))
-    } else {
-      out <- extract_models(models,
-        coef_map = coef_map,
-        coef_omit = coef_omit,
-        fmt = '%.50f') %>%
-        dplyr::filter(group == 'estimates', statistic == 'estimate') %>%
-        dplyr::select(-group, -statistic) %>%
-        tidyr::pivot_longer(-term, names_to = 'model', values_to = 'estimate') %>%
-        dplyr::mutate(estimate = clean(estimate)) %>%
-        stats::na.omit()
-    }
-    out <- out %>%
-      dplyr::mutate(term = factor(term, rev(unique(term))),
-        model = factor(model, unique(model)))
-    return(out)
+
+
+  if (is.null(conf_level)) {
+    out <- extract_models(
+             models=models,
+             fmt="%.50f",
+             conf_level=conf_level,
+             coef_map=coef_map,
+             coef_omit=coef_omit,
+             coef_rename=coef_rename,
+             statistic_override=statistic_override) %>%
+      dplyr::filter(group == "estimates", statistic=="estimate") %>%
+      tidyr::pivot_longer(cols=4:ncol(.), values_to="estimate", names_to="model") %>%
+      dplyr::filter(estimate != "") %>%
+      dplyr::mutate(estimate = as.numeric(estimate))
+  } else {
+    out <- extract_models(
+             models=models,
+             fmt="%.50f",
+             conf_level=conf_level,
+             coef_map=coef_map,
+             coef_omit=coef_omit,
+             coef_rename=coef_rename,
+             statistic="conf.int",
+             statistic_override=statistic_override)  %>%
+      dplyr::filter(group == "estimates") %>%
+      tidyr::pivot_longer(cols=4:ncol(.), names_to="model") %>%
+      tidyr::pivot_wider(names_from="statistic") %>%
+      dplyr::mutate(statistic1 = gsub('\\[|\\]', '', statistic1)) %>%
+      dplyr::filter(estimate != "") %>%
+      tidyr::separate(statistic1, into=c("conf.low", "conf.high"), sep=", ") %>%
+      dplyr::mutate(dplyr::across(c(estimate, conf.low, conf.high), as.numeric))
   }
 
-  dat <- modelplot_extract(models,
-    coef_map = coef_map,
-    coef_omit = coef_omit,
-    coef_rename = coef_rename,
-    conf_level = conf_level)
+  dat <- out %>%
+    dplyr::mutate(
+      term = factor(term, rev(unique(term))),
+      model = factor(model, unique(model))
+    )
 
   if (!draw) {
     return(dat)

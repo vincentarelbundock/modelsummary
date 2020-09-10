@@ -20,16 +20,18 @@ extract_estimates <- function(model,
   if (!is.null(statistic_override)) {
 
     # extract overriden statistics
-    so <- modelsummary:::extract_statistic_override(model,
+    so <- extract_statistic_override(model,
       statistic_override=statistic_override,
       conf_level=conf_level)
 
-    if (!statistic %in% colnames(so)) {
+    bad1 <- (statistic != "conf.int") & (!statistic %in% colnames(so))
+    bad2 <- (statistic == "conf.int") & (!"conf.low" %in% colnames(so))
+    if (bad1 || bad2) {
       stop(paste0(statistic, " cannot be extracted through the
                         `statistic_override` argument. You might want to look
                         at the `modelsummary:::extract_statistic_override`
                         function to diagnose the problem."))
-    }
+    } 
 
     # extract estimates
     est <- tidy(model, ...)

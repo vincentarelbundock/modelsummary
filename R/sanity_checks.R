@@ -74,7 +74,7 @@ sanity_fmt <- function(fmt) checkmate::assert_string(fmt, null.ok = FALSE)
 #'
 #' @keywords internal
 sanity_conf_level <- function(conf_level) {
-  checkmate::assert_number(conf_level, lower = 0, upper = .999999999999)
+  checkmate::assert_number(conf_level, lower = 0, upper = .999999999999, null.ok=TRUE)
 }
 
 #' sanity check

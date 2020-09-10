@@ -1,5 +1,6 @@
 library(vdiffr)
 library(ggplot2)
+library(sandwich)
 
 context("modelplot")
 
@@ -44,5 +45,20 @@ test_that("conf_level=NULL", {
   mod <- lm(hp ~ mpg + drat, data = mtcars)
   p <- modelplot(mod, draw = FALSE, conf_level = NULL)
   expect_is(p, "data.frame")
-  expect_equal(dim(p), c(3, 3))
+  expect_equal(nrow(p), 3)
+})
+
+
+test_that("statistic_override", {
+
+  mod <- list(lm(hp ~ mpg + drat, data = mtcars),
+              lm(hp ~ mpg + drat, data = mtcars))
+  so <- list(vcov, sandwich::vcovHC)
+
+  p <- modelplot(mod, statistic_override=so, draw=FALSE)
+
+  expect_equal(p$conf.low, c(165.179327669237, 182.406373565931,
+                             -22.1832974370102, -28.1858724755655,
+                             -13.6502180401172, -15.0390897152001))
+
 })

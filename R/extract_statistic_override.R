@@ -29,7 +29,7 @@ extract_statistic_override <- function(model, statistic_override, conf_level=NUL
       }
     }
     
-    if (checkmate::check_data_frame(out)) {
+    if (inherits(out, "data.frame")) {
       return(out)
     }
 
@@ -47,8 +47,8 @@ extract_statistic_override <- function(model, statistic_override, conf_level=NUL
     return(out)
   } 
 
-  # atomic vector (is.function necessary otherwise "not interpretable as logical")
-  if (!is.function(statistic_override) && checkmate::check_atomic_vector(statistic_override)) {
+  # atomic vector
+  if (is.atomic(statistic_override)) {
     out <- tibble::tibble(term = names(statistic_override), std.error = statistic_override)
     return(out)
   }
