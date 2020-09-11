@@ -9,7 +9,7 @@ datasummary_skim(
   type = "numeric",
   output = "default",
   fmt = "\%.1f",
-  histogram = FALSE,
+  histogram = TRUE,
   title = NULL,
   notes = NULL,
   align = NULL,
@@ -33,7 +33,9 @@ string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
 the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
 use exponential notation. See `?sprintf` for more options.}
 
-\item{histogram}{TRUE to include a unicode character histogram (boolean)}
+\item{histogram}{TRUE to include a SVG histogram (boolean). This option is
+only supported for HTML and LaTeX tables. The examples section shows one way
+to reproduce the summary with histogram in other formats.}
 
 \item{title}{string}
 
@@ -49,4 +51,25 @@ set `exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \description{
 Quick overview of numeric or categorical variables
+}
+\examples{
+
+\dontrun{
+dat <- mtcars
+dat$vs <- as.logical(dat$vs)
+dat$cyl <- as.factor(dat$vs)
+datasummary_skim(dat)
+datasummary_skim(dat, "categorical")
+
+# You can use `datasummary` to produce a similar table in different formats.
+Note that the `Histogram` function relies on unicode characters. These
+characters will only display correctly in some operating systems, under some
+locales, using some fonts. The `modelsummary` authors cannot provide support
+to display these unicode histograms.
+
+f <- All(dat, numeric = TRUE, factor = FALSE) ~
+     (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
+     Heading("") * Histogram
+
+}
 }
