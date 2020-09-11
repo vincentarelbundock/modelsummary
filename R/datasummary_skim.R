@@ -38,24 +38,26 @@ datasummary_skim <- function(data,
                              align  = NULL,
                              ...) {
 
+  checkmate::assert_true(type %in% c("numeric", "categorical"))
+
   # tables does not play well with tibbles
   data <- as.data.frame(data)
 
   # output format
-  out <- parse_output_arg(output)
+  output_info <- modelsummary:::parse_output_arg(output)
 
   # draw histogram?
   if (histogram) {
     histogram_col <- function(x) ""
-    histogram <- out$output_format %in% c("latex", "html", "kableExtra") &&
-                 out$output_factory == "kableExtra"
+    histogram <- output_info$output_format %in% c("latex", "html", "kableExtra") &&
+                 output_info$output_factory == "kableExtra"
   }
 
   if (type == 'numeric') {
 
     # subset of numeric variables with non NA values
-    dat_new <- data[, sapply(data, is.numeric)] 
-    dat_new <- dat_new[, sapply(dat_new, function(x) !all(is.na(x)))]
+    dat_new <- data[, sapply(data, is.numeric), drop=FALSE] 
+    dat_new <- dat_new[, sapply(dat_new, function(x) !all(is.na(x))), drop=FALSE]
 
     if (ncol(dat_new) == 0) {
       stop('data contains no numeric variable.')
@@ -63,16 +65,23 @@ datasummary_skim <- function(data,
 
     # with histogram
     if (histogram) {
-      f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
+      f <- All(dat_new, numeric=TRUE, factor=FALSE) ~
            (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
            Heading("") * histogram_col
 
-      # prepare histogram
-      idx <- datasummary(f, fmt="%.2f", data=dat_new, output="data.frame")[[1]]
-      histograms <- as.list(data[, idx])
-      histograms <- lapply(histograms, scale)
-      histograms <- lapply(histograms, as.numeric)
-      histograms <- lapply(histograms, na.omit)
+      # prepare list of histograms
+      # TODO: inefficient because it computes the table twice. But I need to
+      # know the exact subset of variables kept by tabular, in the exact
+      # order, to print the right histograms.
+
+      idx <- datasummary(f, data=dat_new, output="data.frame")[[1]]
+      histogram_list <- as.list(data[, idx, drop=FALSE])
+      for (n in names(histogram_list)) {
+        histogram_list[[n]] <- as.numeric(scale(stats::na.omit(histogram_list[[n]])))
+        if (all(is.nan(histogram_list[[n]]))) {
+          histogram_list[[n]] <- 0
+        }
+      }
 
       # draw table
       out <- datasummary(formula = f,
@@ -83,7 +92,8 @@ datasummary_skim <- function(data,
           notes = notes) %>%
         kableExtra::column_spec(
           column=7, 
-          image=kableExtra::spec_hist(histograms, col="black")
+          image=kableExtra::spec_hist(histogram_list, 
+                                      col="black")
         )
 
     # without histogram
@@ -102,24 +112,34 @@ datasummary_skim <- function(data,
 
   } else if (type == 'categorical') {
 
-    # subset of categorical variables with non-NA values
-    is.categorical <- function(x) {
-      is.character(x) || is.factor(x) || is.logical(x)
-    }
-    dat_new <- data[, sapply(data, is.categorical)] 
-    dat_new <- dat_new[, sapply(dat_new, function(x) !all(is.na(x)))]
+    dat_new <- data
 
+    # logical | character -> factor for unit breakdowns
+    dropped <- FALSE
     for (n in colnames(dat_new)) {
-      if (is.logical(dat_new[[n]])) {
+      if (is.logical(dat_new[[n]]) || is.character(dat_new[[n]])) {
         dat_new[[n]] <- as.factor(dat_new[[n]])
+        if (length(levels(dat_new[[n]])) > 10) {
+          dropped <- TRUE
+          dat_new[[n]] <- NULL
+        }
       }
     }
+
+    if (dropped) {
+      warning("datasummary_skim dropped a categorical variable because it contained more than 10 levels.")
+    }
+
+    # subset of categorical variables with non-NA values
+    idx <- sapply(dat_new, is.factor) && sapply(dat_new, function(x) !all(is.na(x)))
+    dat_new <- dat_new[, idx, drop=FALSE] 
+
     if (ncol(dat_new) == 0) {
       stop('data contains no logical, character, or factor variable.')
     }
 
     pctformat = function(x) sprintf("%.1f", x)
-    f <- All(dat_new, numeric=FALSE, factor=TRUE, logical=TRUE) ~
+    f <- All(dat_new, numeric=FALSE, factor=TRUE, logical=TRUE, character=TRUE) ~
          (N = 1) * Format(digits=0) + (`%` = Percent()) * Format(pctformat())
 
     out <- datasummary(
