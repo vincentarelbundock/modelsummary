@@ -2,7 +2,7 @@
 #'
 #' @inheritParams datasummary
 #' @inheritParams modelsummary
-#' @param histogram TRUE to include a SVG histogram (boolean). This option is
+#' @param histogram TRUE includes a histogram for numeric variables (boolean). This option is
 #' only supported for HTML and LaTeX tables. The examples section shows one way
 #' to reproduce the summary with histogram in other formats.
 #' @param type of variables to summarize: "numeric" or "categorical" (character)
@@ -46,14 +46,18 @@ datasummary_skim <- function(data,
   # output format
   output_info <- modelsummary:::parse_output_arg(output)
 
-  # draw histogram?
-  if (histogram) {
-    histogram_col <- function(x) ""
-    histogram <- output_info$output_format %in% c("latex", "html", "kableExtra") &&
-                 output_info$output_factory == "kableExtra"
-  }
-
   if (type == 'numeric') {
+
+    # draw histogram?
+    if (histogram) {
+      histogram_col <- function(x) ""
+      if ((output_info$output_format %in% c("html", "kableExtra")) || knitr::is_latex_output()) {
+        histogram <- TRUE
+      } else {
+        histogram <- FALSE
+        warning('The histogram option is only available for output of types "html" and "kableExtra", and for PDF and HTML documents produced by Rmarkdown or knitr. Use `histogram=FALSE` to silence this warning.')
+      }
+    }
 
     # subset of numeric variables with non NA values
     dat_new <- data[, sapply(data, is.numeric), drop=FALSE] 
