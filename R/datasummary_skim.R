@@ -81,6 +81,10 @@ datasummary_skim <- function(data,
       stop('data contains no numeric variable.')
     }
 
+    # pad colnames in case one is named Min, Max, Mean, or other function name
+    colnames(dat_new) <- paste0(colnames(dat_new), " ")
+
+
     # with histogram
     if (histogram) {
       f <- All(dat_new, numeric=TRUE, factor=FALSE) ~
@@ -99,6 +103,11 @@ datasummary_skim <- function(data,
         if (all(is.nan(histogram_list[[n]]))) {
           histogram_list[[n]] <- 0
         }
+      }
+
+      # too large
+      if (ncol(dat_new) > 50) {
+        stop("Cannot summarize more than 50 variables at a time.")
       }
 
       # draw table
@@ -132,29 +141,52 @@ datasummary_skim <- function(data,
 
     dat_new <- data
 
-    # logical | character -> factor for unit breakdowns
-    dropped <- FALSE
+    # pad colnames in case one is named Min, Max, Mean, or other function name
+    colnames(dat_new) <- paste0(colnames(dat_new), " ")
+
     for (n in colnames(dat_new)) {
-      if (is.logical(dat_new[[n]]) || is.character(dat_new[[n]])) {
-        dat_new[[n]] <- as.factor(dat_new[[n]])
-        if (length(levels(dat_new[[n]])) > 10) {
-          dropped <- TRUE
-          dat_new[[n]] <- NULL
+
+      if (is.logical(dat_new[[n]]) | 
+          is.character(dat_new[[n]]) | 
+          is.factor(dat_new[[n]])) {
+
+        # convert to factor
+        dat_new[[n]] <- factor(dat_new[[n]])
+
+        # pad factor levels, otherwise tables::tabular breaks on ""
+        if (is.factor(dat_new[[n]])) {
+          levels(dat_new[[n]]) <- paste0(dat_new[[n]], " ")
         }
+
+        # factors with too many levels
+        if (is.factor(dat_new[[n]])) {
+          if (length(levels(dat_new[[n]])) > 20) {
+            dat_new[[n]] <- NULL
+            warning("datasummary_skim dropped a categorical variable because it contained more than 20 levels.")
+          }
+        }
+
+        # drop completely missing
+        if (all(is.na(dat_new[[n]]))) {
+          dat_new[[n]] <- NULL
+          warning("datasummary_skim dropped a categorical variable because it was entirely NA.")
+        }
+
+      # discard non-factors
+      } else {
+        dat_new[[n]] <- NULL
       }
+
     }
 
-    if (dropped) {
-      warning("datasummary_skim dropped a categorical variable because it contained more than 10 levels.")
-    }
-
-    # subset of categorical variables with non-NA values
-    idx <- sapply(dat_new, is.factor) & sapply(dat_new, function(x) !all(is.na(x)))
-
-    dat_new <- dat_new[, idx, drop=FALSE] 
-
+    # too small
     if (ncol(dat_new) == 0) {
       stop('data contains no logical, character, or factor variable.')
+    }
+
+    # too large
+    if (ncol(dat_new) > 50) {
+      stop("Cannot summarize more than 50 variables at a time.")
     }
 
     pctformat = function(x) sprintf("%.1f", x)
