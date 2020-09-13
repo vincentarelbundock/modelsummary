@@ -57,8 +57,8 @@ test_that("statistic_override", {
 
   p <- modelplot(mod, statistic_override=so, draw=FALSE)
 
-  expect_equal(p$conf.low, c(165.179327669237, 182.406373565931,
-                             -22.1832974370102, -28.1858724755655,
-                             -13.6502180401172, -15.0390897152001))
+  known <- c(165.179327669237, 182.406373565931, -13.6502180401172,
+             -15.0390897152001, -22.1832974370102, -28.1858724755655)
+  expect_equal(p$conf.low, known)
 
 })
