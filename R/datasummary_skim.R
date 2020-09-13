@@ -1,5 +1,7 @@
 #' Quick overview of numeric or categorical variables
 #'
+#' This function was inspired by the excellent `skimr` package for R.
+#'
 #' @inheritParams datasummary
 #' @inheritParams modelsummary
 #' @param histogram include a histogram (TRUE/FALSE). Supported for:
@@ -34,14 +36,16 @@
 #' }
 #' @export
 datasummary_skim <- function(data,
-                             output = 'default',
                              type   = 'numeric',
+                             output = 'default',
                              fmt    = '%.1f',
                              histogram = TRUE,
                              title  = NULL,
                              notes  = NULL,
                              align  = NULL,
                              ...) {
+
+  sanity_output(output)
 
   checkmate::assert_true(type %in% c("numeric", "categorical"))
 

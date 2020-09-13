@@ -14,6 +14,8 @@ datasummary_df <- function(data,
                            add_columns = NULL,
                            ...) {
 
+  sanity_output(output)
+
   checkmate::assert_data_frame(data)
 
   for (n in colnames(data)) {

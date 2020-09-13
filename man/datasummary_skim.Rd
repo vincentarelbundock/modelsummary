@@ -6,8 +6,8 @@
 \usage{
 datasummary_skim(
   data,
-  output = "default",
   type = "numeric",
+  output = "default",
   fmt = "\%.1f",
   histogram = TRUE,
   title = NULL,
@@ -19,14 +19,14 @@ datasummary_skim(
 \arguments{
 \item{data}{A data.frame (or tibble)}
 
+\item{type}{of variables to summarize: "numeric" or "categorical" (character)}
+
 \item{output}{filename or object type (string)
 \itemize{
   \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
   \item Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
   \item When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.
 }}
-
-\item{type}{of variables to summarize: "numeric" or "categorical" (character)}
 
 \item{fmt}{string which specifies how numeric values will be rounded. This
 string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
@@ -55,7 +55,7 @@ used to extract estimates from the model. For example, this allows users to
 set `exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \description{
-Quick overview of numeric or categorical variables
+This function was inspired by the excellent `skimr` package for R.
 }
 \examples{
 

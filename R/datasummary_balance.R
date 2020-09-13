@@ -32,6 +32,8 @@ datasummary_balance <- function(formula,
                                 dinm_statistic = 'std.error',
                                 ...) {
 
+  sanity_output(output)
+
   # tables does not play well with tibbles
   data <- as.data.frame(data)
 

@@ -133,6 +133,8 @@ datasummary <- function(formula,
                         add_rows = NULL,
                         sparse_header = TRUE) {
 
+  sanity_output(output)
+
   # output: factory, file, format
   output_list <- parse_output_arg(output)
 

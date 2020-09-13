@@ -8,6 +8,8 @@ datasummary_correlation <- function(data,
                                     title = NULL,
                                     notes = NULL) {
 
+  sanity_output(output)
+
   clean_r <- function(x) {
     x <- sprintf(fmt, x)
     x <- gsub('0\\.', '\\.', x)
