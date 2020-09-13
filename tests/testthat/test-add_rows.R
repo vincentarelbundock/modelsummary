@@ -16,13 +16,13 @@ test_that("tibble", {
     'NEW GOF 1', '?',  '?',
     'NEW GOF 2', 'X',  'X',
     'NEW GOF 3', 'Y',  'Y')
-  attr(rows, 'position') <- c(1, 2, 9, 10)
+  attr(rows, 'position') <- c(3, 8, 9, 12)
 
-  raw <- modelsummary(mod, add_rows = rows, output = 'dataframe')
-
-  truth <- c("cyl4", "NEW GOF 1", "(Intercept)", "", "cyl6", "", "cyl8", "", "NEW GOF 2", "NEW GOF 3", "Num.Obs.", "R2", "R2 Adj.", "AIC", "BIC", "Log.Lik.", "F")
-
-  expect_equal(truth, unname(raw[[2]]))
+  expect_known_output(modelsummary(mod, add_rows=rows,
+                                   output="markdown"),
+                      file="known_output/msummary_add_rows_1.md",
+                      print=TRUE,
+                      update=FALSE)
 
 })
 
