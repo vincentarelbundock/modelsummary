@@ -149,7 +149,8 @@ datasummary_skim <- function(data,
     }
 
     # subset of categorical variables with non-NA values
-    idx <- sapply(dat_new, is.factor) && sapply(dat_new, function(x) !all(is.na(x)))
+    idx <- sapply(dat_new, is.factor) & sapply(dat_new, function(x) !all(is.na(x)))
+
     dat_new <- dat_new[, idx, drop=FALSE] 
 
     if (ncol(dat_new) == 0) {
