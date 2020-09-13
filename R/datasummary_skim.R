@@ -2,9 +2,14 @@
 #'
 #' @inheritParams datasummary
 #' @inheritParams modelsummary
-#' @param histogram TRUE includes a histogram for numeric variables (boolean). This option is
-#' only supported for HTML and LaTeX tables. The examples section shows one way
-#' to reproduce the summary with histogram in other formats.
+#' @param histogram include a histogram (TRUE/FALSE). Supported for:
+#' \itemize{
+#' \item type = "numeric"
+#' \item output is "html", "default", "jpg", "png", or "kableExtra"
+#' \item PDF and HTML documents compiled via Rmarkdown or knitr
+#' \item See the examples section below for an example of how to use
+#' `datasummary` to include histograms in other formats such as markdown.
+#' }
 #' @param type of variables to summarize: "numeric" or "categorical" (character)
 #'
 #' @examples
@@ -17,20 +22,20 @@
 #' datasummary_skim(dat, "categorical")
 #' 
 #' # You can use `datasummary` to produce a similar table in different formats.
-#' Note that the `Histogram` function relies on unicode characters. These
-#' characters will only display correctly in some operating systems, under some
-#' locales, using some fonts. The `modelsummary` authors cannot provide support
-#' to display these unicode histograms.
+#' # Note that the `Histogram` function relies on unicode characters. These
+#' # characters will only display correctly in some operating systems, under some
+#' # locales, using some fonts. Displaying such histograms on Windows computers
+#' # is notoriously tricky. The `modelsummary` authors cannot provide support to
+#' # display these unicode histograms.
 #'
-#' f <- All(dat, numeric = TRUE, factor = FALSE) ~
-#'      (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
-#'      Heading("") * Histogram
+#' f <- All(mtcars) ~ Mean + SD + Min + Median + Max + Histogram
+#' datasummary(f, mtcars, output="markdown")
 #'
 #' }
 #' @export
 datasummary_skim <- function(data,
-                             type   = 'numeric',
                              output = 'default',
+                             type   = 'numeric',
                              fmt    = '%.1f',
                              histogram = TRUE,
                              title  = NULL,
@@ -51,11 +56,16 @@ datasummary_skim <- function(data,
     # draw histogram?
     if (histogram) {
       histogram_col <- function(x) ""
-      if ((output_info$output_format %in% c("html", "kableExtra")) || knitr::is_latex_output()) {
+
+      good <- c("html", "png", "jpg", "kableExtra", "default")
+      if ((output_info$output_format %in% good) || knitr::is_latex_output()) {
         histogram <- TRUE
+
       } else {
         histogram <- FALSE
-        warning('The histogram option is only available for output of types "html" and "kableExtra", and for PDF and HTML documents produced by Rmarkdown or knitr. Use `histogram=FALSE` to silence this warning.')
+
+        warning('The histogram argument is only supported for these output types: "default", "html", "jpg", "png", and "kableExtra". It also works in Rmarkdown/knitr documents compiled to PDF or HTML. Use `histogram=FALSE` to silence this warning.')
+
       }
     }
 
