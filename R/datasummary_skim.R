@@ -59,18 +59,31 @@ datasummary_skim <- function(data,
 
     # draw histogram?
     if (histogram) {
-      histogram_col <- function(x) ""
 
-      good <- c("html", "png", "jpg", "kableExtra", "default")
-      if ((output_info$output_format %in% good) || knitr::is_latex_output()) {
-        histogram <- TRUE
-
-      } else {
+      # histogram is a kableExtra-specific option
+      if (output_info$output_factory != "kableExtra") {
         histogram <- FALSE
-
-        warning('The histogram argument is only supported for these output types: "default", "html", "jpg", "png", and "kableExtra". It also works in Rmarkdown/knitr documents compiled to PDF or HTML. Use `histogram=FALSE` to silence this warning.')
-
       }
+
+      # write to file
+      if (!is.null(output_info$output_file)) {
+        if (!output_info$output_format %in% c("html", "png", "jpg")) {
+          histogram <- FALSE
+        }
+
+      # interactive or Rmarkdown/knitr
+      } else {
+        if (!output_info$output_format %in% c("default", "html", "kableExtra") &
+            !knitr::is_latex_output()) {
+          histogram <- FALSE
+        }
+      }
+
+      # if flag was flipped
+      if (!histogram) {
+        warning('The histogram argument is only supported for (a) output types "default", "html", or "kableExtra"; (b) writing to file paths with extensions ".html", ".jpg", or ".png"; and (c) Rmarkdown or knitr documents compiled to PDF or HTML. Use `histogram=FALSE` to silence this warning.')
+      }
+
     }
 
     # subset of numeric variables with non NA values
@@ -87,6 +100,9 @@ datasummary_skim <- function(data,
 
     # with histogram
     if (histogram) {
+
+      histogram_col <- function(x) ""
+
       f <- All(dat_new, numeric=TRUE, factor=FALSE) ~
            (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
            Heading("") * histogram_col
@@ -110,6 +126,11 @@ datasummary_skim <- function(data,
         stop("Cannot summarize more than 50 variables at a time.")
       }
 
+      # don't use output=filepath.html when post-processing
+      if (!is.null(output_info$output_file)) { 
+        output <- "kableExtra"
+      }
+
       # draw table
       out <- datasummary(formula = f,
           data = dat_new,
@@ -123,11 +144,18 @@ datasummary_skim <- function(data,
                                       col="black")
         )
 
+      # don't use output=filepath.html when post-processing
+      if (!is.null(output_info$output_file)) {
+        kableExtra::save_kable(out, file=output_info$output_file)
+        return(invisible(out))
+      }
+
     # without histogram
     } else {
 
       f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
            (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt)
+
       out <- datasummary(f,
           data = dat_new,
           output = output,
@@ -153,9 +181,9 @@ datasummary_skim <- function(data,
         # convert to factor
         dat_new[[n]] <- factor(dat_new[[n]])
 
-        # pad factor levels, otherwise tables::tabular breaks on ""
+        # tables::tabular breaks on ""
         if (is.factor(dat_new[[n]])) {
-          levels(dat_new[[n]]) <- paste0(dat_new[[n]], " ")
+          levels(dat_new[[n]])[levels(dat_new[[n]]) == ""] <- " "
         }
 
         # factors with too many levels
