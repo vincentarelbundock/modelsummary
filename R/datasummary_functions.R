@@ -88,7 +88,7 @@ NPercent <- function(x, y) {
 #' datasummary statistic shortcut
 #' @export
 #' @keywords internal
-NUnique <- function(x, ...) length(unique(x))
+NUnique <- function(x, ...) sprintf("%.0f", length(unique(x)))
 
 
 #' datasummary statistic shortcut
@@ -149,12 +149,8 @@ P100 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' datasummary statistic shortcut
 #' @export
 #' @keywords internal
-PercentMissing <- function(x, fmt = NULL) {
-  out <- mean(is.na(x)) * 100
-  if ((!is.null(fmt))) {
-    out <- sprintf(fmt, )
-  }
-  return(out)
+PercentMissing <- function(x) {
+  sprintf("%.0f", mean(is.na(x)) * 100)
 }
 
 #' datasummary statistic shortcut

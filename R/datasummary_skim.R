@@ -97,13 +97,14 @@ datasummary_skim <- function(data,
     # pad colnames in case one is named Min, Max, Mean, or other function name
     colnames(dat_new) <- paste0(colnames(dat_new), " ")
 
-
     # with histogram
     if (histogram) {
 
       histogram_col <- function(x) ""
 
       f <- All(dat_new, numeric=TRUE, factor=FALSE) ~
+           Heading("Unique (#)") * NUnique + 
+           Heading("Missing (%)") * PercentMissing +
            (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
            Heading("") * histogram_col
 
@@ -139,7 +140,7 @@ datasummary_skim <- function(data,
           align = align,
           notes = notes) %>%
         kableExtra::column_spec(
-          column=7, 
+          column=9, 
           image=kableExtra::spec_hist(histogram_list, 
                                       col="black")
         )
@@ -154,6 +155,8 @@ datasummary_skim <- function(data,
     } else {
 
       f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
+           Heading("Unique (#)") * NUnique + 
+           Heading("Missing (%)") * PercentMissing +
            (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt)
 
       out <- datasummary(f,
