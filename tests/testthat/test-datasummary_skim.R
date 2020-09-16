@@ -8,7 +8,7 @@ dat$gear <- as.factor(dat$gear)
 test_that("basic", {
 
   tmp <- expect_warning(datasummary_skim(dat, output="data.frame"))
-  expect_equal(dim(tmp), c(9, 6))
+  expect_equal(dim(tmp), c(9, 8))
 
   tmp <- datasummary_skim(dat, type="categorical", output="data.frame")
   expect_equal(dim(tmp), c(5, 4))
