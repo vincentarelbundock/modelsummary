@@ -1,3 +1,3 @@
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #' @export
-magrittr::`%>%`
+dplyr::`%>%`
