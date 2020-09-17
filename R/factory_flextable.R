@@ -12,7 +12,7 @@ factory_flextable <- function(tab,
                               title = NULL,
                               ...) {
 
-  check_dependency("flextable")
+  assert_dependency("flextable")
 
   # measurements
   table_width <- ncol(tab)

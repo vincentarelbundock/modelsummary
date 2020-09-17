@@ -53,7 +53,7 @@ datasummary_skim <- function(data,
   data <- as.data.frame(data)
 
   # output format
-  output_info <- modelsummary:::parse_output_arg(output)
+  output_info <- parse_output_arg(output)
 
   if (type == 'numeric') {
 

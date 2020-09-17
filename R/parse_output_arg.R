@@ -45,11 +45,13 @@ parse_output_arg <- function(output) {
   }
 
   # if knit to word
-  fmt <- try(rmarkdown::default_output_format(knitr::current_input())$name,
-    silent = TRUE)
-  if (!inherits(fmt, "try-error")) {
-    if ("word_document" %in% fmt) {
-      output_format <- "word"
+  if (check_dependency("knitr") && check_dependency("rmarkdown")) {
+    fmt <- try(rmarkdown::default_output_format(knitr::current_input())$name, 
+      silent = TRUE)
+    if (!inherits(fmt, "try-error")) {
+      if ("word_document" %in% fmt) {
+        output_format <- "word"
+      }
     }
   }
 

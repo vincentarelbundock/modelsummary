@@ -1,13 +1,20 @@
-#' check if dependency is installed
+#' assert if dependency is installed
 #'
 #' @keywords internal
-check_dependency <- function(library_name, msg=NULL) {
+assert_dependency <- function(library_name, msg=NULL) {
   if (is.null(msg)) {
     msg <- "Please install the %s package."
   }
   if (!requireNamespace(library_name, quietly = TRUE)) {
     stop(sprintf(msg, library_name))
   }
+}
+
+#' check if dependency is installed
+#'
+#' @keywords internal
+check_dependency <- function(library_name) {
+  requireNamespace(library_name, quietly = TRUE)
 }
 
 #' sanity check

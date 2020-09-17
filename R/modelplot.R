@@ -108,7 +108,7 @@ modelplot <- function(models,
   if (!draw) {
     return(dat)
   } else {
-    check_dependency("ggplot2", "Please install %s or set `modelplot(draw=FALSE)`")
+    assert_dependency("ggplot2", "Please install %s or set `modelplot(draw=FALSE)`")
   }
 
   p <- ggplot2::ggplot(dat) +

@@ -13,7 +13,7 @@ factory_huxtable <- function(tab,
                              ...) {
 
 
-  check_dependency("huxtable")
+  assert_dependency("huxtable")
 
   ## warning on align
   # if (!is.null(align)) {

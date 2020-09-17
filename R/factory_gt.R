@@ -14,7 +14,7 @@ factory_gt <- function(tab,
                        title = NULL,
                        ...) {
 
-  check_dependency("gt")
+  assert_dependency("gt")
 
   # create gt table object
   idx_col <- ncol(tab)

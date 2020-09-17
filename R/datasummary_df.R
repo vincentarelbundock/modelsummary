@@ -2,6 +2,7 @@
 #'
 #' @inheritParams modelsummary
 #' @inheritParams datasummary
+#' @inheritParams factory
 #' @export
 datasummary_df <- function(data,
                            output = "default",

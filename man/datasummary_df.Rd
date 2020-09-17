@@ -36,6 +36,8 @@ use exponential notation. See `?sprintf` for more options.}
 the table.  "lcr" means that the first column will be left-aligned, the 2nd
 column center-aligned, and the 3rd column right-aligned.}
 
+\item{hrule}{position of horizontal rules (integer vector)}
+
 \item{title}{string}
 
 \item{notes}{list or vector of notes to append to the bottom of the table.}
