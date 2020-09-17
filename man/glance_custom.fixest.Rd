@@ -3,7 +3,7 @@
 \name{glance_custom.fixest}
 \alias{glance_custom.fixest}
 \title{Extract custom information from a model object and turn it into a tidy
-tibble with a single row.}
+data.frame or tibble with a single row.}
 \usage{
 \method{glance_custom}{fixest}(x)
 }

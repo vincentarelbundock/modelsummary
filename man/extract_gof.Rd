@@ -23,7 +23,7 @@ used to extract estimates from the model. For example, this allows users to
 set `exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \value{
-tibble with goodness-of-fit  statistics
+data.frame with goodness-of-fit  statistics
 }
 \description{
 Extract goodness-of-fit statistics from a single model

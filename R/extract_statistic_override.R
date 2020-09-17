@@ -43,13 +43,13 @@ extract_statistic_override <- function(model, statistic_override, conf_level=NUL
   if (is.matrix(out)) {
     out <- base::diag(out) %>%
       sqrt %>%
-      tibble::tibble(term = names(.), std.error = .)
+      data.frame(term=names(.), std.error=.)
     return(out)
   } 
 
   # atomic vector
   if (is.atomic(statistic_override)) {
-    out <- tibble::tibble(term = names(statistic_override), std.error = statistic_override)
+    out <- data.frame(term=names(statistic_override), std.error=statistic_override)
     return(out)
   }
 

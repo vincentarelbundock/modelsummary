@@ -86,7 +86,7 @@ used to extract estimates from the model. For example, this allows users to
 set `exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 }
 \value{
-tibble
+data.frame or tibble
 }
 \description{
 Extract and combine estimates and goodness-of-fit statistics from several

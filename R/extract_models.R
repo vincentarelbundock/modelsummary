@@ -2,7 +2,7 @@
 #' statistical models.
 #'
 #' @inheritParams modelsummary
-#' @return tibble
+#' @return data.frame or tibble
 #' @keywords internal
 extract_models <- function(models,
                            statistic = 'std.error',

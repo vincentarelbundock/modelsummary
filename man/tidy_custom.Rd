@@ -3,18 +3,18 @@
 \name{tidy_custom}
 \alias{tidy_custom}
 \title{Extract custom information from a model object and turn it into a tidy
-tibble}
+data.frame or tibble}
 \usage{
 tidy_custom(x)
 }
 \arguments{
-\item{x}{An object to be converted into a tidy [tibble::tibble()].}
+\item{x}{An object to be converted into a tidy data.frame or tibble.}
 }
 \value{
-A [tibble::tibble()] with information about model components.
+A data.frame or tibble with information about model components.
 }
 \description{
 Extract custom information from a model object and turn it into a tidy
-tibble
+data.frame or tibble
 }
 \keyword{internal}

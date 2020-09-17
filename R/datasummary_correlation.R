@@ -22,7 +22,7 @@ datasummary_correlation <- function(data,
     dplyr::select(where(is.numeric)) %>%
     stats::cor(use = 'pairwise.complete.obs') %>%
     data.frame %>%
-    tibble::rownames_to_column() %>%
+    cbind(rowname=row.names(.), .) %>%
     dplyr::mutate(dplyr::across(where(is.numeric), clean_r))
 
   for (i in 1:nrow(out)) {

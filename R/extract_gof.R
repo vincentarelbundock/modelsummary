@@ -1,9 +1,8 @@
 #' Extract goodness-of-fit statistics from a single model
 #' @param model object type with an available `glance` method.
 #' @importFrom broom glance
-#' @importFrom tibble tibble
 #' @inheritParams modelsummary
-#' @return tibble with goodness-of-fit  statistics
+#' @return data.frame with goodness-of-fit  statistics
 #' @keywords internal
 extract_gof <- function(model, fmt, gof_map, ...) {
 
@@ -69,10 +68,10 @@ extract_gof <- function(model, fmt, gof_map, ...) {
     }
 
     # reshape
-    out <- tibble::tibble(term = names(gof), value = unlist(gof))
+    out <- data.frame(term = names(gof), value = unlist(gof))
 
   } else { # all gof are excluded return an empty tibble (needs character to match merge type)
-    out <- tibble::tibble(term = NA_character_, value = NA_character_) %>%
+    out <- data.frame(term = NA_character_, value = NA_character_) %>%
       stats::na.omit()
   }
 

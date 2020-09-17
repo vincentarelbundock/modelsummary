@@ -1,3 +1,42 @@
+#' internal function to build gof_map
+#'
+#' @keywords internal
+gof_map_build <- function() {
+  text <- 'raw, clean, fmt, omit,
+  nobs,                      Num.Obs.,           %.0f, FALSE,
+  nimp,                      Num.Imp.,           %.0f, FALSE,
+  nclusters,                 Num.Clust.,         %.0f, FALSE,
+  nblocks,                   Num.Blocks,         %.0f, FALSE,
+  r.squared,                 R2,                 %.3f, FALSE,
+  adj.r.squared,             R2 Adj.,            %.3f, FALSE,
+  pseudo.r.squared,          R2 Pseudo,          %.3f, FALSE,
+  within.r.squared,          R2 Within,          %.3f, FALSE,
+  r.squared.within,          R2 Within,          %.3f, FALSE,
+  AIC,                       AIC,                %.1f, FALSE,
+  BIC,                       BIC,                %.1f, FALSE,
+  logLik,                    Log.Lik.,           %.3f, FALSE,
+  std.error.type,            Std.Error Type,     %.3f, FALSE,
+  deviance,                  Deviance,           %.2f, TRUE,
+  df.residual,               DF Resid,           %.0f, TRUE,
+  df.null,                   DF Null,            %.0f, TRUE,
+  sigma,                     Sigma,              %.3f, TRUE,
+  statistic,                 Statistics,         %.3f, TRUE,
+  p.value,                   p,                  %.3f, TRUE,
+  df,                        DF,                 %.0f, TRUE,
+  null.deviance,             Deviance Null,      %.2f, TRUE,
+  statistic.Weak.instrument, Weak IV F-stat,     %.1f, FALSE,
+  statistic.Wu.Hausman,      Wu-Hausman Chi-Sq., %.1f, FALSE,
+  statistic.Sargan,          Sargan J-stat,      %.1f, FALSE,
+  p.value.Weak.instrument,   Weak IV p,          %.3f, TRUE,
+  p.value.Wu.Hausman,        Wu-Hausman p,       %.3f, TRUE,
+  p.value.Sargan,            Sargan p,           %.3f, TRUE'
+  out <- utils::read.csv(text=text, colClasses=c("character", "character", "character", "logical", "NULL"))
+  for (i in 1:3) {
+    out[[i]] <- trimws(out[[i]])
+  }
+  out
+}
+
 #' Data.frame used to clean up and format goodness-of-fit statistics
 #'
 #' By default, this data frame is passed to the 'gof_map' argument of the
@@ -21,34 +60,4 @@
 #' }
 #'
 #' @export
-gof_map <- dplyr::tribble(
-  ~raw,                        ~clean,               ~fmt,   ~omit,
-  "nobs",                      "Num.Obs.",           "%.0f", FALSE,
-  "nimp",                      "Num.Imp.",           "%.0f", FALSE,
-  "nclusters",                 "Num.Clust.",         "%.0f", FALSE,
-  "nblocks",                   "Num.Blocks",         "%.0f", FALSE,
-  "r.squared",                 "R2",                 "%.3f", FALSE,
-  "adj.r.squared",             "R2 Adj.",            "%.3f", FALSE,
-  "pseudo.r.squared",          "R2 Pseudo",          "%.3f", FALSE,
-  "within.r.squared",          "R2 Within",          "%.3f", FALSE,
-  "r.squared.within",          "R2 Within",          "%.3f", FALSE,
-  "AIC",                       "AIC",                "%.1f", FALSE,
-  "BIC",                       "BIC",                "%.1f", FALSE,
-  "logLik",                    "Log.Lik.",           "%.3f", FALSE,
-  "std.error.type",            "Std.Error Type",     "%.3f", FALSE,
-  "deviance",                  "Deviance",           "%.2f", TRUE,
-  "df.residual",               "DF Resid",           "%.0f", TRUE,
-  "df.null",                   "DF Null",            "%.0f", TRUE,
-  "sigma",                     "Sigma",              "%.3f", TRUE,
-  "statistic",                 "Statistics",         "%.3f", TRUE,
-  "p.value",                   "p",                  "%.3f", TRUE,
-  "df",                        "DF",                 "%.0f", TRUE,
-  "null.deviance",             "Deviance Null",      "%.2f", TRUE,
-  # ivreg::ivreg & AER::ivreg
-  "statistic.Weak.instrument", "Weak IV F-stat",     "%.1f", FALSE,
-  "statistic.Wu.Hausman",      "Wu-Hausman Chi-Sq.", "%.1f", FALSE,
-  "statistic.Sargan",          "Sargan J-stat",      "%.1f", FALSE,
-  "p.value.Weak.instrument",   "Weak IV p",          "%.3f", TRUE,
-  "p.value.Wu.Hausman",        "Wu-Hausman p",       "%.3f", TRUE,
-  "p.value.Sargan",            "Sargan p",           "%.3f", TRUE
-)
+gof_map <- gof_map_build() 

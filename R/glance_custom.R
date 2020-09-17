@@ -1,5 +1,5 @@
 #' Extract custom information from a model object and turn it into a tidy
-#' tibble with a single row.
+#' data.frame or tibble with a single row.
 #'
 #' glance_custom methods always return either a one-row data frame (except on
 #'  `NULL`, which returns an empty data frame). This
@@ -25,10 +25,11 @@ glance_custom.default <- function(x) NULL
 #' @keywords internal
 #' @export
 glance_custom.fixest <- function(x) {
-  out <- tibble::tibble(.rows = 1)
+  out <- data.frame(row.names="firstrow")
   for (n in x$fixef_vars) {
-    out[[paste('FE: ', n)]] <- 'X'
+    out[[paste('FE:', n)]] <- 'X'
   }
   out[['Std. errors']] <- attr(fixest::coeftable(x), "type")
+  row.names(out) <- NULL
   return(out)
 }
