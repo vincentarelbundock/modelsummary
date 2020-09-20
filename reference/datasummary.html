@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.1.9000</span>
       </span>
     </div>
 
@@ -176,7 +176,7 @@ more resources.</p></td>
       <td><p>filename or object type (string)</p><ul>
 <li><p>Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.</p></li>
 <li><p>Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".</p></li>
-<li><p>When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.</p></li>
+<li><p>When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kableExtra::save_kable`, or `cat` functions.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -235,7 +235,96 @@ formats: kableExtra, gt, html, rtf, and LaTeX. When saving tables to other
 formats, nested labels will be combined to a "flat" header.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"></pre>
+    <pre class="examples"><div class='input'>
+<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+
+<span class='co'># The left-hand side of the formula describes rows, and the right-hand side</span>
+<span class='co'># describes columns. This table uses the "mpg" variable as a row and the "mean"</span>
+<span class='co'># function as a column:</span>
+
+<span class='fu'>datasummary</span>(<span class='no'>mpg</span> ~ <span class='no'>mean</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+
+<span class='co'># This table uses the "mean" function as a row and the "mpg" variable as a column:</span>
+
+<span class='fu'>datasummary</span>(<span class='no'>mean</span> ~ <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+
+<span class='co'># Display several variables or functions of the data using the "+"</span>
+<span class='co'># concatenation operator. This table has 2 rows and 2 columns:</span>
+
+<span class='fu'>datasummary</span>(<span class='no'>hp</span> + <span class='no'>mpg</span> ~ <span class='no'>mean</span> + <span class='no'>sd</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+
+<span class='co'># Nest variables or statistics inside a "factor" variable using the "*" nesting</span>
+<span class='co'># operator. This table shows the mean of "hp" and "mpg" for each value of</span>
+<span class='co'># "cyl":</span>
+
+<span class='no'>mtcars</span>$<span class='no'>cyl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='no'>mtcars</span>$<span class='no'>cyl</span>)
+<span class='fu'>datasummary</span>(<span class='no'>hp</span> + <span class='no'>mpg</span> ~ <span class='no'>cyl</span> * <span class='no'>mean</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+
+<span class='co'># If you don't want to convert your original data</span>
+<span class='co'># to factors, you can use the 'Factor()'</span>
+<span class='co'># function inside 'datasummary' to obtain an identical result:</span>
+
+<span class='fu'>datasummary</span>(<span class='no'>hp</span> + <span class='no'>mpg</span> ~ <span class='fu'><a href='Factor.html'>Factor</a></span>(<span class='no'>cyl</span>) * <span class='no'>mean</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+
+<span class='co'># You can nest several variables or statistics inside a factor by using</span>
+<span class='co'># parentheses. This table shows the mean and the standard deviation for each</span>
+<span class='co'># subset of "cyl":</span>
+
+<span class='fu'>datasummary</span>(<span class='no'>hp</span> + <span class='no'>mpg</span> ~ <span class='no'>cyl</span> * (<span class='no'>mean</span> + <span class='no'>sd</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+
+<span class='co'># Summarize all numeric variables with 'All()'</span>
+<span class='fu'>datasummary</span>(<span class='fu'><a href='All.html'>All</a></span>(<span class='no'>mtcars</span>) ~ <span class='no'>mean</span> + <span class='no'>sd</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+
+<span class='co'># Define custom summary statistics. Your custom function should accept a vector</span>
+<span class='co'># of numeric values and return a single numeric or string value:</span>
+
+<span class='no'>minmax</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>"[%.2f, %.2f]"</span>, <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span>(<span class='no'>x</span>), <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span>(<span class='no'>x</span>))
+<span class='no'>mean_na</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'>datasummary</span>(<span class='no'>hp</span> + <span class='no'>mpg</span> ~ <span class='no'>minmax</span> + <span class='no'>mean_na</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+
+<span class='co'># To handle missing values, you can pass arguments to your functions using</span>
+<span class='co'># '*Arguments()'</span>
+
+<span class='fu'>datasummary</span>(<span class='no'>hp</span> + <span class='no'>mpg</span> ~ <span class='no'>mean</span> * <span class='fu'><a href='Arguments.html'>Arguments</a></span>(<span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+
+<span class='co'># For convenience, 'modelsummary' supplies several convenience functions</span>
+<span class='co'># with the argument `na.rm=TRUE` by default: Mean, Median, Min, Max, SD, Var,</span>
+<span class='co'># P0, P25, P50, P75, P100, NUnique, Histogram</span>
+
+<span class='fu'>datasummary</span>(<span class='no'>hp</span> + <span class='no'>mpg</span> ~ <span class='no'>Mean</span> + <span class='no'>SD</span> + <span class='no'>Histogram</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+
+<span class='co'># These functions also accept a 'fmt' argument which allows you to</span>
+<span class='co'># round/format the results</span>
+
+<span class='fu'>datasummary</span>(<span class='no'>hp</span> + <span class='no'>mpg</span> ~ <span class='no'>Mean</span> * <span class='fu'><a href='Arguments.html'>Arguments</a></span>(<span class='kw'>fmt</span> <span class='kw'>=</span> <span class='st'>"%.3f"</span>) + <span class='no'>SD</span> * <span class='fu'><a href='Arguments.html'>Arguments</a></span>(<span class='kw'>fmt</span> <span class='kw'>=</span> <span class='st'>"%.1f"</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+
+<span class='co'># Save your tables to a variety of output formats:</span>
+<span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='no'>hp</span> + <span class='no'>mpg</span> ~ <span class='no'>Mean</span> + <span class='no'>SD</span>
+<span class='fu'>datasummary</span>(<span class='no'>f</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>'table.html'</span>)
+<span class='fu'>datasummary</span>(<span class='no'>f</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>'table.tex'</span>)
+<span class='fu'>datasummary</span>(<span class='no'>f</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>'table.md'</span>)
+<span class='fu'>datasummary</span>(<span class='no'>f</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>'table.docx'</span>)
+<span class='fu'>datasummary</span>(<span class='no'>f</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>'table.pptx'</span>)
+<span class='fu'>datasummary</span>(<span class='no'>f</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>'table.jpg'</span>)
+<span class='fu'>datasummary</span>(<span class='no'>f</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>'table.png'</span>)
+
+<span class='co'># Display human-readable code</span>
+<span class='fu'>datasummary</span>(<span class='no'>f</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>'html'</span>)
+<span class='fu'>datasummary</span>(<span class='no'>f</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>'markdown'</span>)
+<span class='fu'>datasummary</span>(<span class='no'>f</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>'latex'</span>)
+
+<span class='co'># Return a table object to customize using a table-making package</span>
+<span class='fu'>datasummary</span>(<span class='no'>f</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>'gt'</span>)
+<span class='fu'>datasummary</span>(<span class='no'>f</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>'kableExtra'</span>)
+<span class='fu'>datasummary</span>(<span class='no'>f</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>'flextable'</span>)
+<span class='fu'>datasummary</span>(<span class='no'>f</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>'huxtable'</span>)
+
+<span class='co'># add_rows</span>
+<span class='no'>new_rows</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>3</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='fl'>4</span>:<span class='fl'>5</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>new_rows</span>, <span class='st'>'position'</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>)
+<span class='fu'>datasummary</span>(<span class='no'>mpg</span> + <span class='no'>hp</span> ~ <span class='no'>mean</span> + <span class='no'>sd</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>add_rows</span> <span class='kw'>=</span> <span class='no'>new_rows</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

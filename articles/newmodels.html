@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.1.9000</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@
 
       
 
-      </header><script src="newmodels_files/header-attrs-2.3.3/header-attrs.js"></script><script src="newmodels_files/kePrint-0.0.1/kePrint.js"></script><link href="newmodels_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+      </header><script src="newmodels_files/header-attrs-2.3/header-attrs.js"></script><script src="newmodels_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="newmodels_files/kePrint-0.0.1/kePrint.js"></script><link href="newmodels_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -127,8 +127,8 @@
                           <span class="kw">estimate</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">s</span>[,<span class="fl">1</span>] <span class="kw">&gt;</span> <span class="fl">0</span>, <span class="st">'⭡'</span>, <span class="st">'⭣'</span>))
     <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
 }</pre></body></html></div>
-<p>After you define the <code>glance_custom</code> and <code>tidy_custom</code> methods, <code>msummary</code> will automatically display your customized model information:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
+<p>After you define the <code>glance_custom</code> and <code>tidy_custom</code> methods, <code>modelsummary</code> will automatically display your customized model information:</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -164,27 +164,6 @@ Model 2
 </tr>
 <tr>
 <td style="text-align:left;">
-drat
-</td>
-<td style="text-align:left;">
-⭡
-</td>
-<td style="text-align:left;">
-⭣
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-(20.198)
-</td>
-<td style="text-align:left;">
-(0.245)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 mpg
 </td>
 <td style="text-align:left;">
@@ -202,6 +181,27 @@ mpg
 </td>
 <td style="text-align:left;">
 (0.019)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+drat
+</td>
+<td style="text-align:left;">
+⭡
+</td>
+<td style="text-align:left;">
+⭣
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+(20.198)
+</td>
+<td style="text-align:left;">
+(0.245)
 </td>
 </tr>
 <tr>
@@ -318,7 +318,7 @@ F
 <h2 class="hasAnchor">
 <a href="#fixed-effects-regression" class="anchor"></a>Fixed effects regression</h2>
 <p>One common use-case for <code>glance_custom</code> is to display the list of “fixed effects” included in a linear regression model.</p>
-<p>The <code>feols</code> function from the <code>fixest</code> package offers an extremely fast way to estimate fixed effects regression models. The <code>feols</code> function produces an object of class “fixest”, which stores the fixed effects variables in a character vector called “fixef_vars”. To display those fixed effects, we create a <code>glance_custom.fixest</code> and call <code>msummary</code>:</p>
+<p>The <code>feols</code> function from the <code>fixest</code> package offers an extremely fast way to estimate fixed effects regression models. The <code>feols</code> function produces an object of class “fixest”, which stores the fixed effects variables in a character vector called “fixef_vars”. To display those fixed effects, we create a <code>glance_custom.fixest</code> and call <code>modelsummary</code>:</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">glance_custom.fixest</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
     <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">.rows</span> <span class="kw">=</span> <span class="fl">1</span>)
     <span class="kw">for</span> (<span class="no">n</span> <span class="kw">in</span> <span class="no">x</span>$<span class="no">fixef_vars</span>) {
@@ -337,7 +337,7 @@ F
 <span class="no">mod</span><span class="kw">[[</span><span class="fl">2</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span>(<span class="no">emp</span> ~ <span class="no">wage</span> <span class="kw">|</span> <span class="no">firm</span>, <span class="no">dat</span>)
 <span class="no">mod</span><span class="kw">[[</span><span class="fl">3</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span>(<span class="no">emp</span> ~ <span class="no">wage</span> <span class="kw">|</span> <span class="no">firm</span> + <span class="no">year</span>, <span class="no">dat</span>)
 
-<span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -583,7 +583,7 @@ Clustered (firm)
 <span class="no">model</span> <span class="kw">&lt;-</span> <span class="fu">MCMCglmm</span>(<span class="no">PO</span> ~ <span class="fl">1</span> + <span class="no">plate</span>, <span class="kw">random</span> <span class="kw">=</span> ~ <span class="no">FSfamily</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">PlodiaPO</span>, <span class="kw">verbose</span><span class="kw">=</span><span class="fl">FALSE</span>, <span class="kw">pr</span><span class="kw">=</span><span class="fl">TRUE</span>)
 
 <span class="co"># summarize the model</span>
-<span class="fu"><a href="../reference/msummary.html">msummary</a></span>(<span class="no">model</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'conf.int'</span>)</pre></body></html></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">model</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'conf.int'</span>)</pre></body></html></div>
 <p>Two important things to note. First, the methods are named <code>tidy.MCMCglmm</code> and <code>glance.MCMCglmm</code> because the model object I am trying to summarize is of class <code>MCMCglmm</code>. You can find the class of a model by running: <code><a href="https://rdrr.io/r/base/class.html">class(model)</a></code>.</p>
 <p>Second, in the example above, we used the <code>statistic = 'conf.int'</code> argument. This is because the <code>tidy</code> method produces <code>conf.low</code> and <code>conf.high</code> columns. In most cases, users will define <code>std.error</code> column in their custom <code>tidy</code> methods, so the <code>statistic</code> argument will need to be adjusted.</p>
 <p>If you create new <code>tidy</code> and <code>glance</code> methods, please consider contributing them to <code>broom</code> so that the rest of the community can benefit from your work: <a href="https://github.com/tidymodels/broom" class="uri">https://github.com/tidymodels/broom</a></p>

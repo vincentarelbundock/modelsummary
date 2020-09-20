@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.1.9000</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@
 
       
 
-      </header><script src="datasummary_files/header-attrs-2.3.3/header-attrs.js"></script><script src="datasummary_files/kePrint-0.0.1/kePrint.js"></script><link href="datasummary_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+      </header><script src="datasummary_files/header-attrs-2.3/header-attrs.js"></script><script src="datasummary_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="datasummary_files/kePrint-0.0.1/kePrint.js"></script><link href="datasummary_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -136,6 +136,8 @@ tbody {
 <code><a href="../reference/datasummary_correlation.html">datasummary_correlation()</a></code>: Table of correlations.</li>
 <li>
 <code><a href="../reference/datasummary_skim.html">datasummary_skim()</a></code>: Quick summary of a dataset.</li>
+<li>
+<code><a href="../reference/datasummary_df.html">datasummary_df()</a></code>: Create a table from any dataframe.</li>
 </ul>
 <p>In the next three sections, we illustrate how to use <code>datasummary_balance</code>, <code>datasummary_correlation</code>, and <code>datasummary_skim</code>. Then, we dive into <code>datasummary</code> itself to highlight its ease and flexibility.</p>
 </div>
@@ -151,10 +153,16 @@ tbody {
 <span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv'</span>
 <span class="no">penguins</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)</pre></body></html></div>
 <p>To summarize the numeric variables in the dataset, we type:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/datasummary_skim.html">datasummary_skim</a></span>(<span class="no">penguins</span>, <span class="kw">histogram</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/datasummary_skim.html">datasummary_skim</a></span>(<span class="no">penguins</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Unique (#)
+</th>
+<th style="text-align:right;">
+Missing (%)
 </th>
 <th style="text-align:right;">
 Mean
@@ -163,28 +171,27 @@ Mean
 SD
 </th>
 <th style="text-align:right;">
-P0
+Min
 </th>
 <th style="text-align:right;">
-P25
+Median
 </th>
 <th style="text-align:right;">
-P50
+Max
 </th>
 <th style="text-align:right;">
-P75
-</th>
-<th style="text-align:right;">
-P100
-</th>
-<th style="text-align:right;">
-Histogram
 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
 bill_length_mm
+</td>
+<td style="text-align:right;">
+165
+</td>
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
 43.9
@@ -196,24 +203,24 @@ bill_length_mm
 32.1
 </td>
 <td style="text-align:right;">
-39.2
-</td>
-<td style="text-align:right;">
 44.5
-</td>
-<td style="text-align:right;">
-48.5
 </td>
 <td style="text-align:right;">
 59.6
 </td>
 <td style="text-align:right;">
-▁▅▆▆▆▇▇▂▁
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48pt" height="12pt" viewbox="0 0 48 12" version="1.1"><g id="surface1"><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M -1.175781 11.664062 L 3.234375 11.664062 L 3.234375 11.519531 L -1.175781 11.519531 Z M -1.175781 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 3.238281 11.664062 L 7.648438 11.664062 L 7.648438 8.945312 L 3.238281 8.945312 Z M 3.238281 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 7.648438 11.664062 L 12.058594 11.664062 L 12.058594 4.652344 L 7.648438 4.652344 Z M 7.648438 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 12.058594 11.664062 L 16.46875 11.664062 L 16.46875 3.363281 L 12.058594 3.363281 Z M 12.058594 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 16.472656 11.664062 L 20.882812 11.664062 L 20.882812 5.9375 L 16.472656 5.9375 Z M 16.472656 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 20.882812 11.664062 L 25.292969 11.664062 L 25.292969 3.21875 L 20.882812 3.21875 Z M 20.882812 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 25.296875 11.664062 L 29.707031 11.664062 L 29.707031 4.9375 L 25.296875 4.9375 Z M 25.296875 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 29.707031 11.664062 L 34.117188 11.664062 L 34.117188 3.792969 L 29.707031 3.792969 Z M 29.707031 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 34.121094 11.664062 L 38.53125 11.664062 L 38.53125 10.375 L 34.121094 10.375 Z M 34.121094 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 38.53125 11.664062 L 42.941406 11.664062 L 42.941406 11.234375 L 38.53125 11.234375 Z M 38.53125 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 42.941406 11.664062 L 47.351562 11.664062 L 47.351562 11.378906 L 42.941406 11.378906 Z M 42.941406 11.664062 "></path></g></svg>
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 bill_depth_mm
+</td>
+<td style="text-align:right;">
+81
+</td>
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
 17.2
@@ -225,24 +232,24 @@ bill_depth_mm
 13.1
 </td>
 <td style="text-align:right;">
-15.6
-</td>
-<td style="text-align:right;">
 17.3
-</td>
-<td style="text-align:right;">
-18.7
 </td>
 <td style="text-align:right;">
 21.5
 </td>
 <td style="text-align:right;">
-▃▄▄▄▇▆▇▅▂▁
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48pt" height="12pt" viewbox="0 0 48 12" version="1.1"><g id="surface6"><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M -1.175781 11.664062 L 3.234375 11.664062 L 3.234375 11.421875 L -1.175781 11.421875 Z M -1.175781 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 3.238281 11.664062 L 7.648438 11.664062 L 7.648438 8.769531 L 3.238281 8.769531 Z M 3.238281 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 7.648438 11.664062 L 12.058594 11.664062 L 12.058594 5.996094 L 7.648438 5.996094 Z M 7.648438 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 12.058594 11.664062 L 16.46875 11.664062 L 16.46875 6.839844 L 12.058594 6.839844 Z M 12.058594 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 16.472656 11.664062 L 20.882812 11.664062 L 20.882812 5.996094 L 16.472656 5.996094 Z M 16.472656 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 20.882812 11.664062 L 25.292969 11.664062 L 25.292969 4.304688 L 20.882812 4.304688 Z M 20.882812 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 25.296875 11.664062 L 29.707031 11.664062 L 29.707031 3.21875 L 25.296875 3.21875 Z M 25.296875 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 29.707031 11.664062 L 34.117188 11.664062 L 34.117188 7.441406 L 29.707031 7.441406 Z M 29.707031 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 34.121094 11.664062 L 38.53125 11.664062 L 38.53125 10.097656 L 34.121094 10.097656 Z M 34.121094 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 38.53125 11.664062 L 42.941406 11.664062 L 42.941406 11.300781 L 38.53125 11.300781 Z M 38.53125 11.664062 "></path></g></svg>
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 flipper_length_mm
+</td>
+<td style="text-align:right;">
+56
+</td>
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
 200.9
@@ -254,24 +261,24 @@ flipper_length_mm
 172.0
 </td>
 <td style="text-align:right;">
-190.0
-</td>
-<td style="text-align:right;">
 197.0
-</td>
-<td style="text-align:right;">
-213.0
 </td>
 <td style="text-align:right;">
 231.0
 </td>
 <td style="text-align:right;">
-▂▅▇▄▁▄▄▂▁
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48pt" height="12pt" viewbox="0 0 48 12" version="1.1"><g id="surface11"><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M -1.175781 11.664062 L 3.234375 11.664062 L 3.234375 11.566406 L -1.175781 11.566406 Z M -1.175781 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 3.238281 11.664062 L 7.648438 11.664062 L 7.648438 10.976562 L 3.238281 10.976562 Z M 3.238281 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 7.648438 11.664062 L 12.058594 11.664062 L 12.058594 7.738281 L 7.648438 7.738281 Z M 7.648438 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 12.058594 11.664062 L 16.46875 11.664062 L 16.46875 3.21875 L 12.058594 3.21875 Z M 12.058594 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 16.472656 11.664062 L 20.882812 11.664062 L 20.882812 5.773438 L 16.472656 5.773438 Z M 16.472656 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 20.882812 11.664062 L 25.292969 11.664062 L 25.292969 9.601562 L 20.882812 9.601562 Z M 20.882812 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 25.296875 11.664062 L 29.707031 11.664062 L 29.707031 6.949219 L 25.296875 6.949219 Z M 25.296875 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 29.707031 11.664062 L 34.117188 11.664062 L 34.117188 6.261719 L 29.707031 6.261719 Z M 29.707031 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 34.121094 11.664062 L 38.53125 11.664062 L 38.53125 10.09375 L 34.121094 10.09375 Z M 34.121094 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 38.53125 11.664062 L 42.941406 11.664062 L 42.941406 10.878906 L 38.53125 10.878906 Z M 38.53125 11.664062 "></path></g></svg>
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 body_mass_g
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:right;">
 4201.8
@@ -283,25 +290,48 @@ body_mass_g
 2700.0
 </td>
 <td style="text-align:right;">
-3550.0
-</td>
-<td style="text-align:right;">
 4050.0
-</td>
-<td style="text-align:right;">
-4750.0
 </td>
 <td style="text-align:right;">
 6300.0
 </td>
 <td style="text-align:right;">
-▁▄▇▅▄▄▃▃▂▁
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48pt" height="12pt" viewbox="0 0 48 12" version="1.1"><g id="surface16"><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 3.238281 11.664062 L 7.648438 11.664062 L 7.648438 10.828125 L 3.238281 10.828125 Z M 3.238281 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 7.648438 11.664062 L 12.058594 11.664062 L 12.058594 7.859375 L 7.648438 7.859375 Z M 7.648438 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 12.058594 11.664062 L 16.46875 11.664062 L 16.46875 3.21875 L 12.058594 3.21875 Z M 12.058594 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 16.472656 11.664062 L 20.882812 11.664062 L 20.882812 6.839844 L 16.472656 6.839844 Z M 16.472656 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 20.882812 11.664062 L 25.292969 11.664062 L 25.292969 7.765625 L 20.882812 7.765625 Z M 20.882812 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 25.296875 11.664062 L 29.707031 11.664062 L 29.707031 7.394531 L 25.296875 7.394531 Z M 25.296875 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 29.707031 11.664062 L 34.117188 11.664062 L 34.117188 9.160156 L 29.707031 9.160156 Z M 29.707031 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 34.121094 11.664062 L 38.53125 11.664062 L 38.53125 9.34375 L 34.121094 9.34375 Z M 34.121094 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 38.53125 11.664062 L 42.941406 11.664062 L 42.941406 10.921875 L 38.53125 10.921875 Z M 38.53125 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 42.941406 11.664062 L 47.351562 11.664062 L 47.351562 11.570312 L 42.941406 11.570312 Z M 42.941406 11.664062 "></path></g></svg>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+year
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2008.0
+</td>
+<td style="text-align:right;">
+0.8
+</td>
+<td style="text-align:right;">
+2007.0
+</td>
+<td style="text-align:right;">
+2008.0
+</td>
+<td style="text-align:right;">
+2009.0
+</td>
+<td style="text-align:right;">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48pt" height="12pt" viewbox="0 0 48 12" version="1.1"><g id="surface21"><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 8.53125 11.664062 L 10.296875 11.664062 L 10.296875 3.921875 L 8.53125 3.921875 Z M 8.53125 11.664062 "></path><path style="fill:none;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 10.296875 11.664062 L 12.0625 11.664062 Z M 10.296875 11.664062 "></path><path style="fill:none;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 12.058594 11.664062 L 13.824219 11.664062 Z M 12.058594 11.664062 "></path><path style="fill:none;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 13.824219 11.664062 L 15.589844 11.664062 Z M 13.824219 11.664062 "></path><path style="fill:none;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 15.589844 11.664062 L 17.355469 11.664062 Z M 15.589844 11.664062 "></path><path style="fill:none;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 17.355469 11.664062 L 19.121094 11.664062 Z M 17.355469 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 19.121094 11.664062 L 20.886719 11.664062 L 20.886719 3.640625 L 19.121094 3.640625 Z M 19.121094 11.664062 "></path><path style="fill:none;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 20.882812 11.664062 L 22.648438 11.664062 Z M 20.882812 11.664062 "></path><path style="fill:none;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 22.648438 11.664062 L 24.414062 11.664062 Z M 22.648438 11.664062 "></path><path style="fill:none;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 24.414062 11.664062 L 26.179688 11.664062 Z M 24.414062 11.664062 "></path><path style="fill:none;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 26.179688 11.664062 L 27.945312 11.664062 Z M 26.179688 11.664062 "></path><path style="fill:none;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 27.941406 11.664062 L 29.707031 11.664062 Z M 27.941406 11.664062 "></path><path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 29.707031 11.664062 L 31.472656 11.664062 L 31.472656 3.21875 L 29.707031 3.21875 Z M 29.707031 11.664062 "></path></g></svg>
 </td>
 </tr>
 </tbody>
 </table>
 <p>To summarize the categorical variables in the dataset, we type:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/datasummary_skim.html">datasummary_skim</a></span>(<span class="no">penguins</span>, <span class="st">'categorical'</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/datasummary_skim.html">datasummary_skim</a></span>(<span class="no">penguins</span>, <span class="kw">type</span><span class="kw">=</span><span class="st">"categorical"</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -324,7 +354,7 @@ species
 Adelie
 </td>
 <td style="text-align:right;">
-152.00
+152
 </td>
 <td style="text-align:right;">
 44.2
@@ -337,7 +367,7 @@ Adelie
 Chinstrap
 </td>
 <td style="text-align:right;">
-68.00
+68
 </td>
 <td style="text-align:right;">
 19.8
@@ -350,7 +380,7 @@ Chinstrap
 Gentoo
 </td>
 <td style="text-align:right;">
-124.00
+124
 </td>
 <td style="text-align:right;">
 36.0
@@ -364,7 +394,7 @@ island
 Biscoe
 </td>
 <td style="text-align:right;">
-168.00
+168
 </td>
 <td style="text-align:right;">
 48.8
@@ -377,7 +407,7 @@ Biscoe
 Dream
 </td>
 <td style="text-align:right;">
-124.00
+124
 </td>
 <td style="text-align:right;">
 36.0
@@ -390,7 +420,7 @@ Dream
 Torgersen
 </td>
 <td style="text-align:right;">
-52.00
+52
 </td>
 <td style="text-align:right;">
 15.1
@@ -404,7 +434,7 @@ sex
 female
 </td>
 <td style="text-align:right;">
-165.00
+165
 </td>
 <td style="text-align:right;">
 48.0
@@ -417,7 +447,7 @@ female
 male
 </td>
 <td style="text-align:right;">
-168.00
+168
 </td>
 <td style="text-align:right;">
 48.8
@@ -938,7 +968,7 @@ carb
                     <span class="kw">notes</span> <span class="kw">=</span> <span class="no">reference</span>)</pre></body></html></div>
 <table class="table table">
 <caption>
-Descriptive statistics about participants in a job training experiment. Earnings are displayed in 1000s of USD. This table was created using the “datasummary” function from the “modelsummary” package for R.
+Descriptive statistics about participants in a job training experiment. Earnings are displayed in 1000s of USD. This table was created using the datasummary function from the modelsummary package for R.
 </caption>
 <thead>
 <tr>
@@ -954,7 +984,9 @@ Control (N=2490)
 Treatment (N=185)
 </div>
 </th>
-<th style="empty-cells: hide;border-bottom:hidden;" colspan="2">
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
 </th>
 </tr>
 <tr>
@@ -962,22 +994,22 @@ Treatment (N=185)
 </th>
 <th style="text-align:left;">
 </th>
-<th style="text-align:right;">
+<th style="text-align:left;">
 Mean
 </th>
-<th style="text-align:right;">
+<th style="text-align:left;">
 Std. Dev.
 </th>
-<th style="text-align:right;">
+<th style="text-align:left;">
 Mean
 </th>
-<th style="text-align:right;">
+<th style="text-align:left;">
 Std. Dev.
 </th>
-<th style="text-align:right;">
+<th style="text-align:left;">
 Diff. in Means
 </th>
-<th style="text-align:right;">
+<th style="text-align:left;">
 Std. Error
 </th>
 </tr>
@@ -989,22 +1021,22 @@ Earnings Before
 </td>
 <td style="text-align:left;color: green !important;">
 </td>
-<td style="text-align:right;color: green !important;">
+<td style="text-align:left;color: green !important;">
 19.1
 </td>
-<td style="text-align:right;color: green !important;">
+<td style="text-align:left;color: green !important;">
 13.6
 </td>
-<td style="text-align:right;color: green !important;">
+<td style="text-align:left;color: green !important;">
 1.5
 </td>
-<td style="text-align:right;color: green !important;">
+<td style="text-align:left;color: green !important;">
 3.2
 </td>
-<td style="text-align:right;color: green !important;">
+<td style="text-align:left;color: green !important;">
 -17.5
 </td>
-<td style="text-align:right;color: green !important;">
+<td style="text-align:left;color: green !important;">
 0.4
 </td>
 </tr>
@@ -1014,22 +1046,22 @@ Earnings After
 </td>
 <td style="text-align:left;color: red !important;">
 </td>
-<td style="text-align:right;color: red !important;">
+<td style="text-align:left;color: red !important;">
 21.6
 </td>
-<td style="text-align:right;color: red !important;">
+<td style="text-align:left;color: red !important;">
 15.6
 </td>
-<td style="text-align:right;color: red !important;">
+<td style="text-align:left;color: red !important;">
 6.3
 </td>
-<td style="text-align:right;color: red !important;">
+<td style="text-align:left;color: red !important;">
 7.9
 </td>
-<td style="text-align:right;color: red !important;">
+<td style="text-align:left;color: red !important;">
 -15.2
 </td>
-<td style="text-align:right;color: red !important;">
+<td style="text-align:left;color: red !important;">
 0.7
 </td>
 </tr>
@@ -1039,22 +1071,22 @@ Age
 </td>
 <td style="text-align:left;">
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 34.9
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 10.4
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 25.8
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 7.2
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 -9.0
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 0.6
 </td>
 </tr>
@@ -1064,22 +1096,22 @@ Education
 </td>
 <td style="text-align:left;">
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 12.1
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 3.1
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 10.3
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 2.0
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 -1.8
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 0.2
 </td>
 </tr>
@@ -1088,21 +1120,21 @@ Education
 </td>
 <td style="text-align:left;font-weight: bold;">
 </td>
-<td style="text-align:right;font-weight: bold;">
+<td style="text-align:left;font-weight: bold;">
 N
 </td>
-<td style="text-align:right;font-weight: bold;">
+<td style="text-align:left;font-weight: bold;">
 %
 </td>
-<td style="text-align:right;font-weight: bold;">
+<td style="text-align:left;font-weight: bold;">
 N
 </td>
-<td style="text-align:right;font-weight: bold;">
+<td style="text-align:left;font-weight: bold;">
 %
 </td>
-<td style="text-align:right;font-weight: bold;">
+<td style="text-align:left;font-weight: bold;">
 </td>
-<td style="text-align:right;font-weight: bold;">
+<td style="text-align:left;font-weight: bold;">
 </td>
 </tr>
 <tr>
@@ -1112,21 +1144,21 @@ Ethnicity
 <td style="text-align:left;">
 black
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 624
 </td>
-<td style="text-align:right;">
-25
+<td style="text-align:left;">
+23.3
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 156
 </td>
-<td style="text-align:right;">
-84
+<td style="text-align:left;">
+5.8
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 </td>
 </tr>
 <tr>
@@ -1135,21 +1167,21 @@ black
 <td style="text-align:left;">
 hispanic
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 81
 </td>
-<td style="text-align:right;">
-3
+<td style="text-align:left;">
+3.0
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 11
 </td>
-<td style="text-align:right;">
-6
+<td style="text-align:left;">
+0.4
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 </td>
 </tr>
 <tr>
@@ -1158,21 +1190,21 @@ hispanic
 <td style="text-align:left;">
 other
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 1785
 </td>
-<td style="text-align:right;">
-72
+<td style="text-align:left;">
+66.7
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 18
 </td>
-<td style="text-align:right;">
-10
+<td style="text-align:left;">
+0.7
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 </td>
 </tr>
 <tr>
@@ -1182,21 +1214,21 @@ Married
 <td style="text-align:left;">
 No
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 333
 </td>
-<td style="text-align:right;">
-13
+<td style="text-align:left;">
+12.4
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 150
 </td>
-<td style="text-align:right;">
-81
+<td style="text-align:left;">
+5.6
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 </td>
 </tr>
 <tr>
@@ -1205,21 +1237,21 @@ No
 <td style="text-align:left;">
 Yes
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 2157
 </td>
-<td style="text-align:right;">
-87
+<td style="text-align:left;">
+80.6
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 35
 </td>
-<td style="text-align:right;">
-19
+<td style="text-align:left;">
+1.3
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 </td>
 </tr>
 </tbody>
@@ -1444,6 +1476,17 @@ body_mass_g
 </td>
 <td style="text-align:right;">
 801.95
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+year
+</td>
+<td style="text-align:right;">
+2008.03
+</td>
+<td style="text-align:right;">
+0.82
 </td>
 </tr>
 </tbody>
@@ -2631,7 +2674,7 @@ flipper_length_mm
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#kzizffbxvp .gt_table {
+#sutszlbltm .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2656,7 +2699,7 @@ flipper_length_mm
   border-left-color: #D3D3D3;
 }
 
-#kzizffbxvp .gt_heading {
+#sutszlbltm .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2668,7 +2711,7 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#kzizffbxvp .gt_title {
+#sutszlbltm .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2678,7 +2721,7 @@ flipper_length_mm
   border-bottom-width: 0;
 }
 
-#kzizffbxvp .gt_subtitle {
+#sutszlbltm .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2688,13 +2731,13 @@ flipper_length_mm
   border-top-width: 0;
 }
 
-#kzizffbxvp .gt_bottom_border {
+#sutszlbltm .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kzizffbxvp .gt_col_headings {
+#sutszlbltm .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2709,7 +2752,7 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#kzizffbxvp .gt_col_heading {
+#sutszlbltm .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2729,7 +2772,7 @@ flipper_length_mm
   overflow-x: hidden;
 }
 
-#kzizffbxvp .gt_column_spanner_outer {
+#sutszlbltm .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2741,15 +2784,15 @@ flipper_length_mm
   padding-right: 4px;
 }
 
-#kzizffbxvp .gt_column_spanner_outer:first-child {
+#sutszlbltm .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kzizffbxvp .gt_column_spanner_outer:last-child {
+#sutszlbltm .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kzizffbxvp .gt_column_spanner {
+#sutszlbltm .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2761,7 +2804,7 @@ flipper_length_mm
   width: 100%;
 }
 
-#kzizffbxvp .gt_group_heading {
+#sutszlbltm .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2783,7 +2826,7 @@ flipper_length_mm
   vertical-align: middle;
 }
 
-#kzizffbxvp .gt_empty_group_heading {
+#sutszlbltm .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2798,15 +2841,15 @@ flipper_length_mm
   vertical-align: middle;
 }
 
-#kzizffbxvp .gt_from_md > :first-child {
+#sutszlbltm .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kzizffbxvp .gt_from_md > :last-child {
+#sutszlbltm .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kzizffbxvp .gt_row {
+#sutszlbltm .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2825,7 +2868,7 @@ flipper_length_mm
   overflow-x: hidden;
 }
 
-#kzizffbxvp .gt_stub {
+#sutszlbltm .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2837,7 +2880,7 @@ flipper_length_mm
   padding-left: 12px;
 }
 
-#kzizffbxvp .gt_summary_row {
+#sutszlbltm .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2847,7 +2890,7 @@ flipper_length_mm
   padding-right: 5px;
 }
 
-#kzizffbxvp .gt_first_summary_row {
+#sutszlbltm .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2857,7 +2900,7 @@ flipper_length_mm
   border-top-color: #D3D3D3;
 }
 
-#kzizffbxvp .gt_grand_summary_row {
+#sutszlbltm .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2867,7 +2910,7 @@ flipper_length_mm
   padding-right: 5px;
 }
 
-#kzizffbxvp .gt_first_grand_summary_row {
+#sutszlbltm .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2877,11 +2920,11 @@ flipper_length_mm
   border-top-color: #D3D3D3;
 }
 
-#kzizffbxvp .gt_striped {
+#sutszlbltm .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#kzizffbxvp .gt_table_body {
+#sutszlbltm .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2890,7 +2933,7 @@ flipper_length_mm
   border-bottom-color: #D3D3D3;
 }
 
-#kzizffbxvp .gt_footnotes {
+#sutszlbltm .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2904,13 +2947,13 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#kzizffbxvp .gt_footnote {
+#sutszlbltm .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#kzizffbxvp .gt_sourcenotes {
+#sutszlbltm .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2924,46 +2967,46 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#kzizffbxvp .gt_sourcenote {
+#sutszlbltm .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#kzizffbxvp .gt_left {
+#sutszlbltm .gt_left {
   text-align: left;
 }
 
-#kzizffbxvp .gt_center {
+#sutszlbltm .gt_center {
   text-align: center;
 }
 
-#kzizffbxvp .gt_right {
+#sutszlbltm .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kzizffbxvp .gt_font_normal {
+#sutszlbltm .gt_font_normal {
   font-weight: normal;
 }
 
-#kzizffbxvp .gt_font_bold {
+#sutszlbltm .gt_font_bold {
   font-weight: bold;
 }
 
-#kzizffbxvp .gt_font_italic {
+#sutszlbltm .gt_font_italic {
   font-style: italic;
 }
 
-#kzizffbxvp .gt_super {
+#sutszlbltm .gt_super {
   font-size: 65%;
 }
 
-#kzizffbxvp .gt_footnote_marks {
+#sutszlbltm .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="kzizffbxvp" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="sutszlbltm" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_col_headings"><tr>
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"> </th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Mean</th>
@@ -3599,6 +3642,17 @@ body_mass_g
 801.95
 </td>
 </tr>
+<tr>
+<td style="text-align:left;">
+year
+</td>
+<td style="text-align:right;">
+2008.03
+</td>
+<td style="text-align:right;">
+0.82
+</td>
+</tr>
 </tbody>
 <tfoot><tr>
 <td style="padding: 0; border:0;" colspan="100%">
@@ -3867,7 +3921,7 @@ flipper_length_mm
 6.48
 </td>
 <td style="text-align:right;">
-0.53
+0.40
 </td>
 </tr>
 <tr>
@@ -3893,7 +3947,7 @@ body_mass_g
 504.12
 </td>
 <td style="text-align:right;">
-0.37
+0.48
 </td>
 </tr>
 </tbody>
@@ -4035,6 +4089,23 @@ body_mass_g
 787.63
 </td>
 </tr>
+<tr>
+<td style="text-align:left;">
+year
+</td>
+<td style="text-align:right;">
+2008.04
+</td>
+<td style="text-align:right;">
+0.81
+</td>
+<td style="text-align:right;">
+2008.04
+</td>
+<td style="text-align:right;">
+0.81
+</td>
+</tr>
 </tbody>
 </table>
 <div class="sourceCode" id="cb46"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
@@ -4063,7 +4134,7 @@ body_mass_g
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#itvyjfiquo .gt_table {
+#xxohduemwi .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -4088,7 +4159,7 @@ body_mass_g
   border-left-color: #D3D3D3;
 }
 
-#itvyjfiquo .gt_heading {
+#xxohduemwi .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -4100,7 +4171,7 @@ body_mass_g
   border-right-color: #D3D3D3;
 }
 
-#itvyjfiquo .gt_title {
+#xxohduemwi .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -4110,7 +4181,7 @@ body_mass_g
   border-bottom-width: 0;
 }
 
-#itvyjfiquo .gt_subtitle {
+#xxohduemwi .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -4120,13 +4191,13 @@ body_mass_g
   border-top-width: 0;
 }
 
-#itvyjfiquo .gt_bottom_border {
+#xxohduemwi .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#itvyjfiquo .gt_col_headings {
+#xxohduemwi .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4141,7 +4212,7 @@ body_mass_g
   border-right-color: #D3D3D3;
 }
 
-#itvyjfiquo .gt_col_heading {
+#xxohduemwi .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4161,7 +4232,7 @@ body_mass_g
   overflow-x: hidden;
 }
 
-#itvyjfiquo .gt_column_spanner_outer {
+#xxohduemwi .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4173,15 +4244,15 @@ body_mass_g
   padding-right: 4px;
 }
 
-#itvyjfiquo .gt_column_spanner_outer:first-child {
+#xxohduemwi .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#itvyjfiquo .gt_column_spanner_outer:last-child {
+#xxohduemwi .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#itvyjfiquo .gt_column_spanner {
+#xxohduemwi .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -4193,7 +4264,7 @@ body_mass_g
   width: 100%;
 }
 
-#itvyjfiquo .gt_group_heading {
+#xxohduemwi .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -4215,7 +4286,7 @@ body_mass_g
   vertical-align: middle;
 }
 
-#itvyjfiquo .gt_empty_group_heading {
+#xxohduemwi .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -4230,15 +4301,15 @@ body_mass_g
   vertical-align: middle;
 }
 
-#itvyjfiquo .gt_from_md > :first-child {
+#xxohduemwi .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#itvyjfiquo .gt_from_md > :last-child {
+#xxohduemwi .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#itvyjfiquo .gt_row {
+#xxohduemwi .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4257,7 +4328,7 @@ body_mass_g
   overflow-x: hidden;
 }
 
-#itvyjfiquo .gt_stub {
+#xxohduemwi .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4269,7 +4340,7 @@ body_mass_g
   padding-left: 12px;
 }
 
-#itvyjfiquo .gt_summary_row {
+#xxohduemwi .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4279,7 +4350,7 @@ body_mass_g
   padding-right: 5px;
 }
 
-#itvyjfiquo .gt_first_summary_row {
+#xxohduemwi .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4289,7 +4360,7 @@ body_mass_g
   border-top-color: #D3D3D3;
 }
 
-#itvyjfiquo .gt_grand_summary_row {
+#xxohduemwi .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4299,7 +4370,7 @@ body_mass_g
   padding-right: 5px;
 }
 
-#itvyjfiquo .gt_first_grand_summary_row {
+#xxohduemwi .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4309,11 +4380,11 @@ body_mass_g
   border-top-color: #D3D3D3;
 }
 
-#itvyjfiquo .gt_striped {
+#xxohduemwi .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#itvyjfiquo .gt_table_body {
+#xxohduemwi .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4322,7 +4393,7 @@ body_mass_g
   border-bottom-color: #D3D3D3;
 }
 
-#itvyjfiquo .gt_footnotes {
+#xxohduemwi .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4336,13 +4407,13 @@ body_mass_g
   border-right-color: #D3D3D3;
 }
 
-#itvyjfiquo .gt_footnote {
+#xxohduemwi .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#itvyjfiquo .gt_sourcenotes {
+#xxohduemwi .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4356,46 +4427,46 @@ body_mass_g
   border-right-color: #D3D3D3;
 }
 
-#itvyjfiquo .gt_sourcenote {
+#xxohduemwi .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#itvyjfiquo .gt_left {
+#xxohduemwi .gt_left {
   text-align: left;
 }
 
-#itvyjfiquo .gt_center {
+#xxohduemwi .gt_center {
   text-align: center;
 }
 
-#itvyjfiquo .gt_right {
+#xxohduemwi .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#itvyjfiquo .gt_font_normal {
+#xxohduemwi .gt_font_normal {
   font-weight: normal;
 }
 
-#itvyjfiquo .gt_font_bold {
+#xxohduemwi .gt_font_bold {
   font-weight: bold;
 }
 
-#itvyjfiquo .gt_font_italic {
+#xxohduemwi .gt_font_italic {
   font-style: italic;
 }
 
-#itvyjfiquo .gt_super {
+#xxohduemwi .gt_super {
   font-size: 65%;
 }
 
-#itvyjfiquo .gt_footnote_marks {
+#xxohduemwi .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="itvyjfiquo" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="xxohduemwi" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_header">
 <tr>
 <th colspan="6" class="gt_heading gt_title gt_font_normal" style>Flipper lengths (mm) of the famous penguins of Palmer Station, Antarctica.</th>

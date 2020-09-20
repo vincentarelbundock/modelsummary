@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.1.9000</span>
       </span>
     </div>
 
@@ -145,6 +145,8 @@
   <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
   <span class='kw'>coef_map</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>coef_omit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>coef_rename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>statistic_override</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>facet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>draw</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>background</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -165,16 +167,31 @@ to summarize</p></td>
     </tr>
     <tr>
       <th>coef_map</th>
-      <td><p>named character vector.  Values refer to the variable names
+      <td><p>named character vector. Values refer to the variable names
 that will appear in the table. Names refer to the original term names stored
-in the model object (e.g., "hp:mpg" for an interaction term). Coefficients
-that are omitted from this vector will be omitted from the table. The table
-will be ordered in the same order as this vector.</p></td>
+in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
+Coefficients that are omitted from this vector will be omitted from the
+table. The table will be ordered in the same order as this vector.</p></td>
     </tr>
     <tr>
       <th>coef_omit</th>
       <td><p>string regular expression. Omits all matching coefficients
 from the table (using `grepl`).</p></td>
+    </tr>
+    <tr>
+      <th>coef_rename</th>
+      <td><p>named character vector. Values refer to the variable names
+that will appear in the table. Names refer to the original term names stored
+in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.</p></td>
+    </tr>
+    <tr>
+      <th>statistic_override</th>
+      <td><p>manually override the uncertainy estimates. This
+argument accepts three types of input:</p><ul>
+<li><p>a function or list of functions of length(models) which produce variance-covariance matrices with row and column names equal to the names of your coefficient estimates. For example, `R` supplies the `vcov` function, and the `sandwich` package supplies `vcovHC`, `vcovHAC`, etc.</p></li>
+<li><p>a list of length(models) variance-covariance matrices with row and column names equal to the names of your coefficient estimates.</p></li>
+<li><p>a list of length(models) vectors with names equal to the names of your coefficient estimates. Numeric vectors are formatted according to `fmt` and placed in brackets, character vectors printed as given.</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>facet</th>
@@ -195,9 +212,9 @@ plot.  This is especially useful to display annotations "behind" the
     </tr>
     <tr>
       <th>...</th>
-      <td><p>all other arguments are passed to the `tidy` method used to
-extract estimates from the model. For example, this allows users to set
-`exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></td>
+      <td><p>all other arguments are passed to the `tidy` and `glance` methods
+used to extract estimates from the model. For example, this allows users to
+set `exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></td>
     </tr>
     </table>
 
@@ -216,13 +233,13 @@ extract estimates from the model. For example, this allows users to set
 
 <span class='co'># rename, reorder and subset with 'coef_map'</span>
 <span class='no'>cm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'vs'</span> <span class='kw'>=</span> <span class='st'>'V-shape engine'</span>,
-        <span class='st'>'drat'</span> <span class='kw'>=</span> <span class='st'>'Rear axle ratio'</span>)
+  <span class='st'>'drat'</span> <span class='kw'>=</span> <span class='st'>'Rear axle ratio'</span>)
 <span class='fu'>modelplot</span>(<span class='no'>mod</span>, <span class='kw'>coef_map</span> <span class='kw'>=</span> <span class='no'>cm</span>)
 
 <span class='co'># several models</span>
 <span class='no'>models</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
 <span class='no'>models</span><span class='kw'>[[</span><span class='st'>'Small model'</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>hp</span> ~ <span class='no'>vs</span>, <span class='no'>mtcars</span>)
-<span class='no'>models</span><span class='kw'>[[</span><span class='st'>'Medium model'</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>hp</span> ~ <span class='no'>vs</span> + <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>) , <span class='no'>mtcars</span>)
+<span class='no'>models</span><span class='kw'>[[</span><span class='st'>'Medium model'</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>hp</span> ~ <span class='no'>vs</span> + <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>), <span class='no'>mtcars</span>)
 <span class='no'>models</span><span class='kw'>[[</span><span class='st'>'Large model'</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>hp</span> ~ <span class='no'>vs</span> + <span class='no'>drat</span> + <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>), <span class='no'>mtcars</span>)
 <span class='fu'>modelplot</span>(<span class='no'>models</span>)
 
@@ -230,21 +247,20 @@ extract estimates from the model. For example, this allows users to set
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
 
 <span class='fu'>modelplot</span>(<span class='no'>models</span>) +
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_brewer.html'>scale_color_brewer</a></span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>'qual'</span>) +
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_classic</a></span>()
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_brewer.html'>scale_color_brewer</a></span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>'qual'</span>) +
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_classic</a></span>()
 
 <span class='co'># pass arguments to 'geom_pointrange' through the ... ellipsis</span>
 <span class='fu'>modelplot</span>(<span class='no'>mod</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>'red'</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>fatten</span> <span class='kw'>=</span> <span class='fl'>.5</span>)
 
 <span class='co'># add geoms to the background, behind geom_pointrange</span>
 <span class='no'>b</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span>(<span class='kw'>xintercept</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>'orange'</span>),
-          <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/annotate.html'>annotate</a></span>(<span class='st'>"rect"</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.1</span>,
-                   <span class='kw'>xmin</span> <span class='kw'>=</span> -<span class='fl'>.5</span>, <span class='kw'>xmax</span> <span class='kw'>=</span> <span class='fl'>.5</span>,
-                   <span class='kw'>ymin</span> <span class='kw'>=</span> -<span class='fl'>Inf</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='fl'>Inf</span>),
-          <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>term</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>estimate</span>), <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.3</span>,
-                     <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>'red'</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>'square'</span>))
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/annotate.html'>annotate</a></span>(<span class='st'>"rect"</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.1</span>,
+    <span class='kw'>xmin</span> <span class='kw'>=</span> -<span class='fl'>.5</span>, <span class='kw'>xmax</span> <span class='kw'>=</span> <span class='fl'>.5</span>,
+    <span class='kw'>ymin</span> <span class='kw'>=</span> -<span class='fl'>Inf</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='fl'>Inf</span>),
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>term</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>estimate</span>), <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.3</span>,
+    <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>'red'</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>'square'</span>))
 <span class='fu'>modelplot</span>(<span class='no'>mod</span>, <span class='kw'>background</span> <span class='kw'>=</span> <span class='no'>b</span>)
-
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

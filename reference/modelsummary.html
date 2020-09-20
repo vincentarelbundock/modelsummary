@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.1.9000</span>
       </span>
     </div>
 
@@ -151,6 +151,7 @@
   <span class='kw'>stars</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>coef_map</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>coef_omit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>coef_rename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>gof_map</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>gof_omit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>add_rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -173,7 +174,7 @@ to summarize</p></td>
       <td><p>filename or object type (string)</p><ul>
 <li><p>Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.</p></li>
 <li><p>Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".</p></li>
-<li><p>When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.</p></li>
+<li><p>When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kableExtra::save_kable`, or `cat` functions.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -218,16 +219,22 @@ estimates. FALSE if statistics should be printed beside estimates.</p></td>
     </tr>
     <tr>
       <th>coef_map</th>
-      <td><p>named character vector.  Values refer to the variable names
+      <td><p>named character vector. Values refer to the variable names
 that will appear in the table. Names refer to the original term names stored
-in the model object (e.g., "hp:mpg" for an interaction term). Coefficients
-that are omitted from this vector will be omitted from the table. The table
-will be ordered in the same order as this vector.</p></td>
+in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
+Coefficients that are omitted from this vector will be omitted from the
+table. The table will be ordered in the same order as this vector.</p></td>
     </tr>
     <tr>
       <th>coef_omit</th>
       <td><p>string regular expression. Omits all matching coefficients
 from the table (using `grepl`).</p></td>
+    </tr>
+    <tr>
+      <th>coef_rename</th>
+      <td><p>named character vector. Values refer to the variable names
+that will appear in the table. Names refer to the original term names stored
+in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.</p></td>
     </tr>
     <tr>
       <th>gof_map</th>
@@ -263,15 +270,15 @@ cases, the default value of this argument should not be changed.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>all other arguments are passed to the `tidy` method used to
-extract estimates from the model. For example, this allows users to set
-`exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></td>
+      <td><p>all other arguments are passed to the `tidy` and `glance` methods
+used to extract estimates from the model. For example, this allows users to
+set `exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a 'gt' table object.</p>
+    <p>a regression table in a format determined by the `output` argument.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
@@ -285,41 +292,46 @@ extract estimates from the model. For example, this allows users to set
 <span class='no'>models</span><span class='kw'>[[</span><span class='st'>'Multivariate'</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>Girth</span> ~ <span class='no'>Height</span> + <span class='no'>Volume</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>trees</span>)
 
 <span class='co'># simple table</span>
-<span class='fu'><a href='msummary.html'>msummary</a></span>(<span class='no'>models</span>)
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>)
 
 <span class='co'># confidence intervals, p values, or t-stats instead of standard errors</span>
-<span class='fu'><a href='msummary.html'>msummary</a></span>(<span class='no'>models</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>'conf.int'</span>, <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.99</span>)
-<span class='fu'><a href='msummary.html'>msummary</a></span>(<span class='no'>models</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>'p.value'</span>, <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.99</span>)
-<span class='fu'><a href='msummary.html'>msummary</a></span>(<span class='no'>models</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>'statistic'</span>, <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.99</span>)
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>'conf.int'</span>, <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.99</span>)
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>'p.value'</span>, <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.99</span>)
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>'statistic'</span>, <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.99</span>)
 
-<span class='co'># rename and re-order coefficients</span>
-<span class='fu'><a href='msummary.html'>msummary</a></span>(<span class='no'>models</span>, <span class='kw'>coef_map</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'Volume'</span> <span class='kw'>=</span> <span class='st'>'Large'</span>, <span class='st'>'Height'</span> <span class='kw'>=</span> <span class='st'>'Tall'</span>))
+<span class='co'># coef_rename: rename coefficients</span>
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>coef_map</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'Volume'</span> <span class='kw'>=</span> <span class='st'>'Large'</span>, <span class='st'>'Height'</span> <span class='kw'>=</span> <span class='st'>'Tall'</span>))
 
-<span class='co'># titles </span>
-<span class='fu'><a href='msummary.html'>msummary</a></span>(<span class='no'>models</span>, <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>'This is the title'</span>)
+<span class='co'># coef_map: rename, re-order, and omit coefficients</span>
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>coef_map</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'Volume'</span> <span class='kw'>=</span> <span class='st'>'Large'</span>, <span class='st'>'Height'</span> <span class='kw'>=</span> <span class='st'>'Tall'</span>))
+
+<span class='co'># titles</span>
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>'This is the title'</span>)
 
 <span class='co'># title with italicized text</span>
-<span class='fu'><a href='msummary.html'>msummary</a></span>(<span class='no'>models</span>, <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/md.html'>md</a></span>(<span class='st'>'This is *the* title'</span>))
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/md.html'>md</a></span>(<span class='st'>'This is *the* title'</span>))
 
 <span class='co'># add_rows: we use `tribble` from the `tibble` package to build a data.frame</span>
 <span class='co'># more easily. Then, we assign an attribute to determine each row's position.</span>
 <span class='no'>rows</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(~<span class='no'>term</span>, ~<span class='no'>Bivariate</span>, ~<span class='no'>Multivariate</span>,
-                        <span class='st'>'Empty row'</span>, <span class='st'>'-'</span>, <span class='st'>'-'</span>,
-                        <span class='st'>'Another empty row'</span>, <span class='st'>'?'</span>, <span class='st'>'?'</span>)
+  <span class='st'>'Empty row'</span>, <span class='st'>'-'</span>, <span class='st'>'-'</span>,
+  <span class='st'>'Another empty row'</span>, <span class='st'>'?'</span>, <span class='st'>'?'</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>rows</span>, <span class='st'>'position'</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>)
-<span class='fu'><a href='msummary.html'>msummary</a></span>(<span class='no'>models</span>, <span class='kw'>add_rows</span> <span class='kw'>=</span> <span class='no'>rows</span>)
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>add_rows</span> <span class='kw'>=</span> <span class='no'>rows</span>)
 
 <span class='co'># notes at the bottom of the table (here, the second note includes markdown bold characters)</span>
-<span class='fu'><a href='msummary.html'>msummary</a></span>(<span class='no'>models</span>, <span class='kw'>notes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>'A first note'</span>, <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/md.html'>md</a></span>(<span class='st'>'A **bold** note'</span>)))
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>notes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>'A first note'</span>, <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/md.html'>md</a></span>(<span class='st'>'A **bold** note'</span>)))
 
 <span class='co'># modify list of GOF statistics and their format using the built-in</span>
 <span class='co'># 'gof_map' data frame as a starting point</span>
 <span class='no'>gof_custom</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>modelsummary</span><span class='kw ns'>::</span><span class='no'><a href='gof_map.html'>gof_map</a></span>
 <span class='no'>gof_custom</span>$<span class='no'>omit</span>[<span class='no'>gof_custom</span>$<span class='no'>raw</span> <span class='kw'>==</span> <span class='st'>'deviance'</span>] <span class='kw'>&lt;-</span> <span class='fl'>FALSE</span>
 <span class='no'>gof_custom</span>$<span class='no'>fmt</span>[<span class='no'>gof_custom</span>$<span class='no'>raw</span> <span class='kw'>==</span> <span class='st'>'r.squared'</span>] <span class='kw'>&lt;-</span> <span class='st'>"%.5f"</span>
-<span class='fu'><a href='msummary.html'>msummary</a></span>(<span class='no'>models</span>, <span class='kw'>gof_map</span> <span class='kw'>=</span> <span class='no'>gof_custom</span>)
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>gof_map</span> <span class='kw'>=</span> <span class='no'>gof_custom</span>)
+}
 
-}</div></pre>
+<span class='co'># see the README on github for a lot more examples:</span>
+<span class='co'># https://github.com/vincentarelbundock/modelsummary</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -42,7 +42,7 @@
   
 
 <meta property="og:title" content="Quick overview of numeric or categorical variables — datasummary_skim" />
-<meta property="og:description" content="Quick overview of numeric or categorical variables" />
+<meta property="og:description" content="This function was inspired by the excellent `skimr` package for R." />
 
 
 
@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.1.9000</span>
       </span>
     </div>
 
@@ -137,7 +137,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Quick overview of numeric or categorical variables</p>
+    <p>This function was inspired by the excellent `skimr` package for R.</p>
     </div>
 
     <pre class="usage"><span class='fu'>datasummary_skim</span>(
@@ -145,7 +145,7 @@
   <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"numeric"</span>,
   <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"default"</span>,
   <span class='kw'>fmt</span> <span class='kw'>=</span> <span class='st'>"%.1f"</span>,
-  <span class='kw'>histogram</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>histogram</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>notes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>align</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -168,7 +168,7 @@
       <td><p>filename or object type (string)</p><ul>
 <li><p>Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.</p></li>
 <li><p>Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".</p></li>
-<li><p>When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kable::save_kable`, or `cat` functions.</p></li>
+<li><p>When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kableExtra::save_kable`, or `cat` functions.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -180,7 +180,13 @@ use exponential notation. See `?sprintf` for more options.</p></td>
     </tr>
     <tr>
       <th>histogram</th>
-      <td><p>TRUE to include a unicode character histogram (boolean)</p></td>
+      <td><p>include a histogram (TRUE/FALSE). Supported for:</p><ul>
+<li><p>type = "numeric"</p></li>
+<li><p>output is "html", "default", "jpg", "png", or "kableExtra"</p></li>
+<li><p>PDF and HTML documents compiled via Rmarkdown or knitr</p></li>
+<li><p>See the examples section below for an example of how to use
+`datasummary` to include histograms in other formats such as markdown.</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>title</th>
@@ -198,13 +204,33 @@ column center-aligned, and the 3rd column right-aligned.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>all other arguments are passed to the `tidy` method used to
-extract estimates from the model. For example, this allows users to set
-`exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></td>
+      <td><p>all other arguments are passed to the `tidy` and `glance` methods
+used to extract estimates from the model. For example, this allows users to
+set `exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></td>
     </tr>
     </table>
 
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars</span>
+<span class='no'>dat</span>$<span class='no'>vs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/logical.html'>as.logical</a></span>(<span class='no'>dat</span>$<span class='no'>vs</span>)
+<span class='no'>dat</span>$<span class='no'>cyl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='no'>dat</span>$<span class='no'>vs</span>)
+<span class='fu'>datasummary_skim</span>(<span class='no'>dat</span>)
+<span class='fu'>datasummary_skim</span>(<span class='no'>dat</span>, <span class='st'>"categorical"</span>)
+
+<span class='co'># You can use `datasummary` to produce a similar table in different formats.</span>
+<span class='co'># Note that the `Histogram` function relies on unicode characters. These</span>
+<span class='co'># characters will only display correctly in some operating systems, under some</span>
+<span class='co'># locales, using some fonts. Displaying such histograms on Windows computers</span>
+<span class='co'># is notoriously tricky. The `modelsummary` authors cannot provide support to</span>
+<span class='co'># display these unicode histograms.</span>
+
+<span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='All.html'>All</a></span>(<span class='no'>mtcars</span>) ~ <span class='no'>Mean</span> + <span class='no'>SD</span> + <span class='no'>Min</span> + <span class='no'>Median</span> + <span class='no'>Max</span> + <span class='no'>Histogram</span>
+<span class='fu'><a href='datasummary.html'>datasummary</a></span>(<span class='no'>f</span>, <span class='no'>mtcars</span>, <span class='kw'>output</span><span class='kw'>=</span><span class='st'>"markdown"</span>)
+
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
