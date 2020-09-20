@@ -45,7 +45,13 @@ factory <- function(tab,
     flat_formats <- c('markdown', 'word', 'powerpoint')
     if ((output_list$output_factory %in% flat_factories) ||
       output_list$output_format %in% flat_formats) {
-      colnames(tab) <- flat_header
+      attr(tab, "header_bottom") <- colnames(tab)
+
+      # datasummary_balance with dinm produces more cols than flat_header 
+      for (i in seq_along(flat_header)) {
+        colnames(tab)[i] <- flat_header[i]
+      }
+
     }
   }
 

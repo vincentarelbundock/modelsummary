@@ -3,10 +3,22 @@ library(estimatr)
 
 context('datasummary_balance')
 
+test_that('add column', {
+  tmp <- mtcars
+  tmp$gear <- as.factor(tmp$gear)
+  tmp$vs <- as.logical(tmp$vs)
+  tab <- datasummary_balance(~vs, 
+    data=tmp, 
+    output='dataframe',
+    add_columns=data.frame(k=letters[1:13]),
+                           z=1:13)
+  expect_equal(dim(tab), c(13, 9))
+})
+
 test_that('only numeric', {
   tab <- datasummary_balance(~vs, mtcars, output = 'dataframe')
-  truth <- c(" ", "0 (N=18) Mean", "0 (N=18) Std. Dev.", "1 (N=14) Mean",
-    "1 (N=14) Std. Dev.", "Diff. in Means", "Std. Error")
+  truth <- c(" ", "0 Mean", "0 Std. Dev.", "1 Mean",
+    "1 Std. Dev.", "Diff. in Means", "Std. Error")
   expect_s3_class(tab, 'data.frame')
   expect_equal(dim(tab), c(10, 7))
   expect_equal(colnames(tab), truth)
@@ -19,8 +31,7 @@ test_that('only factors', {
   tmp$vs <- as.logical(tmp$vs)
   tmp <- tmp[, c('am', 'vs', 'cyl', 'gear')]
   tab <- datasummary_balance(~am, tmp, output = 'dataframe')
-  truth <- c(" ", "  ", "0 (N=19) N", "0 (N=19) %", "1 (N=13) N",
-    "1 (N=13) %")
+  truth <- c(" ", "  ", "0 N", "0 %", "1 N", "1 %")
   expect_s3_class(tab, 'data.frame')
   expect_equal(dim(tab), c(8, 6))
   expect_equal(colnames(tab), truth)
@@ -32,8 +43,8 @@ test_that('both factors and numerics', {
   tmp$gear <- factor(tmp$gear)
   tmp$vs <- as.logical(tmp$vs)
   tab <- datasummary_balance(~am, tmp, output = 'dataframe')
-  truth <- c(" ", "  ", "0 (N=19) Mean", "0 (N=19) Std. Dev.", "1 (N=13) Mean",
-    "1 (N=13) Std. Dev.", "Diff. in Means", "Std. Error")
+  truth <- c(" ", "  ", "0 Mean", "0 Std. Dev.", "1 Mean",
+    "1 Std. Dev.", "Diff. in Means", "Std. Error")
   expect_s3_class(tab, 'data.frame')
   expect_equal(dim(tab), c(16, 8))
   expect_equal(colnames(tab), truth)
@@ -45,6 +56,9 @@ test_that('more than two conditions', {
   tmp$vs <- as.logical(tmp$vs)
   tab <- datasummary_balance(~gear, tmp, output = 'dataframe', dinm = FALSE)
   expect_s3_class(tab, 'data.frame')
+  expect_equal(dim(tab), c(14, 8))
+
+  tab <- expect_warning(datasummary_balance(~gear, tmp, output = 'dataframe', dinm = TRUE))
   expect_equal(dim(tab), c(14, 8))
 })
 
@@ -75,8 +89,8 @@ test_that('single factor', {
   tmp$gear <- factor(tmp$gear)
   tab <- datasummary_balance(~am, data = tmp, output = 'dataframe')
   expect_s3_class(tab, 'data.frame')
-  expect_equal(dim(tab), c(3, 5))
-  expect_equal(tab[[1]][1], '3')
+  expect_equal(dim(tab), c(3, 6))
+  expect_equal(tab[[2]][1], '3')
 })
 
 test_that('dinm=FALSE', {
@@ -100,15 +114,14 @@ test_that('fmt', {
   tmp$gear <- factor(tmp$gear)
   truth <- c("17.15", "N", "15", "4", "0")
   tab <- datasummary_balance(~am, tmp, fmt = "%.2f", output = 'dataframe')
-  expect_equal(tab[[2]], truth)
+  expect_equal(tab[[3]], truth)
 })
 
-
 test_that('too many factor levels', {
-
+  set.seed(10)
   dat <- data.frame(ID = as.character(1:100),
     Y = rnorm(100),
-    Z_comp = sample(0:1, 100, replace = TRUE))
+    Z_comp = sample(0:20, 100, replace = TRUE))
   expect_error(datasummary_balance(~Z_comp, dat))
 })
 
@@ -147,7 +160,7 @@ test_that('estimatr: clusters, blocks, weights', {
 })
 
 
-test_that('words with tibbles', {
+test_that('works with tibbles', {
   res <- dplyr::starwars %>%
     dplyr::filter(species == 'Human') %>%
     dplyr::select(height:gender) %>%

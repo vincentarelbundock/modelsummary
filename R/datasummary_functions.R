@@ -168,32 +168,3 @@ Histogram <- function(x, bins = 10) {
   out <- paste(bars, collapse = '')
   return(out)
 }
-
-#' datasummary statistic shortcut
-#' @export
-#' @keywords internal
-DinM <- function(x, data, statistic = 'estimate', fmt = "%.2f") {
-  # is estimatr installed?
-  if (!requireNamespace('estimatr', quietly = TRUE)) {
-    stop("Please install the `estimatr` package.")
-  }
-
-  # if clusters, weights, or blocks are absent, we set them to NULL
-  if (!'clusters' %in% colnames(data)) clusters <- NULL
-  if (!'weights' %in% colnames(data)) weights <- NULL
-  if (!'blocks' %in% colnames(data)) blocks <- NULL
-
-  # datasummary supplies a numeric vector. we use it as outcome
-  data$outcome_variable <- x
-
-  # compute statistics
-  out <- estimatr::difference_in_means(outcome_variable ~ condition_variable,
-    data = data,
-    blocks = blocks,
-    clusters = clusters,
-    weights = weights)
-
-  # extract result using estimatr's `tidy` function
-  out <- estimatr::tidy(out)[[statistic]]
-  return(out)
-}
