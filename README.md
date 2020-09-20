@@ -23,6 +23,7 @@ The tables produced by `modelsummary` are beautiful and highly customizable. The
     - `datasummary_balance`: Balance tables with subgroup statistics and difference in means (aka "Table 1").
     - `datasummary_correlation`: Correlation tables.
     - `datasummary_skim`: Quick overview of a dataset.
+    - `datasummary_df`: Turn dataframes into nice tables with titles, notes, etc.
     
 Click on the links at the top of this page to see how these functions are used: https://vincentarelbundock.github.io/modelsummary
 
@@ -63,20 +64,20 @@ Here are a few benefits of `modelsummary` over some [alternative packages](#alte
 library(modelsummary)
 
 mod <- lm(y ~ x, dat)
-msummary(mod)
+modelsummary(mod)
 ```
 
 The command above will automatically display a summary table in the `Rstudio` Viewer or in a web browser. All you need is one word to change the output format. For example, a text-only version of the table can be printed to the Console by typing:
 
 ``` r
-msummary(mod, "markdown")
+modelsummary(mod, "markdown")
 ```
 
 Tables in Microsoft Word and LaTeX formats can be saved to file by typing:
 
 ``` r
-msummary(mod, "table.docx")
-msummary(mod, "table.tex")
+modelsummary(mod, "table.docx")
+modelsummary(mod, "table.tex")
 ```
 
 #### Flexible
@@ -135,12 +136,12 @@ url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
 dat <- read.csv(url) 
 ```
 
-We estimate a linear model and call the `msummary` function to display
+We estimate a linear model and call the `modelsummary` function to display
 the results:
 
 ``` r
 mod <- lm(Donations ~ Crime_prop, data = dat)
-msummary(mod)
+modelsummary(mod)
 ```
 
 <center>
@@ -161,7 +162,7 @@ models[['OLS 2']] <- lm(Crime_pers ~ Literacy + Clergy, data = dat)
 models[['Poisson 2']] <- glm(Crime_pers ~ Literacy + Commerce, family = poisson, data = dat)
 models[['OLS 3']] <- lm(Crime_prop ~ Literacy + Clergy, data = dat)
 
-msummary(models)
+modelsummary(models)
 ```
 
 In `Rstudio`, the image below will be displayed automatically in the
@@ -177,7 +178,7 @@ In `Rstudio`, the image below will be displayed automatically in the
 The same table can be printed in text-only format to the `R` Console:
 
 ``` r
-msummary(models, 'markdown')
+modelsummary(models, 'markdown')
 
 
 |            |OLS 1      |Poisson 1   |OLS 2      |Poisson 2   |OLS 3      |
@@ -210,20 +211,20 @@ There are four ways to display and save `modelsummary` tables.
 To display, simply choose the output format. For example,
 
 ```{r}
-msummary(models, output = 'latex')
-msummary(models, output = 'markdown')
-msummary(models, output = 'gt')
-msummary(models, output = 'kableExtra')
-msummary(models, output = 'flextable')
+modelsummary(models, output = 'latex')
+modelsummary(models, output = 'markdown')
+modelsummary(models, output = 'gt')
+modelsummary(models, output = 'kableExtra')
+modelsummary(models, output = 'flextable')
 ```
 
 To save a table, choose the file path with the extension you want. For example,
 
 ```{r}
-msummary(models, output = 'table.tex')
-msummary(models, output = 'table.docx')
-msummary(models, output = 'table.html')
-msummary(models, output = 'table.md')
+modelsummary(models, output = 'table.tex')
+modelsummary(models, output = 'table.docx')
+modelsummary(models, output = 'table.html')
+modelsummary(models, output = 'table.md')
 ```
 
 To customize a table with the `gt`, `kableExtra`, `flextable`, or `huxtable` packages, choose the output format. Then, you can use functions from those packages to modify the resulting objects:
@@ -231,7 +232,7 @@ To customize a table with the `gt`, `kableExtra`, `flextable`, or `huxtable` pac
 ```{r}
 library(kableExtra)
 
-tab <- msummary(models, output = 'kableExtra')
+tab <- modelsummary(models, output = 'kableExtra')
 tab %>% row_spec(3, bold = TRUE, color = 'green')
 ```
 

@@ -52,10 +52,10 @@ tidy_custom.lm <- function(x) {
 }
 ```
 
-After you define the `glance_custom` and `tidy_custom` methods, `msummary` will automatically display your customized model information:
+After you define the `glance_custom` and `tidy_custom` methods, `modelsummary` will automatically display your customized model information:
 
 ```{r}
-msummary(mod)
+modelsummary(mod)
 ```
 
 Note that you can define a `std.error` column in `tidy_custom.lm` to replace the uncertainty estimates instead of the coefficients.
@@ -64,7 +64,7 @@ Note that you can define a `std.error` column in `tidy_custom.lm` to replace the
 
 One common use-case for `glance_custom` is to display the list of "fixed effects" included in a linear regression model.  
 
-The `feols` function from the `fixest` package offers an extremely fast way to estimate fixed effects regression models. The `feols` function produces an object of class "fixest", which stores the fixed effects variables in a character vector called "fixef_vars". To display those fixed effects, we create a `glance_custom.fixest` and call `msummary`:
+The `feols` function from the `fixest` package offers an extremely fast way to estimate fixed effects regression models. The `feols` function produces an object of class "fixest", which stores the fixed effects variables in a character vector called "fixef_vars". To display those fixed effects, we create a `glance_custom.fixest` and call `modelsummary`:
 
 ```{r}
 glance_custom.fixest <- function(x) {
@@ -85,7 +85,7 @@ mod[[1]] <- feols(emp ~ wage, dat)
 mod[[2]] <- feols(emp ~ wage | firm, dat)
 mod[[3]] <- feols(emp ~ wage | firm + year, dat)
 
-msummary(mod)
+modelsummary(mod)
 ```
 
 # Adding new models
@@ -119,7 +119,7 @@ glance.MCMCglmm <- function(object, ...) {
 model <- MCMCglmm(PO ~ 1 + plate, random = ~ FSfamily, data = PlodiaPO, verbose=FALSE, pr=TRUE)
 
 # summarize the model
-msummary(model, statistic = 'conf.int')
+modelsummary(model, statistic = 'conf.int')
 ```
 
 Two important things to note. First, the methods are named `tidy.MCMCglmm` and `glance.MCMCglmm` because the model object I am trying to summarize is of class `MCMCglmm`. You can find the class of a model by running: `class(model)`.

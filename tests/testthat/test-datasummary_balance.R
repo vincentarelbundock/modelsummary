@@ -3,6 +3,13 @@ library(estimatr)
 
 context('datasummary_balance')
 
+test_that('variable name with spaces', {
+  tmp <- mtcars
+  colnames(tmp)[1] <- "testing spaces"
+  tab <- expect_error(datasummary_balance(~vs, data=tmp, output="dataframe"), NA)
+  expect_equal(dim(tab), c(10, 7))
+})
+
 test_that('add column', {
   tmp <- mtcars
   tmp$gear <- as.factor(tmp$gear)

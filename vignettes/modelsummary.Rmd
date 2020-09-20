@@ -34,34 +34,34 @@ By default, `modelsummary` prints an uncertainty estimate in parentheses below t
 `statistic` must be a string which equal to `conf.int` or to one of the columns produced by the `broom::tidy` function. 
 
 ```r
-msummary(models, statistic = 'std.error')
-msummary(models, statistic = 'p.value')
-msummary(models, statistic = 'statistic')
+modelsummary(models, statistic = 'std.error')
+modelsummary(models, statistic = 'p.value')
+modelsummary(models, statistic = 'statistic')
 ```
 
 You can display confidence intervals in brackets by setting `statistic="conf.int"`:
 
 ```{r}
-msummary(models, statistic = 'conf.int', conf_level = .99)
+modelsummary(models, statistic = 'conf.int', conf_level = .99)
 ```
 
 To display uncertainty estimates next to coefficients instead of below them:
 
 ```r
-msummary(models, statistic_vertical = FALSE)
+modelsummary(models, statistic_vertical = FALSE)
 ```
 
 You can override the uncertainty estimates in a number of ways. First, you can specify a function that produces variance-covariance matrices:
 
 ```r
 library(sandwich)
-msummary(models, statistic_override = vcovHC, statistic = 'p.value')
+modelsummary(models, statistic_override = vcovHC, statistic = 'p.value')
 ```
 
 You can supply a list of functions of the same length as your model list:
 
 ```r
-msummary(models, 
+modelsummary(models, 
    statistic_override = list(vcov, vcovHC, vcovHAC, vcovHC, vcov))
 ```
 
@@ -69,7 +69,7 @@ You can supply a list of named variance-covariance matrices:
 
 ```r
 vcov_matrices <- lapply(models, vcovHC)
-msummary(models, statistic_override = vcov_matrices)
+modelsummary(models, statistic_override = vcov_matrices)
 ```
 
 You can supply a list of named vectors:
@@ -80,13 +80,13 @@ custom_stats <- list(`OLS 1` = c(`(Intercept)` = 2, Literacy = 3, Clergy = 4),
                      `OLS 2` = c(`(Intercept)` = 7, Literacy = -6, Clergy = 9), 
                      `Poisson 2` = c(`(Intercept)` = 4, Literacy = -7, Commerce = -9),
                      `OLS 3` = c(`(Intercept)` = 1, Literacy = -5, Clergy = -2))
-msummary(models, statistic_override = custom_stats)
+modelsummary(models, statistic_override = custom_stats)
 ```
 
 You can also display several different uncertainty estimates below the coefficient estimates. For example,
 
 ```r
-msummary(models, statistic = c('std.error', 'p.value', 'conf.int'))
+modelsummary(models, statistic = c('std.error', 'p.value', 'conf.int'))
 ```
 
 Will produce something like this:
@@ -98,7 +98,7 @@ Will produce something like this:
 You can add a title to your table as follows:
 
 ```r
-msummary(models, title = 'This is a title for my table.')
+modelsummary(models, title = 'This is a title for my table.')
 ```
 
 # Notes
@@ -106,7 +106,7 @@ msummary(models, title = 'This is a title for my table.')
 Add notes to the bottom of your table:
 
 ```r
-msummary(models, 
+modelsummary(models, 
    notes = list('Text of the first note.', 
                 'Text of the second note.'))
 ```
@@ -123,13 +123,13 @@ The `coef_map` argument is a named vector which allows users to rename, reorder,
 cm <- c('Literacy' = 'Literacy (%)',
         'Commerce' = 'Patents per capita',
         '(Intercept)' = 'Constant')
-msummary(models, coef_map = cm)
+modelsummary(models, coef_map = cm)
 ```
 
 An alternative mechanism to subset coefficients is to use the `coef_omit` argument. This string is a regular expression which will be fed to `stringr::str_detect` to detect the variable names which should be excluded from the table.
 
 ```r
-msummary(models, coef_omit = 'Intercept|Donation')
+modelsummary(models, coef_omit = 'Intercept|Donation')
 ```
 
 ## Goodness-of-fit and other statistics
@@ -137,7 +137,7 @@ msummary(models, coef_omit = 'Intercept|Donation')
 `gof_omit` is a regular expression which will be fed to `stringr::str_detect` to detect the names of the statistics which should be excluded from the table.
 
 ```r
-msummary(models, gof_omit = 'DF|Deviance|R2|AIC|BIC')
+modelsummary(models, gof_omit = 'DF|Deviance|R2|AIC|BIC')
 ```
 
 A more powerful mechanism is to supply a `data.frame` (or `tibble`) through the `gof_map` argument. This data.frame must include 4 columns:
@@ -152,7 +152,7 @@ You can see an example of a valid data frame by typing `modelsummary::gof_map`. 
 ```r
 gm <- modelsummary::gof_map
 gm$omit <- FALSE
-msummary(models, gof_map = gm)
+modelsummary(models, gof_map = gm)
 ```
 
 The goodness-of-fit statistics will be printed in the table in the same order as in the `gof_map` data.frame.
@@ -168,15 +168,15 @@ Some people like to add "stars" to their model summary tables to mark statistica
 3. Named numeric vector for custom stars.
 
 ```r
-msummary(models)
-msummary(models, stars = TRUE) 
-msummary(models, stars = c('+' = .1, '&' = .01)) 
+modelsummary(models)
+modelsummary(models, stars = TRUE) 
+modelsummary(models, stars = c('+' = .1, '&' = .01)) 
 ```
 
 Whenever `stars != FALSE`, `modelsummary` adds a note at the bottom of the table automatically. If you would like to omit this note, just use the `stars_note` argument:
 
 ```r
-msummary(models, stars = TRUE, stars_note = FALSE) 
+modelsummary(models, stars = TRUE, stars_note = FALSE) 
 ```
 
 If you want to create your own stars description, you can add custom notes with the [`notes`](https://github.com/vincentarelbundock/modelsummary#notes) argument.
@@ -192,7 +192,7 @@ The `fmt` argument defines how numeric values are rounded and presented in the t
 Most users will just modify the `3` in `%.3f`, but this is a very powerful system, and all users are encouraged to read the details: `?sprintf`
 
 ```r
-msummary(models, fmt = '%.7f')
+modelsummary(models, fmt = '%.7f')
 ```
 
 # `add_rows`
@@ -214,7 +214,7 @@ rows <- tribble(~term,          ~OLS,  ~Logit,
                 'Info',         '???', 'XYZ')
 attr(rows, 'position') <- c(3, 9)
 
-msummary(models, add_rows = rows)
+modelsummary(models, add_rows = rows)
 ```
 
 # Extra tidy arguments (e.g., exponentiated coefficients)
@@ -223,7 +223,7 @@ Users can pass any additional argument they want to the `tidy` method which is u
 
 ```r
 mod_logit <- glm(am ~ mpg, data = mtcars, family = binomial)
-msummary(mod_logit, exponentiate = TRUE)
+modelsummary(mod_logit, exponentiate = TRUE)
 ```
 
 Any argument supported by `tidy` is thus supported by `modelsummary`.
@@ -241,7 +241,7 @@ To customize the appearance of tables, `modelsummary` supports four of the most 
 
 Users are encouraged to visit these websites to determine which package suits their needs best. Each of them has different strengths and weaknesses. For instance, `gt` allows seamless integration with the RStudio IDE, but `kableExtra`'s LaTeX (and PDF) output is far more mature.
 
-To create customized tables, the analyst begins by calling `msummary(models)` to create a summary table. Then, she *post-processes* the table by applying functions from one of the packages listed above. It is often convenient to use the `%>%` operator to do this.
+To create customized tables, the analyst begins by calling `modelsummary(models)` to create a summary table. Then, she *post-processes* the table by applying functions from one of the packages listed above. It is often convenient to use the `%>%` operator to do this.
 
 To illustrate, we download data from the [Rdatasets repository](https://vincentarelbundock.github.io/Rdatasets') and we estimate 5 models:
 
@@ -259,7 +259,7 @@ models[['Poisson 2']] <- glm(Crime_pers ~ Literacy + Clergy, family = poisson, d
 models[['OLS 3']] <- lm(Crime_prop ~ Literacy + Clergy, data = dat)
 ```
 
-In the rest of this vignette, we will customize tables using tools supplied by the `gt`, `kableExtra`, `flextable`, and `huxtable` packages. In each case, the pattern will be similar. First, we create a table by calling `msummary` and by specifying the output format with the `output` parameter. Then, we will use functions from the four packages to customize the appearance of our tables.
+In the rest of this vignette, we will customize tables using tools supplied by the `gt`, `kableExtra`, `flextable`, and `huxtable` packages. In each case, the pattern will be similar. First, we create a table by calling `modelsummary` and by specifying the output format with the `output` parameter. Then, we will use functions from the four packages to customize the appearance of our tables.
 
 ## `gt`
 
@@ -280,7 +280,7 @@ library(gt)
 cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
 cap <- 'A modelsummary table customized with gt'
 
-tab <- msummary(models, 
+tab <- modelsummary(models, 
                 output = "gt",
                 coef_map = cm, stars = TRUE, 
                 title = cap, gof_omit = 'IC|Log|Adj') 
@@ -322,7 +322,7 @@ We will now illustrate how to customize tables using functions from the `kableEx
 * `add_footnote` adds a footnote and a matching marking in a specific cell.
 * `row_spec` can modify the text and color of rows, columns, or cells.
 
-We use the same code as above, but specify `output='kableExtra'` in the `msummary()` call:
+We use the same code as above, but specify `output='kableExtra'` in the `modelsummary()` call:
 
 ```{r}
 library(kableExtra)
@@ -331,7 +331,7 @@ library(kableExtra)
 cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
 cap <- 'A modelsummary table customized with kableExtra'
 
-tab <- msummary(models, output = 'kableExtra',
+tab <- modelsummary(models, output = 'kableExtra',
                 coef_map = cm, stars = TRUE, 
                 title = cap, gof_omit = 'IC|Log|Adj') 
 
@@ -360,16 +360,16 @@ We will now illustrate how to customize tables using functions from the `flextab
 * `bg` to modify the color of the background
 * `autofit` sets column width to sensible values.
 
-We use the same code as above, but specify `output='flextable'` in the `msummary()` call:
+We use the same code as above, but specify `output='flextable'` in the `modelsummary()` call:
 
-```{r}
+```{r, message=FALSE}
 library(flextable)
 
 # build table with `modelsummary` 
 cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
 cap <- 'A modelsummary table customized with flextable'
 
-tab <- msummary(models, output = 'flextable',
+tab <- modelsummary(models, output = 'flextable',
                 coef_map = cm, stars = TRUE, 
                 title = cap, gof_omit = 'IC|Log|Adj') 
 
@@ -391,16 +391,16 @@ We will now illustrate how to customize tables using functions from the `huxtabl
 
 * `set_text_color` to change the color of some entries
 
-We use the same code as above, but specify `output='huxtable'` in the `msummary()` call:
+We use the same code as above, but specify `output='huxtable'` in the `modelsummary()` call:
 
-```{r}
+```{r, message=FALSE}
 library(huxtable)
 
 # build table with `modelsummary` 
 cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
 cap <- 'A modelsummary table customized with huxtable'
 
-tab <- msummary(models, output = 'huxtable',
+tab <- modelsummary(models, output = 'huxtable',
                 coef_map = cm, stars = TRUE, 
                 title = cap, gof_omit = 'IC|Log|Adj') 
 
@@ -413,18 +413,18 @@ tab %>%
 
 ## Warning: Saving to file
 
-When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt`, `kableExtra`, `huxtable`, or `flextable`. When users specify a filename in the `output` argument, the `msummary()` call should be the *final* one in the chain.
+When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt`, `kableExtra`, `huxtable`, or `flextable`. When users specify a filename in the `output` argument, the `modelsummary()` call should be the *final* one in the chain.
 
 This is OK:
 
 ```{r, eval=FALSE}
-msummary(models, output = 'table.html')
+modelsummary(models, output = 'table.html')
 ```
 
 This is **not** OK:
 
 ```{r, eval=FALSE}
-msummary(models, output = 'table.html') %>%
+modelsummary(models, output = 'table.html') %>%
     tab_spanner(label = 'Literacy', columns = c('OLS 1', 'Poisson 1'))
 ```
 

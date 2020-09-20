@@ -20,7 +20,7 @@ Users are encouraged to visit these websites to determine which package suits th
 
 # Post-processing
 
-To create customized tables, the analyst begins by calling `msummary(models)` to create a summary table. Then, she *post-processes* the table by applying functions from one of the packages listed above. It is often convenient to use the `%>%` operator to do this.
+To create customized tables, the analyst begins by calling `modelsummary(models)` to create a summary table. Then, she *post-processes* the table by applying functions from one of the packages listed above. It is often convenient to use the `%>%` operator to do this.
 
 To illustrate, we download data from the [Rdatasets repository](https://vincentarelbundock.github.io/Rdatasets') and we estimate 5 models:
 
@@ -38,7 +38,7 @@ models[['Poisson 2']] <- glm(Crime_pers ~ Literacy + Clergy, family = poisson, d
 models[['OLS 3']] <- lm(Crime_prop ~ Literacy + Clergy, data = dat)
 ```
 
-In the rest of this vignette, we will customize tables using tools supplied by the `gt`, `kableExtra`, `flextable`, and `huxtable` packages. In each case, the pattern will be similar. First, we create a table by calling `msummary` and by specifying the output format with the `output` parameter. Then, we will use functions from the four packages to customize the appearance of our tables.
+In the rest of this vignette, we will customize tables using tools supplied by the `gt`, `kableExtra`, `flextable`, and `huxtable` packages. In each case, the pattern will be similar. First, we create a table by calling `modelsummary` and by specifying the output format with the `output` parameter. Then, we will use functions from the four packages to customize the appearance of our tables.
 
 # `gt`
 
@@ -59,7 +59,7 @@ library(gt)
 cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
 cap <- 'A modelsummary table customized with gt'
 
-tab <- msummary(models, 
+tab <- modelsummary(models, 
                 output = "gt",
                 coef_map = cm, stars = TRUE, 
                 title = cap, gof_omit = 'IC|Log|Adj') 
@@ -101,7 +101,7 @@ We will now illustrate how to customize tables using functions from the `kableEx
 * `add_footnote` adds a footnote and a matching marking in a specific cell.
 * `row_spec` can modify the text and color of rows, columns, or cells.
 
-We use the same code as above, but specify `output='kableExtra'` in the `msummary()` call:
+We use the same code as above, but specify `output='kableExtra'` in the `modelsummary()` call:
 
 ```{r}
 library(kableExtra)
@@ -110,7 +110,7 @@ library(kableExtra)
 cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
 cap <- 'A modelsummary table customized with kableExtra'
 
-tab <- msummary(models, output = 'kableExtra',
+tab <- modelsummary(models, output = 'kableExtra',
                 coef_map = cm, stars = TRUE, 
                 title = cap, gof_omit = 'IC|Log|Adj') 
 
@@ -139,7 +139,7 @@ We will now illustrate how to customize tables using functions from the `flextab
 * `bg` to modify the color of the background
 * `autofit` sets column width to sensible values.
 
-We use the same code as above, but specify `output='flextable'` in the `msummary()` call:
+We use the same code as above, but specify `output='flextable'` in the `modelsummary()` call:
 
 ```{r}
 library(flextable)
@@ -148,7 +148,7 @@ library(flextable)
 cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
 cap <- 'A modelsummary table customized with flextable'
 
-tab <- msummary(models, output = 'flextable',
+tab <- modelsummary(models, output = 'flextable',
                 coef_map = cm, stars = TRUE, 
                 title = cap, gof_omit = 'IC|Log|Adj') 
 
@@ -170,7 +170,7 @@ We will now illustrate how to customize tables using functions from the `huxtabl
 
 * `set_text_color` to change the color of some entries
 
-We use the same code as above, but specify `output='huxtable'` in the `msummary()` call:
+We use the same code as above, but specify `output='huxtable'` in the `modelsummary()` call:
 
 ```{r}
 library(huxtable)
@@ -179,7 +179,7 @@ library(huxtable)
 cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
 cap <- 'A modelsummary table customized with huxtable'
 
-tab <- msummary(models, output = 'huxtable',
+tab <- modelsummary(models, output = 'huxtable',
                 coef_map = cm, stars = TRUE, 
                 title = cap, gof_omit = 'IC|Log|Adj') 
 
@@ -192,18 +192,18 @@ tab %>%
 
 # Warning: Saving to file
 
-When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt`, `kableExtra`, `huxtable`, or `flextable`. When users specify a filename in the `output` argument, the `msummary()` call should be the *final* one in the chain.
+When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt`, `kableExtra`, `huxtable`, or `flextable`. When users specify a filename in the `output` argument, the `modelsummary()` call should be the *final* one in the chain.
 
 This is OK:
 
 ```{r, eval=FALSE}
-msummary(models, output = 'table.html')
+modelsummary(models, output = 'table.html')
 ```
 
 This is **not** OK:
 
 ```{r, eval=FALSE}
-msummary(models, output = 'table.html') %>%
+modelsummary(models, output = 'table.html') %>%
     tab_spanner(label = 'Literacy', columns = c('OLS 1', 'Poisson 1'))
 ```
 

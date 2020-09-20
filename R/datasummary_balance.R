@@ -12,9 +12,13 @@ DinM <- function(lhs, rhs, data, fmt, statistic) {
   if (!"blocks" %in% colnames(data))
       blocks <- NULL
 
-  f <- stats::formula(paste(lhs, '~', rhs))
-  out <- estimatr::difference_in_means(f,
-      data = data, blocks = blocks, clusters = clusters, weights = weights)
+  # needed for names with spaces
+  data[["condition_variable_placeholder"]] <- data[[rhs]]
+  data[["outcome_variable_placeholder"]] <- data[[lhs]]
+
+  out <- estimatr::difference_in_means(
+    outcome_variable_placeholder ~ condition_variable_placeholder,
+    data = data, blocks = blocks, clusters = clusters, weights = weights)
 
   out <- estimatr::tidy(out)
 
@@ -207,14 +211,13 @@ datasummary_balance <- function(formula,
   if (dinm) {
     numeric_variables <- colnames(data_norhs)[sapply(data_norhs, is.numeric)]
     tmp <- lapply(numeric_variables,
-                  function(x) DinM(x, 
-                                   rhs=rhs, 
-                                   data=data, 
-                                   fmt=fmt, 
-                                   statistic=dinm_statistic))
+                  function(lhs) DinM(lhs=lhs, 
+                                     rhs=rhs, 
+                                     data=data, 
+                                     fmt=fmt, 
+                                     statistic=dinm_statistic))
     tmp <- do.call("rbind", tmp)
     tab <- dplyr::left_join(tab, tmp, by=" ")
-
 
     # post-DinM, pad the span if the table has new columns
     skE <- attr(tab, "span_kableExtra")

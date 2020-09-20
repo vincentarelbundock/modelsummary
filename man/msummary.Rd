@@ -122,24 +122,24 @@ models[['Bivariate']] <- lm(Girth ~ Height, data = trees)
 models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
 
 # simple table
-msummary(models)
+modelsummary(models)
 
 # confidence intervals, p values, or t-stats instead of standard errors
-msummary(models, statistic = 'conf.int', conf_level = 0.99)
-msummary(models, statistic = 'p.value', conf_level = 0.99)
-msummary(models, statistic = 'statistic', conf_level = 0.99)
+modelsummary(models, statistic = 'conf.int', conf_level = 0.99)
+modelsummary(models, statistic = 'p.value', conf_level = 0.99)
+modelsummary(models, statistic = 'statistic', conf_level = 0.99)
 
 # coef_rename: rename coefficients
-msummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
+modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 
 # coef_map: rename, re-order, and omit coefficients
-msummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
+modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 
 # titles
-msummary(models, title = 'This is the title')
+modelsummary(models, title = 'This is the title')
 
 # title with italicized text
-msummary(models, title = gt::md('This is *the* title'))
+modelsummary(models, title = gt::md('This is *the* title'))
 
 # add_rows: we use `tribble` from the `tibble` package to build a data.frame
 # more easily. Then, we assign an attribute to determine each row's position.
@@ -147,17 +147,17 @@ rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,
   'Empty row', '-', '-',
   'Another empty row', '?', '?')
 attr(rows, 'position') <- c(1, 3)
-msummary(models, add_rows = rows)
+modelsummary(models, add_rows = rows)
 
 # notes at the bottom of the table (here, the second note includes markdown bold characters)
-msummary(models, notes = list('A first note', gt::md('A **bold** note')))
+modelsummary(models, notes = list('A first note', gt::md('A **bold** note')))
 
 # modify list of GOF statistics and their format using the built-in
 # 'gof_map' data frame as a starting point
 gof_custom <- modelsummary::gof_map
 gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE
 gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "\%.5f"
-msummary(models, gof_map = gof_custom)
+modelsummary(models, gof_map = gof_custom)
 }
 
 # see the README on github for a lot more examples:

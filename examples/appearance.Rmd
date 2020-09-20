@@ -10,7 +10,7 @@ This file illustrates how to use `modelsummary` to produce PDF, HTML, and RTF (M
 
 # A first table
 
-To begin we estimate three linear regression models using the `mtcars` data. Then, we load the `modelsummary` package and call the `msummary` function:
+To begin we estimate three linear regression models using the `mtcars` data. Then, we load the `modelsummary` package and call the `modelsummary` function:
 
 ```{r}
 library(modelsummary)
@@ -20,14 +20,14 @@ models[[1]] <- lm(mpg ~ cyl, mtcars)
 models[[2]] <- lm(mpg ~ cyl + drat, mtcars)
 models[[3]] <- lm(hp ~ cyl + drat, mtcars)
 
-msummary(models,
-         title = 'Determinants of Car Features',
-         statistic = 'conf.int')
+modelsummary(models,
+             title='Determinants of Car Features',
+             statistic='conf.int')
 ```
 
 Without any modification, this code will produce a nice table, whether the document is compiled to PDF, HTML, or RTF.^[The Rmarkdown output in the header must be set to either "pdf_document", "html_document", or "rtf_document".] In fact, tables produced using *any* of the `modelsummary` built-in options and arguments should compile correctly in all three formats.
 
-One major benefit of `modelsummary` is that regression tables can be customized using the powerful `gt` and `kableExtra` libraries. To achieve this, we *post-process* the output of `msummary()` using functions from the `gt` or `kableExtra` packages. Achieving this in an Rmarkdown file requires some slight, but very easy, tweaks to our code. The next two sections explain what those tweaks are. 
+One major benefit of `modelsummary` is that regression tables can be customized using the powerful `gt` and `kableExtra` libraries. To achieve this, we *post-process* the output of `modelsummary()` using functions from the `gt` or `kableExtra` packages. Achieving this in an Rmarkdown file requires some slight, but very easy, tweaks to our code. The next two sections explain what those tweaks are. 
 
 # Output formats: `gt` vs. `kableExtra`
 
@@ -52,12 +52,12 @@ We can use functions from the `gt` package to post-process and customize a `mode
 ```{r, eval=!is_latex, fig.pos='!H'}
 library(gt)
 
-msummary(models, 
-         output = 'gt',
-         title = 'Table customized using `gt` functions.',
-         stars = TRUE,
-         notes = c('First custom note to contain text.',
-                   'Second custom note with different content.')) %>%
+modelsummary(models, 
+             output = 'gt',
+             title = 'Table customized using `gt` functions.',
+             stars = TRUE,
+             notes = c('First custom note to contain text.',
+                       'Second custom note with different content.')) %>%
    # spanning labels
    tab_spanner(label = 'Miles / Gallon', columns = 2:3) %>%
    tab_spanner(label = 'Horsepower', columns = 4) %>%
@@ -70,17 +70,17 @@ msummary(models,
 
 # Customizing tables with `kableExtra`
 
-We can use functions from the `kableExtra` package to post-process and customize a `modelsummary` table. To do this, we load the `kableExtra` package, and we set `output='kableExtra'` in the `msummary()` call:
+We can use functions from the `kableExtra` package to post-process and customize a `modelsummary` table. To do this, we load the `kableExtra` package, and we set `output='kableExtra'` in the `modelsummary()` call:
 
 ```{r, eval=!is_rtf, fig.pos='!H'}
 library(kableExtra)
 
-msummary(models, 
-         output = 'kableExtra',
-         title = 'Table customized using `kableExtra` functions.',
-         stars = TRUE,
-         notes = c('First custom note to contain text.',
-                   'Second custom note with different content.')) %>%
+modelsummary(models, 
+             output = 'kableExtra',
+             title = 'Table customized using `kableExtra` functions.',
+             stars = TRUE,
+             notes = c('First custom note to contain text.',
+                       'Second custom note with different content.')) %>%
     # spanning labels
     add_header_above(c(" " = 1, "Miles / Gallon" = 2, "Horsepower" = 1)) %>%
     # color
