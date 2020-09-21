@@ -74,6 +74,7 @@ test_that("unsupported global options", {
 
   options(modelsummary_png = 'huxtable')
   expect_error(msummary(mod, 'test.png'))
+  unlink("test.png")
   options(modelsummary_png = 'flextable')
 
   options(modelsummary_jpg = 'huxtable')
