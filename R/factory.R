@@ -87,9 +87,11 @@ factory <- function(tab,
     # append
     for (i in seq_along(add_columns)) {
       if (!is.null(pos) && !is.na(pos[i])) {
-        tab <- tab %>% tibble::add_column(add_columns[i], .before = pos[i])
+        lef <- tab[, -c(pos[i]:ncol(tab)), drop=FALSE]
+        rig <- tab[, c(pos[i]:ncol(tab)), drop=FALSE]
+        tab <- dplyr::bind_cols(lef, add_columns[i], rig)
       } else {
-        tab <- tab %>% tibble::add_column(add_columns[i])
+        tab <- dplyr::bind_cols(tab, add_columns[i])
       }
     }
 
@@ -137,10 +139,11 @@ factory <- function(tab,
     for (i in 1:nrow(add_rows)) {
       # append
       if (!is.null(pos) && !is.na(pos[i])) {
-        tab <- tab %>% tibble::add_row(add_rows[i, , drop = FALSE],
-          .before = pos[i])
+        top <- tab[-c(pos[i]:nrow(tab)), , drop=FALSE]
+        bot <- tab[c(pos[i]:nrow(tab)), , drop=FALSE]
+        tab <- dplyr::bind_rows(top, add_rows[i, , drop=FALSE], bot)
       } else {
-        tab <- tab %>% tibble::add_row(add_rows[i, , drop = FALSE])
+        tab <- dplyr::bind_rows(tab, add_rows[i, , drop=FALSE])
       }
     }
   }
