@@ -2,7 +2,7 @@
 % Please edit documentation in R/sanity_checks.R
 \name{sanity_ds_right_handed_formula}
 \alias{sanity_ds_right_handed_formula}
-\title{sanity check: datasummary_table1}
+\title{sanity check: datasummary_balance}
 \usage{
 sanity_ds_right_handed_formula(formula)
 }
@@ -10,5 +10,5 @@ sanity_ds_right_handed_formula(formula)
 \item{formula}{right-handed formulae only}
 }
 \description{
-sanity check: datasummary_table1
+sanity check: datasummary_balance
 }

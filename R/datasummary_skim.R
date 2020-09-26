@@ -73,9 +73,15 @@ datasummary_skim <- function(data,
 
       # interactive or Rmarkdown/knitr
       } else {
-        if (!output_info$output_format %in% c("default", "html", "kableExtra") &
-            !knitr::is_latex_output()) {
-          histogram <- FALSE
+        if (check_dependency("knitr")) {
+          if (!output_info$output_format %in% c("default", "html", "kableExtra") &&
+              !knitr::is_latex_output()) {
+            histogram <- FALSE
+          }
+        } else {
+          if (!output_info$output_format %in% c("default", "html", "kableExtra")) {
+            histogram <- FALSE
+          }
         }
       }
 
