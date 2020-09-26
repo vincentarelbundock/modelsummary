@@ -1,4 +1,4 @@
-# modelsummary 0.6.1.9000
+# modelsummary 0.6.2
 
 * new argument: coef_rename
 * new function: datasummary_df
