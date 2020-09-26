@@ -2,11 +2,13 @@
 
 * new argument: coef_rename
 * new function: datasummary_df
-* term order is preserved in modelsummary
+* preserve term order in modelsummary
 * refactor datasummary_balance
 * datasummary_skim uses svg histograms instead of unicode
-* fewer dependencies
+* removed 5 dependencies
 * pass ... to kableExtra::kbl for more customization
+* test improvements
+* internal code style
 * bug fixes
 
 # modelsummary 0.6.1
