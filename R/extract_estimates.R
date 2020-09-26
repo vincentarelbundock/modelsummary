@@ -63,6 +63,11 @@ extract_estimates <- function(model,
     }
   }
 
+  # broom.mixed sometimes includes a `group` column with duplicate terms
+  if ("group" %in% colnames(est) && anyDuplicated(est$term) > 0) {
+    est$term <- ifelse(is.na(est$group), est$term, paste(est$group, est$term))
+  }
+
   # round estimates
   est[[estimate]] <- rounding(est[[estimate]], fmt)
 
@@ -130,6 +135,10 @@ extract_estimates <- function(model,
     est$value <- paste(est[[estimate]], est$statistic1)
     est[[estimate]] <- est$statistic1 <- NULL
   }
+
+  # drop empty rows (important for broom.mixed which produces group
+  # estimates without standard errors)
+  est <- est[est$value != "", ]
 
   # output
   return(est)
