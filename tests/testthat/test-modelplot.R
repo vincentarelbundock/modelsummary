@@ -4,6 +4,7 @@ library(sandwich)
 
 context("modelplot")
 
+
 test_that("single model", {
 
   mod <- lm(hp ~ mpg + drat, data = mtcars)
@@ -61,4 +62,22 @@ test_that("statistic_override", {
              -15.0390897152001, -22.1832974370102, -28.1858724755655)
   expect_equal(p$conf.low, known)
 
+})
+
+
+# TODO: these tests are too minimalist
+
+test_that("single model without ci", {
+  mod <- lm(hp ~ mpg + drat, data = mtcars)
+  expect_error(modelplot(mod, conf_level=NULL), NA)
+})
+
+test_that("multiple models without ci", {
+  mod <- list(
+    lm(hp ~ mpg, data = mtcars),
+    lm(hp ~ mpg + drat, data = mtcars),
+    lm(hp ~ mpg + drat + am, data = mtcars)
+  )
+  expect_error(modelplot(mod, facet=TRUE, conf_level=NULL), NA)
+  expect_error(modelplot(mod, facet=FALSE, conf_level=NULL), NA)
 })

@@ -91,3 +91,7 @@ test_that("statistic_override content", {
   expect_equivalent(results[["hardcoded numerical"]], reference[["hardcoded numerical"]])
   expect_equivalent(results[["hardcoded arbitrary"]], reference[["hardcoded arbitrary"]])
 })
+
+test_that("useless: function but no ci needed", {
+  expect_error(modelsummary(models, statistic_override=vcov, conf_level=NULL), NA)
+})

@@ -79,14 +79,6 @@ parse_output_arg <- function(output) {
 
   output_factory <- factory_list[[output_format]]
 
-  # gt cannot knit to latex.
-  if (output_factory == 'gt') {
-    if (knitr::is_latex_output()) {
-      output_format <- 'latex'
-      output_factory <- 'kableExtra'
-    }
-  }
-
   # kableExtra must specify output_format ex ante
   if (output_factory == 'kableExtra') {
     if (output_format %in% c('default', 'kableExtra')) {
