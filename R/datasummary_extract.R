@@ -1,6 +1,5 @@
 #' Extract data from a `tables::tabular` object
 #'
-#' @export
 #' @keywords internal
 datasummary_extract <- function(tab,
                                 fmt = NULL,
