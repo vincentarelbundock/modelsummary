@@ -4,6 +4,10 @@ penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerp
 
 context('datasummary')
 
+test_that("cannot nest two continuous variables", {
+  expect_error(datasummary(mpg * hp ~ Mean + SD, mtcars))
+})
+
 test_that("tibble input does not error", {
   dat <- as_tibble(penguins)
   expect_error(datasummary_skim(dat, histogram = TRUE), NA)
