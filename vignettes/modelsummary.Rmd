@@ -128,8 +128,14 @@ modelsummary(models, coef_map = cm)
 
 An alternative mechanism to subset coefficients is to use the `coef_omit` argument. This string is a regular expression which will be fed to `stringr::str_detect` to detect the variable names which should be excluded from the table.
 
-```r
-modelsummary(models, coef_omit = 'Intercept|Donation')
+```{r}
+modelsummary(models, coef_omit = "Intercept|Commerce", gof_omit=".*")
+```
+
+Since `coef_omit` accepts regexes, you can do interesting things with it, such as specifying the list of variables that `modelsummary` should *keep* instead of omit. To do this, we use the `[^]` construct that specifies what *not* to match, we use the `|` pipe operator to separate the list of variables to include:
+
+```{r}
+modelsummary(models, coef_omit = "[^Commerce|(Intercept)]", gof_omit=".*")
 ```
 
 ## Goodness-of-fit and other statistics
