@@ -63,9 +63,15 @@ extract_estimates <- function(model,
     }
   }
 
-  # broom.mixed sometimes includes a `group` column with duplicate terms
-  if ("group" %in% colnames(est) && anyDuplicated(est$term) > 0) {
-    est$term <- ifelse(is.na(est$group), est$term, paste(est$group, est$term))
+  if (anyDuplicated(est$term) > 0) {
+    # broom.mixed `group` column
+    if ("group" %in% colnames(est)) {
+      est$term <- ifelse(is.na(est$group), est$term, paste(est$group, est$term))
+    }
+    # nnet::multinom `y.level` column
+    if ("y.level" %in% colnames(est)) {
+      est$term <- ifelse(is.na(est$y.level), est$term, paste(est$y.level, est$term))
+    }
   }
 
   # round estimates
