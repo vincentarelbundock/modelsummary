@@ -1,6 +1,6 @@
 # modelsummary 0.6.2.9000
 
-* new function: modelsummary_wide
+* new function: modelsummary_long
 
 # modelsummary 0.6.2
 
