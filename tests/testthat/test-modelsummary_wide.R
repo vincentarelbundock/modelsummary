@@ -1,4 +1,4 @@
-context("modelsummary_long")
+context("modelsummary_wide")
 
 library(nnet)
 
@@ -16,7 +16,7 @@ test_that("nnet::multinom one model", {
   var3 <- rnorm(100, mean=10, sd=2)
   df <- data.frame(var1, var2, var3)
   invisible(capture.output(mod <- nnet::multinom(var1~var2, data=df)))
-  tmp <- modelsummary_long(mod, output="data.frame")
+  tmp <- modelsummary_wide(mod, output="data.frame")
   expect_is(tmp, "data.frame")
   expect_equal(dim(tmp), c(7, 5))
 })
@@ -37,7 +37,7 @@ test_that("nnet::multinom two models", {
   invisible(capture.output(m1 <- nnet::multinom(var1~var2, data=df1)))
   invisible(capture.output(m2 <- nnet::multinom(var1~var2, data=df2)))
 
-  tmp <- modelsummary_long(list(m1, m2), output="data.frame")
+  tmp <- modelsummary_wide(list(m1, m2), output="data.frame")
   expect_is(tmp, "data.frame")
   expect_equal(dim(tmp), c(16, 5))
 
