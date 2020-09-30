@@ -222,7 +222,7 @@ sanity_statistic <- function(statistic,
 #'
 #' @keywords internal
 sanity_gof <- function(gof_output, gof_custom) {
-  checkmate::assert_data_frame(gof_output, nrows = 1, min.cols = 1, null.ok = FALSE)
+  checkmate::assert_data_frame(gof_output, nrows = 1, null.ok = FALSE)
   checkmate::assert_data_frame(gof_custom, nrows = 1, null.ok = TRUE)
 }
 

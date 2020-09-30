@@ -1,15 +1,3 @@
-#' internal tidy method
-#'
-#' @export
-#' @keywords internal
-tidy.modelsummary_internal_coef_groups <- function(x) x$tidy
-
-#' internal glance method
-#'
-#' @export
-#' @keywords internal
-glance.modelsummary_internal_coef_groups <- function(x) x$glance
-
 #' Beautiful, customizable summaries of statistical models
 #'
 #' `modelsummary_wide` is a specialized function to display groups of
@@ -79,15 +67,15 @@ modelsummary_wide <- function(model,
       gl_empty[[i]] <- ""
     }
 
-    # split and create placeholder lists extractable by the *.coef_groups methods
+    # split and convert to modelsummary_list objects
     out <- split(out, out[[coef_group]])
     for (i in seq_along(out)) {
       if (i == 1) {
         out[[i]] <- list(glance = gl, tidy = out[[i]])
       } else {
-        out[[i]] <- list(glance = gl_empty, tidy = out[[i]])
+        out[[i]] <- list(tidy = out[[i]])
       }
-      class(out[[i]]) <- c("modelsummary_internal_coef_groups", class(out[[i]]))
+      class(out[[i]]) <- "modelsummary_list"
     }
     out
   }
