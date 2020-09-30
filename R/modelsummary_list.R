@@ -2,7 +2,7 @@
 #'
 #' @export
 #' @keywords internal
-tidy.modelsummary_list <- function(x) {
+tidy.modelsummary_list <- function(x, ...) {
   if ("tidy" %in% names(x)) {
     x[["tidy"]]
   } else {
@@ -14,7 +14,7 @@ tidy.modelsummary_list <- function(x) {
 #'
 #' @export
 #' @keywords internal
-glance.modelsummary_list <- function(x) {
+glance.modelsummary_list <- function(x, ...) {
   if ("glance" %in% names(x)) {
     out <- x[["glance"]]
   } else {
