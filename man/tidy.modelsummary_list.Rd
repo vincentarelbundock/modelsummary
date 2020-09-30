@@ -4,7 +4,7 @@
 \alias{tidy.modelsummary_list}
 \title{internal tidy method}
 \usage{
-\method{tidy}{modelsummary_list}(x)
+\method{tidy}{modelsummary_list}(x, ...)
 }
 \description{
 internal tidy method

@@ -3,23 +3,23 @@
 #' `modelsummary_wide` is a specialized function to display groups of
 #' parameters from a single model in separate columns. This can be useful, for
 #' example, to display the different levels of coefficients in a multinomial
-#' regression model (e.g., `nnet::multinom`). 
+#' regression model (e.g., `nnet::multinom`). The `coef_group` argument
+#' specifies the name of the group identifier.
 #'
-#' @param model a single model object with "grouped" terms.
-#' @param coef_group the name of the coefficient groups to use as columns (NULL or character). See details. 
+#' @param coef_group the name of the coefficient groups to use as columns (NULL
+#' or character). If `coef_group` is NULL, `modelsummary` tries to guess the
+#' correct coefficient group identifier. To be valid, this identifier must be a
+#' column in the data.frame produced by `tidy(model)`. Note: you may have to
+#' load the `broom` or `broom.mixed` package before executing `tidy(model)`.
 #' @inheritParams modelsummary
 #' @return a regression table in a format determined by the `output` argument.
-#' @details If `coef_group` is NULL, `modelsummary` tries to guess the correct
-#'   coefficient group identifier. To be valid, this identifier must be a column
-#'   in the data.frame produced by `tidy(model)`. Note: you may have to load the
-#'   `broom` or `broom.mixed` package before executing `tidy(model)`.
-#' @examples
+#' @details #' @examples
 #' \dontrun{
 #'
 #'
 #' }
 #' @export
-modelsummary_wide <- function(model,
+modelsummary_wide <- function(models,
   output = "default",
   fmt = '%.3f',
   statistic = 'std.error',
@@ -39,55 +39,64 @@ modelsummary_wide <- function(model,
   estimate = 'estimate',
   ...) {
 
-  # local helpers split a single model into a list of models
-
-  coef_groups <- function(model, coef_group, statistic, conf_level, ...) {
-
-    # tidy
-    if (statistic == "conf.int") {
-      out <- generics::tidy(model, conf.int=TRUE, conf.level=conf_level, ...)
-    } else {
-      out <- generics::tidy(model, conf.int=TRUE, conf.level=conf_level, ...)
-    }
-
-    # guess coef_group
-    if (is.null(coef_group)) {
-      if ("y.level" %in% colnames(out)) {
-        coef_group <- "y.level"
-      } else if ("group" %in% colnames(out)) {
-        coef_group <- "group"
-      } else {
-        stop("You must specify a valid character value for the `coef_group` argument. To find this value for your type of model, load the `broom` and/or `broom.mixed` libraries, then call `tidy(model)` on your model object. The `coef_group` value must be a column in the resulting data.frame. This column includes identifiers which determine which coefficients appear in which columns of your table.") 
-      }
-    }
-
-    # glance
-    gl <- gl_empty <- generics::glance(model, ...)
-    for (i in seq_along(gl_empty)) {
-      gl_empty[[i]] <- ""
-    }
-
-    # split and convert to modelsummary_list objects
-    out <- split(out, out[[coef_group]])
-    for (i in seq_along(out)) {
-      if (i == 1) {
-        out[[i]] <- list(glance = gl, tidy = out[[i]])
-      } else {
-        out[[i]] <- list(tidy = out[[i]])
-      }
-      class(out[[i]]) <- "modelsummary_list"
-    }
-    out
+  # models must be a list of models
+  if (!'list' %in% class(models)) {
+    models <- list(models)
   }
 
-  models <- coef_groups(
-    model=model, 
-    coef_group=coef_group, 
-    conf_level=conf_level,
-    statistic=statistic,
-    ...)
+  # model names
+  if (is.null(names(models))) {
+    model_names <- paste('Model', 1:length(models))
+  } else {
+    model_names <- names(models)
+  }
+  model_names <- pad(model_names)
 
-  modelsummary(models,
+  # tidy
+  if (statistic == "conf.int") {
+    ti <- lapply(models, function(x) 
+                 generics::tidy(x, conf.int=TRUE, conf.level=conf_level, ...))
+  } else {
+    ti <- lapply(models, function(x) 
+                 generics::tidy(x, ...))
+  }
+
+  # glance
+  gl <- lapply(models, generics::glance)
+
+  # combine
+  if (length(models) > 1) {
+    for (i in seq_along(models)) {
+      ti[[i]]$term <- paste(model_names[i], ti[[i]]$term)
+      colnames(gl[[i]]) <- paste(model_names[i], colnames(gl[[i]]))
+    }
+  }
+
+  gl <- dplyr::bind_cols(gl)
+  ti <- dplyr::bind_rows(ti)
+
+  # guess coef_group
+  if (is.null(coef_group)) {
+    if ("y.level" %in% colnames(ti)) {
+      coef_group <- "y.level"
+    } else if ("group" %in% colnames(ti)) {
+      coef_group <- "group"
+    } else {
+      stop("You must specify a valid character value for the `coef_group` argument. To find this value for your type of model, load the `broom` and/or `broom.mixed` libraries, then call `tidy(model)` on your model object. The `coef_group` value must be a column in the resulting data.frame. This column includes identifiers which determine which coefficients appear in which columns of your table.") 
+    }
+  }
+
+  # split by coef_group (treat them as separate models)
+  results <- split(ti, ti[[coef_group]])
+
+  # assemble modelsummary_list
+  for (i in seq_along(results)) {
+    results[[i]] <- list(tidy = results[[i]])
+    class(results[[i]]) <- "modelsummary_list"
+  }
+  results[[1]]$glance <- gl
+
+  modelsummary(results,
     output = output,
     fmt = fmt,
     statistic = statistic,

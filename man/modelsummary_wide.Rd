@@ -5,7 +5,7 @@
 \title{Beautiful, customizable summaries of statistical models}
 \usage{
 modelsummary_wide(
-  model,
+  models,
   output = "default",
   fmt = "\%.3f",
   statistic = "std.error",
@@ -27,7 +27,8 @@ modelsummary_wide(
 )
 }
 \arguments{
-\item{model}{a single model object with "grouped" terms.}
+\item{models}{a single model object or a (potentially named) list of models
+to summarize}
 
 \item{output}{filename or object type (string)
 \itemize{
@@ -67,7 +68,11 @@ estimates. FALSE if statistics should be printed beside estimates.}
   \item Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
 }}
 
-\item{coef_group}{the name of the coefficient groups to use as columns (NULL or character). See details.}
+\item{coef_group}{the name of the coefficient groups to use as columns (NULL
+or character). If `coef_group` is NULL, `modelsummary` tries to guess the
+correct coefficient group identifier. To be valid, this identifier must be a
+column in the data.frame produced by `tidy(model)`. Note: you may have to
+load the `broom` or `broom.mixed` package before executing `tidy(model)`.}
 
 \item{coef_map}{named character vector. Values refer to the variable names
 that will appear in the table. Names refer to the original term names stored
@@ -113,15 +118,11 @@ a regression table in a format determined by the `output` argument.
 `modelsummary_wide` is a specialized function to display groups of
 parameters from a single model in separate columns. This can be useful, for
 example, to display the different levels of coefficients in a multinomial
-regression model (e.g., `nnet::multinom`).
+regression model (e.g., `nnet::multinom`). The `coef_group` argument
+specifies the name of the group identifier.
 }
 \details{
-If `coef_group` is NULL, `modelsummary` tries to guess the correct
-  coefficient group identifier. To be valid, this identifier must be a column
-  in the data.frame produced by `tidy(model)`. Note: you may have to load the
-  `broom` or `broom.mixed` package before executing `tidy(model)`.
-}
-\examples{
+#' @examples
 \dontrun{
 
 
