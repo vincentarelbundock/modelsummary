@@ -120,7 +120,7 @@ datasummary_skim <- function(data,
       # order, to print the right histograms.
 
       idx <- datasummary(f, data=dat_new, output="data.frame")[[1]]
-      histogram_list <- as.list(data[, idx, drop=FALSE])
+      histogram_list <- as.list(dat_new[, idx, drop=FALSE])
       for (n in names(histogram_list)) {
         histogram_list[[n]] <- as.numeric(scale(stats::na.omit(histogram_list[[n]])))
         if (all(is.nan(histogram_list[[n]]))) {
