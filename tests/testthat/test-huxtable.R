@@ -27,7 +27,7 @@ test_that("save to file", {
   options(modelsummary_word = 'huxtable')
   options(modelsummary_powerpoint = 'huxtable')
 
-  random <- stringi::stri_rand_strings(1, 30)
+  random <- random_string()
 
   filename <- paste0(random, '.html')
   expect_error(msummary(models, filename), NA)

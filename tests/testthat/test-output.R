@@ -29,7 +29,7 @@ test_that("unsupported output", {
 
 test_that("supported global options", {
 
-  random <- stringi::stri_rand_strings(1, 30)
+  random <- random_string()
 
   # RTF
   filename <- paste0(random, '.rtf')
@@ -87,7 +87,7 @@ test_that("unsupported global options", {
 
 test_that("save to file", {
 
-  random <- stringi::stri_rand_strings(1, 30)
+  random <- random_string()
 
   filename <- paste0(random, '.html')
   expect_error(msummary(mod, filename), NA)
@@ -125,7 +125,7 @@ test_that("save to file", {
 
 test_that("overwrite file", {
 
-  random <- stringi::stri_rand_strings(1, 30)
+  random <- random_string()
 
   filename <- paste0(random, '.html')
   expect_error(msummary(mod, filename), NA)

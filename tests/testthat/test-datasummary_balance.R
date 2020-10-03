@@ -186,7 +186,7 @@ tmp$am <- as.character(tmp$am)
 save_to_file <- function(ext) {
   msg <- paste('save to', ext)
   test_that(msg, {
-    random <- stringi::stri_rand_strings(1, 30)
+    random <- random_string()
     filename <- paste0(random, ext)
     expect_error(datasummary_balance(~am, data = tmp, output = filename), NA)
     unlink(filename)
