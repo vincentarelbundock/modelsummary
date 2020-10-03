@@ -87,7 +87,11 @@ datasummary_skim <- function(data,
 
       # if flag was flipped
       if (!histogram) {
-        warning('The histogram argument is only supported for (a) output types "default", "html", or "kableExtra"; (b) writing to file paths with extensions ".html", ".jpg", or ".png"; and (c) Rmarkdown or knitr documents compiled to PDF or HTML. Use `histogram=FALSE` to silence this warning.')
+        warning('The histogram argument is only supported for (a) output types
+                "default", "html", or "kableExtra"; (b) writing to file paths
+                with extensions ".html", ".jpg", or ".png"; and (c) Rmarkdown
+                or knitr documents compiled to PDF or HTML. Use
+                `histogram=FALSE` to silence this warning.')
       }
 
     }
@@ -101,7 +105,7 @@ datasummary_skim <- function(data,
     }
 
     # pad colnames in case one is named Min, Max, Mean, or other function name
-    colnames(dat_new) <- paste0(colnames(dat_new), " ")
+    # colnames(dat_new) <- paste0(colnames(dat_new), " ")
 
     # with histogram
     if (histogram) {
@@ -179,7 +183,7 @@ datasummary_skim <- function(data,
     dat_new <- data
 
     # pad colnames in case one is named Min, Max, Mean, or other function name
-    colnames(dat_new) <- paste0(colnames(dat_new), " ")
+    # colnames(dat_new) <- paste0(colnames(dat_new), " ")
 
     for (n in colnames(dat_new)) {
 

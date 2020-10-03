@@ -56,6 +56,7 @@ test_that("supported global options", {
   options(modelsummary_html = 'huxtable')
   expect_error(msummary(mod, filename), NA)
   unlink(filename)
+  options(modelsummary_html = 'kableExtra')
 
 })
 
@@ -80,13 +81,13 @@ test_that("unsupported global options", {
   options(modelsummary_png = 'huxtable')
   expect_error(msummary(mod, 'test.png'))
   unlink("test.png")
-  options(modelsummary_png = 'flextable')
+  options(modelsummary_png = 'kableExtra')
 
   options(modelsummary_jpg = 'huxtable')
   expect_error(msummary(mod, 'test.jpg'))
   options(modelsummary_jpg = 'gt')
   expect_error(msummary(mod, 'test.jpg'))
-  options(modelsummary_jpg = 'flextable')
+  options(modelsummary_jpg = 'kableExtra')
 
 })
 
