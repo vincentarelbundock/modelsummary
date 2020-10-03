@@ -1,6 +1,11 @@
 library(modelsummary)
 library(estimatr)
 
+random_string <- function() {
+  paste(sample(letters, 30, replace=TRUE), collapse="")
+}
+
+
 context('datasummary_balance')
 
 test_that('variable name with spaces', {

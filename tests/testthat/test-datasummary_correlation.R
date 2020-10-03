@@ -1,6 +1,11 @@
 library(modelsummary)
 context('datasummary_correlation')
 
+random_string <- function() {
+  paste(sample(letters, 30, replace=TRUE), collapse="")
+}
+
+
 test_that('output format do not produce errors', {
 
   # output formats do not produce errors

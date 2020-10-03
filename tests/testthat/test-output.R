@@ -1,5 +1,10 @@
 context("output types")
 
+random_string <- function() {
+  paste(sample(letters, 30, replace=TRUE), collapse="")
+}
+
+
 library(modelsummary)
 
 mod <- list()
