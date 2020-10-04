@@ -74,20 +74,6 @@ test_that('more than two conditions', {
   expect_equal(dim(tab), c(14, 8))
 })
 
-test_that('output formats do not produce errors', {
-  tmp <- mtcars
-  tmp$cyl <- as.character(tmp$cyl)
-  tmp$vs <- as.logical(tmp$vs)
-  expect_error(datasummary_balance(~am, tmp, output = 'huxtable'), NA)
-  expect_error(datasummary_balance(~am, tmp, output = 'flextable'), NA)
-  expect_error(datasummary_balance(~am, tmp, output = 'kableExtra'), NA)
-  expect_error(datasummary_balance(~am, tmp, output = 'huxtable'), NA)
-  expect_error(datasummary_balance(~am, tmp, output = 'dataframe'), NA)
-  expect_error(datasummary_balance(~am, tmp, output = 'markdown'), NA)
-  expect_error(datasummary_balance(~am, tmp, output = 'latex'), NA)
-  expect_error(datasummary_balance(~am, tmp, output = 'html'), NA)
-})
-
 test_that('single numeric', {
   tmp <- mtcars[, c('am', 'mpg')]
   tab <- datasummary_balance(~am, data = tmp, output = 'dataframe')
@@ -180,42 +166,6 @@ test_that('works with tibbles', {
   expect_equal(dim(res), c(28, 8))
 })
 
-
-##################
-#  save to file  #
-##################
-tmp <- mtcars
-tmp$cyl <- as.factor(tmp$cyl)
-tmp$vs <- as.logical(tmp$vs)
-tmp$am <- as.character(tmp$am)
-save_to_file <- function(ext) {
-  msg <- paste('save to', ext)
-  test_that(msg, {
-    random <- random_string()
-    filename <- paste0(random, ext)
-    expect_error(datasummary_balance(~am, data = tmp, output = filename), NA)
-    unlink(filename)
-  })
-}
-for (ext in c('.html', '.tex', '.rtf', '.docx', '.pptx', '.jpg', '.png')) {
-  save_to_file(ext)
-}
-
-#####################################
-#  add_columns output formats work  #
-#####################################
-tmp <- mtcars
-tmp$cyl <- as.character(tmp$cyl)
-tmp$vs <- as.logical(tmp$vs)
-custom <- data.frame('a' = 1:2, 'b' = 1:2)
-output_formats <- c('gt', 'kableExtra', 'flextable', 'huxtable', 'latex',
-  'markdown', 'html')
-for (o in output_formats) {
-  testname <- paste('add_columns with', o)
-  test_that(testname, {
-    expect_warning(datasummary_balance(~am, tmp, add_columns = custom, output = o), NA)
-  })
-}
 
 ######################
 #  various datasets  #

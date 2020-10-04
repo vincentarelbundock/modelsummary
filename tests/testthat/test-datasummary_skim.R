@@ -54,38 +54,6 @@ test_that("completely missing variables are dropped", {
 })
 
 
-test_that("write to file", {
-
-  expect_error(datasummary_skim(dat, output="test.jpg"), NA)
-  expect_error(datasummary_skim(dat, type="categorical", output="test.jpg"), NA)
-  expect_error(datasummary_skim(dat, output="test.png"), NA)
-  expect_error(datasummary_skim(dat, type="categorical", output="test.png"), NA)
-  expect_error(datasummary_skim(dat, output="test.html"), NA)
-  expect_error(datasummary_skim(dat, type="categorical", output="test.html"), NA)
-  expect_warning(datasummary_skim(dat, output="test.tex"))
-
-  unlink("test.jpg")
-  unlink("test.html")
-  unlink("test.tex")
-
-})
-
-test_that("unsupported formats", {
-
-  expect_warning(datasummary_skim(dat, output="flextable"))
-  expect_warning(datasummary_skim(dat, output="flextable", histogram=FALSE), NA)
-
-  expect_warning(datasummary_skim(dat, output="gt"))
-  expect_warning(datasummary_skim(dat, output="gt", histogram=FALSE), NA)
-
-  expect_warning(datasummary_skim(dat, output="huxtable"))
-  expect_warning(datasummary_skim(dat, output="huxtable", histogram=FALSE), NA)
-
-  expect_warning(datasummary_skim(dat, output="latex"))
-  expect_warning(datasummary_skim(dat, output="latex", histogram=FALSE), NA)
-
-})
-
 
 # # RDatasets tests: must be commented out
 # any_categorical <- function(x) {

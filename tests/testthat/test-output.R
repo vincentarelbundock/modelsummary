@@ -1,16 +1,14 @@
-context("output types")
+context("output: modelsummary")
 
 random_string <- function() {
   paste(sample(letters, 30, replace=TRUE), collapse="")
 }
-
 
 library(modelsummary)
 
 mod <- list()
 mod[[1]] <- lm(hp ~ mpg, mtcars)
 mod[[2]] <- lm(hp ~ mpg + drat, mtcars)
-
 
 test_that("table objects from different packages", {
   expect_error(msummary(mod), NA)
@@ -139,3 +137,134 @@ test_that("overwrite file", {
   unlink(filename)
 
 })
+
+
+
+######################################
+context("output: datasummary_balance")
+######################################
+
+test_that('output formats do not produce errors', {
+  tmp <- mtcars
+  tmp$cyl <- as.character(tmp$cyl)
+  tmp$vs <- as.logical(tmp$vs)
+  expect_error(datasummary_balance(~am, tmp, output = 'huxtable'), NA)
+  expect_error(datasummary_balance(~am, tmp, output = 'flextable'), NA)
+  expect_error(datasummary_balance(~am, tmp, output = 'kableExtra'), NA)
+  expect_error(datasummary_balance(~am, tmp, output = 'huxtable'), NA)
+  expect_error(datasummary_balance(~am, tmp, output = 'dataframe'), NA)
+  expect_error(datasummary_balance(~am, tmp, output = 'markdown'), NA)
+  expect_error(datasummary_balance(~am, tmp, output = 'latex'), NA)
+  expect_error(datasummary_balance(~am, tmp, output = 'html'), NA)
+})
+
+#  add_columns output formats work  #
+tmp <- mtcars
+tmp$cyl <- as.character(tmp$cyl)
+tmp$vs <- as.logical(tmp$vs)
+custom <- data.frame('a' = 1:2, 'b' = 1:2)
+output_formats <- c('gt', 'kableExtra', 'flextable', 'huxtable', 'latex',
+  'markdown', 'html')
+for (o in output_formats) {
+  testname <- paste('add_columns with', o)
+  test_that(testname, {
+    expect_warning(datasummary_balance(~am, tmp, add_columns = custom, output = o), NA)
+  })
+}
+
+#  save to file  #
+tmp <- mtcars
+tmp$cyl <- as.factor(tmp$cyl)
+tmp$vs <- as.logical(tmp$vs)
+tmp$am <- as.character(tmp$am)
+save_to_file <- function(ext) {
+  msg <- paste('save to', ext)
+  test_that(msg, {
+    random <- random_string()
+    filename <- paste0(random, ext)
+    expect_error(datasummary_balance(~am, data = tmp, output = filename), NA)
+    unlink(filename)
+  })
+}
+for (ext in c('.html', '.tex', '.rtf', '.docx', '.pptx', '.jpg', '.png')) {
+  save_to_file(ext)
+}
+
+
+###################################
+context("output: datasummary_skim")
+###################################
+
+dat <- mtcars
+dat$vs <- as.logical(dat$vs)
+dat$gear <- as.factor(dat$gear)
+
+test_that("write to file", {
+
+  expect_error(datasummary_skim(dat, output="test.jpg"), NA)
+  expect_error(datasummary_skim(dat, type="categorical", output="test.jpg"), NA)
+  expect_error(datasummary_skim(dat, output="test.png"), NA)
+  expect_error(datasummary_skim(dat, type="categorical", output="test.png"), NA)
+  expect_error(datasummary_skim(dat, output="test.html"), NA)
+  expect_error(datasummary_skim(dat, type="categorical", output="test.html"), NA)
+  expect_warning(datasummary_skim(dat, output="test.tex"))
+
+  unlink("test.jpg")
+  unlink("test.html")
+  unlink("test.tex")
+
+})
+
+test_that("unsupported formats", {
+
+  expect_warning(datasummary_skim(dat, output="flextable"))
+  expect_warning(datasummary_skim(dat, output="flextable", histogram=FALSE), NA)
+
+  expect_warning(datasummary_skim(dat, output="gt"))
+  expect_warning(datasummary_skim(dat, output="gt", histogram=FALSE), NA)
+
+  expect_warning(datasummary_skim(dat, output="huxtable"))
+  expect_warning(datasummary_skim(dat, output="huxtable", histogram=FALSE), NA)
+
+  expect_warning(datasummary_skim(dat, output="latex"))
+  expect_warning(datasummary_skim(dat, output="latex", histogram=FALSE), NA)
+
+})
+
+
+##########################################
+context("output: datasummary_correlation")
+##########################################
+
+test_that('output format do not produce errors', {
+
+  # output formats do not produce errors
+  expect_error(datasummary_correlation(mtcars, output = 'huxtable'), NA)
+  expect_error(datasummary_correlation(mtcars, output = 'flextable'), NA)
+  expect_error(datasummary_correlation(mtcars, output = 'huxtable'), NA)
+  expect_error(datasummary_correlation(mtcars, output = 'kableExtra'), NA)
+  expect_error(datasummary_correlation(mtcars, output = 'dataframe'), NA)
+  expect_error(datasummary_correlation(mtcars, output = 'markdown'), NA)
+  expect_error(datasummary_correlation(mtcars, output = 'latex'), NA)
+  expect_error(datasummary_correlation(mtcars, output = 'html'), NA)
+
+})
+
+tmp <- mtcars
+tmp$cyl <- as.factor(tmp$cyl)
+tmp$vs <- as.logical(tmp$vs)
+tmp$am <- as.character(tmp$am)
+save_to_file <- function(ext = '.html') {
+  msg <- paste('datasummary_correlation: save to', ext)
+  test_that(msg, {
+    random <- random_string()
+    filename <- paste0(random, ext)
+    expect_error(datasummary_correlation(tmp, output = filename), NA)
+    unlink(filename)
+  })
+
+}
+
+for (ext in c('.html', '.tex', '.rtf', '.docx', '.pptx', '.jpg', '.png')) {
+  save_to_file(ext)
+}
