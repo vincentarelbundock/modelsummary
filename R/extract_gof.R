@@ -75,6 +75,13 @@ extract_gof <- function(model, fmt, gof_map, ...) {
       stats::na.omit()
   }
 
+  # factor to character (otherwise gof_map breaks under R < 4.0.0)
+  for (i in seq_along(out)) {
+    if (is.factor(out[[i]])) {
+      out[[i]] <- as.character(out[[i]])
+    }
+  }
+
   # output
   return(out)
 }
