@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2.9000</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@
 
       
 
-      </header><script src="newmodels_files/header-attrs-2.3/header-attrs.js"></script><script src="newmodels_files/kePrint-0.0.1/kePrint.js"></script><link href="newmodels_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+      </header><script src="newmodels_files/header-attrs-2.4/header-attrs.js"></script><script src="newmodels_files/kePrint-0.0.1/kePrint.js"></script><link href="newmodels_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -100,35 +100,50 @@
 
     
     
+<div id="supported-models" class="section level1">
+<h1 class="hasAnchor">
+<a href="#supported-models" class="anchor"></a>Supported models</h1>
+<p><code>modelsummary</code> automatically supports all the models supported by the <a href="broom.tidymodels.org">broom package</a>. Specifically, <code>modelsummary</code> uses the <code>glance</code> and <code>tidy</code> methods from the <code>broom</code> package to extract information from model objects. To see if a package is supported out-of-the-box, load the <code>broom</code> package, and see if the <code>tidy</code> and <code>glance</code> methods produce valid output:</p>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">broom</span>)
+
+<span class="fu"><a href="https://broom.tidymodels.org/reference/reexports.html">tidy</a></span>(<span class="no">mod</span>)
+<span class="fu"><a href="https://broom.tidymodels.org/reference/reexports.html">glance</a></span>(<span class="no">mod</span>)</pre></body></html></div>
+<p>If the <code>tidy</code> and <code>glance</code> functions do not work on your model type, you may consider opening an issue on the Github website of the <code>broom</code> package: <a href="https://github.com/tidymodels/broom/issues" class="uri">https://github.com/tidymodels/broom/issues</a></p>
+<p>Note that several packages supply additional <code>tidy</code> and <code>glance</code> functions. Loading these packages can increase the range of models supported by <code>modelsummary</code>. For example, loading the <a href="https://github.com/bbolker/broom.mixed">broom.mixed package</a> allows modelsummary to support a wide variety of mixed (hierarchical, multi-level) models (e.g., <code>lme4</code>, <code>brms</code>, <code>rstanarm</code>).</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">broom.mixed</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
+</div>
 <div id="customizing-existing-models" class="section level1">
 <h1 class="hasAnchor">
 <a href="#customizing-existing-models" class="anchor"></a>Customizing existing models</h1>
 <p>The information that <code>modelsummary</code> can display about a model is determined by the output of the <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::glance</a></code> and <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::tidy</a></code> functions. <code>glance</code> is used the extract the information at the the bottom of the table, where goodness-of-fit measures are displayed. <code>tidy</code> is used to extract the information in the body of the table: parameter and uncertainty estimates.</p>
 <p>Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new <code>glance_custom</code> and <code>tidy_custom</code> methods. To illustrate, we estimate two linear regression models using the <code>lm</code> function:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
 <span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
 <span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">hp</span> ~ <span class="no">mpg</span> + <span class="no">drat</span>, <span class="no">mtcars</span>)
 <span class="no">mod</span><span class="kw">[[</span><span class="fl">2</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">wt</span> ~ <span class="no">mpg</span> + <span class="no">drat</span> + <span class="no">am</span>, <span class="no">mtcars</span>)</pre></body></html></div>
 <p>In <code>R</code>, the <code>lm</code> function produces models of class “lm”:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]])
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]])
 <span class="co">#&gt; [1] "lm"</span></pre></body></html></div>
 <p>Let’s say you would like to print the dependent variable for each model of this particular class. All you need to do is define a new method called <code>glance_custom.lm</code>. This method should return a data.frame (or tibble) with 1 row, and 1 column per piece of information you want to display. For example:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">glance_custom.lm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">glance_custom.lm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
     <span class="no">dv</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/formula.html">formula</a></span>(<span class="no">x</span>)[<span class="fl">2</span>])
     <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">`Dependent variable:`</span> <span class="kw">=</span> <span class="no">dv</span>)
     <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
 }</pre></body></html></div>
-<p>Now, let’s customize the body of the table. The <code>statistic_override</code> argument already allows users to customize uncertainty estimates. But imagine you want to override the <em>coefficient estimates</em> of your “lm” models. Easy! All you need to do is define a <code>tidy_custom.lm</code> method which returns a data.frame (or tibble) with one column called “term” and one column called “estimate”.</p>
+<p>; ow, let’s customize the body of the table. The <code>statistic_override</code> argument already allows users to customize uncertainty estimates. But imagine you want to override the <em>coefficient estimates</em> of your “lm” models. Easy! All you need to do is define a <code>tidy_custom.lm</code> method which returns a data.frame (or tibble) with one column called “term” and one column called “estimate”.</p>
 <p>Here, we’ll substitute estimates by an up/down arrow which represents their signs:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">tidy_custom.lm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">tidy_custom.lm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
     <span class="no">s</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">x</span>)$<span class="no">coefficients</span>
     <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">term</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="no">s</span>),
                           <span class="kw">estimate</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">s</span>[,<span class="fl">1</span>] <span class="kw">&gt;</span> <span class="fl">0</span>, <span class="st">'⭡'</span>, <span class="st">'⭣'</span>))
     <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
 }</pre></body></html></div>
 <p>After you define the <code>glance_custom</code> and <code>tidy_custom</code> methods, <code>modelsummary</code> will automatically display your customized model information:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -319,7 +334,7 @@ F
 <a href="#fixed-effects-regression" class="anchor"></a>Fixed effects regression</h2>
 <p>One common use-case for <code>glance_custom</code> is to display the list of “fixed effects” included in a linear regression model.</p>
 <p>The <code>feols</code> function from the <code>fixest</code> package offers an extremely fast way to estimate fixed effects regression models. The <code>feols</code> function produces an object of class “fixest”, which stores the fixed effects variables in a character vector called “fixef_vars”. To display those fixed effects, we create a <code>glance_custom.fixest</code> and call <code>modelsummary</code>:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">glance_custom.fixest</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">glance_custom.fixest</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
     <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">.rows</span> <span class="kw">=</span> <span class="fl">1</span>)
     <span class="kw">for</span> (<span class="no">n</span> <span class="kw">in</span> <span class="no">x</span>$<span class="no">fixef_vars</span>) {
         <span class="no">out</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">'FE: '</span>, <span class="no">n</span>)]] <span class="kw">&lt;-</span> <span class="st">'X'</span>
@@ -559,7 +574,7 @@ Clustered (firm)
 <a href="#adding-new-models" class="anchor"></a>Adding new models</h1>
 <p><code>modelsummary</code> relies on two functions from the <code>broom</code> package to extract model information: <code>tidy</code> and <code>glance</code>. If <code>broom</code> doesn’t support the type of model you are trying to summarize, <code>modelsummary</code> won’t support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.</p>
 <p>For example, models produced by the <code>MCMCglmm</code> package are not currently supported by <code>broom</code>. To add support, you simply need to create a <code>tidy</code> and a <code>glance</code> method:</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="co"># load packages and data</span>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="co"># load packages and data</span>
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">MCMCglmm</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">PlodiaPO</span>)
@@ -605,7 +620,7 @@ Clustered (firm)
 </ol>
 <p>For convenience, <code>modelsummary</code> includes two unexported functions which can do most this for you. Reading <a href="https://github.com/vincentarelbundock/modelsummary/blob/master/R/convenience.R">the annotated code for these two functions</a> could be an instructive exercise for those who wish to exploit everything that <code>modelsummary</code> has to offer.</p>
 <p>To print IV regression results from <code><a href="https://rdrr.io/pkg/lfe/man/felm.html">lfe::felm</a></code> models, we execute this code:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">lfe</span>)
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">lfe</span>)
 
 <span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
   <span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html">felm</a></span>(<span class="no">wt</span> ~ <span class="no">drat</span> <span class="kw">|</span> <span class="fl">0</span> <span class="kw">|</span> (<span class="no">disp</span> ~ <span class="no">hp</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>),
