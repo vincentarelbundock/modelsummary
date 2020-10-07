@@ -8,11 +8,6 @@ test_that("cannot nest two continuous variables", {
   expect_error(datasummary(mpg * hp ~ Mean + SD, mtcars))
 })
 
-test_that("tibble input does not error", {
-  dat <- as_tibble(penguins)
-  expect_error(datasummary_skim(dat, histogram = TRUE), NA)
-})
-
 test_that('numeric content of simple tables', {
 
   # 2 rows 2 cols

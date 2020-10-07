@@ -125,6 +125,7 @@ datasummary_skim <- function(data,
 
       idx <- datasummary(f, data=dat_new, output="data.frame")[[1]]
       histogram_list <- as.list(dat_new[, idx, drop=FALSE])
+      histogram_list <- lapply(histogram_list, stats::na.omit)
 
       # too large
       if (ncol(dat_new) > 50) {

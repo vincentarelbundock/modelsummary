@@ -1,9 +1,12 @@
 context('datasummary_skim')
 
+library(tibble)
 library(modelsummary)
 dat <- mtcars
 dat$vs <- as.logical(dat$vs)
 dat$gear <- as.factor(dat$gear)
+
+penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
 
 test_that("basic", {
 
@@ -13,6 +16,11 @@ test_that("basic", {
   tmp <- datasummary_skim(dat, type="categorical", output="data.frame")
   expect_equal(dim(tmp), c(5, 4))
 
+})
+
+test_that("tibble input does not error", {
+  dat <- as_tibble(penguins)
+  expect_error(datasummary_skim(dat), NA)
 })
 
 test_that("fmt", {
