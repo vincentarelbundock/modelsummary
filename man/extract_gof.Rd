@@ -9,10 +9,12 @@ extract_gof(model, fmt, gof_map, ...)
 \arguments{
 \item{model}{object type with an available `glance` method.}
 
-\item{fmt}{string which specifies how numeric values will be rounded. This
-string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
-the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
-use exponential notation. See `?sprintf` for more options.}
+\item{fmt}{an integer, string, or function which determines how to format numeric values:
+\itemize{
+  \item integer: the number of digits to keep after the period (`format(round(x, fmt), nsmall=fmt)`)
+  \item character: string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will use exponential notation. See `?sprintf` for more options.
+  \item function: a function which returns a formatted character string
+}}
 
 \item{gof_map}{data.frame with four columns: `raw`, `clean`, `fmt`, and
 `omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame

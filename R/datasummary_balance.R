@@ -23,8 +23,8 @@ DinM <- function(lhs, rhs, data, fmt, statistic) {
   out <- estimatr::tidy(out)
 
   out <- out[, c("estimate", statistic), drop=FALSE]
-  out[[1]] <- sprintf(fmt, out[[1]])
-  out[[2]] <- sprintf(fmt, out[[2]])
+  out[[1]] <- rounding(out[[1]], fmt)
+  out[[2]] <- rounding(out[[2]], fmt)
   out$variable <- lhs
 
   if (statistic == "std.error") {
@@ -63,7 +63,7 @@ DinM <- function(lhs, rhs, data, fmt, statistic) {
 datasummary_balance <- function(formula,
                                 data,
                                 output = 'default',
-                                fmt = "%.1f",
+                                fmt = 1,
                                 title = NULL,
                                 notes = NULL,
                                 align = NULL,

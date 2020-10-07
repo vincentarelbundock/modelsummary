@@ -7,7 +7,7 @@
 #' @inheritParams datasummary
 factory <- function(tab,
                     align = NULL,
-                    fmt = "%.3f",
+                    fmt = 3,
                     hrule = NULL,
                     notes = NULL,
                     output = NULL,
@@ -69,7 +69,7 @@ factory <- function(tab,
     # convert to numeric
     for (i in seq_along(add_columns)) {
       if (is.numeric(add_columns[[i]])) {
-        add_columns[[i]] <- sprintf(fmt, add_columns[[i]])
+        add_columns[[i]] <- rounding(add_columns[[i]], fmt)
       } else {
         add_columns[[i]] <- as.character(add_columns[[i]])
       }
@@ -129,7 +129,7 @@ factory <- function(tab,
     # convert to character
     for (i in 1:ncol(add_rows)) {
       if (is.numeric(add_rows[[i]])) {
-        add_rows[[i]] <- sprintf(fmt, add_rows[[i]])
+        add_rows[[i]] <- rounding(add_rows[[i]], fmt)
       } else {
         add_rows[[i]] <- as.character(add_rows[[i]])
       }

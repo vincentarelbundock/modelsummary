@@ -125,7 +125,7 @@
 datasummary <- function(formula,
                         data,
                         output = 'default',
-                        fmt = "%.2f",
+                        fmt = 2,
                         title = NULL,
                         notes = NULL,
                         align = NULL,

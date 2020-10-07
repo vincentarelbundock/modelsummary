@@ -8,10 +8,20 @@
 #' @return a rounded number as character
 #' @keywords internal
 rounding <- function(x, fmt = '%.3f') {
-  if (!is.character(x)) {
-    out <- sprintf(fmt, x)
-  } else {
+  if (is.character(x)) {
     out <- x
+  } else if (is.factor(x)) {
+    out <- as.character(x) 
+  } else {
+    if (is.character(fmt)) {
+      out <- sprintf(fmt, x)
+    } else if (is.numeric(fmt)) {
+      out <- trimws(format(round(x, fmt), nsmall=fmt))
+    } else if (is.function(fmt)) {
+      out <- fmt(x)
+    } else {
+      out <- x
+    }
   }
   out <- gsub('^NA$|^NaN$|^-Inf$|^Inf$', '', out)
   return(out)

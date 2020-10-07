@@ -5,7 +5,7 @@
 Mean <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- mean(x, na.rm = na.rm)
   if (!is.null(fmt)) {
-    out <- sprintf(fmt, out)
+    out <- rounding(out, fmt)
   }
   return(out)
 }
@@ -16,7 +16,7 @@ Mean <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 Median <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::median(x, na.rm = na.rm)
   if (!is.null(fmt)) {
-    out <- sprintf(fmt, out)
+    out <- rounding(out, fmt)
   }
   return(out)
 }
@@ -27,7 +27,7 @@ Median <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 Min <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- min(x, na.rm = na.rm)
   if (!is.null(fmt)) {
-    out <- sprintf(fmt, out)
+    out <- rounding(out, fmt)
   }
   return(out)
 }
@@ -38,7 +38,7 @@ Min <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 Max <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- max(x, na.rm = na.rm)
   if (!is.null(fmt)) {
-    out <- sprintf(fmt, out)
+    out <- rounding(out, fmt)
   }
   return(out)
 }
@@ -49,7 +49,7 @@ Max <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 SD <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::sd(x, na.rm = na.rm)
   if (!is.null(fmt)) {
-    out <- sprintf(fmt, out)
+    out <- rounding(out, fmt)
   }
   return(out)
 }
@@ -60,7 +60,7 @@ SD <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 Var <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::var(x, na.rm = na.rm)
   if (!is.null(fmt)) {
-    out <- sprintf(fmt, out)
+    out <- rounding(out, fmt)
   }
   return(out)
 }
@@ -97,7 +97,7 @@ NUnique <- function(x, ...) sprintf("%.0f", length(unique(x)))
 P0 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::quantile(x, prob = 0, na.rm = na.rm)
   if (!is.null(fmt)) {
-    out <- sprintf(fmt, out)
+    out <- rounding(out, fmt)
   }
   return(out)
 }
@@ -108,7 +108,7 @@ P0 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 P25 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::quantile(x, prob = 0.25, na.rm = na.rm)
   if (!is.null(fmt)) {
-    out <- sprintf(fmt, out)
+    out <- rounding(out, fmt)
   }
   return(out)
 }
@@ -119,7 +119,7 @@ P25 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 P50 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::quantile(x, prob = 0.50, na.rm = na.rm)
   if (!is.null(fmt)) {
-    out <- sprintf(fmt, out)
+    out <- rounding(out, fmt)
   }
   return(out)
 }
@@ -130,7 +130,7 @@ P50 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 P75 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::quantile(x, prob = 0.75, na.rm = na.rm)
   if (!is.null(fmt)) {
-    out <- sprintf(fmt, out)
+    out <- rounding(out, fmt)
   }
   return(out)
 }
@@ -141,7 +141,7 @@ P75 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 P100 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::quantile(x, prob = 1, na.rm = na.rm)
   if (!is.null(fmt)) {
-    out <- sprintf(fmt, out)
+    out <- rounding(out, fmt)
   }
   return(out)
 }

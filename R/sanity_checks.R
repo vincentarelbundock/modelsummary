@@ -75,7 +75,13 @@ sanity_gof_map <- function(gof_map) checkmate::check_data_frame(gof_map, null.ok
 #' sanity check
 #'
 #' @keywords internal
-sanity_fmt <- function(fmt) checkmate::assert_string(fmt, null.ok = FALSE)
+sanity_fmt <- function(fmt) {
+  checkmate::assert(
+    checkmate::check_character(fmt, len=1),
+    checkmate::check_numeric(fmt, len=1, lower=0),
+    checkmate::check_function(fmt)
+  )
+}
 
 #' sanity check
 #'

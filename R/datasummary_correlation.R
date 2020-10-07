@@ -4,14 +4,14 @@
 #' @export
 datasummary_correlation <- function(data,
                                     output = 'default',
-                                    fmt = "%.2f",
+                                    fmt = 2,
                                     title = NULL,
                                     notes = NULL) {
 
   sanity_output(output)
 
   clean_r <- function(x) {
-    x <- sprintf(fmt, x)
+    x <- rounding(x, fmt)
     x <- gsub('0\\.', '\\.', x)
     x <- gsub('1\\.00', '1', x)
     return(x)

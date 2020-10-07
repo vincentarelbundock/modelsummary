@@ -15,7 +15,7 @@ datasummary_extract <- function(tab,
     # use default where not specified in the tabular formula
     if (is.na(idx[i])) {
       if (is.numeric(tab[[i]])) {
-        tab[[i]] <- sprintf(fmt, tab[[i]])
+        tab[[i]] <- rounding(tab[[i]], fmt)
       }
     }
   }

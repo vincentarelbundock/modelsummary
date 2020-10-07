@@ -7,7 +7,7 @@
 datasummary_df(
   data,
   output = "default",
-  fmt = "\%.2f",
+  fmt = 2,
   align = NULL,
   hrule = NULL,
   title = NULL,
@@ -27,10 +27,12 @@ datasummary_df(
   \item When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kableExtra::save_kable`, or `cat` functions.
 }}
 
-\item{fmt}{string which specifies how numeric values will be rounded. This
-string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
-the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
-use exponential notation. See `?sprintf` for more options.}
+\item{fmt}{an integer, string, or function which determines how to format numeric values:
+\itemize{
+  \item integer: the number of digits to keep after the period (`format(round(x, fmt), nsmall=fmt)`)
+  \item character: string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will use exponential notation. See `?sprintf` for more options.
+  \item function: a function which returns a formatted character string
+}}
 
 \item{align}{A character string of length equal to the number of columns in
 the table.  "lcr" means that the first column will be left-aligned, the 2nd

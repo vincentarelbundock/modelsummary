@@ -6,7 +6,7 @@
 #' @export
 datasummary_df <- function(data,
                            output = "default",
-                           fmt = "%.2f",
+                           fmt = 2,
                            align = NULL,
                            hrule = NULL,
                            title = NULL,
@@ -20,7 +20,7 @@ datasummary_df <- function(data,
   checkmate::assert_data_frame(data)
 
   for (n in colnames(data)) {
-    data[[n]] <- sprintf(fmt, data[[n]])
+    data[[n]] <- rounding(data[[n]], fmt)
   }
 
   factory(data,

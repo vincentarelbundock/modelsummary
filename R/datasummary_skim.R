@@ -226,7 +226,7 @@ datasummary_skim <- function(data,
       stop("Cannot summarize more than 50 variables at a time.")
     }
 
-    pctformat = function(x) sprintf(fmt, x)
+    pctformat = function(x) rounding(x, fmt)
     f <- All(dat_new, numeric=FALSE, factor=TRUE, logical=TRUE, character=TRUE) ~
          (N = 1) * Format(digits=0) + (`%` = Percent()) * Format(pctformat())
 

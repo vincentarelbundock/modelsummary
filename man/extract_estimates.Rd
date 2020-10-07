@@ -38,10 +38,12 @@ estimates. FALSE if statistics should be printed beside estimates.}
 
 \item{conf_level}{confidence level to use for confidence intervals}
 
-\item{fmt}{string which specifies how numeric values will be rounded. This
-string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
-the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
-use exponential notation. See `?sprintf` for more options.}
+\item{fmt}{an integer, string, or function which determines how to format numeric values:
+\itemize{
+  \item integer: the number of digits to keep after the period (`format(round(x, fmt), nsmall=fmt)`)
+  \item character: string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will use exponential notation. See `?sprintf` for more options.
+  \item function: a function which returns a formatted character string
+}}
 
 \item{stars}{to indicate statistical significance
 \itemize{

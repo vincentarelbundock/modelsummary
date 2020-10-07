@@ -72,10 +72,12 @@ the table (using `grepl`).}
   \item Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
 }}
 
-\item{fmt}{string which specifies how numeric values will be rounded. This
-string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
-the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
-use exponential notation. See `?sprintf` for more options.}
+\item{fmt}{an integer, string, or function which determines how to format numeric values:
+\itemize{
+  \item integer: the number of digits to keep after the period (`format(round(x, fmt), nsmall=fmt)`)
+  \item character: string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will use exponential notation. See `?sprintf` for more options.
+  \item function: a function which returns a formatted character string
+}}
 
 \item{estimate}{character name of the estimate to display. Must be a column
 name in the data.frame produced by `tidy(model)`. In the vast majority of

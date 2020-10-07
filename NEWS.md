@@ -1,6 +1,8 @@
 # modelsummary 0.6.2.9000
 
-* new function: modelsummary_long
+* new function: modelsummary_wide
+* fmt accepts integer, string or function and respects options(OutDec=",")
+* bug fixes
 
 # modelsummary 0.6.2
 

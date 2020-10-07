@@ -8,7 +8,7 @@ inputs.}
 factory(
   tab,
   align = NULL,
-  fmt = "\%.3f",
+  fmt = 3,
   hrule = NULL,
   notes = NULL,
   output = NULL,
@@ -25,10 +25,12 @@ factory(
 the table.  "lcr" means that the first column will be left-aligned, the 2nd
 column center-aligned, and the 3rd column right-aligned.}
 
-\item{fmt}{string which specifies how numeric values will be rounded. This
-string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after
-the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will
-use exponential notation. See `?sprintf` for more options.}
+\item{fmt}{an integer, string, or function which determines how to format numeric values:
+\itemize{
+  \item integer: the number of digits to keep after the period (`format(round(x, fmt), nsmall=fmt)`)
+  \item character: string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will use exponential notation. See `?sprintf` for more options.
+  \item function: a function which returns a formatted character string
+}}
 
 \item{hrule}{position of horizontal rules (integer vector)}
 
