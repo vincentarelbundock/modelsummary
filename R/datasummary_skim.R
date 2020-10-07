@@ -125,12 +125,6 @@ datasummary_skim <- function(data,
 
       idx <- datasummary(f, data=dat_new, output="data.frame")[[1]]
       histogram_list <- as.list(dat_new[, idx, drop=FALSE])
-      for (n in names(histogram_list)) {
-        histogram_list[[n]] <- as.numeric(scale(stats::na.omit(histogram_list[[n]])))
-        if (all(is.nan(histogram_list[[n]]))) {
-          histogram_list[[n]] <- 0
-        }
-      }
 
       # too large
       if (ncol(dat_new) > 50) {
@@ -152,7 +146,8 @@ datasummary_skim <- function(data,
         kableExtra::column_spec(
           column=9, 
           image=kableExtra::spec_hist(histogram_list, 
-                                      col="black")
+                                      col="black",
+                                      same_lim=FALSE)
         )
 
       # don't use output=filepath.html when post-processing
