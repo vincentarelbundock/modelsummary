@@ -24,13 +24,18 @@ extract_estimates <- function(model,
       statistic_override=statistic_override,
       conf_level=conf_level)
 
+    # factor -> character (important for R<4.0.0)
+    for (i in seq_along(so)) {
+      if (is.factor(so[[i]])) {
+        so[[i]] <- as.character(so[[i]])
+      }
+    }
+
     bad1 <- (statistic != "conf.int") & (!statistic %in% colnames(so))
     bad2 <- (statistic == "conf.int") & (!"conf.low" %in% colnames(so))
     if (bad1 || bad2) {
-      stop(paste0(statistic, " cannot be extracted through the
-                        `statistic_override` argument. You might want to look
-                        at the `modelsummary:::extract_statistic_override`
-                        function to diagnose the problem."))
+      
+      stop(paste0(statistic, " cannot be extracted through the `statistic_override` argument. You might want to install the `lmtest` package and/or look at the `modelsummary:::extract_statistic_override` function to diagnose the problem."))
     } 
 
     # extract estimates
