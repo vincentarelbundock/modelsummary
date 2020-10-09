@@ -2,6 +2,7 @@
 
 * new function: modelsummary_wide
 * fmt accepts integer, string or function and respects options(OutDec=",")
+* align argument for modelsummary
 * bug fixes
 
 # modelsummary 0.6.2

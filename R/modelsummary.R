@@ -65,6 +65,9 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' @param estimate character name of the estimate to display. Must be a column
 #' name in the data.frame produced by `tidy(model)`. In the vast majority of
 #' cases, the default value of this argument should not be changed.
+#' @param align A character string of length equal to the number of columns in
+#' the table.  "lcr" means that the first column will be left-aligned, the 2nd
+#' column center-aligned, and the 3rd column right-aligned.
 #' @param ... all other arguments are passed to the `tidy` and `glance` methods
 #' used to extract estimates from the model. For example, this allows users to
 #' set `exponentiate=TRUE` to exponentiate logistic regression coefficients.
@@ -138,6 +141,7 @@ modelsummary <- function(models,
                          add_rows = NULL,
                          title = NULL,
                          notes = NULL,
+                         align = NULL,
                          estimate = 'estimate',
                          ...) {
 
@@ -206,10 +210,8 @@ modelsummary <- function(models,
   }
 
   # column alignment
-  if ("align" %in% names(ellipsis)) {
-    align <- ellipsis[["align"]]
-  } else {
-    align <- strrep("l", ncol(tab))
+  if (is.null(align)) {
+    align <- paste0("l", strrep("c", ncol(tab) - 1))
   }
 
   # build table

@@ -7,9 +7,6 @@
 #' See the Examples section for a mini-tutorial and the Details section for
 #' more resources.
 #' @param data A data.frame (or tibble)
-#' @param align A character string of length equal to the number of columns in
-#' the table.  "lcr" means that the first column will be left-aligned, the 2nd
-#' column center-aligned, and the 3rd column right-aligned.
 #' @param add_columns a data.frame (or tibble) with the same number of rows as
 #' your main table.
 #' @param sparse_header TRUE or FALSE. TRUE eliminates column headers which

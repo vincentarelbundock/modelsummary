@@ -21,6 +21,7 @@ modelsummary(
   add_rows = NULL,
   title = NULL,
   notes = NULL,
+  align = NULL,
   estimate = "estimate",
   ...
 )
@@ -97,6 +98,10 @@ See examples.}
 \item{title}{string}
 
 \item{notes}{list or vector of notes to append to the bottom of the table.}
+
+\item{align}{A character string of length equal to the number of columns in
+the table.  "lcr" means that the first column will be left-aligned, the 2nd
+column center-aligned, and the 3rd column right-aligned.}
 
 \item{estimate}{character name of the estimate to display. Must be a column
 name in the data.frame produced by `tidy(model)`. In the vast majority of
