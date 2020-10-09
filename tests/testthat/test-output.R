@@ -209,6 +209,7 @@ test_that("write to file", {
   expect_error(datasummary_skim(dat, type="categorical", output="test.html"), NA)
   expect_warning(datasummary_skim(dat, output="test.tex"))
 
+  unlink("test.png")
   unlink("test.jpg")
   unlink("test.html")
   unlink("test.tex")
