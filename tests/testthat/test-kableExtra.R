@@ -37,7 +37,6 @@ test_that("kable markdown: complex table", {
         'Second custom note with different content.'),
       output = 'markdown'),
     print = TRUE,
-    tab,
     file = "known_output/kableExtra_markdown_complex.md",
     update = FALSE)
 
@@ -52,7 +51,6 @@ test_that("kable markdown: rouding + custom stars", {
       fmt = '%.8f',
       output = 'markdown'),
     print = TRUE,
-    tab,
     file = "known_output/kableExtra_markdown_rounding_stars.md",
     update = FALSE)
 
