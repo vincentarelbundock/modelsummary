@@ -75,7 +75,11 @@ factory_kableExtra <- function(tab,
   if (is.null(output_file)) {
     return(out)
   } else {
-    kableExtra::save_kable(out, file = output_file)
+    if (output_format == "markdown") {
+      writeLines(paste(out, collapse="\n"), con=output_file)
+    } else {
+      kableExtra::save_kable(out, file = output_file)
+    }
   }
 
 }
