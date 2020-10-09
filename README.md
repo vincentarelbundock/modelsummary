@@ -153,13 +153,14 @@ To summarize multiple models side-by-side, we store them in a list. If
 the items in that list are named, the names will be used as column
 labels:
 
-``` r
-models <- list()
-models[['OLS 1']] <- lm(Donations ~ Literacy + Clergy, data = dat)
-models[['Poisson 1']] <- glm(Donations ~ Literacy + Commerce, family = poisson, data = dat)
-models[['OLS 2']] <- lm(Crime_pers ~ Literacy + Clergy, data = dat)
-models[['Poisson 2']] <- glm(Crime_pers ~ Literacy + Commerce, family = poisson, data = dat)
-models[['OLS 3']] <- lm(Crime_prop ~ Literacy + Clergy, data = dat)
+```r
+models <- list(
+  "OLS 1"     = lm(Donations ~ Literacy + Clergy, data = dat),
+  "Poisson 1" = glm(Donations ~ Literacy + Commerce, family = poisson, data = dat),
+  "OLS 2"     = lm(Crime_pers ~ Literacy + Clergy, data = dat),
+  "Poisson 2" = glm(Crime_pers ~ Literacy + Commerce, family = poisson, data = dat),
+  "OLS 3"     = lm(Crime_prop ~ Literacy + Clergy, data = dat)
+)
 
 modelsummary(models)
 ```
@@ -176,7 +177,7 @@ In `Rstudio`, the image below will be displayed automatically in the
 
 The same table can be printed in text-only format to the `R` Console:
 
-``` r
+```r
 modelsummary(models, 'markdown')
 
 
