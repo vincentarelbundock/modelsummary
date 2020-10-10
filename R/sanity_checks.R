@@ -34,7 +34,7 @@ sanity_align <- function(align, tab) {
   if (!is.null(align)) {
     checkmate::assert_true(nchar(align) == ncol(tab))
     align <- strsplit(align, '')[[1]]
-    checkmate::assert_true(all(align %in% c('l', 'c', 'r')))
+    checkmate::assert_true(all(align %in% c('l', 'c', 'r', 'd')))
   }
 }
 
