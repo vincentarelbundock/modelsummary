@@ -30,12 +30,11 @@ sanity_model_names <- function(modelnames) {
 #'
 #' @keywords internal
 sanity_align <- function(align, tab) {
-  checkmate::assert_string(align, null.ok = TRUE)
-  if (!is.null(align)) {
-    checkmate::assert_true(nchar(align) == ncol(tab))
-    align <- strsplit(align, '')[[1]]
-    checkmate::assert_true(all(align %in% c('l', 'c', 'r', 'd')))
-  }
+  checkmate::assert(
+    checkmate::check_character(align, len=1, null.ok = TRUE),
+    checkmate::check_character(align, len=ncol(tab), null.ok = TRUE),
+    combine="or"
+  )
 }
 
 #' sanity check

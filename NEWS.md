@@ -3,6 +3,7 @@
 * new function: modelsummary_wide
 * fmt accepts integer, string or function and respects options(OutDec=",")
 * align argument for modelsummary
+* align is more liberal to accept dcolumn alignment
 * glance_custom methods for lfe and fixest 
 * bug fixes
 

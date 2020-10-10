@@ -12,8 +12,7 @@ factory_kableExtra <- function(tab,
                                title = NULL,
                                ...) {
 
-  if (is.null(output_format) ||
-    !output_format %in% c("latex", "markdown")) {
+  if (is.null(output_format) || !output_format %in% c("latex", "markdown")) {
     output_format <- "html"
   }
 
@@ -24,13 +23,27 @@ factory_kableExtra <- function(tab,
              "midrule", "caption.short", "table.envir") 
   arguments <- c(
     list(...),
-    "align"    = align,
     "caption"  = title,
     "format"   = output_format,
     "booktabs" = TRUE,
     "linesep"  = "")
+
+  # align
+  if (!is.null(align)) {
+    arguments[["align"]] <- align
+
+    # if dcolumn, wrap model names in multicolumn to avoid math mode
+    if (output_format == "latex" && 
+        any(grepl("D\\{", align)) &&
+        !"escape" %in% names(arguments)) {
+      colnames(tab) <- paste0("\\multicolumn{1}{c}{", colnames(tab), "}")
+      arguments$escape <- FALSE
+    }
+  }
+
   arguments <- arguments[base::intersect(names(arguments), valid)]
   arguments <- c(list(tab), arguments)
+
   out <- do.call(kableExtra::kbl, arguments)
 
   # horizontal rule to separate coef/gof not supported in markdown
