@@ -116,7 +116,7 @@
 <span class="no">dat</span>$<span class="no">Literacy</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">dat</span>), <span class="fl">10</span>)] <span class="kw">&lt;-</span> <span class="fl">NA</span>
 
 <span class="co"># Impute with `mice` and `Amelia`</span>
-<span class="no">dat_mice</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://amices.github.io/mice/reference/mice.html">mice</a></span>(<span class="no">dat</span>, <span class="kw">m</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">printFlag</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="no">dat_mice</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mice/man/mice.html">mice</a></span>(<span class="no">dat</span>, <span class="kw">m</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">printFlag</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="no">dat_amelia</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Amelia/man/amelia.html">amelia</a></span>(<span class="no">dat</span>, <span class="kw">m</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">p2s</span> <span class="kw">=</span> <span class="fl">0</span>)$<span class="no">imputations</span>
 
 <span class="co"># Estimate models</span>
@@ -126,8 +126,8 @@
 <span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">dat_amelia</span>, <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="no">x</span>))
 
 <span class="co"># Pool results</span>
-<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mice</span><span class="kw ns">::</span><span class="fu"><a href="https://amices.github.io/mice/reference/pool.html">pool</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]])
-<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mice</span><span class="kw ns">::</span><span class="fu"><a href="https://amices.github.io/mice/reference/pool.html">pool</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]])
+<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mice</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/mice/man/pool.html">pool</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]])
+<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mice</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/mice/man/pool.html">pool</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]])
 
 <span class="co"># Summarize</span>
 <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
@@ -135,13 +135,13 @@
 <thead><tr>
 <th style="text-align:left;">
 </th>
-<th style="text-align:left;">
+<th style="text-align:center;">
 Listwise deletion
 </th>
-<th style="text-align:left;">
+<th style="text-align:center;">
 Mice
 </th>
-<th style="text-align:left;">
+<th style="text-align:center;">
 Amelia
 </th>
 </tr></thead>
@@ -150,94 +150,94 @@ Amelia
 <td style="text-align:left;">
 (Intercept)
 </td>
-<td style="text-align:left;">
-77.253
+<td style="text-align:center;">
+72.736
 </td>
-<td style="text-align:left;">
-80.254
+<td style="text-align:center;">
+68.866
 </td>
-<td style="text-align:left;">
-71.675
+<td style="text-align:center;">
+64.108
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
-<td style="text-align:left;">
-(14.649)
+<td style="text-align:center;">
+(14.116)
 </td>
-<td style="text-align:left;">
-(13.082)
+<td style="text-align:center;">
+(12.693)
 </td>
-<td style="text-align:left;">
-(12.555)
+<td style="text-align:center;">
+(14.273)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Literacy
 </td>
-<td style="text-align:left;">
--0.497
+<td style="text-align:center;">
+-0.489
 </td>
-<td style="text-align:left;">
--0.554
+<td style="text-align:center;">
+-0.381
 </td>
-<td style="text-align:left;">
--0.444
+<td style="text-align:center;">
+-0.353
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
-<td style="text-align:left;">
-(0.238)
-</td>
-<td style="text-align:left;">
-(0.231)
-</td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 (0.223)
+</td>
+<td style="text-align:center;">
+(0.193)
+</td>
+<td style="text-align:center;">
+(0.197)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Commerce
 </td>
-<td style="text-align:left;">
--0.299
+<td style="text-align:center;">
+-0.226
 </td>
-<td style="text-align:left;">
--0.346
+<td style="text-align:center;">
+-0.230
 </td>
-<td style="text-align:left;">
--0.249
+<td style="text-align:center;">
+-0.162
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
-<td style="text-align:left;">
-(0.155)
+<td style="text-align:center;">
+(0.157)
 </td>
-<td style="text-align:left;">
-(0.127)
+<td style="text-align:center;">
+(0.160)
 </td>
-<td style="text-align:left;">
-(0.129)
+<td style="text-align:center;">
+(0.180)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Num.Obs.
 </td>
-<td style="text-align:left;">
-61
+<td style="text-align:center;">
+57
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 86
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 86
 </td>
 </tr>
@@ -245,12 +245,12 @@ Num.Obs.
 <td style="text-align:left;">
 Num.Imp.
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 5
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 5
 </td>
 </tr>
@@ -258,76 +258,76 @@ Num.Imp.
 <td style="text-align:left;">
 R2
 </td>
-<td style="text-align:left;">
-0.080
+<td style="text-align:center;">
+0.084
 </td>
-<td style="text-align:left;">
-0.122
+<td style="text-align:center;">
+0.059
 </td>
-<td style="text-align:left;">
-0.081
+<td style="text-align:center;">
+0.050
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 R2 Adj.
 </td>
-<td style="text-align:left;">
-0.048
+<td style="text-align:center;">
+0.050
 </td>
-<td style="text-align:left;">
-0.100
+<td style="text-align:center;">
+0.035
 </td>
-<td style="text-align:left;">
-0.057
+<td style="text-align:center;">
+0.025
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 AIC
 </td>
-<td style="text-align:left;">
-568.9
+<td style="text-align:center;">
+529.1
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 BIC
 </td>
-<td style="text-align:left;">
-577.3
+<td style="text-align:center;">
+537.3
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Log.Lik.
 </td>
-<td style="text-align:left;">
--280.431
+<td style="text-align:center;">
+-260.545
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 F
 </td>
-<td style="text-align:left;">
-2.513
+<td style="text-align:center;">
+2.478
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 </td>
 </tr>
 </tbody>
