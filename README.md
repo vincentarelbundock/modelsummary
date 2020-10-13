@@ -15,6 +15,8 @@ Status](https://travis-ci.org/vincentarelbundock/modelsummary.svg?branch=master)
 
 The tables produced by `modelsummary` are beautiful and highly customizable. They can be echoed to the `R` console or displayed in the `RStudio` Viewer. They can be saved to a wide variety of formats, including HTML, PDF, Text/Markdown, LaTeX, MS Word, RTF, JPG, and PNG. Tables can easily be embedded in dynamic documents with `Rmarkdown`, `knitr`, or `Sweave`. `modelsummary` supports dozens of model types out-of-the-box. 
 
+Extensive documentation and examples can be found on the `modelsummary` website: https://vincentarelbundock.github.io/modelsummary
+
 `modelsummary` includes three families of functions:
 
 1. `modelsummary`: Display results from several statistical models side-by-side. 
