@@ -1,6 +1,12 @@
 #' Create summary tables using 2-sided formulae: crosstabs, frequencies, table
 #' 1s and more.
 #'
+#' `datasummary` can use any summary function which produces one numeric or
+#' character value per variable. The examples section of this documentation
+#' shows how to define custom summary functions. The package also ships with
+#' several shortcut summary functions: Min, Max, Mean, Median, Var, SD,
+#' NPercent, NUnique, Ncol, P0, P25, P50, P75, P100.
+#'
 #' @inheritParams modelsummary
 #' @import tables
 #' @param formula A two-sided formula to describe the table: rows ~ columns.
