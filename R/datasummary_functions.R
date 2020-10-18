@@ -154,6 +154,14 @@ PercentMissing <- function(x) {
 }
 
 #' datasummary statistic shortcut
+#'
+#' This function uses Unicode characters to create a histogram. This can
+#' sometimes be useful, but is generally discouraged. Unicode characters can
+#' only display a limited number of heights for bars, and the accuracy of
+#' output is highly dependent on the platform (typeface, output type, windows
+#' vs. mac, etc.). We recommend you use the `kableExtra::spec_hist` function
+#' instead.
+#'
 #' @export
 #' @keywords internal
 Histogram <- function(x, bins = 10) {
