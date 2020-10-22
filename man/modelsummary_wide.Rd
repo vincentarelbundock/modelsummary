@@ -83,7 +83,7 @@ Coefficients that are omitted from this vector will be omitted from the
 table. The table will be ordered in the same order as this vector.}
 
 \item{coef_omit}{string regular expression. Omits all matching coefficients
-from the table (using `grepl`).}
+from the table (using `grepl(perl=TRUE)`).}
 
 \item{coef_rename}{named character vector. Values refer to the variable names
 that will appear in the table. Names refer to the original term names stored
@@ -94,7 +94,7 @@ in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
 by default: `modelsummary::gof_map`}
 
 \item{gof_omit}{string regular expression. Omits all matching gof statistics from
-the table (using `grepl`).}
+the table (using `grepl(perl=TRUE)`).}
 
 \item{add_rows}{a data.frame (or tibble) with the same number of columns as
 your main table. By default, rows are appended to the bottom of the table.

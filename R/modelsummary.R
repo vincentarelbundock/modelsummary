@@ -47,7 +47,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' Coefficients that are omitted from this vector will be omitted from the
 #' table. The table will be ordered in the same order as this vector.
 #' @param coef_omit string regular expression. Omits all matching coefficients
-#' from the table (using `grepl`).
+#' from the table (using `grepl(perl=TRUE)`).
 #' @param coef_rename named character vector. Values refer to the variable names
 #' that will appear in the table. Names refer to the original term names stored
 #' in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
@@ -55,7 +55,7 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' `omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame
 #' by default: `modelsummary::gof_map`
 #' @param gof_omit string regular expression. Omits all matching gof statistics from
-#' the table (using `grepl`).
+#' the table (using `grepl(perl=TRUE)`).
 #' @param add_rows a data.frame (or tibble) with the same number of columns as
 #' your main table. By default, rows are appended to the bottom of the table.
 #' You can define a "position" attribute of integers to set the row positions.

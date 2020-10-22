@@ -2,6 +2,16 @@ context('coef_omit')
 
 library(modelsummary)
 
+test_that("perl=TRUE allows lookbehind", {
+  # omit vs except when it is preceded by mpg
+  mod <- lm(hp ~ mpg * vs, mtcars)
+  out <- modelsummary(mod, 
+                      coef_omit="^(?!mpg).*vs",
+                      output="data.frame")
+  expect_equal(out$term[1:7],
+               c("(Intercept)", "", "mpg", "", "mpg × vs", "", "Num.Obs."))
+})
+
 test_that("omit coefficients using regular expressions", {
 
   mod <- list()

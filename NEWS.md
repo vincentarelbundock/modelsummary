@@ -1,6 +1,7 @@
 # modelsummary 0.6.2.9000
 
 * new function: modelsummary_wide
+* coef_omit and gof_omit use grepl(perl=TRUE)
 * fmt accepts integer, string or function and respects options(OutDec=",")
 * align argument for modelsummary
 * align is more liberal to accept dcolumn alignment

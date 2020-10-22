@@ -93,7 +93,7 @@ extract_models <- function(models,
     # coef_omit
     if (!is.null(coef_omit)) {
       est[[i]] <- est[[i]] %>%
-        dplyr::filter(!grepl(coef_omit, term))
+        dplyr::filter(!grepl(coef_omit, term, perl=TRUE))
     }
 
     # set model name
@@ -126,7 +126,7 @@ extract_models <- function(models,
   # omit gof using regex
   if (!is.null(gof_omit)) {
     gof <- gof %>%
-      dplyr::filter(!grepl(gof_omit, term))
+      dplyr::filter(!grepl(gof_omit, term, perl=TRUE))
   }
 
   # otherwise defined at the model level in extract_gof
