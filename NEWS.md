@@ -1,4 +1,4 @@
-# modelsummary 0.6.2.9000
+# modelsummary 0.6.3
 
 * new function: modelsummary_wide
 * coef_omit and gof_omit use grepl(perl=TRUE)
