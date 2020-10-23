@@ -12,6 +12,15 @@ models[['OLS 2']] <- lm(Desertion ~ Crime_prop + Infants, dat)
 models[['Poisson 2']] <- glm(Desertion ~ Crime_prop + Donations, dat, family = poisson())
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 
+test_that("single model", {
+  mod <- lm(hp ~ mpg + drat, mtcars)
+  x <- modelsummary(mod, statistic_override=vcov, output="data.frame")
+  y <- modelsummary(mod, statistic_override=vcov(mod), output="data.frame")
+  z <- modelsummary(mod, statistic_override=sqrt(diag(vcov(mod))), output="data.frame")
+  expect_equal(x, y)
+  expect_equal(y, z)
+})
+
 # reference tables
 results <- list()
 

@@ -201,8 +201,13 @@ sanity_statistic <- function(statistic,
 
   checkmate::assert_character(statistic)
 
-  checkmate::assert(checkmate::check_list(statistic_override, null.ok = TRUE),
-    checkmate::check_function(statistic_override, null.ok = TRUE))
+  checkmate::assert(
+    checkmate::check_list(statistic_override, null.ok = TRUE),
+    checkmate::check_function(statistic_override, null.ok = TRUE),
+    checkmate::check_matrix(statistic_override, null.ok = TRUE),
+    checkmate::check_atomic_vector(statistic_override),
+    combine="or"
+  )
 
   if (is.list(statistic_override)) {
     checkmate::assert_true(length(statistic_override) == length(models))

@@ -38,6 +38,8 @@ extract_statistic_override <- function(model, statistic_override, conf_level=NUL
   # function is expected to return a matrix
   if (is.function(statistic_override)) {
     out <- try(statistic_override(model), silent=TRUE)
+  } else {
+    out <- statistic_override
   }
 
   if (is.matrix(out)) {
@@ -48,8 +50,10 @@ extract_statistic_override <- function(model, statistic_override, conf_level=NUL
   } 
 
   # atomic vector
-  if (is.atomic(statistic_override)) {
-    out <- data.frame(term=names(statistic_override), std.error=statistic_override)
+  flag <- checkmate::check_atomic_vector(out, names="named")
+  if (isTRUE(flag)) {
+    out <- data.frame(term=names(out), 
+                      std.error=out)
     return(out)
   }
 

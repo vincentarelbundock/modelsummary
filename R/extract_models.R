@@ -47,9 +47,8 @@ extract_models <- function(models,
   }
   model_names <- pad(model_names)
 
-  # if statistics_override is a single function, repeat it in a list to allow
-  # map
-  if (is.function(statistic_override)) {
+  # if statistics_override is not a list, repeat it to match models list
+  if (!inherits(statistic_override, "list")) {
     statistic_override <- rep(list(statistic_override), length(models))
   }
 
