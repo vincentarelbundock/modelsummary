@@ -75,7 +75,8 @@ modelplot <- function(models,
              coef_map=coef_map,
              coef_omit=coef_omit,
              coef_rename=coef_rename,
-             statistic_override=statistic_override) %>%
+             statistic_override=statistic_override,
+             ...) %>%
       dplyr::filter(group == "estimates", statistic=="estimate") %>%
       tidyr::pivot_longer(cols=4:ncol(.), values_to="estimate", names_to="model") %>%
       dplyr::filter(estimate != "") %>%
@@ -89,7 +90,8 @@ modelplot <- function(models,
              coef_omit=coef_omit,
              coef_rename=coef_rename,
              statistic="conf.int",
-             statistic_override=statistic_override)  %>%
+             statistic_override=statistic_override,
+             ...)  %>%
       dplyr::filter(group == "estimates") %>%
       tidyr::pivot_longer(cols=4:ncol(.), names_to="model") %>%
       tidyr::pivot_wider(names_from="statistic") %>%
@@ -128,12 +130,11 @@ modelplot <- function(models,
   if (!is.null(conf_level)) {
     if (length(unique(dat$model)) == 1) {
       p <- p + 
-        ggplot2::geom_pointrange(
-          ggplot2::aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high), ...)
+        ggplot2::geom_pointrange(ggplot2::aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high), ...)
     } else {
       if (facet) {
         p <- p + 
-          ggplot2::geom_pointrange(ggplot2::aes(y=model, x=estimate, xmin=conf.low, xmax=conf.high), ...) +
+          ggplot2::geom_pointrange(ggplot2::aes(y=model, x=estimate, xmin=conf.low, xmax=conf.high), ...) + 
           ggplot2::facet_grid(term ~ ., scales='free_y')
       } else {
         p <- p + 

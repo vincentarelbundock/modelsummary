@@ -1,3 +1,7 @@
+# modelsummary 0.6.3.9000
+
+* modelplot pushes ... through to extract_models
+
 # modelsummary 0.6.3
 
 * new function: modelsummary_wide
