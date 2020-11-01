@@ -137,6 +137,16 @@ modelsummary(models,
 
 ## Coefficient estimates
 
+You can rename coefficients using the `coef_rename` argument. For example, if you have two models with different explanatory variables, but you want both variables to have the same names and appear ont he same row, you can do:
+
+```{r}
+x <- list(
+  lm(hp ~ drat, mtcars),
+  lm(hp ~ vs, mtcars)
+  )
+modelsummary(x, coef_rename=c("drat"="Explanator", "vs"="Explanator"))
+```
+
 The `coef_map` argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the "clean" variable name. Names of this vector correspond to the "raw" variable name. The table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.
 
 ```{r}
