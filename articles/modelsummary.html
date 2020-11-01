@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
       </span>
     </div>
 
@@ -86,7 +86,8 @@
 
       
 
-      </header><script src="modelsummary_files/header-attrs-2.4/header-attrs.js"></script><script src="modelsummary_files/kePrint-0.0.1/kePrint.js"></script><link href="modelsummary_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+      </header><script src="modelsummary_files/header-attrs-2.5/header-attrs.js"></script><link href="modelsummary_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="modelsummary_files/anchor-sections-1.0/anchor-sections.js"></script><script src="modelsummary_files/kePrint-0.0.1/kePrint.js"></script><link href="modelsummary_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <link href="modelsummary_files/tabwid-1.0.0/tabwid.css" rel="stylesheet">
 <script src="modelsummary_files/tabwid-1.0.0/tabwid.js"></script><div class="row">
   <div class="col-md-9 contents">
@@ -789,8 +790,147 @@ F
 <div id="coefficient-estimates" class="section level2">
 <h2 class="hasAnchor">
 <a href="#coefficient-estimates" class="anchor"></a>Coefficient estimates</h2>
+<p>You can rename coefficients using the <code>coef_rename</code> argument. For example, if you have two models with different explanatory variables, but you want both variables to have the same names and appear ont he same row, you can do:</p>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
+  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">hp</span> ~ <span class="no">drat</span>, <span class="no">mtcars</span>),
+  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">hp</span> ~ <span class="no">vs</span>, <span class="no">mtcars</span>)
+  )
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">x</span>, <span class="kw">coef_rename</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"drat"</span><span class="kw">=</span><span class="st">"Explanator"</span>, <span class="st">"vs"</span><span class="kw">=</span><span class="st">"Explanator"</span>))</pre></body></html></div>
+<table class="table table">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+Model 1
+</th>
+<th style="text-align:center;">
+Model 2
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
+353.653
+</td>
+<td style="text-align:center;">
+189.722
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+(76.049)
+</td>
+<td style="text-align:center;">
+(11.347)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Explanator
+</td>
+<td style="text-align:center;">
+-57.545
+</td>
+<td style="text-align:center;">
+-98.365
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+(20.922)
+</td>
+<td style="text-align:center;">
+(17.155)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Num.Obs.
+</td>
+<td style="text-align:center;">
+32
+</td>
+<td style="text-align:center;">
+32
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R2
+</td>
+<td style="text-align:center;">
+0.201
+</td>
+<td style="text-align:center;">
+0.523
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R2 Adj.
+</td>
+<td style="text-align:center;">
+0.175
+</td>
+<td style="text-align:center;">
+0.507
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AIC
+</td>
+<td style="text-align:center;">
+359.2
+</td>
+<td style="text-align:center;">
+342.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BIC
+</td>
+<td style="text-align:center;">
+363.6
+</td>
+<td style="text-align:center;">
+347.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Log.Lik.
+</td>
+<td style="text-align:center;">
+-176.588
+</td>
+<td style="text-align:center;">
+-168.347
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+F
+</td>
+<td style="text-align:center;">
+7.565
+</td>
+<td style="text-align:center;">
+32.876
+</td>
+</tr>
+</tbody>
+</table>
 <p>The <code>coef_map</code> argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the “clean” variable name. Names of this vector correspond to the “raw” variable name. The table will be sorted in the order in which terms are presented in <code>coef_map</code>. Coefficients which are <em>not</em> included in <code>coef_map</code> will be excluded from the table.</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>,
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>,
         <span class="st">'Commerce'</span> <span class="kw">=</span> <span class="st">'Patents per capita'</span>,
         <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>)
 <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>)</pre></body></html></div>
@@ -1063,7 +1203,7 @@ F
 </tbody>
 </table>
 <p>An alternative mechanism to subset coefficients is to use the <code>coef_omit</code> argument. This string is a regular expression which will be fed to <code><a href="https://stringr.tidyverse.org/reference/str_detect.html">stringr::str_detect</a></code> to detect the variable names which should be excluded from the table.</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_omit</span> <span class="kw">=</span> <span class="st">"Intercept|Commerce"</span>, <span class="kw">gof_omit</span><span class="kw">=</span><span class="st">".*"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_omit</span> <span class="kw">=</span> <span class="st">"Intercept|Commerce"</span>, <span class="kw">gof_omit</span><span class="kw">=</span><span class="st">".*"</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1162,7 +1302,7 @@ Clergy
 </tbody>
 </table>
 <p>Since <code>coef_omit</code> accepts regexes, you can do interesting things with it, such as specifying the list of variables that <code>modelsummary</code> should <em>keep</em> instead of omit. To do this, we use the <code>[^]</code> construct that specifies what <em>not</em> to match, we use the <code><a href="https://rdrr.io/r/base/Logic.html">|</a></code> pipe operator to separate the list of variables to include:</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_omit</span> <span class="kw">=</span> <span class="st">"[^Commerce|(Intercept)]"</span>, <span class="kw">gof_omit</span><span class="kw">=</span><span class="st">".*"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_omit</span> <span class="kw">=</span> <span class="st">"[^Commerce|(Intercept)]"</span>, <span class="kw">gof_omit</span><span class="kw">=</span><span class="st">".*"</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1263,7 +1403,7 @@ Commerce
 <h2 class="hasAnchor">
 <a href="#goodness-of-fit-and-other-statistics" class="anchor"></a>Goodness-of-fit and other statistics</h2>
 <p><code>gof_omit</code> is a regular expression which will be fed to <code><a href="https://stringr.tidyverse.org/reference/str_detect.html">stringr::str_detect</a></code> to detect the names of the statistics which should be excluded from the table.</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'DF|Deviance|R2|AIC|BIC'</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'DF|Deviance|R2|AIC|BIC'</span>)</pre></body></html></div>
 <p>A more powerful mechanism is to supply a <code>data.frame</code> (or <code>tibble</code>) through the <code>gof_map</code> argument. This data.frame must include 4 columns:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -1276,7 +1416,7 @@ Commerce
 <code>omit</code>: <code>TRUE</code> if you want the statistic to be omitted from your final table.</li>
 </ol>
 <p>You can see an example of a valid data frame by typing <code><a href="../reference/gof_map.html">modelsummary::gof_map</a></code>. This is the default data.frame that <code>modelsummary</code> uses to subset and reorder goodness-of-fit statistics. As you can see, <code>omit == TRUE</code> for quite a number of statistics. You can include setting <code>omit == FALSE</code>:</p>
-<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">gm</span> <span class="kw">&lt;-</span> <span class="kw pkg">modelsummary</span><span class="kw ns">::</span><span class="no"><a href="../reference/gof_map.html">gof_map</a></span>
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">gm</span> <span class="kw">&lt;-</span> <span class="kw pkg">modelsummary</span><span class="kw ns">::</span><span class="no"><a href="../reference/gof_map.html">gof_map</a></span>
 <span class="no">gm</span>$<span class="no">omit</span> <span class="kw">&lt;-</span> <span class="fl">FALSE</span>
 <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">gof_map</span> <span class="kw">=</span> <span class="no">gm</span>)</pre></body></html></div>
 <p>The goodness-of-fit statistics will be printed in the table in the same order as in the <code>gof_map</code> data.frame.</p>
@@ -1295,11 +1435,11 @@ Commerce
 </li>
 <li>Named numeric vector for custom stars.</li>
 </ol>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>)
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>)
 <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'+'</span> <span class="kw">=</span> <span class="fl">.1</span>, <span class="st">'&amp;'</span> <span class="kw">=</span> <span class="fl">.01</span>))</pre></body></html></div>
 <p>Whenever <code>stars != FALSE</code>, <code>modelsummary</code> adds a note at the bottom of the table automatically. If you would like to omit this note, just use the <code>stars_note</code> argument:</p>
-<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">stars_note</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">stars_note</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
 <p>If you want to create your own stars description, you can add custom notes with the <a href="https://github.com/vincentarelbundock/modelsummary#notes"><code>notes</code></a> argument.</p>
 </div>
 <div id="rounding" class="section level1">
@@ -1314,18 +1454,18 @@ Commerce
 <li>Changing the <code>f</code> for an <code>e</code> will use the exponential decimal representation.</li>
 </ul>
 <p>Most users will just modify the <code>3</code> in <code>%.3f</code>, but this is a very powerful system, and all users are encouraged to read the details: <code><a href="https://rdrr.io/r/base/sprintf.html">?sprintf</a></code></p>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">fmt</span> <span class="kw">=</span> <span class="st">'%.7f'</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">fmt</span> <span class="kw">=</span> <span class="st">'%.7f'</span>)</pre></body></html></div>
 </div>
 <div id="add_rows" class="section level1">
 <h1 class="hasAnchor">
 <a href="#add_rows" class="anchor"></a><code>add_rows</code>
 </h1>
 <p>Use the <code>add_rows</code> argument to add rows manually to a table. For example, let’s say you estimate two models with a factor variables and you want to insert (a) an empty line to identify the category of reference, and (b) cutomized information at the bottom of the table:</p>
-<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
 <span class="no">models</span><span class="kw">[[</span><span class="st">'OLS'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">mpg</span> ~ <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">cyl</span>), <span class="no">mtcars</span>)
 <span class="no">models</span><span class="kw">[[</span><span class="st">'Logit'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">am</span> ~ <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">cyl</span>), <span class="no">mtcars</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">binomial</span>)</pre></body></html></div>
 <p>We create a data.frame with the same number of columns as the summary table. Then, we define a “position” attribute to specify where the new rows should be inserted in the table. Finally, we pass this data.frame to the <code>add_rows</code> argument:</p>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tibble</span>)
+<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tibble</span>)
 <span class="no">rows</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(~<span class="no">term</span>,          ~<span class="no">OLS</span>,  ~<span class="no">Logit</span>,
                 <span class="st">'factor(cyl)4'</span>, <span class="st">'-'</span>,   <span class="st">'-'</span>,
                 <span class="st">'Info'</span>,         <span class="st">'???'</span>, <span class="st">'XYZ'</span>)
@@ -1510,7 +1650,7 @@ F
 <h1 class="hasAnchor">
 <a href="#extra-tidy-arguments-e-g--exponentiated-coefficients" class="anchor"></a>Extra tidy arguments (e.g., exponentiated coefficients)</h1>
 <p>Users can pass any additional argument they want to the <code>tidy</code> method which is used to extract estimates from a model. For example, in logitistic or Cox proportional hazard models, many users want to exponentiate coefficients to faciliate interpretation. The <code>tidy</code> functions supplied by the <code>broom</code> package allow users to set <code>exponentiate=TRUE</code> to achieve this. In <code>modelsummary</code>, users can use the same argument:</p>
-<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">mod_logit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">am</span> ~ <span class="no">mpg</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">binomial</span>)
+<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="no">mod_logit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">am</span> ~ <span class="no">mpg</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">binomial</span>)
 <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod_logit</span>, <span class="kw">exponentiate</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
 <p>Any argument supported by <code>tidy</code> is thus supported by <code>modelsummary</code>.</p>
 <p>Warning: at the moment (2020-05-05), <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::tidy</a></code> still reports <code>std.error</code> on the original scale. See this <a href="https://github.com/tidymodels/broom/issues/422">discussion on the <code>broom</code> GitHub page.</a></p>
@@ -1528,7 +1668,7 @@ F
 <p>Users are encouraged to visit these websites to determine which package suits their needs best. Each of them has different strengths and weaknesses. For instance, <code>gt</code> allows seamless integration with the RStudio IDE, but <code>kableExtra</code>’s LaTeX (and PDF) output is far more mature.</p>
 <p>To create customized tables, the analyst begins by calling <code><a href="../reference/modelsummary.html">modelsummary(models)</a></code> to create a summary table. Then, she <em>post-processes</em> the table by applying functions from one of the packages listed above. It is often convenient to use the <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code> operator to do this.</p>
 <p>To illustrate, we download data from the <a href="https://vincentarelbundock.github.io/Rdatasets'">Rdatasets repository</a> and we estimate 5 models:</p>
-<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
 <span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
 <span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)
@@ -1555,7 +1695,7 @@ F
 </ul>
 <p>To produce a “cleaner” look, we will also use <code>modelsummary</code>’s <code>stars</code>, <code>coef_map</code>, <code>gof_omit</code>, and <code>title</code> arguments.</p>
 <p>Note that in order to access <code>gt</code> functions, we must first load the library.</p>
-<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
+<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
 
 <span class="co"># build table with `modelsummary` </span>
 <span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>)
@@ -1588,7 +1728,7 @@ F
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#tqqqrjrbdd .gt_table {
+#ohztlpvfsw .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1613,7 +1753,7 @@ F
   border-left-color: #D3D3D3;
 }
 
-#tqqqrjrbdd .gt_heading {
+#ohztlpvfsw .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1625,7 +1765,7 @@ F
   border-right-color: #D3D3D3;
 }
 
-#tqqqrjrbdd .gt_title {
+#ohztlpvfsw .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1635,7 +1775,7 @@ F
   border-bottom-width: 0;
 }
 
-#tqqqrjrbdd .gt_subtitle {
+#ohztlpvfsw .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1645,13 +1785,13 @@ F
   border-top-width: 0;
 }
 
-#tqqqrjrbdd .gt_bottom_border {
+#ohztlpvfsw .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#tqqqrjrbdd .gt_col_headings {
+#ohztlpvfsw .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1666,7 +1806,7 @@ F
   border-right-color: #D3D3D3;
 }
 
-#tqqqrjrbdd .gt_col_heading {
+#ohztlpvfsw .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1686,7 +1826,7 @@ F
   overflow-x: hidden;
 }
 
-#tqqqrjrbdd .gt_column_spanner_outer {
+#ohztlpvfsw .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1698,15 +1838,15 @@ F
   padding-right: 4px;
 }
 
-#tqqqrjrbdd .gt_column_spanner_outer:first-child {
+#ohztlpvfsw .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#tqqqrjrbdd .gt_column_spanner_outer:last-child {
+#ohztlpvfsw .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#tqqqrjrbdd .gt_column_spanner {
+#ohztlpvfsw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1718,7 +1858,7 @@ F
   width: 100%;
 }
 
-#tqqqrjrbdd .gt_group_heading {
+#ohztlpvfsw .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1740,7 +1880,7 @@ F
   vertical-align: middle;
 }
 
-#tqqqrjrbdd .gt_empty_group_heading {
+#ohztlpvfsw .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1755,15 +1895,15 @@ F
   vertical-align: middle;
 }
 
-#tqqqrjrbdd .gt_from_md > :first-child {
+#ohztlpvfsw .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#tqqqrjrbdd .gt_from_md > :last-child {
+#ohztlpvfsw .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#tqqqrjrbdd .gt_row {
+#ohztlpvfsw .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1782,7 +1922,7 @@ F
   overflow-x: hidden;
 }
 
-#tqqqrjrbdd .gt_stub {
+#ohztlpvfsw .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1794,7 +1934,7 @@ F
   padding-left: 12px;
 }
 
-#tqqqrjrbdd .gt_summary_row {
+#ohztlpvfsw .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1804,7 +1944,7 @@ F
   padding-right: 5px;
 }
 
-#tqqqrjrbdd .gt_first_summary_row {
+#ohztlpvfsw .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1814,7 +1954,7 @@ F
   border-top-color: #D3D3D3;
 }
 
-#tqqqrjrbdd .gt_grand_summary_row {
+#ohztlpvfsw .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1824,7 +1964,7 @@ F
   padding-right: 5px;
 }
 
-#tqqqrjrbdd .gt_first_grand_summary_row {
+#ohztlpvfsw .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1834,11 +1974,11 @@ F
   border-top-color: #D3D3D3;
 }
 
-#tqqqrjrbdd .gt_striped {
+#ohztlpvfsw .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#tqqqrjrbdd .gt_table_body {
+#ohztlpvfsw .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1847,7 +1987,7 @@ F
   border-bottom-color: #D3D3D3;
 }
 
-#tqqqrjrbdd .gt_footnotes {
+#ohztlpvfsw .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1861,13 +2001,13 @@ F
   border-right-color: #D3D3D3;
 }
 
-#tqqqrjrbdd .gt_footnote {
+#ohztlpvfsw .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#tqqqrjrbdd .gt_sourcenotes {
+#ohztlpvfsw .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1881,46 +2021,46 @@ F
   border-right-color: #D3D3D3;
 }
 
-#tqqqrjrbdd .gt_sourcenote {
+#ohztlpvfsw .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#tqqqrjrbdd .gt_left {
+#ohztlpvfsw .gt_left {
   text-align: left;
 }
 
-#tqqqrjrbdd .gt_center {
+#ohztlpvfsw .gt_center {
   text-align: center;
 }
 
-#tqqqrjrbdd .gt_right {
+#ohztlpvfsw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#tqqqrjrbdd .gt_font_normal {
+#ohztlpvfsw .gt_font_normal {
   font-weight: normal;
 }
 
-#tqqqrjrbdd .gt_font_bold {
+#ohztlpvfsw .gt_font_bold {
   font-weight: bold;
 }
 
-#tqqqrjrbdd .gt_font_italic {
+#ohztlpvfsw .gt_font_italic {
   font-style: italic;
 }
 
-#tqqqrjrbdd .gt_super {
+#ohztlpvfsw .gt_super {
   font-size: 65%;
 }
 
-#tqqqrjrbdd .gt_footnote_marks {
+#ohztlpvfsw .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="tqqqrjrbdd" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="ohztlpvfsw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_header">
 <tr>
 <th colspan="6" class="gt_heading gt_title gt_font_normal" style>A modelsummary table customized with gt</th>
@@ -2040,7 +2180,7 @@ F
     </tr></tfoot>
 </table></div>
 <p>The <a href="https://gt.rstudio.com"><code>gt</code> website</a> offers many more examples. The possibilities are endless. For instance, <code>gt</code> allows you to embed images in your tables using the <code>text_transform</code> and <code>local_image</code> functions:</p>
-<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">f</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/pkg/gt/man/web_image.html">web_image</a></span>(<span class="kw">url</span> <span class="kw">=</span> <span class="st">"https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png"</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="fl">80</span>)
+<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="no">f</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/pkg/gt/man/web_image.html">web_image</a></span>(<span class="kw">url</span> <span class="kw">=</span> <span class="st">"https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png"</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="fl">80</span>)
 
 <span class="no">tab</span> <span class="kw">%&gt;%</span>
     <span class="fu"><a href="https://rdrr.io/pkg/gt/man/text_transform.html">text_transform</a></span>(<span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">6</span>, <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">1</span>), <span class="kw">fn</span> <span class="kw">=</span> <span class="no">f</span>)</pre></body></html></div>
@@ -2048,7 +2188,7 @@ F
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#znihezempd .gt_table {
+#tlwdaeruow .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2073,7 +2213,7 @@ F
   border-left-color: #D3D3D3;
 }
 
-#znihezempd .gt_heading {
+#tlwdaeruow .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2085,7 +2225,7 @@ F
   border-right-color: #D3D3D3;
 }
 
-#znihezempd .gt_title {
+#tlwdaeruow .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2095,7 +2235,7 @@ F
   border-bottom-width: 0;
 }
 
-#znihezempd .gt_subtitle {
+#tlwdaeruow .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2105,13 +2245,13 @@ F
   border-top-width: 0;
 }
 
-#znihezempd .gt_bottom_border {
+#tlwdaeruow .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#znihezempd .gt_col_headings {
+#tlwdaeruow .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2126,7 +2266,7 @@ F
   border-right-color: #D3D3D3;
 }
 
-#znihezempd .gt_col_heading {
+#tlwdaeruow .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2146,7 +2286,7 @@ F
   overflow-x: hidden;
 }
 
-#znihezempd .gt_column_spanner_outer {
+#tlwdaeruow .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2158,15 +2298,15 @@ F
   padding-right: 4px;
 }
 
-#znihezempd .gt_column_spanner_outer:first-child {
+#tlwdaeruow .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#znihezempd .gt_column_spanner_outer:last-child {
+#tlwdaeruow .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#znihezempd .gt_column_spanner {
+#tlwdaeruow .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2178,7 +2318,7 @@ F
   width: 100%;
 }
 
-#znihezempd .gt_group_heading {
+#tlwdaeruow .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2200,7 +2340,7 @@ F
   vertical-align: middle;
 }
 
-#znihezempd .gt_empty_group_heading {
+#tlwdaeruow .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2215,15 +2355,15 @@ F
   vertical-align: middle;
 }
 
-#znihezempd .gt_from_md > :first-child {
+#tlwdaeruow .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#znihezempd .gt_from_md > :last-child {
+#tlwdaeruow .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#znihezempd .gt_row {
+#tlwdaeruow .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2242,7 +2382,7 @@ F
   overflow-x: hidden;
 }
 
-#znihezempd .gt_stub {
+#tlwdaeruow .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2254,7 +2394,7 @@ F
   padding-left: 12px;
 }
 
-#znihezempd .gt_summary_row {
+#tlwdaeruow .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2264,7 +2404,7 @@ F
   padding-right: 5px;
 }
 
-#znihezempd .gt_first_summary_row {
+#tlwdaeruow .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2274,7 +2414,7 @@ F
   border-top-color: #D3D3D3;
 }
 
-#znihezempd .gt_grand_summary_row {
+#tlwdaeruow .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2284,7 +2424,7 @@ F
   padding-right: 5px;
 }
 
-#znihezempd .gt_first_grand_summary_row {
+#tlwdaeruow .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2294,11 +2434,11 @@ F
   border-top-color: #D3D3D3;
 }
 
-#znihezempd .gt_striped {
+#tlwdaeruow .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#znihezempd .gt_table_body {
+#tlwdaeruow .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2307,7 +2447,7 @@ F
   border-bottom-color: #D3D3D3;
 }
 
-#znihezempd .gt_footnotes {
+#tlwdaeruow .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2321,13 +2461,13 @@ F
   border-right-color: #D3D3D3;
 }
 
-#znihezempd .gt_footnote {
+#tlwdaeruow .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#znihezempd .gt_sourcenotes {
+#tlwdaeruow .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2341,46 +2481,46 @@ F
   border-right-color: #D3D3D3;
 }
 
-#znihezempd .gt_sourcenote {
+#tlwdaeruow .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#znihezempd .gt_left {
+#tlwdaeruow .gt_left {
   text-align: left;
 }
 
-#znihezempd .gt_center {
+#tlwdaeruow .gt_center {
   text-align: center;
 }
 
-#znihezempd .gt_right {
+#tlwdaeruow .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#znihezempd .gt_font_normal {
+#tlwdaeruow .gt_font_normal {
   font-weight: normal;
 }
 
-#znihezempd .gt_font_bold {
+#tlwdaeruow .gt_font_bold {
   font-weight: bold;
 }
 
-#znihezempd .gt_font_italic {
+#tlwdaeruow .gt_font_italic {
   font-style: italic;
 }
 
-#znihezempd .gt_super {
+#tlwdaeruow .gt_super {
   font-size: 65%;
 }
 
-#znihezempd .gt_footnote_marks {
+#tlwdaeruow .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="znihezempd" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="tlwdaeruow" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_header">
 <tr>
 <th colspan="6" class="gt_heading gt_title gt_font_normal" style>A modelsummary table customized with gt</th>
@@ -2490,7 +2630,7 @@ F
 <code>row_spec</code> can modify the text and color of rows, columns, or cells.</li>
 </ul>
 <p>We use the same code as above, but specify <code>output='kableExtra'</code> in the <code><a href="../reference/modelsummary.html">modelsummary()</a></code> call:</p>
-<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)
+<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)
 
 <span class="co"># build table with `modelsummary` </span>
 <span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>)
@@ -2747,7 +2887,7 @@ F
 <code>autofit</code> sets column width to sensible values.</li>
 </ul>
 <p>We use the same code as above, but specify <code>output='flextable'</code> in the <code><a href="../reference/modelsummary.html">modelsummary()</a></code> call:</p>
-<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">flextable</span>)
+<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">flextable</span>)
 
 <span class="co"># build table with `modelsummary` </span>
 <span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>)
@@ -2767,91 +2907,91 @@ F
     <span class="co"># column widths</span>
     <span class="fu"><a href="https://rdrr.io/pkg/flextable/man/autofit.html">autofit</a></span>()</pre></body></html></div>
 <div class="tabwid">
-<style>.cl-ecaef3d0{font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;}.cl-ecaef402{font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(255, 0, 0, 1.00);background-color:transparent;}.cl-ecaef416{font-family:'Arial';font-size:10px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-ecaf141e{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;line-height: 1.00;background-color:transparent;}.cl-ecaf1432{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:0;padding-right:0;line-height: 1.00;background-color:transparent;}.cl-ecaf4c54{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4c72{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4c7c{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4c86{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4c90{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4c91{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4c9a{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4ca4{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4cae{width:69px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4cb8{width:87px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4cc2{width:81px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4ccc{width:89px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4ccd{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4cd6{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4ce0{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4cea{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4cf4{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4cfe{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4d08{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4d09{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4d12{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4d1c{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4d1d{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4d26{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4d30{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4d3a{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4d44{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecaf4d4e{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<style>.cl-9a963f06{font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;}.cl-9a963f42{font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(255, 0, 0, 1.00);background-color:transparent;}.cl-9a963f4c{font-family:'Arial';font-size:10px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-9a9669cc{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;line-height: 1.00;background-color:transparent;}.cl-9a9669f4{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:0;padding-right:0;line-height: 1.00;background-color:transparent;}.cl-9a96b210{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b242{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b256{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b260{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b274{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b27e{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b292{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b29c{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b2a6{width:69px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b2b0{width:87px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b2ba{width:81px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b2c4{width:89px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b2ce{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b2cf{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b2d8{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b2e2{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b2ec{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b2f6{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b30a{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b314{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b31e{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b328{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b329{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b33c{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b33d{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b346{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b350{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9a96b35a{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
 <table class="table">
 <caption>A modelsummary table customized with flextable</caption>
 <thead><tr style="overflow-wrap:break-word;">
-<td class="cl-ecaf4d30"><p class="cl-ecaf141e"><span class="cl-ecaef3d0"> </span></p></td>
-<td class="cl-ecaf4d4e"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">OLS 1</span></p></td>
-<td class="cl-ecaf4d44"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">Poisson 1</span></p></td>
-<td class="cl-ecaf4d3a"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">OLS 2</span></p></td>
-<td class="cl-ecaf4d44"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">Poisson 2</span></p></td>
-<td class="cl-ecaf4d3a"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">OLS 3</span></p></td>
+<td class="cl-9a96b33d"><p class="cl-9a9669cc"><span class="cl-9a963f06"> </span></p></td>
+<td class="cl-9a96b35a"><p class="cl-9a9669cc"><span class="cl-9a963f06">OLS 1</span></p></td>
+<td class="cl-9a96b350"><p class="cl-9a9669cc"><span class="cl-9a963f06">Poisson 1</span></p></td>
+<td class="cl-9a96b346"><p class="cl-9a9669cc"><span class="cl-9a963f06">OLS 2</span></p></td>
+<td class="cl-9a96b350"><p class="cl-9a9669cc"><span class="cl-9a963f06">Poisson 2</span></p></td>
+<td class="cl-9a96b346"><p class="cl-9a9669cc"><span class="cl-9a963f06">OLS 3</span></p></td>
 </tr></thead>
 <tbody>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-ecaf4c86"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">Constant</span></p></td>
-<td class="cl-ecaf4c7c"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">8759.068***</span></p></td>
-<td class="cl-ecaf4c72"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">8.986***</span></p></td>
-<td class="cl-ecaf4c54"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">20357.309***</span></p></td>
-<td class="cl-ecaf4c72"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">9.708***</span></p></td>
-<td class="cl-ecaf4c54"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">11243.544***</span></p></td>
+<td class="cl-9a96b260"><p class="cl-9a9669cc"><span class="cl-9a963f06">Constant</span></p></td>
+<td class="cl-9a96b256"><p class="cl-9a9669cc"><span class="cl-9a963f06">8759.068***</span></p></td>
+<td class="cl-9a96b242"><p class="cl-9a9669cc"><span class="cl-9a963f06">8.986***</span></p></td>
+<td class="cl-9a96b210"><p class="cl-9a9669cc"><span class="cl-9a963f06">20357.309***</span></p></td>
+<td class="cl-9a96b242"><p class="cl-9a9669cc"><span class="cl-9a963f06">9.708***</span></p></td>
+<td class="cl-9a96b210"><p class="cl-9a9669cc"><span class="cl-9a963f06">11243.544***</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-ecaf4c91"><p class="cl-ecaf141e"><span class="cl-ecaef3d0"></span></p></td>
-<td class="cl-ecaf4ca4"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">(1559.363)</span></p></td>
-<td class="cl-ecaf4c90"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">(0.004)</span></p></td>
-<td class="cl-ecaf4c9a"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">(2020.980)</span></p></td>
-<td class="cl-ecaf4c90"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">(0.003)</span></p></td>
-<td class="cl-ecaf4c9a"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">(1011.240)</span></p></td>
+<td class="cl-9a96b27e"><p class="cl-9a9669cc"><span class="cl-9a963f06"></span></p></td>
+<td class="cl-9a96b29c"><p class="cl-9a9669cc"><span class="cl-9a963f06">(1559.363)</span></p></td>
+<td class="cl-9a96b274"><p class="cl-9a9669cc"><span class="cl-9a963f06">(0.004)</span></p></td>
+<td class="cl-9a96b292"><p class="cl-9a9669cc"><span class="cl-9a963f06">(2020.980)</span></p></td>
+<td class="cl-9a96b274"><p class="cl-9a9669cc"><span class="cl-9a963f06">(0.003)</span></p></td>
+<td class="cl-9a96b292"><p class="cl-9a9669cc"><span class="cl-9a963f06">(1011.240)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-ecaf4c91"><p class="cl-ecaf141e"><span class="cl-ecaef402">Literacy (%)</span></p></td>
-<td class="cl-ecaf4ca4"><p class="cl-ecaf141e"><span class="cl-ecaef402">-42.886</span></p></td>
-<td class="cl-ecaf4c90"><p class="cl-ecaf141e"><span class="cl-ecaef402">-0.006***</span></p></td>
-<td class="cl-ecaf4c9a"><p class="cl-ecaf141e"><span class="cl-ecaef402">-15.358</span></p></td>
-<td class="cl-ecaf4c90"><p class="cl-ecaf141e"><span class="cl-ecaef402">0.000***</span></p></td>
-<td class="cl-ecaf4c9a"><p class="cl-ecaf141e"><span class="cl-ecaef402">-68.507***</span></p></td>
+<td class="cl-9a96b27e"><p class="cl-9a9669cc"><span class="cl-9a963f42">Literacy (%)</span></p></td>
+<td class="cl-9a96b29c"><p class="cl-9a9669cc"><span class="cl-9a963f42">-42.886</span></p></td>
+<td class="cl-9a96b274"><p class="cl-9a9669cc"><span class="cl-9a963f42">-0.006***</span></p></td>
+<td class="cl-9a96b292"><p class="cl-9a9669cc"><span class="cl-9a963f42">-15.358</span></p></td>
+<td class="cl-9a96b274"><p class="cl-9a9669cc"><span class="cl-9a963f42">0.000***</span></p></td>
+<td class="cl-9a96b292"><p class="cl-9a9669cc"><span class="cl-9a963f42">-68.507***</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-ecaf4c91"><p class="cl-ecaf141e"><span class="cl-ecaef3d0"></span></p></td>
-<td class="cl-ecaf4ca4"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">(36.362)</span></p></td>
-<td class="cl-ecaf4c90"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">(0.000)</span></p></td>
-<td class="cl-ecaf4c9a"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">(47.127)</span></p></td>
-<td class="cl-ecaf4c90"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">(0.000)</span></p></td>
-<td class="cl-ecaf4c9a"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">(18.029)</span></p></td>
+<td class="cl-9a96b27e"><p class="cl-9a9669cc"><span class="cl-9a963f06"></span></p></td>
+<td class="cl-9a96b29c"><p class="cl-9a9669cc"><span class="cl-9a963f06">(36.362)</span></p></td>
+<td class="cl-9a96b274"><p class="cl-9a9669cc"><span class="cl-9a963f06">(0.000)</span></p></td>
+<td class="cl-9a96b292"><p class="cl-9a9669cc"><span class="cl-9a963f06">(47.127)</span></p></td>
+<td class="cl-9a96b274"><p class="cl-9a9669cc"><span class="cl-9a963f06">(0.000)</span></p></td>
+<td class="cl-9a96b292"><p class="cl-9a9669cc"><span class="cl-9a963f06">(18.029)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-ecaf4ccc"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">Priests/capita</span></p></td>
-<td class="cl-ecaf4cc2"><p class="cl-ecaf141e"><span class="cl-ecaef3d0"></span></p></td>
-<td class="cl-ecaf4cae"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">0.002***</span></p></td>
-<td class="cl-ecaf4cb8"><p class="cl-ecaf141e"><span class="cl-ecaef3d0"></span></p></td>
-<td class="cl-ecaf4cae"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">0.004***</span></p></td>
-<td class="cl-ecaf4cb8"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">-16.376</span></p></td>
+<td class="cl-9a96b2c4"><p class="cl-9a9669cc"><span class="cl-9a963f06">Priests/capita</span></p></td>
+<td class="cl-9a96b2ba"><p class="cl-9a9669cc"><span class="cl-9a963f06"></span></p></td>
+<td class="cl-9a96b2a6"><p class="cl-9a9669cc"><span class="cl-9a963f06">0.002***</span></p></td>
+<td class="cl-9a96b2b0"><p class="cl-9a9669cc"><span class="cl-9a963f06"></span></p></td>
+<td class="cl-9a96b2a6"><p class="cl-9a9669cc"><span class="cl-9a963f06">0.004***</span></p></td>
+<td class="cl-9a96b2b0"><p class="cl-9a9669cc"><span class="cl-9a963f06">-16.376</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-ecaf4c91"><p class="cl-ecaf141e"><span class="cl-ecaef3d0"></span></p></td>
-<td class="cl-ecaf4ca4"><p class="cl-ecaf141e"><span class="cl-ecaef3d0"></span></p></td>
-<td class="cl-ecaf4c90"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">(0.000)</span></p></td>
-<td class="cl-ecaf4c9a"><p class="cl-ecaf141e"><span class="cl-ecaef3d0"></span></p></td>
-<td class="cl-ecaf4c90"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">(0.000)</span></p></td>
-<td class="cl-ecaf4c9a"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">(12.522)</span></p></td>
+<td class="cl-9a96b27e"><p class="cl-9a9669cc"><span class="cl-9a963f06"></span></p></td>
+<td class="cl-9a96b29c"><p class="cl-9a9669cc"><span class="cl-9a963f06"></span></p></td>
+<td class="cl-9a96b274"><p class="cl-9a9669cc"><span class="cl-9a963f06">(0.000)</span></p></td>
+<td class="cl-9a96b292"><p class="cl-9a9669cc"><span class="cl-9a963f06"></span></p></td>
+<td class="cl-9a96b274"><p class="cl-9a9669cc"><span class="cl-9a963f06">(0.000)</span></p></td>
+<td class="cl-9a96b292"><p class="cl-9a9669cc"><span class="cl-9a963f06">(12.522)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-ecaf4cd6"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">Num.Obs.</span></p></td>
-<td class="cl-ecaf4cea"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">86</span></p></td>
-<td class="cl-ecaf4ce0"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">86</span></p></td>
-<td class="cl-ecaf4ccd"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">86</span></p></td>
-<td class="cl-ecaf4ce0"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">86</span></p></td>
-<td class="cl-ecaf4ccd"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">86</span></p></td>
+<td class="cl-9a96b2cf"><p class="cl-9a9669cc"><span class="cl-9a963f06">Num.Obs.</span></p></td>
+<td class="cl-9a96b2e2"><p class="cl-9a9669cc"><span class="cl-9a963f06">86</span></p></td>
+<td class="cl-9a96b2d8"><p class="cl-9a9669cc"><span class="cl-9a963f06">86</span></p></td>
+<td class="cl-9a96b2ce"><p class="cl-9a9669cc"><span class="cl-9a963f06">86</span></p></td>
+<td class="cl-9a96b2d8"><p class="cl-9a9669cc"><span class="cl-9a963f06">86</span></p></td>
+<td class="cl-9a96b2ce"><p class="cl-9a9669cc"><span class="cl-9a963f06">86</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-ecaf4c86"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">R2</span></p></td>
-<td class="cl-ecaf4c7c"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">0.016</span></p></td>
-<td class="cl-ecaf4c72"><p class="cl-ecaf141e"><span class="cl-ecaef3d0"></span></p></td>
-<td class="cl-ecaf4c54"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">0.001</span></p></td>
-<td class="cl-ecaf4c72"><p class="cl-ecaf141e"><span class="cl-ecaef3d0"></span></p></td>
-<td class="cl-ecaf4c54"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">0.152</span></p></td>
+<td class="cl-9a96b260"><p class="cl-9a9669cc"><span class="cl-9a963f06">R2</span></p></td>
+<td class="cl-9a96b256"><p class="cl-9a9669cc"><span class="cl-9a963f06">0.016</span></p></td>
+<td class="cl-9a96b242"><p class="cl-9a9669cc"><span class="cl-9a963f06"></span></p></td>
+<td class="cl-9a96b210"><p class="cl-9a9669cc"><span class="cl-9a963f06">0.001</span></p></td>
+<td class="cl-9a96b242"><p class="cl-9a9669cc"><span class="cl-9a963f06"></span></p></td>
+<td class="cl-9a96b210"><p class="cl-9a9669cc"><span class="cl-9a963f06">0.152</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-ecaf4d09"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">F</span></p></td>
-<td class="cl-ecaf4d08"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">1.391</span></p></td>
-<td class="cl-ecaf4cf4"><p class="cl-ecaf141e"><span class="cl-ecaef3d0"></span></p></td>
-<td class="cl-ecaf4cfe"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">0.106</span></p></td>
-<td class="cl-ecaf4cf4"><p class="cl-ecaf141e"><span class="cl-ecaef3d0"></span></p></td>
-<td class="cl-ecaf4cfe"><p class="cl-ecaf141e"><span class="cl-ecaef3d0">7.441</span></p></td>
+<td class="cl-9a96b314"><p class="cl-9a9669cc"><span class="cl-9a963f06">F</span></p></td>
+<td class="cl-9a96b30a"><p class="cl-9a9669cc"><span class="cl-9a963f06">1.391</span></p></td>
+<td class="cl-9a96b2ec"><p class="cl-9a9669cc"><span class="cl-9a963f06"></span></p></td>
+<td class="cl-9a96b2f6"><p class="cl-9a9669cc"><span class="cl-9a963f06">0.106</span></p></td>
+<td class="cl-9a96b2ec"><p class="cl-9a9669cc"><span class="cl-9a963f06"></span></p></td>
+<td class="cl-9a96b2f6"><p class="cl-9a9669cc"><span class="cl-9a963f06">7.441</span></p></td>
 </tr>
-<tr style="overflow-wrap:break-word;"><td colspan="6" class="cl-ecaf4d26"><p class="cl-ecaf1432"><span class="cl-ecaef416">* p &lt; 0.1, ** p &lt; 0.05, *** p &lt; 0.01</span></p></td></tr>
+<tr style="overflow-wrap:break-word;"><td colspan="6" class="cl-9a96b33c"><p class="cl-9a9669f4"><span class="cl-9a963f4c">* p &lt; 0.1, ** p &lt; 0.05, *** p &lt; 0.01</span></p></td></tr>
 </tbody>
 </table>
 </div>
@@ -2866,7 +3006,7 @@ F
 <code>set_text_color</code> to change the color of some entries</li>
 </ul>
 <p>We use the same code as above, but specify <code>output='huxtable'</code> in the <code><a href="../reference/modelsummary.html">modelsummary()</a></code> call:</p>
-<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">huxtable</span>)
+<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">huxtable</span>)
 
 <span class="co"># build table with `modelsummary` </span>
 <span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>)
@@ -2977,9 +3117,9 @@ F
 <a href="#warning-saving-to-file" class="anchor"></a>Warning: Saving to file</h2>
 <p>When users supply a file name to the <code>output</code> argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from <code>gt</code>, <code>kableExtra</code>, <code>huxtable</code>, or <code>flextable</code>. When users specify a filename in the <code>output</code> argument, the <code><a href="../reference/modelsummary.html">modelsummary()</a></code> call should be the <em>final</em> one in the chain.</p>
 <p>This is OK:</p>
-<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.html'</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.html'</span>)</pre></body></html></div>
 <p>This is <strong>not</strong> OK:</p>
-<div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.html'</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb32"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.html'</span>) <span class="kw">%&gt;%</span>
     <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Literacy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 1'</span>, <span class="st">'Poisson 1'</span>))</pre></body></html></div>
 <p>To save a customized table, you should apply all the customization functions you need before saving it using <code><a href="https://rdrr.io/pkg/gt/man/gtsave.html">gt::gtsave</a></code>, <code><a href="https://rdrr.io/pkg/kableExtra/man/save_kable.html">kableExtra::save_kable</a></code>, or the appropriate helper function from the package that you are using to customize your table.</p>
 </div>
