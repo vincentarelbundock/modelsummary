@@ -53,7 +53,9 @@ globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'va
 #' in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
 #' @param gof_map data.frame with four columns: `raw`, `clean`, `fmt`, and
 #' `omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame
-#' by default: `modelsummary::gof_map`
+#' by default: `modelsummary::gof_map` By default, all the statistics produced
+#' by `broom::glance` will be included unless they are omitted explicitly in
+#' `gof_map`.
 #' @param gof_omit string regular expression. Omits all matching gof statistics from
 #' the table (using `grepl(perl=TRUE)`).
 #' @param add_rows a data.frame (or tibble) with the same number of columns as

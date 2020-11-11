@@ -18,7 +18,9 @@ extract_gof(model, fmt, gof_map, ...)
 
 \item{gof_map}{data.frame with four columns: `raw`, `clean`, `fmt`, and
 `omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame
-by default: `modelsummary::gof_map`}
+by default: `modelsummary::gof_map` By default, all the statistics produced
+by `broom::glance` will be included unless they are omitted explicitly in
+`gof_map`.}
 
 \item{...}{all other arguments are passed to the `tidy` and `glance` methods
 used to extract estimates from the model. For example, this allows users to
