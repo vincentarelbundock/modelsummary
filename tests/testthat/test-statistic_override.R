@@ -83,11 +83,6 @@ test_that("bad function", {
   expect_error(msummary(models, statistic_override = na.omit))
 })
 
-test_that("bad matrix", {
-  mat <- matrix(1, ncol = 2, nrow = 2)
-  expect_error(msummary(models, statistic_override = mat))
-})
-
 test_that("vector must be named", {
   vec <- as.numeric(1:3)
   expect_error(msummary(models[[1]], statistic = "std.error", statistic_override = vec))

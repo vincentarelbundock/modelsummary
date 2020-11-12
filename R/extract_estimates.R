@@ -33,8 +33,8 @@ extract_estimates <- function(model,
 
     bad1 <- (statistic != "conf.int") & (!statistic %in% colnames(so))
     bad2 <- (statistic == "conf.int") & (!"conf.low" %in% colnames(so))
+
     if (bad1 || bad2) {
-      
       stop(paste0(statistic, " cannot be extracted through the `statistic_override` argument. You might want to install the `lmtest` package and/or look at the `modelsummary:::extract_statistic_override` function to diagnose the problem."))
     } 
 
@@ -43,6 +43,13 @@ extract_estimates <- function(model,
 
     # keep only columns that do not appear in so
     est <- est[, c('term', base::setdiff(colnames(est), colnames(so))), drop = FALSE]
+
+    # make sure statistic_override is of the correct length
+    if (nrow(est) != nrow(so)) {
+      stop("statistic_override and estimates have different dimensions.")
+    }
+
+    # merge statistic_override and estimates
     est <- dplyr::left_join(est, so, by = 'term')
 
   } else { # if statistic_override is not used

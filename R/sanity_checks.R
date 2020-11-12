@@ -209,11 +209,17 @@ sanity_statistic <- function(statistic,
     combine="or"
   )
 
-  if (is.list(statistic_override)) {
+  if (class(statistic_override)[1] == "list") { # must be a simple list
     checkmate::assert_true(length(statistic_override) == length(models))
-    checkmate::assert(checkmate::check_true(all(sapply(statistic_override, is.function))),
-      checkmate::check_true(all(sapply(statistic_override, is.vector))),
-      checkmate::check_true(all(sapply(statistic_override, is.matrix))))
+    for (s in statistic_override) {
+      checkmate::assert(
+        checkmate::check_function(s),
+        checkmate::check_matrix(s),
+        checkmate::check_vector(s),
+        combine="or"
+      )
+    }
+
   } else if (is.function(statistic_override)) {
     statistic_override <- lapply(models, function(x) statistic_override)
   }
