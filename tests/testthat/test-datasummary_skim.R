@@ -61,6 +61,12 @@ test_that("completely missing variables are dropped", {
 
 })
 
+test_that("simple dataset", {
+  tab <- datasummary_skim(mtcars, type="dataset", output="data.frame")
+  expect_equal(dim(tab), c(4, 2))
+})
+
+
 
 
 # # RDatasets tests: must be commented out

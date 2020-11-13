@@ -47,199 +47,288 @@ datasummary_skim <- function(data,
 
   sanity_output(output)
 
-  checkmate::assert_true(type %in% c("numeric", "categorical"))
+  checkmate::assert_true(type %in% c("numeric", "categorical", "dataset"))
 
   # tables does not play well with tibbles
   data <- as.data.frame(data)
 
+  if (type == "numeric") {
+    out <- datasummary_skim_numeric(data, output=output, fmt=fmt,
+                                    histogram=histogram, title=title,
+                                    notes=notes, align=align, ...)
+  } 
+
+  if (type == "categorical") {
+    out <- datasummary_skim_categorical(data, output=output, fmt=fmt,
+                                        title=title, notes=notes, align=align,
+                                        ...)
+  } 
+
+  if (type == "dataset") {
+    out <- datasummary_skim_dataset(data, output=output, title=title,
+                                    notes=notes, align=align, ...)
+  }
+
+  return(out)
+
+}
+
+#' Internal function to skim whole datasets
+#'
+#' @keywords internal
+datasummary_skim_dataset <- function(
+  data,
+  output,
+  title,
+  notes,
+  align,
+  ...) {
+
+
+  is.binary <- function(x) {
+    tryCatch(length(unique(na.omit(x))) == 2, error = function(e) FALSE, silent = TRUE)
+  }
+  out <- c(
+    Rows = rounding(nrow(data), fmt=0),
+    Columns = rounding(ncol(data), fmt=0),
+    # `# Binary` = rounding(sum(sapply(data, is.binary)), 0),
+    `# Character` = rounding(sum(sapply(data, is.character)), 0),
+    `# Factor` = rounding(sum(sapply(data, is.factor)), 0),
+    `# Logical` = rounding(sum(sapply(data, is.logical)), 0),
+    `# Numeric` = rounding(sum(sapply(data, is.numeric)), 0),
+    `% Missing` = rounding(mean(is.na(data) * 100), 0)
+  )
+  out <- data.frame(names(out), out)
+  out <- out[out[[2]] != "0" | out[[1]] == "% Missing",]
+  row.names(out) <- NULL
+  colnames(out) <- c(" ", "  ")
+
+  out <- datasummary_df(
+    data = out,
+    output = output,
+    title = title,
+    align = align,
+    notes = notes,
+    ...)
+
+  return(out)
+
+}
+
+
+#' Internal function to skim numeric variables
+#'
+#' @keywords internal
+datasummary_skim_numeric <- function(
+  data,
+  output,
+  fmt,
+  histogram,
+  title,
+  notes,
+  align,
+  ...) {
+
   # output format
   output_info <- parse_output_arg(output)
 
-  if (type == 'numeric') {
+  # draw histogram?
+  if (histogram) {
 
-    # draw histogram?
-    if (histogram) {
+    # histogram is a kableExtra-specific option
+    if (output_info$output_factory != "kableExtra") {
+      histogram <- FALSE
+    }
 
-      # histogram is a kableExtra-specific option
-      if (output_info$output_factory != "kableExtra") {
+    # write to file
+    if (!is.null(output_info$output_file)) {
+      if (!output_info$output_format %in% c("html", "png", "jpg")) {
         histogram <- FALSE
       }
 
-      # write to file
-      if (!is.null(output_info$output_file)) {
-        if (!output_info$output_format %in% c("html", "png", "jpg")) {
+    # interactive or Rmarkdown/knitr
+    } else {
+      if (check_dependency("knitr")) {
+        if (!output_info$output_format %in% c("default", "html", "kableExtra") &&
+            !knitr::is_latex_output()) {
           histogram <- FALSE
         }
-
-      # interactive or Rmarkdown/knitr
       } else {
-        if (check_dependency("knitr")) {
-          if (!output_info$output_format %in% c("default", "html", "kableExtra") &&
-              !knitr::is_latex_output()) {
-            histogram <- FALSE
-          }
-        } else {
-          if (!output_info$output_format %in% c("default", "html", "kableExtra")) {
-            histogram <- FALSE
-          }
+        if (!output_info$output_format %in% c("default", "html", "kableExtra")) {
+          histogram <- FALSE
         }
       }
-
-      # if flag was flipped
-      if (!histogram) {
-        warning('The histogram argument is only supported for (a) output types
-                "default", "html", or "kableExtra"; (b) writing to file paths
-                with extensions ".html", ".jpg", or ".png"; and (c) Rmarkdown
-                or knitr documents compiled to PDF or HTML. Use
-                `histogram=FALSE` to silence this warning.')
-      }
-
     }
 
-    # subset of numeric variables with non NA values
-    dat_new <- data[, sapply(data, is.numeric), drop=FALSE] 
-    dat_new <- dat_new[, sapply(dat_new, function(x) !all(is.na(x))), drop=FALSE]
-
-    if (ncol(dat_new) == 0) {
-      stop('data contains no numeric variable.')
+    # if flag was flipped
+    if (!histogram) {
+      warning('The histogram argument is only supported for (a) output types
+              "default", "html", or "kableExtra"; (b) writing to file paths
+              with extensions ".html", ".jpg", or ".png"; and (c) Rmarkdown
+              or knitr documents compiled to PDF or HTML. Use
+              `histogram=FALSE` to silence this warning.')
     }
 
-    # pad colnames in case one is named Min, Max, Mean, or other function name
-    # colnames(dat_new) <- paste0(colnames(dat_new), " ")
+  }
 
-    # with histogram
-    if (histogram) {
+  # subset of numeric variables with non NA values
+  dat_new <- data[, sapply(data, is.numeric), drop=FALSE] 
+  dat_new <- dat_new[, sapply(dat_new, function(x) !all(is.na(x))), drop=FALSE]
 
-      histogram_col <- function(x) ""
+  if (ncol(dat_new) == 0) {
+    stop('data contains no numeric variable.')
+  }
 
-      f <- All(dat_new, numeric=TRUE, factor=FALSE) ~
-           Heading("Unique (#)") * NUnique + 
-           Heading("Missing (%)") * PercentMissing +
-           (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
-           Heading("") * histogram_col
+  # pad colnames in case one is named Min, Max, Mean, or other function name
+  # colnames(dat_new) <- paste0(colnames(dat_new), " ")
 
-      # prepare list of histograms
-      # TODO: inefficient because it computes the table twice. But I need to
-      # know the exact subset of variables kept by tabular, in the exact
-      # order, to print the right histograms.
+  # with histogram
+  if (histogram) {
 
-      idx <- datasummary(f, data=dat_new, output="data.frame")[[1]]
-      histogram_list <- as.list(dat_new[, idx, drop=FALSE])
-      histogram_list <- lapply(histogram_list, stats::na.omit)
+    histogram_col <- function(x) ""
 
-      # too large
-      if (ncol(dat_new) > 50) {
-        stop("Cannot summarize more than 50 variables at a time.")
-      }
+    f <- All(dat_new, numeric=TRUE, factor=FALSE) ~
+         Heading("Unique (#)") * NUnique + 
+         Heading("Missing (%)") * PercentMissing +
+         (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
+         Heading("") * histogram_col
 
-      # don't use output=filepath.html when post-processing
-      if (!is.null(output_info$output_file)) { 
-        output <- "kableExtra"
-      }
+    # prepare list of histograms
+    # TODO: inefficient because it computes the table twice. But I need to
+    # know the exact subset of variables kept by tabular, in the exact
+    # order, to print the right histograms.
 
-      # draw table
-      out <- datasummary(formula = f,
-          data = dat_new,
-          output = output,
-          title = title,
-          align = align,
-          notes = notes) %>%
-        kableExtra::column_spec(
-          column=9, 
-          image=kableExtra::spec_hist(histogram_list, 
-                                      col="black",
-                                      same_lim=FALSE)
-        )
-
-      # don't use output=filepath.html when post-processing
-      if (!is.null(output_info$output_file)) {
-        kableExtra::save_kable(out, file=output_info$output_file)
-        return(invisible(out))
-      }
-
-    # without histogram
-    } else {
-
-      f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
-           Heading("Unique (#)") * NUnique + 
-           Heading("Missing (%)") * PercentMissing +
-           (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt)
-
-      out <- datasummary(f,
-          data = dat_new,
-          output = output,
-          title = title,
-          align = align,
-          notes = notes) 
-
-    }
-
-  } else if (type == 'categorical') {
-
-    dat_new <- data
-
-    # pad colnames in case one is named Min, Max, Mean, or other function name
-    # colnames(dat_new) <- paste0(colnames(dat_new), " ")
-
-    for (n in colnames(dat_new)) {
-
-      if (is.logical(dat_new[[n]]) | 
-          is.character(dat_new[[n]]) | 
-          is.factor(dat_new[[n]])) {
-
-        # convert to factor
-        dat_new[[n]] <- factor(dat_new[[n]])
-
-        # tables::tabular breaks on ""
-        if (is.factor(dat_new[[n]])) {
-          levels(dat_new[[n]])[levels(dat_new[[n]]) == ""] <- " "
-        }
-
-        # factors with too many levels
-        if (is.factor(dat_new[[n]])) {
-          if (length(levels(dat_new[[n]])) > 20) {
-            dat_new[[n]] <- NULL
-            warning("datasummary_skim dropped a categorical variable because it contained more than 20 levels.")
-          }
-        }
-
-        # drop completely missing
-        if (all(is.na(dat_new[[n]]))) {
-          dat_new[[n]] <- NULL
-          warning("datasummary_skim dropped a categorical variable because it was entirely NA.")
-        }
-
-      # discard non-factors
-      } else {
-        dat_new[[n]] <- NULL
-      }
-
-    }
-
-    # too small
-    if (ncol(dat_new) == 0) {
-      stop('data contains no logical, character, or factor variable.')
-    }
+    idx <- datasummary(f, data=dat_new, output="data.frame")[[1]]
+    histogram_list <- as.list(dat_new[, idx, drop=FALSE])
+    histogram_list <- lapply(histogram_list, stats::na.omit)
 
     # too large
     if (ncol(dat_new) > 50) {
       stop("Cannot summarize more than 50 variables at a time.")
     }
 
-    pctformat = function(x) rounding(x, fmt)
-    f <- All(dat_new, numeric=FALSE, factor=TRUE, logical=TRUE, character=TRUE) ~
-         (N = 1) * Format(digits=0) + (`%` = Percent()) * Format(pctformat())
+    # don't use output=filepath.html when post-processing
+    if (!is.null(output_info$output_file)) { 
+      output <- "kableExtra"
+    }
 
-    out <- datasummary(
-      formula = f,
-      data = dat_new,
-      output = output,
-      title = title,
-      align = align,
-      notes = notes) 
+    # draw table
+    out <- datasummary(formula = f,
+        data = dat_new,
+        output = output,
+        title = title,
+        align = align,
+        notes = notes) %>%
+      kableExtra::column_spec(
+        column=9, 
+        image=kableExtra::spec_hist(histogram_list, 
+                                    col="black",
+                                    same_lim=FALSE)
+      )
 
-  } 
+    # don't use output=filepath.html when post-processing
+    if (!is.null(output_info$output_file)) {
+      kableExtra::save_kable(out, file=output_info$output_file)
+      return(invisible(out))
+    }
 
-  out
+  # without histogram
+  } else {
+
+    f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
+         Heading("Unique (#)") * NUnique + 
+         Heading("Missing (%)") * PercentMissing +
+         (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt)
+
+    out <- datasummary(f,
+        data = dat_new,
+        output = output,
+        title = title,
+        align = align,
+        notes = notes) 
+
+  }
+
+  return(out)
 
 }
+
+
+
+#' Internal function to skim categorical variables
+#'
+#' @keywords internal
+datasummary_skim_categorical <- function(
+  data,
+  output,
+  fmt,
+  title,
+  notes,
+  align,
+  ...) {
+
+  dat_new <- data
+
+  # pad colnames in case one is named Min, Max, Mean, or other function name
+  # colnames(dat_new) <- paste0(colnames(dat_new), " ")
+
+  for (n in colnames(dat_new)) {
+
+    if (is.logical(dat_new[[n]]) | 
+        is.character(dat_new[[n]]) | 
+        is.factor(dat_new[[n]])) {
+
+      # convert to factor
+      dat_new[[n]] <- factor(dat_new[[n]])
+
+      # tables::tabular breaks on ""
+      if (is.factor(dat_new[[n]])) {
+        levels(dat_new[[n]])[levels(dat_new[[n]]) == ""] <- " "
+      }
+
+      # factors with too many levels
+      if (is.factor(dat_new[[n]])) {
+        if (length(levels(dat_new[[n]])) > 20) {
+          dat_new[[n]] <- NULL
+          warning("datasummary_skim dropped a categorical variable because it contained more than 20 levels.")
+        }
+      }
+
+      # drop completely missing
+      if (all(is.na(dat_new[[n]]))) {
+        dat_new[[n]] <- NULL
+        warning("datasummary_skim dropped a categorical variable because it was entirely NA.")
+      }
+
+    # discard non-factors
+    } else {
+      dat_new[[n]] <- NULL
+    }
+
+  }
+
+  # too small
+  if (ncol(dat_new) == 0) {
+    stop('data contains no logical, character, or factor variable.')
+  }
+
+  # too large
+  if (ncol(dat_new) > 50) {
+    stop("Cannot summarize more than 50 variables at a time.")
+  }
+
+  pctformat = function(x) rounding(x, fmt)
+  f <- All(dat_new, numeric=FALSE, factor=TRUE, logical=TRUE, character=TRUE) ~
+       (N = 1) * Format(digits=0) + (`%` = Percent()) * Format(pctformat())
+
+  out <- datasummary(
+    formula = f,
+    data = dat_new,
+    output = output,
+    title = title,
+    align = align,
+    notes = notes) 
+
+  return(out)
+
+} 

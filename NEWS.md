@@ -1,6 +1,9 @@
 # modelsummary 0.6.3.9000
 
 * modelplot pushes ... through to extract_models
+* datasummary_skim(type="dataset")
+* gof_map omits by default
+* statistic_override does not require a list
 
 # modelsummary 0.6.3
 
