@@ -143,9 +143,11 @@ datasummary <- function(formula,
 
   # convenience: transform logical and character to factor
   # are there use-cases for character variables?
-  data <- data %>%
-    dplyr::mutate(dplyr::across(where(is.character) | where(is.logical),
-                                factor))
+  for (i in seq_along(data)) {
+    if (is.character(data[[i]]) | is.logical(data[[i]])) {
+      data[[i]] <- factor(data[[i]])
+    }
+  }
 
   # tibble -> data.frame (for All())
   data <- as.data.frame(data)

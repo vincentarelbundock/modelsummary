@@ -4,17 +4,7 @@
 \alias{datasummary_skim_categorical}
 \title{Internal function to skim categorical variables}
 \usage{
-datasummary_skim_categorical(
-  data,
-  type = "numeric",
-  output = "default",
-  fmt = "\%.1f",
-  histogram = TRUE,
-  title = NULL,
-  notes = NULL,
-  align = NULL,
-  ...
-)
+datasummary_skim_categorical(data, output, fmt, title, notes, align, ...)
 }
 \description{
 Internal function to skim categorical variables

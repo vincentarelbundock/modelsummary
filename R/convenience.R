@@ -41,13 +41,14 @@ tidy_felm_iv <- function(x, ...) {
   # extract results
   stage2 <- generics::tidy(x, ...)
   stage1 <- generics::tidy(x$stage1, ...) %>%
-    # keep only the stage1 terms if they are not in stage2
-    dplyr::filter(!(term %in% stage2$term)) %>%
-    # label
-    dplyr::mutate(term = paste("Stage 1", term))
+
+  # keep only the stage1 terms if they are not in stage2
+  idx <- !stage1$term %in% stage2$term
+  stage1 <- stage1[idx, , drop=FALSE]
+  stage1$term <- paste("Stage 1", stage1$term)
 
   # combine stage1 and stage2 results
-  out <- dplyr::bind_rows(stage1, stage2)
+  out <- bind_rows(stage1, stage2)
   out
 }
 

@@ -140,14 +140,15 @@ extract_estimates <- function(model,
 
   # reshape to vertical
   if (statistic_vertical) {
-    est <- est %>%
-      tidyr::pivot_longer(-term, names_to = 'statistic') %>%
-      # sort by statistic to have se below coef, but don't sort terms
-      # use factor hack to preserve order with weird names like cor__(Inter.)
-      # especially important for broom.mixed style models 
-      dplyr::mutate(term = factor(term, unique(term))) %>%
-      dplyr::arrange(term, statistic) %>%
-      dplyr::mutate(term = as.character(term))
+    est <- tidyr::pivot_longer(est, -term, names_to = 'statistic')
+
+    # sort by statistic to have se below coef, but don't sort terms
+    # use factor hack to preserve order with weird names like cor__(Inter.)
+    # especially important for broom.mixed style models 
+    est$term <- factor(est$term, unique(est$term))
+    est <- est[order(est$term, est$statistic),]
+    est$term <- as.character(est$term)
+
   } else {
     est$statistic <- 'estimate'
     est$value <- paste(est[[estimate]], est$statistic1)

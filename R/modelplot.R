@@ -76,11 +76,12 @@ modelplot <- function(models,
              coef_omit=coef_omit,
              coef_rename=coef_rename,
              statistic_override=statistic_override,
-             ...) %>%
-      dplyr::filter(group == "estimates", statistic=="estimate") %>%
-      tidyr::pivot_longer(cols=4:ncol(.), values_to="estimate", names_to="model") %>%
-      dplyr::filter(estimate != "") %>%
-      dplyr::mutate(estimate = as.numeric(estimate))
+             ...)
+    out <- out[out$group == "estimates" & out$statistic == "estimate",]
+    out <- tidyr::pivot_longer(out, cols=4:ncol(out), values_to="estimate",
+                               names_to="model")
+    out <- out[out$estimate != "",]
+    out$estimate <- as.numeric(out$estimate)
   } else {
     out <- extract_models(
              models=models,
@@ -91,21 +92,21 @@ modelplot <- function(models,
              coef_rename=coef_rename,
              statistic="conf.int",
              statistic_override=statistic_override,
-             ...)  %>%
-      dplyr::filter(group == "estimates") %>%
-      tidyr::pivot_longer(cols=4:ncol(.), names_to="model") %>%
-      tidyr::pivot_wider(names_from="statistic") %>%
-      dplyr::mutate(statistic1 = gsub('\\[|\\]', '', statistic1)) %>%
-      dplyr::filter(estimate != "") %>%
-      tidyr::separate(statistic1, into=c("conf.low", "conf.high"), sep=", ") %>%
-      dplyr::mutate(dplyr::across(c(estimate, conf.low, conf.high), as.numeric))
+             ...)
+    out <- out[out$group == "estimates",]
+    out <- tidyr::pivot_longer(out, cols=4:ncol(out), names_to="model")
+    out <- tidyr::pivot_wider(out, names_from="statistic")
+    out$statistic1 <- gsub('\\[|\\]', '', out$statistic1)
+    out <- out[out$estimate != "",]
+    out <- tidyr::separate(out, statistic1, into=c("conf.low", "conf.high"), sep=", ")
+    out$estimate <- as.numeric(out$estimate)  
+    out$conf.low <- as.numeric(out$conf.low)  
+    out$conf.high <- as.numeric(out$conf.high)  
   }
 
-  dat <- out %>%
-    dplyr::mutate(
-      term = factor(term, rev(unique(term))),
-      model = factor(model, unique(model))
-    )
+  dat <- out
+  dat$term <- factor(dat$term, rev(unique(dat$term)))
+  dat$model <- factor(dat$model, unique(dat$model))
 
   if (!draw) {
     return(dat)

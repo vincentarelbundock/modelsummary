@@ -4,7 +4,7 @@
 \alias{datasummary_skim_dataset}
 \title{Internal function to skim whole datasets}
 \usage{
-datasummary_skim_dataset(data, ...)
+datasummary_skim_dataset(data, output, title, notes, align, ...)
 }
 \description{
 Internal function to skim whole datasets

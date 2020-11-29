@@ -6,6 +6,11 @@ mod <- list()
 mod$OLS <- lm(am ~ drat, data = mtcars)
 mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 
+test_that('gof_omit omits everything', {
+  tab = modelsummary(mod, gof_omit=".*", output="data.frame")
+  expect_equal(dim(tab), c(6, 5))
+})
+
 test_that('custom gof_map omits everything by default', {
   gm = tibble::tribble(~raw,        ~clean, ~fmt, ~omit,
                        "nobs",      "Num.Obs", 0, omit=FALSE,

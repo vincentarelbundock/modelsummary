@@ -91,8 +91,8 @@ extract_models <- function(models,
 
     # coef_omit
     if (!is.null(coef_omit)) {
-      est[[i]] <- est[[i]] %>%
-        dplyr::filter(!grepl(coef_omit, term, perl=TRUE))
+      idx <- !grepl(coef_omit, est[[i]]$term, perl=TRUE)
+      est[[i]] <- est[[i]][idx, ]
     }
 
     # set model name
@@ -100,9 +100,9 @@ extract_models <- function(models,
   }
 
   f <- function(x, y) dplyr::full_join(x, y, by = c('term', 'statistic'))
-  est <- Reduce(f, est) %>%
-    dplyr::mutate(group = 'estimates') %>%
-    dplyr::select(group, term, statistic, names(.))
+  est <- Reduce(f, est) 
+  est$group <- "estimates"
+  est <- est[, unique(c("group", "term", "statistic", names(est)))]
 
   # reorder estimates (must be done after join
   if (!is.null(coef_map)) {
@@ -112,38 +112,44 @@ extract_models <- function(models,
 
   # extract and combine gof
   f <- function(x, y) dplyr::full_join(x, y, by = 'term')
-  gof <- models %>%
-    lapply(extract_gof, fmt = fmt, gof_map = gof_map, ...) %>%
-    Reduce(f, .) %>%
-    stats::setNames(c('term', model_names))
+  gof <- lapply(models, extract_gof, fmt = fmt, gof_map = gof_map, ...)
+  gof <- Reduce(f, gof)
+  gof <- stats::setNames(gof, c('term', model_names))
 
-  # add gof row identifier
-  gof <- gof %>%
-    dplyr::mutate(group = 'gof') %>%
-    dplyr::select(group, term, names(.))
+  if (nrow(gof) > 0) {
 
-  # omit gof using regex
-  if (!is.null(gof_omit)) {
-    gof <- gof %>%
-      dplyr::filter(!grepl(gof_omit, term, perl=TRUE))
-  }
+    # add gof row identifier
+    gof$group <- "gof"
+    gof <- gof[, unique(c("group", "term", names(gof)))]
 
-  # otherwise defined at the model level in extract_gof
-  if (is.null(gof_map)) {
-    gof_map <- modelsummary::gof_map
-  }
+    # omit gof using regex
+    if (!is.null(gof_omit)) {
+      idx <- !grepl(gof_omit, gof$term, perl=TRUE)
+      gof <- gof[idx, , drop=FALSE]
+    }
 
-  # gof_map: omit, reorder, rename
-  gof <- gof[!gof$term %in% gof_map$raw[gof_map$omit], ] # omit (black list)
-  gof_names <- gof_map$clean[match(gof$term, gof_map$raw)] # rename
-  gof_names[is.na(gof_names)] <- gof$term[is.na(gof_names)]
-  gof$term <- gof_names
-  idx <- match(gof$term, gof_map$clean) # reorder
-  gof <- gof[order(idx, gof$term), ]
+    if (nrow(gof) > 0) {
+
+      # otherwise defined at the model level in extract_gof
+      if (is.null(gof_map)) {
+        gof_map <- modelsummary::gof_map
+      }
+
+      # gof_map: omit, reorder, rename
+      gof <- gof[!gof$term %in% gof_map$raw[gof_map$omit], ] # omit (black list)
+      gof_names <- gof_map$clean[match(gof$term, gof_map$raw)] # rename
+      gof_names[is.na(gof_names)] <- gof$term[is.na(gof_names)]
+      gof$term <- gof_names
+      idx <- match(gof$term, gof_map$clean) # reorder
+      gof <- gof[order(idx, gof$term), ]
+
+    }
+
+  } 
 
   # combine estimates and gof
   if (nrow(gof) > 0) {
-    tab <- dplyr::bind_rows(est, gof)
+    tab <- bind_rows(est, gof)
   } else {
     tab <- est
   }

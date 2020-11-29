@@ -173,7 +173,7 @@ datasummary_balance <- function(formula,
     tab_fac <- rbind(header, tab_fac)
 
     # bind tables and reorder columns (factor is always widest)
-    tab <- dplyr::bind_rows(tab_num, tab_fac)
+    tab <- bind_rows(tab_num, tab_fac)
     tab <- tab[, colnames(tab_fac)]
 
     attr(tab, "stub_width") <- attr(tab_fac, "stub_width")
@@ -217,7 +217,10 @@ datasummary_balance <- function(formula,
                                      fmt=fmt, 
                                      statistic=dinm_statistic))
     tmp <- do.call("rbind", tmp)
+
     tab <- dplyr::left_join(tab, tmp, by=" ")
+    # tab <- left_join(tab, tmp, by=" ")
+    # tab <- merge(tab, tmp, all.x=TRUE, by=" ", sort=FALSE)
 
     # post-DinM, pad the span if the table has new columns
     skE <- attr(tab, "span_kableExtra")

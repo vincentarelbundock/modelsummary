@@ -6,13 +6,12 @@
 \usage{
 datasummary_skim_numeric(
   data,
-  type = "numeric",
-  output = "default",
-  fmt = "\%.1f",
-  histogram = TRUE,
-  title = NULL,
-  notes = NULL,
-  align = NULL,
+  output,
+  fmt,
+  histogram,
+  title,
+  notes,
+  align,
   ...
 )
 }

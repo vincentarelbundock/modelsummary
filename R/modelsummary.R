@@ -171,8 +171,8 @@ modelsummary <- function(models,
 
   # remove duplicate term labels
   idx <- grepl('statistic\\d*$', dat$statistic)
-  tab <- dat %>%
-    dplyr::mutate(term = ifelse(idx, '', term))
+  tab <- dat
+  tab$term <- ifelse(idx, '', tab$term)
 
   # interaction : becomes ×
   if (is.null(coef_map)) {
@@ -195,10 +195,9 @@ modelsummary <- function(models,
 
   # clean table but keep metadata for data.frame output
   if (parse_output_arg(output)$output_format != "dataframe") {
-    tab <- tab %>%
-      dplyr::select(-statistic, -group) %>%
-      # HACK: arbitrary 7 spaces to avoid name conflict
-      dplyr::rename(`       ` = term)
+    tab$statistic <- tab$group <- NULL
+    # HACK: arbitrary 7 spaces to avoid name conflict
+    colnames(tab)[colnames(tab)=="term"] <- "       "
   }
 
   # stars

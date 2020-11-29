@@ -67,8 +67,8 @@ modelsummary_wide <- function(models,
     }
   }
 
-  gl <- dplyr::bind_cols(gl)
-  ti <- dplyr::bind_rows(ti)
+  gl <- bind_cols(gl)
+  ti <- bind_rows(ti)
 
   # guess coef_group
   if (is.null(coef_group)) {

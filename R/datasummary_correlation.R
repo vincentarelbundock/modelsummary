@@ -18,12 +18,17 @@ datasummary_correlation <- function(data,
   }
 
   nvar <- ncol(data)
-  out <- data %>%
-    dplyr::select(where(is.numeric)) %>%
-    stats::cor(use = 'pairwise.complete.obs') %>%
-    data.frame %>%
-    cbind(rowname=row.names(.), .) %>%
-    dplyr::mutate(dplyr::across(where(is.numeric), clean_r))
+
+  out <- data[, sapply(data, is.numeric)]
+  out <- stats::cor(out, use='pairwise.complete.obs')
+  out <- data.frame(out)
+  out <- cbind(rowname=row.names(out), out)
+
+  for (i in seq_along(out)) {
+    if (is.numeric(out[[i]])) {
+      out[[i]] <- clean_r(out[[i]])
+    }
+  }
 
   for (i in 1:nrow(out)) {
     for (j in 2:ncol(out)) {

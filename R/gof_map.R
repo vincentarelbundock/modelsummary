@@ -47,7 +47,6 @@ gof_map_build <- function() {
 #' @keywords datasets
 #' @name gof_map
 #' @format data.frame with 4 columns of character data: raw, clean, fmt, omit
-#' @importFrom dplyr tribble
 #' @examples
 #' \dontrun{
 #'
