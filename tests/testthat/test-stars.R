@@ -9,22 +9,23 @@ mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 test_that("same stars with different statistics", {
 
   m <- lm(dist ~ speed, data = cars)
-  tab1 <- modelsummary:::extract_models(m, stars = TRUE)
-  tab2 <- modelsummary:::extract_models(m, statistic = 'p.value',
-    stars = TRUE)
-  tab3 <- modelsummary:::extract_models(m,
-    statistic = c('p.value', 'conf.int'),
-    stars = TRUE)
+  tab1 <- modelsummary(m, stars=TRUE, output="dataframe")
+  tab2 <- modelsummary(m, statistic='p.value', stars=TRUE, output="dataframe")
+  tab3 <- modelsummary(m, statistic=c('p.value', 'conf.int'), stars=TRUE, output="dataframe")
 
-  expect_equal(tab1[c(1, 3), 4], tab2[c(1, 3), 4])
-  expect_equal(tab1[c(1, 3), 4], tab3[c(1, 4), 4])
+  tab1 <- tab1[[4]]
+  tab2 <- tab2[[4]]
+  tab3 <- tab3[[4]]
+
+  expect_equal(tab1[c(1, 3)], tab2[c(1, 3)])
+  expect_equal(tab1[c(1, 3)], tab3[c(1, 4)])
 
 })
 
 
 test_that("stars = FALSE", {
 
-  raw <- modelsummary:::extract_models(mod, stars = FALSE)
+  raw <- modelsummary(mod, stars=FALSE, output="dataframe")
 
   truth <- c("-1.986", "(0.434)", "0.665", "(0.120)")
   expect_equal(truth, unname(raw[[4]][1:4]))
@@ -36,7 +37,7 @@ test_that("stars = FALSE", {
 
 test_that("stars = TRUE", {
 
-  raw <- modelsummary:::extract_models(mod, stars = TRUE)
+  raw <- modelsummary(mod, stars = TRUE, output="dataframe")
 
   truth <- c("-1.986***", "(0.434)", "0.665***", "(0.120)")
   expect_equal(truth, unname(raw[[4]][1:4]))
@@ -48,7 +49,7 @@ test_that("stars = TRUE", {
 
 test_that("custom stars", {
 
-  raw <- modelsummary:::extract_models(mod, stars = c('+' = .8, '*' = .1))
+  raw <- modelsummary(mod, stars = c('+' = .8, '*' = .1), output="dataframe")
 
   truth <- c("-1.986*", "(0.434)", "0.665*", "(0.120)")
   expect_equal(truth, unname(raw[[4]][1:4]))

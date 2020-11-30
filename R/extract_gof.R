@@ -20,8 +20,9 @@ extract_gof <- function(model, fmt, gof_map, ...) {
 
   # define gof_map if not supplied. Keep anything not included explicitly
   if (is.null(gof_map)) {
+
     gof_map <- modelsummary::gof_map
-    if (isTRUE(inherits(model, "lm"))) {
+    if (isTRUE(class(model)[1] == "lm")) { # glm also inherits from lm
       gof_map$clean[gof_map$raw == "statistic"] <- "F"
       gof_map$omit[gof_map$raw == "statistic"] <- FALSE
     }

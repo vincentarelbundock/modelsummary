@@ -12,6 +12,7 @@ factory_kableExtra <- function(tab,
                                title = NULL,
                                ...) {
 
+
   if (is.null(output_format) || !output_format %in% c("latex", "markdown")) {
     output_format <- "html"
   }
@@ -23,10 +24,12 @@ factory_kableExtra <- function(tab,
              "midrule", "caption.short", "table.envir") 
   arguments <- c(
     list(...),
-    "caption"  = title,
-    "format"   = output_format,
-    "booktabs" = TRUE,
-    "linesep"  = "")
+    "caption"   = title,
+    "format"    = output_format,
+    "booktabs"  = TRUE,
+    "linesep"   = "",
+    "row.names" = NULL
+  )
 
   # align
   if (!is.null(align)) {
@@ -41,6 +44,10 @@ factory_kableExtra <- function(tab,
     }
   }
 
+  # don't print row.names
+  row.names(tab) <- NULL
+
+  # combine arguments
   arguments <- arguments[base::intersect(names(arguments), valid)]
   arguments <- c(list(tab), arguments)
 

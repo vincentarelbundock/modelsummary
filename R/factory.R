@@ -18,7 +18,6 @@ factory <- function(tab,
 
 
   # sanity check functions are hosted in R/sanity_checks.R
-  # more sanity checks are conducted in modelsummary:::extract_models()
   sanity_output(output)
   sanity_title(title)
   sanity_notes(notes)

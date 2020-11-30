@@ -18,11 +18,14 @@ test_that("tibble", {
     'NEW GOF 3', 'Y',  'Y')
   attr(rows, 'position') <- c(3, 8, 9, 12)
 
-  expect_known_output(modelsummary(mod, add_rows=rows,
-                                   output="markdown"),
-                      file="known_output/msummary_add_rows_1.md",
-                      print=TRUE,
-                      update=FALSE)
+  expect_known_output(
+    modelsummary(
+      mod, 
+      add_rows=rows,
+      output="markdown"),
+    file="known_output/msummary_add_rows_1.md",
+    print=TRUE,
+    update=FALSE)
 
 })
 

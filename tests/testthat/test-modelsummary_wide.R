@@ -2,12 +2,13 @@ context("modelsummary_wide")
 
 library(nnet)
 
-# test_that("no group", {
-#   mod <- list(
-#     lm(hp ~ mpg, mtcars),
-#     lm(hp ~ mpg + drat + vs, mtcars)
-#   )
-# })
+test_that("no group", {
+  mod <- list(
+    lm(hp ~ mpg, mtcars),
+    lm(hp ~ mpg + drat + vs, mtcars)
+  )
+  expect_error(modelsummary_wide(mod))
+})
 
 
 test_that("nnet::multinom one model", {

@@ -4,6 +4,7 @@
 * datasummary_skim(type="dataset")
 * gof_map omits by default
 * statistic_override does not require a list
+* extract_models is deprecated. Use modelsummary(output="dataframe") instead.
 
 # modelsummary 0.6.3
 

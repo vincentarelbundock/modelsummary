@@ -68,32 +68,36 @@ modelplot <- function(models,
 
 
   if (is.null(conf_level)) {
-    out <- extract_models(
-             models=models,
-             fmt="%.50f",
-             conf_level=conf_level,
-             coef_map=coef_map,
-             coef_omit=coef_omit,
-             coef_rename=coef_rename,
-             statistic_override=statistic_override,
-             ...)
-    out <- out[out$group == "estimates" & out$statistic == "estimate",]
+    out <- modelsummary(
+      output="dataframe",
+      models=models,
+      fmt="%.50f",
+      conf_level=conf_level,
+      coef_map=coef_map,
+      coef_omit=coef_omit,
+      coef_rename=coef_rename,
+      statistic_override=statistic_override,
+      ...
+    )
+    out <- out[out$part == "estimates" & out$statistic == "estimate",]
     out <- tidyr::pivot_longer(out, cols=4:ncol(out), values_to="estimate",
                                names_to="model")
     out <- out[out$estimate != "",]
     out$estimate <- as.numeric(out$estimate)
   } else {
-    out <- extract_models(
-             models=models,
-             fmt="%.50f",
-             conf_level=conf_level,
-             coef_map=coef_map,
-             coef_omit=coef_omit,
-             coef_rename=coef_rename,
-             statistic="conf.int",
-             statistic_override=statistic_override,
-             ...)
-    out <- out[out$group == "estimates",]
+    out <- modelsummary(
+      output="dataframe",
+      models=models,
+      fmt="%.50f",
+      conf_level=conf_level,
+      coef_map=coef_map,
+      coef_omit=coef_omit,
+      coef_rename=coef_rename,
+      statistic="conf.int",
+      statistic_override=statistic_override,
+      ...
+    )
+    out <- out[out$part == "estimates",]
     out <- tidyr::pivot_longer(out, cols=4:ncol(out), names_to="model")
     out <- tidyr::pivot_wider(out, names_from="statistic")
     out$statistic1 <- gsub('\\[|\\]', '', out$statistic1)

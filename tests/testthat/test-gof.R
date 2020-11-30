@@ -23,7 +23,7 @@ test_that('custom gof_map omits everything by default', {
 test_that('omit all gof', {
   gof_map_custom <- modelsummary::gof_map
   gof_map_custom$omit <- TRUE
-  raw <- modelsummary:::extract_models(mod, gof_map = gof_map_custom)
+  raw <- modelsummary(mod, gof_map = gof_map_custom, output="dataframe")
   truth <- c("-1.986", "(0.434)", "0.665", "(0.120)", "", "")
   expect_equal(truth, unname(raw[[4]]))
   truth <- c("4.739", "(4.045)", "", "", "-0.288", "(0.228)")
@@ -37,7 +37,7 @@ test_that('omit all gof from only a few models', {
   gof_map <- modelsummary::gof_map
   gof_map$omit <- TRUE
   gof_map$omit[gof_map$raw == "r.squared"] <- FALSE
-  tmp <- modelsummary:::extract_models(list(mod1, mod2), gof_map = gof_map)
+  tmp <- modelsummary(list(mod1, mod2), gof_map = gof_map, output="dataframe")
   expect_equal(nrow(tmp), 5)
   expect_equal(ncol(tmp), 5)
 })

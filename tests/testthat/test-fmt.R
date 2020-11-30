@@ -8,7 +8,7 @@ mod$Logit <- glm(am ~ drat + hp, data = mtcars, family = binomial())
 
 test_that("rounding 5 decimals", {
 
-  raw <- modelsummary:::extract_models(mod, fmt = '%.5f')
+  raw <- modelsummary(mod, fmt = '%.5f', output="dataframe")
 
   truth <- c("353.65253", "(76.04873)", "-57.54523", "(20.92205)", "", "")
   expect_equal(truth, unname(raw[[4]])[1:6])

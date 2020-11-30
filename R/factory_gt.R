@@ -58,8 +58,8 @@ factory_gt <- function(tab,
     center <- grep('c', align)
     right <- grep('r', align)
     out <- out %>%
-      gt::cols_align('left', left) %>%
-      gt::cols_align('center', center) %>%
+      gt::cols_align(align='center', columns=center) %>%
+      gt::cols_align(align='left', columns=left) %>%
       gt::cols_align('right', right)
   }
 

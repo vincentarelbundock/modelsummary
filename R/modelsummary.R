@@ -1,8 +1,16 @@
 # https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when#comment20826625_12429344
 # 2012 hadley says "globalVariables is a hideous hack and I will never use it"
 # 2014 hadley updates his own answer with globalVariables as one of "two solutions"
-globalVariables(c('.', 'term', 'group', 'estimate', 'conf.high', 'conf.low', 'value', 'p.value', 'std.error', 'statistic', 'stars_note', 'logLik', 'formatBicLL', 'section', 'position', 'where', 'ticks', 'statistic1', 'model', 'tmp_grp', 'condition_variable'))
+globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'value', 'p.value', 'std.error', 'statistic', 'stars_note', 'logLik', 'formatBicLL', 'section', 'position', 'where', 'ticks', 'statistic1', 'model', 'tmp_grp', 'condition_variable'))
 
+
+
+#' deprecated function
+#'
+#' @export
+extract_models <- function(...) {
+  stop('This function is deprecated. Consider using `modelsummary(output="data.frame")` instead.')
+}
 
 #' Beautiful, customizable summaries of statistical models
 #'
@@ -147,43 +155,173 @@ modelsummary <- function(models,
                          estimate = 'estimate',
                          ...) {
 
+
+  # sanity check functions are hosted in R/sanity_checks.R
+  sanity_output(output)
+  sanity_statistic(statistic, statistic_override, statistic_vertical, models)
+  sanity_conf_level(conf_level)
+  sanity_coef_map(coef_map)
+  sanity_coef_omit(coef_omit)
+  sanity_gof_map(gof_map)
+  sanity_gof_omit(gof_omit)
+  sanity_stars(stars)
+  sanity_fmt(fmt)
+  sanity_estimate(estimate)
+  if (!is.null(coef_rename) & !is.null(coef_map)) {
+    stop("coef_map and coef_rename cannot be used together.")
+  }
+
+  # output
+  output_format <- parse_output_arg(output)$output_format
+
+  # extra arguments
   ellipsis <- list(...)
 
-  # sanity checks for arguments not present in extract_models
-  sanity_output(output)
+  # models must be a list
+  if (!inherits(models, "list")) {
+    models <- list(models)
+  }
 
-  # extract estimates and gof
-  dat <- extract_models(
-    models,
-    statistic = statistic,
-    statistic_override = statistic_override,
-    statistic_vertical = statistic_vertical,
-    conf_level = conf_level,
-    coef_map = coef_map,
-    coef_omit = coef_omit,
-    coef_rename = coef_rename,
-    gof_map = gof_map,
-    gof_omit = gof_omit,
-    stars = stars,
-    fmt = fmt,
-    estimate = estimate,
-    ...)
+  # model names dictionary: use unique names for manipulation
+  if (is.null(names(models))) {
+    model_names <- paste("Model", 1:length(models))
+  } else {
+    model_names <- names(models)
+  }
+  model_id <- paste("Model", 1:length(models))
+  
+  # statistics_override must be a list
+  if (!inherits(statistic_override, "list")) {
+    statistic_override <- rep(list(statistic_override), length(models))
+  }
 
-  # remove duplicate term labels
-  idx <- grepl('statistic\\d*$', dat$statistic)
-  tab <- dat
-  tab$term <- ifelse(idx, '', tab$term)
+  # estimates: extract and combine
+  est <- list()
+
+  for (i in seq_along(models)) {
+
+    tmp <- modelsummary:::extract_estimates(
+      model              = models[[i]],
+      fmt                = fmt,
+      estimate           = estimate,
+      statistic          = statistic,
+      statistic_override = statistic_override[[i]],
+      statistic_vertical = statistic_vertical,
+      conf_level         = conf_level,
+      stars              = stars,
+      ...
+    )
+
+    # coef_rename: before merge to collapse rows
+    if (!is.null(coef_rename)) {
+      tmp$term <- replace_dict(tmp$term, coef_rename)
+    }
+
+    # coef_map
+    if (!is.null(coef_map)) {
+      tmp <- tmp[tmp$term %in% names(coef_map), , drop=FALSE]
+      tmp$term <- replace_dict(tmp$term, coef_map)
+    }
+
+    # coef_omit
+    if (!is.null(coef_omit)) {
+      idx <- !grepl(coef_omit, tmp$term, perl=TRUE)
+      tmp <- tmp[idx, , drop=FALSE]
+    }
+
+    # make sure no duplicate estimate names *within* a single model. this
+    # cannot be in input sanity checks. idx paste allows multiple statistics.
+    idx <- paste(tmp$term, tmp$statistic)
+    if (anyDuplicated(idx) > 2) {
+      stop('Two coefficients from a single model cannot share the same name. Check model ', i)
+    }
+
+    # model name is temporarily a unique id
+    colnames(tmp)[3] <- model_id[i]
+
+    # assign
+    est[[model_id[i]]] <- tmp
+
+  }
+
+  term_order <- lapply(est, function(x) x$term)
+  term_order <- unique(unlist(term_order))
+
+  f <- function(x, y) merge(x, y, all=TRUE, sort=FALSE, by=c("term", "statistic"))
+  est <- Reduce(f, est) 
+  est$part <- "estimates"
+  est <- est[, unique(c("part", "term", "statistic", names(est)))]
+
+  # default order
+  idx <- match(est[["term"]], term_order)
+  est <- est[order(idx, est[["statistic"]]),]
+
+  # coef_map
+  if (!is.null(coef_map)) {
+    coef_map <- intersect(coef_map, term_order)
+    est <- est[est[["term"]] %in% coef_map, , drop=FALSE]
+    idx <- match(est[["term"]], coef_map)
+    est <- est[order(idx, est[["statistic"]]),]
+  }
+
+  # gof: extract and combine
+  gof <- list()
+
+  for (i in seq_along(models)) {
+    gof[[i]] <- extract_gof(models[[i]], fmt=fmt, gof_map=gof_map, ...)
+    colnames(gof[[i]])[2] <- model_id[i]
+  }
+
+  f <- function(x, y) merge(x, y, all=TRUE, sort=FALSE, by="term")
+  gof <- Reduce(f, gof)
+
+  if (nrow(gof) > 0) {
+
+    # gof row identifier
+    gof$part <- "gof"
+    gof <- gof[, unique(c("part", "term", names(gof)))]
+
+    # gof_omit
+    if (!is.null(gof_omit)) {
+      idx <- !grepl(gof_omit, gof$term, perl=TRUE)
+      gof <- gof[idx, , drop=FALSE]
+    }
+
+    # gof_map
+    if (nrow(gof) > 0) {
+      if (is.null(gof_map)) {
+        gof_map <- modelsummary:::gof_map
+      }
+      gof <- gof[!gof$term %in% gof_map$raw[gof_map$omit], , drop=FALSE]
+      gof_names <- gof_map$clean[match(gof$term, gof_map$raw)]
+      gof_names[is.na(gof_names)] <- gof$term[is.na(gof_names)]
+      gof$term <- gof_names
+      idx <- match(gof$term, gof_map$clean)
+      gof <- gof[order(idx, gof$term), ]
+    }
+
+  } 
+
+  # combine estimates and gof
+  if (nrow(gof) > 0) {
+    tab <- bind_rows(est, gof)
+  } else {
+    tab <- est
+  }
+
+  # empty cells
+  tab[is.na(tab)] <- ''
 
   # interaction : becomes ×
   if (is.null(coef_map)) {
-    if (parse_output_arg(output)$output_format != 'rtf') {
-      idx <- tab$group != 'gof'
+    if (output_format != 'rtf') {
+      idx <- tab$part != 'gof'
       tab$term <- ifelse(idx, gsub(':', ' \u00d7 ', tab$term), tab$term)
     }
   }
 
   # measure table
-  hrule <- match('gof', tab$group)
+  hrule <- match('gof', tab$part)
   if (!is.na(hrule) &&
     !is.null(add_rows) &&
     !is.null(attr(add_rows, 'position'))) {
@@ -191,13 +329,6 @@ modelsummary <- function(models,
   }
   if (is.na(hrule)) {
     hrule <- NULL
-  }
-
-  # clean table but keep metadata for data.frame output
-  if (parse_output_arg(output)$output_format != "dataframe") {
-    tab$statistic <- tab$group <- NULL
-    # HACK: arbitrary 7 spaces to avoid name conflict
-    colnames(tab)[colnames(tab)=="term"] <- "       "
   }
 
   # stars
@@ -210,13 +341,36 @@ modelsummary <- function(models,
     }
   }
 
-  # column alignment
+
+  # data.frame output keeps redundant info
+  if (output_format != "dataframe") {
+
+    # duplicate term labels
+    idx <- grepl('statistic\\d*$', tab$statistic)
+    tab$term <- ifelse(idx, "", tab$term)
+
+    # clean table but keep metadata for data.frame output
+    if (output_format != "dataframe") {
+      tab$statistic <- tab$part <- NULL
+
+      # HACK: arbitrary 7 spaces to avoid name conflict
+      colnames(tab)[colnames(tab)=="term"] <- "       "
+    }
+
+  }
+
+  # column alignment (after removing extraneous columns)
   if (is.null(align)) {
     align <- paste0("l", strrep("c", ncol(tab) - 1))
   }
 
+  # restore original model names
+  idx <- match(model_id, colnames(tab))
+  colnames(tab)[idx] <- model_names
+
   # build table
-  factory(tab,
+  factory(
+    tab,
     align = align,
     fmt = fmt,
     hrule = hrule,
@@ -224,7 +378,8 @@ modelsummary <- function(models,
     output = output,
     title = title,
     add_rows = add_rows,
-    ...)
+    ...
+  )
 
 }
 
