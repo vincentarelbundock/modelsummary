@@ -1,6 +1,5 @@
 context("flextable")
 
-library(dplyr)
 library(modelsummary)
 
 models <- list()

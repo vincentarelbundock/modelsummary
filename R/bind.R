@@ -155,3 +155,9 @@ squash <- function(lst) {
   do.call(c, lapply(lst, function(x) if (is.list(x) && !is.data.frame(x)) squash(x) else list(x)))
 }
 
+
+#' poorman
+#' @noRd
+names_are_invalid <- function(x) {
+  x == "" | is.na(x)
+}

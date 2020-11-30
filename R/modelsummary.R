@@ -4,9 +4,9 @@
 globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'value', 'p.value', 'std.error', 'statistic', 'stars_note', 'logLik', 'formatBicLL', 'section', 'position', 'where', 'ticks', 'statistic1', 'model', 'tmp_grp', 'condition_variable'))
 
 
-
-#' deprecated function
+#' Deprecated function
 #'
+#' @param ... any argument
 #' @export
 extract_models <- function(...) {
   stop('This function is deprecated. Consider using `modelsummary(output="data.frame")` instead.')
@@ -200,7 +200,7 @@ modelsummary <- function(models,
 
   for (i in seq_along(models)) {
 
-    tmp <- modelsummary:::extract_estimates(
+    tmp <- extract_estimates(
       model              = models[[i]],
       fmt                = fmt,
       estimate           = estimate,
@@ -290,7 +290,9 @@ modelsummary <- function(models,
     # gof_map
     if (nrow(gof) > 0) {
       if (is.null(gof_map)) {
-        gof_map <- modelsummary:::gof_map
+        # assign here and not in the function definition because we use NULL to
+        # figure out if F-stat should be included by default for lm models.
+        gof_map <- get("gof_map", as.environment("package:modelsummary"))
       }
       gof <- gof[!gof$term %in% gof_map$raw[gof_map$omit], , drop=FALSE]
       gof_names <- gof_map$clean[match(gof$term, gof_map$raw)]
@@ -323,8 +325,8 @@ modelsummary <- function(models,
   # measure table
   hrule <- match('gof', tab$part)
   if (!is.na(hrule) &&
-    !is.null(add_rows) &&
-    !is.null(attr(add_rows, 'position'))) {
+      !is.null(add_rows) &&
+      !is.null(attr(add_rows, 'position'))) {
     hrule <- hrule + sum(attr(add_rows, 'position') < hrule)
   }
   if (is.na(hrule)) {

@@ -58,9 +58,7 @@ factory_kableExtra <- function(tab,
   if (!is.null(hrule)) {
     if (output_format %in% 'latex') {
       for (pos in hrule) {
-        out <- out %>%
-          kableExtra::row_spec(row = pos - 1,
-            extra_latex_after = '\\midrule')
+        out <- kableExtra::row_spec(out, row=pos-1, extra_latex_after='\\midrule')
       }
     }
   }
@@ -70,8 +68,7 @@ factory_kableExtra <- function(tab,
     # threeparttable only works with 1 note. But it creates a weird bug
     # when using coef_map and stars in Rmarkdown PDF output
     for (n in notes) {
-      out <- out %>%
-        kableExtra::add_footnote(label = n, notation = 'none')
+      out <- kableExtra::add_footnote(out, label=n, notation='none')
     }
   }
 
@@ -81,14 +78,14 @@ factory_kableExtra <- function(tab,
     if (output_format %in% c('latex', 'html')) {
       span <- rev(span) # correct vertical order
       for (s in span) {
-        out <- out %>% kableExtra::add_header_above(s)
+        out <- kableExtra::add_header_above(out, s)
       }
     }
   }
 
   # styling (can be overriden manually by calling again)
   if (output_format %in% c("latex", "html")) {
-    out <- out %>% kableExtra::kable_styling(full_width = FALSE)
+    out <- kableExtra::kable_styling(out, full_width = FALSE)
   }
 
   # output

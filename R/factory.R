@@ -111,13 +111,13 @@ factory <- function(tab,
     # data.frame includes metadata columns
     if (output_list$output_format == "dataframe") {
       # only for modelsummary, not for datasummary
+
       if (all(c("term", "statistic") %in% colnames(tab))) {
-        add_rows$group <- "manual"
+        add_rows$part <- "manual"
         add_rows$statistic <- ""
-        add_rows <- add_rows %>%
-          dplyr::relocate(group, .before = term) %>%
-          dplyr::relocate(statistic, .after = term)
+        add_rows <- add_rows[, colnames(tab)]
       }
+
     }
 
     # sanity check

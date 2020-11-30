@@ -12,7 +12,7 @@ gof_map
 }
 \description{
 By default, this data frame is passed to the 'gof_map' argument of the
-'msummary' or 'modelsummary' functions. Users can modify this data frame to
+'modelsummary' function. Users can modify this data frame to
 customize the list of statistics to display and their format. See example
 below.
 }
@@ -24,7 +24,7 @@ mod <- lm(wt ~ drat, data = mtcars)
 gm <- modelsummary::gof_map
 gm$omit[gm$raw == 'deviance'] <- FALSE
 gm$fmt[gm$raw == 'r.squared'] <- "\%.5f"
-msummary(mod, gof_map = gm)
+modelsummary(mod, gof_map = gm)
 }
 
 }

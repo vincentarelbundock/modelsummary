@@ -1,7 +1,5 @@
 context("kableExtra")
 
-library(dplyr)
-library(modelsummary)
 library(kableExtra)
 
 models <- list()

@@ -67,9 +67,8 @@ results[['hardcoded arbitrary']] <- modelsummary(
 
 # we are not interested in GOFs in this test
 for (i in seq_along(results)) {
-  results[[i]] <- results[[i]] %>%
-    dplyr::filter(part == "estimates") %>%
-    dplyr::select(-part, -statistic)
+  results[[i]] <- results[[i]][results[[i]]$part == "estimates",, drop=FALSE]
+  results[[i]]$part <- results[[i]]$statistic <- NULL
 }
 
 # # save known values (comment out until new manual check)

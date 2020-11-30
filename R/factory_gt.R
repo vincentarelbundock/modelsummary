@@ -18,27 +18,28 @@ factory_gt <- function(tab,
 
   # create gt table object
   idx_col <- ncol(tab)
-  out <- tab %>%
-    gt::gt()
+  out <- gt::gt(tab)
 
   # horizontal rule to separate coef/gof
   if (!is.null(hrule)) { # check if there are >0 GOF
     for (pos in hrule) {
-      out <- out %>%
-        gt::tab_style(style = gt::cell_borders(sides = 'bottom', color = '#000000'),
-          locations = gt::cells_body(columns = 1:idx_col, rows = (pos - 1)))
+      out <- gt::tab_style(
+        out, 
+        style = gt::cell_borders(sides = 'bottom', color = '#000000'),
+        locations = gt::cells_body(columns = 1:idx_col, rows = (pos - 1))
+      )
     }
   }
 
   # titles
   if (!is.null(title)) {
-    out <- out %>% gt::tab_header(title = title)
+    out <- gt::tab_header(out, title = title)
   }
 
   # user-supplied notes at the bottom of table
   if (!is.null(notes)) {
     for (n in notes) {
-      out <- out %>% gt::tab_source_note(source_note = n)
+      out <- gt::tab_source_note(out, source_note = n)
     }
   }
 
@@ -47,7 +48,7 @@ factory_gt <- function(tab,
 
   if (!is.null(span)) {
     for (s in span) {
-      out <- out %>% gt::tab_spanner(label = s$label, columns = s$position)
+      out <- gt::tab_spanner(out, label = s$label, columns = s$position)
     }
   }
 
@@ -57,10 +58,10 @@ factory_gt <- function(tab,
     left <- grep('l', align)
     center <- grep('c', align)
     right <- grep('r', align)
-    out <- out %>%
-      gt::cols_align(align='center', columns=center) %>%
-      gt::cols_align(align='left', columns=left) %>%
-      gt::cols_align('right', right)
+    out <- 
+    out <- gt::cols_align(out, align='center', columns=center)
+    out <- gt::cols_align(out, align='left', columns=left) 
+    out <- gt::cols_align(out, align='right', column=right)
   }
 
   # output

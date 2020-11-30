@@ -43,9 +43,8 @@ extract_statistic_override <- function(model, statistic_override, conf_level=NUL
   }
 
   if (is.matrix(out)) {
-    out <- base::diag(out) %>%
-      sqrt %>%
-      data.frame(term=names(.), std.error=.)
+    out <- sqrt(base::diag(out))
+    out <- data.frame(term=names(out), std.error=out)
     return(out)
   } 
 

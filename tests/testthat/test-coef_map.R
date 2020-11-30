@@ -49,6 +49,7 @@ test_that("coef_map with multiple vertical statistics", {
     ~term, ~OLS, ~Logit,
     '4-cylinder', '-', '-',
     '12-cylinder', '-', '-')
+
   mat <- modelsummary(models,
     output = 'dataframe',
     statistic = c('std.error', 'conf.int'),

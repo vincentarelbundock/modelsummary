@@ -78,8 +78,8 @@ extract_gof <- function(model, fmt, gof_map, ...) {
     out <- data.frame(term = names(gof), value = unlist(gof))
 
   } else { # all gof are excluded return an empty tibble (needs character to match merge type)
-    out <- data.frame(term = NA_character_, value = NA_character_) %>%
-      stats::na.omit()
+    out <- data.frame(term = NA_character_, value = NA_character_)
+    out <- stats::na.omit(out)
   }
 
   # factor to character (otherwise gof_map breaks under R < 4.0.0)

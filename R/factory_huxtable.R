@@ -24,23 +24,32 @@ factory_huxtable <- function(tab,
   out <- huxtable::hux(tab, add_colnames = TRUE)
 
   # horizontal rules
-  out <- out %>%
-    huxtable::set_bottom_border(row = 1,
-      col = 1:ncol(.),
-      value = 1) %>%
-    huxtable::set_top_border(row = 1,
-      col = 1:ncol(.),
-      value = 1) %>%
-    huxtable::set_bottom_border(row = nrow(.),
-      col = 1:ncol(.),
-      value = 1)
+  out <- huxtable::set_bottom_border(
+    out,
+    row = 1,
+    col = 1:ncol(out),
+    value = 1
+  ) 
+  out <- huxtable::set_top_border(
+    out,
+    row = 1,
+    col = 1:ncol(out),
+    value = 1
+  )
+  out <- huxtable::set_bottom_border(
+    out,
+    row = nrow(out),
+    col = 1:ncol(out),
+    value = 1
+  )
 
   if (!is.null(hrule)) {
     for (pos in hrule) {
-      out <- out %>%
-        huxtable::set_bottom_border(row = pos,
-          col = 1:ncol(.),
-          value = 1)
+      out <- huxtable::set_bottom_border(
+        out, row = pos,
+        col = 1:ncol(out),
+        value = 1
+      )
     }
   }
 

@@ -143,9 +143,9 @@ test_that('estimatr: clusters, blocks, weights', {
 
   # blocks
   dat$block <- rep(1:5, each = 20) # hardcoded name in estimatr
-  dat <- dat %>%
-    dplyr::group_by(block) %>%
-    dplyr::mutate(Z_block = rbinom(dplyr::n(), 1, .5))
+
+  dat$Z_block <- unlist(tapply(dat$block, dat$block, function(z) rbinom(length(z), 1, .5)))
+
   dat$blocks <- dat$block # hardcoded name in datasummary_balance
   dat$clusters <- NULL
 
@@ -155,15 +155,6 @@ test_that('estimatr: clusters, blocks, weights', {
   tab <- datasummary_balance(~Z_block, dat, fmt = "%.6f", output = 'dataframe')
   expect_equal(tab[1, ncol(tab)], truth)
 
-})
-
-
-test_that('works with tibbles', {
-  res <- dplyr::starwars %>%
-    dplyr::filter(species == 'Human') %>%
-    dplyr::select(height:gender) %>%
-    datasummary_balance(~gender, data = ., output = "data.frame")
-  expect_equal(dim(res), c(28, 8))
 })
 
 

@@ -86,7 +86,7 @@ datasummary_skim_dataset <- function(
 
 
   is.binary <- function(x) {
-    tryCatch(length(unique(na.omit(x))) == 2, error = function(e) FALSE, silent = TRUE)
+    tryCatch(length(unique(stats::na.omit(x))) == 2, error = function(e) FALSE, silent = TRUE)
   }
   out <- c(
     Rows = rounding(nrow(data), fmt=0),
@@ -218,8 +218,8 @@ datasummary_skim_numeric <- function(
         output = output,
         title = title,
         align = align,
-        notes = notes) %>%
-      kableExtra::column_spec(
+        notes = notes) 
+    out <- kableExtra::column_spec(out,
         column=9, 
         image=kableExtra::spec_hist(histogram_list, 
                                     col="black",

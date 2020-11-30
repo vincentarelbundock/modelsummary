@@ -19,11 +19,11 @@
 fmt_labels_md <- function(tab, position = c('both', 'row', 'column')) {
   out <- tab
   if (match.arg(position) %in% c('both', 'row')) {
-    out <- out %>% gt::fmt_markdown(columns = 1)
+    out <- gt::fmt_markdown(out, columns = 1)
   }
   if (match.arg(position) %in% c('both', 'column')) {
     f <- function(x) stats::setNames(lapply(names(x$`_data`), gt::md), names(x$`_data`))
-    out <- out %>% gt::cols_label(.list = f(.))
+    out <- gt::cols_label(out, .list = f(.))
   }
   return(out)
 }
@@ -40,7 +40,7 @@ tidy_felm_iv <- function(x, ...) {
 
   # extract results
   stage2 <- generics::tidy(x, ...)
-  stage1 <- generics::tidy(x$stage1, ...) %>%
+  stage1 <- generics::tidy(x$stage1, ...)
 
   # keep only the stage1 terms if they are not in stage2
   idx <- !stage1$term %in% stage2$term

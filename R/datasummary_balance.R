@@ -218,17 +218,27 @@ datasummary_balance <- function(formula,
                                      statistic=dinm_statistic))
     tmp <- do.call("rbind", tmp)
 
-    tab <- dplyr::left_join(tab, tmp, by=" ")
-    # tab <- merge(tab, tmp, all.x=TRUE, by=" ", sort=FALSE)
+    # save attributes because merge wipes them out
+    header_sparse_flat <- attr(tab, "header_sparse_flat")
+    stub_width <- attr(tab, "stub_width")
+    span_gt <- attr(tab, "span_gt")
+    span_kableExtra <- attr(tab, "span_kableExtra")
+
+    # merge
+    tab <- merge(tab, tmp, all.x=TRUE, by=" ", sort=FALSE)
+
+    # restore attributes
+    attr(tab, "header_sparse_flat") <- header_sparse_flat
+    attr(tab, "stub_width") <- stub_width
+    attr(tab, "span_gt") <- span_gt
 
     # post-DinM, pad the span if the table has new columns
-    skE <- attr(tab, "span_kableExtra")
-    for (i in seq_along(skE)) {
-      skE[[i]] <- c(skE[[i]], rep("    ", ncol(tab) - sum(skE[[i]])))
+    for (i in seq_along(span_kableExtra)) {
+      span_kableExtra[[i]] <- c(span_kableExtra[[i]], 
+                                rep("    ", ncol(tab) - sum(span_kableExtra[[i]])))
     }
-    attr(tab, "span_kableExtra") <- skE
+    attr(tab, "span_kableExtra") <- span_kableExtra
 
-    header_sparse_flat <- attr(tab, "header_sparse_flat")
     if (ncol(tab) > length(header_sparse_flat)) {
       attr(tab, "header_sparse_flat") <- c(header_sparse_flat, colnames(tab)[-c(1:length(header_sparse_flat))])
     }

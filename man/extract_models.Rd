@@ -2,10 +2,13 @@
 % Please edit documentation in R/modelsummary.R
 \name{extract_models}
 \alias{extract_models}
-\title{deprecated function}
+\title{Deprecated function}
 \usage{
 extract_models(...)
 }
+\arguments{
+\item{...}{any argument}
+}
 \description{
-deprecated function
+Deprecated function
 }

@@ -1,7 +1,6 @@
 context("gt")
 
 library(gt)
-library(dplyr)
 library(modelsummary)
 
 models <- list()
