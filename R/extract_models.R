@@ -20,7 +20,7 @@ extract_models <- function(models,
                            ...) {
 
   # models must be a list of models
-  if (!'list' %in% class(models)) {
+  if (!inherits(models, "list")) {
     models <- list(models)
   }
 
@@ -39,14 +39,14 @@ extract_models <- function(models,
   sanity_fmt(fmt)
   sanity_estimate(estimate)
 
-  # model names
+  # model names dictionary (use unique names for manipulation)
   if (is.null(names(models))) {
-    model_names <- paste('Model', 1:length(models))
+    model_names <- paste("Model", 1:length(models))
   } else {
     model_names <- names(models)
   }
-  model_names <- pad(model_names)
-
+  model_id <- paste("Model", 1:length(models))
+  
   # if statistics_override is not a list, repeat it to match models list
   if (!inherits(statistic_override, "list")) {
     statistic_override <- rep(list(statistic_override), length(models))
@@ -96,10 +96,11 @@ extract_models <- function(models,
     }
 
     # set model name
-    colnames(est[[i]])[3] <- model_names[i]
+    colnames(est[[i]])[3] <- model_id[i]
   }
 
   f <- function(x, y) dplyr::full_join(x, y, by = c('term', 'statistic'))
+  # f <- function(x, y) merge(x, y, all=TRUE, sort=FALSE, by=c("term", "statistic"))
   est <- Reduce(f, est) 
   est$group <- "estimates"
   est <- est[, unique(c("group", "term", "statistic", names(est)))]
@@ -112,9 +113,10 @@ extract_models <- function(models,
 
   # extract and combine gof
   f <- function(x, y) dplyr::full_join(x, y, by = 'term')
+  # f <- function(x, y) merge(x, y, all=TRUE, sort=FALSE, by="statistic")
   gof <- lapply(models, extract_gof, fmt = fmt, gof_map = gof_map, ...)
   gof <- Reduce(f, gof)
-  gof <- stats::setNames(gof, c('term', model_names))
+  gof <- stats::setNames(gof, c('term', model_id))
 
   if (nrow(gof) > 0) {
 
@@ -156,6 +158,10 @@ extract_models <- function(models,
 
   # empty cells
   tab[is.na(tab)] <- ''
+
+  # restore original model names
+  idx <- match(model_id, colnames(tab))
+  colnames(tab)[idx] <- model_names
 
   # output
   return(tab)

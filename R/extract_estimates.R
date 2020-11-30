@@ -50,7 +50,7 @@ extract_estimates <- function(model,
     }
 
     # merge statistic_override and estimates
-    est <- dplyr::left_join(est, so, by = 'term')
+    est <- merge(est, so, by="term", sort=FALSE)
 
   } else { # if statistic_override is not used
 

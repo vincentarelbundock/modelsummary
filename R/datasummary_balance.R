@@ -219,7 +219,6 @@ datasummary_balance <- function(formula,
     tmp <- do.call("rbind", tmp)
 
     tab <- dplyr::left_join(tab, tmp, by=" ")
-    # tab <- left_join(tab, tmp, by=" ")
     # tab <- merge(tab, tmp, all.x=TRUE, by=" ", sort=FALSE)
 
     # post-DinM, pad the span if the table has new columns
