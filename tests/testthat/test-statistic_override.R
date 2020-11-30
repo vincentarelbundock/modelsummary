@@ -24,26 +24,26 @@ test_that("single model", {
 # reference tables
 results <- list()
 
-results[['one sandwich']] <- msummary(
+results[['one sandwich']] <- modelsummary(
   models,
   output = "data.frame",
   statistic_override = vcov,
   statistic = 'p.value',
   fmt = "%.7f")
 
-results[['many sandwiches']] <- msummary(
+results[['many sandwiches']] <- modelsummary(
   models,
   output = "data.frame",
   statistic_override = list(vcov, vcov, vcov, vcov, vcov),
   fmt = "%.7f")
 
-results[['list of matrices']] <- msummary(
+results[['list of matrices']] <- modelsummary(
   models,
   output = "data.frame",
   statistic_override = lapply(models, vcov),
   fmt = "%.7f")
 
-results[['hardcoded numerical']] <- msummary(
+results[['hardcoded numerical']] <- modelsummary(
   models,
   output = "data.frame",
   fmt = "%.7f",
@@ -54,7 +54,7 @@ results[['hardcoded numerical']] <- msummary(
     `NBin 2` = c('(Intercept)' = 4, Crime_prop = -7, Donations = -9),
     `Logit 1` = c('(Intercept)' = 1, Crime_prop = -5, Infants = -2)))
 
-results[['hardcoded arbitrary']] <- msummary(
+results[['hardcoded arbitrary']] <- modelsummary(
   models,
   output = "data.frame",
   fmt = "%.7f",
@@ -80,12 +80,12 @@ reference <- readRDS(file = "known_output/statistic-override.rds")
 
 
 test_that("bad function", {
-  expect_error(msummary(models, statistic_override = na.omit))
+  expect_error(modelsummary(models, statistic_override = na.omit))
 })
 
 test_that("vector must be named", {
   vec <- as.numeric(1:3)
-  expect_error(msummary(models[[1]], statistic = "std.error", statistic_override = vec))
+  expect_error(modelsummary(models[[1]], statistic = "std.error", statistic_override = vec))
 })
 
 test_that("statistic_override content", {

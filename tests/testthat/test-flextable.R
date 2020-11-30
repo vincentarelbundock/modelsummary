@@ -12,7 +12,7 @@ models[['Logit 2']] <- glm(am ~ hp + disp, mtcars, family = binomial())
 
 test_that("no error with caption and notes", {
 
-  expect_error(msummary(models, "flextable", title = "test title",
+  expect_error(modelsummary(models, "flextable", title = "test title",
     notes = "test note", stars = TRUE),
   NA)
 

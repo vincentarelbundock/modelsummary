@@ -12,7 +12,7 @@ test_that("fixed value glance_custom.glm", {
   assign("glance_custom.glm", glance_custom.glm, envir=.GlobalEnv)
 
   mod <- glm(am ~ mpg, mtcars, family = binomial)
-  out <- msummary(mod, "data.frame")
+  out <- modelsummary(mod, "data.frame")
   expect_equal(dim(out), c(12, 4))
 
   # hack to fix testthat scoping issue
