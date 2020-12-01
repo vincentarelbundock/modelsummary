@@ -80,10 +80,26 @@ modelplot <- function(models,
       ...
     )
     out <- out[out$part == "estimates" & out$statistic == "estimate",]
-    out <- tidyr::pivot_longer(out, cols=4:ncol(out), values_to="estimate",
-                               names_to="model")
+
+    # save for sorting later
+    term_order <- unique(out$term)
+
+    # this used to be a `pivot_long` but I can't grok reshape and don't want
+    # the tidyr dependency
+    out_split <- lapply(4:ncol(out), function(i)
+                 data.frame(out[, 1:3], 
+                            model=colnames(out)[i], 
+                            estimate=out[[i]]))
+    out <- bind_rows(out_split)
     out <- out[out$estimate != "",]
+
+    # sort
+    out$term <- factor(out$term, term_order)
+    out <- out[order(out$term, out$model),]
+
+    # character -> numeric (modelsummary produces characters)
     out$estimate <- as.numeric(out$estimate)
+
   } else {
     out <- modelsummary(
       output="dataframe",
@@ -97,15 +113,35 @@ modelplot <- function(models,
       statistic_override=statistic_override,
       ...
     )
+
+    # save for sorting later
+    term_order <- unique(out$term)
+
+    # this used to be a `pivot_long` and a `pivot_wide` but I can't grok
+    # reshape and don't want the tidyr dependency
     out <- out[out$part == "estimates",]
-    out <- tidyr::pivot_longer(out, cols=4:ncol(out), names_to="model")
-    out <- tidyr::pivot_wider(out, names_from="statistic")
-    out$statistic1 <- gsub('\\[|\\]', '', out$statistic1)
+    out_split <- lapply(4:ncol(out), function(i) 
+                        data.frame(out[, 1:3], model=colnames(out)[i], estimate=out[[i]]))
+    out <- bind_rows(out_split)
+    out <- reshape(
+      out, 
+      timevar = "statistic",
+      idvar = c("part", "term", "model"),
+      direction = "wide")
+    colnames(out) <- gsub("^estimate\\.", "", colnames(out))
+
+    # sort
     out <- out[out$estimate != "",]
-    out <- tidyr::separate(out, statistic1, into=c("conf.low", "conf.high"), sep=", ")
-    out$estimate <- as.numeric(out$estimate)  
-    out$conf.low <- as.numeric(out$conf.low)  
-    out$conf.high <- as.numeric(out$conf.high)  
+    out$term <- factor(out$term, term_order)
+    out <- out[order(out$term, out$model),]
+
+    # clean statistic
+    regex <- "\\[(.*), (.*)\\]"
+    out$conf.low <- as.numeric(gsub(regex, "\\1", out$statistic1))
+    out$conf.high <- as.numeric(gsub(regex, "\\2", out$statistic1))
+    out$statistic1 <- NULL
+    out$estimate <- as.numeric(out$estimate)
+
   }
 
   dat <- out
