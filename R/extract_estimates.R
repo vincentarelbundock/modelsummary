@@ -62,7 +62,7 @@ extract_estimates <- function(model,
     }
   }
 
-  # tidy_custom if availablee
+  # tidy_custom if available
   est_custom <- tidy_custom(model)
 
   # did tidy and tidy_custom produce useable output?
@@ -98,7 +98,6 @@ extract_estimates <- function(model,
                                   est$p.value,
                                   stars)
   }
-
 
   # extract statistics
   for (i in seq_along(statistic)) {
@@ -140,12 +139,22 @@ extract_estimates <- function(model,
 
   # reshape to vertical
   if (statistic_vertical) {
-    est <- tidyr::pivot_longer(est, -term, names_to = 'statistic')
 
     # sort by statistic to have se below coef, but don't sort terms
     # use factor hack to preserve order with weird names like cor__(Inter.)
-    # especially important for broom.mixed style models 
+    # especially important for broom.mixed models 
     est$term <- factor(est$term, unique(est$term))
+    est <- reshape(
+      data.frame(est),
+      varying       = grep("estimate|statistic", colnames(est), value=TRUE),
+      times         = grep("estimate|statistic", colnames(est), value=TRUE),
+      v.names       = "value",
+      timevar       = "statistic",
+      direction     = "long",
+      new.row.names = 1:1000)
+    est$id <- NULL
+
+    # sort then convert back to character
     est <- est[order(est$term, est$statistic),]
     est$term <- as.character(est$term)
 
