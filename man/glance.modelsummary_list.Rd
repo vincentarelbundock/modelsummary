@@ -4,7 +4,7 @@
 \alias{glance.modelsummary_list}
 \title{internal glance method}
 \usage{
-\method{glance}{modelsummary_list}(x, ...)
+glance.modelsummary_list(x, ...)
 }
 \description{
 internal glance method

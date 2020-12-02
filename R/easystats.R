@@ -7,6 +7,10 @@ glance_easystats <- function(model, ...) {
   }
   out <- performance::model_performance(model)
   out <- insight::standardize_names(out, style="broom")
+  mi <- insight::model_info(model)
+  if ("n_obs" %in% names(mi)) {
+    out$nobs <- mi$n_obs
+  }
   return(out)
 }
 

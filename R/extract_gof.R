@@ -1,13 +1,30 @@
 #' Extract goodness-of-fit statistics from a single model
 #' @param model object type with an available `glance` method.
-#' @importFrom broom glance
 #' @inheritParams modelsummary
+#' @importFrom generics tidy
 #' @return data.frame with goodness-of-fit  statistics
 #' @keywords internal
 extract_gof <- function(model, fmt, gof_map, ...) {
 
   # extract gof from model object
-  gof <- generics::glance(model, ...)
+  gof <- suppressWarnings(try(generics::glance(model, ...), silent=TRUE))
+  if (inherits(gof, "try-error")) {
+    noprint <- capture.output(
+      gof <- try(glance_easystats(model, ...), silent=TRUE)
+    )
+  }
+  if (!inherits(gof, "data.frame") || nrow(gof) == 0) {  
+    stop(sprintf('Cannot extract information from models of class "%s". Consider installing and loading the `parameters`, `performance`, and `broom.mixed` or any other package with `tidy` and `glance` functions appropriate for this model type. Alternatively, you can define your own `tidy` method, following the instructions on the `modelsummary` website: https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html', class(model)[1]))
+  }
+  
+  # lm model: include F-stat by default
+  if (isTRUE(class(model)[1] == "lm")) { # glm also inherits from lm
+    if (inherits(gof, "performance_model")) {
+      gof$F <- attr(gof, "r2")$F
+    } else {
+      gof$F <- gof$statistic
+    }
+  }
 
   # glance_custom
   gof_custom <- glance_custom(model)
@@ -22,11 +39,6 @@ extract_gof <- function(model, fmt, gof_map, ...) {
   if (is.null(gof_map)) {
 
     gof_map <- modelsummary::gof_map
-    if (isTRUE(class(model)[1] == "lm")) { # glm also inherits from lm
-      gof_map$clean[gof_map$raw == "statistic"] <- "F"
-      gof_map$omit[gof_map$raw == "statistic"] <- FALSE
-    }
-
     # drop if gof_map$omit == TRUE
     bad <- gof_map$raw[gof_map$omit]
     gof <- gof[setdiff(colnames(gof), bad)]

@@ -38,8 +38,18 @@ extract_estimates <- function(model,
       stop(paste0(statistic, " cannot be extracted through the `statistic_override` argument. You might want to install the `lmtest` package and/or look at the `modelsummary:::extract_statistic_override` function to diagnose the problem."))
     } 
 
-    # extract estimates
-    est <- tidy(model, ...)
+    # extract estimates using `broom` or `parameters`
+    est <- suppressWarnings(try(tidy(model, ...), silent=TRUE))
+
+    if (!inherits(est, "data.frame") || nrow(est) == 0) {
+      noprint <- capture.output(
+        est <- suppressWarnings(try(tidy_easystats(model, ...), silent=TRUE))
+      )
+    }
+
+    if (!inherits(est, "data.frame") || nrow(est) == 0) {  
+      stop(sprintf('Cannot extract information from models of class "%s". Consider installing the `parameters`, `performance`, `broom.mixed`, or any other package with `tidy` and `glance` functions appropriate for this model type. Alternatively, you can define your own `tidy` method, following the instructions on the `modelsummary` website: https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html', class(model)[1]))
+    }
 
     # keep only columns that do not appear in so
     est <- est[, c('term', base::setdiff(colnames(est), colnames(so))), drop = FALSE]
@@ -56,10 +66,24 @@ extract_estimates <- function(model,
 
     # extract estimates
     if ('conf.int' %in% statistic) {
-      est <- tidy(model, conf.int = TRUE, conf.level = conf_level, ...)
+      est <- suppressWarnings(try(generics::tidy(model, conf.int=TRUE, conf.level=conf_level, ...), silent=TRUE))
+      if (inherits(est, "try-error")) {
+        noprint <- capture.output(
+          est <- suppressWarnings(try(tidy_easystats(model, ci=conf_level, ...), silent=TRUE))
+        )
+      }
     } else {
-      est <- tidy(model, ...)
+      est <- suppressWarnings(try(generics::tidy(model, ...), silent=TRUE))
+      if (inherits(est, "try-error")) {
+        noprint <- capture.output(
+          est <- try(tidy_easystats(model, ...), silent=TRUE)
+        )
+      }
     }
+    if (!inherits(est, "data.frame") || nrow(est) == 0) {  
+      stop(sprintf('Cannot extract information from models of class "%s". Consider installing the `parameters`, `performance`, `broom.mixed` or any other package with `tidy` and `glance` functions appropriate for this model type. Alternatively, you can define your own `tidy` method, following the instructions on the `modelsummary` website: https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html', class(model)[1]))
+    }
+
   }
 
   # tidy_custom if available
