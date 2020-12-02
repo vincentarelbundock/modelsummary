@@ -82,6 +82,7 @@ extract_models <- function(...) {
 #' used to extract estimates from the model. For example, this allows users to
 #' set `exponentiate=TRUE` to exponentiate logistic regression coefficients.
 #' @return a regression table in a format determined by the `output` argument.
+#' @importFrom broom glance tidy
 #' @examples
 #' \dontrun{
 #'

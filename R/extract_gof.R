@@ -6,7 +6,7 @@
 extract_gof <- function(model, fmt, gof_map, ...) {
 
   # extract gof from model object
-  gof <- suppressWarnings(try(generics::glance(model, ...), silent=TRUE))
+  gof <- suppressWarnings(try(glance(model, ...), silent=TRUE))
   if (inherits(gof, "try-error")) {
     gof <- try(glance_easystats(model, ...), silent=TRUE)
   }

@@ -38,7 +38,7 @@ extract_estimates <- function(model,
     } 
 
     # extract estimates using `broom` or `parameters`
-    est <- suppressWarnings(try(generics::tidy(model, ...), silent=TRUE))
+    est <- suppressWarnings(try(tidy(model, ...), silent=TRUE))
 
     if (!inherits(est, "data.frame") || nrow(est) == 0) {
       est <- suppressWarnings(
@@ -65,14 +65,14 @@ extract_estimates <- function(model,
 
     # extract estimates
     if ('conf.int' %in% statistic) {
-      est <- suppressWarnings(try(generics::tidy(model, conf.int=TRUE, conf.level=conf_level, ...), silent=TRUE))
+      est <- suppressWarnings(try(tidy(model, conf.int=TRUE, conf.level=conf_level, ...), silent=TRUE))
       if (inherits(est, "try-error")) {
         est <- suppressWarnings(
           try(tidy_easystats(model, ci=conf_level, ...), silent=TRUE)
         )
       }
     } else {
-      est <- suppressWarnings(try(generics::tidy(model, ...), silent=TRUE))
+      est <- suppressWarnings(try(tidy(model, ...), silent=TRUE))
       if (inherits(est, "try-error")) {
         est <- try(tidy_easystats(model, ...), silent=TRUE)
       }
