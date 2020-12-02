@@ -1,5 +1,4 @@
 #' Extract estimates and statistics from a single model
-#' @importFrom generics tidy
 #' @param model object type with an available `tidy` method.
 #' @inheritParams modelsummary
 #' @return data.frame with side-by-side model summaries
@@ -39,7 +38,7 @@ extract_estimates <- function(model,
     } 
 
     # extract estimates using `broom` or `parameters`
-    est <- suppressWarnings(try(tidy(model, ...), silent=TRUE))
+    est <- suppressWarnings(try(generics::tidy(model, ...), silent=TRUE))
 
     if (!inherits(est, "data.frame") || nrow(est) == 0) {
       noprint <- capture.output(

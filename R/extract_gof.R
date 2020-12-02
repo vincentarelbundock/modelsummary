@@ -1,7 +1,6 @@
 #' Extract goodness-of-fit statistics from a single model
 #' @param model object type with an available `glance` method.
 #' @inheritParams modelsummary
-#' @importFrom generics tidy
 #' @return data.frame with goodness-of-fit  statistics
 #' @keywords internal
 extract_gof <- function(model, fmt, gof_map, ...) {

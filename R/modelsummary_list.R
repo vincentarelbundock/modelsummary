@@ -1,6 +1,7 @@
 #' internal tidy method
 #'
 #' @export
+#' @importFrom generics tidy
 #' @keywords internal
 tidy.modelsummary_list <- function(x, ...) {
   if ("tidy" %in% names(x)) {
@@ -13,6 +14,7 @@ tidy.modelsummary_list <- function(x, ...) {
 #' internal glance method
 #'
 #' @export
+#' @importFrom generics glance
 #' @keywords internal
 glance.modelsummary_list <- function(x, ...) {
   if ("glance" %in% names(x)) {
