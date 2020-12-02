@@ -8,9 +8,7 @@ extract_gof <- function(model, fmt, gof_map, ...) {
   # extract gof from model object
   gof <- suppressWarnings(try(generics::glance(model, ...), silent=TRUE))
   if (inherits(gof, "try-error")) {
-    noprint <- capture.output(
-      gof <- try(glance_easystats(model, ...), silent=TRUE)
-    )
+    gof <- try(glance_easystats(model, ...), silent=TRUE)
   }
   if (!inherits(gof, "data.frame") || nrow(gof) == 0) {  
     stop(sprintf('Cannot extract information from models of class "%s". Consider installing and loading the `parameters`, `performance`, and `broom.mixed` or any other package with `tidy` and `glance` functions appropriate for this model type. Alternatively, you can define your own `tidy` method, following the instructions on the `modelsummary` website: https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html', class(model)[1]))

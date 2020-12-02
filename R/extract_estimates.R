@@ -41,8 +41,8 @@ extract_estimates <- function(model,
     est <- suppressWarnings(try(generics::tidy(model, ...), silent=TRUE))
 
     if (!inherits(est, "data.frame") || nrow(est) == 0) {
-      noprint <- capture.output(
-        est <- suppressWarnings(try(tidy_easystats(model, ...), silent=TRUE))
+      est <- suppressWarnings(
+        try(tidy_easystats(model, ...), silent=TRUE)
       )
     }
 
@@ -67,16 +67,14 @@ extract_estimates <- function(model,
     if ('conf.int' %in% statistic) {
       est <- suppressWarnings(try(generics::tidy(model, conf.int=TRUE, conf.level=conf_level, ...), silent=TRUE))
       if (inherits(est, "try-error")) {
-        noprint <- capture.output(
-          est <- suppressWarnings(try(tidy_easystats(model, ci=conf_level, ...), silent=TRUE))
+        est <- suppressWarnings(
+          try(tidy_easystats(model, ci=conf_level, ...), silent=TRUE)
         )
       }
     } else {
       est <- suppressWarnings(try(generics::tidy(model, ...), silent=TRUE))
       if (inherits(est, "try-error")) {
-        noprint <- capture.output(
-          est <- try(tidy_easystats(model, ...), silent=TRUE)
-        )
+        est <- try(tidy_easystats(model, ...), silent=TRUE)
       }
     }
     if (!inherits(est, "data.frame") || nrow(est) == 0) {  
@@ -167,7 +165,7 @@ extract_estimates <- function(model,
     # use factor hack to preserve order with weird names like cor__(Inter.)
     # especially important for broom.mixed models 
     est$term <- factor(est$term, unique(est$term))
-    est <- reshape(
+    est <- stats::reshape(
       data.frame(est),
       varying       = grep("estimate|statistic", colnames(est), value=TRUE),
       times         = grep("estimate|statistic", colnames(est), value=TRUE),

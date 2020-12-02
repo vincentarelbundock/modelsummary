@@ -123,7 +123,7 @@ modelplot <- function(models,
     out_split <- lapply(4:ncol(out), function(i) 
                         data.frame(out[, 1:3], model=colnames(out)[i], estimate=out[[i]]))
     out <- bind_rows(out_split)
-    out <- reshape(
+    out <- stats::reshape(
       out, 
       timevar = "statistic",
       idvar = c("part", "term", "model"),
