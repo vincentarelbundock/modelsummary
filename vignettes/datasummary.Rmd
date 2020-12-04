@@ -337,16 +337,46 @@ datasummary(sex * (flipper_length_mm + bill_length_mm) + Heading("Body mass (g)"
             data = penguins)
 ```
 
+# Rounding
+
+The `fmt` argument allows us to set the printing format of numeric values. It accepts a single number representing the number of digits after the period, or a string to be passed to the `sprintf` function. For instance, setting `fmt="%.4f"` will keep 4 digits after the dot (see `?sprintf` for more options):
+
+```{r}
+datasummary(flipper_length_mm ~ Mean + SD,
+            fmt = 4,
+            data = penguins)
+```
+
+We can set the formatting on a term-by-term basis by using the same `Arguments` function that we used to handle missing values in the previous section. The shortcut functions that ship with `modelsummary` (e.g., `Mean`, `SD`, `Median`, `P25`) all include a `fmt` argument: 
+
+```{r}
+datasummary(flipper_length_mm ~ Mean * Arguments(fmt = "%.4f") + SD * Arguments(fmt = "%.1f"),
+            data = penguins)
+```
+
+If we do *not* want `datasummary` to format numbers, and we want to keep the numerical values instead of formatted strings, set `fmt=NULL`. This can be useful when post-processing tables with packages like `gt`, which allow us to transform cells based on their numerical content (this `gt` table will be omitted from PDF output):
+
+```{r, eval = !knitr::is_latex_output()}
+library(gt)
+
+datasummary(All(mtcars) ~ Mean + SD, 
+            data = mtcars, 
+            fmt = NULL, 
+            output = 'gt') %>%
+    tab_style(style = cell_fill(color = "pink"), 
+              locations = cells_body(rows = Mean > 10, columns = 2))
+```
+
 # Counts and Percentages
 
-The `tables` package allows `datasummary` to use a neat tricks to produce frequency tables:
+The `tables` package allows `datasummary` to use neat tricks to produce frequency tables:
 
-1. Add a `1` to the right-hand side of the equation and rename it: `(N = 1)`. 
+1. Add a `N` to the right-hand side of the equation. 
 2. Add `Percent()` to the right-hand side to calculate the percentage of observations in each cell.
 3. Add `1` to the left-hand side to include a row with the total number of observations:
 
 ```{r}
-datasummary(species * sex + 1 ~ (N = 1) + Percent(),
+datasummary(species * sex + 1 ~ N + Percent(),
             data = penguins)
 ```
 
@@ -377,35 +407,6 @@ datasummary(flipper_length_mm ~ Mean + Var + P75 + Range,
             data = penguins)
 ```
 
-# Rounding
-
-The `fmt` argument allows us to set the printing format of numeric values. For instance, setting `fmt="%.4f"` will keep 4 digits after the period (see `?sprintf` for more options):
-
-```{r}
-datasummary(flipper_length_mm ~ Mean + SD,
-            fmt = "%.4f",
-            data = penguins)
-```
-
-We can set the formatting on a term-by-term basis by using the same `Arguments` function that we used to handle missing values in the previous section. The shortcut functions that ship with `modelsummary` (e.g., `Mean`, `SD`, `Median`, `P25`) all include a `fmt` argument: 
-
-```{r}
-datasummary(flipper_length_mm ~ Mean * Arguments(fmt = "%.4f") + SD * Arguments(fmt = "%.1f"),
-            data = penguins)
-```
-
-If we do *not* want `datasummary` to format numbers, and we want to keep the numerical values instead of formatted strings, set `fmt=NULL`. This can be useful when post-processing tables with packages like `gt`, which allow us to transform cells based on their numerical content (this `gt` table will be omitted from PDF output):
-
-```{r, eval = !knitr::is_latex_output()}
-library(gt)
-
-datasummary(All(mtcars) ~ Mean + SD, 
-            data = mtcars, 
-            fmt = NULL, 
-            output = 'gt') %>%
-    tab_style(style = cell_fill(color = "pink"), 
-              locations = cells_body(rows = Mean > 10, columns = 2))
-```
 
 # `Factor`
 

@@ -1,3 +1,7 @@
+#' datasummary statistic shortcut
+#' @export
+#' @keywords internal
+N <- function(x) sprintf("%.0f", length(x))
 
 #' datasummary statistic shortcut
 #' @export
