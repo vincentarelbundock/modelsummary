@@ -1,6 +1,6 @@
 # modelsummary 0.6.3.9000
 
-* support easystats packages for model info extraction: performance, parameters
+* support for easystats packages for model info extraction: performance, parameters
 * modelplot pushes ... through to extract_models
 * datasummary_skim(type="dataset")
 * gof_map omits by default

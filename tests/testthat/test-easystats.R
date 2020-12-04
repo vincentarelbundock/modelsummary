@@ -9,5 +9,5 @@ test_that("lme4 is supported by easystats but not broom", {
   mod <- lmer(y ~ tx * x + (x | subj), data = d)
   tab <- modelsummary(mod, output="dataframe")
   expect_s3_class(tab, "data.frame")
-  expect_equal(dim(tab), c(22, 4))
+  expect_equal(dim(tab), c(23, 4))
 })

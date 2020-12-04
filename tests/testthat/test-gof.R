@@ -14,7 +14,8 @@ test_that('gof_omit omits everything', {
 test_that('custom gof_map omits everything by default', {
   gm = tibble::tribble(~raw,        ~clean, ~fmt, ~omit,
                        "nobs",      "Num.Obs", 0, omit=FALSE,
-                       "r.squared", "R2", 2, omit=FALSE)
+                       "r.squared", "R2", 2, omit=FALSE,
+                       "r2", "R2", 2, omit=FALSE)
   tab = modelsummary(mod, gof_map=gm, output="data.frame")
   expect_equal(dim(tab), c(8, 5))
 })
@@ -37,6 +38,7 @@ test_that('omit all gof from only a few models', {
   gof_map <- modelsummary::gof_map
   gof_map$omit <- TRUE
   gof_map$omit[gof_map$raw == "r.squared"] <- FALSE
+  gof_map$omit[gof_map$raw == "r2"] <- FALSE
   tmp <- modelsummary(list(mod1, mod2), gof_map = gof_map, output="dataframe")
   expect_equal(nrow(tmp), 5)
   expect_equal(ncol(tmp), 5)

@@ -33,6 +33,7 @@ gof_map_build <- function() {
   log.loss,                  Log Loss,           3, TRUE,
   pcp,                       PCP,                3, TRUE,
   r2.tjur,                   R2 tjur  ,          2, TRUE,
+  r2.nagelkerke,             R2 Nagelkerke,      2, TRUE,
   score.log,                 Score Log,          3, TRUE,
   score.spherical,           Score Spherical,    3, TRUE,
   p.value,                   p,                  3, TRUE,

@@ -13,8 +13,6 @@ extract_estimates <- function(model,
                               estimate = 'estimate',
                               ...) {
 
-
-
   # statistic override
   if (!is.null(statistic_override)) {
 
