@@ -138,11 +138,10 @@ datasummary_balance <- function(formula,
     data_norhs$badfactordropthis <- factor(c("badfactordropthis1", rep("badfactordropthis2", nrow(data_norhs)-1)))
 
     pctformat = function(x) sprintf("%.1f", x)
-    f_fac <- sprintf(
-      'All(data_norhs, factor=TRUE, numeric=FALSE) ~ 
-       Factor(%s) * (Heading("N")*1 * Format(digits=0) + 
-       Heading("%%") * Percent() * Format(pctformat()))',
-       rhs)
+    f_fac <- 'All(data_norhs, factor=TRUE, numeric=FALSE) ~ 
+              Factor(%s) * (Heading("N")*1 * Format(digits=0) + 
+              Heading("%%") * Percent("col") * Format(pctformat()))'
+    f_fac <- sprintf(f_fac, rhs)
     if (any_numeric) {
       f_fac <- gsub('\\"\\%\\"', '\\"Std. Dev.\\"', f_fac)
       f_fac <- gsub('\\"N\\"', '\\"Mean\\"', f_fac)
