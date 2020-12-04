@@ -103,35 +103,36 @@
     
 <p><em>Warning:</em> The code in this vignette relies on <code>tidy</code> and <code>glance</code> methods which were recently added to the <code>mice</code> package. As of 2020-06-12, they were only available in the development version of the package (&gt;3.9.0). The most recent version of <code>mice</code> can be installed by calling: <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github('stefvanbuuren/mice')</a></code></p>
 <p><code>modelsummary</code> can pool and display analyses on several datasets imputed using the <code>mice</code> or <code>Amelia</code> packages. This code illustrates how:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mice</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">Amelia</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stefvanbuuren/mice">mice</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://gking.harvard.edu/amelia">Amelia</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
 
 <span class="co"># Download data from `Rdatasets`</span>
-<span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
-<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)[, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Clergy'</span>, <span class="st">'Commerce'</span>, <span class="st">'Literacy'</span>)]
+<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
+<span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Clergy'</span>, <span class="st">'Commerce'</span>, <span class="st">'Literacy'</span><span class="op">)</span><span class="op">]</span>
 
 <span class="co"># Insert missing values</span>
-<span class="no">dat</span>$<span class="no">Clergy</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">dat</span>), <span class="fl">10</span>)] <span class="kw">&lt;-</span> <span class="fl">NA</span>
-<span class="no">dat</span>$<span class="no">Commerce</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">dat</span>), <span class="fl">10</span>)] <span class="kw">&lt;-</span> <span class="fl">NA</span>
-<span class="no">dat</span>$<span class="no">Literacy</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">dat</span>), <span class="fl">10</span>)] <span class="kw">&lt;-</span> <span class="fl">NA</span>
+<span class="va">dat</span><span class="op">$</span><span class="va">Clergy</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
+<span class="va">dat</span><span class="op">$</span><span class="va">Commerce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
+<span class="va">dat</span><span class="op">$</span><span class="va">Literacy</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
 
 <span class="co"># Impute with `mice` and `Amelia`</span>
-<span class="no">dat_mice</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mice/man/mice.html">mice</a></span>(<span class="no">dat</span>, <span class="kw">m</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">printFlag</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="no">dat_amelia</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Amelia/man/amelia.html">amelia</a></span>(<span class="no">dat</span>, <span class="kw">m</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">p2s</span> <span class="kw">=</span> <span class="fl">0</span>)$<span class="no">imputations</span>
+<span class="va">dat_mice</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mice/man/mice.html">mice</a></span><span class="op">(</span><span class="va">dat</span>, m <span class="op">=</span> <span class="fl">5</span>, printFlag <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">dat_amelia</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Amelia/man/amelia.html">amelia</a></span><span class="op">(</span><span class="va">dat</span>, m <span class="op">=</span> <span class="fl">5</span>, p2s <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">$</span><span class="va">imputations</span>
 
 <span class="co"># Estimate models</span>
-<span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
-<span class="no">mod</span><span class="kw">[[</span><span class="st">'Listwise deletion'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="no">dat</span>)
-<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span>(<span class="no">dat_mice</span>, <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>))
-<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">dat_amelia</span>, <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="no">x</span>))
+<span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">mod</span><span class="op">[[</span><span class="st">'Listwise deletion'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Clergy</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Commerce</span>, <span class="va">dat</span><span class="op">)</span>
+<span class="va">mod</span><span class="op">[[</span><span class="st">'Mice'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">dat_mice</span>, <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Clergy</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Commerce</span><span class="op">)</span><span class="op">)</span> 
+<span class="va">mod</span><span class="op">[[</span><span class="st">'Amelia'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">dat_amelia</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Clergy</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Commerce</span>, <span class="va">x</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Pool results</span>
-<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mice</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/mice/man/pool.html">pool</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]])
-<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mice</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/mice/man/pool.html">pool</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]])
+<span class="va">mod</span><span class="op">[[</span><span class="st">'Mice'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">mice</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mice/man/pool.html">pool</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[[</span><span class="st">'Mice'</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+<span class="va">mod</span><span class="op">[[</span><span class="st">'Amelia'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">mice</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mice/man/pool.html">pool</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[[</span><span class="st">'Amelia'</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
 
 <span class="co"># Summarize</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -152,26 +153,26 @@ Amelia
 (Intercept)
 </td>
 <td style="text-align:center;">
-69.267
+95.906
 </td>
 <td style="text-align:center;">
-69.346
+88.916
 </td>
 <td style="text-align:center;">
-61.595
+92.469
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(15.507)
+(13.451)
 </td>
 <td style="text-align:center;">
-(18.024)
+(13.305)
 </td>
 <td style="text-align:center;">
-(17.614)
+(13.042)
 </td>
 </tr>
 <tr>
@@ -179,26 +180,26 @@ Amelia
 Literacy
 </td>
 <td style="text-align:center;">
--0.430
+-0.716
 </td>
 <td style="text-align:center;">
--0.464
+-0.592
 </td>
 <td style="text-align:center;">
--0.375
+-0.630
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.233)
+(0.205)
 </td>
 <td style="text-align:center;">
-(0.248)
+(0.201)
 </td>
 <td style="text-align:center;">
-(0.248)
+(0.191)
 </td>
 </tr>
 <tr>
@@ -206,26 +207,26 @@ Literacy
 Commerce
 </td>
 <td style="text-align:center;">
--0.193
+-0.467
 </td>
 <td style="text-align:center;">
--0.191
+-0.441
 </td>
 <td style="text-align:center;">
--0.099
+-0.486
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.173)
+(0.149)
 </td>
 <td style="text-align:center;">
-(0.204)
+(0.156)
 </td>
 <td style="text-align:center;">
-(0.198)
+(0.144)
 </td>
 </tr>
 <tr>
@@ -233,7 +234,7 @@ Commerce
 Num.Obs.
 </td>
 <td style="text-align:center;">
-57
+58
 </td>
 <td style="text-align:center;">
 86
@@ -260,13 +261,13 @@ Num.Imp.
 R2
 </td>
 <td style="text-align:center;">
-0.059
+0.208
 </td>
 <td style="text-align:center;">
-0.077
+0.166
 </td>
 <td style="text-align:center;">
-0.058
+0.181
 </td>
 </tr>
 <tr>
@@ -274,13 +275,13 @@ R2
 R2 Adj.
 </td>
 <td style="text-align:center;">
-0.025
+0.179
 </td>
 <td style="text-align:center;">
-0.053
+0.146
 </td>
 <td style="text-align:center;">
-0.033
+0.161
 </td>
 </tr>
 <tr>
@@ -288,7 +289,7 @@ R2 Adj.
 AIC
 </td>
 <td style="text-align:center;">
-530.8
+529.3
 </td>
 <td style="text-align:center;">
 </td>
@@ -300,7 +301,7 @@ AIC
 BIC
 </td>
 <td style="text-align:center;">
-538.9
+537.6
 </td>
 <td style="text-align:center;">
 </td>
@@ -312,7 +313,7 @@ BIC
 Log.Lik.
 </td>
 <td style="text-align:center;">
--261.386
+-260.663
 </td>
 <td style="text-align:center;">
 </td>
@@ -324,7 +325,7 @@ Log.Lik.
 F
 </td>
 <td style="text-align:center;">
-1.705
+7.223
 </td>
 <td style="text-align:center;">
 </td>
@@ -348,7 +349,7 @@ F
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
