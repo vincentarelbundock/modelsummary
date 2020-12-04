@@ -272,6 +272,9 @@ datasummary_skim_categorical <- function(
   # pad colnames in case one is named Min, Max, Mean, or other function name
   # colnames(dat_new) <- paste0(colnames(dat_new), " ")
 
+  drop_too_many_levels <- 0
+  drop_entirely_na <- 0
+
   for (n in colnames(dat_new)) {
 
     if (is.logical(dat_new[[n]]) | 
@@ -286,19 +289,20 @@ datasummary_skim_categorical <- function(
         levels(dat_new[[n]])[levels(dat_new[[n]]) == ""] <- " "
       }
 
-      # factors with too many levels
-      if (is.factor(dat_new[[n]])) {
-        if (length(levels(dat_new[[n]])) > 20) {
-          dat_new[[n]] <- NULL
-          warning("datasummary_skim dropped a categorical variable because it contained more than 20 levels.")
+      # completely missing
+      if (all(is.na(dat_new[[n]]))) {
+        dat_new[[n]] <- NULL
+        drop_entirely_na <- drop_entirely_na + 1
+      } else {
+        # factors with too many levels
+        if (is.factor(dat_new[[n]])) {
+          if (length(levels(dat_new[[n]])) > 20) {
+            dat_new[[n]] <- NULL
+            drop_too_many_levels <- drop_too_many_levels + 1
+          }
         }
       }
 
-      # drop completely missing
-      if (all(is.na(dat_new[[n]]))) {
-        dat_new[[n]] <- NULL
-        warning("datasummary_skim dropped a categorical variable because it was entirely NA.")
-      }
 
     # discard non-factors
     } else {
@@ -306,6 +310,7 @@ datasummary_skim_categorical <- function(
     }
 
   }
+
 
   # too small
   if (ncol(dat_new) == 0) {
@@ -315,6 +320,14 @@ datasummary_skim_categorical <- function(
   # too large
   if (ncol(dat_new) > 50) {
     stop("Cannot summarize more than 50 variables at a time.")
+  }
+
+  if (drop_too_many_levels > 0) {
+    warning(sprintf("datasummary_skim dropped %s categorical variable(s): more than 20 levels.", drop_too_many_levels))
+  }
+
+  if (drop_entirely_na > 0) {
+    warning(sprintf("datasummary_skim dropped %s categorical variable(s): entirely NA.", drop_entirely_na))
   }
 
   pctformat = function(x) rounding(x, fmt)
