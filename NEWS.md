@@ -7,6 +7,7 @@
 * statistic_override does not require a list
 * extract_models is deprecated. Use modelsummary(output="dataframe") instead.
 * datasummary_balance uses row percentages
+* statistic_override accepts a single model
 * N function for well formatted N in datasummary
 
 # modelsummary 0.6.3
