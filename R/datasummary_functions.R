@@ -26,6 +26,9 @@ Median <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @keywords internal
 Min <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- min(x, na.rm = na.rm)
+  if (is.integer(x)) {
+    out <- sprintf("%.0f", out)
+  }
   if (!is.null(fmt)) {
     out <- rounding(out, fmt)
   }
@@ -37,6 +40,9 @@ Min <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @keywords internal
 Max <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- max(x, na.rm = na.rm)
+  if (is.integer(x)) {
+    out <- sprintf("%.0f", out)
+  }
   if (!is.null(fmt)) {
     out <- rounding(out, fmt)
   }
