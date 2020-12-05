@@ -1,43 +1,3 @@
-#' Difference in means using `estimatr`
-#'
-#' @keywords internal
-DinM <- function(lhs, rhs, data, fmt, statistic) {
-
-  assert_dependency("estimatr")
-
-  if (!"clusters" %in% colnames(data))
-      clusters <- NULL
-  if (!"weights" %in% colnames(data))
-      weights <- NULL
-  if (!"blocks" %in% colnames(data))
-      blocks <- NULL
-
-  # needed for names with spaces
-  data[["condition_variable_placeholder"]] <- data[[rhs]]
-  data[["outcome_variable_placeholder"]] <- data[[lhs]]
-
-  out <- estimatr::difference_in_means(
-    outcome_variable_placeholder ~ condition_variable_placeholder,
-    data = data, blocks = blocks, clusters = clusters, weights = weights)
-
-  out <- estimatr::tidy(out)
-
-  out <- out[, c("estimate", statistic), drop=FALSE]
-  out[[1]] <- rounding(out[[1]], fmt)
-  out[[2]] <- rounding(out[[2]], fmt)
-  out$variable <- lhs
-
-  if (statistic == "std.error") {
-    colnames(out) <- c("Diff. in Means", "Std. Error", " ")
-  } else if (statistic == "p.value") {
-    colnames(out) <- c("Diff. in Means", "p", " ")
-  } else {
-    colnames(out) <- c("Diff. in Means", statistic, " ")
-  }
-  out
-
-}
-
 #' Balance table: Summary statistics for different subsets of the data (e.g.,
 #' control and treatment groups)
 #'
@@ -120,75 +80,6 @@ datasummary_balance <- function(formula,
   any_numeric <- any(sapply(data_norhs, is.numeric))
   any_factor <- any(sapply(data_norhs, is.factor))
 
-  if (any_numeric) {
-    f_num <- sprintf(
-      'All(data_norhs) ~ 
-      Factor(%s) * (Mean + Heading("Std. Dev.") * SD) * Arguments(fmt=fmt)',
-      rhs)
-    f_num <- formula(f_num)
-    tab_num <- datasummary(f_num, data=data, output="data.frame")
-    colnames(tab_num) <- pad(attr(tab_num, "header_bottom"))
-  }
-
-  if (any_factor) {
-
-    # hack: `tables::tabular` produces different # of cols with a single or
-    # multiple factors. Make sure there are multiple.
-    data$badfactordropthis <- factor(c("badfactordropthis1", rep("badfactordropthis2", nrow(data)-1)))
-    data_norhs$badfactordropthis <- factor(c("badfactordropthis1", rep("badfactordropthis2", nrow(data_norhs)-1)))
-
-    pctformat = function(x) sprintf("%.1f", x)
-    f_fac <- 'All(data_norhs, factor=TRUE, numeric=FALSE) ~ 
-              Factor(%s) * (Heading("N")*1 * Format(digits=0) + 
-              Heading("%%") * Percent("col") * Format(pctformat()))'
-    f_fac <- sprintf(f_fac, rhs)
-    if (any_numeric) {
-      f_fac <- gsub('\\"\\%\\"', '\\"Std. Dev.\\"', f_fac)
-      f_fac <- gsub('\\"N\\"', '\\"Mean\\"', f_fac)
-    }
-    tab_fac <- datasummary(
-      formula(f_fac), data=data, output="data.frame")
-
-    colnames(tab_fac) <- pad(attr(tab_fac, "header_bottom"))
-
-    idx <- !grepl("^badfactordropthis\\d$", tab_fac[[2]])
-    tab_fac <- tab_fac[idx, , drop=FALSE]
-
-    # hack
-    data_norhs$badfactordropthis <- data$badfactordropthis <- NULL
-
-  }
-
-  if (any_numeric && any_factor) {
-
-    # header compatibility + new header
-    header <- tab_fac[1, , drop=FALSE]
-    cols <- trimws(colnames(header)) # we padded colnames above
-    for (i in seq_along(header)) {
-      header[1, i] <- ifelse(!cols[i] %in% c("Mean", "Std. Dev."), "", header[1, i])
-      header[1, i] <- ifelse(cols[i] == "Mean", "N", header[1, i])
-      header[1, i] <- ifelse(cols[i] == "Std. Dev.", "%", header[1, i])
-    }
-    tab_fac <- rbind(header, tab_fac)
-
-    # bind tables and reorder columns (factor is always widest)
-    tab <- bind_rows(tab_num, tab_fac)
-    tab <- tab[, colnames(tab_fac)]
-
-    attr(tab, "stub_width") <- attr(tab_fac, "stub_width")
-    attr(tab, "span_gt") <- attr(tab_fac, "span_gt")
-    attr(tab, "span_kableExtra") <- attr(tab_fac, "span_kableExtra")
-    attr(tab, "header_sparse_flat") <- attr(tab_fac, "header_sparse_flat")
-    colnames(tab) <- gsub(".*\\) ", "", colnames(tab))
-
-  } else if (any_numeric) {
-    tab <- tab_num
-
-  } else if (any_factor) {
-    tab <- tab_fac
-
-  }
-
   # difference in means
   if (!any_numeric) {
     dinm <- FALSE
@@ -207,42 +98,48 @@ datasummary_balance <- function(formula,
             warning.")
   }
 
-  if (dinm) {
-    numeric_variables <- colnames(data_norhs)[sapply(data_norhs, is.numeric)]
-    tmp <- lapply(numeric_variables,
-                  function(lhs) DinM(lhs=lhs, 
-                                     rhs=rhs, 
-                                     data=data, 
-                                     fmt=fmt, 
-                                     statistic=dinm_statistic))
-    tmp <- do.call("rbind", tmp)
+  if (any_factor) {
+    tab_fac <- datasummary_balance_factor(rhs, data, data_norhs, any_numeric) 
+  }
 
-    # save attributes because merge wipes them out
-    header_sparse_flat <- attr(tab, "header_sparse_flat")
-    stub_width <- attr(tab, "stub_width")
-    span_gt <- attr(tab, "span_gt")
-    span_kableExtra <- attr(tab, "span_kableExtra")
+  if (any_numeric) {
+    tab_num <- datasummary_balance_numeric(rhs, data, data_norhs, fmt, dinm, dinm_statistic) 
+  }
 
-    # merge
-    tab <- merge(tab, tmp, all.x=TRUE, by=" ", sort=FALSE)
+  if (any_numeric && any_factor) {
 
-    # restore attributes
-    attr(tab, "header_sparse_flat") <- header_sparse_flat
-    attr(tab, "stub_width") <- stub_width
-    attr(tab, "span_gt") <- span_gt
-
-    # post-DinM, pad the span if the table has new columns
-    for (i in seq_along(span_kableExtra)) {
-      span_kableExtra[[i]] <- c(span_kableExtra[[i]], 
-                                rep("    ", ncol(tab) - sum(span_kableExtra[[i]])))
+    # header compatibility + new header
+    header <- tab_fac[1, , drop=FALSE]
+    cols <- trimws(colnames(header)) # we padded colnames above
+    for (i in seq_along(header)) {
+      header[1, i] <- ifelse(!cols[i] %in% c("Mean", "Std. Dev."), "", header[1, i])
+      header[1, i] <- ifelse(cols[i] == "Mean", "N", header[1, i])
+      header[1, i] <- ifelse(cols[i] == "Std. Dev.", "%", header[1, i])
     }
-    attr(tab, "span_kableExtra") <- span_kableExtra
+    tab_fac <- bind_rows(header, tab_fac)
 
-    if (ncol(tab) > length(header_sparse_flat)) {
-      attr(tab, "header_sparse_flat") <- c(header_sparse_flat, colnames(tab)[-c(1:length(header_sparse_flat))])
+    # bind tables and reorder columns 
+    tab <- bind_rows(tab_num, tab_fac)
+    tab <- tab[, unique(c(" ", "  ", colnames(tab)))]
+
+    # column spans
+    if (dinm) {
+      skE <- attr(tab_fac, "span_kableExtra")
+      skE[[1]] <- c(skE[[1]], " " = 2)
+      attr(tab, "span_kableExtra") <- skE
+    } else {
+      attr(tab, "span_kableExtra") <- attr(tab_fac, "span_kableExtra")
     }
-    attr(tab, "header_sparse_flat") <- gsub(" \\(N=\\d+\\)", "", attr(tab, "header_sparse_flat"))
-    attr(tab, "header_sparse_flat") <- pad(attr(tab, "header_sparse_flat"))
+    attr(tab, "header_sparse_flat") <- attr(tab_fac, "header_sparse_flat")
+    attr(tab, "stub_width") <- attr(tab_fac, "stub_width")
+    attr(tab, "span_gt") <- attr(tab_fac, "span_gt")
+    colnames(tab) <- gsub(".*\\) ", "", colnames(tab))
+
+  } else if (any_numeric) {
+    tab <- tab_num
+
+  } else if (any_factor) {
+    tab <- tab_fac
 
   }
 
@@ -266,5 +163,133 @@ datasummary_balance <- function(formula,
     add_columns = add_columns,
     title = title,
     ...)
+
+}
+
+datasummary_balance_factor <- function(rhs, data, data_norhs, any_numeric){
+
+  # hack: `tables::tabular` produces different # of cols with a single or
+  # multiple factors. Make sure there are multiple.
+  data$badfactordropthis <- factor(c("badfactordropthis1", rep("badfactordropthis2", nrow(data)-1)))
+  data_norhs$badfactordropthis <- factor(c("badfactordropthis1", rep("badfactordropthis2", nrow(data_norhs)-1)))
+
+  pctformat = function(x) sprintf("%.1f", x)
+  f_fac <- 'All(data_norhs, factor=TRUE, numeric=FALSE) ~ 
+            Factor(%s) * (Heading("N")*1 * Format(digits=0) + 
+            Heading("%%") * Percent("col") * Format(pctformat()))'
+  f_fac <- sprintf(f_fac, rhs)
+  if (any_numeric) {
+    f_fac <- gsub('\\"\\%\\"', '\\"Std. Dev.\\"', f_fac)
+    f_fac <- gsub('\\"N\\"', '\\"Mean\\"', f_fac)
+  }
+  tab_fac <- datasummary(stats::formula(f_fac), data=data, output="data.frame")
+
+  colnames(tab_fac) <- pad(attr(tab_fac, "header_bottom"))
+
+  idx <- !grepl("^badfactordropthis\\d$", tab_fac[[2]])
+  tab_fac <- tab_fac[idx, , drop=FALSE]
+
+  # hack
+  data_norhs$badfactordropthis <- data$badfactordropthis <- NULL
+
+  return(tab_fac)
+
+}
+
+
+datasummary_balance_numeric <- function(rhs, data, data_norhs, fmt, dinm, dinm_statistic) {
+
+  # create table as data.frame
+  f_num <- sprintf(
+    'All(data_norhs) ~ Factor(%s) * (Mean + Heading("Std. Dev.") * SD) * Arguments(fmt=fmt)',
+    rhs)
+  f_num <- stats::formula(f_num)
+  tab_num <- datasummary(f_num, data=data, output="data.frame")
+
+  # otherwise colnames: female (N=140) Mean
+  colnames(tab_num) <- pad(attr(tab_num, "header_bottom")) 
+
+  # difference in means
+  if (dinm) {
+    numeric_variables <- colnames(data_norhs)[sapply(data_norhs, is.numeric)]
+    tmp <- lapply(numeric_variables,
+                  function(lhs) DinM(lhs=lhs, 
+                                     rhs=rhs, 
+                                     data=data, 
+                                     fmt=fmt, 
+                                     statistic=dinm_statistic))
+    tmp <- do.call("rbind", tmp)
+
+    # save attributes because merge wipes them out
+    header_sparse_flat <- attr(tab_num, "header_sparse_flat")
+    stub_width <- attr(tab_num, "stub_width")
+    span_gt <- attr(tab_num, "span_gt")
+    span_kableExtra <- attr(tab_num, "span_kableExtra")
+
+    # merge
+    tab_num <- merge(tab_num, tmp, all.x=TRUE, by=" ", sort=FALSE)
+
+    # restore attributes
+    attr(tab_num, "header_sparse_flat") <- header_sparse_flat
+    attr(tab_num, "stub_width") <- stub_width
+    attr(tab_num, "span_gt") <- span_gt
+
+    # after DinM, pad the spanning columns if tab_num has new columns
+    for (i in seq_along(span_kableExtra)) {
+      span_kableExtra[[i]] <- c(span_kableExtra[[i]], 
+                                rep("    ", ncol(tab_num) - sum(span_kableExtra[[i]])))
+    }
+    attr(tab_num, "span_kableExtra") <- span_kableExtra
+
+    if (ncol(tab_num) > length(header_sparse_flat)) {
+      attr(tab_num, "header_sparse_flat") <- c(header_sparse_flat, colnames(tab_num)[-c(1:length(header_sparse_flat))])
+    }
+    attr(tab_num, "header_sparse_flat") <- gsub(" \\(N=\\d+\\)", "", attr(tab_num, "header_sparse_flat"))
+    attr(tab_num, "header_sparse_flat") <- pad(attr(tab_num, "header_sparse_flat"))
+
+  }
+
+  return(tab_num)
+
+}
+
+
+#' Difference in means using `estimatr`
+#'
+#' @keywords internal
+DinM <- function(lhs, rhs, data, fmt, statistic) {
+
+  assert_dependency("estimatr")
+
+  if (!"clusters" %in% colnames(data))
+      clusters <- NULL
+  if (!"weights" %in% colnames(data))
+      weights <- NULL
+  if (!"blocks" %in% colnames(data))
+      blocks <- NULL
+
+  # needed for names with spaces
+  data[["condition_variable_placeholder"]] <- data[[rhs]]
+  data[["outcome_variable_placeholder"]] <- data[[lhs]]
+
+  out <- estimatr::difference_in_means(
+    outcome_variable_placeholder ~ condition_variable_placeholder,
+    data = data, blocks = blocks, clusters = clusters, weights = weights)
+
+  out <- estimatr::tidy(out)
+
+  out <- out[, c("estimate", statistic), drop=FALSE]
+  out[[1]] <- rounding(out[[1]], fmt)
+  out[[2]] <- rounding(out[[2]], fmt)
+  out$variable <- lhs
+
+  if (statistic == "std.error") {
+    colnames(out) <- c("Diff. in Means", "Std. Error", " ")
+  } else if (statistic == "p.value") {
+    colnames(out) <- c("Diff. in Means", "p", " ")
+  } else {
+    colnames(out) <- c("Diff. in Means", statistic, " ")
+  }
+  out
 
 }

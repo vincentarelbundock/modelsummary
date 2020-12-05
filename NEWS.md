@@ -9,6 +9,7 @@
 * datasummary_balance uses row percentages
 * statistic_override accepts a single model
 * N function for well formatted N in datasummary
+* Bug fixes
 
 # modelsummary 0.6.3
 
