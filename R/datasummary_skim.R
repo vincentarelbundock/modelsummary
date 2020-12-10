@@ -254,7 +254,6 @@ datasummary_skim_numeric <- function(
 }
 
 
-
 #' Internal function to skim categorical variables
 #'
 #' @keywords internal
@@ -272,8 +271,8 @@ datasummary_skim_categorical <- function(
   # pad colnames in case one is named Min, Max, Mean, or other function name
   # colnames(dat_new) <- paste0(colnames(dat_new), " ")
 
-  drop_too_many_levels <- 0
-  drop_entirely_na <- 0
+  drop_too_many_levels <- NULL
+  drop_entirely_na <- NULL
 
   for (n in colnames(dat_new)) {
 
@@ -292,13 +291,13 @@ datasummary_skim_categorical <- function(
       # completely missing
       if (all(is.na(dat_new[[n]]))) {
         dat_new[[n]] <- NULL
-        drop_entirely_na <- drop_entirely_na + 1
+        drop_entirely_na <- c(drop_entirely_na, n)
       } else {
         # factors with too many levels
         if (is.factor(dat_new[[n]])) {
           if (length(levels(dat_new[[n]])) > 20) {
             dat_new[[n]] <- NULL
-            drop_too_many_levels <- drop_too_many_levels + 1
+            drop_too_many_levels <- c(drop_too_many_levels, n)
           }
         }
       }
@@ -311,7 +310,6 @@ datasummary_skim_categorical <- function(
 
   }
 
-
   # too small
   if (ncol(dat_new) == 0) {
     stop('data contains no logical, character, or factor variable.')
@@ -322,12 +320,12 @@ datasummary_skim_categorical <- function(
     stop("Cannot summarize more than 50 variables at a time.")
   }
 
-  if (drop_too_many_levels > 0) {
-    warning(sprintf("datasummary_skim dropped %s categorical variable(s): more than 20 levels.", drop_too_many_levels))
+  if (!is.null(drop_too_many_levels)) {
+    warning(sprintf("These variables were omitted because they include more than 20 levels: %s.", paste(drop_too_many_levels, collapse=", ")))
   }
 
-  if (drop_entirely_na > 0) {
-    warning(sprintf("datasummary_skim dropped %s categorical variable(s): entirely NA.", drop_entirely_na))
+  if (!is.null(drop_entirely_na)) {
+    warning(sprintf("These variables were omitted because they are entirely missing: %s.", paste(drop_entirely_na, collapse=", ")))
   }
 
   pctformat = function(x) rounding(x, fmt)
