@@ -211,7 +211,8 @@ sanity_statistic_override <- function(models, statistic_override) {
     combine="or"
   )
 
-  if (class(statistic_override)[1] == "list") { # must be a simple list
+  if (class(statistic_override)[1] == "list" &
+      class(models)[1] == "list") { # must be simple lists
     checkmate::assert_true(length(statistic_override) == length(models))
     for (s in statistic_override) {
       checkmate::assert(

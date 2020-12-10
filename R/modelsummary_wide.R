@@ -74,6 +74,8 @@ modelsummary_wide <- function(models,
   if (is.null(coef_group)) {
     if ("y.level" %in% colnames(ti)) {
       coef_group <- "y.level"
+    } else if ("response" %in% colnames(ti)) {
+      coef_group <- "response"
     } else if ("group" %in% colnames(ti)) {
       coef_group <- "group"
     } else {

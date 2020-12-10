@@ -21,6 +21,16 @@ test_that("single model", {
   expect_equal(y, z)
 })
 
+test_that("sublist (sandwich vignette)", {
+  models <- lm(hp ~ mpg + drat, mtcars)
+  tab <- modelsummary(
+    models,
+    output="data.frame",
+    statistic_override = list(vcov))
+  expect_s3_class(tab, "data.frame")
+  expect_equal(dim(tab), c(13, 4))
+})
+
 # reference tables
 results <- list()
 
@@ -98,3 +108,4 @@ test_that("statistic_override content", {
 test_that("useless: function but no ci needed", {
   expect_error(modelsummary(models, statistic_override=vcov, conf_level=NULL), NA)
 })
+

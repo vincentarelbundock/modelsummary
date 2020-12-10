@@ -11,12 +11,12 @@ test_that("tidiers", {
   ti <- generics::tidy(ml)
   expect_is(gl, "data.frame")
   expect_is(ti, "data.frame")
-  # # broom
-  # expect_equal(dim(ti), c(4, 5))
-  # expect_equal(dim(gl), c(1, 12))
-  # easystats
-  expect_equal(dim(ti), c(4, 6))
-  expect_equal(dim(gl), c(1, 9))
+  # broom
+  expect_equal(dim(ti), c(4, 5))
+  expect_equal(dim(gl), c(1, 12))
+  # # easystats
+  # expect_equal(dim(ti), c(4, 6))
+  # expect_equal(dim(gl), c(1, 9))
 })
 
 test_that("tidiers empty", {
