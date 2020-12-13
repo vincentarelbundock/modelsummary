@@ -1,6 +1,5 @@
 context("modelsummary_wide")
 
-library(nnet)
 library(modelsummary)
 
 test_that("no group", {
@@ -13,6 +12,8 @@ test_that("no group", {
 
 
 test_that("nnet::multinom one model (factor DV)", {
+  testthat::skip_if_not_installed("nnet")
+  testthat::skip_if_not_installed("broom")
   var1 <- sample(c('A', 'B', 'C'), replace = T, size=100)
   var2 <- sample(c(0,1), size=100, replace=T)
   var3 <- rnorm(100, mean=10, sd=2)
@@ -26,6 +27,8 @@ test_that("nnet::multinom one model (factor DV)", {
 
 
 test_that("nnet::multinom two models (factor DV)", {
+  testthat::skip_if_not_installed("nnet")
+  testthat::skip_if_not_installed("broom")
   var1 <- sample(c('A', 'B', 'C'), replace = T, size=100)
   var2 <- sample(c(0,1), size=100, replace=T)
   var3 <- rnorm(100, mean=10, sd=2)

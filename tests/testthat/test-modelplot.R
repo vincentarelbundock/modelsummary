@@ -1,11 +1,11 @@
 library(ggplot2)
-library(sandwich)
 
 context("modelplot")
 
 # CRAN requires vdiffr to be conditional
 # Function recommended by Lionel Henry on 2020-12-08
 expect_doppelganger <- function(title, fig, path = NULL, ...) {
+  testthat::skip_if(getRversion() > '4.0.3') # new graphics device
   testthat::skip_if_not_installed("vdiffr")
   vdiffr::expect_doppelganger(title, fig, path = path, ...)
 }
@@ -56,6 +56,7 @@ test_that("conf_level=NULL", {
 
 
 test_that("statistic_override", {
+  testthat::skip_if_not_installed("sandwich")
   mod <- list(lm(hp ~ mpg + drat, data = mtcars),
               lm(hp ~ mpg + drat, data = mtcars))
   so <- list(vcov, sandwich::vcovHC)
