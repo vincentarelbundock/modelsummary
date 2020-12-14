@@ -96,6 +96,13 @@ extract_gof <- function(model, fmt, gof_map, ...) {
   return(out)
 }
 
+
+#' Extract model gof A mostly internal function with some potential uses
+#' outside.
+#'
+#' @inheritParams modelsummary
+#' @param model a single model object
+#' @export
 get_gof <- function(model, ...) {
 
   flag <- function(x) {

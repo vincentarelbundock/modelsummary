@@ -11,6 +11,7 @@
 #' correct coefficient group identifier. To be valid, this identifier must be a
 #' column in the data.frame produced by `tidy(model)`. Note: you may have to
 #' load the `broom` or `broom.mixed` package before executing `tidy(model)`.
+#' @param stacking direction in which models are stacked: "horizontal" or "vertical"
 #' @inheritParams modelsummary
 #' @return a regression table in a format determined by the `output` argument.
 #' @export
@@ -28,11 +29,14 @@ modelsummary_wide <- function(models,
   gof_map = NULL,
   gof_omit = NULL,
   add_rows = NULL,
+  stacking = "horizontal",
   title = NULL,
   notes = NULL,
   estimate = "estimate",
   statistic_vertical = NULL,
   ...) {
+
+  checkmate::assert_character(stacking, pattern="^horizontal$|^vertical$")
 
   # models must be a list of models
   if (!'list' %in% class(models)) {
@@ -50,7 +54,7 @@ modelsummary_wide <- function(models,
   # tidy
   if (statistic == "conf.int") {
     ti <- lapply(models, function(x) 
-                 get_estimates(x, conf.level=conf_level, ...))
+                 get_estimates(x, conf_level=conf_level, ...))
   } else {
     ti <- lapply(models, function(x) 
                  get_estimates(x, ...))
@@ -58,41 +62,79 @@ modelsummary_wide <- function(models,
 
   # glance
   gl <- lapply(models, get_gof)
+  gl_wide <- gl
 
-  # combine
-  if (length(models) > 1) {
-    for (i in seq_along(models)) {
-      ti[[i]]$term <- paste(model_names[i], ti[[i]]$term)
-      colnames(gl[[i]]) <- paste(model_names[i], colnames(gl[[i]]))
+  # insert model names in glance and tidy frames
+  for (i in seq_along(model_names)) {
+    ti[[i]]$model <- model_names[i]
+    gl[[i]]$model <- model_names[i]
+    if (length(model_names) > 1) {
+      colnames(gl_wide[[i]]) <- paste(model_names[i], colnames(gl_wide[[i]]))
     }
   }
-
-  gl <- bind_cols(gl)
   ti <- bind_rows(ti)
+  gl <- bind_rows(gl)
+  gl_wide <- bind_cols(gl_wide)
 
   # guess coef_group
   if (is.null(coef_group)) {
-    if ("y.level" %in% colnames(ti)) {
-      coef_group <- "y.level"
-    } else if ("response" %in% colnames(ti)) {
-      coef_group <- "response"
-    } else if ("group" %in% colnames(ti)) {
-      coef_group <- "group"
-    } else {
+    coef_group <- intersect(c("y.level", "response", "group"), colnames(ti))[1]
+    if (is.na(coef_group)) {
       stop("You must specify a valid character value for the `coef_group` argument. To find this value for your type of model, load the `broom` and/or `broom.mixed` libraries, then call `tidy(model)` on your model object. The `coef_group` value must be a column in the resulting data.frame. This column includes identifiers which determine which coefficients appear in which columns of your table.") 
     }
   }
 
-  # split by coef_group (treat them as separate models)
-  results <- split(ti, ti[[coef_group]])
+  # unique group names
+  group_names <- unique(ti[[coef_group]])
 
-  # assemble modelsummary_list
-  for (i in seq_along(results)) {
-    results[[i]] <- list(tidy = results[[i]])
-    class(results[[i]]) <- "modelsummary_list"
+  # vertical stacking: model_names are groups
+  if (stacking == "vertical") {
+    results <- list()
+    for (g in group_names) {
+      results[[g]]$tidy <- ti[ti[[coef_group]] == g, , drop=FALSE]
+      results[[g]]$tidy$term <- paste(results[[g]]$tidy$model,
+                                      results[[g]]$tidy$term)
+      if (g == group_names[1]) {
+        results[[g]]$glance = gl_wide
+      }
+      class(results[[g]]) <- c("modelsummary_list", "list")
+    }
   }
-  results[[1]]$glance <- gl
+      
+  # horizontal stacking: model_names are model/group combinations
+  if (stacking == "horizontal") {
+    results <- list()
+    for (m in model_names) {
+      first <- TRUE
+      for (g in group_names) {
 
+        # do not include model label in columns for single model tables, only
+        # the response.
+        if (length(model_names) > 1) {
+          idx <- paste(m, g)
+        } else {
+          idx <- g
+        }
+
+        tmp_ti <- ti[ti[[coef_group]] == g & ti$model == m, , drop=FALSE]
+        tmp_gl <- gl[gl$model == m,]
+        tmp_gl$model <- NULL
+
+        # skip missing response levels
+        if (nrow(tmp_ti) > 0) { 
+          results[[idx]] <- list()
+          results[[idx]]$tidy <- tmp_ti
+          if (first) {
+            results[[idx]]$glance <- tmp_gl
+            first <- FALSE
+          }
+          class(results[[idx]]) <- c("modelsummary_list", "list")
+        }
+      }
+    }
+  }
+
+  # output
   modelsummary(results,
     output = output,
     fmt = fmt,

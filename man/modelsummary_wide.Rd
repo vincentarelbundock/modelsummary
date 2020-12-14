@@ -19,6 +19,7 @@ modelsummary_wide(
   gof_map = NULL,
   gof_omit = NULL,
   add_rows = NULL,
+  stacking = "horizontal",
   title = NULL,
   notes = NULL,
   estimate = "estimate",
@@ -100,6 +101,8 @@ the table (using `grepl(perl=TRUE)`).}
 your main table. By default, rows are appended to the bottom of the table.
 You can define a "position" attribute of integers to set the row positions.
 See examples.}
+
+\item{stacking}{direction in which models are stacked: "horizontal" or "vertical"}
 
 \item{title}{string}
 

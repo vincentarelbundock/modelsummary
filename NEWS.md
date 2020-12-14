@@ -4,6 +4,7 @@
 * easystats support for model info extraction
 * deprecate statistic_vertical
 * deprecate extract_models. Use modelsummary(output="dataframe") instead.
+* modelsummary_wide has a new "stacking" argument
 * modelplot pushes ... through to modelsummary(output="dataframe")
 * datasummary_skim(type="dataset")
 * gof_map omits by default

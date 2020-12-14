@@ -157,6 +157,12 @@ extract_estimates <- function(
   return(est)
 }
 
+#' Extract model estimates. A mostly internal function with some potential uses
+#' outside.
+#'
+#' @inheritParams modelsummary
+#' @param model a single model object
+#' @export
 get_estimates <- function(model, conf_level=NULL, ...) {
 
   if (is.null(conf_level)) {
