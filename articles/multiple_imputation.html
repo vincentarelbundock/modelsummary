@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.4</span>
       </span>
     </div>
 
@@ -104,7 +104,7 @@
 <p><em>Warning:</em> The code in this vignette relies on <code>tidy</code> and <code>glance</code> methods which were recently added to the <code>mice</code> package. As of 2020-06-12, they were only available in the development version of the package (&gt;3.9.0). The most recent version of <code>mice</code> can be installed by calling: <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github('stefvanbuuren/mice')</a></code></p>
 <p><code>modelsummary</code> can pool and display analyses on several datasets imputed using the <code>mice</code> or <code>Amelia</code> packages. This code illustrates how:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stefvanbuuren/mice">mice</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/amices/mice">mice</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://gking.harvard.edu/amelia">Amelia</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
 
@@ -118,7 +118,7 @@
 <span class="va">dat</span><span class="op">$</span><span class="va">Literacy</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
 
 <span class="co"># Impute with `mice` and `Amelia`</span>
-<span class="va">dat_mice</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mice/man/mice.html">mice</a></span><span class="op">(</span><span class="va">dat</span>, m <span class="op">=</span> <span class="fl">5</span>, printFlag <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">dat_mice</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://amices.org/mice/reference/mice.html">mice</a></span><span class="op">(</span><span class="va">dat</span>, m <span class="op">=</span> <span class="fl">5</span>, printFlag <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="va">dat_amelia</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Amelia/man/amelia.html">amelia</a></span><span class="op">(</span><span class="va">dat</span>, m <span class="op">=</span> <span class="fl">5</span>, p2s <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">$</span><span class="va">imputations</span>
 
 <span class="co"># Estimate models</span>
@@ -128,8 +128,8 @@
 <span class="va">mod</span><span class="op">[[</span><span class="st">'Amelia'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">dat_amelia</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Clergy</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Commerce</span>, <span class="va">x</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Pool results</span>
-<span class="va">mod</span><span class="op">[[</span><span class="st">'Mice'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">mice</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mice/man/pool.html">pool</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[[</span><span class="st">'Mice'</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-<span class="va">mod</span><span class="op">[[</span><span class="st">'Amelia'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">mice</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mice/man/pool.html">pool</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[[</span><span class="st">'Amelia'</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+<span class="va">mod</span><span class="op">[[</span><span class="st">'Mice'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">mice</span><span class="fu">::</span><span class="fu"><a href="https://amices.org/mice/reference/pool.html">pool</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[[</span><span class="st">'Mice'</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+<span class="va">mod</span><span class="op">[[</span><span class="st">'Amelia'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">mice</span><span class="fu">::</span><span class="fu"><a href="https://amices.org/mice/reference/pool.html">pool</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[[</span><span class="st">'Amelia'</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
 
 <span class="co"># Summarize</span>
 <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
@@ -153,26 +153,26 @@ Amelia
 (Intercept)
 </td>
 <td style="text-align:center;">
-79.324
+70.797
 </td>
 <td style="text-align:center;">
-82.877
+79.970
 </td>
 <td style="text-align:center;">
-84.555
+73.308
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(12.379)
+(12.974)
 </td>
 <td style="text-align:center;">
-(13.291)
+(11.401)
 </td>
 <td style="text-align:center;">
-(11.912)
+(12.196)
 </td>
 </tr>
 <tr>
@@ -180,26 +180,26 @@ Amelia
 Literacy
 </td>
 <td style="text-align:center;">
--0.604
+-0.392
 </td>
 <td style="text-align:center;">
--0.641
+-0.490
 </td>
 <td style="text-align:center;">
--0.669
+-0.424
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.206)
+(0.202)
 </td>
 <td style="text-align:center;">
-(0.209)
+(0.199)
 </td>
 <td style="text-align:center;">
-(0.193)
+(0.208)
 </td>
 </tr>
 <tr>
@@ -207,26 +207,26 @@ Literacy
 Commerce
 </td>
 <td style="text-align:center;">
--0.321
+-0.265
 </td>
 <td style="text-align:center;">
--0.368
+-0.398
 </td>
 <td style="text-align:center;">
--0.376
+-0.330
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.137)
+(0.148)
 </td>
 <td style="text-align:center;">
-(0.145)
+(0.130)
 </td>
 <td style="text-align:center;">
-(0.133)
+(0.126)
 </td>
 </tr>
 <tr>
@@ -234,7 +234,7 @@ Commerce
 Num.Obs.
 </td>
 <td style="text-align:center;">
-61
+60
 </td>
 <td style="text-align:center;">
 86
@@ -261,13 +261,13 @@ Num.Imp.
 R2
 </td>
 <td style="text-align:center;">
-0.141
+0.074
 </td>
 <td style="text-align:center;">
-0.152
+0.138
 </td>
 <td style="text-align:center;">
-0.168
+0.094
 </td>
 </tr>
 <tr>
@@ -275,13 +275,13 @@ R2
 R2 Adj.
 </td>
 <td style="text-align:center;">
-0.111
+0.042
 </td>
 <td style="text-align:center;">
-0.130
+0.117
 </td>
 <td style="text-align:center;">
-0.147
+0.072
 </td>
 </tr>
 <tr>
@@ -289,7 +289,7 @@ R2 Adj.
 AIC
 </td>
 <td style="text-align:center;">
-559.7
+557.6
 </td>
 <td style="text-align:center;">
 </td>
@@ -301,7 +301,7 @@ AIC
 BIC
 </td>
 <td style="text-align:center;">
-568.1
+566.0
 </td>
 <td style="text-align:center;">
 </td>
@@ -313,7 +313,7 @@ BIC
 Log.Lik.
 </td>
 <td style="text-align:center;">
--275.849
+-274.795
 </td>
 <td style="text-align:center;">
 </td>
@@ -325,7 +325,7 @@ Log.Lik.
 F
 </td>
 <td style="text-align:center;">
-4.746
+2.293
 </td>
 <td style="text-align:center;">
 </td>
