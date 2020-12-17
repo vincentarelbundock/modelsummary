@@ -28,18 +28,18 @@ on the right-hand side.}
 "blocks", "clusters", and/or "weights", the 'estimatr' package will
 consider them when calculating the difference in means.}
 
-\item{output}{filename or object type (string)
+\item{output}{filename or object type (character string)
 \itemize{
   \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
   \item Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
-  \item When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kableExtra::save_kable`, or `cat` functions.
+  \item Warning: the `output` argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
 }}
 
-\item{fmt}{an integer, string, or function which determines how to format numeric values:
+\item{fmt}{determines how to format numeric values
 \itemize{
-  \item integer: the number of digits to keep after the period (`format(round(x, fmt), nsmall=fmt)`)
-  \item character: string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will use exponential notation. See `?sprintf` for more options.
-  \item function: a function which returns a formatted character string
+  \item integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
+  \item character: passed to the `sprintf` function (e.g., '\%.3f' keeps 3 digits with trailing zero). See `?sprintf`
+  \item function: returns a formatted character string.
 }}
 
 \item{title}{string}
@@ -56,7 +56,7 @@ your main table.}
 \item{add_rows}{a data.frame (or tibble) with the same number of columns as
 your main table. By default, rows are appended to the bottom of the table.
 You can define a "position" attribute of integers to set the row positions.
-See examples.}
+See Examples section below.}
 
 \item{dinm}{TRUE calculates a difference in means with uncertainty
 estimates. This option is only available if the `estimatr` package is

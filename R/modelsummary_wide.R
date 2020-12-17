@@ -15,25 +15,26 @@
 #' @inheritParams modelsummary
 #' @return a regression table in a format determined by the `output` argument.
 #' @export
-modelsummary_wide <- function(models,
-  output = "default",
-  fmt = '%.3f',
-  statistic = "std.error",
+modelsummary_wide <- function(
+  models,
+  output             = "default",
+  fmt                = 3,
+  estimate           = "estimate",
+  statistic          = "std.error",
   statistic_override = NULL,
-  conf_level = 0.95,
-  stars = FALSE,
-  coef_group = NULL,
-  coef_map = NULL,
-  coef_omit = NULL,
-  coef_rename = NULL,
-  gof_map = NULL,
-  gof_omit = NULL,
-  add_rows = NULL,
-  stacking = "horizontal",
-  title = NULL,
-  notes = NULL,
-  estimate = "estimate",
-  statistic_vertical = NULL,
+  conf_level         = 0.95,
+  stars              = FALSE,
+  coef_group         = NULL,
+  coef_map           = NULL,
+  coef_omit          = NULL,
+  coef_rename        = NULL,
+  gof_map            = NULL,
+  gof_omit           = NULL,
+  add_rows           = NULL,
+  align              = NULL,
+  notes              = NULL,
+  title              = NULL,
+  stacking           = "horizontal",
   ...) {
 
   checkmate::assert_character(stacking, pattern="^horizontal$|^vertical$")
@@ -151,6 +152,7 @@ modelsummary_wide <- function(models,
     title = title,
     notes = notes,
     estimate = estimate,
+    align = align,
     statistic_vertical = statistic_vertical,
     ...) 
 

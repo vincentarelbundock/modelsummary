@@ -5,7 +5,7 @@
 \title{Extract model estimates. A mostly internal function with some potential uses
 outside.}
 \usage{
-get_estimates(model, conf_level = NULL, ...)
+get_estimates(model, conf_level = 0.95, ...)
 }
 \arguments{
 \item{model}{a single model object}

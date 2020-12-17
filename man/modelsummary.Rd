@@ -8,58 +8,69 @@ modelsummary(
   models,
   output = "default",
   fmt = 3,
+  estimate = "estimate",
   statistic = "std.error",
   statistic_override = NULL,
-  stars = FALSE,
   conf_level = 0.95,
+  stars = FALSE,
   coef_map = NULL,
   coef_omit = NULL,
   coef_rename = NULL,
   gof_map = NULL,
   gof_omit = NULL,
-  estimate = "estimate",
   add_rows = NULL,
-  title = NULL,
-  notes = NULL,
   align = NULL,
-  statistic_vertical = NULL,
+  notes = NULL,
+  title = NULL,
   ...
 )
 }
 \arguments{
-\item{models}{a single model object or a (potentially named) list of models
-to summarize}
+\item{models}{a model or (optionally named) list of models}
 
-\item{output}{filename or object type (string)
+\item{output}{filename or object type (character string)
 \itemize{
   \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
   \item Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
-  \item When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kableExtra::save_kable`, or `cat` functions.
+  \item Warning: the `output` argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
 }}
 
-\item{fmt}{an integer, string, or function which determines how to format numeric values:
+\item{fmt}{determines how to format numeric values
 \itemize{
-  \item integer: the number of digits to keep after the period (`format(round(x, fmt), nsmall=fmt)`)
-  \item character: string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will use exponential notation. See `?sprintf` for more options.
-  \item function: a function which returns a formatted character string
+  \item integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
+  \item character: passed to the `sprintf` function (e.g., '\%.3f' keeps 3 digits with trailing zero). See `?sprintf`
+  \item function: returns a formatted character string.
 }}
 
-\item{statistic}{character vector of raw strings or glue strings (see examples) which represent the uncertainty statistics to report vertically. Parentheses are added automatically unless the value includes `glue` curly braces {}. Acceptable values:
+\item{estimate}{string or `glue` string of the estimate to display. Valid entries include any column name of the data.frame produced by `get_estimates(model)`. Examples:
 \itemize{
-  \item Typical values: "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high".
-  \item Alternative values: any column name produced by `broom::tidy(model)`
-  \item `glue` package strings with braces such as: 
+  \item "estimate"
+  \item "\{estimate\} (\{std.error\})"
   \item "\{estimate\} [\{conf.low\}, \{conf.high\}]"
 }}
 
-\item{statistic_override}{robust standard errors and manual statistics. Accepts five types of input:
+\item{statistic}{vector of strings or `glue` strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics. 
 \itemize{
-  \item character string: will use the corresponding type of heteroscedasticity-consistent covariance matrix produced by the `vcovHC` function of the `sandwich` package. The valid strings are: "robust", "classical", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", and "stata". Your model object must be supported by the `sandwich` and `lmtest` packages. Supported models include lm, glm, survreg, coxph, mlogit, polr, hurdle, zeroinfl, and more.
-  \item a one-sided formula (e.g., ~cluster) with the name of the cluster variable(s) on the right-hand side. This formula will be passed to the `vcovCL` function of the `sandwich` package. Your model type must be supported by `sandwich`.
-  \item a function or list of functions of length(models) which produce variance-covariance matrices with row and column names equal to the names of your coefficient estimates. For example, `R` supplies the `vcov` function, and the `sandwich` package supplies `vcovHC`, `vcovHAC`, etc. If the `lmtest` package is installed, `modelsummary` will try to use it to override: "std.error", "statistic", "p.value", "conf.int". If the `lmtest` package is not installed, `modelsummary` will override "std.error" by using the square root of the vcov matrix diagonal.
-  \item a list of length(models) variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
-  \item a list of length(models) vectors with names equal to the names of your coefficient estimates. Numeric vectors are formatted according to `fmt` and placed in brackets, character vectors printed as given.
+  \item "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", or any column name produced by: `get_estimates(model)`
+  \item `glue` package strings with braces, such as: 
+  \itemize{
+    \item "{p.value} [\{conf.low\}, \{conf.high\}]"
+    \item "Std.Error: \{std.error\}"
+  }
+  \item Note: Parentheses are added automatically unless the string includes `glue` curly braces \{\}.
+  \item Note: To report uncertainty statistics \emph{next} to coefficients, you can supply a `glue` string to the `estimate` argument.
 }}
+
+\item{statistic_override}{robust standard errors and other manual statistics. The `statistic_override` argument accepts five types of input (see the 'Details' and 'Examples' sections below):
+\itemize{
+  \item string or list of strings: "classical", "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "constant" or "iid".
+  \item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
+  \item function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`).
+  \item list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+  \item a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. 
+}}
+
+\item{conf_level}{confidence level to use for confidence intervals}
 
 \item{stars}{to indicate statistical significance
 \itemize{
@@ -68,8 +79,6 @@ to summarize}
   \item Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
 }}
 
-\item{conf_level}{confidence level to use for confidence intervals}
-
 \item{coef_map}{named character vector. Values refer to the variable names
 that will appear in the table. Names refer to the original term names stored
 in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
@@ -77,7 +86,7 @@ Coefficients that are omitted from this vector will be omitted from the
 table. The table will be ordered in the same order as this vector.}
 
 \item{coef_omit}{string regular expression. Omits all matching coefficients
-from the table (using `grepl(perl=TRUE)`).}
+from the table using `grepl(perl=TRUE)`.}
 
 \item{coef_rename}{named character vector. Values refer to the variable names
 that will appear in the table. Names refer to the original term names stored
@@ -86,30 +95,24 @@ in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
 \item{gof_map}{data.frame with four columns: `raw`, `clean`, `fmt`, and
 `omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame
 by default: `modelsummary::gof_map` By default, all the statistics produced
-by `broom::glance` will be included unless they are omitted explicitly in
+by `get_gof(model)` will be included unless they are omitted explicitly in
 `gof_map`.}
 
 \item{gof_omit}{string regular expression. Omits all matching gof statistics from
 the table (using `grepl(perl=TRUE)`).}
 
-\item{estimate}{character name of the estimate to display. Must be a column
-name in the data.frame produced by `tidy(model)`. In the vast majority of
-cases, the default value of this argument should not be changed.}
-
 \item{add_rows}{a data.frame (or tibble) with the same number of columns as
 your main table. By default, rows are appended to the bottom of the table.
 You can define a "position" attribute of integers to set the row positions.
-See examples.}
-
-\item{title}{string}
-
-\item{notes}{list or vector of notes to append to the bottom of the table.}
+See Examples section below.}
 
 \item{align}{A character string of length equal to the number of columns in
 the table.  "lcr" means that the first column will be left-aligned, the 2nd
 column center-aligned, and the 3rd column right-aligned.}
 
-\item{statistic_vertical}{deprecated argument. Supply a vector of strings or `glue` strings to the `estimate` instead.}
+\item{notes}{list or vector of notes to append to the bottom of the table.}
+
+\item{title}{string}
 
 \item{...}{all other arguments are passed to the `tidy` and `glance` methods
 used to extract estimates from the model. For example, this allows users to
@@ -120,6 +123,46 @@ a regression table in a format determined by the `output` argument.
 }
 \description{
 Beautiful, customizable summaries of statistical models
+}
+\details{
+`output` argument:
+
+When a file name is supplied to the `output` argument, the table is written
+immediately to file. If you want to customize your table by post-processing
+it with an external package, you need to choose a different output format
+and saving mechanism. Unfortunately, the approach differs from package to
+package:
+\itemize{
+  \item `gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave` function.
+  \item `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.
+}
+
+`statistic_override` argument:
+
+To use a string such as "robust" or "HC0", your model must be supported
+by the `sandwich` package. This includes objects such as: lm, glm,
+survreg, coxph, mlogit, polr, hurdle, zeroinfl, and more.
+
+"classical", "iid", and "constant" are aliases which do not modify
+uncertainty estimates and simply report the default standard errors stored
+in the model object.
+
+One-sided formulas such as `~clusterid` are passed to the `sandwich::vcovCL`
+function.
+
+Matrices and functions producing variance-covariance matrices are first
+passed to `lmtest`. If this does not work, `modelsummary` attempts to take
+the square root of the diagonal to adjust "std.error", but the other
+uncertainty estimates are not be adjusted.
+
+Numeric vectors are formatted according to `fmt` and placed in brackets.
+Character vectors printed as given, without parentheses. 
+If your model type is supported by the `lmtest` package, the
+`statistic_override` argument will try to use that package to adjust all the
+uncertainty estimates, including "std.error", "statistic", "p.value", and
+"conf.int". If your model is not supported by `lmtest`, only the "std.error"
+will be adjusted by, for example, taking the square root of the matrix's
+diagonal.
 }
 \examples{
 \dontrun{
@@ -135,15 +178,35 @@ models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
 # simple table
 modelsummary(models)
 
-# confidence intervals, p values, or t-stats instead of standard errors
+# statistic
+modelsummary(models, statistic = NULL)
+modelsummary(models, statistic = 'p.value')
+modelsummary(models, statistic = 'statistic')
 modelsummary(models, statistic = 'conf.int', conf_level = 0.99)
-modelsummary(models, statistic = 'p.value', conf_level = 0.99)
-modelsummary(models, statistic = 'statistic', conf_level = 0.99)
+modelsummary(models, statistic = c("t = {statistic}",
+                                   "se = {std.error}",
+                                   "conf.int"))
 
-# coef_rename: rename coefficients
+# estimate
+modelsummary(models, 
+  statistic = NULL,
+  estimate = "{estimate} [{conf.low}, {conf.high}]")
+
+# statistic_override
+modelsummary(models, statistic_override = "robust")
+modelsummary(models, statistic_override = list("classical", "stata"))
+modelsummary(models, statistic_override = sandwich::vcovHC)
+modelsummary(models, 
+  statistic_override = list(stats::vcov, sandwich::vcovHC))
+modelsummary(models, 
+  statistic_override = list(c("(Intercept)"="", "Height"="!"),
+                            c("(Intercept)"="", "Height"="!", "Volume"="!!")))
+
+
+# coef_rename
 modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 
-# coef_map: rename, re-order, and omit coefficients
+# coef_map
 modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 
 # titles
@@ -160,8 +223,8 @@ rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,
 attr(rows, 'position') <- c(1, 3)
 modelsummary(models, add_rows = rows)
 
-# notes at the bottom of the table (here, the second note includes markdown bold characters)
-modelsummary(models, notes = list('A first note', gt::md('A **bold** note')))
+# notes at the bottom of the table
+modelsummary(models, notes = list('A first note', 'A second note'))
 
 # modify list of GOF statistics and their format using the built-in
 # 'gof_map' data frame as a starting point
@@ -171,6 +234,6 @@ gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "\%.5f"
 modelsummary(models, gof_map = gof_custom)
 }
 
-# see the README on github for a lot more examples:
-# https://github.com/vincentarelbundock/modelsummary
+# The `modelsummary` website includes \emph{many} more examples:
+# https://vincentarelbundock.github.io/modelsummary
 }

@@ -50,9 +50,9 @@ extract_estimates <- function(
   
   # extract estimates using broom or parameters
   if (any(grepl("conf", estimate_glue))) {
-    est <- get_estimates(model, conf_level=conf_level)
+    est <- get_estimates(model, conf_level=conf_level, ...)
   } else {
-    est <- get_estimates(model, conf_level=NULL)
+    est <- get_estimates(model, conf_level=NULL, ...)
   }
   
   # estimate override
@@ -164,7 +164,7 @@ extract_estimates <- function(
 #' @inheritParams modelsummary
 #' @param model a single model object
 #' @export
-get_estimates <- function(model, conf_level=NULL, ...) {
+get_estimates <- function(model, conf_level=.95, ...) {
 
   if (is.null(conf_level)) {
     conf_int=FALSE

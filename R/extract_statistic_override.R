@@ -9,11 +9,11 @@ extract_statistic_override <- function(model, statistic_override, conf_level=NUL
   out <- mat <- NULL
 
   # character shortcuts
-  regex = "^robust$|^classical$|^HC0$|^HC1$|^HC2$|^HC3$|^HC4$|^HC4m$|^HC5$|^stata$|^const$"
+  regex = "^robust$|^HC$|^HC0$|^HC1$|^HC2$|^HC3$|^HC4$|^HC4m$|^HC5$|^stata$|^classical$|^constant$|^iid$"
   flag <- checkmate::check_character(statistic_override, len=1, pattern=regex)
   if (isTRUE(flag)) {
     assert_dependency("sandwich")
-    if (statistic_override == "classical") {
+    if (statistic_override %in% c("classical", "constant", "iid")) {
       mat <- stats::vcov(model)
     } else {
       if (statistic_override == "stata") {

@@ -18,34 +18,41 @@ extract_estimates(
 \arguments{
 \item{model}{object type with an available `tidy` method.}
 
-\item{estimate}{character name of the estimate to display. Must be a column
-name in the data.frame produced by `tidy(model)`. In the vast majority of
-cases, the default value of this argument should not be changed.}
-
-\item{statistic}{character vector of raw strings or glue strings (see examples) which represent the uncertainty statistics to report vertically. Parentheses are added automatically unless the value includes `glue` curly braces {}. Acceptable values:
+\item{estimate}{string or `glue` string of the estimate to display. Valid entries include any column name of the data.frame produced by `get_estimates(model)`. Examples:
 \itemize{
-  \item Typical values: "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high".
-  \item Alternative values: any column name produced by `broom::tidy(model)`
-  \item `glue` package strings with braces such as: 
+  \item "estimate"
+  \item "\{estimate\} (\{std.error\})"
   \item "\{estimate\} [\{conf.low\}, \{conf.high\}]"
 }}
 
-\item{statistic_override}{robust standard errors and manual statistics. Accepts five types of input:
+\item{statistic}{vector of strings or `glue` strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics. 
 \itemize{
-  \item character string: will use the corresponding type of heteroscedasticity-consistent covariance matrix produced by the `vcovHC` function of the `sandwich` package. The valid strings are: "robust", "classical", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", and "stata". Your model object must be supported by the `sandwich` and `lmtest` packages. Supported models include lm, glm, survreg, coxph, mlogit, polr, hurdle, zeroinfl, and more.
-  \item a one-sided formula (e.g., ~cluster) with the name of the cluster variable(s) on the right-hand side. This formula will be passed to the `vcovCL` function of the `sandwich` package. Your model type must be supported by `sandwich`.
-  \item a function or list of functions of length(models) which produce variance-covariance matrices with row and column names equal to the names of your coefficient estimates. For example, `R` supplies the `vcov` function, and the `sandwich` package supplies `vcovHC`, `vcovHAC`, etc. If the `lmtest` package is installed, `modelsummary` will try to use it to override: "std.error", "statistic", "p.value", "conf.int". If the `lmtest` package is not installed, `modelsummary` will override "std.error" by using the square root of the vcov matrix diagonal.
-  \item a list of length(models) variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
-  \item a list of length(models) vectors with names equal to the names of your coefficient estimates. Numeric vectors are formatted according to `fmt` and placed in brackets, character vectors printed as given.
+  \item "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", or any column name produced by: `get_estimates(model)`
+  \item `glue` package strings with braces, such as: 
+  \itemize{
+    \item "{p.value} [\{conf.low\}, \{conf.high\}]"
+    \item "Std.Error: \{std.error\}"
+  }
+  \item Note: Parentheses are added automatically unless the string includes `glue` curly braces \{\}.
+  \item Note: To report uncertainty statistics \emph{next} to coefficients, you can supply a `glue` string to the `estimate` argument.
+}}
+
+\item{statistic_override}{robust standard errors and other manual statistics. The `statistic_override` argument accepts five types of input (see the 'Details' and 'Examples' sections below):
+\itemize{
+  \item string or list of strings: "classical", "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "constant" or "iid".
+  \item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
+  \item function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`).
+  \item list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+  \item a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. 
 }}
 
 \item{conf_level}{confidence level to use for confidence intervals}
 
-\item{fmt}{an integer, string, or function which determines how to format numeric values:
+\item{fmt}{determines how to format numeric values
 \itemize{
-  \item integer: the number of digits to keep after the period (`format(round(x, fmt), nsmall=fmt)`)
-  \item character: string is passed to the `sprintf` function. '\%.3f' will keep 3 digits after the decimal point with trailing zero. '\%.5f' will keep 5 digits. '\%.3e' will use exponential notation. See `?sprintf` for more options.
-  \item function: a function which returns a formatted character string
+  \item integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
+  \item character: passed to the `sprintf` function (e.g., '\%.3f' keeps 3 digits with trailing zero). See `?sprintf`
+  \item function: returns a formatted character string.
 }}
 
 \item{stars}{to indicate statistical significance
