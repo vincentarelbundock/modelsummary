@@ -153,7 +153,6 @@ modelsummary_wide <- function(
     notes = notes,
     estimate = estimate,
     align = align,
-    statistic_vertical = statistic_vertical,
     ...) 
 
 }

@@ -235,6 +235,11 @@ modelsummary <- function(
   sanity_stars(stars)
   sanity_fmt(fmt)
 
+  # deprecated arguments
+  if (!is.null(list(...)[["statistic_vertical"]])) {
+    warning("The `statistic_vertical` argument is deprecated and will be ignored. To display uncertainty estimates next to your coefficients, use a `glue` string in the `estimate` argument. See `?modelsummary`")
+  }
+
   # output
   output_format <- parse_output_arg(output)$output_format
 
