@@ -37,7 +37,7 @@ in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
 
 \item{vcov}{robust standard errors and other manual statistics. The `vcov` argument accepts five types of input (see the 'Details' and 'Examples' sections below):
 \itemize{
-  \item string or list of strings: "classical", "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "constant" or "iid".
+  \item string or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").
   \item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
   \item function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`).
   \item list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.

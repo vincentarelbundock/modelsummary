@@ -1,7 +1,8 @@
 # modelsummary 0.6.4.9000
 
-* statistic_override accepts shortcuts: "robust", "stata", "HC0"
-* statistic_override accepts formulas for clustered SEs: ~group
+* `statistic_override` becomes `vcov`
+* vcov accepts shortcuts: "robust", "stata", "HC0", etc.
+* vcov accepts formulas for clustered SEs: ~group
 * modelsummary_wide has a new "stacking" argument
 
 # modelsummary 0.6.4
