@@ -179,6 +179,18 @@ Since `coef_omit` accepts regexes, you can do interesting things with it, such a
 modelsummary(models, coef_omit = "[^Commerce|(Intercept)]", gof_omit=".*")
 ```
 
+You could also use fancy [look-ahead or look-behind assertions](https://en.wikipedia.org/wiki/Perl_Compatible_Regular_Expressions#Look-ahead_and_look-behind_assertions). For example, if you want the *opposite* of `coef_omit` (call it `coef_keep`), and you want to "keep" parameters that match a certain pattern, you could try:
+
+```{r}
+modelsummary(models, coef_omit = "^(?!.*Commerce)", gof_omit=".*")
+```
+
+You can chain those look-behinds as needed to match multiple patterns (noting that parentheses must be escaped):
+
+```{r}
+modelsummary(models, coef_omit = "^(?!.*Commerce)(?!.*\\(Int)", gof_omit=".*")
+```
+
 ## Goodness-of-fit and other statistics
 
 `gof_omit` is a regular expression which will be fed to `stringr::str_detect` to detect the names of the statistics which should be excluded from the table.
