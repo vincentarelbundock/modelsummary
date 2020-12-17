@@ -3,43 +3,43 @@
 #' @inheritParams modelsummary
 #' @keywords internal
 #' @return a numeric vector of test statistics
-extract_statistic_override <- function(model, statistic_override, conf_level=NULL) {
+extract_vcov <- function(model, vcov, conf_level=NULL) {
 
   # needed for logic tests
   out <- mat <- NULL
 
   # character shortcuts
   regex = "^robust$|^HC$|^HC0$|^HC1$|^HC2$|^HC3$|^HC4$|^HC4m$|^HC5$|^stata$|^classical$|^constant$|^iid$"
-  flag <- checkmate::check_character(statistic_override, len=1, pattern=regex)
+  flag <- checkmate::check_character(vcov, len=1, pattern=regex)
   if (isTRUE(flag)) {
     assert_dependency("sandwich")
-    if (statistic_override %in% c("classical", "constant", "iid")) {
+    if (vcov %in% c("classical", "constant", "iid")) {
       mat <- stats::vcov(model)
     } else {
-      if (statistic_override == "stata") {
-        statistic_override <- "HC1"
-      } else if (statistic_override == "robust") {
-        statistic_override <- "HC3"
+      if (vcov == "stata") {
+        vcov <- "HC1"
+      } else if (vcov == "robust") {
+        vcov <- "HC3"
       }
-      mat <- sandwich::vcovHC(model, type=statistic_override)
+      mat <- sandwich::vcovHC(model, type=vcov)
     }
   }
 
   # formula for clusters
-  flag <- checkmate::check_formula(statistic_override)
+  flag <- checkmate::check_formula(vcov)
   if (isTRUE(flag)) {
     assert_dependency("sandwich")
-    mat <- sandwich::vcovCL(model, cluster=statistic_override)
+    mat <- sandwich::vcovCL(model, cluster=vcov)
   }
 
   # function is expected to return a covariance matrix
-  if (is.function(statistic_override)) {
-    mat <- statistic_override(model)
+  if (is.function(vcov)) {
+    mat <- vcov(model)
   }
 
   # matrix
-  if (is.matrix(statistic_override)) {
-    mat <- statistic_override
+  if (is.matrix(vcov)) {
+    mat <- vcov
   }
 
   # lmtest attempt and manual fallback
@@ -57,10 +57,10 @@ extract_statistic_override <- function(model, statistic_override, conf_level=NUL
   }
 
   # atomic vector
-  flag <- checkmate::check_atomic_vector(statistic_override, names="named")
+  flag <- checkmate::check_atomic_vector(vcov, names="named")
   if (isTRUE(flag)) {
-    out <- data.frame(term=names(statistic_override), 
-                      std.error=statistic_override)
+    out <- data.frame(term=names(vcov), 
+                      std.error=vcov)
     # factor -> character (important for R<4.0.0)
     for (i in seq_along(out)) {
       if (is.factor(out[[i]])) {
@@ -70,19 +70,19 @@ extract_statistic_override <- function(model, statistic_override, conf_level=NUL
     return(out)
   }
 
-  stop("Could not retrieve a valid variance-covariance matrix using the function supplied in `statistic_override`.")
+  stop("Could not retrieve a valid variance-covariance matrix using the function supplied in `vcov`.")
 }
 
 
-get_coeftest <- function(model, statistic_override, conf_level) {
+get_coeftest <- function(model, vcov, conf_level) {
 
   if (!check_dependency("lmtest")) return(NULL)
 
   gof <- try(
-    lmtest::coeftest(model, vcov.=statistic_override), silent=TRUE)
+    lmtest::coeftest(model, vcov.=vcov), silent=TRUE)
 
   gof_ci <- try(
-    lmtest::coefci(model, vcov.=statistic_override, level=conf_level),
+    lmtest::coefci(model, vcov.=vcov, level=conf_level),
     silent=TRUE)
 
   if (!inherits(gof, "try-error")) {

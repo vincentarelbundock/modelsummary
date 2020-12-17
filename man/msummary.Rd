@@ -10,7 +10,7 @@ msummary(
   fmt = 3,
   estimate = "estimate",
   statistic = "std.error",
-  statistic_override = NULL,
+  vcov = NULL,
   conf_level = 0.95,
   stars = FALSE,
   coef_map = NULL,
@@ -61,7 +61,7 @@ msummary(
   \item Note: To report uncertainty statistics \emph{next} to coefficients, you can supply a `glue` string to the `estimate` argument.
 }}
 
-\item{statistic_override}{robust standard errors and other manual statistics. The `statistic_override` argument accepts five types of input (see the 'Details' and 'Examples' sections below):
+\item{vcov}{robust standard errors and other manual statistics. The `vcov` argument accepts five types of input (see the 'Details' and 'Examples' sections below):
 \itemize{
   \item string or list of strings: "classical", "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "constant" or "iid".
   \item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
@@ -137,7 +137,7 @@ package:
   \item `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.
 }
 
-`statistic_override` argument:
+`vcov` argument:
 
 To use a string such as "robust" or "HC0", your model must be supported
 by the `sandwich` package. This includes objects such as: lm, glm,
@@ -158,7 +158,7 @@ uncertainty estimates are not be adjusted.
 Numeric vectors are formatted according to `fmt` and placed in brackets.
 Character vectors printed as given, without parentheses. 
 If your model type is supported by the `lmtest` package, the
-`statistic_override` argument will try to use that package to adjust all the
+`vcov` argument will try to use that package to adjust all the
 uncertainty estimates, including "std.error", "statistic", "p.value", and
 "conf.int". If your model is not supported by `lmtest`, only the "std.error"
 will be adjusted by, for example, taking the square root of the matrix's
@@ -192,14 +192,14 @@ modelsummary(models,
   statistic = NULL,
   estimate = "{estimate} [{conf.low}, {conf.high}]")
 
-# statistic_override
-modelsummary(models, statistic_override = "robust")
-modelsummary(models, statistic_override = list("classical", "stata"))
-modelsummary(models, statistic_override = sandwich::vcovHC)
+# vcov
+modelsummary(models, vcov = "robust")
+modelsummary(models, vcov = list("classical", "stata"))
+modelsummary(models, vcov = sandwich::vcovHC)
 modelsummary(models, 
-  statistic_override = list(stats::vcov, sandwich::vcovHC))
+  vcov = list(stats::vcov, sandwich::vcovHC))
 modelsummary(models, 
-  statistic_override = list(c("(Intercept)"="", "Height"="!"),
+  vcov = list(c("(Intercept)"="", "Height"="!"),
                             c("(Intercept)"="", "Height"="!", "Volume"="!!")))
 
 

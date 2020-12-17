@@ -10,7 +10,7 @@ modelsummary_wide(
   fmt = 3,
   estimate = "estimate",
   statistic = "std.error",
-  statistic_override = NULL,
+  vcov = NULL,
   conf_level = 0.95,
   stars = FALSE,
   coef_group = NULL,
@@ -63,7 +63,7 @@ modelsummary_wide(
   \item Note: To report uncertainty statistics \emph{next} to coefficients, you can supply a `glue` string to the `estimate` argument.
 }}
 
-\item{statistic_override}{robust standard errors and other manual statistics. The `statistic_override` argument accepts five types of input (see the 'Details' and 'Examples' sections below):
+\item{vcov}{robust standard errors and other manual statistics. The `vcov` argument accepts five types of input (see the 'Details' and 'Examples' sections below):
 \itemize{
   \item string or list of strings: "classical", "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "constant" or "iid".
   \item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).

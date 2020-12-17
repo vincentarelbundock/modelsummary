@@ -5,12 +5,12 @@
 #' @keywords internal
 extract_estimates <- function(
   model,
-  estimate = "estimate",
-  statistic = "std.error",
-  statistic_override = NULL,
+  estimate   = "estimate",
+  statistic  = "std.error",
+  vcov       = NULL,
   conf_level = .95,
-  fmt = "%.3f",
-  stars = FALSE,
+  fmt        = "%.3f",
+  stars      = FALSE,
   ...) {
 
   # conf.int to glue
@@ -31,9 +31,9 @@ extract_estimates <- function(
     sprintf("{%s}", estimate_glue))
     
   # statistics to glue
-  if (!is.null(statistic_override) &&     # don't add parentheses
-      is.character(statistic_override) && # to manual strings
-      length(statistic_override) > 1) {   # of length greater than 1 (i.e., robust shortcuts)
+  if (!is.null(vcov) &&     # don't add parentheses
+      is.character(vcov) && # to manual strings
+      length(vcov) > 1) {   # of length greater than 1 (i.e., robust shortcuts)
     statistic_glue <- ifelse(
       grepl("\\{", statistic_glue),
       statistic_glue,
@@ -56,23 +56,23 @@ extract_estimates <- function(
   }
   
   # estimate override
-  if (!is.null(statistic_override)) {
+  if (!is.null(vcov)) {
 
     # extract overriden estimates
-    so <- extract_statistic_override(
+    so <- extract_vcov(
       model,
-      statistic_override=statistic_override,
+      vcov=vcov,
       conf_level=conf_level)
 
     # keep only columns that do not appear in so
     est <- est[, c('term', base::setdiff(colnames(est), colnames(so))), drop = FALSE]
 
-    # make sure statistic_override is of the correct length
+    # make sure vcov is of the correct length
     if (nrow(est) != nrow(so)) {
-      stop("statistic_override and estimates have different dimensions.")
+      stop("vcov and estimates have different dimensions.")
     }
 
-    # merge statistic_override and estimates
+    # merge vcov and estimates
     est <- merge(est, so, by="term", sort=FALSE)
 
   }

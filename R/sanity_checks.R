@@ -201,23 +201,23 @@ sanity_add_rows <- function(add_rows, models) {
 #' sanity check
 #'
 #' @keywords internal
-sanity_statistic_override <- function(models, statistic_override) {
+sanity_vcov <- function(models, vcov) {
 
   regex = "^robust$|^HC$|^HC0$|^HC1$|^HC2$|^HC3$|^HC4$|^HC4m$|^HC5$|^stata$|^classical$|^constant$|^iid$"
   checkmate::assert(
-    checkmate::check_formula(statistic_override, null.ok=TRUE),
-    checkmate::check_character(statistic_override, len=1, pattern=regex, null.ok=TRUE),
-    checkmate::check_list(statistic_override, null.ok = TRUE),
-    checkmate::check_function(statistic_override, null.ok = TRUE),
-    checkmate::check_matrix(statistic_override, null.ok = TRUE),
-    checkmate::check_atomic_vector(statistic_override),
+    checkmate::check_formula(vcov, null.ok=TRUE),
+    checkmate::check_character(vcov, len=1, pattern=regex, null.ok=TRUE),
+    checkmate::check_list(vcov, null.ok = TRUE),
+    checkmate::check_function(vcov, null.ok = TRUE),
+    checkmate::check_matrix(vcov, null.ok = TRUE),
+    checkmate::check_atomic_vector(vcov),
     combine="or"
   )
 
-  if (class(statistic_override)[1] == "list" &
+  if (class(vcov)[1] == "list" &
       class(models)[1] == "list") { # must be simple lists
-    checkmate::assert_true(length(statistic_override) == length(models))
-    for (s in statistic_override) {
+    checkmate::assert_true(length(vcov) == length(models))
+    for (s in vcov) {
       checkmate::assert(
         checkmate::check_formula(s),
         checkmate::check_function(s),

@@ -45,7 +45,7 @@ extract_models <- function(...) {
 #'   \item Note: Parentheses are added automatically unless the string includes `glue` curly braces \{\}.
 #'   \item Note: To report uncertainty statistics \emph{next} to coefficients, you can supply a `glue` string to the `estimate` argument.
 #' }
-#' @param statistic_override robust standard errors and other manual statistics. The `statistic_override` argument accepts five types of input (see the 'Details' and 'Examples' sections below):
+#' @param vcov robust standard errors and other manual statistics. The `vcov` argument accepts five types of input (see the 'Details' and 'Examples' sections below):
 #' \itemize{
 #'   \item string or list of strings: "classical", "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "constant" or "iid".
 #'   \item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
@@ -104,7 +104,7 @@ extract_models <- function(...) {
 #'   \item `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.
 #' }
 #' 
-#' `statistic_override` argument:
+#' `vcov` argument:
 #'
 #' To use a string such as "robust" or "HC0", your model must be supported
 #' by the `sandwich` package. This includes objects such as: lm, glm,
@@ -126,7 +126,7 @@ extract_models <- function(...) {
 #' Character vectors printed as given, without parentheses. 
 
 #' If your model type is supported by the `lmtest` package, the
-#' `statistic_override` argument will try to use that package to adjust all the
+#' `vcov` argument will try to use that package to adjust all the
 #' uncertainty estimates, including "std.error", "statistic", "p.value", and
 #' "conf.int". If your model is not supported by `lmtest`, only the "std.error"
 #' will be adjusted by, for example, taking the square root of the matrix's
@@ -159,14 +159,14 @@ extract_models <- function(...) {
 #'   statistic = NULL,
 #'   estimate = "{estimate} [{conf.low}, {conf.high}]")
 #' 
-#' # statistic_override
-#' modelsummary(models, statistic_override = "robust")
-#' modelsummary(models, statistic_override = list("classical", "stata"))
-#' modelsummary(models, statistic_override = sandwich::vcovHC)
+#' # vcov
+#' modelsummary(models, vcov = "robust")
+#' modelsummary(models, vcov = list("classical", "stata"))
+#' modelsummary(models, vcov = sandwich::vcovHC)
 #' modelsummary(models, 
-#'   statistic_override = list(stats::vcov, sandwich::vcovHC))
+#'   vcov = list(stats::vcov, sandwich::vcovHC))
 #' modelsummary(models, 
-#'   statistic_override = list(c("(Intercept)"="", "Height"="!"),
+#'   vcov = list(c("(Intercept)"="", "Height"="!"),
 #'                             c("(Intercept)"="", "Height"="!", "Volume"="!!")))
 #'
 #'
@@ -206,38 +206,47 @@ extract_models <- function(...) {
 #' @export
 modelsummary <- function(
   models,
-  output = "default",
-  fmt = 3,
-  estimate = "estimate",
-  statistic = "std.error",
-  statistic_override = NULL,
-  conf_level = 0.95,
-  stars = FALSE,
-  coef_map = NULL,
-  coef_omit = NULL,
+  output      = "default",
+  fmt         = 3,
+  estimate    = "estimate",
+  statistic   = "std.error",
+  vcov        = NULL,
+  conf_level  = 0.95,
+  stars       = FALSE,
+  coef_map    = NULL,
+  coef_omit   = NULL,
   coef_rename = NULL,
-  gof_map = NULL,
-  gof_omit = NULL,
-  add_rows = NULL,
-  align = NULL,
-  notes = NULL,
-  title = NULL,
+  gof_map     = NULL,
+  gof_omit    = NULL,
+  add_rows    = NULL,
+  align       = NULL,
+  notes       = NULL,
+  title       = NULL,
   ...) {
 
   # sanity check functions are hosted in R/sanity_checks.R
   sanity_output(output)
   sanity_statistic(statistic)
   sanity_estimate(estimate)
-  sanity_statistic_override(models, statistic_override)
+  sanity_vcov(models, vcov)
   sanity_conf_level(conf_level)
   sanity_coef(coef_map, coef_rename, coef_omit)
   # sanity_gof(gof_map, gof_omit)
   sanity_stars(stars)
   sanity_fmt(fmt)
 
+  ellip <- list(...)
+
   # deprecated arguments
-  if (!is.null(list(...)[["statistic_vertical"]])) {
+  if ("statistic_vertical" %in% names(ellip)) {
     warning("The `statistic_vertical` argument is deprecated and will be ignored. To display uncertainty estimates next to your coefficients, use a `glue` string in the `estimate` argument. See `?modelsummary`")
+  }
+
+  if ("statistic_override" %in% names(ellip)) {
+    if (!is.null(vcov)) {
+      stop("The `vcov` and `statistic_override` arguments cannot be used at the same time. The `statistic_override` argument is deprecated. Please use `vcov` instead.")
+    }
+    vcov <- ellip$statistic_override
   }
 
   # output
@@ -259,9 +268,9 @@ modelsummary <- function(
   }
   model_id <- paste("Model", 1:length(models))
 
-  # statistic_override: must be a list
-  if (!inherits(statistic_override, "list")) {
-    statistic_override <- rep(list(statistic_override), length(models))
+  # vcov: must be a list
+  if (!inherits(vcov, "list")) {
+    vcov <- rep(list(vcov), length(models))
   }
 
   # estimates: extract and combine
@@ -274,7 +283,7 @@ modelsummary <- function(
       fmt                = fmt,
       estimate           = estimate,
       statistic          = statistic,
-      statistic_override = statistic_override[[i]],
+      vcov               = vcov[[i]],
       conf_level         = conf_level,
       stars              = stars,
       ...
@@ -442,12 +451,12 @@ modelsummary <- function(
   # build table
   factory(
     tab,
-    align = align,
-    fmt = fmt,
-    hrule = hrule,
-    notes = notes,
-    output = output,
-    title = title,
+    align    = align,
+    fmt      = fmt,
+    hrule    = hrule,
+    notes    = notes,
+    output   = output,
+    title    = title,
     add_rows = add_rows,
     ...
   )

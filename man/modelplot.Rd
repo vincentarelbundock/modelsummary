@@ -10,7 +10,7 @@ modelplot(
   coef_map = NULL,
   coef_omit = NULL,
   coef_rename = NULL,
-  statistic_override = NULL,
+  vcov = NULL,
   facet = FALSE,
   draw = TRUE,
   background = NULL,
@@ -35,7 +35,7 @@ from the table using `grepl(perl=TRUE)`.}
 that will appear in the table. Names refer to the original term names stored
 in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
 
-\item{statistic_override}{robust standard errors and other manual statistics. The `statistic_override` argument accepts five types of input (see the 'Details' and 'Examples' sections below):
+\item{vcov}{robust standard errors and other manual statistics. The `vcov` argument accepts five types of input (see the 'Details' and 'Examples' sections below):
 \itemize{
   \item string or list of strings: "classical", "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "constant" or "iid".
   \item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).

@@ -55,17 +55,23 @@
 #'
 #' @export
 modelplot <- function(models,
-                      conf_level = .95,
-                      coef_map = NULL,
-                      coef_omit = NULL,
+                      conf_level  = .95,
+                      coef_map    = NULL,
+                      coef_omit   = NULL,
                       coef_rename = NULL,
-                      statistic_override = NULL,
-                      facet = FALSE,
-                      draw = TRUE,
-                      background = NULL,
+                      vcov        = NULL,
+                      facet       = FALSE,
+                      draw        = TRUE,
+                      background  = NULL,
                       ...) {
 
+  ellip <- list(...)
 
+  if ("statistic_override" %in% names(ellip)) {
+    if (!is.null(vcov)) {
+      stop("The `vcov` and `statistic_override` arguments cannot be used at the same time. The `statistic_override` argument is deprecated. Please use `vcov` instead.")
+    }
+  }
 
   if (is.null(conf_level)) {
     estimate <- "estimate"
@@ -74,17 +80,17 @@ modelplot <- function(models,
   }
 
   out <- modelsummary(
-    output="dataframe",
-    models=models,
-    fmt="%.50f",
-    estimate=estimate,
-    statistic=NULL,
-    conf_level=conf_level,
-    coef_map=coef_map,
-    coef_omit=coef_omit,
-    coef_rename=coef_rename,
-    gof_omit=".*",
-    statistic_override=statistic_override,
+    output      = "dataframe",
+    models      = models,
+    fmt         = "%.50f",
+    estimate    = estimate,
+    statistic   = NULL,
+    conf_level  = conf_level,
+    coef_map    = coef_map,
+    coef_omit   = coef_omit,
+    coef_rename = coef_rename,
+    gof_omit    = ".*",
+    vcov        = vcov,
     ...
   )
   out$part <- out$statistic <- NULL
