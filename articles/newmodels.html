@@ -86,8 +86,7 @@
 
       
 
-      </header><script src="newmodels_files/header-attrs-2.5/header-attrs.js"></script><link href="newmodels_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="newmodels_files/anchor-sections-1.0/anchor-sections.js"></script><script src="newmodels_files/kePrint-0.0.1/kePrint.js"></script><link href="newmodels_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+      </header><script src="newmodels_files/header-attrs-2.6/header-attrs.js"></script><script src="newmodels_files/kePrint-0.0.1/kePrint.js"></script><link href="newmodels_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -105,53 +104,46 @@
 <h1 class="hasAnchor">
 <a href="#supported-models" class="anchor"></a>Supported models</h1>
 <p><code>modelsummary</code> automatically supports all the models supported by the <a href="broom.tidymodels.org">broom package</a>. Specifically, <code>modelsummary</code> uses the <code>glance</code> and <code>tidy</code> methods from the <code>broom</code> package to extract information from model objects. To see if a package is supported out-of-the-box, load the <code>broom</code> package, and see if the <code>tidy</code> and <code>glance</code> methods produce valid output:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://broom.tidymodels.org/">broom</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">broom</span>)
 
-<span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
-<span class="fu"><a href="https://generics.r-lib.org/reference/glance.html">glance</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://broom.tidymodels.org/reference/reexports.html">tidy</a></span>(<span class="no">mod</span>)
+<span class="fu"><a href="https://broom.tidymodels.org/reference/reexports.html">glance</a></span>(<span class="no">mod</span>)</pre></body></html></div>
 <p>If the <code>tidy</code> and <code>glance</code> functions do not work on your model type, you may consider opening an issue on the Github website of the <code>broom</code> package: <a href="https://github.com/tidymodels/broom/issues" class="uri">https://github.com/tidymodels/broom/issues</a></p>
 <p>Note that several packages supply additional <code>tidy</code> and <code>glance</code> functions. Loading these packages can increase the range of models supported by <code>modelsummary</code>. For example, loading the <a href="https://github.com/bbolker/broom.mixed">broom.mixed package</a> allows modelsummary to support a wide variety of mixed (hierarchical, multi-level) models (e.g., <code>lme4</code>, <code>brms</code>, <code>rstanarm</code>).</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/bbolker/broom.mixed">broom.mixed</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">broom.mixed</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
 </div>
 <div id="customizing-existing-models" class="section level1">
 <h1 class="hasAnchor">
 <a href="#customizing-existing-models" class="anchor"></a>Customizing existing models</h1>
-<p>The information that <code>modelsummary</code> can display about a model is determined by the output of the <code><a href="https://generics.r-lib.org/reference/glance.html">broom::glance</a></code> and <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy</a></code> functions. <code>glance</code> is used the extract the information at the the bottom of the table, where goodness-of-fit measures are displayed. <code>tidy</code> is used to extract the information in the body of the table: parameter and uncertainty estimates.</p>
+<p>The information that <code>modelsummary</code> can display about a model is determined by the output of the <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::glance</a></code> and <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::tidy</a></code> functions. <code>glance</code> is used the extract the information at the the bottom of the table, where goodness-of-fit measures are displayed. <code>tidy</code> is used to extract the information in the body of the table: parameter and uncertainty estimates.</p>
 <p>Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new <code>glance_custom</code> and <code>tidy_custom</code> methods. To illustrate, we estimate two linear regression models using the <code>lm</code> function:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
-<span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">mod</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span>, <span class="va">mtcars</span><span class="op">)</span>
-<span class="va">mod</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">wt</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">am</span>, <span class="va">mtcars</span><span class="op">)</span></code></pre></div>
+<span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+<span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">hp</span> ~ <span class="no">mpg</span> + <span class="no">drat</span>, <span class="no">mtcars</span>)
+<span class="no">mod</span><span class="kw">[[</span><span class="fl">2</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">wt</span> ~ <span class="no">mpg</span> + <span class="no">drat</span> + <span class="no">am</span>, <span class="no">mtcars</span>)</pre></body></html></div>
 <p>In <code>R</code>, the <code>lm</code> function produces models of class “lm”:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-<span class="co">#&gt; [1] "lm"</span></code></pre></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]])
+<span class="co">#&gt; [1] "lm"</span></pre></body></html></div>
 <p>Let’s say you would like to print the dependent variable for each model of this particular class. All you need to do is define a new method called <code>glance_custom.lm</code>. This method should return a data.frame (or tibble) with 1 row, and 1 column per piece of information you want to display. For example:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">glance_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html">formula</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>
-    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>`Dependent variable:` <span class="op">=</span> <span class="va">dv</span><span class="op">)</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">glance_custom.lm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
+    <span class="no">dv</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/formula.html">formula</a></span>(<span class="no">x</span>)[<span class="fl">2</span>])
+    <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">`Dependent variable:`</span> <span class="kw">=</span> <span class="no">dv</span>)
+    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
+}</pre></body></html></div>
 <p>; ow, let’s customize the body of the table. The <code>statistic_override</code> argument already allows users to customize uncertainty estimates. But imagine you want to override the <em>coefficient estimates</em> of your “lm” models. Easy! All you need to do is define a <code>tidy_custom.lm</code> method which returns a data.frame (or tibble) with one column called “term” and one column called “estimate”.</p>
 <p>Here, we’ll substitute estimates by an up/down arrow which represents their signs:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tidy_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span>
-    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span>,
-                          estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">s</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="st">'⭡'</span>, <span class="st">'⭣'</span><span class="op">)</span><span class="op">)</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">tidy_custom.lm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
+    <span class="no">s</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">x</span>)$<span class="no">coefficients</span>
+    <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">term</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="no">s</span>),
+                          <span class="kw">estimate</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">s</span>[,<span class="fl">1</span>] <span class="kw">&gt;</span> <span class="fl">0</span>, <span class="st">'⭡'</span>, <span class="st">'⭣'</span>))
+    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
+}</pre></body></html></div>
 <p>After you define the <code>glance_custom</code> and <code>tidy_custom</code> methods, <code>modelsummary</code> will automatically display your customized model information:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -342,26 +334,25 @@ wt
 <a href="#fixed-effects-regression" class="anchor"></a>Fixed effects regression</h2>
 <p>One common use-case for <code>glance_custom</code> is to display the list of “fixed effects” included in a linear regression model.</p>
 <p>The <code>feols</code> function from the <code>fixest</code> package offers an extremely fast way to estimate fixed effects regression models. The <code>feols</code> function produces an object of class “fixest”, which stores the fixed effects variables in a character vector called “fixef_vars”. To display those fixed effects, we create a <code>glance_custom.fixest</code> and call <code>modelsummary</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">glance_custom.fixest</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>.rows <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-    <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="va">x</span><span class="op">$</span><span class="va">fixef_vars</span><span class="op">)</span> <span class="op">{</span>
-        <span class="va">out</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">'FE: '</span>, <span class="va">n</span><span class="op">)</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">'X'</span>
-    <span class="op">}</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
-<span class="op">}</span>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">glance_custom.fixest</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
+    <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">.rows</span> <span class="kw">=</span> <span class="fl">1</span>)
+    <span class="kw">for</span> (<span class="no">n</span> <span class="kw">in</span> <span class="no">x</span>$<span class="no">fixef_vars</span>) {
+        <span class="no">out</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">'FE: '</span>, <span class="no">n</span>)]] <span class="kw">&lt;-</span> <span class="st">'X'</span>
+    }
+    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
+}
 
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">fixest</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">fixest</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/plm/EmplUK.csv'</span>
-<span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
-<span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">mod</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span><span class="op">(</span><span class="va">emp</span> <span class="op">~</span> <span class="va">wage</span>, <span class="va">dat</span><span class="op">)</span>
-<span class="va">mod</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span><span class="op">(</span><span class="va">emp</span> <span class="op">~</span> <span class="va">wage</span> <span class="op">|</span> <span class="va">firm</span>, <span class="va">dat</span><span class="op">)</span>
-<span class="va">mod</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span><span class="op">(</span><span class="va">emp</span> <span class="op">~</span> <span class="va">wage</span> <span class="op">|</span> <span class="va">firm</span> <span class="op">+</span> <span class="va">year</span>, <span class="va">dat</span><span class="op">)</span>
+<span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/plm/EmplUK.csv'</span>
+<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)
+<span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+<span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span>(<span class="no">emp</span> ~ <span class="no">wage</span>, <span class="no">dat</span>)
+<span class="no">mod</span><span class="kw">[[</span><span class="fl">2</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span>(<span class="no">emp</span> ~ <span class="no">wage</span> <span class="kw">|</span> <span class="no">firm</span>, <span class="no">dat</span>)
+<span class="no">mod</span><span class="kw">[[</span><span class="fl">3</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span>(<span class="no">emp</span> ~ <span class="no">wage</span> <span class="kw">|</span> <span class="no">firm</span> + <span class="no">year</span>, <span class="no">dat</span>)
 
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -583,32 +574,31 @@ Clustered (firm)
 <a href="#adding-new-models" class="anchor"></a>Adding new models</h1>
 <p><code>modelsummary</code> relies on two functions from the <code>broom</code> package to extract model information: <code>tidy</code> and <code>glance</code>. If <code>broom</code> doesn’t support the type of model you are trying to summarize, <code>modelsummary</code> won’t support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.</p>
 <p>For example, models produced by the <code>MCMCglmm</code> package are not currently supported by <code>broom</code>. To add support, you simply need to create a <code>tidy</code> and a <code>glance</code> method:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># load packages and data</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">MCMCglmm</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">PlodiaPO</span><span class="op">)</span>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="co"># load packages and data</span>
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">MCMCglmm</span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">PlodiaPO</span>)
 
 <span class="co"># add custom functions to extract estimates (tidy) and goodness-of-fit (glance) information</span>
-<span class="va">tidy.MCMCglmm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-    <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">)</span>,
-                          estimate <span class="op">=</span> <span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,
-                          conf.low <span class="op">=</span> <span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>,
-                          conf.high <span class="op">=</span> <span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span><span class="op">)</span>
-    <span class="va">ret</span>
-<span class="op">}</span>
-<span class="va">glance.MCMCglmm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>dic <span class="op">=</span> <span class="va">object</span><span class="op">$</span><span class="va">DIC</span>,
-                          n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">object</span><span class="op">$</span><span class="va">X</span><span class="op">)</span><span class="op">)</span>
-    <span class="va">ret</span>
-<span class="op">}</span>
+<span class="no">tidy.MCMCglmm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">object</span>, <span class="no">...</span>) {
+    <span class="no">s</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">object</span>, <span class="no">...</span>)
+    <span class="no">ret</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">term</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="no">s</span>$<span class="no">solutions</span>),
+                          <span class="kw">estimate</span> <span class="kw">=</span> <span class="no">s</span>$<span class="no">solutions</span>[, <span class="fl">1</span>],
+                          <span class="kw">conf.low</span> <span class="kw">=</span> <span class="no">s</span>$<span class="no">solutions</span>[, <span class="fl">2</span>],
+                          <span class="kw">conf.high</span> <span class="kw">=</span> <span class="no">s</span>$<span class="no">solutions</span>[, <span class="fl">3</span>])
+    <span class="no">ret</span>
+}
+<span class="no">glance.MCMCglmm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">object</span>, <span class="no">...</span>) {
+    <span class="no">ret</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">dic</span> <span class="kw">=</span> <span class="no">object</span>$<span class="no">DIC</span>,
+                          <span class="kw">n</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">object</span>$<span class="no">X</span>))
+    <span class="no">ret</span>
+}
 
 <span class="co"># estimate a simple model</span>
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MCMCglmm/man/MCMCglmm.html">MCMCglmm</a></span><span class="op">(</span><span class="va">PO</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">plate</span>, random <span class="op">=</span> <span class="op">~</span> <span class="va">FSfamily</span>, data <span class="op">=</span> <span class="va">PlodiaPO</span>, verbose<span class="op">=</span><span class="cn">FALSE</span>, pr<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+<span class="no">model</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MCMCglmm/man/MCMCglmm.html">MCMCglmm</a></span>(<span class="no">PO</span> ~ <span class="fl">1</span> + <span class="no">plate</span>, <span class="kw">random</span> <span class="kw">=</span> ~ <span class="no">FSfamily</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">PlodiaPO</span>, <span class="kw">verbose</span><span class="kw">=</span><span class="fl">FALSE</span>, <span class="kw">pr</span><span class="kw">=</span><span class="fl">TRUE</span>)
 
 <span class="co"># summarize the model</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">model</span>, statistic <span class="op">=</span> <span class="st">'conf.int'</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">model</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'conf.int'</span>)</pre></body></html></div>
 <p>Two important things to note. First, the methods are named <code>tidy.MCMCglmm</code> and <code>glance.MCMCglmm</code> because the model object I am trying to summarize is of class <code>MCMCglmm</code>. You can find the class of a model by running: <code><a href="https://rdrr.io/r/base/class.html">class(model)</a></code>.</p>
 <p>Second, in the example above, we used the <code>statistic = 'conf.int'</code> argument. This is because the <code>tidy</code> method produces <code>conf.low</code> and <code>conf.high</code> columns. In most cases, users will define <code>std.error</code> column in their custom <code>tidy</code> methods, so the <code>statistic</code> argument will need to be adjusted.</p>
 <p>If you create new <code>tidy</code> and <code>glance</code> methods, please consider contributing them to <code>broom</code> so that the rest of the community can benefit from your work: <a href="https://github.com/tidymodels/broom" class="uri">https://github.com/tidymodels/broom</a></p>
@@ -630,24 +620,23 @@ Clustered (firm)
 </ol>
 <p>For convenience, <code>modelsummary</code> includes two unexported functions which can do most this for you. Reading <a href="https://github.com/vincentarelbundock/modelsummary/blob/master/R/convenience.R">the annotated code for these two functions</a> could be an instructive exercise for those who wish to exploit everything that <code>modelsummary</code> has to offer.</p>
 <p>To print IV regression results from <code><a href="https://rdrr.io/pkg/lfe/man/felm.html">lfe::felm</a></code> models, we execute this code:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sgaure/lfe">lfe</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">lfe</span>)
 
-<span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html">felm</a></span><span class="op">(</span><span class="va">wt</span> <span class="op">~</span> <span class="va">drat</span> <span class="op">|</span> <span class="fl">0</span> <span class="op">|</span> <span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">hp</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html">felm</a></span><span class="op">(</span><span class="va">wt</span> <span class="op">~</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">vs</span> <span class="op">|</span> <span class="fl">0</span> <span class="op">|</span> <span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">hp</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
-  <span class="op">)</span>
+<span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
+  <span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html">felm</a></span>(<span class="no">wt</span> ~ <span class="no">drat</span> <span class="kw">|</span> <span class="fl">0</span> <span class="kw">|</span> (<span class="no">disp</span> ~ <span class="no">hp</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>),
+  <span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html">felm</a></span>(<span class="no">wt</span> ~ <span class="no">drat</span> + <span class="no">vs</span> <span class="kw">|</span> <span class="fl">0</span> <span class="kw">|</span> (<span class="no">disp</span> ~ <span class="no">hp</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>)
+  )
 
 <span class="co"># define a new method to combine tidy information about both stages</span>
-<span class="va">tidy.iv</span> <span class="op">&lt;-</span> <span class="fu">modelsummary</span><span class="fu">:::</span><span class="va"><a href="../reference/tidy_felm_iv.html">tidy_felm_iv</a></span>
+<span class="no">tidy.iv</span> <span class="kw">&lt;-</span> <span class="kw pkg">modelsummary</span><span class="kw ns">:::</span><span class="no"><a href="../reference/tidy_felm_iv.html">tidy_felm_iv</a></span>
 
 <span class="co"># change the model classes to trigger the new method</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">models</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">models</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'iv'</span>, <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">models</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">models</span><span class="kw">[[</span><span class="fl">1</span>]]) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">models</span><span class="kw">[[</span><span class="fl">2</span>]]) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'iv'</span>, <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">models</span><span class="kw">[[</span><span class="fl">1</span>]]))
 
 <span class="co"># use helper function to sort coefficients with 1st stage last</span>
-<span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu">modelsummary</span><span class="fu">:::</span><span class="fu"><a href="../reference/coef_map_felm_iv.html">coef_map_felm_iv</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span>
+<span class="no">cm</span> <span class="kw">&lt;-</span> <span class="kw pkg">modelsummary</span><span class="kw ns">:::</span><span class="fu"><a href="../reference/coef_map_felm_iv.html">coef_map_felm_iv</a></span>(<span class="no">models</span>)
 
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_map<span class="op">=</span><span class="va">cm</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_map</span><span class="kw">=</span><span class="no">cm</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -704,27 +693,6 @@ drat
 </tr>
 <tr>
 <td style="text-align:left;">
-<code>disp(fit)</code>
-</td>
-<td style="text-align:center;">
-0.006
-</td>
-<td style="text-align:center;">
-0.007
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-(0.001)
-</td>
-<td style="text-align:center;">
-(0.002)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 vs
 </td>
 <td style="text-align:center;">
@@ -740,27 +708,6 @@ vs
 </td>
 <td style="text-align:center;">
 (0.307)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Stage 1 hp
-</td>
-<td style="text-align:center;">
-1.069
-</td>
-<td style="text-align:center;">
-0.844
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-(0.175)
-</td>
-<td style="text-align:center;">
-(0.226)
 </td>
 </tr>
 <tr>
@@ -796,6 +743,39 @@ R2 Adj.
 0.790
 </td>
 </tr>
+<tr>
+<td style="text-align:left;">
+AIC
+</td>
+<td style="text-align:center;">
+44.8
+</td>
+<td style="text-align:center;">
+45.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BIC
+</td>
+<td style="text-align:center;">
+50.7
+</td>
+<td style="text-align:center;">
+52.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Log.Lik.
+</td>
+<td style="text-align:center;">
+-18.400
+</td>
+<td style="text-align:center;">
+-17.581
+</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -816,7 +796,7 @@ R2 Adj.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

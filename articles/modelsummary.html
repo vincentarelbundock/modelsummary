@@ -86,8 +86,7 @@
 
       
 
-      </header><script src="modelsummary_files/header-attrs-2.5/header-attrs.js"></script><link href="modelsummary_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="modelsummary_files/anchor-sections-1.0/anchor-sections.js"></script><script src="modelsummary_files/kePrint-0.0.1/kePrint.js"></script><link href="modelsummary_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+      </header><script src="modelsummary_files/header-attrs-2.6/header-attrs.js"></script><script src="modelsummary_files/kePrint-0.0.1/kePrint.js"></script><link href="modelsummary_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <link href="modelsummary_files/tabwid-1.0.0/tabwid.css" rel="stylesheet">
 <script src="modelsummary_files/tabwid-1.0.0/tabwid.js"></script><div class="row">
   <div class="col-md-9 contents">
@@ -103,23 +102,22 @@
     
     
 <p><code>modelsummary</code> includes a powerful set of utilities to customize the information displayed in your model summary tables. You can easily rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to display; display various “robust” standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/gt">gt</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
 
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
-<span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
+<span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
+<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)
 
-<span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  <span class="st">"OLS 1"</span>     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Donations</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
-  <span class="st">"Poisson 1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Donations</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Commerce</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
-  <span class="st">"OLS 2"</span>     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Crime_pers</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
-  <span class="st">"Poisson 2"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Crime_pers</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Commerce</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
-  <span class="st">"OLS 3"</span>     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Crime_prop</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
-<span class="op">)</span>
+<span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
+  <span class="st">"OLS 1"</span>     <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>),
+  <span class="st">"Poisson 1"</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>),
+  <span class="st">"OLS 2"</span>     <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>),
+  <span class="st">"Poisson 2"</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>),
+  <span class="st">"OLS 3"</span>     <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_prop</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+)
 
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -427,16 +425,14 @@ F
 <h1 class="hasAnchor">
 <a href="#uncertainty-estimates" class="anchor"></a>Uncertainty estimates</h1>
 <p>By default, <code>modelsummary</code> prints an uncertainty estimate in parentheses below the corresponding coefficient estimate. The value of this estimate is determined by the <code>statistic</code> argument.</p>
-<p><code>statistic</code> must be a string which equal to <code>conf.int</code>, one of the columns produced by the <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy</a></code> function, or a <a href="https://glue.tidyverse.org/">glue string</a>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="st">'std.error'</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="st">'p.value'</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="st">'statistic'</span><span class="op">)</span></code></pre></div>
+<p><code>statistic</code> must be a string which equal to <code>conf.int</code>, one of the columns produced by the <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::tidy</a></code> function, or a <a href="https://glue.tidyverse.org/">glue string</a>.</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'std.error'</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'p.value'</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'statistic'</span>)</pre></body></html></div>
 <p>You can display confidence intervals in brackets by setting <code>statistic="conf.int"</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span>,
-             statistic <span class="op">=</span> <span class="st">'conf.int'</span>, 
-             conf_level <span class="op">=</span> <span class="fl">.99</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">".*"</span>,
+             <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'conf.int'</span>,
+             <span class="kw">conf_level</span> <span class="kw">=</span> <span class="fl">.99</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -607,9 +603,8 @@ Commerce
 </tbody>
 </table>
 <p>Alternatively, you can supply a <a href="https://glue.tidyverse.org/">glue string</a> to get more complicated results:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span>,
-             statistic <span class="op">=</span> <span class="st">"{std.error} ({p.value})"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">".*"</span>,
+             <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">"{std.error} ({p.value})"</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -780,12 +775,11 @@ Commerce
 </tbody>
 </table>
 <p>You can also display several different uncertainty estimates below the coefficient estimates. For example,</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span>,
-             statistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"conf.int"</span>,
-                           <span class="st">"s.e. = {std.error}"</span>, 
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">".*"</span>,
+             <span class="kw">statistic</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"conf.int"</span>,
+                           <span class="st">"s.e. = {std.error}"</span>,
                            <span class="st">"t = {statistic}"</span>,
-                           <span class="st">"p = {p.value}"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+                           <span class="st">"p = {p.value}"</span>))</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1169,10 +1163,9 @@ p = 0.000
 </tbody>
 </table>
 <p>Setting <code>statistic=NULL</code> omits all statistics. This can often be useful if, for example, you want to display confience intervals next to coefficients:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span>,
-             estimate <span class="op">=</span> <span class="st">"{estimate} [{conf.low}, {conf.high}]"</span>,
-             statistic <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">".*"</span>,
+             <span class="kw">estimate</span> <span class="kw">=</span> <span class="st">"{estimate} [{conf.low}, {conf.high}]"</span>,
+             <span class="kw">statistic</span> <span class="kw">=</span> <span class="kw">NULL</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1272,33 +1265,28 @@ Commerce
 </tbody>
 </table>
 <p>You can override the uncertainty estimates in a number of ways. First, you can specify a function that produces variance-covariance matrices:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://sandwich.R-Forge.R-project.org/">sandwich</a></span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic_override <span class="op">=</span> <span class="va">vcovHC</span>, statistic <span class="op">=</span> <span class="st">'p.value'</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sandwich</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">statistic_override</span> <span class="kw">=</span> <span class="no">vcovHC</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'p.value'</span>)</pre></body></html></div>
 <p>You can supply a list of functions of the same length as your model list:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, 
-   statistic_override <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">vcov</span>, <span class="va">vcovHC</span>, <span class="va">vcovHAC</span>, <span class="va">vcovHC</span>, <span class="va">vcov</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>,
+   <span class="kw">statistic_override</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">vcov</span>, <span class="no">vcovHC</span>, <span class="no">vcovHAC</span>, <span class="no">vcovHC</span>, <span class="no">vcov</span>))</pre></body></html></div>
 <p>You can supply a list of named variance-covariance matrices:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">vcov_matrices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">models</span>, <span class="va">vcovHC</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic_override <span class="op">=</span> <span class="va">vcov_matrices</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">vcov_matrices</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">models</span>, <span class="no">vcovHC</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">statistic_override</span> <span class="kw">=</span> <span class="no">vcov_matrices</span>)</pre></body></html></div>
 <p>You can supply a list of named vectors:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">custom_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>`OLS 1` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>`(Intercept)` <span class="op">=</span> <span class="fl">2</span>, Literacy <span class="op">=</span> <span class="fl">3</span>, Clergy <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>, 
-                     `Poisson 1` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>`(Intercept)` <span class="op">=</span> <span class="fl">3</span>, Literacy <span class="op">=</span> <span class="op">-</span><span class="fl">5</span>, Commerce <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,
-                     `OLS 2` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>`(Intercept)` <span class="op">=</span> <span class="fl">7</span>, Literacy <span class="op">=</span> <span class="op">-</span><span class="fl">6</span>, Clergy <span class="op">=</span> <span class="fl">9</span><span class="op">)</span>, 
-                     `Poisson 2` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>`(Intercept)` <span class="op">=</span> <span class="fl">4</span>, Literacy <span class="op">=</span> <span class="op">-</span><span class="fl">7</span>, Commerce <span class="op">=</span> <span class="op">-</span><span class="fl">9</span><span class="op">)</span>,
-                     `OLS 3` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>`(Intercept)` <span class="op">=</span> <span class="fl">1</span>, Literacy <span class="op">=</span> <span class="op">-</span><span class="fl">5</span>, Clergy <span class="op">=</span> <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic_override <span class="op">=</span> <span class="va">custom_stats</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">custom_stats</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">`OLS 1`</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">`(Intercept)`</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="kw">Literacy</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">Clergy</span> <span class="kw">=</span> <span class="fl">4</span>),
+                     <span class="kw">`Poisson 1`</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">`(Intercept)`</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">Literacy</span> <span class="kw">=</span> -<span class="fl">5</span>, <span class="kw">Commerce</span> <span class="kw">=</span> <span class="fl">3</span>),
+                     <span class="kw">`OLS 2`</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">`(Intercept)`</span> <span class="kw">=</span> <span class="fl">7</span>, <span class="kw">Literacy</span> <span class="kw">=</span> -<span class="fl">6</span>, <span class="kw">Clergy</span> <span class="kw">=</span> <span class="fl">9</span>),
+                     <span class="kw">`Poisson 2`</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">`(Intercept)`</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">Literacy</span> <span class="kw">=</span> -<span class="fl">7</span>, <span class="kw">Commerce</span> <span class="kw">=</span> -<span class="fl">9</span>),
+                     <span class="kw">`OLS 3`</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">`(Intercept)`</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">Literacy</span> <span class="kw">=</span> -<span class="fl">5</span>, <span class="kw">Clergy</span> <span class="kw">=</span> -<span class="fl">2</span>))
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">statistic_override</span> <span class="kw">=</span> <span class="no">custom_stats</span>)</pre></body></html></div>
 </div>
 <div id="alignment" class="section level1">
 <h1 class="hasAnchor">
 <a href="#alignment" class="anchor"></a>Alignment</h1>
 <p>By default, <code>modelsummary</code> will align the first column (with coefficient names) to the left, and will center the results columns. To change this default, you can use the align argument, which accepts a string or vector of strings:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, align<span class="op">=</span><span class="st">"lrrrrr"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, align<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">align</span><span class="kw">=</span><span class="st">"lrrrrr"</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">align</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>))</pre></body></html></div>
 <p>Many users want to align values on the decimal dot. Unfortunately, I am not aware of a single way to achieve this outcome for all output formats (pdf/latex, markdown, html). However, it is possible to do decimal alignment in LaTeX or Rmarkdown PDF documents, by using the <code>dcolumn</code> LaTeX package. Consider this Rmarkdown document:</p>
 <p><img src="https://user-images.githubusercontent.com/987057/95660928-14617d80-0af9-11eb-9e48-504231a0484f.png" width="70%"></p>
 <p>Compiling the code above produces this table:</p>
@@ -1308,17 +1296,15 @@ Commerce
 <h1 class="hasAnchor">
 <a href="#titles" class="anchor"></a>Titles</h1>
 <p>You can add a title to your table as follows:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, title <span class="op">=</span> <span class="st">'This is a title for my table.'</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">title</span> <span class="kw">=</span> <span class="st">'This is a title for my table.'</span>)</pre></body></html></div>
 </div>
 <div id="notes" class="section level1">
 <h1 class="hasAnchor">
 <a href="#notes" class="anchor"></a>Notes</h1>
 <p>Add notes to the bottom of your table:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, 
-   notes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'Text of the first note.'</span>, 
-                <span class="st">'Text of the second note.'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>,
+   <span class="kw">notes</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">'Text of the first note.'</span>,
+                <span class="st">'Text of the second note.'</span>))</pre></body></html></div>
 </div>
 <div id="rename-reorder-and-subset" class="section level1">
 <h1 class="hasAnchor">
@@ -1328,12 +1314,11 @@ Commerce
 <h2 class="hasAnchor">
 <a href="#coefficient-estimates" class="anchor"></a>Coefficient estimates</h2>
 <p>You can rename coefficients using the <code>coef_rename</code> argument. For example, if you have two models with different explanatory variables, but you want both variables to have the same names and appear ont he same row, you can do:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">drat</span>, <span class="va">mtcars</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">vs</span>, <span class="va">mtcars</span><span class="op">)</span>
-  <span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">x</span>, coef_rename<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"drat"</span><span class="op">=</span><span class="st">"Explanator"</span>, <span class="st">"vs"</span><span class="op">=</span><span class="st">"Explanator"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
+  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">hp</span> ~ <span class="no">drat</span>, <span class="no">mtcars</span>),
+  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">hp</span> ~ <span class="no">vs</span>, <span class="no">mtcars</span>)
+  )
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">x</span>, <span class="kw">coef_rename</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"drat"</span><span class="kw">=</span><span class="st">"Explanator"</span>, <span class="st">"vs"</span><span class="kw">=</span><span class="st">"Explanator"</span>))</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1468,11 +1453,10 @@ F
 </tbody>
 </table>
 <p>The <code>coef_map</code> argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the “clean” variable name. Names of this vector correspond to the “raw” variable name. The table will be sorted in the order in which terms are presented in <code>coef_map</code>. Coefficients which are <em>not</em> included in <code>coef_map</code> will be excluded from the table.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Literacy'</span> <span class="op">=</span> <span class="st">'Literacy (%)'</span>,
-        <span class="st">'Commerce'</span> <span class="op">=</span> <span class="st">'Patents per capita'</span>,
-        <span class="st">'(Intercept)'</span> <span class="op">=</span> <span class="st">'Constant'</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_map <span class="op">=</span> <span class="va">cm</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>,
+        <span class="st">'Commerce'</span> <span class="kw">=</span> <span class="st">'Patents per capita'</span>,
+        <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1742,8 +1726,7 @@ F
 </tbody>
 </table>
 <p>An alternative mechanism to subset coefficients is to use the <code>coef_omit</code> argument. This string is a regular expression which will be fed to <code><a href="https://stringr.tidyverse.org/reference/str_detect.html">stringr::str_detect</a></code> to detect the variable names which should be excluded from the table.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"Intercept|Commerce"</span>, gof_omit<span class="op">=</span><span class="st">".*"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_omit</span> <span class="kw">=</span> <span class="st">"Intercept|Commerce"</span>, <span class="kw">gof_omit</span><span class="kw">=</span><span class="st">".*"</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1842,8 +1825,162 @@ Clergy
 </tbody>
 </table>
 <p>Since <code>coef_omit</code> accepts regexes, you can do interesting things with it, such as specifying the list of variables that <code>modelsummary</code> should <em>keep</em> instead of omit. To do this, we use the <code>[^]</code> construct that specifies what <em>not</em> to match, we use the <code><a href="https://rdrr.io/r/base/Logic.html">|</a></code> pipe operator to separate the list of variables to include:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"[^Commerce|(Intercept)]"</span>, gof_omit<span class="op">=</span><span class="st">".*"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_omit</span> <span class="kw">=</span> <span class="st">"[^Commerce|(Intercept)]"</span>, <span class="kw">gof_omit</span><span class="kw">=</span><span class="st">".*"</span>)</pre></body></html></div>
+<table class="table table">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+OLS 1
+</th>
+<th style="text-align:center;">
+Poisson 1
+</th>
+<th style="text-align:center;">
+OLS 2
+</th>
+<th style="text-align:center;">
+Poisson 2
+</th>
+<th style="text-align:center;">
+OLS 3
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
+7948.667
+</td>
+<td style="text-align:center;">
+8.241
+</td>
+<td style="text-align:center;">
+16259.384
+</td>
+<td style="text-align:center;">
+9.876
+</td>
+<td style="text-align:center;">
+11243.544
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+(2078.276)
+</td>
+<td style="text-align:center;">
+(0.006)
+</td>
+<td style="text-align:center;">
+(2611.140)
+</td>
+<td style="text-align:center;">
+(0.003)
+</td>
+<td style="text-align:center;">
+(1011.240)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Commerce
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+0.011
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+0.001
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+(0.000)
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+(0.000)
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+</tbody>
+</table>
+<p>You could also use fancy <a href="https://en.wikipedia.org/wiki/Perl_Compatible_Regular_Expressions#Look-ahead_and_look-behind_assertions">look-ahead or look-behind assertions</a>. For example, if you want the <em>opposite</em> of <code>coef_omit</code> (call it <code>coef_keep</code>), and you want to “keep” parameters that match a certain pattern, you could try:</p>
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_omit</span> <span class="kw">=</span> <span class="st">"^(?!.*Commerce)"</span>, <span class="kw">gof_omit</span><span class="kw">=</span><span class="st">".*"</span>)</pre></body></html></div>
+<table class="table table">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+OLS 1
+</th>
+<th style="text-align:center;">
+Poisson 1
+</th>
+<th style="text-align:center;">
+OLS 2
+</th>
+<th style="text-align:center;">
+Poisson 2
+</th>
+<th style="text-align:center;">
+OLS 3
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Commerce
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+0.011
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+0.001
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+(0.000)
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+(0.000)
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+</tbody>
+</table>
+<p>You can chain those look-behinds as needed to match multiple patterns (noting that parentheses must be escaped):</p>
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_omit</span> <span class="kw">=</span> <span class="st">"^(?!.*Commerce)(?!.*\\(Int)"</span>, <span class="kw">gof_omit</span><span class="kw">=</span><span class="st">".*"</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1944,12 +2081,11 @@ Commerce
 <h2 class="hasAnchor">
 <a href="#goodness-of-fit-and-other-statistics" class="anchor"></a>Goodness-of-fit and other statistics</h2>
 <p><code>gof_omit</code> is a regular expression which will be fed to <code><a href="https://stringr.tidyverse.org/reference/str_detect.html">stringr::str_detect</a></code> to detect the names of the statistics which should be excluded from the table.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_omit <span class="op">=</span> <span class="st">'DF|Deviance|R2|AIC|BIC'</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'DF|Deviance|R2|AIC|BIC'</span>)</pre></body></html></div>
 <p>A more powerful mechanism is to supply a <code>data.frame</code> (or <code>tibble</code>) through the <code>gof_map</code> argument. This data.frame must include 4 columns:</p>
 <ol style="list-style-type: decimal">
 <li>
-<code>raw</code>: a string with the name of a column produced by <code><a href="https://generics.r-lib.org/reference/glance.html">broom::glance(model)</a></code>.</li>
+<code>raw</code>: a string with the name of a column produced by <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::glance(model)</a></code>.</li>
 <li>
 <code>clean</code>: a string with the “clean” name of the statistic you want to appear in your final table.</li>
 <li>
@@ -1958,10 +2094,9 @@ Commerce
 <code>omit</code>: <code>TRUE</code> if you want the statistic to be omitted from your final table.</li>
 </ol>
 <p>You can see an example of a valid data frame by typing <code><a href="../reference/gof_map.html">modelsummary::gof_map</a></code>. This is the default data.frame that <code>modelsummary</code> uses to subset and reorder goodness-of-fit statistics. As you can see, <code>omit == TRUE</code> for quite a number of statistics. You can include setting <code>omit == FALSE</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">gm</span> <span class="op">&lt;-</span> <span class="fu">modelsummary</span><span class="fu">::</span><span class="va"><a href="../reference/gof_map.html">gof_map</a></span>
-<span class="va">gm</span><span class="op">$</span><span class="va">omit</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_map <span class="op">=</span> <span class="va">gm</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">gm</span> <span class="kw">&lt;-</span> <span class="kw pkg">modelsummary</span><span class="kw ns">::</span><span class="no"><a href="../reference/gof_map.html">gof_map</a></span>
+<span class="no">gm</span>$<span class="no">omit</span> <span class="kw">&lt;-</span> <span class="fl">FALSE</span>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">gof_map</span> <span class="kw">=</span> <span class="no">gm</span>)</pre></body></html></div>
 <p>The goodness-of-fit statistics will be printed in the table in the same order as in the <code>gof_map</code> data.frame.</p>
 <p>Notice the subtle difference between <code>coef_map</code> and <code>gof_map</code>. On the one hand, <code>coef_map</code> works as a “white list”: any coefficient not explicitly entered will be omitted from the table. On the other, <code>gof_map</code> works as a “black list”: statistics need to be explicitly marked for omission.</p>
 </div>
@@ -1978,13 +2113,11 @@ Commerce
 </li>
 <li>Named numeric vector for custom stars.</li>
 </ol>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, stars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> 
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, stars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'+'</span> <span class="op">=</span> <span class="fl">.1</span>, <span class="st">'&amp;'</span> <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'+'</span> <span class="kw">=</span> <span class="fl">.1</span>, <span class="st">'&amp;'</span> <span class="kw">=</span> <span class="fl">.01</span>))</pre></body></html></div>
 <p>Whenever <code>stars != FALSE</code>, <code>modelsummary</code> adds a note at the bottom of the table automatically. If you would like to omit this note, just use the <code>stars_note</code> argument:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, stars <span class="op">=</span> <span class="cn">TRUE</span>, stars_note <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </code></pre></div>
+<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">stars_note</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
 <p>If you want to create your own stars description, you can add custom notes with the <a href="https://github.com/vincentarelbundock/modelsummary#notes"><code>notes</code></a> argument.</p>
 </div>
 <div id="rounding" class="section level1">
@@ -1999,27 +2132,24 @@ Commerce
 <li>Changing the <code>f</code> for an <code>e</code> will use the exponential decimal representation.</li>
 </ul>
 <p>Most users will just modify the <code>3</code> in <code>%.3f</code>, but this is a very powerful system, and all users are encouraged to read the details: <code><a href="https://rdrr.io/r/base/sprintf.html">?sprintf</a></code></p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, fmt <span class="op">=</span> <span class="st">'%.7f'</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">fmt</span> <span class="kw">=</span> <span class="st">'%.7f'</span>)</pre></body></html></div>
 </div>
 <div id="add_rows" class="section level1">
 <h1 class="hasAnchor">
 <a href="#add_rows" class="anchor"></a><code>add_rows</code>
 </h1>
 <p>Use the <code>add_rows</code> argument to add rows manually to a table. For example, let’s say you estimate two models with a factor variables and you want to insert (a) an empty line to identify the category of reference, and (b) cutomized information at the bottom of the table:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">models</span><span class="op">[[</span><span class="st">'OLS'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, <span class="va">mtcars</span><span class="op">)</span>
-<span class="va">models</span><span class="op">[[</span><span class="st">'Logit'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, <span class="va">mtcars</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">mpg</span> ~ <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">cyl</span>), <span class="no">mtcars</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'Logit'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">am</span> ~ <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">cyl</span>), <span class="no">mtcars</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">binomial</span>)</pre></body></html></div>
 <p>We create a data.frame with the same number of columns as the summary table. Then, we define a “position” attribute to specify where the new rows should be inserted in the table. Finally, we pass this data.frame to the <code>add_rows</code> argument:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/">tibble</a></span><span class="op">)</span>
-<span class="va">rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span><span class="op">~</span><span class="va">term</span>,          <span class="op">~</span><span class="va">OLS</span>,  <span class="op">~</span><span class="va">Logit</span>,
+<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tibble</span>)
+<span class="no">rows</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(~<span class="no">term</span>,          ~<span class="no">OLS</span>,  ~<span class="no">Logit</span>,
                 <span class="st">'factor(cyl)4'</span>, <span class="st">'-'</span>,   <span class="st">'-'</span>,
-                <span class="st">'Info'</span>,         <span class="st">'???'</span>, <span class="st">'XYZ'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">rows</span>, <span class="st">'position'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">9</span><span class="op">)</span>
+                <span class="st">'Info'</span>,         <span class="st">'???'</span>, <span class="st">'XYZ'</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(<span class="no">rows</span>, <span class="st">'position'</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>, <span class="fl">9</span>)
 
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, add_rows <span class="op">=</span> <span class="va">rows</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">add_rows</span> <span class="kw">=</span> <span class="no">rows</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -2198,11 +2328,10 @@ F
 <h1 class="hasAnchor">
 <a href="#extra-tidy-arguments-e-g--exponentiated-coefficients" class="anchor"></a>Extra tidy arguments (e.g., exponentiated coefficients)</h1>
 <p>Users can pass any additional argument they want to the <code>tidy</code> method which is used to extract estimates from a model. For example, in logitistic or Cox proportional hazard models, many users want to exponentiate coefficients to faciliate interpretation. The <code>tidy</code> functions supplied by the <code>broom</code> package allow users to set <code>exponentiate=TRUE</code> to achieve this. In <code>modelsummary</code>, users can use the same argument:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mod_logit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod_logit</span>, exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="no">mod_logit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">am</span> ~ <span class="no">mpg</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">binomial</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod_logit</span>, <span class="kw">exponentiate</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
 <p>Any argument supported by <code>tidy</code> is thus supported by <code>modelsummary</code>.</p>
-<p>Warning: at the moment (2020-05-05), <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy</a></code> still reports <code>std.error</code> on the original scale. See this <a href="https://github.com/tidymodels/broom/issues/422">discussion on the <code>broom</code> GitHub page.</a></p>
+<p>Warning: at the moment (2020-05-05), <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::tidy</a></code> still reports <code>std.error</code> on the original scale. See this <a href="https://github.com/tidymodels/broom/issues/422">discussion on the <code>broom</code> GitHub page.</a></p>
 </div>
 <div id="customizing-the-look-of-your-table" class="section level1">
 <h1 class="hasAnchor">
@@ -2215,20 +2344,19 @@ F
 <li><a href="https://davidgohel.github.io/flextable/"><code>flextable</code>: https://davidgohel.github.io/flextable/</a></li>
 </ol>
 <p>Users are encouraged to visit these websites to determine which package suits their needs best. Each of them has different strengths and weaknesses. For instance, <code>gt</code> allows seamless integration with the RStudio IDE, but <code>kableExtra</code>’s LaTeX (and PDF) output is far more mature.</p>
-<p>To create customized tables, the analyst begins by calling <code><a href="../reference/modelsummary.html">modelsummary(models)</a></code> to create a summary table. Then, she <em>post-processes</em> the table by applying functions from one of the packages listed above. It is often convenient to use the <code><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></code> operator to do this.</p>
+<p>To create customized tables, the analyst begins by calling <code><a href="../reference/modelsummary.html">modelsummary(models)</a></code> to create a summary table. Then, she <em>post-processes</em> the table by applying functions from one of the packages listed above. It is often convenient to use the <code><a href="https://rdrr.io/pkg/kableExtra/man/reexports.html">%&gt;%</a></code> operator to do this.</p>
 <p>To illustrate, we download data from the <a href="https://vincentarelbundock.github.io/Rdatasets'">Rdatasets repository</a> and we estimate 5 models:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
-<span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
+<span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
+<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)
 
-<span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">models</span><span class="op">[[</span><span class="st">'OLS 1'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Donations</span> <span class="op">~</span> <span class="va">Literacy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
-<span class="va">models</span><span class="op">[[</span><span class="st">'Poisson 1'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Donations</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
-<span class="va">models</span><span class="op">[[</span><span class="st">'OLS 2'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Crime_pers</span> <span class="op">~</span> <span class="va">Literacy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
-<span class="va">models</span><span class="op">[[</span><span class="st">'Poisson 2'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Crime_pers</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
-<span class="va">models</span><span class="op">[[</span><span class="st">'OLS 3'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Crime_prop</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></code></pre></div>
+<span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'Poisson 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 2'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'Poisson 2'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 3'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_prop</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)</pre></body></html></div>
 <p>In the rest of this vignette, we will customize tables using tools supplied by the <code>gt</code>, <code>kableExtra</code>, <code>flextable</code>, and <code>huxtable</code> packages. In each case, the pattern will be similar. First, we create a table by calling <code>modelsummary</code> and by specifying the output format with the <code>output</code> parameter. Then, we will use functions from the four packages to customize the appearance of our tables.</p>
 <div id="gt" class="section level2">
 <h2 class="hasAnchor">
@@ -2245,41 +2373,40 @@ F
 </ul>
 <p>To produce a “cleaner” look, we will also use <code>modelsummary</code>’s <code>stars</code>, <code>coef_map</code>, <code>gof_omit</code>, and <code>title</code> arguments.</p>
 <p>Note that in order to access <code>gt</code> functions, we must first load the library.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/gt">gt</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
 
 <span class="co"># build table with `modelsummary` </span>
-<span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="st">'(Intercept)'</span> <span class="op">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="op">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="op">=</span> <span class="st">'Priests/capita'</span><span class="op">)</span>
-<span class="va">cap</span> <span class="op">&lt;-</span> <span class="st">'A modelsummary table customized with gt'</span>
+<span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>)
+<span class="no">cap</span> <span class="kw">&lt;-</span> <span class="st">'A modelsummary table customized with gt'</span>
 
-<span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, 
-                output <span class="op">=</span> <span class="st">"gt"</span>,
-                coef_map <span class="op">=</span> <span class="va">cm</span>, stars <span class="op">=</span> <span class="cn">TRUE</span>, 
-                title <span class="op">=</span> <span class="va">cap</span>, gof_omit <span class="op">=</span> <span class="st">'IC|Log|Adj'</span><span class="op">)</span> 
+<span class="no">tab</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>,
+                <span class="kw">output</span> <span class="kw">=</span> <span class="st">"gt"</span>,
+                <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
+                <span class="kw">title</span> <span class="kw">=</span> <span class="no">cap</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'IC|Log|Adj'</span>)
 
 <span class="co"># customize table with `gt`</span>
 
-<span class="va">tab</span> <span class="op">%&gt;%</span>
+<span class="no">tab</span> <span class="kw">%&gt;%</span>
 
     <span class="co"># column labels</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">'Donations'</span>, columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">'Crimes (persons)'</span>, columns <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">'Crimes (property)'</span>, columns <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Donations'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">3</span>) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Crimes (persons)'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">4</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Crimes (property)'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">6</span>) <span class="kw">%&gt;%</span>
 
     <span class="co"># footnote</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span><span class="op">(</span>footnote <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span><span class="op">(</span><span class="st">"A very **important** variable."</span><span class="op">)</span>,
-                 locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">3</span>, columns <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(<span class="kw">footnote</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span>(<span class="st">"A very **important** variable."</span>),
+                 <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">rows</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">1</span>)) <span class="kw">%&gt;%</span>
 
     <span class="co"># text and background color</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span>,
-              locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_fill.html">cell_fill</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">'lightblue'</span><span class="op">)</span>,
-              locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">'red'</span>),
+              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">rows</span> <span class="kw">=</span> <span class="fl">3</span>)) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_fill.html">cell_fill</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">'lightblue'</span>),
+              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">rows</span> <span class="kw">=</span> <span class="fl">5</span>))</pre></body></html></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#nkombmyfdm .gt_table {
+#qwhaboltdp .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2304,7 +2431,7 @@ F
   border-left-color: #D3D3D3;
 }
 
-#nkombmyfdm .gt_heading {
+#qwhaboltdp .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2316,7 +2443,7 @@ F
   border-right-color: #D3D3D3;
 }
 
-#nkombmyfdm .gt_title {
+#qwhaboltdp .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2326,7 +2453,7 @@ F
   border-bottom-width: 0;
 }
 
-#nkombmyfdm .gt_subtitle {
+#qwhaboltdp .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2336,13 +2463,13 @@ F
   border-top-width: 0;
 }
 
-#nkombmyfdm .gt_bottom_border {
+#qwhaboltdp .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#nkombmyfdm .gt_col_headings {
+#qwhaboltdp .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2357,7 +2484,7 @@ F
   border-right-color: #D3D3D3;
 }
 
-#nkombmyfdm .gt_col_heading {
+#qwhaboltdp .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2377,7 +2504,7 @@ F
   overflow-x: hidden;
 }
 
-#nkombmyfdm .gt_column_spanner_outer {
+#qwhaboltdp .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2389,15 +2516,15 @@ F
   padding-right: 4px;
 }
 
-#nkombmyfdm .gt_column_spanner_outer:first-child {
+#qwhaboltdp .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#nkombmyfdm .gt_column_spanner_outer:last-child {
+#qwhaboltdp .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#nkombmyfdm .gt_column_spanner {
+#qwhaboltdp .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2409,7 +2536,7 @@ F
   width: 100%;
 }
 
-#nkombmyfdm .gt_group_heading {
+#qwhaboltdp .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2431,7 +2558,7 @@ F
   vertical-align: middle;
 }
 
-#nkombmyfdm .gt_empty_group_heading {
+#qwhaboltdp .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2446,15 +2573,15 @@ F
   vertical-align: middle;
 }
 
-#nkombmyfdm .gt_from_md > :first-child {
+#qwhaboltdp .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#nkombmyfdm .gt_from_md > :last-child {
+#qwhaboltdp .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#nkombmyfdm .gt_row {
+#qwhaboltdp .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2473,7 +2600,7 @@ F
   overflow-x: hidden;
 }
 
-#nkombmyfdm .gt_stub {
+#qwhaboltdp .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2485,7 +2612,7 @@ F
   padding-left: 12px;
 }
 
-#nkombmyfdm .gt_summary_row {
+#qwhaboltdp .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2495,7 +2622,7 @@ F
   padding-right: 5px;
 }
 
-#nkombmyfdm .gt_first_summary_row {
+#qwhaboltdp .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2505,7 +2632,7 @@ F
   border-top-color: #D3D3D3;
 }
 
-#nkombmyfdm .gt_grand_summary_row {
+#qwhaboltdp .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2515,7 +2642,7 @@ F
   padding-right: 5px;
 }
 
-#nkombmyfdm .gt_first_grand_summary_row {
+#qwhaboltdp .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2525,11 +2652,11 @@ F
   border-top-color: #D3D3D3;
 }
 
-#nkombmyfdm .gt_striped {
+#qwhaboltdp .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#nkombmyfdm .gt_table_body {
+#qwhaboltdp .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2538,7 +2665,7 @@ F
   border-bottom-color: #D3D3D3;
 }
 
-#nkombmyfdm .gt_footnotes {
+#qwhaboltdp .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2552,13 +2679,13 @@ F
   border-right-color: #D3D3D3;
 }
 
-#nkombmyfdm .gt_footnote {
+#qwhaboltdp .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#nkombmyfdm .gt_sourcenotes {
+#qwhaboltdp .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2572,46 +2699,46 @@ F
   border-right-color: #D3D3D3;
 }
 
-#nkombmyfdm .gt_sourcenote {
+#qwhaboltdp .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#nkombmyfdm .gt_left {
+#qwhaboltdp .gt_left {
   text-align: left;
 }
 
-#nkombmyfdm .gt_center {
+#qwhaboltdp .gt_center {
   text-align: center;
 }
 
-#nkombmyfdm .gt_right {
+#qwhaboltdp .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#nkombmyfdm .gt_font_normal {
+#qwhaboltdp .gt_font_normal {
   font-weight: normal;
 }
 
-#nkombmyfdm .gt_font_bold {
+#qwhaboltdp .gt_font_bold {
   font-weight: bold;
 }
 
-#nkombmyfdm .gt_font_italic {
+#qwhaboltdp .gt_font_italic {
   font-style: italic;
 }
 
-#nkombmyfdm .gt_super {
+#qwhaboltdp .gt_super {
   font-size: 65%;
 }
 
-#nkombmyfdm .gt_footnote_marks {
+#qwhaboltdp .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="nkombmyfdm" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="qwhaboltdp" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_header">
 <tr>
 <th colspan="6" class="gt_heading gt_title gt_font_normal" style>A modelsummary table customized with gt</th>
@@ -2731,16 +2858,15 @@ F
     </tr></tfoot>
 </table></div>
 <p>The <a href="https://gt.rstudio.com"><code>gt</code> website</a> offers many more examples. The possibilities are endless. For instance, <code>gt</code> allows you to embed images in your tables using the <code>text_transform</code> and <code>local_image</code> functions:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">f</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/web_image.html">web_image</a></span><span class="op">(</span>url <span class="op">=</span> <span class="st">"https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png"</span>, height <span class="op">=</span> <span class="fl">80</span><span class="op">)</span>
+<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="no">f</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/pkg/gt/man/web_image.html">web_image</a></span>(<span class="kw">url</span> <span class="kw">=</span> <span class="st">"https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png"</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="fl">80</span>)
 
-<span class="va">tab</span> <span class="op">%&gt;%</span> 
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/text_transform.html">text_transform</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">6</span>, rows <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, fn <span class="op">=</span> <span class="va">f</span><span class="op">)</span></code></pre></div>
+<span class="no">tab</span> <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/text_transform.html">text_transform</a></span>(<span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">6</span>, <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">1</span>), <span class="kw">fn</span> <span class="kw">=</span> <span class="no">f</span>)</pre></body></html></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#bevgvehrgi .gt_table {
+#cmnrzlpeow .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2765,7 +2891,7 @@ F
   border-left-color: #D3D3D3;
 }
 
-#bevgvehrgi .gt_heading {
+#cmnrzlpeow .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2777,7 +2903,7 @@ F
   border-right-color: #D3D3D3;
 }
 
-#bevgvehrgi .gt_title {
+#cmnrzlpeow .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2787,7 +2913,7 @@ F
   border-bottom-width: 0;
 }
 
-#bevgvehrgi .gt_subtitle {
+#cmnrzlpeow .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2797,13 +2923,13 @@ F
   border-top-width: 0;
 }
 
-#bevgvehrgi .gt_bottom_border {
+#cmnrzlpeow .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#bevgvehrgi .gt_col_headings {
+#cmnrzlpeow .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2818,7 +2944,7 @@ F
   border-right-color: #D3D3D3;
 }
 
-#bevgvehrgi .gt_col_heading {
+#cmnrzlpeow .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2838,7 +2964,7 @@ F
   overflow-x: hidden;
 }
 
-#bevgvehrgi .gt_column_spanner_outer {
+#cmnrzlpeow .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2850,15 +2976,15 @@ F
   padding-right: 4px;
 }
 
-#bevgvehrgi .gt_column_spanner_outer:first-child {
+#cmnrzlpeow .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#bevgvehrgi .gt_column_spanner_outer:last-child {
+#cmnrzlpeow .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#bevgvehrgi .gt_column_spanner {
+#cmnrzlpeow .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2870,7 +2996,7 @@ F
   width: 100%;
 }
 
-#bevgvehrgi .gt_group_heading {
+#cmnrzlpeow .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2892,7 +3018,7 @@ F
   vertical-align: middle;
 }
 
-#bevgvehrgi .gt_empty_group_heading {
+#cmnrzlpeow .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2907,15 +3033,15 @@ F
   vertical-align: middle;
 }
 
-#bevgvehrgi .gt_from_md > :first-child {
+#cmnrzlpeow .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#bevgvehrgi .gt_from_md > :last-child {
+#cmnrzlpeow .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#bevgvehrgi .gt_row {
+#cmnrzlpeow .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2934,7 +3060,7 @@ F
   overflow-x: hidden;
 }
 
-#bevgvehrgi .gt_stub {
+#cmnrzlpeow .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2946,7 +3072,7 @@ F
   padding-left: 12px;
 }
 
-#bevgvehrgi .gt_summary_row {
+#cmnrzlpeow .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2956,7 +3082,7 @@ F
   padding-right: 5px;
 }
 
-#bevgvehrgi .gt_first_summary_row {
+#cmnrzlpeow .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2966,7 +3092,7 @@ F
   border-top-color: #D3D3D3;
 }
 
-#bevgvehrgi .gt_grand_summary_row {
+#cmnrzlpeow .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2976,7 +3102,7 @@ F
   padding-right: 5px;
 }
 
-#bevgvehrgi .gt_first_grand_summary_row {
+#cmnrzlpeow .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2986,11 +3112,11 @@ F
   border-top-color: #D3D3D3;
 }
 
-#bevgvehrgi .gt_striped {
+#cmnrzlpeow .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#bevgvehrgi .gt_table_body {
+#cmnrzlpeow .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2999,7 +3125,7 @@ F
   border-bottom-color: #D3D3D3;
 }
 
-#bevgvehrgi .gt_footnotes {
+#cmnrzlpeow .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3013,13 +3139,13 @@ F
   border-right-color: #D3D3D3;
 }
 
-#bevgvehrgi .gt_footnote {
+#cmnrzlpeow .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#bevgvehrgi .gt_sourcenotes {
+#cmnrzlpeow .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3033,46 +3159,46 @@ F
   border-right-color: #D3D3D3;
 }
 
-#bevgvehrgi .gt_sourcenote {
+#cmnrzlpeow .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#bevgvehrgi .gt_left {
+#cmnrzlpeow .gt_left {
   text-align: left;
 }
 
-#bevgvehrgi .gt_center {
+#cmnrzlpeow .gt_center {
   text-align: center;
 }
 
-#bevgvehrgi .gt_right {
+#cmnrzlpeow .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#bevgvehrgi .gt_font_normal {
+#cmnrzlpeow .gt_font_normal {
   font-weight: normal;
 }
 
-#bevgvehrgi .gt_font_bold {
+#cmnrzlpeow .gt_font_bold {
   font-weight: bold;
 }
 
-#bevgvehrgi .gt_font_italic {
+#cmnrzlpeow .gt_font_italic {
   font-style: italic;
 }
 
-#bevgvehrgi .gt_super {
+#cmnrzlpeow .gt_super {
   font-size: 65%;
 }
 
-#bevgvehrgi .gt_footnote_marks {
+#cmnrzlpeow .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="bevgvehrgi" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="cmnrzlpeow" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_header">
 <tr>
 <th colspan="6" class="gt_heading gt_title gt_font_normal" style>A modelsummary table customized with gt</th>
@@ -3182,26 +3308,25 @@ F
 <code>row_spec</code> can modify the text and color of rows, columns, or cells.</li>
 </ul>
 <p>We use the same code as above, but specify <code>output='kableExtra'</code> in the <code><a href="../reference/modelsummary.html">modelsummary()</a></code> call:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)
 
 <span class="co"># build table with `modelsummary` </span>
-<span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="st">'(Intercept)'</span> <span class="op">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="op">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="op">=</span> <span class="st">'Priests/capita'</span><span class="op">)</span>
-<span class="va">cap</span> <span class="op">&lt;-</span> <span class="st">'A modelsummary table customized with kableExtra'</span>
+<span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>)
+<span class="no">cap</span> <span class="kw">&lt;-</span> <span class="st">'A modelsummary table customized with kableExtra'</span>
 
-<span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">'kableExtra'</span>,
-                coef_map <span class="op">=</span> <span class="va">cm</span>, stars <span class="op">=</span> <span class="cn">TRUE</span>, 
-                title <span class="op">=</span> <span class="va">cap</span>, gof_omit <span class="op">=</span> <span class="st">'IC|Log|Adj'</span><span class="op">)</span> 
+<span class="no">tab</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'kableExtra'</span>,
+                <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
+                <span class="kw">title</span> <span class="kw">=</span> <span class="no">cap</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'IC|Log|Adj'</span>)
 
 <span class="co"># customize table with `kableExtra`</span>
-<span class="va">tab</span> <span class="op">%&gt;%</span>
-    
+<span class="no">tab</span> <span class="kw">%&gt;%</span>
+
     <span class="co"># column labels</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/add_header_above.html">add_header_above</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">" "</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"Donations"</span> <span class="op">=</span> <span class="fl">2</span>, <span class="st">"Crimes (person)"</span> <span class="op">=</span> <span class="fl">2</span>, <span class="st">"Crimes (property)"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-   
+    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/add_header_above.html">add_header_above</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">" "</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="st">"Donations"</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="st">"Crimes (person)"</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="st">"Crimes (property)"</span> <span class="kw">=</span> <span class="fl">1</span>)) <span class="kw">%&gt;%</span>
+
     <span class="co"># text and background color</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">3</span>, color <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">5</span>, background <span class="op">=</span> <span class="st">'lightblue'</span><span class="op">)</span></code></pre></div>
+    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span>(<span class="fl">3</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">'red'</span>) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span>(<span class="fl">5</span>, <span class="kw">background</span> <span class="kw">=</span> <span class="st">'lightblue'</span>)</pre></body></html></div>
 <table class="table table">
 <caption>
 A modelsummary table customized with kableExtra
@@ -3440,112 +3565,111 @@ F
 <code>autofit</code> sets column width to sensible values.</li>
 </ul>
 <p>We use the same code as above, but specify <code>output='flextable'</code> in the <code><a href="../reference/modelsummary.html">modelsummary()</a></code> call:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://davidgohel.github.io/flextable/">flextable</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb32"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">flextable</span>)
 
 <span class="co"># build table with `modelsummary` </span>
-<span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="st">'(Intercept)'</span> <span class="op">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="op">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="op">=</span> <span class="st">'Priests/capita'</span><span class="op">)</span>
-<span class="va">cap</span> <span class="op">&lt;-</span> <span class="st">'A modelsummary table customized with flextable'</span>
+<span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>)
+<span class="no">cap</span> <span class="kw">&lt;-</span> <span class="st">'A modelsummary table customized with flextable'</span>
 
-<span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">'flextable'</span>,
-                coef_map <span class="op">=</span> <span class="va">cm</span>, stars <span class="op">=</span> <span class="cn">TRUE</span>, 
-                title <span class="op">=</span> <span class="va">cap</span>, gof_omit <span class="op">=</span> <span class="st">'IC|Log|Adj'</span><span class="op">)</span> 
+<span class="no">tab</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'flextable'</span>,
+                <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
+                <span class="kw">title</span> <span class="kw">=</span> <span class="no">cap</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'IC|Log|Adj'</span>)
 
 <span class="co"># customize table with `flextable`</span>
-<span class="va">tab</span> <span class="op">%&gt;%</span>
-   
+<span class="no">tab</span> <span class="kw">%&gt;%</span>
+
     <span class="co"># text and background color</span>
-    <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/color.html">color</a></span><span class="op">(</span><span class="fl">3</span>, color <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/bg.html">bg</a></span><span class="op">(</span><span class="fl">5</span>, bg <span class="op">=</span> <span class="st">'lightblue'</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  
+    <span class="fu"><a href="https://rdrr.io/pkg/flextable/man/color.html">color</a></span>(<span class="fl">3</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">'red'</span>) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/flextable/man/bg.html">bg</a></span>(<span class="fl">5</span>, <span class="kw">bg</span> <span class="kw">=</span> <span class="st">'lightblue'</span>) <span class="kw">%&gt;%</span>
+
     <span class="co"># column widths</span>
-    <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/autofit.html">autofit</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    <span class="fu"><a href="https://rdrr.io/pkg/flextable/man/autofit.html">autofit</a></span>()</pre></body></html></div>
 <div class="tabwid">
-<style>.cl-57170e7a{font-family:'Arial';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;}.cl-57170eb6{font-family:'Arial';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(255, 0, 0, 1.00);background-color:transparent;}.cl-57170ec0{font-family:'Arial';font-size:10px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-57172a9a{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;line-height: 1.00;background-color:transparent;}.cl-57172ab8{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:0;padding-right:0;line-height: 1.00;background-color:transparent;}.cl-571769ba{width:85px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-571769e2{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-571769ec{width:79px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176a00{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176a0a{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176a1e{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176a28{width:85px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176a3c{width:79px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176a46{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176a50{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176a64{width:79px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176a6e{width:85px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176a82{width:69px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176a8c{width:85px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176aa0{width:79px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176aaa{width:87px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176abe{width:85px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176ac8{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176adc{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176ae6{width:79px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176afa{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176b04{width:85px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176b0e{width:79px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176b22{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176b2c{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176b40{width:85px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176b4a{width:79px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176b54{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176b68{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176b72{width:85px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176b7c{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-57176b90{width:79px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<style>.cl-4e6af716{font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;}.cl-4e6af734{font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(255, 0, 0, 1.00);background-color:transparent;}.cl-4e6af748{font-family:'Arial';font-size:10px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-4e6b11ce{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;line-height: 1.00;background-color:transparent;}.cl-4e6b11f6{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:0;padding-right:0;line-height: 1.00;background-color:transparent;}.cl-4e6b4a04{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4a22{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4a2c{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4a36{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4a40{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4a54{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4a55{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4a5e{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4a68{width:69px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4a72{width:87px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4a7c{width:81px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4a86{width:89px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4a90{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4a9a{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4aa4{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4aae{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4ab8{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4ad6{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4ae0{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4aea{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4af4{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4afe{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4b08{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4b12{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4b1c{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4b26{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4b27{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4e6b4b30{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
 <table class="table">
 <caption>A modelsummary table customized with flextable</caption>
 <thead><tr style="overflow-wrap:break-word;">
-<td class="cl-57176b68"><p class="cl-57172a9a"><span class="cl-57170e7a"> </span></p></td>
-<td class="cl-57176b90"><p class="cl-57172a9a"><span class="cl-57170e7a">OLS 1</span></p></td>
-<td class="cl-57176b7c"><p class="cl-57172a9a"><span class="cl-57170e7a">Poisson 1</span></p></td>
-<td class="cl-57176b72"><p class="cl-57172a9a"><span class="cl-57170e7a">OLS 2</span></p></td>
-<td class="cl-57176b7c"><p class="cl-57172a9a"><span class="cl-57170e7a">Poisson 2</span></p></td>
-<td class="cl-57176b72"><p class="cl-57172a9a"><span class="cl-57170e7a">OLS 3</span></p></td>
+<td class="cl-4e6b4b1c"><p class="cl-4e6b11ce"><span class="cl-4e6af716"> </span></p></td>
+<td class="cl-4e6b4b30"><p class="cl-4e6b11ce"><span class="cl-4e6af716">OLS 1</span></p></td>
+<td class="cl-4e6b4b27"><p class="cl-4e6b11ce"><span class="cl-4e6af716">Poisson 1</span></p></td>
+<td class="cl-4e6b4b26"><p class="cl-4e6b11ce"><span class="cl-4e6af716">OLS 2</span></p></td>
+<td class="cl-4e6b4b27"><p class="cl-4e6b11ce"><span class="cl-4e6af716">Poisson 2</span></p></td>
+<td class="cl-4e6b4b26"><p class="cl-4e6b11ce"><span class="cl-4e6af716">OLS 3</span></p></td>
 </tr></thead>
 <tbody>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-57176a00"><p class="cl-57172a9a"><span class="cl-57170e7a">Constant</span></p></td>
-<td class="cl-571769ec"><p class="cl-57172a9a"><span class="cl-57170e7a">8759.068***</span></p></td>
-<td class="cl-571769e2"><p class="cl-57172a9a"><span class="cl-57170e7a">8.986***</span></p></td>
-<td class="cl-571769ba"><p class="cl-57172a9a"><span class="cl-57170e7a">20357.309***</span></p></td>
-<td class="cl-571769e2"><p class="cl-57172a9a"><span class="cl-57170e7a">9.708***</span></p></td>
-<td class="cl-571769ba"><p class="cl-57172a9a"><span class="cl-57170e7a">11243.544***</span></p></td>
+<td class="cl-4e6b4a36"><p class="cl-4e6b11ce"><span class="cl-4e6af716">Constant</span></p></td>
+<td class="cl-4e6b4a2c"><p class="cl-4e6b11ce"><span class="cl-4e6af716">8759.068***</span></p></td>
+<td class="cl-4e6b4a22"><p class="cl-4e6b11ce"><span class="cl-4e6af716">8.986***</span></p></td>
+<td class="cl-4e6b4a04"><p class="cl-4e6b11ce"><span class="cl-4e6af716">20357.309***</span></p></td>
+<td class="cl-4e6b4a22"><p class="cl-4e6b11ce"><span class="cl-4e6af716">9.708***</span></p></td>
+<td class="cl-4e6b4a04"><p class="cl-4e6b11ce"><span class="cl-4e6af716">11243.544***</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-57176a1e"><p class="cl-57172a9a"><span class="cl-57170e7a"></span></p></td>
-<td class="cl-57176a3c"><p class="cl-57172a9a"><span class="cl-57170e7a">(1559.363)</span></p></td>
-<td class="cl-57176a0a"><p class="cl-57172a9a"><span class="cl-57170e7a">(0.004)</span></p></td>
-<td class="cl-57176a28"><p class="cl-57172a9a"><span class="cl-57170e7a">(2020.980)</span></p></td>
-<td class="cl-57176a0a"><p class="cl-57172a9a"><span class="cl-57170e7a">(0.003)</span></p></td>
-<td class="cl-57176a28"><p class="cl-57172a9a"><span class="cl-57170e7a">(1011.240)</span></p></td>
+<td class="cl-4e6b4a54"><p class="cl-4e6b11ce"><span class="cl-4e6af716"></span></p></td>
+<td class="cl-4e6b4a5e"><p class="cl-4e6b11ce"><span class="cl-4e6af716">(1559.363)</span></p></td>
+<td class="cl-4e6b4a40"><p class="cl-4e6b11ce"><span class="cl-4e6af716">(0.004)</span></p></td>
+<td class="cl-4e6b4a55"><p class="cl-4e6b11ce"><span class="cl-4e6af716">(2020.980)</span></p></td>
+<td class="cl-4e6b4a40"><p class="cl-4e6b11ce"><span class="cl-4e6af716">(0.003)</span></p></td>
+<td class="cl-4e6b4a55"><p class="cl-4e6b11ce"><span class="cl-4e6af716">(1011.240)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-57176a50"><p class="cl-57172a9a"><span class="cl-57170eb6">Literacy (%)</span></p></td>
-<td class="cl-57176a64"><p class="cl-57172a9a"><span class="cl-57170eb6">-42.886</span></p></td>
-<td class="cl-57176a46"><p class="cl-57172a9a"><span class="cl-57170eb6">-0.006***</span></p></td>
-<td class="cl-57176a6e"><p class="cl-57172a9a"><span class="cl-57170eb6">-15.358</span></p></td>
-<td class="cl-57176a46"><p class="cl-57172a9a"><span class="cl-57170eb6">0.000***</span></p></td>
-<td class="cl-57176a6e"><p class="cl-57172a9a"><span class="cl-57170eb6">-68.507***</span></p></td>
+<td class="cl-4e6b4a54"><p class="cl-4e6b11ce"><span class="cl-4e6af734">Literacy (%)</span></p></td>
+<td class="cl-4e6b4a5e"><p class="cl-4e6b11ce"><span class="cl-4e6af734">-42.886</span></p></td>
+<td class="cl-4e6b4a40"><p class="cl-4e6b11ce"><span class="cl-4e6af734">-0.006***</span></p></td>
+<td class="cl-4e6b4a55"><p class="cl-4e6b11ce"><span class="cl-4e6af734">-15.358</span></p></td>
+<td class="cl-4e6b4a40"><p class="cl-4e6b11ce"><span class="cl-4e6af734">0.000***</span></p></td>
+<td class="cl-4e6b4a55"><p class="cl-4e6b11ce"><span class="cl-4e6af734">-68.507***</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-57176a1e"><p class="cl-57172a9a"><span class="cl-57170e7a"></span></p></td>
-<td class="cl-57176a3c"><p class="cl-57172a9a"><span class="cl-57170e7a">(36.362)</span></p></td>
-<td class="cl-57176a0a"><p class="cl-57172a9a"><span class="cl-57170e7a">(0.000)</span></p></td>
-<td class="cl-57176a28"><p class="cl-57172a9a"><span class="cl-57170e7a">(47.127)</span></p></td>
-<td class="cl-57176a0a"><p class="cl-57172a9a"><span class="cl-57170e7a">(0.000)</span></p></td>
-<td class="cl-57176a28"><p class="cl-57172a9a"><span class="cl-57170e7a">(18.029)</span></p></td>
+<td class="cl-4e6b4a54"><p class="cl-4e6b11ce"><span class="cl-4e6af716"></span></p></td>
+<td class="cl-4e6b4a5e"><p class="cl-4e6b11ce"><span class="cl-4e6af716">(36.362)</span></p></td>
+<td class="cl-4e6b4a40"><p class="cl-4e6b11ce"><span class="cl-4e6af716">(0.000)</span></p></td>
+<td class="cl-4e6b4a55"><p class="cl-4e6b11ce"><span class="cl-4e6af716">(47.127)</span></p></td>
+<td class="cl-4e6b4a40"><p class="cl-4e6b11ce"><span class="cl-4e6af716">(0.000)</span></p></td>
+<td class="cl-4e6b4a55"><p class="cl-4e6b11ce"><span class="cl-4e6af716">(18.029)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-57176aaa"><p class="cl-57172a9a"><span class="cl-57170e7a">Priests/capita</span></p></td>
-<td class="cl-57176aa0"><p class="cl-57172a9a"><span class="cl-57170e7a"></span></p></td>
-<td class="cl-57176a82"><p class="cl-57172a9a"><span class="cl-57170e7a">0.002***</span></p></td>
-<td class="cl-57176a8c"><p class="cl-57172a9a"><span class="cl-57170e7a"></span></p></td>
-<td class="cl-57176a82"><p class="cl-57172a9a"><span class="cl-57170e7a">0.004***</span></p></td>
-<td class="cl-57176a8c"><p class="cl-57172a9a"><span class="cl-57170e7a">-16.376</span></p></td>
+<td class="cl-4e6b4a86"><p class="cl-4e6b11ce"><span class="cl-4e6af716">Priests/capita</span></p></td>
+<td class="cl-4e6b4a7c"><p class="cl-4e6b11ce"><span class="cl-4e6af716"></span></p></td>
+<td class="cl-4e6b4a68"><p class="cl-4e6b11ce"><span class="cl-4e6af716">0.002***</span></p></td>
+<td class="cl-4e6b4a72"><p class="cl-4e6b11ce"><span class="cl-4e6af716"></span></p></td>
+<td class="cl-4e6b4a68"><p class="cl-4e6b11ce"><span class="cl-4e6af716">0.004***</span></p></td>
+<td class="cl-4e6b4a72"><p class="cl-4e6b11ce"><span class="cl-4e6af716">-16.376</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-57176a1e"><p class="cl-57172a9a"><span class="cl-57170e7a"></span></p></td>
-<td class="cl-57176a3c"><p class="cl-57172a9a"><span class="cl-57170e7a"></span></p></td>
-<td class="cl-57176a0a"><p class="cl-57172a9a"><span class="cl-57170e7a">(0.000)</span></p></td>
-<td class="cl-57176a28"><p class="cl-57172a9a"><span class="cl-57170e7a"></span></p></td>
-<td class="cl-57176a0a"><p class="cl-57172a9a"><span class="cl-57170e7a">(0.000)</span></p></td>
-<td class="cl-57176a28"><p class="cl-57172a9a"><span class="cl-57170e7a">(12.522)</span></p></td>
+<td class="cl-4e6b4a54"><p class="cl-4e6b11ce"><span class="cl-4e6af716"></span></p></td>
+<td class="cl-4e6b4a5e"><p class="cl-4e6b11ce"><span class="cl-4e6af716"></span></p></td>
+<td class="cl-4e6b4a40"><p class="cl-4e6b11ce"><span class="cl-4e6af716">(0.000)</span></p></td>
+<td class="cl-4e6b4a55"><p class="cl-4e6b11ce"><span class="cl-4e6af716"></span></p></td>
+<td class="cl-4e6b4a40"><p class="cl-4e6b11ce"><span class="cl-4e6af716">(0.000)</span></p></td>
+<td class="cl-4e6b4a55"><p class="cl-4e6b11ce"><span class="cl-4e6af716">(12.522)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-57176ac8"><p class="cl-57172a9a"><span class="cl-57170e7a">Num.Obs.</span></p></td>
-<td class="cl-57176ae6"><p class="cl-57172a9a"><span class="cl-57170e7a">86</span></p></td>
-<td class="cl-57176adc"><p class="cl-57172a9a"><span class="cl-57170e7a">86</span></p></td>
-<td class="cl-57176abe"><p class="cl-57172a9a"><span class="cl-57170e7a">86</span></p></td>
-<td class="cl-57176adc"><p class="cl-57172a9a"><span class="cl-57170e7a">86</span></p></td>
-<td class="cl-57176abe"><p class="cl-57172a9a"><span class="cl-57170e7a">86</span></p></td>
+<td class="cl-4e6b4a9a"><p class="cl-4e6b11ce"><span class="cl-4e6af716">Num.Obs.</span></p></td>
+<td class="cl-4e6b4aae"><p class="cl-4e6b11ce"><span class="cl-4e6af716">86</span></p></td>
+<td class="cl-4e6b4aa4"><p class="cl-4e6b11ce"><span class="cl-4e6af716">86</span></p></td>
+<td class="cl-4e6b4a90"><p class="cl-4e6b11ce"><span class="cl-4e6af716">86</span></p></td>
+<td class="cl-4e6b4aa4"><p class="cl-4e6b11ce"><span class="cl-4e6af716">86</span></p></td>
+<td class="cl-4e6b4a90"><p class="cl-4e6b11ce"><span class="cl-4e6af716">86</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-57176a00"><p class="cl-57172a9a"><span class="cl-57170e7a">R2</span></p></td>
-<td class="cl-571769ec"><p class="cl-57172a9a"><span class="cl-57170e7a">0.016</span></p></td>
-<td class="cl-571769e2"><p class="cl-57172a9a"><span class="cl-57170e7a"></span></p></td>
-<td class="cl-571769ba"><p class="cl-57172a9a"><span class="cl-57170e7a">0.001</span></p></td>
-<td class="cl-571769e2"><p class="cl-57172a9a"><span class="cl-57170e7a"></span></p></td>
-<td class="cl-571769ba"><p class="cl-57172a9a"><span class="cl-57170e7a">0.152</span></p></td>
+<td class="cl-4e6b4a36"><p class="cl-4e6b11ce"><span class="cl-4e6af716">R2</span></p></td>
+<td class="cl-4e6b4a2c"><p class="cl-4e6b11ce"><span class="cl-4e6af716">0.016</span></p></td>
+<td class="cl-4e6b4a22"><p class="cl-4e6b11ce"><span class="cl-4e6af716"></span></p></td>
+<td class="cl-4e6b4a04"><p class="cl-4e6b11ce"><span class="cl-4e6af716">0.001</span></p></td>
+<td class="cl-4e6b4a22"><p class="cl-4e6b11ce"><span class="cl-4e6af716"></span></p></td>
+<td class="cl-4e6b4a04"><p class="cl-4e6b11ce"><span class="cl-4e6af716">0.152</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-57176b22"><p class="cl-57172a9a"><span class="cl-57170e7a">F</span></p></td>
-<td class="cl-57176b0e"><p class="cl-57172a9a"><span class="cl-57170e7a">1.391</span></p></td>
-<td class="cl-57176afa"><p class="cl-57172a9a"><span class="cl-57170e7a"></span></p></td>
-<td class="cl-57176b04"><p class="cl-57172a9a"><span class="cl-57170e7a">0.106</span></p></td>
-<td class="cl-57176afa"><p class="cl-57172a9a"><span class="cl-57170e7a"></span></p></td>
-<td class="cl-57176b04"><p class="cl-57172a9a"><span class="cl-57170e7a">7.441</span></p></td>
+<td class="cl-4e6b4aea"><p class="cl-4e6b11ce"><span class="cl-4e6af716">F</span></p></td>
+<td class="cl-4e6b4ae0"><p class="cl-4e6b11ce"><span class="cl-4e6af716">1.391</span></p></td>
+<td class="cl-4e6b4ab8"><p class="cl-4e6b11ce"><span class="cl-4e6af716"></span></p></td>
+<td class="cl-4e6b4ad6"><p class="cl-4e6b11ce"><span class="cl-4e6af716">0.106</span></p></td>
+<td class="cl-4e6b4ab8"><p class="cl-4e6b11ce"><span class="cl-4e6af716"></span></p></td>
+<td class="cl-4e6b4ad6"><p class="cl-4e6b11ce"><span class="cl-4e6af716">7.441</span></p></td>
 </tr>
-<tr style="overflow-wrap:break-word;"><td colspan="6" class="cl-57176b54"><p class="cl-57172ab8"><span class="cl-57170ec0">* p &lt; 0.1, ** p &lt; 0.05, *** p &lt; 0.01</span></p></td></tr>
+<tr style="overflow-wrap:break-word;"><td colspan="6" class="cl-4e6b4b12"><p class="cl-4e6b11f6"><span class="cl-4e6af748">* p &lt; 0.1, ** p &lt; 0.05, *** p &lt; 0.01</span></p></td></tr>
 </tbody>
 </table>
 </div>
@@ -3560,22 +3684,21 @@ F
 <code>set_text_color</code> to change the color of some entries</li>
 </ul>
 <p>We use the same code as above, but specify <code>output='huxtable'</code> in the <code><a href="../reference/modelsummary.html">modelsummary()</a></code> call:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://hughjonesd.github.io/huxtable/">huxtable</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb33"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">huxtable</span>)
 
 <span class="co"># build table with `modelsummary` </span>
-<span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="st">'(Intercept)'</span> <span class="op">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="op">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="op">=</span> <span class="st">'Priests/capita'</span><span class="op">)</span>
-<span class="va">cap</span> <span class="op">&lt;-</span> <span class="st">'A modelsummary table customized with huxtable'</span>
+<span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>)
+<span class="no">cap</span> <span class="kw">&lt;-</span> <span class="st">'A modelsummary table customized with huxtable'</span>
 
-<span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">'huxtable'</span>,
-                coef_map <span class="op">=</span> <span class="va">cm</span>, stars <span class="op">=</span> <span class="cn">TRUE</span>, 
-                title <span class="op">=</span> <span class="va">cap</span>, gof_omit <span class="op">=</span> <span class="st">'IC|Log|Adj'</span><span class="op">)</span> 
+<span class="no">tab</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'huxtable'</span>,
+                <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
+                <span class="kw">title</span> <span class="kw">=</span> <span class="no">cap</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'IC|Log|Adj'</span>)
 
 <span class="co"># customize table with `huxtable`</span>
-<span class="va">tab</span> <span class="op">%&gt;%</span>
-   
+<span class="no">tab</span> <span class="kw">%&gt;%</span>
+
     <span class="co"># text color</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/huxtable/man/text_color.html">set_text_color</a></span><span class="op">(</span>row <span class="op">=</span> <span class="fl">4</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>, value <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span></code></pre></div>
+    <span class="fu"><a href="https://rdrr.io/pkg/huxtable/man/text_color.html">set_text_color</a></span>(<span class="kw">row</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">.</span>), <span class="kw">value</span> <span class="kw">=</span> <span class="st">'red'</span>)</pre></body></html></div>
 <table class="table huxtable">
 <caption style="caption-side: top; text-align: center;">A modelsummary table customized with huxtable</caption>
 <col>
@@ -3672,12 +3795,10 @@ F
 <a href="#warning-saving-to-file" class="anchor"></a>Warning: Saving to file</h2>
 <p>When users supply a file name to the <code>output</code> argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from <code>gt</code>, <code>kableExtra</code>, <code>huxtable</code>, or <code>flextable</code>. When users specify a filename in the <code>output</code> argument, the <code><a href="../reference/modelsummary.html">modelsummary()</a></code> call should be the <em>final</em> one in the chain.</p>
 <p>This is OK:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">'table.html'</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.html'</span>)</pre></body></html></div>
 <p>This is <strong>not</strong> OK:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">'table.html'</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">'Literacy'</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'OLS 1'</span>, <span class="st">'Poisson 1'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.html'</span>) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Literacy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 1'</span>, <span class="st">'Poisson 1'</span>))</pre></body></html></div>
 <p>To save a customized table, you should apply all the customization functions you need before saving it using <code><a href="https://rdrr.io/pkg/gt/man/gtsave.html">gt::gtsave</a></code>, <code><a href="https://rdrr.io/pkg/kableExtra/man/save_kable.html">kableExtra::save_kable</a></code>, or the appropriate helper function from the package that you are using to customize your table.</p>
 </div>
 </div>
@@ -3698,7 +3819,7 @@ F
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
