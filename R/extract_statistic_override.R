@@ -51,7 +51,7 @@ extract_statistic_override <- function(model, statistic_override, conf_level=NUL
     } else {
       out <- sqrt(base::diag(out))
       out <- data.frame(term=names(out), std.error=out)
-      print(out)
+      warning("Your model does not seem to be supported by the `lmtest` package. Only `std.error` can be adjusted.")
       return(out)
     }
   }
