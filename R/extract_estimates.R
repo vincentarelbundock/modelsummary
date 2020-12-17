@@ -31,8 +31,9 @@ extract_estimates <- function(
     sprintf("{%s}", estimate_glue))
     
   # statistics to glue
-  if (!is.null(statistic_override) &&     # don't add parentheses to manual strings
-      is.character(statistic_override)) {
+  if (!is.null(statistic_override) &&     # don't add parentheses
+      is.character(statistic_override) && # to manual strings
+      length(statistic_override) > 1) {   # of length greater than 1 (i.e., robust shortcuts)
     statistic_glue <- ifelse(
       grepl("\\{", statistic_glue),
       statistic_glue,
@@ -109,7 +110,7 @@ extract_estimates <- function(
     est[[n]] <- rounding(est[[n]], fmt)
   }
 
-  # stars
+   # stars
   if (!isFALSE(stars)) {
     if (!'p.value' %in% colnames(est)) {
       stop('To use the `stars` argument, the `tidy` function must produce a column called "p.value"')

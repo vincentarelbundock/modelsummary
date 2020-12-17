@@ -1,10 +1,15 @@
+# modelsummary 0.6.4.9000
+
+* statistic_override accepts shortcuts: "robust", "stata", "HC0"
+* statistic_override accepts formulas for clustered SEs: ~group
+* modelsummary_wide has a new "stacking" argument
+
 # modelsummary 0.6.4
 
 * glue format for `estimate` and `statistic`
 * easystats support for model info extraction
 * deprecate statistic_vertical
 * deprecate extract_models. Use modelsummary(output="dataframe") instead.
-* modelsummary_wide has a new "stacking" argument
 * modelplot pushes ... through to modelsummary(output="dataframe")
 * datasummary_skim(type="dataset")
 * gof_map omits by default

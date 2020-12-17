@@ -203,7 +203,10 @@ sanity_add_rows <- function(add_rows, models) {
 #' @keywords internal
 sanity_statistic_override <- function(models, statistic_override) {
 
+  regex = "^robust$|^HC0$|^HC1$|^HC2$|^HC3$|^HC4$|^HC4m$|^HC5$|^stata$|^classical$"
   checkmate::assert(
+    checkmate::check_formula(statistic_override, null.ok=TRUE),
+    checkmate::check_character(statistic_override, len=1, pattern=regex, null.ok=TRUE),
     checkmate::check_list(statistic_override, null.ok = TRUE),
     checkmate::check_function(statistic_override, null.ok = TRUE),
     checkmate::check_matrix(statistic_override, null.ok = TRUE),
@@ -216,6 +219,7 @@ sanity_statistic_override <- function(models, statistic_override) {
     checkmate::assert_true(length(statistic_override) == length(models))
     for (s in statistic_override) {
       checkmate::assert(
+        checkmate::check_formula(s),
         checkmate::check_function(s),
         checkmate::check_matrix(s),
         checkmate::check_vector(s),
