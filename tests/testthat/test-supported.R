@@ -1,6 +1,70 @@
-context('supported models')
+# several tests adapted from `parameters` package under GPL3
+
+context('various supported models (soft tests)')
 
 library(modelsummary)
+
+test_that("survival", {
+  testthat::skip_if_not_installed("survival")
+  library(survival)
+  data("lung")
+  lung <- subset(lung, subset = ph.ecog %in% 0:2)
+  lung$sex <- factor(lung$sex, labels = c("male", "female"))
+  lung$ph.ecog <- factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
+  mod <- survival::coxph(Surv(time, status) ~ sex + age + ph.ecog, data = lung)
+  tab <- modelsummary(mod, output="data.frame") 
+  expect_is(tab, "data.frame")
+  expect_true(nrow(tab) > 11)
+})
+
+
+test_that("mgcv::gam", {
+  testthat::skip_if_not_installed("mgcv")
+  mod <- mgcv::gam(
+    formula = mpg ~ s(hp) + s(wt) + factor(cyl) + am + qsec,
+    family = stats::quasi(),
+    data = mtcars)
+  tab <- modelsummary(mod, output="data.frame", statistic="p.value") 
+  expect_is(tab, "data.frame")
+  expect_true(nrow(tab) > 5)
+})
+
+
+test_that("betareg::betareg", {
+  testthat::skip_if_not_installed("betareg")
+  data("GasolineYield", package="betareg")
+  data("FoodExpenditure", package="betareg")
+  m1 <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
+  m2 <- betareg::betareg(I(food / income) ~ income + persons, data = FoodExpenditure)
+  tab <- modelsummary(list(m1, m2), output="data.frame")
+  expect_is(tab, "data.frame")
+  expect_true(nrow(tab) > 30)
+})
+ 
+
+test_that("ivreg::ivreg", {
+  testthat::skip_if_not_installed("ivreg")
+  testthat::skip_if_not_installed("AER")
+  data(CigarettesSW, package="AER")
+  mod <- ivreg::ivreg(
+    log(packs) ~ log(price) + log(income) | log(income) + I(tax / cpi),
+    data = CigarettesSW)
+  tab <- modelsummary(mod, output="data.frame")
+  expect_is(tab, "data.frame")
+  expect_true(nrow(tab) > 5)
+})
+ 
+
+test_that("pscl::hurdle", {
+  set.seed(123)
+  data("bioChemists", package = "pscl")
+  mod<- pscl::hurdle(formula = art ~ ., 
+               data = bioChemists, zero = "geometric")
+  tab <- modelsummary(mod, output="data.frame") 
+  expect_is(tab, "data.frame")
+  expect_true(nrow(tab) > 25)
+})
+
 
 test_that("fixest", {
   testthat::skip_if_not_installed("fixest")
@@ -62,7 +126,7 @@ test_that("lme4", {
   mod <- lmer(y ~ tx * x + (x | subj), data = d)
   tab <- modelsummary(mod, output="dataframe")
   expect_s3_class(tab, "data.frame")
-  expect_equal(dim(tab), c(23, 4))
+  expect_true(nrow(tab) > 22)
 })
 
 
