@@ -28,6 +28,22 @@ test_that("clustered standard errors", {
   expect_equal(truth, tmp[[4]])
 })
 
+test_that("lme4 and various warnings", {
+  skip_if_not_installed("lme4")
+  library(lme4)
+  models = list(
+    lm(hp ~ mpg, mtcars),
+    lmer(hp ~ mpg + (1|cyl), mtcars))
+  tab = modelsummary(models, output="dataframe", vcov=list("robust", "classical"))
+  expect_s3_class(tab, "data.frame")
+  expect_equal(ncol(tab), 5)
+  expect_warning(modelsummary(models, output="dataframe", vcov="robust"))
+  expect_warning(modelsummary(models, output="dataframe", vcov="classical"), NA)
+  expect_warning(modelsummary(models, output="dataframe", vcov=list("robust", "classical")), NA)
+  expect_warning(modelsummary(models[[2]], vcov=stats::vcov), regexp="Only.*error.*adjusted")
+  expect_warning(modelsummary(models, output="dataframe", vcov="robust"), regexp="are unadjusted")
+})
+
 
 test_that("robust character shortcuts", {
   testthat::skip_if_not_installed("estimatr") 
@@ -130,7 +146,7 @@ reference <- readRDS(file = "known_output/statistic-override.rds")
 
 
 test_that("bad function", {
-  expect_error(modelsummary(models, vcov = na.omit))
+  expect_warning(modelsummary(models, vcov = na.omit))
 })
 
 test_that("vector must be named", {

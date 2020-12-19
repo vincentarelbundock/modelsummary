@@ -56,7 +56,13 @@ extract_estimates <- function(
   }
   
   # estimate override
-  if (!is.null(vcov)) {
+  flag1 <- !is.null(vcov)
+  flag2 <- isFALSE(all.equal(vcov, stats::vcov))
+  flag3 <- !is.character(vcov)
+  flag4 <- is.character(vcov) && length(vcov) == 1 && !vcov %in% c("classical", "iid", "constant")
+  flag5 <- is.character(vcov) && length(vcov) > 1
+
+  if (flag1 && (flag2 || flag3 || flag4 || flag5)) {
 
     # extract overriden estimates
     so <- extract_vcov(
@@ -64,17 +70,13 @@ extract_estimates <- function(
       vcov=vcov,
       conf_level=conf_level)
 
-    # keep only columns that do not appear in so
-    est <- est[, c('term', base::setdiff(colnames(est), colnames(so))), drop = FALSE]
+    if (!is.null(so) && nrow(est) == nrow(so)) {
+      # keep only columns that do not appear in so
+      est <- est[, c('term', base::setdiff(colnames(est), colnames(so))), drop = FALSE]
+      # merge vcov and estimates
+      est <- merge(est, so, by="term", sort=FALSE)
 
-    # make sure vcov is of the correct length
-    if (nrow(est) != nrow(so)) {
-      stop("vcov and estimates have different dimensions.")
-    }
-
-    # merge vcov and estimates
-    est <- merge(est, so, by="term", sort=FALSE)
-
+    } 
   }
 
   # tidy_custom
