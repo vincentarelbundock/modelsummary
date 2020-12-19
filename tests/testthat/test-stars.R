@@ -6,6 +6,19 @@ mod <- list()
 mod$OLS <- lm(am ~ drat, data = mtcars)
 mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 
+test_that("bug: make stars before rounding", {
+  m <- lm(vs ~ hp + mpg + factor(cyl), data = mtcars)
+  st <- c("*"=.49)
+  tab1 <- modelsummary(m, stars=st, output="data.frame",
+          statistic=NULL, fmt=1, gof_omit=".*")
+  tab2 <- modelsummary(m, stars=st, output="data.frame",
+          statistic=NULL, fmt=3, gof_omit=".*")
+  tab1 <- grepl("\\*", tab1[[4]])
+  tab2 <- grepl("\\*", tab2[[4]])
+  expect_equal(tab1, tab2)
+})
+
+
 test_that("same stars with different statistics", {
   m <- lm(dist ~ speed, data = cars)
   tab1 <- modelsummary(m, stars=TRUE, output="dataframe")

@@ -107,18 +107,18 @@ extract_estimates <- function(
   # term must be a character (not rounded with decimals when integer)
   est$term <- as.character(est$term)
 
-  # round everything
-  for (n in colnames(est)) {
-    est[[n]] <- rounding(est[[n]], fmt)
-  }
-
-   # stars
+  # stars (before rounding)
   if (!isFALSE(stars)) {
     if (!'p.value' %in% colnames(est)) {
       stop('To use the `stars` argument, the `tidy` function must produce a column called "p.value"')
     }
     est$stars <- make_stars(est$p.value, stars)
     estimate_glue[1] <- paste0(estimate_glue[1], "{stars}")
+  }
+
+  # round everything
+  for (n in colnames(est)) {
+    est[[n]] <- rounding(est[[n]], fmt)
   }
 
   # extract estimates (there can be several)

@@ -4,6 +4,7 @@
 * vcov accepts shortcuts: "robust", "stata", "HC0", etc.
 * vcov accepts formulas for clustered SEs: ~group
 * modelsummary_wide has a new "stacking" argument
+* bug: stars and rounding
 
 # modelsummary 0.6.4
 
