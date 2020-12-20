@@ -103,7 +103,6 @@ extract_gof <- function(model, fmt, gof_map, ...) {
 #' outside.
 #'
 #' @inheritParams get_estimates
-#' @importFrom generics glance
 #' @export
 get_gof <- function(model, ...) {
 
@@ -112,17 +111,22 @@ get_gof <- function(model, ...) {
     nrow(x) == 1
   }
 
-  # broom first
+  # generics first
   gof <- suppressWarnings(try(
-    glance(model, ...), silent=TRUE))
+    generics::glance(model, ...), silent=TRUE))
   if (flag(gof)) return(gof)
 
-  # performance second
+  # broom second
+  gof <- suppressWarnings(try(
+    broom::glance(model, ...), silent=TRUE))
+  if (flag(gof)) return(gof)
+
+  # performance third
   gof <- suppressWarnings(try(
     glance_easystats(model, ...), silent=TRUE))
   if (flag(gof)) return(gof)
 
-  # broom.mixed third
+  # broom.mixed fourth
   if (check_dependency("broom.mixed")) {
     gof <- suppressWarnings(try(
       broom.mixed::glance(model, ...), silent=TRUE))

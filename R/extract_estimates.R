@@ -163,7 +163,6 @@ extract_estimates <- function(
 #' Extract model estimates. A mostly internal function with some potential uses
 #' outside.
 #'
-#' @importFrom generics tidy
 #' @inheritParams modelsummary
 #' @param model a single model object
 #' @export
@@ -181,17 +180,24 @@ get_estimates <- function(model, conf_level=.95, ...) {
     "term" %in% colnames(x)
   }
 
-  # broom first
+  # generics first
   est <- suppressWarnings(try(
-    tidy(model, conf.int=conf_int, conf.level=conf_level, ...), silent=TRUE))
+    generics::tidy(model, conf.int=conf_int, conf.level=conf_level, ...), silent=TRUE))
   if (flag(est)) return(est)
 
-  # parameters second
+  # broom second 
+  # can't use generics::tidy here otherwise broom only gets loaded the second
+  # time modelsummary is called, and the first attempt fails.
+  est <- suppressWarnings(try(
+    broom::tidy(model, conf.int=conf_int, conf.level=conf_level, ...), silent=TRUE))
+  if (flag(est)) return(est)
+
+  # parameters third
   est <- suppressWarnings(try(
     tidy_easystats(model, ci=conf_level, ...), silent=TRUE))
   if (flag(est)) return(est)
 
-  # broom.mixed third
+  # broom.mixed fourth
   if (check_dependency("broom.mixed")) {
     est <- suppressWarnings(try(
       broom.mixed::tidy(model, conf.int=TRUE, conf.level=conf_level, ...), silent=TRUE))
