@@ -130,8 +130,7 @@ test_that("lme4", {
 })
 
 
-#################### sandwich
-test_that("sandwich website vignette", {
+test_that("sandwich vignette", {
   testthat::skip_if_not_installed("sandwich")
   testthat::skip_if_not_installed("lmtest")
   data("PetersenCL", package = "sandwich")
