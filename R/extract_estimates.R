@@ -163,6 +163,7 @@ extract_estimates <- function(
 #' Extract model estimates. A mostly internal function with some potential uses
 #' outside.
 #'
+#' @importFrom generics tidy
 #' @inheritParams modelsummary
 #' @param model a single model object
 #' @export
@@ -180,31 +181,24 @@ get_estimates <- function(model, conf_level=.95, ...) {
     "term" %in% colnames(x)
   }
 
-  # tidy method in the environment takes precedence over everything
+  # broom first
   est <- suppressWarnings(try(
-    generics::tidy(model, conf.int=conf_int, conf.level=conf_level, ...), silent=TRUE))
+    tidy(model, conf.int=conf_int, conf.level=conf_level, ...), silent=TRUE))
   if (flag(est)) return(est)
 
-  # easystats/parameters: unless broom is loaded manually, this is the default method
+  # parameters second
   est <- suppressWarnings(try(
     tidy_easystats(model, ci=conf_level, ...), silent=TRUE))
   if (flag(est)) return(est)
 
-  # if broom is installed locally, try it
-  if (check_dependency("broom")) {
-    est <- suppressWarnings(try(
-      broom::tidy(model, conf.int=conf_int, conf.level=conf_level, ...), silent=TRUE))
-  }
-  if (flag(est)) return(est)
-
-  # if broom.mixed is installed locally, try it
+  # broom.mixed third
   if (check_dependency("broom.mixed")) {
     est <- suppressWarnings(try(
       broom.mixed::tidy(model, conf.int=TRUE, conf.level=conf_level, ...), silent=TRUE))
   }
   if (flag(est)) return(est)
 
-  stop(sprintf('Cannot extract the required information from models of class "%s". Consider installing and loading `broom.mixed`, or any other package that includes `tidy` and `glance` methods appropriate for this model type. Alternatively, you can easily define your own methods by following the instructions on the `modelsummary` website: https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html', class(model)[1]))
+  stop(sprintf('Cannot extract the required information from models of class "%s". Consider installing `broom.mixed`, or any other package that includes `tidy` and `glance` methods appropriate for this model type. Alternatively, you can easily define your own methods by following the instructions on the `modelsummary` website: https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html', class(model)[1]))
 
 }
  

@@ -10,8 +10,10 @@ extract_gof <- function(model, fmt, gof_map, ...) {
  
   # lm model: include F-stat by default
   if (isTRUE(class(model)[1] == "lm")) { # glm also inherits from lm
+    # performance
     if (inherits(gof, "performance_model")) {
       gof$F <- attr(gof, "r2")$F
+    # broom
     } else {
       gof$F <- gof$statistic
     }
@@ -100,8 +102,8 @@ extract_gof <- function(model, fmt, gof_map, ...) {
 #' Extract model gof A mostly internal function with some potential uses
 #' outside.
 #'
-#' @inheritParams modelsummary
-#' @param model a single model object
+#' @inheritParams get_estimates
+#' @importFrom generics glance
 #' @export
 get_gof <- function(model, ...) {
 
@@ -110,31 +112,23 @@ get_gof <- function(model, ...) {
     nrow(x) == 1
   }
 
-  # if a `glance` method is loaded in memory use that as default
+  # broom first
   gof <- suppressWarnings(try(
-    generics::glance(model, ...), silent=TRUE))
+    glance(model, ...), silent=TRUE))
   if (flag(gof)) return(gof)
 
-  # easystats/performance is the default
+  # performance second
   gof <- suppressWarnings(try(
     glance_easystats(model, ...), silent=TRUE))
   if (flag(gof)) return(gof)
 
-  # if broom is installed, try it
-  if (check_dependency("broom")) {
-    gof <- suppressWarnings(try(
-      broom::glance(model, ...), silent=TRUE))
-    if (flag(gof)) return(gof)
-  }
-
-  # if broom.mixed is installed, try it
+  # broom.mixed third
   if (check_dependency("broom.mixed")) {
     gof <- suppressWarnings(try(
       broom.mixed::glance(model, ...), silent=TRUE))
     if (flag(gof)) return(gof)
   }
 
-  stop(sprintf('Cannot extract information from models of class "%s". Consider installing and loading the `parameters`, `performance`, and `broom.mixed` or any other package with `tidy` and `glance` functions appropriate for this model type. Alternatively, you can define your own `tidy` method, following the instructions on the `modelsummary` website: https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html', class(model)[1]))
+  stop(sprintf('Cannot extract information from models of class "%s". Consider installing `broom.mixed` or any other package with `tidy` and `glance` functions appropriate for this model type. Alternatively, you can define your own `tidy` method, following the instructions on the `modelsummary` website: https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html', class(model)[1]))
 
 }
- 

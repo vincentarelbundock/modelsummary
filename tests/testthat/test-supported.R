@@ -49,7 +49,7 @@ test_that("ivreg::ivreg", {
   mod <- ivreg::ivreg(
     log(packs) ~ log(price) + log(income) | log(income) + I(tax / cpi),
     data = CigarettesSW)
-  tab <- modelsummary(mod, output="data.frame")
+  tab <- modelsummary(mod, output="data.frame", diagnostic=TRUE)
   expect_is(tab, "data.frame")
   expect_true(nrow(tab) > 5)
 })
