@@ -68,7 +68,15 @@ factory_kableExtra <- function(tab,
     # threeparttable only works with 1 note. But it creates a weird bug
     # when using coef_map and stars in Rmarkdown PDF output
     for (n in notes) {
-      out <- kableExtra::add_footnote(out, label=n, notation='none')
+      # otherwise stars_note breaks in PDF output under pdflatex
+      if (output_format == "latex" && isTRUE(grepl(" < ", n))) {
+        n <- gsub(" < ", " $<$ ", n)
+        out <- kableExtra::add_footnote(out, label=n, notation='none',
+                                        escape=FALSE)
+      } else {
+        out <- kableExtra::add_footnote(out, label=n, notation='none',
+                                        escape=TRUE)
+      }
     }
   }
 
