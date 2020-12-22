@@ -64,11 +64,12 @@ extract_models <- function(...) {
 #' @param coef_rename named character vector. Values refer to the variable names
 #' that will appear in the table. Names refer to the original term names stored
 #' in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
-#' @param gof_map data.frame with four columns: `raw`, `clean`, `fmt`, and
-#' `omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame
-#' by default: `modelsummary::gof_map` By default, all the statistics produced
-#' by `get_gof(model)` will be included unless they are omitted explicitly in
-#' `gof_map`.
+#' @param gof_map 
+#' \itemize{
+#'   \item NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.
+#'   \item data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
+#'   \item list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
+#' }
 #' @param gof_omit string regular expression. Omits all matching gof statistics from
 #' the table (using `grepl(perl=TRUE)`).
 #' @param add_rows a data.frame (or tibble) with the same number of columns as
@@ -134,6 +135,9 @@ extract_models <- function(...) {
 #' @examples
 #' \dontrun{
 #'
+#' # The `modelsummary` website includes \emph{many} examples and tutorials:
+#' # https://vincentarelbundock.github.io/modelsummary
+#' 
 #' library(modelsummary)
 #'
 #' # load data and estimate models
@@ -169,40 +173,43 @@ extract_models <- function(...) {
 #'   vcov = list(c("(Intercept)"="", "Height"="!"),
 #'                             c("(Intercept)"="", "Height"="!", "Volume"="!!")))
 #'
-#'
 #' # coef_rename
 #' modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 #'
 #' # coef_map
 #' modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 #'
-#' # titles
+#' # title
 #' modelsummary(models, title = 'This is the title')
 #'
-#' # title with italicized text
-#' modelsummary(models, title = gt::md('This is *the* title'))
-#'
-#' # add_rows: we use `tribble` from the `tibble` package to build a data.frame
-#' # more easily. Then, we assign an attribute to determine each row's position.
+#' # add_rows
 #' rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,
 #'   'Empty row', '-', '-',
 #'   'Another empty row', '?', '?')
 #' attr(rows, 'position') <- c(1, 3)
 #' modelsummary(models, add_rows = rows)
 #'
-#' # notes at the bottom of the table
+#' # notes
 #' modelsummary(models, notes = list('A first note', 'A second note'))
 #'
-#' # modify list of GOF statistics and their format using the built-in
-#' # 'gof_map' data frame as a starting point
-#' gof_custom <- modelsummary::gof_map
+#' # gof_map: data.frame
+#' gm <- modelsummary::gof_map
 #' gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE
 #' gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "%.5f"
 #' modelsummary(models, gof_map = gof_custom)
+#' 
+#' # gof_map: list of lists
+#' f1 <- function(x) format(round(x, 3), big.mark=",")
+#' f2 <- function(x) format(round(x, 0), big.mark=",")
+#' gm <- list(
+#'   list("raw" = "nobs", "clean" = "N", "fmt" = f2),
+#'   list("raw" = "AIC", "clean" = "aic", "fmt" = f1))
+#' modelsummary(models,
+#'   fmt = f1,
+#'   gof_map = gm)
+#' 
 #' }
 #'
-#' # The `modelsummary` website includes \emph{many} more examples:
-#' # https://vincentarelbundock.github.io/modelsummary
 #' @export
 modelsummary <- function(
   models,
@@ -369,13 +376,19 @@ modelsummary <- function(
       if (is.null(gof_map)) {
         # assign here and not in the function definition because we use NULL to
         # figure out if F-stat should be included by default for lm models.
-        gof_map <- get("gof_map", as.environment("package:modelsummary"))
+        gm_list <- get("gof_map", as.environment("package:modelsummary"))
+        gm_list <- lapply(1:nrow(gm_list), function(i) gm_list[i, ])
+      } else if (inherits(gof_map, "data.frame")) {
+        gm_list <- lapply(1:nrow(gof_map), function(i) gof_map[i, ])
+      } else {
+        gm_list <- gof_map
       }
-      gof <- gof[!gof$term %in% gof_map$raw[gof_map$omit], , drop=FALSE]
-      gof_names <- gof_map$clean[match(gof$term, gof_map$raw)]
+      gm_raw <- sapply(gm_list, function(x) x$raw)
+      gm_clean <- sapply(gm_list, function(x) x$clean)
+      gof_names <- gm_clean[match(gof$term, gm_raw)]
       gof_names[is.na(gof_names)] <- gof$term[is.na(gof_names)]
       gof$term <- gof_names
-      idx <- match(gof$term, gof_map$clean)
+      idx <- match(gof$term, gm_clean)
       gof <- gof[order(idx, gof$term), ]
     }
 

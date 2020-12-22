@@ -4,6 +4,7 @@
 * vcov accepts shortcuts: "robust", "stata", "HC0", etc.
 * vcov accepts formulas for clustered SEs: ~group
 * modelsummary_wide has a new "stacking" argument
+* gof_map accepts list of lists. only needs 3 columns.
 * bug: stars and rounding
 
 # modelsummary 0.6.4

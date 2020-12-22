@@ -74,7 +74,16 @@ sanity_coef <- function(coef_map, coef_rename, coef_omit) {
 #' @keywords internal
 sanity_gof <- function(gof_map, gof_omit) {
   checkmate::assert_string(gof_omit, null.ok = TRUE)
-  checkmate::assert_data_frame(gof_map, null.ok = TRUE)
+  checkmate::assert(
+    checkmate::check_data_frame(gof_map, null.ok = TRUE, ncols = 3),
+    checkmate::check_list(gof_map, null.ok = TRUE),
+    combine = "or")
+  if (class(gof_map)[1] == "list") {
+    for (gm in gof_map) {
+      checkmate::assert_list(gm, len = 3, names = "named")
+      checkmate::assert_true(all(c("raw", "clean", "fmt") %in% names(gm)))
+    }
+  }
 }
 
 

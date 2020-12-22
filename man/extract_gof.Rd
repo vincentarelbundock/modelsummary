@@ -16,11 +16,11 @@ extract_gof(model, fmt, gof_map, ...)
   \item function: returns a formatted character string.
 }}
 
-\item{gof_map}{data.frame with four columns: `raw`, `clean`, `fmt`, and
-`omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame
-by default: `modelsummary::gof_map` By default, all the statistics produced
-by `get_gof(model)` will be included unless they are omitted explicitly in
-`gof_map`.}
+\item{gof_map}{\itemize{
+  \item NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.
+  \item data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
+  \item list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
+}}
 
 \item{...}{all other arguments are passed to the `tidy` and `glance` methods
 used to extract estimates from the model. For example, this allows users to

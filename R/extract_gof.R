@@ -28,61 +28,55 @@ extract_gof <- function(model, fmt, gof_map, ...) {
     }
   }
 
-  # define gof_map if not supplied. Keep anything not included explicitly
+  # convert gof_map to list and vectors
   if (is.null(gof_map)) {
-
-    gof_map <- modelsummary::gof_map
-    # drop if gof_map$omit == TRUE
-    bad <- gof_map$raw[gof_map$omit]
-    gof <- gof[setdiff(colnames(gof), bad)]
-
-  # used supplied gof_map. Drop anything not included explicitly
+    gm_list <- lapply(1:nrow(modelsummary::gof_map), function(i) 
+                  as.list(modelsummary::gof_map[i, ]))
+    gm_omit <- sapply(gm_list, function(x) x$omit) 
+  } else if (inherits(gof_map, "data.frame")) {
+    gm_list <- lapply(1:nrow(gof_map), function(i)
+                  as.list(gof_map[i, ]))
   } else {
-    # keep only if gof_map$omit == FALSE
-    good <- gof_map$raw[!gof_map$omit]
-    gof <- gof[intersect(colnames(gof), good)]
+    gm_list <- gof_map
+  }
+  gm_raw <- sapply(gm_list, function(x) x$raw)
+  gm_clean <- sapply(gm_list, function(x) x$clean) 
+
+  # round 
+  unknown <- setdiff(colnames(gof), gm_raw)
+  for (u in unknown) {
+    gof[[u]] <- rounding(gof[[u]], fmt)
+  }
+  for (gm in gm_list) {
+    if (gm$raw %in% colnames(gof)) {
+      gof[[gm$raw]] <- rounding(gof[[gm$raw]], gm$fmt)
+    }
   }
 
-  # re-order gof columns
-  idx1 <- intersect(gof_map$raw, colnames(gof))
-  idx2 <- setdiff(colnames(gof), gof_map$raw)
+  # gof_map = NULL: drop explicit omit
+  if (is.null(gof_map)) {
+    gof <- gof[, !colnames(gof) %in% gm_raw[gm_omit], drop=FALSE]
+  # gof_map != NULL: drop unknown
+  } else {
+    gof <- gof[, colnames(gof) %in% gm_raw, drop=FALSE]
+  }
+
+  # reorder
+  idx1 <- intersect(gm_raw, colnames(gof))
+  idx2 <- setdiff(colnames(gof), gm_raw)
   gof <- gof[c(idx1, idx2)]
 
-  # if number of gof > 0
+  # some gof were kept
   if (ncol(gof) > 0) {
-
-    for (i in seq_along(gof)) {
-
-      idx <- match(colnames(gof)[i], gof_map$raw)
-
-      if (!is.na(idx)) { # if gof in gof_map
-
-        # rename
-        colnames(gof)[i] <- gof_map$clean[idx]
-
-        # round integer/numeric values
-        if (inherits(gof[[i]], 'numeric')) {
-          gof[[i]] <- rounding(gof[[i]], gof_map$fmt[idx])
-        } else {
-          gof[[i]] <- as.character(gof[[i]])
-        }
-
-      } else { # if gof is not in gof_map
-
-        # round integer/numeric values
-        if (inherits(gof[[i]], 'numeric')) {
-          gof[[i]] <- rounding(gof[[i]], fmt)
-        }
-        else {
-          gof[[i]] <- as.character(gof[[i]])
-        }
-      }
-    }
+    # rename
+    idx <- match(colnames(gof), gm_raw)
+    colnames(gof) <- ifelse(is.na(idx), colnames(gof), gm_clean[idx])
 
     # reshape
     out <- data.frame(term = names(gof), value = unlist(gof))
-
-  } else { # all gof are excluded return an empty tibble (needs character to match merge type)
+  
+  # all gof are excluded return an empty tibble (needs character to match merge type)
+  } else { 
     out <- data.frame(term = NA_character_, value = NA_character_)
     out <- stats::na.omit(out)
   }

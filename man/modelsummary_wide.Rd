@@ -100,11 +100,11 @@ from the table using `grepl(perl=TRUE)`.}
 that will appear in the table. Names refer to the original term names stored
 in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
 
-\item{gof_map}{data.frame with four columns: `raw`, `clean`, `fmt`, and
-`omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame
-by default: `modelsummary::gof_map` By default, all the statistics produced
-by `get_gof(model)` will be included unless they are omitted explicitly in
-`gof_map`.}
+\item{gof_map}{\itemize{
+  \item NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.
+  \item data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
+  \item list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
+}}
 
 \item{gof_omit}{string regular expression. Omits all matching gof statistics from
 the table (using `grepl(perl=TRUE)`).}

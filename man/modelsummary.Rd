@@ -92,11 +92,11 @@ from the table using `grepl(perl=TRUE)`.}
 that will appear in the table. Names refer to the original term names stored
 in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
 
-\item{gof_map}{data.frame with four columns: `raw`, `clean`, `fmt`, and
-`omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame
-by default: `modelsummary::gof_map` By default, all the statistics produced
-by `get_gof(model)` will be included unless they are omitted explicitly in
-`gof_map`.}
+\item{gof_map}{\itemize{
+  \item NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.
+  \item data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
+  \item list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
+}}
 
 \item{gof_omit}{string regular expression. Omits all matching gof statistics from
 the table (using `grepl(perl=TRUE)`).}
@@ -167,6 +167,9 @@ diagonal.
 \examples{
 \dontrun{
 
+# The `modelsummary` website includes \emph{many} examples and tutorials:
+# https://vincentarelbundock.github.io/modelsummary
+
 library(modelsummary)
 
 # load data and estimate models
@@ -202,38 +205,41 @@ modelsummary(models,
   vcov = list(c("(Intercept)"="", "Height"="!"),
                             c("(Intercept)"="", "Height"="!", "Volume"="!!")))
 
-
 # coef_rename
 modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 
 # coef_map
 modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 
-# titles
+# title
 modelsummary(models, title = 'This is the title')
 
-# title with italicized text
-modelsummary(models, title = gt::md('This is *the* title'))
-
-# add_rows: we use `tribble` from the `tibble` package to build a data.frame
-# more easily. Then, we assign an attribute to determine each row's position.
+# add_rows
 rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,
   'Empty row', '-', '-',
   'Another empty row', '?', '?')
 attr(rows, 'position') <- c(1, 3)
 modelsummary(models, add_rows = rows)
 
-# notes at the bottom of the table
+# notes
 modelsummary(models, notes = list('A first note', 'A second note'))
 
-# modify list of GOF statistics and their format using the built-in
-# 'gof_map' data frame as a starting point
-gof_custom <- modelsummary::gof_map
+# gof_map: data.frame
+gm <- modelsummary::gof_map
 gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE
 gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "\%.5f"
 modelsummary(models, gof_map = gof_custom)
+
+# gof_map: list of lists
+f1 <- function(x) format(round(x, 3), big.mark=",")
+f2 <- function(x) format(round(x, 0), big.mark=",")
+gm <- list(
+  list("raw" = "nobs", "clean" = "N", "fmt" = f2),
+  list("raw" = "AIC", "clean" = "aic", "fmt" = f1))
+modelsummary(models,
+  fmt = f1,
+  gof_map = gm)
+
 }
 
-# The `modelsummary` website includes \emph{many} more examples:
-# https://vincentarelbundock.github.io/modelsummary
 }
