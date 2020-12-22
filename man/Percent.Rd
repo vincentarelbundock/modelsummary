@@ -4,6 +4,7 @@
 \name{Percent}
 \alias{Percent}
 \title{Pseudo-function to compute a statistic relative to a reference set.}
+\keyword{internal}
 \description{
 These objects are imported from other packages. Follow the links
 below to see their documentation.

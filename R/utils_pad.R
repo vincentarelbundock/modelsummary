@@ -6,7 +6,7 @@
 #' will usually strip white space anyway. This is suboptimal because it
 #' makes it harder to select columns, so we only apply pad duplicate
 #' entries.
-#' @keywords internal
+#' @noRd
 pad <- function(x) {
   checkmate::assert_character(x)
   out <- trimws(x)

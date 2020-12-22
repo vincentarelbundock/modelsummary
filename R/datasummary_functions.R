@@ -1,11 +1,17 @@
 #' datasummary statistic shortcut
+#'
 #' @export
-#' @keywords internal
-N <- function(x) sprintf("%.0f", length(x))
-
-#' datasummary statistic shortcut
-#' @export
-#' @keywords internal
+#' @param x varible to summarize
+#' @param fmt passed to the `modelsummary:::rounding` function
+#' @param na.rm  a logical value indicating whether ‘NA’ values should be
+#'   stripped before the computation proceeds.
+#' @param ... unused
+#' @examples
+#' \dontrun{
+#' datasummary(mpg + hp ~ Mean + P0 + P25 + P50 + P75 + P100 + 
+#'             Min + Max + SD + Var, 
+#'             data = mtcars)
+#' }
 Mean <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- mean(x, na.rm = na.rm)
   if (!is.null(fmt)) {
@@ -14,9 +20,26 @@ Mean <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   return(out)
 }
 
+
 #' datasummary statistic shortcut
+#' @inheritParams Mean
 #' @export
-#' @keywords internal
+#' @examples
+#' \dontrun{
+#' datasummary(Factor(cyl) ~ N, data = mtcars)
+#' }
+N <- function(x) sprintf("%.0f", length(x))
+
+
+#' datasummary statistic shortcut
+#' @inheritParams Mean
+#' @export
+#' @examples
+#' \dontrun{
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
+#'             Min + Max + SD + Var, 
+#'             data = mtcars)
+#' }
 Median <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::median(x, na.rm = na.rm)
   if (!is.null(fmt)) {
@@ -26,8 +49,14 @@ Median <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @inheritParams Mean
 #' @export
-#' @keywords internal
+#' @examples
+#' \dontrun{
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
+#'             Min + Max + SD + Var, 
+#'             data = mtcars)
+#' }
 Min <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- min(x, na.rm = na.rm)
   if (is.integer(x)) {
@@ -39,9 +68,16 @@ Min <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   return(out)
 }
 
+
 #' datasummary statistic shortcut
+#' @inheritParams Mean
 #' @export
-#' @keywords internal
+#' @examples
+#' \dontrun{
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
+#'             Min + Max + SD + Var, 
+#'             data = mtcars)
+#' }
 Max <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- max(x, na.rm = na.rm)
   if (is.integer(x)) {
@@ -54,8 +90,14 @@ Max <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @inheritParams Mean
 #' @export
-#' @keywords internal
+#' @examples
+#' \dontrun{
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
+#'             Min + Max + SD + Var, 
+#'             data = mtcars)
+#' }
 SD <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::sd(x, na.rm = na.rm)
   if (!is.null(fmt)) {
@@ -65,8 +107,14 @@ SD <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @inheritParams Mean
 #' @export
-#' @keywords internal
+#' @examples
+#' \dontrun{
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
+#'             Min + Max + SD + Var, 
+#'             data = mtcars)
+#' }
 Var <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::var(x, na.rm = na.rm)
   if (!is.null(fmt)) {
@@ -76,14 +124,15 @@ Var <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @inheritParams Mean
 #' @export
-#' @keywords internal
 Ncol <- function(x, ...)
   paste0('(N = ', length(x), ')')
 
 #' datasummary statistic shortcut
+#' @inheritParams Mean
+#' @param y denominator variable
 #' @export
-#' @keywords internal
 NPercent <- function(x, y) {
   pct <- round(100 * length(x) / length(y))
   n <- length(x)
@@ -95,15 +144,26 @@ NPercent <- function(x, y) {
   return(out)
 }
 
+
 #' datasummary statistic shortcut
+#' @inheritParams Mean
 #' @export
-#' @keywords internal
+#' @examples
+#' \dontrun{
+#' datasummary(cyl + hp ~ NUnique, data = mtcars)
+#' }
 NUnique <- function(x, ...) sprintf("%.0f", length(unique(x)))
 
 
 #' datasummary statistic shortcut
+#' @inheritParams Mean
 #' @export
-#' @keywords internal
+#' @examples
+#' \dontrun{
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
+#'             Min + Max + SD + Var, 
+#'             data = mtcars)
+#' }
 P0 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::quantile(x, prob = 0, na.rm = na.rm)
   if (!is.null(fmt)) {
@@ -113,8 +173,14 @@ P0 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @inheritParams Mean
 #' @export
-#' @keywords internal
+#' @examples
+#' \dontrun{
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
+#'             Min + Max + SD + Var, 
+#'             data = mtcars)
+#' }
 P25 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::quantile(x, prob = 0.25, na.rm = na.rm)
   if (!is.null(fmt)) {
@@ -124,8 +190,14 @@ P25 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @inheritParams Mean
 #' @export
-#' @keywords internal
+#' @examples
+#' \dontrun{
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
+#'             Min + Max + SD + Var, 
+#'             data = mtcars)
+#' }
 P50 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::quantile(x, prob = 0.50, na.rm = na.rm)
   if (!is.null(fmt)) {
@@ -135,8 +207,14 @@ P50 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @inheritParams Mean
 #' @export
-#' @keywords internal
+#' @examples
+#' \dontrun{
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
+#'             Min + Max + SD + Var, 
+#'             data = mtcars)
+#' }
 P75 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::quantile(x, prob = 0.75, na.rm = na.rm)
   if (!is.null(fmt)) {
@@ -146,8 +224,14 @@ P75 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @inheritParams Mean
 #' @export
-#' @keywords internal
+#' @examples
+#' \dontrun{
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
+#'             Min + Max + SD + Var, 
+#'             data = mtcars)
+#' }
 P100 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- stats::quantile(x, prob = 1, na.rm = na.rm)
   if (!is.null(fmt)) {
@@ -157,8 +241,8 @@ P100 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @inheritParams Mean
 #' @export
-#' @keywords internal
 PercentMissing <- function(x) {
   sprintf("%.0f", mean(is.na(x)) * 100)
 }
@@ -172,8 +256,9 @@ PercentMissing <- function(x) {
 #' vs. mac, etc.). We recommend you use the `kableExtra::spec_hist` function
 #' instead.
 #'
+#' @inheritParams Mean
+#' @param bins number of histogram bars
 #' @export
-#' @keywords internal
 Histogram <- function(x, bins = 10) {
   # ticks <- c(" ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█")
   ticks <- c(" ", "\u2581", "\u2582", "\u2583", "\u2584", "\u2585", "\u2586", "\u2587", "\u2588")

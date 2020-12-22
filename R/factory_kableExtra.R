@@ -1,7 +1,7 @@
 #' Internal function to build table with `kableExtra`
 #'
 #' @inheritParams factory_gt
-#' @keywords internal
+#' @noRd
 #' @return kableExtra object
 factory_kableExtra <- function(tab,
                                align = NULL,

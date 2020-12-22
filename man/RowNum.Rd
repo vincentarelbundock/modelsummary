@@ -4,6 +4,7 @@
 \name{RowNum}
 \alias{RowNum}
 \title{Display all observations in a table.}
+\keyword{internal}
 \description{
 These objects are imported from other packages. Follow the links
 below to see their documentation.

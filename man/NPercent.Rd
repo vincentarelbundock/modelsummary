@@ -6,7 +6,11 @@
 \usage{
 NPercent(x, y)
 }
+\arguments{
+\item{x}{varible to summarize}
+
+\item{y}{denominator variable}
+}
 \description{
 datasummary statistic shortcut
 }
-\keyword{internal}

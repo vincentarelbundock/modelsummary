@@ -3,6 +3,7 @@
 #'
 #' @param tab table body (data.frame)
 #' @param hrule position of horizontal rules (integer vector)
+#' @noRd
 #' @inheritParams modelsummary
 #' @inheritParams datasummary
 factory <- function(tab,

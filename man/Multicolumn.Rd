@@ -4,6 +4,7 @@
 \name{Multicolumn}
 \alias{Multicolumn}
 \title{Use a variable as a factor to give rows in a table.}
+\keyword{internal}
 \description{
 These objects are imported from other packages. Follow the links
 below to see their documentation.

@@ -75,7 +75,7 @@ datasummary_skim <- function(data,
 
 #' Internal function to skim whole datasets
 #'
-#' @keywords internal
+#' @noRd
 datasummary_skim_dataset <- function(
   data,
   output,
@@ -118,7 +118,7 @@ datasummary_skim_dataset <- function(
 
 #' Internal function to skim numeric variables
 #'
-#' @keywords internal
+#' @noRd
 datasummary_skim_numeric <- function(
   data,
   output,
@@ -256,7 +256,7 @@ datasummary_skim_numeric <- function(
 
 #' Internal function to skim categorical variables
 #'
-#' @keywords internal
+#' @noRd
 datasummary_skim_categorical <- function(
   data,
   output,

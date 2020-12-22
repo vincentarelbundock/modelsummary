@@ -1,8 +1,8 @@
 #' Extract custom information from a model object and turn it into a tidy
 #' data.frame or tibble with a single row.
 #'
-#' glance_custom methods always return either a one-row data frame (except on
-#'  `NULL`, which returns an empty data frame). This
+#' To customize the output of a model of class `lm`, you can define a new
+#' method called `glance_custom.lm` which returns a one-row data.frame.
 #'
 #' @param x model or other R object to convert to single-row data frame
 #'
@@ -16,13 +16,13 @@ glance_custom <- function(x) {
 
 
 #' @inherit glance_custom
-#' @keywords internal
+#' @noRd
 #' @export
 glance_custom.default <- function(x) NULL
 
 
 #' @inherit glance_custom
-#' @keywords internal
+#' @noRd
 #' @export
 glance_custom.fixest <- function(x) {
   assert_dependency("fixest")
@@ -36,7 +36,7 @@ glance_custom.fixest <- function(x) {
 }
 
 ##' @inherit glance_custom
-##' @keywords internal
+##' @noRd
 ##' @export
 #glance_custom.felm <- function(x) {
 #	out <- tibble::tibble(.rows = 1)

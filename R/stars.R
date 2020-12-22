@@ -1,6 +1,6 @@
 #' Internal function to prepare stars
 #'
-#' @keywords internal
+#' @noRd
 clean_stars <- function(stars) {
   if (is.logical(stars)) {
     if (stars) {
@@ -18,7 +18,7 @@ clean_stars <- function(stars) {
 
 #' Internal function to prepare stars
 #'
-#' @keywords internal
+#' @noRd
 make_stars <- function(pvalues, stars) {
   stars <- clean_stars(stars)
   tmp <- ""
@@ -31,7 +31,7 @@ make_stars <- function(pvalues, stars) {
 
 #' Internal function to prepare stars footnote
 #'
-#' @keywords internal
+#' @noRd
 make_stars_note <- function(stars) {
   out <- clean_stars(stars)
   if (!is.null(out)) {

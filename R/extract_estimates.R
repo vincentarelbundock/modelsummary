@@ -2,7 +2,7 @@
 #' @param model object type with an available `tidy` method.
 #' @inheritParams modelsummary
 #' @return data.frame with side-by-side model summaries
-#' @keywords internal
+#' @noRd
 extract_estimates <- function(
   model,
   estimate   = "estimate",

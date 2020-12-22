@@ -4,14 +4,6 @@
 globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'value', 'p.value', 'std.error', 'statistic', 'stars_note', 'logLik', 'formatBicLL', 'section', 'position', 'where', 'ticks', 'statistic1', 'model', 'tmp_grp', 'condition_variable'))
 
 
-#' Deprecated function
-#'
-#' @param ... any argument
-#' @export
-extract_models <- function(...) {
-  stop('This function is deprecated. Consider using `modelsummary(output="data.frame")` instead.')
-}
-
 
 #' Beautiful, customizable summaries of statistical models
 #'
@@ -480,5 +472,6 @@ modelsummary <- function(
 #'
 #' `msummary()` is a shortcut to `modelsummary()`
 #' @inherit modelsummary
+#' @keywords internal
 #' @export
 msummary <- modelsummary

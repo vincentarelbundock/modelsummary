@@ -6,7 +6,7 @@
 #' `sprintf` function. See ?sprintf for details.
 #'
 #' @return a rounded number as character
-#' @keywords internal
+#' @noRd
 rounding <- function(x, fmt = '%.3f') {
   if (is.character(x)) {
     out <- x

@@ -1,7 +1,7 @@
 #' Internal function to build table with `huxtable`
 #'
 #' @inheritParams factory_gt
-#' @keywords internal
+#' @noRd
 #' @return huxtable object
 factory_huxtable <- function(tab,
                              align = NULL,

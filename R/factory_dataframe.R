@@ -2,8 +2,8 @@
 #' attributes. Useful for testing.
 #'
 #' @inheritParams factory_gt
-#' @keywords internal
 #' @return data.frame
+#' @noRd
 factory_dataframe <- function(tab,
                               align = NULL,
                               hrule = NULL,

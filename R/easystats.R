@@ -1,6 +1,6 @@
 #' extract gof using the easystats `performance` package
 #'
-#' @keywords internal
+#' @noRd
 glance_easystats <- function(model, ...) {
   if (!check_dependency("performance")) {
     return(NULL)
@@ -32,7 +32,7 @@ glance_easystats <- function(model, ...) {
 
 #' extract estimates using the easystats `parameters` package
 #'
-#' @keywords internal
+#' @noRd
 tidy_easystats <- function(model, ...) {
   if (!check_dependency("parameters")) {
     return(NULL)

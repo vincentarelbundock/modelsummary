@@ -6,7 +6,16 @@
 \usage{
 NUnique(x, ...)
 }
+\arguments{
+\item{x}{varible to summarize}
+
+\item{...}{unused}
+}
 \description{
 datasummary statistic shortcut
 }
-\keyword{internal}
+\examples{
+\dontrun{
+datasummary(cyl + hp ~ NUnique, data = mtcars)
+}
+}

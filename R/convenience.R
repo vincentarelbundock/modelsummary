@@ -13,7 +13,7 @@
 #' @param tab a `gt` table object
 #' @param position character string determines wither row, column or both
 #'   labels should be rendered.
-#' @keywords internal
+#' @noRd
 #' @note This function only works for HTML output, since the `gt` render tools
 #' are less developed for LaTeX and RTF output.
 fmt_labels_md <- function(tab, position = c('both', 'row', 'column')) {
@@ -32,7 +32,7 @@ fmt_labels_md <- function(tab, position = c('both', 'row', 'column')) {
 #' An unsupported and unexported function to tidy a lfe::felm instrumental
 #' variable model
 #'
-#' @keywords internal
+#' @noRd
 tidy_felm_iv <- function(x, ...) {
   # we have changed the class of the model to "iv". Now, we want to use the
   # standard broom:::tidy.felm function, so we switch it back.
@@ -56,7 +56,7 @@ tidy_felm_iv <- function(x, ...) {
 #' An unsupported and unexported function to clean the term names from a lfe::felm
 #' instrumental variable model
 #'
-#' @keywords internal
+#' @noRd
 coef_map_felm_iv <- function(x) {
   # this function must work for models and lists of models, so we define a
   # couple of helpers functions to extract term names from both stages of

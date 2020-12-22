@@ -79,4 +79,3 @@ control and treatment groups)
 datasummary_balance(~am, mtcars)
 }
 }
-\keyword{internal}

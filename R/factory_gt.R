@@ -3,7 +3,7 @@
 #' @inheritParams factory
 #' @param output_file file path (character or NULL)
 #' @param output_format character
-#' @keywords internal
+#' @noRd
 #' @return tbl_gt object
 factory_gt <- function(tab,
                        align = NULL,

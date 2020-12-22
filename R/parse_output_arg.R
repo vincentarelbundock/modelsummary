@@ -1,7 +1,7 @@
 #' parse an `output` argument to determine which table factory and which output
 #' format to use.
 #'
-#' @keywords internal
+#' @noRd
 parse_output_arg <- function(output) {
 
   # kableExtra produces human-readable code

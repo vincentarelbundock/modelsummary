@@ -3,7 +3,6 @@
 
 
 #' bind columns
-#' @keywords internal
 #' @noRd
 bind_cols <- function(...) {
   lsts <- list(...)
@@ -17,7 +16,6 @@ bind_cols <- function(...) {
 }
 
 #' bind rows
-#' @keywords internal
 #' @noRd
 bind_rows <- function(..., .id = NULL) {
   lsts <- list(...)
@@ -49,7 +47,6 @@ bind_rows <- function(..., .id = NULL) {
 }
 
 #' Move entries within a list up one level
-#' @keywords internal
 #' @noRd
 flatten <- function(lst) {
   nested <- is_nested(lst)
@@ -59,7 +56,6 @@ flatten <- function(lst) {
 
 
 #' Check whether the input is an atomic vector or a data.frame
-#' @keywords internal
 #' @noRd
 is_df_or_vector <- function(x) {
   res <- is.data.frame(x) || is.atomic(x)
@@ -68,7 +64,6 @@ is_df_or_vector <- function(x) {
 }
 
 #' poorman check
-#' @keywords internal
 #' @noRd
 is_named <- function(x) {
   nms <- names(x)
@@ -78,7 +73,6 @@ is_named <- function(x) {
 }
 
 #' Check whether the input is an atomic vector or a data.frame
-#' @keywords internal
 #' @noRd
 is_df_or_vector <- function(x) {
   res <- is.data.frame(x) || is.atomic(x)
@@ -87,12 +81,10 @@ is_df_or_vector <- function(x) {
 }
 
 #' Check whether any elements of a list are nested#' @param lst A `list()`
-#' @keywords internal
 #' @noRd
 is_nested <- function(lst) vapply(lst, function(x) inherits(x[1L], "list"), FALSE)
 
 #' Remove all levels of a list
-#' @keywords internal
 #' @noRd
 squash <- function(lst) {
   do.call(c, lapply(lst, function(x) if (is.list(x) && !is.data.frame(x)) squash(x) else list(x)))
@@ -100,7 +92,6 @@ squash <- function(lst) {
 
 
 #' poorman check
-#' @keywords internal
 #' @noRd
 names_are_invalid <- function(x) {
   x == "" | is.na(x)

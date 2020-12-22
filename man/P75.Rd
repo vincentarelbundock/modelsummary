@@ -6,7 +6,23 @@
 \usage{
 P75(x, fmt = NULL, na.rm = TRUE, ...)
 }
+\arguments{
+\item{x}{varible to summarize}
+
+\item{fmt}{passed to the `modelsummary:::rounding` function}
+
+\item{na.rm}{a logical value indicating whether ‘NA’ values should be
+stripped before the computation proceeds.}
+
+\item{...}{unused}
+}
 \description{
 datasummary statistic shortcut
 }
-\keyword{internal}
+\examples{
+\dontrun{
+datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
+            Min + Max + SD + Var, 
+            data = mtcars)
+}
+}

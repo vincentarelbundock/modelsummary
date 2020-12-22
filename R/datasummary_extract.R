@@ -1,6 +1,6 @@
 #' Extract data from a `tables::tabular` object
 #'
-#' @keywords internal
+#' @noRd
 datasummary_extract <- function(tab,
                                 fmt = NULL,
                                 sparse_header = TRUE) {

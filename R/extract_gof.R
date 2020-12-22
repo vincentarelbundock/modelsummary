@@ -2,7 +2,7 @@
 #' @param model object type with an available `glance` method.
 #' @inheritParams modelsummary
 #' @return data.frame with goodness-of-fit  statistics
-#' @keywords internal
+#' @noRd
 extract_gof <- function(model, fmt, gof_map, ...) {
 
   # extract gof from model object

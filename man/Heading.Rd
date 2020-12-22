@@ -4,6 +4,7 @@
 \name{Heading}
 \alias{Heading}
 \title{'Heading' pseudo-function}
+\keyword{internal}
 \description{
 These objects are imported from other packages. Follow the links
 below to see their documentation.

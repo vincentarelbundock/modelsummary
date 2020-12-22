@@ -6,7 +6,14 @@
 \usage{
 N(x)
 }
+\arguments{
+\item{x}{varible to summarize}
+}
 \description{
 datasummary statistic shortcut
 }
-\keyword{internal}
+\examples{
+\dontrun{
+datasummary(Factor(cyl) ~ N, data = mtcars)
+}
+}

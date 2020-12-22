@@ -6,7 +6,9 @@
 \usage{
 PercentMissing(x)
 }
+\arguments{
+\item{x}{varible to summarize}
+}
 \description{
 datasummary statistic shortcut
 }
-\keyword{internal}

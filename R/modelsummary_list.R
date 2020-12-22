@@ -1,7 +1,7 @@
 #' internal tidy method
 #'
 #' @export
-#' @keywords internal
+#' @noRd
 tidy.modelsummary_list <- function(x, ...) {
   if ("tidy" %in% names(x)) {
     x[["tidy"]]
@@ -13,7 +13,7 @@ tidy.modelsummary_list <- function(x, ...) {
 #' internal glance method
 #'
 #' @export
-#' @keywords internal
+#' @noRd
 glance.modelsummary_list <- function(x, ...) {
   if ("glance" %in% names(x)) {
     out <- x[["glance"]]

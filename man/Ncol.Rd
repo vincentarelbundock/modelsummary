@@ -6,7 +6,11 @@
 \usage{
 Ncol(x, ...)
 }
+\arguments{
+\item{x}{varible to summarize}
+
+\item{...}{unused}
+}
 \description{
 datasummary statistic shortcut
 }
-\keyword{internal}

@@ -2,80 +2,79 @@
 
 #' @title Include all columsn of a dataframe.
 #' @export
-#' @keywords NULL
-#' @keywords NULL
+#' @keywords internal
 #' @name All
 tables::All
 
 #' @title Display all observations in a table.
 #' @export
-#' @keywords NULL
+#' @keywords internal
 #' @name AllObs
 tables::AllObs
 
 #' @title 'Arguments' pseudo-function
 #' @export
-#' @keywords NULL
+#' @keywords internal
 #' @name Arguments
 tables::Arguments
 
 #' @title 'DropEmpty' pseudo-function
 #' @export
-#' @keywords NULL
+#' @keywords internal
 #' @name DropEmpty
 tables::DropEmpty
 
 #' @title Use a variable as a factor to give rows in a table.
 #' @export
-#' @keywords NULL
+#' @keywords internal
 #' @name Factor
 tables::Factor
 
 #' @title Use a variable as a factor to give rows in a table.
 #' @export
-#' @keywords NULL
+#' @keywords internal
 #' @name Format
 tables::Format
 
 #' @title 'Heading' pseudo-function
 #' @export
-#' @keywords NULL
+#' @keywords internal
 #' @name Heading
 tables::Heading
 
 #' @title Use a variable as a factor to give rows in a table.
 #' @export
-#' @keywords NULL
+#' @keywords internal
 #' @name Multicolumn
 tables::Multicolumn
 
 #' @title Generate terms to paste values together in table.
 #' @export
-#' @keywords NULL
+#' @keywords internal
 #' @name Paste
 tables::Paste
 
 #' @title Pseudo-function to compute a statistic relative to a reference set.
 #' @export
-#' @keywords NULL
+#' @keywords internal
 #' @name Percent
 tables::Percent
 
 #' @title Generate 'x +/- y' terms in table.
 #' @export
-#' @keywords NULL
+#' @keywords internal
 #' @name PlusMinus
 tables::PlusMinus
 
 #' @title Use a variable as a factor to give rows in a table.
 #' @export
-#' @keywords NULL
+#' @keywords internal
 #' @name RowFactor
 tables::RowFactor
 
 #' @title Display all observations in a table.
 #' @export
-#' @keywords NULL
+#' @keywords internal
 #' @name RowNum
 tables::RowNum
 

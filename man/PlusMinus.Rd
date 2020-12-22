@@ -4,6 +4,7 @@
 \name{PlusMinus}
 \alias{PlusMinus}
 \title{Generate 'x +/- y' terms in table.}
+\keyword{internal}
 \description{
 These objects are imported from other packages. Follow the links
 below to see their documentation.

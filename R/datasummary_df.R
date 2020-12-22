@@ -2,7 +2,7 @@
 #'
 #' @inheritParams modelsummary
 #' @inheritParams datasummary
-#' @inheritParams factory
+#' @param hrule position of horizontal rules (integer vector)
 #' @export
 datasummary_df <- function(data,
                            output = "default",

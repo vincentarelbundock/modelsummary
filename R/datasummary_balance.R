@@ -19,7 +19,6 @@
 #' \dontrun{
 #' datasummary_balance(~am, mtcars)
 #' }
-#' @keywords internal
 datasummary_balance <- function(formula,
                                 data,
                                 output = 'default',
@@ -256,7 +255,7 @@ datasummary_balance_numeric <- function(rhs, data, data_norhs, fmt, dinm, dinm_s
 
 #' Difference in means using `estimatr`
 #'
-#' @keywords internal
+#' @noRd
 DinM <- function(lhs, rhs, data, fmt, statistic) {
 
   assert_dependency("estimatr")

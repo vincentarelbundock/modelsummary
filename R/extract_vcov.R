@@ -1,7 +1,7 @@
 #' Allow users to override uncertainty estimates
 #' @param model object type with an available `tidy` method.
 #' @inheritParams modelsummary
-#' @keywords internal
+#' @noRd
 #' @return a numeric vector of test statistics
 extract_vcov <- function(model, vcov, conf_level=NULL) {
 

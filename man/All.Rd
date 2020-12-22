@@ -4,6 +4,7 @@
 \name{All}
 \alias{All}
 \title{Include all columsn of a dataframe.}
+\keyword{internal}
 \description{
 These objects are imported from other packages. Follow the links
 below to see their documentation.

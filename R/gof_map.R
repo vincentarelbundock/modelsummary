@@ -1,6 +1,6 @@
 #' internal function to build gof_map
 #'
-#' @keywords internal
+#' @noRd
 gof_map_build <- function() {
   text <- 'raw, clean, fmt, omit,
   nobs,                      Num.Obs.,           0, FALSE,

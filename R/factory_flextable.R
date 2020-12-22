@@ -1,8 +1,8 @@
 #' Internal function to build table with `flextable`
 #'
 #' @inheritParams factory_gt
-#' @keywords internal
 #' @return flextable object
+#' @noRd
 factory_flextable <- function(tab,
                               align = NULL,
                               hrule = NULL,

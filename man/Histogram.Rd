@@ -6,6 +6,11 @@
 \usage{
 Histogram(x, bins = 10)
 }
+\arguments{
+\item{x}{varible to summarize}
+
+\item{bins}{number of histogram bars}
+}
 \description{
 This function uses Unicode characters to create a histogram. This can
 sometimes be useful, but is generally discouraged. Unicode characters can
@@ -14,4 +19,3 @@ output is highly dependent on the platform (typeface, output type, windows
 vs. mac, etc.). We recommend you use the `kableExtra::spec_hist` function
 instead.
 }
-\keyword{internal}
