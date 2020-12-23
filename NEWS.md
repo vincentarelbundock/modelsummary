@@ -5,6 +5,7 @@
 * vcov accepts formulas for clustered SEs: ~group
 * modelsummary_wide has a new "stacking" argument
 * gof_map accepts list of lists. only needs 3 columns.
+* support officedown Rmd
 * bug: stars and rounding
 
 # modelsummary 0.6.4
