@@ -230,7 +230,7 @@ modelsummary <- function(
   sanity_vcov(models, vcov)
   sanity_conf_level(conf_level)
   sanity_coef(coef_map, coef_rename, coef_omit)
-  # sanity_gof(gof_map, gof_omit)
+  sanity_gof_map(gof_map, gof_omit)
   sanity_stars(stars)
   sanity_fmt(fmt)
 

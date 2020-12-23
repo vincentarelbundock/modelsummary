@@ -72,10 +72,10 @@ sanity_coef <- function(coef_map, coef_rename, coef_omit) {
 #' sanity check
 #'
 #' @noRd
-sanity_gof <- function(gof_map, gof_omit) {
+sanity_gof_map <- function(gof_map, gof_omit) {
   checkmate::assert_string(gof_omit, null.ok = TRUE)
   checkmate::assert(
-    checkmate::check_data_frame(gof_map, null.ok = TRUE, ncols = 3),
+    checkmate::check_data_frame(gof_map, null.ok = TRUE, min.cols = 3),
     checkmate::check_list(gof_map, null.ok = TRUE),
     combine = "or")
   if (class(gof_map)[1] == "list") {
