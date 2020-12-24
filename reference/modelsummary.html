@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.4.9000</span>
       </span>
     </div>
 
@@ -89,26 +89,8 @@
 <li>
   <a href="../articles/datasummary.html">datasummary</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    More
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/rmarkdown.html">Rmarkdown &amp; knitr</a>
-    </li>
-    <li>
-      <a href="../articles/newmodels.html">Adding and customizing models</a>
-    </li>
-    <li>
-      <a href="../articles/multiple_imputation.html">Multiple imputation</a>
-    </li>
-    <li>
-      <a href="../articles/extract.html">Raw data</a>
-    </li>
-  </ul>
+<li>
+  <a href="../articles/appearance.html">appearance</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -140,68 +122,83 @@
     <p>Beautiful, customizable summaries of statistical models</p>
     </div>
 
-    <pre class="usage"><span class='fu'>modelsummary</span>(
-  <span class='no'>models</span>,
-  <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"default"</span>,
-  <span class='kw'>fmt</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>"std.error"</span>,
-  <span class='kw'>statistic_override</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>stars</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>coef_map</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>coef_omit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>coef_rename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>gof_map</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>gof_omit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"estimate"</span>,
-  <span class='kw'>add_rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>notes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>align</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>statistic_vertical</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>modelsummary</span><span class='op'>(</span>
+  <span class='va'>models</span>,
+  output <span class='op'>=</span> <span class='st'>"default"</span>,
+  fmt <span class='op'>=</span> <span class='fl'>3</span>,
+  estimate <span class='op'>=</span> <span class='st'>"estimate"</span>,
+  statistic <span class='op'>=</span> <span class='st'>"std.error"</span>,
+  vcov <span class='op'>=</span> <span class='cn'>NULL</span>,
+  conf_level <span class='op'>=</span> <span class='fl'>0.95</span>,
+  stars <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  coef_map <span class='op'>=</span> <span class='cn'>NULL</span>,
+  coef_omit <span class='op'>=</span> <span class='cn'>NULL</span>,
+  coef_rename <span class='op'>=</span> <span class='cn'>NULL</span>,
+  gof_map <span class='op'>=</span> <span class='cn'>NULL</span>,
+  gof_omit <span class='op'>=</span> <span class='cn'>NULL</span>,
+  add_rows <span class='op'>=</span> <span class='cn'>NULL</span>,
+  align <span class='op'>=</span> <span class='cn'>NULL</span>,
+  notes <span class='op'>=</span> <span class='cn'>NULL</span>,
+  title <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>models</th>
-      <td><p>a single model object or a (potentially named) list of models
-to summarize</p></td>
+      <td><p>a model or (optionally named) list of models</p></td>
     </tr>
     <tr>
       <th>output</th>
-      <td><p>filename or object type (string)</p><ul>
+      <td><p>filename or object type (character string)</p><ul>
 <li><p>Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.</p></li>
 <li><p>Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".</p></li>
-<li><p>When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kableExtra::save_kable`, or `cat` functions.</p></li>
+<li><p>Warning: the `output` argument <em>cannot</em> be used when customizing tables with external packages. See the 'Details' section below.</p></li>
 </ul></td>
     </tr>
     <tr>
       <th>fmt</th>
-      <td><p>an integer, string, or function which determines how to format numeric values:</p><ul>
-<li><p>integer: the number of digits to keep after the period (`format(round(x, fmt), nsmall=fmt)`)</p></li>
-<li><p>character: string is passed to the `sprintf` function. '%.3f' will keep 3 digits after the decimal point with trailing zero. '%.5f' will keep 5 digits. '%.3e' will use exponential notation. See `?sprintf` for more options.</p></li>
-<li><p>function: a function which returns a formatted character string</p></li>
+      <td><p>determines how to format numeric values</p><ul>
+<li><p>integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`</p></li>
+<li><p>character: passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`</p></li>
+<li><p>function: returns a formatted character string.</p></li>
 </ul></td>
     </tr>
     <tr>
-      <th>statistic</th>
-      <td><p>character vector of raw strings or glue strings (see examples) which represent the uncertainty statistics to report vertically. Parentheses are added automatically unless the value includes `glue` curly braces . Acceptable values:</p><ul>
-<li><p>Typical values: "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high".</p></li>
-<li><p>Alternative values: any column name produced by `broom::tidy(model)`</p></li>
-<li><p>`glue` package strings with braces such as:</p></li>
+      <th>estimate</th>
+      <td><p>string or `glue` string of the estimate to display. Valid entries include any column name of the data.frame produced by `get_estimates(model)`. Examples:</p><ul>
+<li><p>"estimate"</p></li>
+<li><p>"{estimate} ({std.error})"</p></li>
 <li><p>"{estimate} [{conf.low}, {conf.high}]"</p></li>
 </ul></td>
     </tr>
     <tr>
-      <th>statistic_override</th>
-      <td><p>manually override statistics. Accepts three types of input:</p><ul>
-<li><p>a function or list of functions of length(models) which produce variance-covariance matrices with row and column names equal to the names of your coefficient estimates. For example, `R` supplies the `vcov` function, and the `sandwich` package supplies `vcovHC`, `vcovHAC`, etc. If the `lmtest` package is installed, `modelsummary` will try to use it to override: "std.error", "statistic", "p.value", "conf.int". If the `lmtest` package is not installed, `modelsummary` will override "std.error" by using the square root of the vcov matrix diagonal.</p></li>
-<li><p>a list of length(models) variance-covariance matrices with row and column names equal to the names of your coefficient estimates.</p></li>
-<li><p>a list of length(models) vectors with names equal to the names of your coefficient estimates. Numeric vectors are formatted according to `fmt` and placed in brackets, character vectors printed as given.</p></li>
+      <th>statistic</th>
+      <td><p>vector of strings or `glue` strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics.</p><ul>
+<li><p>"conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", or any column name produced by: `get_estimates(model)`</p></li>
+<li><p>`glue` package strings with braces, such as:</p><ul>
+<li><p>"{p.value} [{conf.low}, {conf.high}]"</p></li>
+<li><p>"Std.Error: {std.error}"</p></li>
+</ul></li>
+<li><p>Note: Parentheses are added automatically unless the string includes `glue` curly braces {}.</p></li>
+<li><p>Note: To report uncertainty statistics <em>next</em> to coefficients, you can supply a `glue` string to the `estimate` argument.</p></li>
 </ul></td>
+    </tr>
+    <tr>
+      <th>vcov</th>
+      <td><p>robust standard errors and other manual statistics. The `vcov` argument accepts five types of input (see the 'Details' and 'Examples' sections below):</p><ul>
+<li><p>string or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").</p></li>
+<li><p>formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).</p></li>
+<li><p>function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`).</p></li>
+<li><p>list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.</p></li>
+<li><p>a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below.</p></li>
+</ul></td>
+    </tr>
+    <tr>
+      <th>conf_level</th>
+      <td><p>confidence level to use for confidence intervals</p></td>
     </tr>
     <tr>
       <th>stars</th>
@@ -210,10 +207,6 @@ to summarize</p></td>
 <li><p>TRUE: *=.1, **=.05, ***=.01</p></li>
 <li><p>Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`</p></li>
 </ul></td>
-    </tr>
-    <tr>
-      <th>conf_level</th>
-      <td><p>confidence level to use for confidence intervals</p></td>
     </tr>
     <tr>
       <th>coef_map</th>
@@ -226,7 +219,7 @@ table. The table will be ordered in the same order as this vector.</p></td>
     <tr>
       <th>coef_omit</th>
       <td><p>string regular expression. Omits all matching coefficients
-from the table (using `grepl(perl=TRUE)`).</p></td>
+from the table using `grepl(perl=TRUE)`.</p></td>
     </tr>
     <tr>
       <th>coef_rename</th>
@@ -236,11 +229,11 @@ in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.</p></t
     </tr>
     <tr>
       <th>gof_map</th>
-      <td><p>data.frame with four columns: `raw`, `clean`, `fmt`, and
-`omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame
-by default: `modelsummary::gof_map` By default, all the statistics produced
-by `broom::glance` will be included unless they are omitted explicitly in
-`gof_map`.</p></td>
+      <td><ul>
+<li><p>NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.</p></li>
+<li><p>data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.</p></li>
+<li><p>list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>gof_omit</th>
@@ -248,25 +241,11 @@ by `broom::glance` will be included unless they are omitted explicitly in
 the table (using `grepl(perl=TRUE)`).</p></td>
     </tr>
     <tr>
-      <th>estimate</th>
-      <td><p>character name of the estimate to display. Must be a column
-name in the data.frame produced by `tidy(model)`. In the vast majority of
-cases, the default value of this argument should not be changed.</p></td>
-    </tr>
-    <tr>
       <th>add_rows</th>
       <td><p>a data.frame (or tibble) with the same number of columns as
 your main table. By default, rows are appended to the bottom of the table.
 You can define a "position" attribute of integers to set the row positions.
-See examples.</p></td>
-    </tr>
-    <tr>
-      <th>title</th>
-      <td><p>string</p></td>
-    </tr>
-    <tr>
-      <th>notes</th>
-      <td><p>list or vector of notes to append to the bottom of the table.</p></td>
+See Examples section below.</p></td>
     </tr>
     <tr>
       <th>align</th>
@@ -275,8 +254,12 @@ the table.  "lcr" means that the first column will be left-aligned, the 2nd
 column center-aligned, and the 3rd column right-aligned.</p></td>
     </tr>
     <tr>
-      <th>statistic_vertical</th>
-      <td><p>deprecated argument. Supply a vector of strings or `glue` strings to the `estimate` instead.</p></td>
+      <th>notes</th>
+      <td><p>list or vector of notes to append to the bottom of the table.</p></td>
+    </tr>
+    <tr>
+      <th>title</th>
+      <td><p>string</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -289,59 +272,119 @@ set `exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></t
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a regression table in a format determined by the `output` argument.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>`output` argument:</p>
+<p>When a file name is supplied to the `output` argument, the table is written
+immediately to file. If you want to customize your table by post-processing
+it with an external package, you need to choose a different output format
+and saving mechanism. Unfortunately, the approach differs from package to
+package:</p><ul>
+<li><p>`gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave` function.</p></li>
+<li><p>`kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.</p></li>
+</ul>
+
+<p>`vcov` argument:</p>
+<p>To use a string such as "robust" or "HC0", your model must be supported
+by the `sandwich` package. This includes objects such as: lm, glm,
+survreg, coxph, mlogit, polr, hurdle, zeroinfl, and more.</p>
+<p>"classical", "iid", and "constant" are aliases which do not modify
+uncertainty estimates and simply report the default standard errors stored
+in the model object.</p>
+<p>One-sided formulas such as `~clusterid` are passed to the `sandwich::vcovCL`
+function.</p>
+<p>Matrices and functions producing variance-covariance matrices are first
+passed to `lmtest`. If this does not work, `modelsummary` attempts to take
+the square root of the diagonal to adjust "std.error", but the other
+uncertainty estimates are not be adjusted.</p>
+<p>Numeric vectors are formatted according to `fmt` and placed in brackets.
+Character vectors printed as given, without parentheses. 
+If your model type is supported by the `lmtest` package, the
+`vcov` argument will try to use that package to adjust all the
+uncertainty estimates, including "std.error", "statistic", "p.value", and
+"conf.int". If your model is not supported by `lmtest`, only the "std.error"
+will be adjusted by, for example, taking the square root of the matrix's
+diagonal.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>modelsummary</span>)
+<span class='co'># The `modelsummary` website includes \emph{many} examples and tutorials:</span>
+<span class='co'># https://vincentarelbundock.github.io/modelsummary</span>
+
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://vincentarelbundock.github.io/modelsummary/'>modelsummary</a></span><span class='op'>)</span>
 
 <span class='co'># load data and estimate models</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>trees</span>)
-<span class='no'>models</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-<span class='no'>models</span><span class='kw'>[[</span><span class='st'>'Bivariate'</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>Girth</span> ~ <span class='no'>Height</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>trees</span>)
-<span class='no'>models</span><span class='kw'>[[</span><span class='st'>'Multivariate'</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>Girth</span> ~ <span class='no'>Height</span> + <span class='no'>Volume</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>trees</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>trees</span><span class='op'>)</span>
+<span class='va'>models</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>models</span><span class='op'>[[</span><span class='st'>'Bivariate'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Girth</span> <span class='op'>~</span> <span class='va'>Height</span>, data <span class='op'>=</span> <span class='va'>trees</span><span class='op'>)</span>
+<span class='va'>models</span><span class='op'>[[</span><span class='st'>'Multivariate'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Girth</span> <span class='op'>~</span> <span class='va'>Height</span> <span class='op'>+</span> <span class='va'>Volume</span>, data <span class='op'>=</span> <span class='va'>trees</span><span class='op'>)</span>
 
 <span class='co'># simple table</span>
-<span class='fu'>modelsummary</span>(<span class='no'>models</span>)
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span><span class='op'>)</span>
 
-<span class='co'># confidence intervals, p values, or t-stats instead of standard errors</span>
-<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>'conf.int'</span>, <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.99</span>)
-<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>'p.value'</span>, <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.99</span>)
-<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>'statistic'</span>, <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.99</span>)
+<span class='co'># statistic</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='st'>'p.value'</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='st'>'statistic'</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='st'>'conf.int'</span>, conf_level <span class='op'>=</span> <span class='fl'>0.99</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"t = {statistic}"</span>,
+                                   <span class='st'>"se = {std.error}"</span>,
+                                   <span class='st'>"conf.int"</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='co'># coef_rename: rename coefficients</span>
-<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>coef_map</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'Volume'</span> <span class='kw'>=</span> <span class='st'>'Large'</span>, <span class='st'>'Height'</span> <span class='kw'>=</span> <span class='st'>'Tall'</span>))
+<span class='co'># estimate</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, 
+  statistic <span class='op'>=</span> <span class='cn'>NULL</span>,
+  estimate <span class='op'>=</span> <span class='st'>"{estimate} [{conf.low}, {conf.high}]"</span><span class='op'>)</span>
 
-<span class='co'># coef_map: rename, re-order, and omit coefficients</span>
-<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>coef_map</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'Volume'</span> <span class='kw'>=</span> <span class='st'>'Large'</span>, <span class='st'>'Height'</span> <span class='kw'>=</span> <span class='st'>'Tall'</span>))
+<span class='co'># vcov</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, vcov <span class='op'>=</span> <span class='st'>"robust"</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"classical"</span>, <span class='st'>"stata"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, vcov <span class='op'>=</span> <span class='fu'>sandwich</span><span class='fu'>::</span><span class='va'><a href='http://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>vcovHC</a></span><span class='op'>)</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, 
+  vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'>stats</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/r/stats/vcov.html'>vcov</a></span>, <span class='fu'>sandwich</span><span class='fu'>::</span><span class='va'><a href='http://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>vcovHC</a></span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, 
+  vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"(Intercept)"</span><span class='op'>=</span><span class='st'>""</span>, <span class='st'>"Height"</span><span class='op'>=</span><span class='st'>"!"</span><span class='op'>)</span>,
+                            <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"(Intercept)"</span><span class='op'>=</span><span class='st'>""</span>, <span class='st'>"Height"</span><span class='op'>=</span><span class='st'>"!"</span>, <span class='st'>"Volume"</span><span class='op'>=</span><span class='st'>"!!"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='co'># titles</span>
-<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>'This is the title'</span>)
+<span class='co'># coef_rename</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, coef_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Volume'</span> <span class='op'>=</span> <span class='st'>'Large'</span>, <span class='st'>'Height'</span> <span class='op'>=</span> <span class='st'>'Tall'</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='co'># title with italicized text</span>
-<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/md.html'>md</a></span>(<span class='st'>'This is *the* title'</span>))
+<span class='co'># coef_map</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, coef_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Volume'</span> <span class='op'>=</span> <span class='st'>'Large'</span>, <span class='st'>'Height'</span> <span class='op'>=</span> <span class='st'>'Tall'</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='co'># add_rows: we use `tribble` from the `tibble` package to build a data.frame</span>
-<span class='co'># more easily. Then, we assign an attribute to determine each row's position.</span>
-<span class='no'>rows</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(~<span class='no'>term</span>, ~<span class='no'>Bivariate</span>, ~<span class='no'>Multivariate</span>,
+<span class='co'># title</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, title <span class='op'>=</span> <span class='st'>'This is the title'</span><span class='op'>)</span>
+
+<span class='co'># add_rows</span>
+<span class='va'>rows</span> <span class='op'>&lt;-</span> <span class='fu'>tibble</span><span class='fu'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>term</span>, <span class='op'>~</span><span class='va'>Bivariate</span>, <span class='op'>~</span><span class='va'>Multivariate</span>,
   <span class='st'>'Empty row'</span>, <span class='st'>'-'</span>, <span class='st'>'-'</span>,
-  <span class='st'>'Another empty row'</span>, <span class='st'>'?'</span>, <span class='st'>'?'</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>rows</span>, <span class='st'>'position'</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>)
-<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>add_rows</span> <span class='kw'>=</span> <span class='no'>rows</span>)
+  <span class='st'>'Another empty row'</span>, <span class='st'>'?'</span>, <span class='st'>'?'</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>rows</span>, <span class='st'>'position'</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, add_rows <span class='op'>=</span> <span class='va'>rows</span><span class='op'>)</span>
 
-<span class='co'># notes at the bottom of the table (here, the second note includes markdown bold characters)</span>
-<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>notes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>'A first note'</span>, <span class='kw pkg'>gt</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/gt/man/md.html'>md</a></span>(<span class='st'>'A **bold** note'</span>)))
+<span class='co'># notes</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, notes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>'A first note'</span>, <span class='st'>'A second note'</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='co'># modify list of GOF statistics and their format using the built-in</span>
-<span class='co'># 'gof_map' data frame as a starting point</span>
-<span class='no'>gof_custom</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>modelsummary</span><span class='kw ns'>::</span><span class='no'><a href='gof_map.html'>gof_map</a></span>
-<span class='no'>gof_custom</span>$<span class='no'>omit</span>[<span class='no'>gof_custom</span>$<span class='no'>raw</span> <span class='kw'>==</span> <span class='st'>'deviance'</span>] <span class='kw'>&lt;-</span> <span class='fl'>FALSE</span>
-<span class='no'>gof_custom</span>$<span class='no'>fmt</span>[<span class='no'>gof_custom</span>$<span class='no'>raw</span> <span class='kw'>==</span> <span class='st'>'r.squared'</span>] <span class='kw'>&lt;-</span> <span class='st'>"%.5f"</span>
-<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>gof_map</span> <span class='kw'>=</span> <span class='no'>gof_custom</span>)
-}
+<span class='co'># gof_map: data.frame</span>
+<span class='va'>gm</span> <span class='op'>&lt;-</span> <span class='fu'>modelsummary</span><span class='fu'>::</span><span class='va'><a href='gof_map.html'>gof_map</a></span>
+<span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>omit</span><span class='op'>[</span><span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>raw</span> <span class='op'>==</span> <span class='st'>'deviance'</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>FALSE</span>
+<span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>fmt</span><span class='op'>[</span><span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>raw</span> <span class='op'>==</span> <span class='st'>'r.squared'</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='st'>"%.5f"</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, gof_map <span class='op'>=</span> <span class='va'>gof_custom</span><span class='op'>)</span>
 
-<span class='co'># see the README on github for a lot more examples:</span>
-<span class='co'># https://github.com/vincentarelbundock/modelsummary</span></div></pre>
+<span class='co'># gof_map: list of lists</span>
+<span class='va'>f1</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fl'>3</span><span class='op'>)</span>, big.mark<span class='op'>=</span><span class='st'>","</span><span class='op'>)</span>
+<span class='va'>f2</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fl'>0</span><span class='op'>)</span>, big.mark<span class='op'>=</span><span class='st'>","</span><span class='op'>)</span>
+<span class='va'>gm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"raw"</span> <span class='op'>=</span> <span class='st'>"nobs"</span>, <span class='st'>"clean"</span> <span class='op'>=</span> <span class='st'>"N"</span>, <span class='st'>"fmt"</span> <span class='op'>=</span> <span class='va'>f2</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"raw"</span> <span class='op'>=</span> <span class='st'>"AIC"</span>, <span class='st'>"clean"</span> <span class='op'>=</span> <span class='st'>"aic"</span>, <span class='st'>"fmt"</span> <span class='op'>=</span> <span class='va'>f1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>,
+  fmt <span class='op'>=</span> <span class='va'>f1</span>,
+  gof_map <span class='op'>=</span> <span class='va'>gm</span><span class='op'>)</span>
+
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -357,7 +400,7 @@ set `exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></t
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

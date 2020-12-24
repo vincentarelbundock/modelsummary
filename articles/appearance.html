@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.4.9000</span>
       </span>
     </div>
 
@@ -47,26 +47,8 @@
 <li>
   <a href="../articles/datasummary.html">datasummary</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    More
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/rmarkdown.html">Rmarkdown &amp; knitr</a>
-    </li>
-    <li>
-      <a href="../articles/newmodels.html">Adding and customizing models</a>
-    </li>
-    <li>
-      <a href="../articles/multiple_imputation.html">Multiple imputation</a>
-    </li>
-    <li>
-      <a href="../articles/extract.html">Raw data</a>
-    </li>
-  </ul>
+  <a href="../articles/appearance.html">appearance</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -109,24 +91,21 @@
 <li><a href="https://davidgohel.github.io/flextable/"><code>flextable</code>: https://davidgohel.github.io/flextable/</a></li>
 </ol>
 <p>Users are encouraged to visit these websites to determine which package suits their needs best. Each of them has different strengths and weaknesses. For instance, <code>gt</code> allows seamless integration with the RStudio IDE, but <code>kableExtra</code>’s LaTeX (and PDF) output is far more mature.</p>
-<div id="post-processing" class="section level1">
-<h1 class="hasAnchor">
-<a href="#post-processing" class="anchor"></a>Post-processing</h1>
-<p>To create customized tables, the analyst begins by calling <code><a href="../reference/modelsummary.html">modelsummary(models)</a></code> to create a summary table. Then, she <em>post-processes</em> the table by applying functions from one of the packages listed above. It is often convenient to use the <code><a href="https://rdrr.io/pkg/kableExtra/man/reexports.html">%&gt;%</a></code> operator to do this.</p>
+<p>To create customized tables, the analyst begins by calling <code><a href="../reference/modelsummary.html">modelsummary(models)</a></code> to create a summary table. Then, she <em>post-processes</em> the table by applying functions from one of the packages listed above. It is often convenient to use the <code><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></code> operator to do this.</p>
 <p>To illustrate, we download data from the <a href="https://vincentarelbundock.github.io/Rdatasets'">Rdatasets repository</a> and we estimate 5 models:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
 
-<span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
-<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)
+<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
+<span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
 
-<span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
-<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
-<span class="no">models</span><span class="kw">[[</span><span class="st">'Poisson 1'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
-<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 2'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
-<span class="no">models</span><span class="kw">[[</span><span class="st">'Poisson 2'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
-<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS 3'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_prop</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)</pre></body></html></div>
+<span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">models</span><span class="op">[[</span><span class="st">'OLS 1'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Donations</span> <span class="op">~</span> <span class="va">Literacy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
+<span class="va">models</span><span class="op">[[</span><span class="st">'Poisson 1'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Donations</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
+<span class="va">models</span><span class="op">[[</span><span class="st">'OLS 2'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Crime_pers</span> <span class="op">~</span> <span class="va">Literacy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
+<span class="va">models</span><span class="op">[[</span><span class="st">'Poisson 2'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Crime_pers</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
+<span class="va">models</span><span class="op">[[</span><span class="st">'OLS 3'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Crime_prop</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></code></pre></div>
 <p>In the rest of this vignette, we will customize tables using tools supplied by the <code>gt</code>, <code>kableExtra</code>, <code>flextable</code>, and <code>huxtable</code> packages. In each case, the pattern will be similar. First, we create a table by calling <code>modelsummary</code> and by specifying the output format with the <code>output</code> parameter. Then, we will use functions from the four packages to customize the appearance of our tables.</p>
-</div>
 <div id="gt" class="section level1">
 <h1 class="hasAnchor">
 <a href="#gt" class="anchor"></a><code>gt</code>
@@ -142,40 +121,41 @@
 </ul>
 <p>To produce a “cleaner” look, we will also use <code>modelsummary</code>’s <code>stars</code>, <code>coef_map</code>, <code>gof_omit</code>, and <code>title</code> arguments.</p>
 <p>Note that in order to access <code>gt</code> functions, we must first load the library.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/gt">gt</a></span><span class="op">)</span>
 
 <span class="co"># build table with `modelsummary` </span>
-<span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>)
-<span class="no">cap</span> <span class="kw">&lt;-</span> <span class="st">'A modelsummary table customized with gt'</span>
+<span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="st">'(Intercept)'</span> <span class="op">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="op">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="op">=</span> <span class="st">'Priests/capita'</span><span class="op">)</span>
+<span class="va">cap</span> <span class="op">&lt;-</span> <span class="st">'A modelsummary table customized with gt'</span>
 
-<span class="no">tab</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>,
-                <span class="kw">output</span> <span class="kw">=</span> <span class="st">"gt"</span>,
-                <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                <span class="kw">title</span> <span class="kw">=</span> <span class="no">cap</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'IC|Log|Adj'</span>)
+<span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, 
+                output <span class="op">=</span> <span class="st">"gt"</span>,
+                coef_map <span class="op">=</span> <span class="va">cm</span>, stars <span class="op">=</span> <span class="cn">TRUE</span>, 
+                title <span class="op">=</span> <span class="va">cap</span>, gof_omit <span class="op">=</span> <span class="st">'IC|Log|Adj'</span><span class="op">)</span> 
 
 <span class="co"># customize table with `gt`</span>
 
-<span class="no">tab</span> <span class="kw">%&gt;%</span>
+<span class="va">tab</span> <span class="op">%&gt;%</span>
 
     <span class="co"># column labels</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Donations'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">3</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Crimes (persons)'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">4</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Crimes (property)'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">6</span>) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">'Donations'</span>, columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">'Crimes (persons)'</span>, columns <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">'Crimes (property)'</span>, columns <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="op">%&gt;%</span>
 
     <span class="co"># footnote</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(<span class="kw">footnote</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span>(<span class="st">"A very **important** variable."</span>),
-                 <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">rows</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fl">1</span>)) <span class="kw">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span><span class="op">(</span>footnote <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/md.html">md</a></span><span class="op">(</span><span class="st">"A very **important** variable."</span><span class="op">)</span>,
+                 locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">3</span>, columns <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
 
     <span class="co"># text and background color</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">'red'</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">rows</span> <span class="kw">=</span> <span class="fl">3</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span>(<span class="kw">style</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_fill.html">cell_fill</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">'lightblue'</span>),
-              <span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">rows</span> <span class="kw">=</span> <span class="fl">5</span>))</pre></body></html></div>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_text.html">cell_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span>,
+              locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_style.html">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cell_fill.html">cell_fill</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">'lightblue'</span><span class="op">)</span>,
+              locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#zbqkkgghhy .gt_table {
+#szpdvpdwaz .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -200,7 +180,7 @@
   border-left-color: #D3D3D3;
 }
 
-#zbqkkgghhy .gt_heading {
+#szpdvpdwaz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -212,7 +192,7 @@
   border-right-color: #D3D3D3;
 }
 
-#zbqkkgghhy .gt_title {
+#szpdvpdwaz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -222,7 +202,7 @@
   border-bottom-width: 0;
 }
 
-#zbqkkgghhy .gt_subtitle {
+#szpdvpdwaz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -232,13 +212,13 @@
   border-top-width: 0;
 }
 
-#zbqkkgghhy .gt_bottom_border {
+#szpdvpdwaz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zbqkkgghhy .gt_col_headings {
+#szpdvpdwaz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -253,7 +233,7 @@
   border-right-color: #D3D3D3;
 }
 
-#zbqkkgghhy .gt_col_heading {
+#szpdvpdwaz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -273,7 +253,7 @@
   overflow-x: hidden;
 }
 
-#zbqkkgghhy .gt_column_spanner_outer {
+#szpdvpdwaz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -285,15 +265,15 @@
   padding-right: 4px;
 }
 
-#zbqkkgghhy .gt_column_spanner_outer:first-child {
+#szpdvpdwaz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zbqkkgghhy .gt_column_spanner_outer:last-child {
+#szpdvpdwaz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zbqkkgghhy .gt_column_spanner {
+#szpdvpdwaz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -305,7 +285,7 @@
   width: 100%;
 }
 
-#zbqkkgghhy .gt_group_heading {
+#szpdvpdwaz .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -327,7 +307,7 @@
   vertical-align: middle;
 }
 
-#zbqkkgghhy .gt_empty_group_heading {
+#szpdvpdwaz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -342,15 +322,15 @@
   vertical-align: middle;
 }
 
-#zbqkkgghhy .gt_from_md > :first-child {
+#szpdvpdwaz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zbqkkgghhy .gt_from_md > :last-child {
+#szpdvpdwaz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zbqkkgghhy .gt_row {
+#szpdvpdwaz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -369,7 +349,7 @@
   overflow-x: hidden;
 }
 
-#zbqkkgghhy .gt_stub {
+#szpdvpdwaz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -381,7 +361,7 @@
   padding-left: 12px;
 }
 
-#zbqkkgghhy .gt_summary_row {
+#szpdvpdwaz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -391,7 +371,7 @@
   padding-right: 5px;
 }
 
-#zbqkkgghhy .gt_first_summary_row {
+#szpdvpdwaz .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -401,7 +381,7 @@
   border-top-color: #D3D3D3;
 }
 
-#zbqkkgghhy .gt_grand_summary_row {
+#szpdvpdwaz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -411,7 +391,7 @@
   padding-right: 5px;
 }
 
-#zbqkkgghhy .gt_first_grand_summary_row {
+#szpdvpdwaz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -421,11 +401,11 @@
   border-top-color: #D3D3D3;
 }
 
-#zbqkkgghhy .gt_striped {
+#szpdvpdwaz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zbqkkgghhy .gt_table_body {
+#szpdvpdwaz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -434,7 +414,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#zbqkkgghhy .gt_footnotes {
+#szpdvpdwaz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -448,13 +428,13 @@
   border-right-color: #D3D3D3;
 }
 
-#zbqkkgghhy .gt_footnote {
+#szpdvpdwaz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#zbqkkgghhy .gt_sourcenotes {
+#szpdvpdwaz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -468,46 +448,46 @@
   border-right-color: #D3D3D3;
 }
 
-#zbqkkgghhy .gt_sourcenote {
+#szpdvpdwaz .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#zbqkkgghhy .gt_left {
+#szpdvpdwaz .gt_left {
   text-align: left;
 }
 
-#zbqkkgghhy .gt_center {
+#szpdvpdwaz .gt_center {
   text-align: center;
 }
 
-#zbqkkgghhy .gt_right {
+#szpdvpdwaz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zbqkkgghhy .gt_font_normal {
+#szpdvpdwaz .gt_font_normal {
   font-weight: normal;
 }
 
-#zbqkkgghhy .gt_font_bold {
+#szpdvpdwaz .gt_font_bold {
   font-weight: bold;
 }
 
-#zbqkkgghhy .gt_font_italic {
+#szpdvpdwaz .gt_font_italic {
   font-style: italic;
 }
 
-#zbqkkgghhy .gt_super {
+#szpdvpdwaz .gt_super {
   font-size: 65%;
 }
 
-#zbqkkgghhy .gt_footnote_marks {
+#szpdvpdwaz .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="zbqkkgghhy" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="szpdvpdwaz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_header">
 <tr>
 <th colspan="6" class="gt_heading gt_title gt_font_normal" style>A modelsummary table customized with gt</th>
@@ -627,15 +607,16 @@
     </tr></tfoot>
 </table></div>
 <p>The <a href="https://gt.rstudio.com"><code>gt</code> website</a> offers many more examples. The possibilities are endless. For instance, <code>gt</code> allows you to embed images in your tables using the <code>text_transform</code> and <code>local_image</code> functions:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">f</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/pkg/gt/man/web_image.html">web_image</a></span>(<span class="kw">url</span> <span class="kw">=</span> <span class="st">"https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png"</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="fl">80</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">f</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/web_image.html">web_image</a></span><span class="op">(</span>url <span class="op">=</span> <span class="st">"https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png"</span>, height <span class="op">=</span> <span class="fl">80</span><span class="op">)</span>
 
-<span class="no">tab</span> <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/text_transform.html">text_transform</a></span>(<span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">2</span>:<span class="fl">6</span>, <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">1</span>), <span class="kw">fn</span> <span class="kw">=</span> <span class="no">f</span>)</pre></body></html></div>
+<span class="va">tab</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/text_transform.html">text_transform</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_body.html">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">6</span>, rows <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, fn <span class="op">=</span> <span class="va">f</span><span class="op">)</span></code></pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#crrgamhlhu .gt_table {
+#gucqvfpcop .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -660,7 +641,7 @@
   border-left-color: #D3D3D3;
 }
 
-#crrgamhlhu .gt_heading {
+#gucqvfpcop .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -672,7 +653,7 @@
   border-right-color: #D3D3D3;
 }
 
-#crrgamhlhu .gt_title {
+#gucqvfpcop .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -682,7 +663,7 @@
   border-bottom-width: 0;
 }
 
-#crrgamhlhu .gt_subtitle {
+#gucqvfpcop .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -692,13 +673,13 @@
   border-top-width: 0;
 }
 
-#crrgamhlhu .gt_bottom_border {
+#gucqvfpcop .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#crrgamhlhu .gt_col_headings {
+#gucqvfpcop .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -713,7 +694,7 @@
   border-right-color: #D3D3D3;
 }
 
-#crrgamhlhu .gt_col_heading {
+#gucqvfpcop .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -733,7 +714,7 @@
   overflow-x: hidden;
 }
 
-#crrgamhlhu .gt_column_spanner_outer {
+#gucqvfpcop .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -745,15 +726,15 @@
   padding-right: 4px;
 }
 
-#crrgamhlhu .gt_column_spanner_outer:first-child {
+#gucqvfpcop .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#crrgamhlhu .gt_column_spanner_outer:last-child {
+#gucqvfpcop .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#crrgamhlhu .gt_column_spanner {
+#gucqvfpcop .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -765,7 +746,7 @@
   width: 100%;
 }
 
-#crrgamhlhu .gt_group_heading {
+#gucqvfpcop .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -787,7 +768,7 @@
   vertical-align: middle;
 }
 
-#crrgamhlhu .gt_empty_group_heading {
+#gucqvfpcop .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -802,15 +783,15 @@
   vertical-align: middle;
 }
 
-#crrgamhlhu .gt_from_md > :first-child {
+#gucqvfpcop .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#crrgamhlhu .gt_from_md > :last-child {
+#gucqvfpcop .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#crrgamhlhu .gt_row {
+#gucqvfpcop .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -829,7 +810,7 @@
   overflow-x: hidden;
 }
 
-#crrgamhlhu .gt_stub {
+#gucqvfpcop .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -841,7 +822,7 @@
   padding-left: 12px;
 }
 
-#crrgamhlhu .gt_summary_row {
+#gucqvfpcop .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -851,7 +832,7 @@
   padding-right: 5px;
 }
 
-#crrgamhlhu .gt_first_summary_row {
+#gucqvfpcop .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -861,7 +842,7 @@
   border-top-color: #D3D3D3;
 }
 
-#crrgamhlhu .gt_grand_summary_row {
+#gucqvfpcop .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -871,7 +852,7 @@
   padding-right: 5px;
 }
 
-#crrgamhlhu .gt_first_grand_summary_row {
+#gucqvfpcop .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -881,11 +862,11 @@
   border-top-color: #D3D3D3;
 }
 
-#crrgamhlhu .gt_striped {
+#gucqvfpcop .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#crrgamhlhu .gt_table_body {
+#gucqvfpcop .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -894,7 +875,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#crrgamhlhu .gt_footnotes {
+#gucqvfpcop .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -908,13 +889,13 @@
   border-right-color: #D3D3D3;
 }
 
-#crrgamhlhu .gt_footnote {
+#gucqvfpcop .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#crrgamhlhu .gt_sourcenotes {
+#gucqvfpcop .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -928,46 +909,46 @@
   border-right-color: #D3D3D3;
 }
 
-#crrgamhlhu .gt_sourcenote {
+#gucqvfpcop .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#crrgamhlhu .gt_left {
+#gucqvfpcop .gt_left {
   text-align: left;
 }
 
-#crrgamhlhu .gt_center {
+#gucqvfpcop .gt_center {
   text-align: center;
 }
 
-#crrgamhlhu .gt_right {
+#gucqvfpcop .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#crrgamhlhu .gt_font_normal {
+#gucqvfpcop .gt_font_normal {
   font-weight: normal;
 }
 
-#crrgamhlhu .gt_font_bold {
+#gucqvfpcop .gt_font_bold {
   font-weight: bold;
 }
 
-#crrgamhlhu .gt_font_italic {
+#gucqvfpcop .gt_font_italic {
   font-style: italic;
 }
 
-#crrgamhlhu .gt_super {
+#gucqvfpcop .gt_super {
   font-size: 65%;
 }
 
-#crrgamhlhu .gt_footnote_marks {
+#gucqvfpcop .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="crrgamhlhu" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="gucqvfpcop" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_header">
 <tr>
 <th colspan="6" class="gt_heading gt_title gt_font_normal" style>A modelsummary table customized with gt</th>
@@ -1077,25 +1058,26 @@
 <code>row_spec</code> can modify the text and color of rows, columns, or cells.</li>
 </ul>
 <p>We use the same code as above, but specify <code>output='kableExtra'</code> in the <code><a href="../reference/modelsummary.html">modelsummary()</a></code> call:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span>
 
 <span class="co"># build table with `modelsummary` </span>
-<span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>)
-<span class="no">cap</span> <span class="kw">&lt;-</span> <span class="st">'A modelsummary table customized with kableExtra'</span>
+<span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="st">'(Intercept)'</span> <span class="op">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="op">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="op">=</span> <span class="st">'Priests/capita'</span><span class="op">)</span>
+<span class="va">cap</span> <span class="op">&lt;-</span> <span class="st">'A modelsummary table customized with kableExtra'</span>
 
-<span class="no">tab</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'kableExtra'</span>,
-                <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                <span class="kw">title</span> <span class="kw">=</span> <span class="no">cap</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'IC|Log|Adj'</span>)
+<span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">'kableExtra'</span>,
+                coef_map <span class="op">=</span> <span class="va">cm</span>, stars <span class="op">=</span> <span class="cn">TRUE</span>, 
+                title <span class="op">=</span> <span class="va">cap</span>, gof_omit <span class="op">=</span> <span class="st">'IC|Log|Adj'</span><span class="op">)</span> 
 
 <span class="co"># customize table with `kableExtra`</span>
-<span class="no">tab</span> <span class="kw">%&gt;%</span>
-
+<span class="va">tab</span> <span class="op">%&gt;%</span>
+    
     <span class="co"># column labels</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/add_header_above.html">add_header_above</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">" "</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="st">"Donations"</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="st">"Crimes (person)"</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="st">"Crimes (property)"</span> <span class="kw">=</span> <span class="fl">1</span>)) <span class="kw">%&gt;%</span>
-
+    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/add_header_above.html">add_header_above</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">" "</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"Donations"</span> <span class="op">=</span> <span class="fl">2</span>, <span class="st">"Crimes (person)"</span> <span class="op">=</span> <span class="fl">2</span>, <span class="st">"Crimes (property)"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+   
     <span class="co"># text and background color</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span>(<span class="fl">3</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">'red'</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span>(<span class="fl">5</span>, <span class="kw">background</span> <span class="kw">=</span> <span class="st">'lightblue'</span>)</pre></body></html></div>
+    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">3</span>, color <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">5</span>, background <span class="op">=</span> <span class="st">'lightblue'</span><span class="op">)</span></code></pre></div>
 <table class="table table">
 <caption>
 A modelsummary table customized with kableExtra
@@ -1334,7 +1316,8 @@ F
 <code>autofit</code> sets column width to sensible values.</li>
 </ul>
 <p>We use the same code as above, but specify <code>output='flextable'</code> in the <code><a href="../reference/modelsummary.html">modelsummary()</a></code> call:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">flextable</span>)
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://davidgohel.github.io/flextable/">flextable</a></span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'flextable'</span>
 <span class="co">#&gt; The following objects are masked from 'package:kableExtra':</span>
@@ -1342,108 +1325,108 @@ F
 <span class="co">#&gt;     as_image, footnote</span>
 
 <span class="co"># build table with `modelsummary` </span>
-<span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>)
-<span class="no">cap</span> <span class="kw">&lt;-</span> <span class="st">'A modelsummary table customized with flextable'</span>
+<span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="st">'(Intercept)'</span> <span class="op">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="op">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="op">=</span> <span class="st">'Priests/capita'</span><span class="op">)</span>
+<span class="va">cap</span> <span class="op">&lt;-</span> <span class="st">'A modelsummary table customized with flextable'</span>
 
-<span class="no">tab</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'flextable'</span>,
-                <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                <span class="kw">title</span> <span class="kw">=</span> <span class="no">cap</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'IC|Log|Adj'</span>)
+<span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">'flextable'</span>,
+                coef_map <span class="op">=</span> <span class="va">cm</span>, stars <span class="op">=</span> <span class="cn">TRUE</span>, 
+                title <span class="op">=</span> <span class="va">cap</span>, gof_omit <span class="op">=</span> <span class="st">'IC|Log|Adj'</span><span class="op">)</span> 
 
 <span class="co"># customize table with `flextable`</span>
-<span class="no">tab</span> <span class="kw">%&gt;%</span>
-
+<span class="va">tab</span> <span class="op">%&gt;%</span>
+   
     <span class="co"># text and background color</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/flextable/man/color.html">color</a></span>(<span class="fl">3</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">'red'</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/flextable/man/bg.html">bg</a></span>(<span class="fl">5</span>, <span class="kw">bg</span> <span class="kw">=</span> <span class="st">'lightblue'</span>) <span class="kw">%&gt;%</span>
-
+    <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/color.html">color</a></span><span class="op">(</span><span class="fl">3</span>, color <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/bg.html">bg</a></span><span class="op">(</span><span class="fl">5</span>, bg <span class="op">=</span> <span class="st">'lightblue'</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  
     <span class="co"># column widths</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/flextable/man/autofit.html">autofit</a></span>()</pre></body></html></div>
+    <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/autofit.html">autofit</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="tabwid">
-<style>.cl-39246b30{font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;}.cl-39246b4e{font-family:'Roboto';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(255, 0, 0, 1.00);background-color:transparent;}.cl-39246b58{font-family:'Arial';font-size:10px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-39248886{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;line-height: 1.00;background-color:transparent;}.cl-392488a4{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:0;padding-right:0;line-height: 1.00;background-color:transparent;}.cl-3924c0a8{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c0c6{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c0d0{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c0da{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c0e4{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c0ee{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c0f8{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c102{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c10c{width:69px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c116{width:87px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c120{width:81px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c12a{width:89px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c148{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c152{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c15c{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c166{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c170{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c17a{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c184{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c18e{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c198{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c1a2{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c1ac{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c1b6{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c1b7{width:89px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c1c0{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c1ca{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3924c1d4{width:81px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<style>.cl-94edf186{font-family:'Arial';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(17, 17, 17, 1.00);background-color:transparent;}.cl-94edf1c2{font-family:'Arial';font-size:11px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(255, 0, 0, 1.00);background-color:transparent;}.cl-94edf1d6{font-family:'Arial';font-size:10px;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-94ee0ad6{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:2px;padding-top:2px;padding-left:5px;padding-right:5px;line-height: 1.00;background-color:transparent;}.cl-94ee0af4{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0;padding-top:0;padding-left:0;padding-right:0;line-height: 1.00;background-color:transparent;}.cl-94ee467c{width:85px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee469a{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee46ae{width:79px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee46c2{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee46d6{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee46e0{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee46ea{width:85px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee46fe{width:79px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee4708{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee471c{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee4726{width:79px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee473a{width:85px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee4744{width:69px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee4758{width:85px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee4762{width:79px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee476c{width:87px;background-clip: padding-box;background-color:rgba(173, 216, 230, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee4780{width:85px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee478a{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee4794{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee47a8{width:79px;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 1.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee47b2{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee47c6{width:85px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee47d0{width:79px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee47e4{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee47ee{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee47f8{width:85px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee480c{width:79px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee4816{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 1.00px solid rgba(255, 255, 255, 0.00);border-top: 1.00px solid rgba(255, 255, 255, 0.00);border-left: 1.00px solid rgba(255, 255, 255, 0.00);border-right: 1.00px solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee4820{width:87px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee4834{width:85px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee483e{width:69px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-94ee4852{width:79px;background-color:transparent;vertical-align: middle;border-bottom: 2.00px solid rgba(0, 0, 0, 1.00);border-top: 2.00px solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
 <table class="table">
 <caption>A modelsummary table customized with flextable</caption>
 <thead><tr style="overflow-wrap:break-word;">
-<td class="cl-3924c1b7"><p class="cl-39248886"><span class="cl-39246b30"> </span></p></td>
-<td class="cl-3924c1d4"><p class="cl-39248886"><span class="cl-39246b30">OLS 1</span></p></td>
-<td class="cl-3924c1ca"><p class="cl-39248886"><span class="cl-39246b30">Poisson 1</span></p></td>
-<td class="cl-3924c1c0"><p class="cl-39248886"><span class="cl-39246b30">OLS 2</span></p></td>
-<td class="cl-3924c1ca"><p class="cl-39248886"><span class="cl-39246b30">Poisson 2</span></p></td>
-<td class="cl-3924c1c0"><p class="cl-39248886"><span class="cl-39246b30">OLS 3</span></p></td>
+<td class="cl-94ee4820"><p class="cl-94ee0ad6"><span class="cl-94edf186"> </span></p></td>
+<td class="cl-94ee4852"><p class="cl-94ee0ad6"><span class="cl-94edf186">OLS 1</span></p></td>
+<td class="cl-94ee483e"><p class="cl-94ee0ad6"><span class="cl-94edf186">Poisson 1</span></p></td>
+<td class="cl-94ee4834"><p class="cl-94ee0ad6"><span class="cl-94edf186">OLS 2</span></p></td>
+<td class="cl-94ee483e"><p class="cl-94ee0ad6"><span class="cl-94edf186">Poisson 2</span></p></td>
+<td class="cl-94ee4834"><p class="cl-94ee0ad6"><span class="cl-94edf186">OLS 3</span></p></td>
 </tr></thead>
 <tbody>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-3924c0da"><p class="cl-39248886"><span class="cl-39246b30">Constant</span></p></td>
-<td class="cl-3924c0d0"><p class="cl-39248886"><span class="cl-39246b30">8759.068***</span></p></td>
-<td class="cl-3924c0c6"><p class="cl-39248886"><span class="cl-39246b30">8.986***</span></p></td>
-<td class="cl-3924c0a8"><p class="cl-39248886"><span class="cl-39246b30">20357.309***</span></p></td>
-<td class="cl-3924c0c6"><p class="cl-39248886"><span class="cl-39246b30">9.708***</span></p></td>
-<td class="cl-3924c0a8"><p class="cl-39248886"><span class="cl-39246b30">11243.544***</span></p></td>
+<td class="cl-94ee46c2"><p class="cl-94ee0ad6"><span class="cl-94edf186">Constant</span></p></td>
+<td class="cl-94ee46ae"><p class="cl-94ee0ad6"><span class="cl-94edf186">8759.068***</span></p></td>
+<td class="cl-94ee469a"><p class="cl-94ee0ad6"><span class="cl-94edf186">8.986***</span></p></td>
+<td class="cl-94ee467c"><p class="cl-94ee0ad6"><span class="cl-94edf186">20357.309***</span></p></td>
+<td class="cl-94ee469a"><p class="cl-94ee0ad6"><span class="cl-94edf186">9.708***</span></p></td>
+<td class="cl-94ee467c"><p class="cl-94ee0ad6"><span class="cl-94edf186">11243.544***</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-3924c0ee"><p class="cl-39248886"><span class="cl-39246b30"></span></p></td>
-<td class="cl-3924c102"><p class="cl-39248886"><span class="cl-39246b30">(1559.363)</span></p></td>
-<td class="cl-3924c0e4"><p class="cl-39248886"><span class="cl-39246b30">(0.004)</span></p></td>
-<td class="cl-3924c0f8"><p class="cl-39248886"><span class="cl-39246b30">(2020.980)</span></p></td>
-<td class="cl-3924c0e4"><p class="cl-39248886"><span class="cl-39246b30">(0.003)</span></p></td>
-<td class="cl-3924c0f8"><p class="cl-39248886"><span class="cl-39246b30">(1011.240)</span></p></td>
+<td class="cl-94ee46e0"><p class="cl-94ee0ad6"><span class="cl-94edf186"></span></p></td>
+<td class="cl-94ee46fe"><p class="cl-94ee0ad6"><span class="cl-94edf186">(1559.363)</span></p></td>
+<td class="cl-94ee46d6"><p class="cl-94ee0ad6"><span class="cl-94edf186">(0.004)</span></p></td>
+<td class="cl-94ee46ea"><p class="cl-94ee0ad6"><span class="cl-94edf186">(2020.980)</span></p></td>
+<td class="cl-94ee46d6"><p class="cl-94ee0ad6"><span class="cl-94edf186">(0.003)</span></p></td>
+<td class="cl-94ee46ea"><p class="cl-94ee0ad6"><span class="cl-94edf186">(1011.240)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-3924c0ee"><p class="cl-39248886"><span class="cl-39246b4e">Literacy (%)</span></p></td>
-<td class="cl-3924c102"><p class="cl-39248886"><span class="cl-39246b4e">-42.886</span></p></td>
-<td class="cl-3924c0e4"><p class="cl-39248886"><span class="cl-39246b4e">-0.006***</span></p></td>
-<td class="cl-3924c0f8"><p class="cl-39248886"><span class="cl-39246b4e">-15.358</span></p></td>
-<td class="cl-3924c0e4"><p class="cl-39248886"><span class="cl-39246b4e">0.000***</span></p></td>
-<td class="cl-3924c0f8"><p class="cl-39248886"><span class="cl-39246b4e">-68.507***</span></p></td>
+<td class="cl-94ee471c"><p class="cl-94ee0ad6"><span class="cl-94edf1c2">Literacy (%)</span></p></td>
+<td class="cl-94ee4726"><p class="cl-94ee0ad6"><span class="cl-94edf1c2">-42.886</span></p></td>
+<td class="cl-94ee4708"><p class="cl-94ee0ad6"><span class="cl-94edf1c2">-0.006***</span></p></td>
+<td class="cl-94ee473a"><p class="cl-94ee0ad6"><span class="cl-94edf1c2">-15.358</span></p></td>
+<td class="cl-94ee4708"><p class="cl-94ee0ad6"><span class="cl-94edf1c2">0.000***</span></p></td>
+<td class="cl-94ee473a"><p class="cl-94ee0ad6"><span class="cl-94edf1c2">-68.507***</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-3924c0ee"><p class="cl-39248886"><span class="cl-39246b30"></span></p></td>
-<td class="cl-3924c102"><p class="cl-39248886"><span class="cl-39246b30">(36.362)</span></p></td>
-<td class="cl-3924c0e4"><p class="cl-39248886"><span class="cl-39246b30">(0.000)</span></p></td>
-<td class="cl-3924c0f8"><p class="cl-39248886"><span class="cl-39246b30">(47.127)</span></p></td>
-<td class="cl-3924c0e4"><p class="cl-39248886"><span class="cl-39246b30">(0.000)</span></p></td>
-<td class="cl-3924c0f8"><p class="cl-39248886"><span class="cl-39246b30">(18.029)</span></p></td>
+<td class="cl-94ee46e0"><p class="cl-94ee0ad6"><span class="cl-94edf186"></span></p></td>
+<td class="cl-94ee46fe"><p class="cl-94ee0ad6"><span class="cl-94edf186">(36.362)</span></p></td>
+<td class="cl-94ee46d6"><p class="cl-94ee0ad6"><span class="cl-94edf186">(0.000)</span></p></td>
+<td class="cl-94ee46ea"><p class="cl-94ee0ad6"><span class="cl-94edf186">(47.127)</span></p></td>
+<td class="cl-94ee46d6"><p class="cl-94ee0ad6"><span class="cl-94edf186">(0.000)</span></p></td>
+<td class="cl-94ee46ea"><p class="cl-94ee0ad6"><span class="cl-94edf186">(18.029)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-3924c12a"><p class="cl-39248886"><span class="cl-39246b30">Priests/capita</span></p></td>
-<td class="cl-3924c120"><p class="cl-39248886"><span class="cl-39246b30"></span></p></td>
-<td class="cl-3924c10c"><p class="cl-39248886"><span class="cl-39246b30">0.002***</span></p></td>
-<td class="cl-3924c116"><p class="cl-39248886"><span class="cl-39246b30"></span></p></td>
-<td class="cl-3924c10c"><p class="cl-39248886"><span class="cl-39246b30">0.004***</span></p></td>
-<td class="cl-3924c116"><p class="cl-39248886"><span class="cl-39246b30">-16.376</span></p></td>
+<td class="cl-94ee476c"><p class="cl-94ee0ad6"><span class="cl-94edf186">Priests/capita</span></p></td>
+<td class="cl-94ee4762"><p class="cl-94ee0ad6"><span class="cl-94edf186"></span></p></td>
+<td class="cl-94ee4744"><p class="cl-94ee0ad6"><span class="cl-94edf186">0.002***</span></p></td>
+<td class="cl-94ee4758"><p class="cl-94ee0ad6"><span class="cl-94edf186"></span></p></td>
+<td class="cl-94ee4744"><p class="cl-94ee0ad6"><span class="cl-94edf186">0.004***</span></p></td>
+<td class="cl-94ee4758"><p class="cl-94ee0ad6"><span class="cl-94edf186">-16.376</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-3924c0ee"><p class="cl-39248886"><span class="cl-39246b30"></span></p></td>
-<td class="cl-3924c102"><p class="cl-39248886"><span class="cl-39246b30"></span></p></td>
-<td class="cl-3924c0e4"><p class="cl-39248886"><span class="cl-39246b30">(0.000)</span></p></td>
-<td class="cl-3924c0f8"><p class="cl-39248886"><span class="cl-39246b30"></span></p></td>
-<td class="cl-3924c0e4"><p class="cl-39248886"><span class="cl-39246b30">(0.000)</span></p></td>
-<td class="cl-3924c0f8"><p class="cl-39248886"><span class="cl-39246b30">(12.522)</span></p></td>
+<td class="cl-94ee46e0"><p class="cl-94ee0ad6"><span class="cl-94edf186"></span></p></td>
+<td class="cl-94ee46fe"><p class="cl-94ee0ad6"><span class="cl-94edf186"></span></p></td>
+<td class="cl-94ee46d6"><p class="cl-94ee0ad6"><span class="cl-94edf186">(0.000)</span></p></td>
+<td class="cl-94ee46ea"><p class="cl-94ee0ad6"><span class="cl-94edf186"></span></p></td>
+<td class="cl-94ee46d6"><p class="cl-94ee0ad6"><span class="cl-94edf186">(0.000)</span></p></td>
+<td class="cl-94ee46ea"><p class="cl-94ee0ad6"><span class="cl-94edf186">(12.522)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-3924c152"><p class="cl-39248886"><span class="cl-39246b30">Num.Obs.</span></p></td>
-<td class="cl-3924c166"><p class="cl-39248886"><span class="cl-39246b30">86</span></p></td>
-<td class="cl-3924c15c"><p class="cl-39248886"><span class="cl-39246b30">86</span></p></td>
-<td class="cl-3924c148"><p class="cl-39248886"><span class="cl-39246b30">86</span></p></td>
-<td class="cl-3924c15c"><p class="cl-39248886"><span class="cl-39246b30">86</span></p></td>
-<td class="cl-3924c148"><p class="cl-39248886"><span class="cl-39246b30">86</span></p></td>
+<td class="cl-94ee478a"><p class="cl-94ee0ad6"><span class="cl-94edf186">Num.Obs.</span></p></td>
+<td class="cl-94ee47a8"><p class="cl-94ee0ad6"><span class="cl-94edf186">86</span></p></td>
+<td class="cl-94ee4794"><p class="cl-94ee0ad6"><span class="cl-94edf186">86</span></p></td>
+<td class="cl-94ee4780"><p class="cl-94ee0ad6"><span class="cl-94edf186">86</span></p></td>
+<td class="cl-94ee4794"><p class="cl-94ee0ad6"><span class="cl-94edf186">86</span></p></td>
+<td class="cl-94ee4780"><p class="cl-94ee0ad6"><span class="cl-94edf186">86</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-3924c0da"><p class="cl-39248886"><span class="cl-39246b30">R2</span></p></td>
-<td class="cl-3924c0d0"><p class="cl-39248886"><span class="cl-39246b30">0.016</span></p></td>
-<td class="cl-3924c0c6"><p class="cl-39248886"><span class="cl-39246b30"></span></p></td>
-<td class="cl-3924c0a8"><p class="cl-39248886"><span class="cl-39246b30">0.001</span></p></td>
-<td class="cl-3924c0c6"><p class="cl-39248886"><span class="cl-39246b30"></span></p></td>
-<td class="cl-3924c0a8"><p class="cl-39248886"><span class="cl-39246b30">0.152</span></p></td>
+<td class="cl-94ee46c2"><p class="cl-94ee0ad6"><span class="cl-94edf186">R2</span></p></td>
+<td class="cl-94ee46ae"><p class="cl-94ee0ad6"><span class="cl-94edf186">0.016</span></p></td>
+<td class="cl-94ee469a"><p class="cl-94ee0ad6"><span class="cl-94edf186"></span></p></td>
+<td class="cl-94ee467c"><p class="cl-94ee0ad6"><span class="cl-94edf186">0.001</span></p></td>
+<td class="cl-94ee469a"><p class="cl-94ee0ad6"><span class="cl-94edf186"></span></p></td>
+<td class="cl-94ee467c"><p class="cl-94ee0ad6"><span class="cl-94edf186">0.152</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-3924c18e"><p class="cl-39248886"><span class="cl-39246b30">F</span></p></td>
-<td class="cl-3924c184"><p class="cl-39248886"><span class="cl-39246b30">1.391</span></p></td>
-<td class="cl-3924c170"><p class="cl-39248886"><span class="cl-39246b30"></span></p></td>
-<td class="cl-3924c17a"><p class="cl-39248886"><span class="cl-39246b30">0.106</span></p></td>
-<td class="cl-3924c170"><p class="cl-39248886"><span class="cl-39246b30"></span></p></td>
-<td class="cl-3924c17a"><p class="cl-39248886"><span class="cl-39246b30">7.441</span></p></td>
+<td class="cl-94ee47e4"><p class="cl-94ee0ad6"><span class="cl-94edf186">F</span></p></td>
+<td class="cl-94ee47d0"><p class="cl-94ee0ad6"><span class="cl-94edf186">1.391</span></p></td>
+<td class="cl-94ee47b2"><p class="cl-94ee0ad6"><span class="cl-94edf186"></span></p></td>
+<td class="cl-94ee47c6"><p class="cl-94ee0ad6"><span class="cl-94edf186">0.106</span></p></td>
+<td class="cl-94ee47b2"><p class="cl-94ee0ad6"><span class="cl-94edf186"></span></p></td>
+<td class="cl-94ee47c6"><p class="cl-94ee0ad6"><span class="cl-94edf186">7.441</span></p></td>
 </tr>
-<tr style="overflow-wrap:break-word;"><td colspan="6" class="cl-3924c1b6"><p class="cl-392488a4"><span class="cl-39246b58">* p &lt; 0.1, ** p &lt; 0.05, *** p &lt; 0.01</span></p></td></tr>
+<tr style="overflow-wrap:break-word;"><td colspan="6" class="cl-94ee4816"><p class="cl-94ee0af4"><span class="cl-94edf1d6">* p &lt; 0.1, ** p &lt; 0.05, *** p &lt; 0.01</span></p></td></tr>
 </tbody>
 </table>
 </div>
@@ -1458,33 +1441,22 @@ F
 <code>set_text_color</code> to change the color of some entries</li>
 </ul>
 <p>We use the same code as above, but specify <code>output='huxtable'</code> in the <code><a href="../reference/modelsummary.html">modelsummary()</a></code> call:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">huxtable</span>)
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'huxtable'</span>
-<span class="co">#&gt; The following objects are masked from 'package:flextable':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     align, as_flextable, bold, font, height, italic, set_caption,</span>
-<span class="co">#&gt;     valign, width</span>
-<span class="co">#&gt; The following object is masked from 'package:kableExtra':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     add_footnote</span>
-<span class="co">#&gt; The following object is masked from 'package:gt':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     fmt_percent</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://hughjonesd.github.io/huxtable/">huxtable</a></span><span class="op">)</span>
 
 <span class="co"># build table with `modelsummary` </span>
-<span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="kw">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="kw">=</span> <span class="st">'Priests/capita'</span>)
-<span class="no">cap</span> <span class="kw">&lt;-</span> <span class="st">'A modelsummary table customized with huxtable'</span>
+<span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="st">'(Intercept)'</span> <span class="op">=</span> <span class="st">'Constant'</span>, <span class="st">'Literacy'</span> <span class="op">=</span> <span class="st">'Literacy (%)'</span>, <span class="st">'Clergy'</span> <span class="op">=</span> <span class="st">'Priests/capita'</span><span class="op">)</span>
+<span class="va">cap</span> <span class="op">&lt;-</span> <span class="st">'A modelsummary table customized with huxtable'</span>
 
-<span class="no">tab</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'huxtable'</span>,
-                <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                <span class="kw">title</span> <span class="kw">=</span> <span class="no">cap</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'IC|Log|Adj'</span>)
+<span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">'huxtable'</span>,
+                coef_map <span class="op">=</span> <span class="va">cm</span>, stars <span class="op">=</span> <span class="cn">TRUE</span>, 
+                title <span class="op">=</span> <span class="va">cap</span>, gof_omit <span class="op">=</span> <span class="st">'IC|Log|Adj'</span><span class="op">)</span> 
 
 <span class="co"># customize table with `huxtable`</span>
-<span class="no">tab</span> <span class="kw">%&gt;%</span>
-
+<span class="va">tab</span> <span class="op">%&gt;%</span>
+   
     <span class="co"># text color</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/huxtable/man/text_color.html">set_text_color</a></span>(<span class="kw">row</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">.</span>), <span class="kw">value</span> <span class="kw">=</span> <span class="st">'red'</span>)</pre></body></html></div>
+    <span class="fu"><a href="https://rdrr.io/pkg/huxtable/man/text_color.html">set_text_color</a></span><span class="op">(</span>row <span class="op">=</span> <span class="fl">4</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>, value <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span></code></pre></div>
 <table class="table huxtable">
 <caption style="caption-side: top; text-align: center;">A modelsummary table customized with huxtable</caption>
 <col>
@@ -1581,11 +1553,32 @@ F
 <a href="#warning-saving-to-file" class="anchor"></a>Warning: Saving to file</h1>
 <p>When users supply a file name to the <code>output</code> argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from <code>gt</code>, <code>kableExtra</code>, <code>huxtable</code>, or <code>flextable</code>. When users specify a filename in the <code>output</code> argument, the <code><a href="../reference/modelsummary.html">modelsummary()</a></code> call should be the <em>final</em> one in the chain.</p>
 <p>This is OK:</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.html'</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">'table.html'</span><span class="op">)</span></code></pre></div>
 <p>This is <strong>not</strong> OK:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">'table.html'</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span>(<span class="kw">label</span> <span class="kw">=</span> <span class="st">'Literacy'</span>, <span class="kw">columns</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'OLS 1'</span>, <span class="st">'Poisson 1'</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">'table.html'</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">'Literacy'</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'OLS 1'</span>, <span class="st">'Poisson 1'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>To save a customized table, you should apply all the customization functions you need before saving it using <code><a href="https://rdrr.io/pkg/gt/man/gtsave.html">gt::gtsave</a></code>, <code><a href="https://rdrr.io/pkg/kableExtra/man/save_kable.html">kableExtra::save_kable</a></code>, or the appropriate helper function from the package that you are using to customize your table.</p>
+<p>For example, to add color column spanners with the <code>gt</code> package:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/gt">gt</a></span><span class="op">)</span>
+
+<span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">"gt"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">'Donations'</span>, columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">'Crimes (persons)'</span>, columns <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_spanner.html">tab_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">'Crimes (property)'</span>, columns <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>
+
+<span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gt/man/gtsave.html">gtsave</a></span><span class="op">(</span><span class="va">tab</span>, filename <span class="op">=</span> <span class="st">"table.html"</span><span class="op">)</span></code></pre></div>
+<p>The procedure is slightly different with <code>kableExtra</code>, because this package needs to know the <em>final</em> output format immediately when the table is created. For instance, if we want to produce, customize, and save a LaTeX table:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span>
+
+
+<span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">'latex'</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/add_header_above.html">add_header_above</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">" "</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"Donations"</span> <span class="op">=</span> <span class="fl">2</span>, <span class="st">"Crimes (person)"</span> <span class="op">=</span> <span class="fl">2</span>, <span class="st">"Crimes (property)"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/save_kable.html">save_kable</a></span><span class="op">(</span><span class="va">tab</span>, file <span class="op">=</span> <span class="st">"table.tex"</span><span class="op">)</span></code></pre></div>
 </div>
   </div>
 
@@ -1604,7 +1597,7 @@ F
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

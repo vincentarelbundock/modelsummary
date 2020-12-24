@@ -77,7 +77,7 @@ control and treatment groups)" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.4.9000</span>
       </span>
     </div>
 
@@ -92,26 +92,8 @@ control and treatment groups)" />
 <li>
   <a href="../articles/datasummary.html">datasummary</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    More
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/rmarkdown.html">Rmarkdown &amp; knitr</a>
-    </li>
-    <li>
-      <a href="../articles/newmodels.html">Adding and customizing models</a>
-    </li>
-    <li>
-      <a href="../articles/multiple_imputation.html">Multiple imputation</a>
-    </li>
-    <li>
-      <a href="../articles/extract.html">Raw data</a>
-    </li>
-  </ul>
+<li>
+  <a href="../articles/appearance.html">appearance</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -145,20 +127,20 @@ control and treatment groups)</h1>
 control and treatment groups)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>datasummary_balance</span>(
-  <span class='no'>formula</span>,
-  <span class='no'>data</span>,
-  <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"default"</span>,
-  <span class='kw'>fmt</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>notes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>align</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>add_columns</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>add_rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>dinm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>dinm_statistic</span> <span class='kw'>=</span> <span class='st'>"std.error"</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>datasummary_balance</span><span class='op'>(</span>
+  <span class='va'>formula</span>,
+  <span class='va'>data</span>,
+  output <span class='op'>=</span> <span class='st'>"default"</span>,
+  fmt <span class='op'>=</span> <span class='fl'>1</span>,
+  title <span class='op'>=</span> <span class='cn'>NULL</span>,
+  notes <span class='op'>=</span> <span class='cn'>NULL</span>,
+  align <span class='op'>=</span> <span class='cn'>NULL</span>,
+  add_columns <span class='op'>=</span> <span class='cn'>NULL</span>,
+  add_rows <span class='op'>=</span> <span class='cn'>NULL</span>,
+  dinm <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  dinm_statistic <span class='op'>=</span> <span class='st'>"std.error"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -176,18 +158,18 @@ consider them when calculating the difference in means.</p></td>
     </tr>
     <tr>
       <th>output</th>
-      <td><p>filename or object type (string)</p><ul>
+      <td><p>filename or object type (character string)</p><ul>
 <li><p>Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.</p></li>
 <li><p>Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".</p></li>
-<li><p>When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kableExtra::save_kable`, or `cat` functions.</p></li>
+<li><p>Warning: the `output` argument <em>cannot</em> be used when customizing tables with external packages. See the 'Details' section below.</p></li>
 </ul></td>
     </tr>
     <tr>
       <th>fmt</th>
-      <td><p>an integer, string, or function which determines how to format numeric values:</p><ul>
-<li><p>integer: the number of digits to keep after the period (`format(round(x, fmt), nsmall=fmt)`)</p></li>
-<li><p>character: string is passed to the `sprintf` function. '%.3f' will keep 3 digits after the decimal point with trailing zero. '%.5f' will keep 5 digits. '%.3e' will use exponential notation. See `?sprintf` for more options.</p></li>
-<li><p>function: a function which returns a formatted character string</p></li>
+      <td><p>determines how to format numeric values</p><ul>
+<li><p>integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`</p></li>
+<li><p>character: passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`</p></li>
+<li><p>function: returns a formatted character string.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -214,7 +196,7 @@ your main table.</p></td>
       <td><p>a data.frame (or tibble) with the same number of columns as
 your main table. By default, rows are appended to the bottom of the table.
 You can define a "position" attribute of integers to set the row positions.
-See examples.</p></td>
+See Examples section below.</p></td>
     </tr>
     <tr>
       <th>dinm</th>
@@ -238,9 +220,10 @@ set `exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></t
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>datasummary_balance</span>(~<span class='no'>am</span>, <span class='no'>mtcars</span>)
-}</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>datasummary_balance</span><span class='op'>(</span><span class='op'>~</span><span class='va'>am</span>, <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -256,7 +239,7 @@ set `exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></t
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

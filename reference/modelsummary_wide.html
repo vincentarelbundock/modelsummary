@@ -78,7 +78,7 @@ specifies the name of the group identifier." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.4.9000</span>
       </span>
     </div>
 
@@ -93,26 +93,8 @@ specifies the name of the group identifier." />
 <li>
   <a href="../articles/datasummary.html">datasummary</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    More
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/rmarkdown.html">Rmarkdown &amp; knitr</a>
-    </li>
-    <li>
-      <a href="../articles/newmodels.html">Adding and customizing models</a>
-    </li>
-    <li>
-      <a href="../articles/multiple_imputation.html">Multiple imputation</a>
-    </li>
-    <li>
-      <a href="../articles/extract.html">Raw data</a>
-    </li>
-  </ul>
+<li>
+  <a href="../articles/appearance.html">appearance</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -148,68 +130,80 @@ regression model (e.g., `nnet::multinom`). The `coef_group` argument
 specifies the name of the group identifier.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>modelsummary_wide</span>(
-  <span class='no'>models</span>,
-  <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"default"</span>,
-  <span class='kw'>fmt</span> <span class='kw'>=</span> <span class='st'>"%.3f"</span>,
-  <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>"std.error"</span>,
-  <span class='kw'>statistic_override</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>stars</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>coef_group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>coef_map</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>coef_omit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>coef_rename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>gof_map</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>gof_omit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>add_rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>stacking</span> <span class='kw'>=</span> <span class='st'>"horizontal"</span>,
-  <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>notes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"estimate"</span>,
-  <span class='kw'>statistic_vertical</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>modelsummary_wide</span><span class='op'>(</span>
+  <span class='va'>models</span>,
+  output <span class='op'>=</span> <span class='st'>"default"</span>,
+  fmt <span class='op'>=</span> <span class='fl'>3</span>,
+  estimate <span class='op'>=</span> <span class='st'>"estimate"</span>,
+  statistic <span class='op'>=</span> <span class='st'>"std.error"</span>,
+  vcov <span class='op'>=</span> <span class='cn'>NULL</span>,
+  conf_level <span class='op'>=</span> <span class='fl'>0.95</span>,
+  stars <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  coef_group <span class='op'>=</span> <span class='cn'>NULL</span>,
+  coef_map <span class='op'>=</span> <span class='cn'>NULL</span>,
+  coef_omit <span class='op'>=</span> <span class='cn'>NULL</span>,
+  coef_rename <span class='op'>=</span> <span class='cn'>NULL</span>,
+  gof_map <span class='op'>=</span> <span class='cn'>NULL</span>,
+  gof_omit <span class='op'>=</span> <span class='cn'>NULL</span>,
+  add_rows <span class='op'>=</span> <span class='cn'>NULL</span>,
+  align <span class='op'>=</span> <span class='cn'>NULL</span>,
+  notes <span class='op'>=</span> <span class='cn'>NULL</span>,
+  title <span class='op'>=</span> <span class='cn'>NULL</span>,
+  stacking <span class='op'>=</span> <span class='st'>"horizontal"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>models</th>
-      <td><p>a single model object or a (potentially named) list of models
-to summarize</p></td>
+      <td><p>a model or (optionally named) list of models</p></td>
     </tr>
     <tr>
       <th>output</th>
-      <td><p>filename or object type (string)</p><ul>
+      <td><p>filename or object type (character string)</p><ul>
 <li><p>Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.</p></li>
 <li><p>Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".</p></li>
-<li><p>When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with functions provided by the `gt` or `kableExtra` packages, you need to choose a different output format (e.g., "gt", "latex", "html", "markdown"), and you need to save the table after post-processing using the `gt::gtsave`, `kableExtra::save_kable`, or `cat` functions.</p></li>
+<li><p>Warning: the `output` argument <em>cannot</em> be used when customizing tables with external packages. See the 'Details' section below.</p></li>
 </ul></td>
     </tr>
     <tr>
       <th>fmt</th>
-      <td><p>an integer, string, or function which determines how to format numeric values:</p><ul>
-<li><p>integer: the number of digits to keep after the period (`format(round(x, fmt), nsmall=fmt)`)</p></li>
-<li><p>character: string is passed to the `sprintf` function. '%.3f' will keep 3 digits after the decimal point with trailing zero. '%.5f' will keep 5 digits. '%.3e' will use exponential notation. See `?sprintf` for more options.</p></li>
-<li><p>function: a function which returns a formatted character string</p></li>
+      <td><p>determines how to format numeric values</p><ul>
+<li><p>integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`</p></li>
+<li><p>character: passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`</p></li>
+<li><p>function: returns a formatted character string.</p></li>
 </ul></td>
     </tr>
     <tr>
-      <th>statistic</th>
-      <td><p>character vector of raw strings or glue strings (see examples) which represent the uncertainty statistics to report vertically. Parentheses are added automatically unless the value includes `glue` curly braces . Acceptable values:</p><ul>
-<li><p>Typical values: "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high".</p></li>
-<li><p>Alternative values: any column name produced by `broom::tidy(model)`</p></li>
-<li><p>`glue` package strings with braces such as:</p></li>
+      <th>estimate</th>
+      <td><p>string or `glue` string of the estimate to display. Valid entries include any column name of the data.frame produced by `get_estimates(model)`. Examples:</p><ul>
+<li><p>"estimate"</p></li>
+<li><p>"{estimate} ({std.error})"</p></li>
 <li><p>"{estimate} [{conf.low}, {conf.high}]"</p></li>
 </ul></td>
     </tr>
     <tr>
-      <th>statistic_override</th>
-      <td><p>manually override statistics. Accepts three types of input:</p><ul>
-<li><p>a function or list of functions of length(models) which produce variance-covariance matrices with row and column names equal to the names of your coefficient estimates. For example, `R` supplies the `vcov` function, and the `sandwich` package supplies `vcovHC`, `vcovHAC`, etc. If the `lmtest` package is installed, `modelsummary` will try to use it to override: "std.error", "statistic", "p.value", "conf.int". If the `lmtest` package is not installed, `modelsummary` will override "std.error" by using the square root of the vcov matrix diagonal.</p></li>
-<li><p>a list of length(models) variance-covariance matrices with row and column names equal to the names of your coefficient estimates.</p></li>
-<li><p>a list of length(models) vectors with names equal to the names of your coefficient estimates. Numeric vectors are formatted according to `fmt` and placed in brackets, character vectors printed as given.</p></li>
+      <th>statistic</th>
+      <td><p>vector of strings or `glue` strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics.</p><ul>
+<li><p>"conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", or any column name produced by: `get_estimates(model)`</p></li>
+<li><p>`glue` package strings with braces, such as:</p><ul>
+<li><p>"{p.value} [{conf.low}, {conf.high}]"</p></li>
+<li><p>"Std.Error: {std.error}"</p></li>
+</ul></li>
+<li><p>Note: Parentheses are added automatically unless the string includes `glue` curly braces {}.</p></li>
+<li><p>Note: To report uncertainty statistics <em>next</em> to coefficients, you can supply a `glue` string to the `estimate` argument.</p></li>
+</ul></td>
+    </tr>
+    <tr>
+      <th>vcov</th>
+      <td><p>robust standard errors and other manual statistics. The `vcov` argument accepts five types of input (see the 'Details' and 'Examples' sections below):</p><ul>
+<li><p>string or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").</p></li>
+<li><p>formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).</p></li>
+<li><p>function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`).</p></li>
+<li><p>list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.</p></li>
+<li><p>a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -243,7 +237,7 @@ table. The table will be ordered in the same order as this vector.</p></td>
     <tr>
       <th>coef_omit</th>
       <td><p>string regular expression. Omits all matching coefficients
-from the table (using `grepl(perl=TRUE)`).</p></td>
+from the table using `grepl(perl=TRUE)`.</p></td>
     </tr>
     <tr>
       <th>coef_rename</th>
@@ -253,11 +247,11 @@ in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.</p></t
     </tr>
     <tr>
       <th>gof_map</th>
-      <td><p>data.frame with four columns: `raw`, `clean`, `fmt`, and
-`omit`. If `gof_map` is NULL, then `modelsummary` will use this data frame
-by default: `modelsummary::gof_map` By default, all the statistics produced
-by `broom::glance` will be included unless they are omitted explicitly in
-`gof_map`.</p></td>
+      <td><ul>
+<li><p>NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.</p></li>
+<li><p>data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.</p></li>
+<li><p>list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>gof_omit</th>
@@ -269,29 +263,25 @@ the table (using `grepl(perl=TRUE)`).</p></td>
       <td><p>a data.frame (or tibble) with the same number of columns as
 your main table. By default, rows are appended to the bottom of the table.
 You can define a "position" attribute of integers to set the row positions.
-See examples.</p></td>
+See Examples section below.</p></td>
     </tr>
     <tr>
-      <th>stacking</th>
-      <td><p>direction in which models are stacked: "horizontal" or "vertical"</p></td>
-    </tr>
-    <tr>
-      <th>title</th>
-      <td><p>string</p></td>
+      <th>align</th>
+      <td><p>A character string of length equal to the number of columns in
+the table.  "lcr" means that the first column will be left-aligned, the 2nd
+column center-aligned, and the 3rd column right-aligned.</p></td>
     </tr>
     <tr>
       <th>notes</th>
       <td><p>list or vector of notes to append to the bottom of the table.</p></td>
     </tr>
     <tr>
-      <th>estimate</th>
-      <td><p>character name of the estimate to display. Must be a column
-name in the data.frame produced by `tidy(model)`. In the vast majority of
-cases, the default value of this argument should not be changed.</p></td>
+      <th>title</th>
+      <td><p>string</p></td>
     </tr>
     <tr>
-      <th>statistic_vertical</th>
-      <td><p>deprecated argument. Supply a vector of strings or `glue` strings to the `estimate` instead.</p></td>
+      <th>stacking</th>
+      <td><p>direction in which models are stacked: "horizontal" or "vertical"</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -320,7 +310,7 @@ set `exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></t
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
