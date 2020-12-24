@@ -2945,12 +2945,12 @@ F
     <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>Now, let’s customize the body of the table. The <code>vcov</code> argument already allows users to customize uncertainty estimates. But imagine you want to override the <em>coefficient estimates</em> of your “lm” models. Easy! All you need to do is define a <code>tidy_custom.lm</code> method which returns a data.frame (or tibble) with one column called “term” and one column called “estimate”.</p>
-<p>Here, we’ll substitute estimates by an up/down arrow which represents their signs:</p>
+<p>Here, we’ll substitute estimates by an up/down-pointing triangles which represents their signs:</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tidy_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span>
     <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span>,
-                          estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">s</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="st">'⭡'</span>, <span class="st">'⭣'</span><span class="op">)</span><span class="op">)</span>
+                          estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">s</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="st">'▲'</span>, <span class="st">'▼'</span><span class="op">)</span><span class="op">)</span>
     <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>After you define the <code>glance_custom</code> and <code>tidy_custom</code> methods, <code>modelsummary</code> will automatically display your customized model information:</p>
@@ -2973,10 +2973,10 @@ Model 2
 (Intercept)
 </td>
 <td style="text-align:center;">
-⭡
+▲
 </td>
 <td style="text-align:center;">
-⭡
+▲
 </td>
 </tr>
 <tr>
@@ -2994,10 +2994,10 @@ Model 2
 mpg
 </td>
 <td style="text-align:center;">
-⭣
+▼
 </td>
 <td style="text-align:center;">
-⭣
+▼
 </td>
 </tr>
 <tr>
@@ -3015,10 +3015,10 @@ mpg
 drat
 </td>
 <td style="text-align:center;">
-⭡
+▲
 </td>
 <td style="text-align:center;">
-⭣
+▼
 </td>
 </tr>
 <tr>
@@ -3038,7 +3038,7 @@ am
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
-⭣
+▼
 </td>
 </tr>
 <tr>
@@ -3696,26 +3696,26 @@ Amelia
 (Intercept)
 </td>
 <td style="text-align:center;">
-⭡
+▲
 </td>
 <td style="text-align:center;">
-75.483
+75.045
 </td>
 <td style="text-align:center;">
-86.182
+73.293
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(14.375)
+(12.666)
 </td>
 <td style="text-align:center;">
-(15.162)
+(10.940)
 </td>
 <td style="text-align:center;">
-(17.867)
+(10.697)
 </td>
 </tr>
 <tr>
@@ -3723,26 +3723,26 @@ Amelia
 Literacy
 </td>
 <td style="text-align:center;">
-⭣
+▼
 </td>
 <td style="text-align:center;">
--0.469
+-0.499
 </td>
 <td style="text-align:center;">
--0.615
+-0.490
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.226)
+(0.205)
 </td>
 <td style="text-align:center;">
-(0.231)
+(0.180)
 </td>
 <td style="text-align:center;">
-(0.262)
+(0.171)
 </td>
 </tr>
 <tr>
@@ -3750,26 +3750,26 @@ Literacy
 Commerce
 </td>
 <td style="text-align:center;">
-⭣
+▼
 </td>
 <td style="text-align:center;">
--0.311
+-0.295
 </td>
 <td style="text-align:center;">
--0.457
+-0.264
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.159)
+(0.143)
 </td>
 <td style="text-align:center;">
-(0.166)
+(0.123)
 </td>
 <td style="text-align:center;">
-(0.196)
+(0.124)
 </td>
 </tr>
 <tr>
@@ -3777,7 +3777,7 @@ Commerce
 Num.Obs.
 </td>
 <td style="text-align:center;">
-58
+59
 </td>
 <td style="text-align:center;">
 86
@@ -3804,13 +3804,13 @@ Num.Imp.
 R2
 </td>
 <td style="text-align:center;">
-0.136
+0.101
 </td>
 <td style="text-align:center;">
-0.081
+0.105
 </td>
 <td style="text-align:center;">
-0.144
+0.101
 </td>
 </tr>
 <tr>
@@ -3818,13 +3818,13 @@ R2
 R2 Adj.
 </td>
 <td style="text-align:center;">
-0.104
+0.069
 </td>
 <td style="text-align:center;">
-0.058
+0.084
 </td>
 <td style="text-align:center;">
-0.121
+0.079
 </td>
 </tr>
 <tr>
@@ -3832,7 +3832,7 @@ R2 Adj.
 AIC
 </td>
 <td style="text-align:center;">
-534.7
+544.7
 </td>
 <td style="text-align:center;">
 </td>
@@ -3844,7 +3844,7 @@ AIC
 BIC
 </td>
 <td style="text-align:center;">
-543.0
+553.0
 </td>
 <td style="text-align:center;">
 </td>
@@ -3856,7 +3856,7 @@ BIC
 Log.Lik.
 </td>
 <td style="text-align:center;">
--263.374
+-268.338
 </td>
 <td style="text-align:center;">
 </td>
@@ -3868,7 +3868,7 @@ Log.Lik.
 F
 </td>
 <td style="text-align:center;">
-4.318
+3.156
 </td>
 <td style="text-align:center;">
 </td>
