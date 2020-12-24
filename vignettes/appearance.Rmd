@@ -18,8 +18,6 @@ To customize the appearance of tables, `modelsummary` supports four of the most 
 
 Users are encouraged to visit these websites to determine which package suits their needs best. Each of them has different strengths and weaknesses. For instance, `gt` allows seamless integration with the RStudio IDE, but `kableExtra`'s LaTeX (and PDF) output is far more mature.
 
-# Post-processing
-
 To create customized tables, the analyst begins by calling `modelsummary(models)` to create a summary table. Then, she *post-processes* the table by applying functions from one of the packages listed above. It is often convenient to use the `%>%` operator to do this.
 
 To illustrate, we download data from the [Rdatasets repository](https://vincentarelbundock.github.io/Rdatasets') and we estimate 5 models:
@@ -172,7 +170,7 @@ We will now illustrate how to customize tables using functions from the `huxtabl
 
 We use the same code as above, but specify `output='huxtable'` in the `modelsummary()` call:
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(huxtable)
 
 # build table with `modelsummary` 
@@ -208,3 +206,28 @@ modelsummary(models, output = 'table.html') %>%
 ```
 
 To save a customized table, you should apply all the customization functions you need before saving it using `gt::gtsave`, `kableExtra::save_kable`, or the appropriate helper function from the package that you are using to customize your table.
+
+For example, to add color column spanners with the `gt` package:
+
+```{r, eval=FALSE}
+library(gt)
+
+tab <- modelsummary(models, output = "gt") %>%
+  tab_spanner(label = 'Donations', columns = 2:3) %>%
+  tab_spanner(label = 'Crimes (persons)', columns = 4:5) %>%
+  tab_spanner(label = 'Crimes (property)', columns = 6)
+
+gt::gtsave(tab, filename = "table.html")
+```
+
+The procedure is slightly different with `kableExtra`, because this package needs to know the *final* output format immediately when the table is created. For instance, if we want to produce, customize, and save a LaTeX table:
+
+```{r, eval=FALSE}
+library(kableExtra)
+
+
+tab <- modelsummary(models, output = 'latex') %>%
+  add_header_above(c(" " = 1, "Donations" = 2, "Crimes (person)" = 2, "Crimes (property)" = 1))
+
+kableExtra::save_kable(tab, file = "table.tex")
+```

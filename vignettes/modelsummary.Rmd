@@ -30,11 +30,86 @@ models <- list(
 modelsummary(models)
 ```
 
-# Uncertainty estimates
+# output
 
-By default, `modelsummary` prints an uncertainty estimate in parentheses below the corresponding coefficient estimate. The value of this estimate is determined by the `statistic` argument.
+The `output` argument determines the type of object returned by `modelsummary` and/or the file where this table should be written.
 
-`statistic` must be a string which equal to `conf.int`, one of the columns produced by the `broom::tidy` function, or a [glue string](https://glue.tidyverse.org/). 
+If you want to save a table directly to file, you can type:
+
+```{r, eval=FALSE}
+modelsummary(models, output = "table.docx")
+modelsummary(models, output = "table.html")
+modelsummary(models, output = "table.tex")
+modelsummary(models, output = "table.md")
+modelsummary(models, output = "table.txt")
+modelsummary(models, output = "table.png")
+```
+
+If you want a raw HTML, LaTeX, or Markdown table, you can type:
+
+```{r, eval=FALSE}
+modelsummary(models, output = "html")
+modelsummary(models, output = "latex")
+modelsummary(models, output = "markdown")
+```
+
+If you to customize the appearance of your table using external tools like `gt`, `kableExtra`, `flextable`, or `huxtable`, you can type:
+
+```{r, eval=FALSE}
+modelsummary(models, output = "gt")
+modelsummary(models, output = "kableExtra")
+modelsummary(models, output = "flextable")
+modelsummary(models, output = "huxtable")
+```
+
+Warning: When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with an external package, you need to choose a different output format and saving mechanism.  Unfortunately, the approach differs from package to package:
+
+* `gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave` function.
+* `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.
+
+# fmt
+
+The `fmt` argument defines how numeric values are rounded and presented in the table. This argument accepts three types of input:
+
+* Integer: Number of digits to keep after the period, including trailing zeros.
+* String: Formatting string passed to the `sprintf` function. See `?sprintf` 
+* Function: Returns a character string in the custom format you want.
+
+For example:
+
+```{r, eval=FALSE}
+modelsummary(models, fmt = 4)
+
+# 4 digits and trailing zero
+modelsummary(models, fmt = "%.4f")
+
+# scientific notation
+modelsummary(models, fmt = "%.4e")
+
+# custom function with big mark commas
+modelsummary(models, fmt = function(x) format(round(x, 0), big.mark=","))
+```
+
+# estimate
+
+By default, `modelsummary` prints each coefficient estimate on its own row. You can customize this by changing the `estimate` argument. For example, this would produce a table of p values instead of coefficient estimates:
+
+```{r, eval=FALSE}
+modelsummary(models, estimate = "p.value")
+```
+
+You can also use [glue string](https://glue.tidyverse.org/), using curly braces to specify the statistics you want. For example, this displays the estimate next to a confidence interval: 
+
+```{r}
+modelsummary(
+  models,
+  estimate  = "{estimate} [{conf.low}, {conf.high}]",
+  statistic = NULL)
+```
+
+# statistic
+
+By default, `modelsummary` prints the coefficient's standard error in parentheses below the corresponding estimate. The value of this uncertainty statistic is determined by the `statistic` argument. The `statistic` argument accepts any of the column names produced by `get_estimates(model)`. For example:
 
 ```{r, eval=FALSE}
 modelsummary(models, statistic = 'std.error')
@@ -42,10 +117,10 @@ modelsummary(models, statistic = 'p.value')
 modelsummary(models, statistic = 'statistic')
 ```
 
-You can display confidence intervals in brackets by setting `statistic="conf.int"`:
+You can also display confidence intervals in brackets by setting `statistic="conf.int"`:
 
 ```{r}
-modelsummary(models, gof_omit = ".*",
+modelsummary(models,
              statistic = 'conf.int', 
              conf_level = .99)
 ```
@@ -53,11 +128,11 @@ modelsummary(models, gof_omit = ".*",
 Alternatively, you can supply a [glue string](https://glue.tidyverse.org/) to get more complicated results:
 
 ```{r}
-modelsummary(models, gof_omit = ".*",
+modelsummary(models,
              statistic = "{std.error} ({p.value})")
 ```
 
-You can also display several different uncertainty estimates below the coefficient estimates. For example,
+You can also display several different uncertainty estimates below the coefficient estimates by using a vector. For example,
 
 ```{r}
 modelsummary(models, gof_omit = ".*",
@@ -75,25 +150,38 @@ modelsummary(models, gof_omit = ".*",
              statistic = NULL)
 ```
 
-You can override the uncertainty estimates in a number of ways. First, you can specify a function that produces variance-covariance matrices:
+# vcov
+
+You can use clustered or robust uncertainty estimates by modifying the `vcov` parameter. This function accepts 5 different types of input.  You can use a string or list of strings:
+
+```r
+modelsummary(models, vcov = "robust")
+modelsummary(models, vcov = list("classical", "robust", "stata", "HC4", "HC0"))
+```
+
+You can use a one-sided formula or list of one-sided formulas to use clustered standard errors:
+
+```r
+modelsummary(models, vcov = ~Region)
+
+You can specify a function that produces variance-covariance matrices:
 
 ```r
 library(sandwich)
-modelsummary(models, statistic_override = vcovHC, statistic = 'p.value')
+modelsummary(models, vcov = vcovHC, statistic = 'p.value')
 ```
 
 You can supply a list of functions of the same length as your model list:
 
 ```r
-modelsummary(models, 
-   statistic_override = list(vcov, vcovHC, vcovHAC, vcovHC, vcov))
+modelsummary(models, vcov = list(vcov, vcovHC, vcovHAC, vcovHC, vcov))
 ```
 
 You can supply a list of named variance-covariance matrices:
 
 ```r
 vcov_matrices <- lapply(models, vcovHC)
-modelsummary(models, statistic_override = vcov_matrices)
+modelsummary(models, vcov = vcov_matrices)
 ```
 
 You can supply a list of named vectors:
@@ -104,121 +192,10 @@ custom_stats <- list(`OLS 1` = c(`(Intercept)` = 2, Literacy = 3, Clergy = 4),
                      `OLS 2` = c(`(Intercept)` = 7, Literacy = -6, Clergy = 9), 
                      `Poisson 2` = c(`(Intercept)` = 4, Literacy = -7, Commerce = -9),
                      `OLS 3` = c(`(Intercept)` = 1, Literacy = -5, Clergy = -2))
-modelsummary(models, statistic_override = custom_stats)
+modelsummary(models, vcov = custom_stats)
 ```
 
-# Alignment
-
-By default, `modelsummary` will align the first column (with coefficient names) to the left, and will center the results columns. To change this default, you can use the align argument, which accepts a string or vector of strings:
-
-```{r, eval=FALSE}
-modelsummary(models, align="lrrrrr")
-modelsummary(models, align=c("l", "r", "r", "r", "r", "r"))
-```
-
-Many users want to align values on the decimal dot. Unfortunately, I am not aware of a single way to achieve this outcome for all output formats (pdf/latex, markdown, html). However, it is possible to do decimal alignment in LaTeX or Rmarkdown PDF documents, by using the `dcolumn` LaTeX package. Consider this Rmarkdown document:
-
-<img src="https://user-images.githubusercontent.com/987057/95660928-14617d80-0af9-11eb-9e48-504231a0484f.png" width="70%">
-
-Compiling the code above produces this table:
-
-<img src="https://user-images.githubusercontent.com/987057/95660797-53430380-0af8-11eb-97d9-9ec2ad2608fb.png" width="40%">
-
-# Titles
-
-You can add a title to your table as follows:
-
-```r
-modelsummary(models, title = 'This is a title for my table.')
-```
-
-# Notes
-
-Add notes to the bottom of your table:
-
-```r
-modelsummary(models, 
-   notes = list('Text of the first note.', 
-                'Text of the second note.'))
-```
-
-# Rename, reorder, and subset
-
-`modelsummary` offers a powerful and innovative mechanism to rename, reorder, and subset coefficients and goodness-of-fit statistics.
-
-## Coefficient estimates
-
-You can rename coefficients using the `coef_rename` argument. For example, if you have two models with different explanatory variables, but you want both variables to have the same names and appear ont he same row, you can do:
-
-```{r}
-x <- list(
-  lm(hp ~ drat, mtcars),
-  lm(hp ~ vs, mtcars)
-  )
-modelsummary(x, coef_rename=c("drat"="Explanator", "vs"="Explanator"))
-```
-
-The `coef_map` argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the "clean" variable name. Names of this vector correspond to the "raw" variable name. The table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.
-
-```{r}
-cm <- c('Literacy' = 'Literacy (%)',
-        'Commerce' = 'Patents per capita',
-        '(Intercept)' = 'Constant')
-modelsummary(models, coef_map = cm)
-```
-
-An alternative mechanism to subset coefficients is to use the `coef_omit` argument. This string is a regular expression which will be fed to `stringr::str_detect` to detect the variable names which should be excluded from the table.
-
-```{r}
-modelsummary(models, coef_omit = "Intercept|Commerce", gof_omit=".*")
-```
-
-Since `coef_omit` accepts regexes, you can do interesting things with it, such as specifying the list of variables that `modelsummary` should *keep* instead of omit. To do this, we use the `[^]` construct that specifies what *not* to match, we use the `|` pipe operator to separate the list of variables to include:
-
-```{r}
-modelsummary(models, coef_omit = "[^Commerce|(Intercept)]", gof_omit=".*")
-```
-
-You could also use fancy [look-ahead or look-behind assertions](https://en.wikipedia.org/wiki/Perl_Compatible_Regular_Expressions#Look-ahead_and_look-behind_assertions). For example, if you want the *opposite* of `coef_omit` (call it `coef_keep`), and you want to "keep" parameters that match a certain pattern, you could try:
-
-```{r}
-modelsummary(models, coef_omit = "^(?!.*Commerce)", gof_omit=".*")
-```
-
-You can chain those look-behinds as needed to match multiple patterns (noting that parentheses must be escaped):
-
-```{r}
-modelsummary(models, coef_omit = "^(?!.*Commerce)(?!.*\\(Int)", gof_omit=".*")
-```
-
-## Goodness-of-fit and other statistics
-
-`gof_omit` is a regular expression which will be fed to `stringr::str_detect` to detect the names of the statistics which should be excluded from the table.
-
-```r
-modelsummary(models, gof_omit = 'DF|Deviance|R2|AIC|BIC')
-```
-
-A more powerful mechanism is to supply a `data.frame` (or `tibble`) through the `gof_map` argument. This data.frame must include 4 columns:
-
-1. `raw`: a string with the name of a column produced by `broom::glance(model)`.
-2. `clean`: a string with the "clean" name of the statistic you want to appear in your final table.
-3. `fmt`: a string which will be used to round/format the string in question (e.g., `"%.3f"`). This follows the same standards as the `fmt` argument in `?modelsummary`.
-4. `omit`: `TRUE` if you want the statistic to be omitted from your final table.
-
-You can see an example of a valid data frame by typing `modelsummary::gof_map`. This is the default data.frame that `modelsummary` uses to subset and reorder goodness-of-fit statistics. As you can see, `omit == TRUE` for quite a number of statistics. You can include setting `omit == FALSE`: 
-
-```r
-gm <- modelsummary::gof_map
-gm$omit <- FALSE
-modelsummary(models, gof_map = gm)
-```
-
-The goodness-of-fit statistics will be printed in the table in the same order as in the `gof_map` data.frame.
-
-Notice the subtle difference between `coef_map` and `gof_map`. On the one hand, `coef_map` works as a "white list": any coefficient not explicitly entered will be omitted from the table. On the other, `gof_map` works as a "black list": statistics need to be explicitly marked for omission.
-
-# Stars
+# stars
 
 Some people like to add "stars" to their model summary tables to mark statistical significance. The `stars` argument can take three types of input:
 
@@ -240,18 +217,130 @@ modelsummary(models, stars = TRUE, stars_note = FALSE)
 
 If you want to create your own stars description, you can add custom notes with the [`notes`](https://github.com/vincentarelbundock/modelsummary#notes) argument.
 
-# Rounding
 
-The `fmt` argument defines how numeric values are rounded and presented in the table. This argument follows the `sprintf` C-library standard. For example,
+# coef: rename/omit/map
 
-* `%.3f` will keep 3 digits after the decimal point, including trailing zeros.
-* `%.5f` will keep 5 digits after the decimal point, including trailing zeros.
-* Changing the `f` for an `e` will use the exponential decimal representation.
+`modelsummary` offers powerful and innovative mechanisms to rename, reorder, and subset coefficients and goodness-of-fit statistics.
 
-Most users will just modify the `3` in `%.3f`, but this is a very powerful system, and all users are encouraged to read the details: `?sprintf`
+## coef_rename
+
+You can rename coefficients using the `coef_rename` argument. For example, if you have two models with different explanatory variables, but you want both variables to have the same name and appear ont he same row, you can do:
+
+```{r}
+x <- list(
+  lm(hp ~ drat, mtcars),
+  lm(hp ~ vs, mtcars))
+modelsummary(x, coef_rename=c("drat"="Explanator", "vs"="Explanator"))
+```
+
+## coef_map
+
+The `coef_map` argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the "clean" variable name. Names of this vector correspond to the "raw" variable name. The table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.
+
+```{r}
+cm <- c('Literacy'    = 'Literacy (%)',
+        'Commerce'    = 'Patents per capita',
+        '(Intercept)' = 'Constant')
+modelsummary(models, coef_map = cm)
+```
+
+## coef_omit
+
+An alternative mechanism to subset coefficients is to use the `coef_omit` argument. This string is a regular expression which will be fed to `stringr::str_detect` to detect the variable names which should be excluded from the table.
+
+```{r}
+modelsummary(models, coef_omit = "Intercept|Commerce", gof_omit=".*")
+```
+
+Since `coef_omit` accepts regexes, you can do interesting things with it, such as specifying the list of variables that `modelsummary` should *keep* instead of omit. To do this, we use the `[^]` construct that specifies what *not* to match, we use the `|` pipe operator to separate the list of variables to include:
+
+```{r}
+modelsummary(models, coef_omit = "[^Commerce|(Intercept)]", gof_omit=".*")
+```
+
+Another way to achieve the same result would be to use fancy [look-ahead or look-behind assertions](https://en.wikipedia.org/wiki/Perl_Compatible_Regular_Expressions#Look-ahead_and_look-behind_assertions). For example, if you want the *opposite* of `coef_omit` (call it `coef_keep`), and you want to "keep" parameters that match a certain pattern, you could try:
+
+```{r}
+modelsummary(models, coef_omit = "^(?!.*Commerce)", gof_omit=".*")
+```
+
+You can chain those look-behinds as needed to match multiple patterns (noting that parentheses must be escaped):
+
+```{r}
+modelsummary(models, coef_omit = "^(?!.*Commerce)(?!.*\\(Int)", gof_omit=".*")
+```
+
+# gof: omit/map
+
+## gof_omit
+
+`gof_omit` is a regular expression which will be fed to `stringr::str_detect` to detect the names of the statistics which should be excluded from the table.
 
 ```r
-modelsummary(models, fmt = '%.7f')
+modelsummary(models, gof_omit = 'DF|Deviance|R2|AIC|BIC')
+```
+
+## gof_map
+
+A more powerful mechanism is to supply a `data.frame` (or `tibble`) through the `gof_map` argument. This data.frame must include 3 columns:
+
+1. `raw`: a string with the name of a column produced by `broom::glance(model)`.
+2. `clean`: a string with the "clean" name of the statistic you want to appear in your final table.
+3. `fmt`: a string which will be used to round/format the string in question (e.g., `"%.3f"`). This follows the same standards as the `fmt` argument in `?modelsummary`.
+
+You can see an example of a valid data frame by typing `modelsummary::gof_map`. This is the default data.frame that `modelsummary` uses to subset and reorder goodness-of-fit statistics. As you can see, `omit == TRUE` for quite a number of statistics. You can include setting `omit == FALSE`: 
+
+```r
+gm <- modelsummary::gof_map
+gm$omit <- FALSE
+modelsummary(models, gof_map = gm)
+```
+
+The goodness-of-fit statistics will be printed in the table in the same order as in the `gof_map` data.frame.
+
+```r
+f <- function(x) format(round(x, 3), big.mark=",")
+gm <- list(
+  list("raw" = "nobs", "clean" = "N", "fmt" = f),
+  list("raw" = "AIC", "clean" = "aic", "fmt" = f))
+modelsummary(models, gof_map = gm)
+```
+
+Notice the subtle difference between `coef_map` and `gof_map`. On the one hand, `coef_map` works as a "white list": any coefficient not explicitly entered will be omitted from the table. On the other, `gof_map` works as a "black list": statistics need to be explicitly marked for omission.
+
+# align
+
+By default, `modelsummary` will align the first column (with coefficient names) to the left, and will center the results columns. To change this default, you can use the align argument, which accepts a string or vector of strings:
+
+```{r, eval=FALSE}
+modelsummary(models, align="lrrrrr")
+modelsummary(models, align=c("l", "r", "r", "r", "r", "r"))
+```
+
+Many users want to align values on the decimal dot. Unfortunately, I am not aware of a single way to achieve this outcome for all output formats (pdf/latex, markdown, html). However, it is possible to do decimal alignment in LaTeX or Rmarkdown PDF documents, by using the `dcolumn` LaTeX package. Consider this Rmarkdown document:
+
+<img src="https://user-images.githubusercontent.com/987057/95660928-14617d80-0af9-11eb-9e48-504231a0484f.png" width="70%">
+
+Compiling the code above produces this table:
+
+<img src="https://user-images.githubusercontent.com/987057/95660797-53430380-0af8-11eb-97d9-9ec2ad2608fb.png" width="40%">
+
+# notes
+
+Add notes to the bottom of your table:
+
+```r
+modelsummary(models, 
+   notes = list('Text of the first note.', 
+                'Text of the second note.'))
+```
+
+# title
+
+You can add a title to your table as follows:
+
+```r
+modelsummary(models, title = 'This is a title for my table.')
 ```
 
 # `add_rows`
@@ -276,7 +365,7 @@ attr(rows, 'position') <- c(3, 9)
 modelsummary(models, add_rows = rows)
 ```
 
-# Extra tidy arguments (e.g., exponentiated coefficients)
+# Exponentiated coefficients (and other extras)
 
 Users can pass any additional argument they want to the `tidy` method which is used to extract estimates from a model. For example, in logitistic or Cox proportional hazard models, many users want to exponentiate coefficients to faciliate interpretation. The `tidy` functions supplied by the `broom` package allow users to set `exponentiate=TRUE` to achieve this. In `modelsummary`, users can use the same argument:
 
@@ -289,202 +378,248 @@ Any argument supported by `tidy` is thus supported by `modelsummary`.
 
 Warning: at the moment (2020-05-05), `broom::tidy` still reports `std.error` on the original scale. See this [discussion on the `broom` GitHub page.](https://github.com/tidymodels/broom/issues/422)
 
-# Customizing the look of your table
+# Custom coefficients and statistics
 
-To customize the appearance of tables, `modelsummary` supports four of the most popular table-making packages: 
+The information that `modelsummary` can display about a model is determined by the output of the `broom::glance` and `broom::tidy` functions. `glance` is used the extract the information at the the bottom of the table, where goodness-of-fit measures are displayed. `tidy` is used to extract the information in the body of the table: parameter and uncertainty estimates.
+
+Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new `glance_custom` and `tidy_custom` methods. To illustrate, we estimate two linear regression models using the `lm` function:
+
+```{r}
+library(modelsummary)
+
+mod <- list()
+mod[[1]] <- lm(hp ~ mpg + drat, mtcars)
+mod[[2]] <- lm(wt ~ mpg + drat + am, mtcars)
+```
+
+In `R`, the `lm` function produces models of class "lm":
+
+```{r}
+class(mod[[1]])
+```
+
+Let's say you would like to print the dependent variable for each model of this particular class. All you need to do is define a new method called `glance_custom.lm`. This method should return a data.frame (or tibble) with 1 row, and 1 column per piece of information you want to display. For example:
+
+```{r}
+glance_custom.lm <- function(x) {
+    dv <- as.character(formula(x)[2])
+    out <- tibble::tibble(`Dependent variable:` = dv)
+    return(out)
+}
+```
+
+Now, let's customize the body of the table. The `vcov` argument already allows users to customize uncertainty estimates. But imagine you want to override the *coefficient estimates* of your "lm" models. Easy! All you need to do is define a `tidy_custom.lm` method which returns a data.frame (or tibble) with one column called "term" and one column called "estimate".
+
+Here, we'll substitute estimates by an up/down-pointing triangles which represents their signs:
+
+```{r}
+tidy_custom.lm <- function(x) {
+    s <- summary(x)$coefficients
+    out <- tibble::tibble(term = row.names(s),
+                          estimate = ifelse(s[,1] > 0, '▲', '▼'))
+    return(out)
+}
+```
+
+After you define the `glance_custom` and `tidy_custom` methods, `modelsummary` will automatically display your customized model information:
+
+```{r}
+modelsummary(mod)
+```
+
+Note that you can define a `std.error` column in `tidy_custom.lm` to replace the uncertainty estimates instead of the coefficients.
+
+# Custom appearance
+
+To customize the appearance of tables, `modelsummary` supports four popular and extremely powerful table-making packages: 
 
 1. [`gt`: https://gt.rstudio.com](https://gt.rstudio.com)
 2. [`kableExtra`: http://haozhu233.github.io/kableExtra](http://haozhu233.github.io/kableExtra)
 3. [`huxtable`: https://hughjonesd.github.io/huxtable/](https://hughjonesd.github.io/huxtable/)
 4. [`flextable`: https://davidgohel.github.io/flextable/](https://davidgohel.github.io/flextable/)
 
-Users are encouraged to visit these websites to determine which package suits their needs best. Each of them has different strengths and weaknesses. For instance, `gt` allows seamless integration with the RStudio IDE, but `kableExtra`'s LaTeX (and PDF) output is far more mature.
+The [Customizing the look of your tables vignette](https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html) shows examples for all 4 packages.
 
-To create customized tables, the analyst begins by calling `modelsummary(models)` to create a summary table. Then, she *post-processes* the table by applying functions from one of the packages listed above. It is often convenient to use the `%>%` operator to do this.
+# Supported models
 
-To illustrate, we download data from the [Rdatasets repository](https://vincentarelbundock.github.io/Rdatasets') and we estimate 5 models:
+`modelsummary` automatically supports all the models supported by the [broom package](broom.tidymodels.org). Specifically, `modelsummary` uses the `glance` and `tidy` methods from the `broom` package to extract information from model objects. To see if a package is supported out-of-the-box, load the `broom` package, and see if the `tidy` and `glance` methods produce valid output:
 
-```{r}
+```{r, eval=FALSE}
+library(broom)
+
+tidy(mod)
+glance(mod)
+```
+
+If the `tidy` and `glance` functions do not work on your model type, you may consider opening an issue on the Github website of the `broom` package: https://github.com/tidymodels/broom/issues
+
+Note that several packages supply additional `tidy` and `glance` functions. Loading these packages can increase the range of models supported by `modelsummary`. For example, loading the [broom.mixed package](https://github.com/bbolker/broom.mixed) allows modelsummary to support a wide variety of mixed (hierarchical, multi-level) models (e.g., `lme4`, `brms`, `rstanarm`).
+
+```{r, eval=FALSE}
+library(broom.mixed)
 library(modelsummary)
 
-url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
+modelsummary(mod)
+```
+
+# Adding new models
+
+`modelsummary` relies on two functions from the `broom` package to extract model information: `tidy` and `glance`. If `broom` doesn't support the type of model you are trying to summarize, `modelsummary` won't support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.
+
+For example, models produced by the `MCMCglmm` package are not currently supported by `broom`. To add support, you simply need to create a `tidy` and a `glance` method:
+
+```r
+# load packages and data
+library(modelsummary)
+library(MCMCglmm)
+data(PlodiaPO)
+
+# add custom functions to extract estimates (tidy) and goodness-of-fit (glance) information
+tidy.MCMCglmm <- function(object, ...) {
+    s <- summary(object, ...)
+    ret <- tibble::tibble(term = row.names(s$solutions),
+                          estimate = s$solutions[, 1],
+                          conf.low = s$solutions[, 2],
+                          conf.high = s$solutions[, 3])
+    ret
+}
+glance.MCMCglmm <- function(object, ...) {
+    ret <- tibble::tibble(dic = object$DIC,
+                          n = nrow(object$X))
+    ret
+}
+
+# estimate a simple model
+model <- MCMCglmm(PO ~ 1 + plate, random = ~ FSfamily, data = PlodiaPO, verbose=FALSE, pr=TRUE)
+
+# summarize the model
+modelsummary(model, statistic = 'conf.int')
+```
+
+Two important things to note. First, the methods are named `tidy.MCMCglmm` and `glance.MCMCglmm` because the model object I am trying to summarize is of class `MCMCglmm`. You can find the class of a model by running: `class(model)`.
+
+Second, in the example above, we used the `statistic = 'conf.int'` argument. This is because the `tidy` method produces `conf.low` and `conf.high` columns. In most cases, users will define `std.error` column in their custom `tidy` methods, so the `statistic` argument will need to be adjusted.
+
+If you create new `tidy` and `glance` methods, please consider contributing them to `broom` so that the rest of the community can benefit from your work: https://github.com/tidymodels/broom
+
+# Rmarkdown and knitr
+
+You can use `modelsummary` to insert tables into dynamic documents with `knitr` or `Rmarkdown`. This minimal .Rmd file can produce tables in PDF, HTML, or RTF documents:
+
+* [minimal.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/minimal.Rmd)
+
+This .Rmd file shows illustrates how to use table numbering and cross-references to produce PDF documents using `bookdown`:
+
+* [cross_references.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/cross_references.Rmd)
+
+This .Rmd file shows how to customize tables in PDF and HTML files using `gt` and `kableExtra` functions:
+
+* [appearance.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/appearance.Rmd)
+
+# Case studies
+
+## Fixed effects regression
+
+One common use-case for `glance_custom` is to display the list of "fixed effects" included in a linear regression model.  
+
+The `feols` function from the `fixest` package offers an extremely fast way to estimate fixed effects regression models. The `feols` function produces an object of class "fixest", which stores the fixed effects variables in a character vector called "fixef_vars". To display those fixed effects, we create a `glance_custom.fixest` and call `modelsummary`:
+
+```{r}
+glance_custom.fixest <- function(x) {
+    out <- tibble::tibble(.rows = 1)
+    for (n in x$fixef_vars) {
+        out[[paste('FE: ', n)]] <- 'X'
+    }
+    return(out)
+}
+
+library(fixest)
+library(modelsummary)
+
+url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/plm/EmplUK.csv'
 dat <- read.csv(url)
+mod <- list()
+mod[[1]] <- feols(emp ~ wage, dat)
+mod[[2]] <- feols(emp ~ wage | firm, dat)
+mod[[3]] <- feols(emp ~ wage | firm + year, dat)
 
-models <- list()
-models[['OLS 1']] <- lm(Donations ~ Literacy, data = dat)
-models[['Poisson 1']] <- glm(Donations ~ Literacy + Clergy, family = poisson, data = dat)
-models[['OLS 2']] <- lm(Crime_pers ~ Literacy, data = dat)
-models[['Poisson 2']] <- glm(Crime_pers ~ Literacy + Clergy, family = poisson, data = dat)
-models[['OLS 3']] <- lm(Crime_prop ~ Literacy + Clergy, data = dat)
+modelsummary(mod)
 ```
 
-In the rest of this vignette, we will customize tables using tools supplied by the `gt`, `kableExtra`, `flextable`, and `huxtable` packages. In each case, the pattern will be similar. First, we create a table by calling `modelsummary` and by specifying the output format with the `output` parameter. Then, we will use functions from the four packages to customize the appearance of our tables.
+## 2-stage instrumental variable estimation 
 
-## `gt`
+2-stage instrumental variable (IV) estimators are popular in many disciplines. Analysts often want to draw tables that include:
 
-To illustrate how to customize tables using the `gt` package we will use the following functions from the `gt` package:
+1. The 2nd stage estimates
+2. The 1st stage estimates, but only for variables *not* included in the 2nd stage (i.e., the "instruments").
 
-* `tab_spanner` creates labels to group columns.
-* `tab_footnote` adds a footnote and a matching marking in a specific cell.
-* `tab_style` can modify the text and color of rows, columns, or cells.
+The problem is that many IV regression packages do not supply results for the 1st stage. Even when these results are accessible, the `tidy` methods supplied by `broom` only return the 2nd stage results.
 
-To produce a "cleaner" look, we will also use `modelsummary`'s `stars`, `coef_map`, `gof_omit`, and `title` arguments.
+To achieve our goal, we will:
 
-Note that in order to access `gt` functions, we must first load the library.
+1. Define a new `tidy.iv` method which extracts information about both stages of the IV estimation.
+2. Change the class of our model objects to `iv`. This ensure that the new `tidy` method is triggered by `modelsummary`.
+3. Sort the coefficients using the `coef_map` argument, to ensure that 1st stage results are displayed below 2nd stage results.
 
-```{r}
-library(gt)
+For convenience, `modelsummary` includes two unexported functions which can do most this for you. Reading [the annotated code for these two functions](https://github.com/vincentarelbundock/modelsummary/blob/master/R/convenience.R) could be an instructive exercise for those who wish to exploit everything that `modelsummary` has to offer.
 
-# build table with `modelsummary` 
-cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
-cap <- 'A modelsummary table customized with gt'
-
-tab <- modelsummary(models, 
-                output = "gt",
-                coef_map = cm, stars = TRUE, 
-                title = cap, gof_omit = 'IC|Log|Adj') 
-
-# customize table with `gt`
-
-tab %>%
-
-    # column labels
-    tab_spanner(label = 'Donations', columns = 2:3) %>%
-    tab_spanner(label = 'Crimes (persons)', columns = 4:5) %>%
-    tab_spanner(label = 'Crimes (property)', columns = 6) %>%
-
-    # footnote
-    tab_footnote(footnote = md("A very **important** variable."),
-                 locations = cells_body(rows = 3, columns = 1)) %>%
-
-    # text and background color
-    tab_style(style = cell_text(color = 'red'),
-              locations = cells_body(rows = 3)) %>%
-    tab_style(style = cell_fill(color = 'lightblue'),
-              locations = cells_body(rows = 5))
-```
-
-The [`gt` website](https://gt.rstudio.com) offers many more examples. The possibilities are endless. For instance, `gt` allows you to embed images in your tables using the `text_transform` and `local_image` functions:
-
-```{r}
-f <- function(x) web_image(url = "https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png", height = 80)
-
-tab %>% 
-    text_transform(locations = cells_body(columns = 2:6, rows = 1), fn = f)
-```
-
-## `kableExtra`
-
-We will now illustrate how to customize tables using functions from the `kableExtra` package:
-
-* `add_header_above` creates labels to group columns.
-* `add_footnote` adds a footnote and a matching marking in a specific cell.
-* `row_spec` can modify the text and color of rows, columns, or cells.
-
-We use the same code as above, but specify `output='kableExtra'` in the `modelsummary()` call:
-
-```{r}
-library(kableExtra)
-
-# build table with `modelsummary` 
-cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
-cap <- 'A modelsummary table customized with kableExtra'
-
-tab <- modelsummary(models, output = 'kableExtra',
-                coef_map = cm, stars = TRUE, 
-                title = cap, gof_omit = 'IC|Log|Adj') 
-
-# customize table with `kableExtra`
-tab %>%
-    
-    # column labels
-    add_header_above(c(" " = 1, "Donations" = 2, "Crimes (person)" = 2, "Crimes (property)" = 1)) %>%
-   
-    # text and background color
-    row_spec(3, color = 'red') %>%
-    row_spec(5, background = 'lightblue')
-```
-
-These `kableExtra` functions can be used to produce LaTeX / PDF tables such as this one:
-
-<img src="https://user-images.githubusercontent.com/987057/82732382-e068f580-9cda-11ea-8924-331550f8f1e8.png" width="40%">
-
-
-## `flextable`
-
-We will now illustrate how to customize tables using functions from the `flextable` package:
-
-
-* `color` to modify the color of the text
-* `bg` to modify the color of the background
-* `autofit` sets column width to sensible values.
-
-We use the same code as above, but specify `output='flextable'` in the `modelsummary()` call:
+To print IV regression results from `lfe::felm` models, we execute this code:
 
 ```{r, message=FALSE}
-library(flextable)
+library(lfe)
 
-# build table with `modelsummary` 
-cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
-cap <- 'A modelsummary table customized with flextable'
+models <- list(
+  felm(wt ~ drat | 0 | (disp ~ hp), data = mtcars),
+  felm(wt ~ drat + vs | 0 | (disp ~ hp), data = mtcars)
+  )
 
-tab <- modelsummary(models, output = 'flextable',
-                coef_map = cm, stars = TRUE, 
-                title = cap, gof_omit = 'IC|Log|Adj') 
+# define a new method to combine tidy information about both stages
+tidy.iv <- modelsummary:::tidy_felm_iv
 
-# customize table with `flextable`
-tab %>%
-   
-    # text and background color
-    color(3, color = 'red') %>%
-    bg(5, bg = 'lightblue') %>%
-  
-    # column widths
-    autofit()
+# change the model classes to trigger the new method
+class(models[[1]]) <- class(models[[2]]) <- c('iv', class(models[[1]]))
+
+# use helper function to sort coefficients with 1st stage last
+cm <- modelsummary:::coef_map_felm_iv(models)
+
+modelsummary(models, coef_map=cm)
 ```
 
+## Multiple imputation
 
-## `huxtable`
-
-We will now illustrate how to customize tables using functions from the `huxtable` package:
-
-* `set_text_color` to change the color of some entries
-
-We use the same code as above, but specify `output='huxtable'` in the `modelsummary()` call:
+`modelsummary` can pool and display analyses on several datasets imputed using the `mice` or `Amelia` packages. This code illustrates how:
 
 ```{r, message=FALSE}
-library(huxtable)
+library(mice)
+library(Amelia)
+library(modelsummary)
 
-# build table with `modelsummary` 
-cm <- c( '(Intercept)' = 'Constant', 'Literacy' = 'Literacy (%)', 'Clergy' = 'Priests/capita')
-cap <- 'A modelsummary table customized with huxtable'
+# Download data from `Rdatasets`
+url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
+dat <- read.csv(url)[, c('Clergy', 'Commerce', 'Literacy')]
 
-tab <- modelsummary(models, output = 'huxtable',
-                coef_map = cm, stars = TRUE, 
-                title = cap, gof_omit = 'IC|Log|Adj') 
+# Insert missing values
+dat$Clergy[sample(1:nrow(dat), 10)] <- NA
+dat$Commerce[sample(1:nrow(dat), 10)] <- NA
+dat$Literacy[sample(1:nrow(dat), 10)] <- NA
 
-# customize table with `huxtable`
-tab %>%
-   
-    # text color
-    set_text_color(row = 4, col = 1:ncol(.), value = 'red')
+# Impute with `mice` and `Amelia`
+dat_mice <- mice(dat, m = 5, printFlag = FALSE)
+dat_amelia <- amelia(dat, m = 5, p2s = 0)$imputations
+
+# Estimate models
+mod <- list()
+mod[['Listwise deletion']] <- lm(Clergy ~ Literacy + Commerce, dat)
+mod[['Mice']] <- with(dat_mice, lm(Clergy ~ Literacy + Commerce)) 
+mod[['Amelia']] <- lapply(dat_amelia, function(x) lm(Clergy ~ Literacy + Commerce, x))
+
+# Pool results
+mod[['Mice']] <- mice::pool(mod[['Mice']])
+mod[['Amelia']] <- mice::pool(mod[['Amelia']])
+
+# Summarize
+modelsummary(mod)
 ```
 
-## Warning: Saving to file
 
-When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt`, `kableExtra`, `huxtable`, or `flextable`. When users specify a filename in the `output` argument, the `modelsummary()` call should be the *final* one in the chain.
 
-This is OK:
-
-```{r, eval=FALSE}
-modelsummary(models, output = 'table.html')
-```
-
-This is **not** OK:
-
-```{r, eval=FALSE}
-modelsummary(models, output = 'table.html') %>%
-    tab_spanner(label = 'Literacy', columns = c('OLS 1', 'Poisson 1'))
-```
-
-To save a customized table, you should apply all the customization functions you need before saving it using `gt::gtsave`, `kableExtra::save_kable`, or the appropriate helper function from the package that you are using to customize your table.
