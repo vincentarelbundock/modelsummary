@@ -429,6 +429,10 @@ modelsummary(mod)
 
 Note that you can define a `std.error` column in `tidy_custom.lm` to replace the uncertainty estimates instead of the coefficients.
 
+```{r, include=FALSE}
+rm("tidy_custom.lm")
+```
+
 # Custom appearance
 
 To customize the appearance of tables, `modelsummary` supports four popular and extremely powerful table-making packages: 
@@ -438,20 +442,25 @@ To customize the appearance of tables, `modelsummary` supports four popular and 
 3. [`huxtable`: https://hughjonesd.github.io/huxtable/](https://hughjonesd.github.io/huxtable/)
 4. [`flextable`: https://davidgohel.github.io/flextable/](https://davidgohel.github.io/flextable/)
 
-The [Customizing the look of your tables vignette](https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html) shows examples for all 4 packages.
+The ["customizing the look of your tables" vignette](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html) shows examples for all 4 packages.
 
 # Supported models
 
-`modelsummary` automatically supports all the models supported by the [broom package](broom.tidymodels.org). Specifically, `modelsummary` uses the `glance` and `tidy` methods from the `broom` package to extract information from model objects. To see if a package is supported out-of-the-box, load the `broom` package, and see if the `tidy` and `glance` methods produce valid output:
+`modelsummary` automatically supports all the models supported by the `tidy` function of the [broom package](broom.tidymodels.org) or the `parameters` function of the [parameters package](https://easystats.github.io/parameters/). The list of supported models is rapidly expanding. At the moment, it covers the following model classes:
 
-```{r, eval=FALSE}
-library(broom)
-
-tidy(mod)
-glance(mod)
+```{r}
+supported_models()
 ```
 
-If the `tidy` and `glance` functions do not work on your model type, you may consider opening an issue on the Github website of the `broom` package: https://github.com/tidymodels/broom/issues
+To see if a given model is supported, you can fit it, and then call this function:
+
+```{r, eval=FALSE}
+get_estimates(model)
+```
+
+The next section shows that it is 
+
+If this function does not return a valid output, you can easily (really!!) add your own support. See the next section for a tutorial. If you do this, you may consider opening an issue on the Github website of the `broom` package: https://github.com/tidymodels/broom/issues
 
 Note that several packages supply additional `tidy` and `glance` functions. Loading these packages can increase the range of models supported by `modelsummary`. For example, loading the [broom.mixed package](https://github.com/bbolker/broom.mixed) allows modelsummary to support a wide variety of mixed (hierarchical, multi-level) models (e.g., `lme4`, `brms`, `rstanarm`).
 
