@@ -87,30 +87,36 @@
 
 <!-- badges: end -->
 <p><code>modelsummary</code> creates tables and plots to summarize statistical models and data in <code>R</code>.</p>
-<p>The tables produced by <code>modelsummary</code> are beautiful and highly customizable. They can be echoed to the <code>R</code> console or displayed in the <code>RStudio</code> Viewer. They can be saved to a wide variety of formats, including HTML, PDF, Text/Markdown, LaTeX, MS Word, RTF, JPG, and PNG. Tables can easily be embedded in dynamic documents with <code>Rmarkdown</code>, <code>knitr</code>, or <code>Sweave</code>. <code>modelsummary</code> supports dozens of model types out-of-the-box.</p>
-<p>Extensive documentation and examples can be found on the <code>modelsummary</code> website: <a href="https://vincentarelbundock.github.io/modelsummary" class="uri">https://vincentarelbundock.github.io/modelsummary</a></p>
-<p><code>modelsummary</code> includes three families of functions:</p>
+<p>The tables and plots produced by <code>modelsummary</code> are beautiful and highly customizable. They can be echoed to the <code>R</code> console or displayed in the <code>RStudio</code> Viewer. They can be saved to a wide variety of formats, including HTML, PDF, Text/Markdown, LaTeX, MS Word, RTF, JPG, and PNG. Tables can easily be embedded in dynamic documents with <code>Rmarkdown</code>, <code>knitr</code>, or <code>Sweave</code>. <code>modelsummary</code> supports <em>hundreds</em> of model types out-of-the-box. The look of your tables is infinitely customizable using external package such as <code>kableExtra</code>, <code>gt</code>, <code>flextable</code>, or <code>huxtable</code>.</p>
+<p><code>modelsummary</code> includes two families of functions:</p>
 <ol>
-<li>
-<code>modelsummary</code>: Display results from several statistical models side-by-side.</li>
-<li>
-<code>modelplot</code>: Plot model coefficients and confidence intervals.</li>
-<li>
-<code>datasummary</code>: A flexible tool to create crosstabs and data summaries.
+<li>Model Summary
 <ul>
+<li>
+<code>modelsummary</code>: Regression tables with side-by-side models.</li>
+<li>
+<code>modelsummary_wide</code>: Regression tables for categorical response models or grouped coefficients.</li>
+<li>
+<code>modelplot</code>: Coefficient plots.</li>
+</ul>
+</li>
+<li>Data Summary
+<ul>
+<li>
+<code>datasummary</code>: Powerful tool to create (multi-level) cross-tabs and data summaries.</li>
 <li>
 <code>datasummary_balance</code>: Balance tables with subgroup statistics and difference in means (aka “Table 1”).</li>
 <li>
 <code>datasummary_correlation</code>: Correlation tables.</li>
 <li>
-<code>datasummary_skim</code>: Quick overview of a dataset.</li>
+<code>datasummary_skim</code>: Quick overview (“skim”) of a dataset.</li>
 <li>
 <code>datasummary_df</code>: Turn dataframes into nice tables with titles, notes, etc.</li>
 </ul>
 </li>
 </ol>
-<p>Click on the links at the top of this page to see how these functions are used: <a href="https://vincentarelbundock.github.io/modelsummary" class="uri">https://vincentarelbundock.github.io/modelsummary</a></p>
-<p>These tables and plots were created using <code>modelsummary</code>, without any manual editing at all:</p>
+<p>The <code>modelsummary</code> website hosts a <em>ton</em> of examples. Make sure you click on the links at the top of this page: <a href="https://vincentarelbundock.github.io/modelsummary" class="uri">https://vincentarelbundock.github.io/modelsummary</a></p>
+<p>The following tables and plots were created using <code>modelsummary</code>, without any manual editing at all:</p>
 <table class="table"><tbody>
 <tr class="odd">
 <td align="center"><img width="2406" src="https://user-images.githubusercontent.com/987057/82853752-90558300-9ed4-11ea-88af-12cf20cb367f.png"></td>
@@ -130,23 +136,6 @@
 </tr>
 </tbody></table>
 </div>
-<div id="contents" class="section level1">
-<h1 class="hasAnchor">
-<a href="#contents" class="anchor"></a>Contents</h1>
-<ul>
-<li><a href="#why-should-i-use-modelsummary">Why should I use <code>modelsummary</code>?</a></li>
-<li><a href="#installation">Installation</a></li>
-<li><a href="#getting-started">Getting started</a></li>
-<li><a href="#saving-and-viewing-output-formats">Saving and viewing: output formats</a></li>
-<li><a href="https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html">modelsummary</a></li>
-<li><a href="https://vincentarelbundock.github.io/modelsummary/articles/modelplot.html">modelplot</a></li>
-<li><a href="https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html">datasummary</a></li>
-<li><a href="https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html">Dynamic documents with <code>Rmarkdown</code> and <code>knitr</code></a></li>
-<li><a href="https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html">Adding and customizing models</a></li>
-<li><a href="https://vincentarelbundock.github.io/modelsummary/articles/multiple_imputation.html">Multiple imputation</a></li>
-<li><a href="https://vincentarelbundock.github.io/modelsummary/articles/extract.html">Raw data</a></li>
-</ul>
-</div>
 <div id="why-should-i-use-modelsummary" class="section level1">
 <h1 class="hasAnchor">
 <a href="#why-should-i-use-modelsummary" class="anchor"></a>Why should I use <code>modelsummary</code>?</h1>
@@ -155,31 +144,28 @@
 <h4 class="hasAnchor">
 <a href="#easy" class="anchor"></a>Easy</h4>
 <p><code>modelsummary</code> is very easy to use. This simple call often suffices:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
-<span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, <span class="va">dat</span><span class="op">)</span>
-<span class="fu"><a href="reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
+<span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">y</span> ~ <span class="no">x</span>, <span class="no">dat</span>)
+<span class="fu"><a href="reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></div>
 <p>The command above will automatically display a summary table in the <code>Rstudio</code> Viewer or in a web browser. All you need is one word to change the output format. For example, a text-only version of the table can be printed to the Console by typing:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"markdown"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"markdown"</span>)</pre></div>
 <p>Tables in Microsoft Word and LaTeX formats can be saved to file by typing:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"table.docx"</span><span class="op">)</span>
-<span class="fu"><a href="reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"table.tex"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"table.docx"</span>)
+<span class="fu"><a href="reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"table.tex"</span>)</pre></div>
 </div>
 <div id="flexible" class="section level4">
 <h4 class="hasAnchor">
 <a href="#flexible" class="anchor"></a>Flexible</h4>
-<p><em>Information</em>: The package offers many intuitive and powerful utilities to <a href="https://vincentarelbundock.github.io/modelsummary/articles/content.html">customize the information</a> reported in a summary table. You can rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to include; display various “robust” standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.</p>
+<p><em>Information</em>: The package offers many intuitive and powerful utilities to <a href="https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html">customize the information</a> reported in a summary table. You can rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to include; display various “robust” standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.</p>
 <p><em>Appearance</em>: Thanks to the <a href="https://gt.rstudio.com"><code>gt</code></a>, <a href="https://haozhu233.github.io/kableExtra/"><code>kableExtra</code></a>, <a href="https://hughjonesd.github.io/huxtable/"><code>huxtable</code></a>, and <a href="https://davidgohel.github.io/flextable/"><code>flextable</code></a> packages, the appearance of <code>modelsummary</code> tables is endlessly customizable. The <a href="https://vincentarelbundock.github.io/modelsummary/articles/appearance.html">appearance customization page</a> shows tables with colored cells, weird text, spanning column labels, row groups, titles, source notes, footnotes, significance stars, and more. This only scratches the surface of possibilities.</p>
-<p><em>Supported models</em>: Thanks to the <a href="https://broom.tidymodels.org/"><code>broom</code> package</a>, <code>modelsummary</code> supports dozens of statistical models out-of-the-box. Installing other packages can extend the capabilities further (e.g., <a href="https://CRAN.R-project.org/package=broom.mixed"><code>broom.mixed</code></a>). It is also very easy to <a href="https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html">add or customize your own models.</a></p>
-<p><em>Output formats</em>: <code>modelsummary</code> tables can be saved to HTML, LaTeX, Text/Markdown, Microsoft Word, Powerpoint, RTF, JPG, or PNG formats. They can also be inserted seamlessly in Rmarkdown documents to produce <a href="https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html">automated documents and reports in PDF, HTML, RTF, or Microsoft Word formats.</a></p>
+<p><em>Supported models</em>: Thanks to the <a href="https://broom.tidymodels.org/"><code>broom</code></a> and <a href="https://easystats.github.io/parameters/"><code>parameters</code></a>, <code>modelsummary</code> supports <em>hundreds</em> of statistical models out-of-the-box. Installing other packages can extend the capabilities further (e.g., <a href="https://CRAN.R-project.org/package=broom.mixed"><code>broom.mixed</code></a>). It is also very easy to <a href="https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html#adding-new-models-1">add or customize your own models.</a></p>
+<p><em>Output formats</em>: <code>modelsummary</code> tables can be saved to HTML, LaTeX, Text/Markdown, Microsoft Word, Powerpoint, RTF, JPG, or PNG formats. They can also be inserted seamlessly in Rmarkdown documents to produce <a href="https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html#rmarkdown-and-knitr-1">automated documents and reports in PDF, HTML, RTF, or Microsoft Word formats.</a></p>
 </div>
 <div id="dangerous" class="section level4">
 <h4 class="hasAnchor">
 <a href="#dangerous" class="anchor"></a>Dangerous</h4>
-<p><code>modelsummary</code> is dangerous! It allows users to do stupid stuff like <a href="https://vincentarelbundock.github.io/modelsummary/articles/appearance.html#images">replacing their intercepts by squirrels.</a></p>
+<p><code>modelsummary</code> is dangerous! It allows users to do stupid stuff like <a href="https://vincentarelbundock.github.io/modelsummary/articles/appearance.html#gt-1">replacing their intercepts by squirrels.</a></p>
 <center>
 <img src="https://user-images.githubusercontent.com/987057/82818916-7a60a780-9e6d-11ea-96ed-04fa92874a23.png" width="40%">
 </center>
@@ -187,12 +173,12 @@
 <div id="reliable" class="section level4">
 <h4 class="hasAnchor">
 <a href="#reliable" class="anchor"></a>Reliable</h4>
-<p><code>modelsummary</code> is <em>reliably</em> dangerous! The package is developed using a <a href="https://github.com/vincentarelbundock/modelsummary/tree/master/tests/testthat">suite of unit tests</a>, so it (probably) won’t break.</p>
+<p><code>modelsummary</code> is <em>reliably</em> dangerous! The package is developed using a <a href="https://github.com/vincentarelbundock/modelsummary/tree/master/tests/testthat">suite of unit tests</a> with about 95% coverage, so it (probably) won’t break.</p>
 </div>
 <div id="community" class="section level4">
 <h4 class="hasAnchor">
 <a href="#community" class="anchor"></a>Community</h4>
-<p><code>modelsummary</code> does not try to do everything. Instead, it leverages the incredible work of the <code>R</code> community. By building on top of the <code>broom</code> package, <code>modelsummary</code> already supports dozens of model types out-of-the-box. <code>modelsummary</code> also supports four of the most popular table-building and customization packages: <code>gt</code>, <code>kableExtra</code>, <code>huxtable</code>, and <code>flextable</code>. packages. By using those packages, <code>modelsummary</code> allows users to produce beautiful, endlessly customizable tables in a wide variety of formats, including HTML, PDF, LaTeX, Markdown, and MS Word.</p>
+<p><code>modelsummary</code> does not try to do everything. Instead, it leverages the incredible work of the <code>R</code> community. By building on top of the <code>broom</code> and <code>parameters</code> packages, <code>modelsummary</code> already supports hundreds of model types out-of-the-box. <code>modelsummary</code> also supports four of the most popular table-building and customization packages: <code>gt</code>, <code>kableExtra</code>, <code>huxtable</code>, and <code>flextable</code>. packages. By using those packages, <code>modelsummary</code> allows users to produce beautiful, endlessly customizable tables in a wide variety of formats, including HTML, PDF, LaTeX, Markdown, and MS Word.</p>
 <p>One benefit of this community-focused approach is that when external packages improve, <code>modelsummary</code> improves as well. Another benefit is that leveraging external packages allows <code>modelsummary</code> to have a massively simplified codebase (relative to other similar packages). This should improve long term code maintainability, and allow contributors to participate through GitHub.</p>
 </div>
 </div>
@@ -200,117 +186,56 @@
 <h1 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h1>
 <p>You can install <code>modelsummary</code> from CRAN:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">'modelsummary'</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'modelsummary'</span>)</pre></div>
 <p>If you want the very latest version, install it from Github:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org">remotes</a></span><span class="op">)</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">'vincentarelbundock/modelsummary'</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">remotes</span>)
+<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">'vincentarelbundock/modelsummary'</span>)</pre></div>
 </div>
 <div id="getting-started" class="section level1">
 <h1 class="hasAnchor">
 <a href="#getting-started" class="anchor"></a>Getting started</h1>
-<p>We begin by loading the <code>modelsummary</code> package and by downloading data from the <a href="https://vincentarelbundock.github.io/Rdatasets/">RDatasets</a> repository:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
-
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
-<span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> </code></pre></div>
-<p>We estimate a linear model and call the <code>modelsummary</code> function to display the results:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Donations</span> <span class="op">~</span> <span class="va">Crime_prop</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
-<span class="fu"><a href="reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
-<center>
-<p><img src="https://user-images.githubusercontent.com/987057/82819815-08895d80-9e6f-11ea-8f78-93a62df204b3.png" width="15%"></p>
-</center>
-<p>To summarize multiple models side-by-side, we store them in a list. If the items in that list are named, the names will be used as column labels:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  <span class="st">"OLS 1"</span>     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Donations</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
-  <span class="st">"Poisson 1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Donations</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Commerce</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
-  <span class="st">"OLS 2"</span>     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Crime_pers</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
-  <span class="st">"Poisson 2"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Crime_pers</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Commerce</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
-  <span class="st">"OLS 3"</span>     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Crime_prop</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="fu"><a href="reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span></code></pre></div>
-<p>In <code>Rstudio</code>, the image below will be displayed automatically in the “Viewer” window. When running <code>R</code> from a terminal or from the basic <code>R</code> interface, this table should appear in your browser.</p>
-<center>
-<p><img src="https://user-images.githubusercontent.com/987057/82816112-8eee7100-9e68-11ea-8bc7-30c0f2626539.png" width="40%"></p>
-</center>
-<p>The same table can be printed in text-only format to the <code>R</code> Console:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(models, <span class="st">'markdown'</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="sc">|</span>            <span class="er">|</span>OLS <span class="dv">1</span>      <span class="sc">|</span>Poisson <span class="dv">1</span>   <span class="sc">|</span>OLS <span class="dv">2</span>      <span class="sc">|</span>Poisson <span class="dv">2</span>   <span class="sc">|</span>OLS <span class="dv">3</span>      <span class="sc">|</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="er">|:</span><span class="sc">-----------</span><span class="er">|:</span><span class="sc">----------</span><span class="er">|:</span><span class="sc">-----------</span><span class="er">|:</span><span class="sc">----------</span><span class="er">|:</span><span class="sc">-----------</span><span class="er">|:</span><span class="sc">----------</span><span class="er">|</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="er">|</span>(Intercept) <span class="sc">|</span><span class="fl">7948.667</span>   <span class="sc">|</span><span class="fl">8.241</span>       <span class="sc">|</span><span class="fl">16259.384</span>  <span class="sc">|</span><span class="fl">9.876</span>       <span class="sc">|</span><span class="fl">11243.544</span>  <span class="sc">|</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="er">|</span>            <span class="er">|</span>(<span class="fl">2078.276</span>) <span class="sc">|</span>(<span class="fl">0.006</span>)     <span class="sc">|</span>(<span class="fl">2611.140</span>) <span class="sc">|</span>(<span class="fl">0.003</span>)     <span class="sc">|</span>(<span class="fl">1011.240</span>) <span class="sc">|</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="er">|</span>Clergy      <span class="sc">|</span><span class="fl">15.257</span>     <span class="sc">|</span>            <span class="er">|</span><span class="fl">77.148</span>     <span class="sc">|</span>            <span class="er">|</span><span class="sc">-</span><span class="fl">16.376</span>    <span class="sc">|</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="er">|</span>            <span class="er">|</span>(<span class="fl">25.735</span>)   <span class="sc">|</span>            <span class="er">|</span>(<span class="fl">32.334</span>)   <span class="sc">|</span>            <span class="er">|</span>(<span class="fl">12.522</span>)   <span class="sc">|</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="er">|</span>Literacy    <span class="sc">|-</span><span class="fl">39.121</span>    <span class="sc">|</span><span class="fl">0.003</span>       <span class="sc">|</span><span class="fl">3.680</span>      <span class="sc">|-</span><span class="fl">0.000</span>      <span class="sc">|-</span><span class="fl">68.507</span>    <span class="sc">|</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="er">|</span>            <span class="er">|</span>(<span class="fl">37.052</span>)   <span class="sc">|</span>(<span class="fl">0.000</span>)     <span class="sc">|</span>(<span class="fl">46.552</span>)   <span class="sc">|</span>(<span class="fl">0.000</span>)     <span class="sc">|</span>(<span class="fl">18.029</span>)   <span class="sc">|</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="er">|</span>Commerce    <span class="sc">|</span>           <span class="er">|</span><span class="fl">0.011</span>       <span class="sc">|</span>           <span class="er">|</span><span class="fl">0.001</span>       <span class="sc">|</span>           <span class="er">|</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="er">|</span>            <span class="er">|</span>           <span class="er">|</span>(<span class="fl">0.000</span>)     <span class="sc">|</span>           <span class="er">|</span>(<span class="fl">0.000</span>)     <span class="sc">|</span>           <span class="er">|</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="er">|</span>Num.Obs.    <span class="sc">|</span><span class="dv">86</span>         <span class="sc">|</span><span class="dv">86</span>          <span class="sc">|</span><span class="dv">86</span>         <span class="sc">|</span><span class="dv">86</span>          <span class="sc">|</span><span class="dv">86</span>         <span class="sc">|</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="er">|</span>R2          <span class="sc">|</span><span class="fl">0.020</span>      <span class="sc">|</span>            <span class="er">|</span><span class="fl">0.065</span>      <span class="sc">|</span>            <span class="er">|</span><span class="fl">0.152</span>      <span class="sc">|</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="er">|</span>Adj.R2      <span class="sc">|-</span><span class="fl">0.003</span>     <span class="sc">|</span>            <span class="er">|</span><span class="fl">0.043</span>      <span class="sc">|</span>            <span class="er">|</span><span class="fl">0.132</span>      <span class="sc">|</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="er">|</span>AIC         <span class="sc">|</span><span class="fl">1740.8</span>     <span class="sc">|</span><span class="fl">274160.8</span>    <span class="sc">|</span><span class="fl">1780.0</span>     <span class="sc">|</span><span class="fl">257564.4</span>    <span class="sc">|</span><span class="fl">1616.9</span>     <span class="sc">|</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="er">|</span>BIC         <span class="sc">|</span><span class="fl">1750.6</span>     <span class="sc">|</span><span class="fl">274168.2</span>    <span class="sc">|</span><span class="fl">1789.9</span>     <span class="sc">|</span><span class="fl">257571.7</span>    <span class="sc">|</span><span class="fl">1626.7</span>     <span class="sc">|</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="er">|</span>Log.Lik.    <span class="sc">|-</span><span class="fl">866.392</span>   <span class="sc">|-</span><span class="fl">137077.401</span> <span class="sc">|-</span><span class="fl">886.021</span>   <span class="sc">|-</span><span class="fl">128779.186</span> <span class="sc">|-</span><span class="fl">804.441</span>   <span class="sc">|</span></span></code></pre></div>
-</div>
-<div id="saving-and-viewing-output-formats" class="section level1">
-<h1 class="hasAnchor">
-<a href="#saving-and-viewing-output-formats" class="anchor"></a>Saving and viewing: output formats</h1>
-<p>There are four ways to display and save <code>modelsummary</code> tables.</p>
-<ol>
-<li>Display in the R Console, the RStudio Viewer, or a web browser.</li>
-<li>Save a table to file.</li>
-<li>Insert a <a href="https://vincentarelbundock.github.io/modelsummary/articles/rmarkdown.html">table in <code>Rmarkdown</code> or <code>knitr</code> documents</a>,</li>
-<li>Convert the table to human-readable html, latex, or markdown code.</li>
-</ol>
-<p>To display, simply choose the output format. For example,</p>
-<pre class="{r}"><code><a href="reference/modelsummary.html">modelsummary(models, output = 'latex')
-modelsummary(models, output = 'markdown')
-modelsummary(models, output = 'gt')
-modelsummary(models, output = 'kableExtra')
-modelsummary(models, output = 'flextable')</a></code></pre>
-<p>To save a table, choose the file path with the extension you want. For example,</p>
-<pre class="{r}"><code><a href="reference/modelsummary.html">modelsummary(models, output = 'table.tex')
-modelsummary(models, output = 'table.docx')
-modelsummary(models, output = 'table.html')
-modelsummary(models, output = 'table.md')</a></code></pre>
-<p>To customize a table with the <code>gt</code>, <code>kableExtra</code>, <code>flextable</code>, or <code>huxtable</code> packages, choose the output format. Then, you can use functions from those packages to modify the resulting objects:</p>
-<pre class="{r}"><code><a href="http://haozhu233.github.io/kableExtra/">library(kableExtra)
-
-tab &lt;- modelsummary(models, output = 'kableExtra')
-tab %&gt;% row_spec(3, bold = TRUE, color = 'green')</a></code></pre>
-</div>
-<div id="default-table-making-backends" class="section level1">
-<h1 class="hasAnchor">
-<a href="#default-table-making-backends" class="anchor"></a>Default table-making backends</h1>
-<p>The table-making backends supported by <code>modelsummary</code> have overlaping capabilities (e.g., several of them can produce HTML tables). These are the default packages used for different outputs:</p>
-<p><code>kableExtra</code>:</p>
+<p>There are a million ways to customize the tables and plots produced by <code>modelsummary</code>. In this Getting Started section we will only scratch the surface. For details, see the vignettes:</p>
 <ul>
-<li>HTML</li>
-<li>LaTeX / PDF</li>
+<li>
+<code>modelsummary</code>: <a href="https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html" class="uri">https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html</a>
+</li>
+<li>
+<code>modelplot</code>: <a href="https://vincentarelbundock.github.io/modelsummary/articles/modelplot.html" class="uri">https://vincentarelbundock.github.io/modelsummary/articles/modelplot.html</a>
+</li>
+<li>
+<code>datasummary</code>: <a href="https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html" class="uri">https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html</a>
+</li>
+<li>Appearance: <a href="https://vincentarelbundock.github.io/modelsummary/articles/appearance.html" class="uri">https://vincentarelbundock.github.io/modelsummary/articles/appearance.html</a>
+</li>
 </ul>
-<p><code>flextable</code>:</p>
-<ul>
-<li>Word</li>
-<li>Powerpoint</li>
-</ul>
-<p><code>gt</code>:</p>
-<ul>
-<li>jpg</li>
-<li>png</li>
-</ul>
-<p>You can modify these defaults by setting global options such as:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>modelsummary_html <span class="op">=</span> <span class="st">'kableExtra'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>modelsummary_latex <span class="op">=</span> <span class="st">'gt'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>modelsummary_word <span class="op">=</span> <span class="st">'huxtable'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>modelsummary_png <span class="op">=</span> <span class="st">'gt'</span><span class="op">)</span></code></pre></div>
+<p>To begin, load the <code>modelsummary</code> package and download data from the <a href="https://vincentarelbundock.github.io/Rdatasets/">Rdatasets archive</a>:</p>
+<div class="sourceCode" id="cb6"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+
+<span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
+<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)
+<span class="no">dat</span>$<span class="no">Small</span> <span class="kw">&lt;-</span> <span class="no">dat</span>$<span class="no">Pop1831</span> <span class="kw">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span>(<span class="no">dat</span>$<span class="no">Pop1831</span>)</pre></div>
+<p>Quick overview of the data:</p>
+<div class="sourceCode" id="cb7"><pre class="r"><span class="fu"><a href="reference/datasummary_skim.html">datasummary_skim</a></span>(<span class="no">dat</span>)</pre></div>
+<p>Balance table (aka “Table 1”) with differences in means by subgroups:</p>
+<div class="sourceCode" id="cb8"><pre class="r"><span class="fu"><a href="reference/datasummary_balance.html">datasummary_balance</a></span>(~<span class="no">Small</span>, <span class="no">dat</span>)</pre></div>
+<p>Correlation table:</p>
+<div class="sourceCode" id="cb9"><pre class="r"><span class="fu"><a href="reference/datasummary_correlation.html">datasummary_correlation</a></span>(<span class="no">dat</span>)</pre></div>
+<p>Two variables and two statistics, nested in subgroups:</p>
+<div class="sourceCode" id="cb10"><pre class="r"><span class="fu"><a href="reference/datasummary.html">datasummary</a></span>(<span class="no">Literacy</span> + <span class="no">Commerce</span> ~ <span class="no">Small</span> * (<span class="no">mean</span> + <span class="no">sd</span>), <span class="no">dat</span>)</pre></div>
+<p>Estimate a linear model and display the results:</p>
+<div class="sourceCode" id="cb11"><pre class="r"><span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Donations</span> ~ <span class="no">Crime_prop</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+
+<span class="fu"><a href="reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></div>
+<p>Estimate five regression models, display the results side-by-side, and save them to a Microsoft Word document:</p>
+<div class="sourceCode" id="cb12"><pre class="r"><span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
+  <span class="st">"OLS 1"</span>     <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>),
+  <span class="st">"Poisson 1"</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>),
+  <span class="st">"OLS 2"</span>     <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>),
+  <span class="st">"Poisson 2"</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>),
+  <span class="st">"OLS 3"</span>     <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_prop</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+)
+
+<span class="fu"><a href="reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"table.docx"</span>)</pre></div>
 </div>
 <div id="alternative-packages" class="section level1">
 <h1 class="hasAnchor">
@@ -320,6 +245,7 @@ tab %&gt;% row_spec(3, bold = TRUE, color = 'green')</a></code></pre>
 <li><a href="https://cran.r-project.org/package=texreg">texreg</a></li>
 <li><a href="https://cran.r-project.org/package=stargazer">stargazer</a></li>
 <li><a href="https://cran.r-project.org/package=apsrtable">apsrtable</a></li>
+<li><a href="https://hughjonesd.github.io/huxtable">huxtable</a></li>
 </ul>
 </div>
 
@@ -369,7 +295,7 @@ tab %&gt;% row_spec(3, bold = TRUE, color = 'green')</a></code></pre>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

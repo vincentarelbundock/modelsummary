@@ -82,24 +82,31 @@
 
     
     
+<style type="text/css">
+tbody {
+  font-size: .8em;
+}
+thead {
+  font-size: .8em;
+}
+</style>
 <p><code>modelsummary</code> includes a powerful set of utilities to customize the information displayed in your model summary tables. You can easily rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to display; display various “robust” standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/gt">gt</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
 
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
-<span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
+<span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
+<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)
 
-<span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  <span class="st">"OLS 1"</span>     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Donations</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
-  <span class="st">"Poisson 1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Donations</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Commerce</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
-  <span class="st">"OLS 2"</span>     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Crime_pers</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
-  <span class="st">"Poisson 2"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Crime_pers</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Commerce</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
-  <span class="st">"OLS 3"</span>     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Crime_prop</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
-<span class="op">)</span>
+<span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
+  <span class="st">"OLS 1"</span>     <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>),
+  <span class="st">"Poisson 1"</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Donations</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>),
+  <span class="st">"OLS 2"</span>     <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>),
+  <span class="st">"Poisson 2"</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">Crime_pers</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">poisson</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>),
+  <span class="st">"OLS 3"</span>     <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Crime_prop</span> ~ <span class="no">Literacy</span> + <span class="no">Clergy</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">dat</span>)
+)
 
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -408,24 +415,21 @@ F
 <a href="#output" class="anchor"></a>output</h1>
 <p>The <code>output</code> argument determines the type of object returned by <code>modelsummary</code> and/or the file where this table should be written.</p>
 <p>If you want to save a table directly to file, you can type:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">"table.docx"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">"table.html"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">"table.tex"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">"table.md"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">"table.txt"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">"table.png"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"table.docx"</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"table.html"</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"table.tex"</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"table.md"</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"table.txt"</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"table.png"</span>)</pre></body></html></div>
 <p>If you want a raw HTML, LaTeX, or Markdown table, you can type:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">"latex"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">"markdown"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"html"</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"latex"</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"markdown"</span>)</pre></body></html></div>
 <p>If you to customize the appearance of your table using external tools like <code>gt</code>, <code>kableExtra</code>, <code>flextable</code>, or <code>huxtable</code>, you can type:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">"gt"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">"kableExtra"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, output <span class="op">=</span> <span class="st">"huxtable"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"gt"</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"kableExtra"</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"flextable"</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"huxtable"</span>)</pre></body></html></div>
 <p>Warning: When a file name is supplied to the <code>output</code> argument, the table is written immediately to file. If you want to customize your table by post-processing it with an external package, you need to choose a different output format and saving mechanism. Unfortunately, the approach differs from package to package:</p>
 <ul>
 <li>
@@ -445,30 +449,29 @@ F
 <li>Function: Returns a character string in the custom format you want.</li>
 </ul>
 <p>For example:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, fmt <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">fmt</span> <span class="kw">=</span> <span class="fl">4</span>)
 
 <span class="co"># 4 digits and trailing zero</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, fmt <span class="op">=</span> <span class="st">"%.4f"</span><span class="op">)</span>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">fmt</span> <span class="kw">=</span> <span class="st">"%.4f"</span>)
 
 <span class="co"># scientific notation</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, fmt <span class="op">=</span> <span class="st">"%.4e"</span><span class="op">)</span>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">fmt</span> <span class="kw">=</span> <span class="st">"%.4e"</span>)
 
 <span class="co"># custom function with big mark commas</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, fmt <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">0</span><span class="op">)</span>, big.mark<span class="op">=</span><span class="st">","</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">fmt</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">x</span>, <span class="fl">0</span>), <span class="kw">big.mark</span><span class="kw">=</span><span class="st">","</span>))</pre></body></html></div>
 </div>
 <div id="estimate" class="section level1">
 <h1 class="hasAnchor">
 <a href="#estimate" class="anchor"></a>estimate</h1>
 <p>By default, <code>modelsummary</code> prints each coefficient estimate on its own row. You can customize this by changing the <code>estimate</code> argument. For example, this would produce a table of p values instead of coefficient estimates:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, estimate <span class="op">=</span> <span class="st">"p.value"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">estimate</span> <span class="kw">=</span> <span class="st">"p.value"</span>)</pre></body></html></div>
 <p>You can also use <a href="https://glue.tidyverse.org/">glue string</a>, using curly braces to specify the statistics you want. For example, this displays the estimate next to a confidence interval:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span>
-  <span class="va">models</span>,
-  estimate  <span class="op">=</span> <span class="st">"{estimate} [{conf.low}, {conf.high}]"</span>,
-  statistic <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(
+  <span class="no">models</span>,
+  <span class="kw">fmt</span> <span class="kw">=</span> <span class="fl">1</span>,
+  <span class="kw">estimate</span>  <span class="kw">=</span> <span class="st">"{estimate} [{conf.low}, {conf.high}]"</span>,
+  <span class="kw">statistic</span> <span class="kw">=</span> <span class="kw">NULL</span>,
+  <span class="kw">coef_omit</span> <span class="kw">=</span> <span class="st">"Intercept"</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -492,42 +495,22 @@ OLS 3
 <tbody>
 <tr>
 <td style="text-align:left;">
-(Intercept)
-</td>
-<td style="text-align:center;">
-7948.667 [3815.060, 12082.275]
-</td>
-<td style="text-align:center;">
-8.241 [8.230, 8.252]
-</td>
-<td style="text-align:center;">
-16259.384 [11065.933, 21452.836]
-</td>
-<td style="text-align:center;">
-9.876 [9.869, 9.883]
-</td>
-<td style="text-align:center;">
-11243.544 [9232.228, 13254.860]
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 Literacy
 </td>
 <td style="text-align:center;">
--39.121 [-112.816, 34.574]
+-39.1 [-112.8, 34.6]
 </td>
 <td style="text-align:center;">
-0.003 [0.003, 0.003]
+0.0 [0.0, 0.0]
 </td>
 <td style="text-align:center;">
-3.680 [-88.910, 96.270]
+3.7 [-88.9, 96.3]
 </td>
 <td style="text-align:center;">
-0.000 [0.000, 0.000]
+0.0 [0.0, 0.0]
 </td>
 <td style="text-align:center;">
--68.507 [-104.365, -32.648]
+-68.5 [-104.4, -32.6]
 </td>
 </tr>
 <tr>
@@ -535,17 +518,17 @@ Literacy
 Clergy
 </td>
 <td style="text-align:center;">
-15.257 [-35.930, 66.443]
+15.3 [-35.9, 66.4]
 </td>
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
-77.148 [12.837, 141.459]
+77.1 [12.8, 141.5]
 </td>
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
--16.376 [-41.282, 8.530]
+-16.4 [-41.3, 8.5]
 </td>
 </tr>
 <tr>
@@ -555,12 +538,12 @@ Commerce
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
-0.011 [0.011, 0.011]
+0.0 [0.0, 0.0]
 </td>
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
-0.001 [0.001, 0.001]
+0.0 [0.0, 0.0]
 </td>
 <td style="text-align:center;">
 </td>
@@ -706,15 +689,14 @@ F
 <h1 class="hasAnchor">
 <a href="#statistic" class="anchor"></a>statistic</h1>
 <p>By default, <code>modelsummary</code> prints the coefficient’s standard error in parentheses below the corresponding estimate. The value of this uncertainty statistic is determined by the <code>statistic</code> argument. The <code>statistic</code> argument accepts any of the column names produced by <code><a href="../reference/get_estimates.html">get_estimates(model)</a></code>. For example:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="st">'std.error'</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="st">'p.value'</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="st">'statistic'</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'std.error'</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'p.value'</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'statistic'</span>)</pre></body></html></div>
 <p>You can also display confidence intervals in brackets by setting <code>statistic="conf.int"</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>,
-             statistic <span class="op">=</span> <span class="st">'conf.int'</span>, 
-             conf_level <span class="op">=</span> <span class="fl">.99</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>,
+             <span class="kw">fmt</span> <span class="kw">=</span> <span class="fl">1</span>,
+             <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'conf.int'</span>,
+             <span class="kw">conf_level</span> <span class="kw">=</span> <span class="fl">.99</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -741,38 +723,38 @@ OLS 3
 (Intercept)
 </td>
 <td style="text-align:center;">
-7948.667
+7948.7
 </td>
 <td style="text-align:center;">
-8.241
+8.2
 </td>
 <td style="text-align:center;">
-16259.384
+16259.4
 </td>
 <td style="text-align:center;">
-9.876
+9.9
 </td>
 <td style="text-align:center;">
-11243.544
+11243.5
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-[2469.565, 13427.769]
+[2469.6, 13427.8]
 </td>
 <td style="text-align:center;">
-[8.226, 8.256]
+[8.2, 8.3]
 </td>
 <td style="text-align:center;">
-[9375.457, 23143.311]
+[9375.5, 23143.3]
 </td>
 <td style="text-align:center;">
-[9.867, 9.885]
+[9.9, 9.9]
 </td>
 <td style="text-align:center;">
-[8577.542, 13909.546]
+[8577.5, 13909.5]
 </td>
 </tr>
 <tr>
@@ -780,38 +762,38 @@ OLS 3
 Literacy
 </td>
 <td style="text-align:center;">
--39.121
+-39.1
 </td>
 <td style="text-align:center;">
-0.003
+0.0
 </td>
 <td style="text-align:center;">
-3.680
+3.7
 </td>
 <td style="text-align:center;">
-0.000
+0.0
 </td>
 <td style="text-align:center;">
--68.507
+-68.5
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-[-136.804, 58.562]
+[-136.8, 58.6]
 </td>
 <td style="text-align:center;">
-[0.003, 0.003]
+[0.0, 0.0]
 </td>
 <td style="text-align:center;">
-[-119.048, 126.408]
+[-119.0, 126.4]
 </td>
 <td style="text-align:center;">
-[0.000, 0.000]
+[0.0, 0.0]
 </td>
 <td style="text-align:center;">
-[-116.037, -20.976]
+[-116.0, -21.0]
 </td>
 </tr>
 <tr>
@@ -819,34 +801,34 @@ Literacy
 Clergy
 </td>
 <td style="text-align:center;">
-15.257
+15.3
 </td>
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
-77.148
+77.1
 </td>
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
--16.376
+-16.4
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-[-52.591, 83.105]
+[-52.6, 83.1]
 </td>
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
-[-8.096, 162.392]
+[-8.1, 162.4]
 </td>
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
-[-49.389, 16.637]
+[-49.4, 16.6]
 </td>
 </tr>
 <tr>
@@ -856,12 +838,12 @@ Commerce
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
-0.011
+0.0
 </td>
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
-0.001
+0.0
 </td>
 <td style="text-align:center;">
 </td>
@@ -872,12 +854,12 @@ Commerce
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
-[0.011, 0.011]
+[0.0, 0.0]
 </td>
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
-[0.001, 0.001]
+[0.0, 0.0]
 </td>
 <td style="text-align:center;">
 </td>
@@ -1019,9 +1001,8 @@ F
 </tbody>
 </table>
 <p>Alternatively, you can supply a <a href="https://glue.tidyverse.org/">glue string</a> to get more complicated results:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>,
-             statistic <span class="op">=</span> <span class="st">"{std.error} ({p.value})"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>,
+             <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">"{std.error} ({p.value})"</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1326,12 +1307,11 @@ F
 </tbody>
 </table>
 <p>You can also display several different uncertainty estimates below the coefficient estimates by using a vector. For example,</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span>,
-             statistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"conf.int"</span>,
-                           <span class="st">"s.e. = {std.error}"</span>, 
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">".*"</span>,
+             <span class="kw">statistic</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"conf.int"</span>,
+                           <span class="st">"s.e. = {std.error}"</span>,
                            <span class="st">"t = {statistic}"</span>,
-                           <span class="st">"p = {p.value}"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+                           <span class="st">"p = {p.value}"</span>))</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1715,10 +1695,9 @@ p = 0.000
 </tbody>
 </table>
 <p>Setting <code>statistic=NULL</code> omits all statistics. This can often be useful if, for example, you want to display confience intervals next to coefficients:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span>,
-             estimate <span class="op">=</span> <span class="st">"{estimate} [{conf.low}, {conf.high}]"</span>,
-             statistic <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">".*"</span>,
+             <span class="kw">estimate</span> <span class="kw">=</span> <span class="st">"{estimate} [{conf.low}, {conf.high}]"</span>,
+             <span class="kw">statistic</span> <span class="kw">=</span> <span class="kw">NULL</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -1822,32 +1801,28 @@ Commerce
 <h1 class="hasAnchor">
 <a href="#vcov" class="anchor"></a>vcov</h1>
 <p>You can use clustered or robust uncertainty estimates by modifying the <code>vcov</code> parameter. This function accepts 5 different types of input. You can use a string or list of strings:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, vcov <span class="op">=</span> <span class="st">"robust"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, vcov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"classical"</span>, <span class="st">"robust"</span>, <span class="st">"stata"</span>, <span class="st">"HC4"</span>, <span class="st">"HC0"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">vcov</span> <span class="kw">=</span> <span class="st">"robust"</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">vcov</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"classical"</span>, <span class="st">"robust"</span>, <span class="st">"stata"</span>, <span class="st">"HC4"</span>, <span class="st">"HC0"</span>))</pre></body></html></div>
 <p>You can use a one-sided formula or list of one-sided formulas to use clustered standard errors:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(models, <span class="at">vcov =</span> <span class="sc">~</span>Region)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>You can specify a <span class="cf">function</span> that produces variance<span class="sc">-</span>covariance matrices<span class="sc">:</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="st">```</span><span class="at">r</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="at">library(sandwich)</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="at">modelsummary(models, vcov = vcovHC, statistic = 'p.value')</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><html><body><pre class="r">modelsummary(models, vcov = ~Region)
+
+You can specify a function that produces variance-covariance matrices:
+
+```r
+library(sandwich)
+modelsummary(models, vcov = vcovHC, statistic = 'p.value')</pre></body></html></div>
 <p>You can supply a list of functions of the same length as your model list:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, vcov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">vcov</span>, <span class="va">vcovHC</span>, <span class="va">vcovHAC</span>, <span class="va">vcovHC</span>, <span class="va">vcov</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">vcov</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">vcov</span>, <span class="no">vcovHC</span>, <span class="no">vcovHAC</span>, <span class="no">vcovHC</span>, <span class="no">vcov</span>))</pre></body></html></div>
 <p>You can supply a list of named variance-covariance matrices:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">vcov_matrices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">models</span>, <span class="va">vcovHC</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, vcov <span class="op">=</span> <span class="va">vcov_matrices</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">vcov_matrices</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">models</span>, <span class="no">vcovHC</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">vcov</span> <span class="kw">=</span> <span class="no">vcov_matrices</span>)</pre></body></html></div>
 <p>You can supply a list of named vectors:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">custom_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>`OLS 1` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>`(Intercept)` <span class="op">=</span> <span class="fl">2</span>, Literacy <span class="op">=</span> <span class="fl">3</span>, Clergy <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>, 
-                     `Poisson 1` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>`(Intercept)` <span class="op">=</span> <span class="fl">3</span>, Literacy <span class="op">=</span> <span class="op">-</span><span class="fl">5</span>, Commerce <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,
-                     `OLS 2` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>`(Intercept)` <span class="op">=</span> <span class="fl">7</span>, Literacy <span class="op">=</span> <span class="op">-</span><span class="fl">6</span>, Clergy <span class="op">=</span> <span class="fl">9</span><span class="op">)</span>, 
-                     `Poisson 2` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>`(Intercept)` <span class="op">=</span> <span class="fl">4</span>, Literacy <span class="op">=</span> <span class="op">-</span><span class="fl">7</span>, Commerce <span class="op">=</span> <span class="op">-</span><span class="fl">9</span><span class="op">)</span>,
-                     `OLS 3` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>`(Intercept)` <span class="op">=</span> <span class="fl">1</span>, Literacy <span class="op">=</span> <span class="op">-</span><span class="fl">5</span>, Clergy <span class="op">=</span> <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, vcov <span class="op">=</span> <span class="va">custom_stats</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">custom_stats</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">`OLS 1`</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">`(Intercept)`</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="kw">Literacy</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">Clergy</span> <span class="kw">=</span> <span class="fl">4</span>),
+                     <span class="kw">`Poisson 1`</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">`(Intercept)`</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">Literacy</span> <span class="kw">=</span> -<span class="fl">5</span>, <span class="kw">Commerce</span> <span class="kw">=</span> <span class="fl">3</span>),
+                     <span class="kw">`OLS 2`</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">`(Intercept)`</span> <span class="kw">=</span> <span class="fl">7</span>, <span class="kw">Literacy</span> <span class="kw">=</span> -<span class="fl">6</span>, <span class="kw">Clergy</span> <span class="kw">=</span> <span class="fl">9</span>),
+                     <span class="kw">`Poisson 2`</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">`(Intercept)`</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">Literacy</span> <span class="kw">=</span> -<span class="fl">7</span>, <span class="kw">Commerce</span> <span class="kw">=</span> -<span class="fl">9</span>),
+                     <span class="kw">`OLS 3`</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">`(Intercept)`</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">Literacy</span> <span class="kw">=</span> -<span class="fl">5</span>, <span class="kw">Clergy</span> <span class="kw">=</span> -<span class="fl">2</span>))
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">vcov</span> <span class="kw">=</span> <span class="no">custom_stats</span>)</pre></body></html></div>
 </div>
 <div id="stars" class="section level1">
 <h1 class="hasAnchor">
@@ -1861,13 +1836,11 @@ Commerce
 </li>
 <li>Named numeric vector for custom stars.</li>
 </ol>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, stars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> 
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, stars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'+'</span> <span class="op">=</span> <span class="fl">.1</span>, <span class="st">'&amp;'</span> <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'+'</span> <span class="kw">=</span> <span class="fl">.1</span>, <span class="st">'&amp;'</span> <span class="kw">=</span> <span class="fl">.01</span>))</pre></body></html></div>
 <p>Whenever <code>stars != FALSE</code>, <code>modelsummary</code> adds a note at the bottom of the table automatically. If you would like to omit this note, just use the <code>stars_note</code> argument:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, stars <span class="op">=</span> <span class="cn">TRUE</span>, stars_note <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </code></pre></div>
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">stars</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">stars_note</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
 <p>If you want to create your own stars description, you can add custom notes with the <a href="https://github.com/vincentarelbundock/modelsummary#notes"><code>notes</code></a> argument.</p>
 </div>
 <div id="coef-renameomitmap" class="section level1">
@@ -1878,11 +1851,10 @@ Commerce
 <h2 class="hasAnchor">
 <a href="#coef_rename" class="anchor"></a>coef_rename</h2>
 <p>You can rename coefficients using the <code>coef_rename</code> argument. For example, if you have two models with different explanatory variables, but you want both variables to have the same name and appear ont he same row, you can do:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">drat</span>, <span class="va">mtcars</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">vs</span>, <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">x</span>, coef_rename<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"drat"</span><span class="op">=</span><span class="st">"Explanator"</span>, <span class="st">"vs"</span><span class="op">=</span><span class="st">"Explanator"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
+  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">hp</span> ~ <span class="no">drat</span>, <span class="no">mtcars</span>),
+  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">hp</span> ~ <span class="no">vs</span>, <span class="no">mtcars</span>))
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">x</span>, <span class="kw">coef_rename</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"drat"</span><span class="kw">=</span><span class="st">"Explanator"</span>, <span class="st">"vs"</span><span class="kw">=</span><span class="st">"Explanator"</span>))</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -2021,11 +1993,10 @@ F
 <h2 class="hasAnchor">
 <a href="#coef_map" class="anchor"></a>coef_map</h2>
 <p>The <code>coef_map</code> argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the “clean” variable name. Names of this vector correspond to the “raw” variable name. The table will be sorted in the order in which terms are presented in <code>coef_map</code>. Coefficients which are <em>not</em> included in <code>coef_map</code> will be excluded from the table.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Literacy'</span>    <span class="op">=</span> <span class="st">'Literacy (%)'</span>,
-        <span class="st">'Commerce'</span>    <span class="op">=</span> <span class="st">'Patents per capita'</span>,
-        <span class="st">'(Intercept)'</span> <span class="op">=</span> <span class="st">'Constant'</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_map <span class="op">=</span> <span class="va">cm</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">cm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Literacy'</span>    <span class="kw">=</span> <span class="st">'Literacy (%)'</span>,
+        <span class="st">'Commerce'</span>    <span class="kw">=</span> <span class="st">'Patents per capita'</span>,
+        <span class="st">'(Intercept)'</span> <span class="kw">=</span> <span class="st">'Constant'</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_map</span> <span class="kw">=</span> <span class="no">cm</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -2299,8 +2270,7 @@ F
 <h2 class="hasAnchor">
 <a href="#coef_omit" class="anchor"></a>coef_omit</h2>
 <p>An alternative mechanism to subset coefficients is to use the <code>coef_omit</code> argument. This string is a regular expression which will be fed to <code><a href="https://stringr.tidyverse.org/reference/str_detect.html">stringr::str_detect</a></code> to detect the variable names which should be excluded from the table.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"Intercept|Commerce"</span>, gof_omit<span class="op">=</span><span class="st">".*"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_omit</span> <span class="kw">=</span> <span class="st">"Intercept|Commerce"</span>, <span class="kw">gof_omit</span><span class="kw">=</span><span class="st">".*"</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -2399,8 +2369,7 @@ Clergy
 </tbody>
 </table>
 <p>Since <code>coef_omit</code> accepts regexes, you can do interesting things with it, such as specifying the list of variables that <code>modelsummary</code> should <em>keep</em> instead of omit. To do this, we use the <code>[^]</code> construct that specifies what <em>not</em> to match, we use the <code><a href="https://rdrr.io/r/base/Logic.html">|</a></code> pipe operator to separate the list of variables to include:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"[^Commerce|(Intercept)]"</span>, gof_omit<span class="op">=</span><span class="st">".*"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_omit</span> <span class="kw">=</span> <span class="st">"[^Commerce|(Intercept)]"</span>, <span class="kw">gof_omit</span><span class="kw">=</span><span class="st">".*"</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -2497,8 +2466,7 @@ Commerce
 </tbody>
 </table>
 <p>Another way to achieve the same result would be to use fancy <a href="https://en.wikipedia.org/wiki/Perl_Compatible_Regular_Expressions#Look-ahead_and_look-behind_assertions">look-ahead or look-behind assertions</a>. For example, if you want the <em>opposite</em> of <code>coef_omit</code> (call it <code>coef_keep</code>), and you want to “keep” parameters that match a certain pattern, you could try:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^(?!.*Commerce)"</span>, gof_omit<span class="op">=</span><span class="st">".*"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_omit</span> <span class="kw">=</span> <span class="st">"^(?!.*Commerce)"</span>, <span class="kw">gof_omit</span><span class="kw">=</span><span class="st">".*"</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -2556,8 +2524,7 @@ Commerce
 </tbody>
 </table>
 <p>You can chain those look-behinds as needed to match multiple patterns (noting that parentheses must be escaped):</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^(?!.*Commerce)(?!.*\\(Int)"</span>, gof_omit<span class="op">=</span><span class="st">".*"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_omit</span> <span class="kw">=</span> <span class="st">"^(?!.*Commerce)(?!.*\\(Int)"</span>, <span class="kw">gof_omit</span><span class="kw">=</span><span class="st">".*"</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -2662,8 +2629,7 @@ Commerce
 <h2 class="hasAnchor">
 <a href="#gof_omit" class="anchor"></a>gof_omit</h2>
 <p><code>gof_omit</code> is a regular expression which will be fed to <code><a href="https://stringr.tidyverse.org/reference/str_detect.html">stringr::str_detect</a></code> to detect the names of the statistics which should be excluded from the table.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_omit <span class="op">=</span> <span class="st">'DF|Deviance|R2|AIC|BIC'</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">gof_omit</span> <span class="kw">=</span> <span class="st">'DF|Deviance|R2|AIC|BIC'</span>)</pre></body></html></div>
 </div>
 <div id="gof_map" class="section level2">
 <h2 class="hasAnchor">
@@ -2671,24 +2637,22 @@ Commerce
 <p>A more powerful mechanism is to supply a <code>data.frame</code> (or <code>tibble</code>) through the <code>gof_map</code> argument. This data.frame must include 3 columns:</p>
 <ol style="list-style-type: decimal">
 <li>
-<code>raw</code>: a string with the name of a column produced by <code><a href="https://generics.r-lib.org/reference/glance.html">broom::glance(model)</a></code>.</li>
+<code>raw</code>: a string with the name of a column produced by <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::glance(model)</a></code>.</li>
 <li>
 <code>clean</code>: a string with the “clean” name of the statistic you want to appear in your final table.</li>
 <li>
 <code>fmt</code>: a string which will be used to round/format the string in question (e.g., <code>"%.3f"</code>). This follows the same standards as the <code>fmt</code> argument in <code><a href="../reference/modelsummary.html">?modelsummary</a></code>.</li>
 </ol>
 <p>You can see an example of a valid data frame by typing <code><a href="../reference/gof_map.html">modelsummary::gof_map</a></code>. This is the default data.frame that <code>modelsummary</code> uses to subset and reorder goodness-of-fit statistics. As you can see, <code>omit == TRUE</code> for quite a number of statistics. You can include setting <code>omit == FALSE</code>:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">gm</span> <span class="op">&lt;-</span> <span class="fu">modelsummary</span><span class="fu">::</span><span class="va"><a href="../reference/gof_map.html">gof_map</a></span>
-<span class="va">gm</span><span class="op">$</span><span class="va">omit</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_map <span class="op">=</span> <span class="va">gm</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="no">gm</span> <span class="kw">&lt;-</span> <span class="kw pkg">modelsummary</span><span class="kw ns">::</span><span class="no"><a href="../reference/gof_map.html">gof_map</a></span>
+<span class="no">gm</span>$<span class="no">omit</span> <span class="kw">&lt;-</span> <span class="fl">FALSE</span>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">gof_map</span> <span class="kw">=</span> <span class="no">gm</span>)</pre></body></html></div>
 <p>The goodness-of-fit statistics will be printed in the table in the same order as in the <code>gof_map</code> data.frame.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">f</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">3</span><span class="op">)</span>, big.mark<span class="op">=</span><span class="st">","</span><span class="op">)</span>
-<span class="va">gm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"raw"</span> <span class="op">=</span> <span class="st">"nobs"</span>, <span class="st">"clean"</span> <span class="op">=</span> <span class="st">"N"</span>, <span class="st">"fmt"</span> <span class="op">=</span> <span class="va">f</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"raw"</span> <span class="op">=</span> <span class="st">"AIC"</span>, <span class="st">"clean"</span> <span class="op">=</span> <span class="st">"aic"</span>, <span class="st">"fmt"</span> <span class="op">=</span> <span class="va">f</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_map <span class="op">=</span> <span class="va">gm</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="no">f</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">x</span>, <span class="fl">3</span>), <span class="kw">big.mark</span><span class="kw">=</span><span class="st">","</span>)
+<span class="no">gm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"raw"</span> <span class="kw">=</span> <span class="st">"nobs"</span>, <span class="st">"clean"</span> <span class="kw">=</span> <span class="st">"N"</span>, <span class="st">"fmt"</span> <span class="kw">=</span> <span class="no">f</span>),
+  <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"raw"</span> <span class="kw">=</span> <span class="st">"AIC"</span>, <span class="st">"clean"</span> <span class="kw">=</span> <span class="st">"aic"</span>, <span class="st">"fmt"</span> <span class="kw">=</span> <span class="no">f</span>))
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">gof_map</span> <span class="kw">=</span> <span class="no">gm</span>)</pre></body></html></div>
 <p>Notice the subtle difference between <code>coef_map</code> and <code>gof_map</code>. On the one hand, <code>coef_map</code> works as a “white list”: any coefficient not explicitly entered will be omitted from the table. On the other, <code>gof_map</code> works as a “black list”: statistics need to be explicitly marked for omission.</p>
 </div>
 </div>
@@ -2696,9 +2660,8 @@ Commerce
 <h1 class="hasAnchor">
 <a href="#align" class="anchor"></a>align</h1>
 <p>By default, <code>modelsummary</code> will align the first column (with coefficient names) to the left, and will center the results columns. To change this default, you can use the align argument, which accepts a string or vector of strings:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, align<span class="op">=</span><span class="st">"lrrrrr"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, align<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">align</span><span class="kw">=</span><span class="st">"lrrrrr"</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">align</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>))</pre></body></html></div>
 <p>Many users want to align values on the decimal dot. Unfortunately, I am not aware of a single way to achieve this outcome for all output formats (pdf/latex, markdown, html). However, it is possible to do decimal alignment in LaTeX or Rmarkdown PDF documents, by using the <code>dcolumn</code> LaTeX package. Consider this Rmarkdown document:</p>
 <p><img src="https://user-images.githubusercontent.com/987057/95660928-14617d80-0af9-11eb-9e48-504231a0484f.png" width="70%"></p>
 <p>Compiling the code above produces this table:</p>
@@ -2708,36 +2671,32 @@ Commerce
 <h1 class="hasAnchor">
 <a href="#notes" class="anchor"></a>notes</h1>
 <p>Add notes to the bottom of your table:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, 
-   notes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'Text of the first note.'</span>, 
-                <span class="st">'Text of the second note.'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>,
+   <span class="kw">notes</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">'Text of the first note.'</span>,
+                <span class="st">'Text of the second note.'</span>))</pre></body></html></div>
 </div>
 <div id="title" class="section level1">
 <h1 class="hasAnchor">
 <a href="#title" class="anchor"></a>title</h1>
 <p>You can add a title to your table as follows:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, title <span class="op">=</span> <span class="st">'This is a title for my table.'</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">title</span> <span class="kw">=</span> <span class="st">'This is a title for my table.'</span>)</pre></body></html></div>
 </div>
 <div id="add_rows" class="section level1">
 <h1 class="hasAnchor">
 <a href="#add_rows" class="anchor"></a><code>add_rows</code>
 </h1>
 <p>Use the <code>add_rows</code> argument to add rows manually to a table. For example, let’s say you estimate two models with a factor variables and you want to insert (a) an empty line to identify the category of reference, and (b) cutomized information at the bottom of the table:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">models</span><span class="op">[[</span><span class="st">'OLS'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, <span class="va">mtcars</span><span class="op">)</span>
-<span class="va">models</span><span class="op">[[</span><span class="st">'Logit'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, <span class="va">mtcars</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><html><body><pre class="r"><span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+<span class="no">models</span><span class="kw">[[</span><span class="st">'OLS'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">mpg</span> ~ <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">cyl</span>), <span class="no">mtcars</span>)
+<span class="no">models</span><span class="kw">[[</span><span class="st">'Logit'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">am</span> ~ <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">cyl</span>), <span class="no">mtcars</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">binomial</span>)</pre></body></html></div>
 <p>We create a data.frame with the same number of columns as the summary table. Then, we define a “position” attribute to specify where the new rows should be inserted in the table. Finally, we pass this data.frame to the <code>add_rows</code> argument:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/">tibble</a></span><span class="op">)</span>
-<span class="va">rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span><span class="op">~</span><span class="va">term</span>,          <span class="op">~</span><span class="va">OLS</span>,  <span class="op">~</span><span class="va">Logit</span>,
+<div class="sourceCode" id="cb33"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tibble</span>)
+<span class="no">rows</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span>(~<span class="no">term</span>,          ~<span class="no">OLS</span>,  ~<span class="no">Logit</span>,
                 <span class="st">'factor(cyl)4'</span>, <span class="st">'-'</span>,   <span class="st">'-'</span>,
-                <span class="st">'Info'</span>,         <span class="st">'???'</span>, <span class="st">'XYZ'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">rows</span>, <span class="st">'position'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">9</span><span class="op">)</span>
+                <span class="st">'Info'</span>,         <span class="st">'???'</span>, <span class="st">'XYZ'</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(<span class="no">rows</span>, <span class="st">'position'</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>, <span class="fl">9</span>)
 
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, add_rows <span class="op">=</span> <span class="va">rows</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">add_rows</span> <span class="kw">=</span> <span class="no">rows</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -2916,46 +2875,40 @@ F
 <h1 class="hasAnchor">
 <a href="#exponentiated-coefficients-and-other-extras" class="anchor"></a>Exponentiated coefficients (and other extras)</h1>
 <p>Users can pass any additional argument they want to the <code>tidy</code> method which is used to extract estimates from a model. For example, in logitistic or Cox proportional hazard models, many users want to exponentiate coefficients to faciliate interpretation. The <code>tidy</code> functions supplied by the <code>broom</code> package allow users to set <code>exponentiate=TRUE</code> to achieve this. In <code>modelsummary</code>, users can use the same argument:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mod_logit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod_logit</span>, exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="no">mod_logit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">am</span> ~ <span class="no">mpg</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>, <span class="kw">family</span> <span class="kw">=</span> <span class="no">binomial</span>)
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod_logit</span>, <span class="kw">exponentiate</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
 <p>Any argument supported by <code>tidy</code> is thus supported by <code>modelsummary</code>.</p>
-<p>Warning: at the moment (2020-05-05), <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy</a></code> still reports <code>std.error</code> on the original scale. See this <a href="https://github.com/tidymodels/broom/issues/422">discussion on the <code>broom</code> GitHub page.</a></p>
+<p>Warning: at the moment (2020-05-05), <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::tidy</a></code> still reports <code>std.error</code> on the original scale. See this <a href="https://github.com/tidymodels/broom/issues/422">discussion on the <code>broom</code> GitHub page.</a></p>
 </div>
 <div id="custom-coefficients-and-statistics" class="section level1">
 <h1 class="hasAnchor">
 <a href="#custom-coefficients-and-statistics" class="anchor"></a>Custom coefficients and statistics</h1>
-<p>The information that <code>modelsummary</code> can display about a model is determined by the output of the <code><a href="https://generics.r-lib.org/reference/glance.html">broom::glance</a></code> and <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy</a></code> functions. <code>glance</code> is used the extract the information at the the bottom of the table, where goodness-of-fit measures are displayed. <code>tidy</code> is used to extract the information in the body of the table: parameter and uncertainty estimates.</p>
+<p>The information that <code>modelsummary</code> can display about a model is determined by the output of the <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::glance</a></code> and <code><a href="https://broom.tidymodels.org/reference/reexports.html">broom::tidy</a></code> functions. <code>glance</code> is used the extract the information at the the bottom of the table, where goodness-of-fit measures are displayed. <code>tidy</code> is used to extract the information in the body of the table: parameter and uncertainty estimates.</p>
 <p>Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new <code>glance_custom</code> and <code>tidy_custom</code> methods. To illustrate, we estimate two linear regression models using the <code>lm</code> function:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb35"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
-<span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">mod</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span>, <span class="va">mtcars</span><span class="op">)</span>
-<span class="va">mod</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">wt</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">am</span>, <span class="va">mtcars</span><span class="op">)</span></code></pre></div>
+<span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+<span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">hp</span> ~ <span class="no">mpg</span> + <span class="no">drat</span>, <span class="no">mtcars</span>)
+<span class="no">mod</span><span class="kw">[[</span><span class="fl">2</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">wt</span> ~ <span class="no">mpg</span> + <span class="no">drat</span> + <span class="no">am</span>, <span class="no">mtcars</span>)</pre></body></html></div>
 <p>In <code>R</code>, the <code>lm</code> function produces models of class “lm”:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-<span class="co">#&gt; [1] "lm"</span></code></pre></div>
+<div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]])
+<span class="co">#&gt; [1] "lm"</span></pre></body></html></div>
 <p>Let’s say you would like to print the dependent variable for each model of this particular class. All you need to do is define a new method called <code>glance_custom.lm</code>. This method should return a data.frame (or tibble) with 1 row, and 1 column per piece of information you want to display. For example:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">glance_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html">formula</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>
-    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>`Dependent variable:` <span class="op">=</span> <span class="va">dv</span><span class="op">)</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<div class="sourceCode" id="cb37"><html><body><pre class="r"><span class="no">glance_custom.lm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
+    <span class="no">dv</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/formula.html">formula</a></span>(<span class="no">x</span>)[<span class="fl">2</span>])
+    <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">`Dependent variable:`</span> <span class="kw">=</span> <span class="no">dv</span>)
+    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
+}</pre></body></html></div>
 <p>Now, let’s customize the body of the table. The <code>vcov</code> argument already allows users to customize uncertainty estimates. But imagine you want to override the <em>coefficient estimates</em> of your “lm” models. Easy! All you need to do is define a <code>tidy_custom.lm</code> method which returns a data.frame (or tibble) with one column called “term” and one column called “estimate”.</p>
 <p>Here, we’ll substitute estimates by an up/down-pointing triangles which represents their signs:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tidy_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span>
-    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span>,
-                          estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">s</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="st">'▲'</span>, <span class="st">'▼'</span><span class="op">)</span><span class="op">)</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<div class="sourceCode" id="cb38"><html><body><pre class="r"><span class="no">tidy_custom.lm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
+    <span class="no">s</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">x</span>)$<span class="no">coefficients</span>
+    <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">term</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="no">s</span>),
+                          <span class="kw">estimate</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">s</span>[,<span class="fl">1</span>] <span class="kw">&gt;</span> <span class="fl">0</span>, <span class="st">'▲'</span>, <span class="st">'▼'</span>))
+    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
+}</pre></body></html></div>
 <p>After you define the <code>glance_custom</code> and <code>tidy_custom</code> methods, <code>modelsummary</code> will automatically display your customized model information:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><html><body><pre class="r"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -3158,8 +3111,7 @@ wt
 <h1 class="hasAnchor">
 <a href="#supported-models" class="anchor"></a>Supported models</h1>
 <p><code>modelsummary</code> automatically supports all the models supported by the <code>tidy</code> function of the <a href="broom.tidymodels.org">broom package</a> or the <code>parameters</code> function of the <a href="https://easystats.github.io/parameters/">parameters package</a>. The list of supported models is rapidly expanding. At the moment, it covers the following model classes:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/supported_models.html">supported_models</a></span><span class="op">(</span><span class="op">)</span>
+<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="fu"><a href="../reference/supported_models.html">supported_models</a></span>()
 <span class="co">#&gt;   [1] "aareg"                    "acf"                     </span>
 <span class="co">#&gt;   [3] "afex_aov"                 "anova"                   </span>
 <span class="co">#&gt;   [5] "anova.rms"                "aov"                     </span>
@@ -3179,135 +3131,131 @@ wt
 <span class="co">#&gt;  [33] "clmm2"                    "coeftest"                </span>
 <span class="co">#&gt;  [35] "confint.glht"             "confusionMatrix"         </span>
 <span class="co">#&gt;  [37] "coxph"                    "cpglmm"                  </span>
-<span class="co">#&gt;  [39] "crr"                      "cv.glmnet"               </span>
-<span class="co">#&gt;  [41] "data.frame"               "default"                 </span>
-<span class="co">#&gt;  [43] "density"                  "dgCMatrix"               </span>
-<span class="co">#&gt;  [45] "dgTMatrix"                "DirichletRegModel"       </span>
-<span class="co">#&gt;  [47] "dist"                     "drc"                     </span>
-<span class="co">#&gt;  [49] "durbinWatsonTest"         "emm_list"                </span>
-<span class="co">#&gt;  [51] "emmeans"                  "emmeans_summary"         </span>
-<span class="co">#&gt;  [53] "emmGrid"                  "epi.2by2"                </span>
-<span class="co">#&gt;  [55] "ergm"                     "fa"                      </span>
-<span class="co">#&gt;  [57] "factanal"                 "FAMD"                    </span>
-<span class="co">#&gt;  [59] "fitdistr"                 "fixest"                  </span>
-<span class="co">#&gt;  [61] "ftable"                   "gam"                     </span>
-<span class="co">#&gt;  [63] "Gam"                      "gamlss"                  </span>
-<span class="co">#&gt;  [65] "gamm"                     "garch"                   </span>
-<span class="co">#&gt;  [67] "geeglm"                   "glht"                    </span>
-<span class="co">#&gt;  [69] "glm"                      "glmm"                    </span>
-<span class="co">#&gt;  [71] "glmmTMB"                  "glmnet"                  </span>
-<span class="co">#&gt;  [73] "glmrob"                   "glmRob"                  </span>
-<span class="co">#&gt;  [75] "glmx"                     "gmm"                     </span>
-<span class="co">#&gt;  [77] "HLfit"                    "htest"                   </span>
-<span class="co">#&gt;  [79] "hurdle"                   "irlba"                   </span>
-<span class="co">#&gt;  [81] "ivreg"                    "kappa"                   </span>
-<span class="co">#&gt;  [83] "kde"                      "Kendall"                 </span>
-<span class="co">#&gt;  [85] "kmeans"                   "lavaan"                  </span>
-<span class="co">#&gt;  [87] "leveneTest"               "Line"                    </span>
-<span class="co">#&gt;  [89] "Lines"                    "list"                    </span>
-<span class="co">#&gt;  [91] "lm"                       "lm.beta"                 </span>
-<span class="co">#&gt;  [93] "lme"                      "lmodel2"                 </span>
-<span class="co">#&gt;  [95] "lmrob"                    "lmRob"                   </span>
-<span class="co">#&gt;  [97] "logical"                  "logistf"                 </span>
-<span class="co">#&gt;  [99] "logitmfx"                 "logitor"                 </span>
-<span class="co">#&gt; [101] "lqm"                      "lqmm"                    </span>
-<span class="co">#&gt; [103] "lsmobj"                   "manova"                  </span>
-<span class="co">#&gt; [105] "maov"                     "map"                     </span>
-<span class="co">#&gt; [107] "margins"                  "Mclust"                  </span>
-<span class="co">#&gt; [109] "mcmc"                     "mcmc.list"               </span>
-<span class="co">#&gt; [111] "MCMCglmm"                 "mediate"                 </span>
-<span class="co">#&gt; [113] "merMod"                   "merModList"              </span>
-<span class="co">#&gt; [115] "meta_bma"                 "meta_fixed"              </span>
-<span class="co">#&gt; [117] "meta_random"              "metaplus"                </span>
-<span class="co">#&gt; [119] "mfx"                      "mipo"                    </span>
-<span class="co">#&gt; [121] "mira"                     "MixMod"                  </span>
-<span class="co">#&gt; [123] "mixor"                    "mjoint"                  </span>
-<span class="co">#&gt; [125] "mle"                      "mle2"                    </span>
-<span class="co">#&gt; [127] "mlm"                      "mlogit"                  </span>
-<span class="co">#&gt; [129] "model_parameters"         "muhaz"                   </span>
-<span class="co">#&gt; [131] "multinom"                 "negbin"                  </span>
-<span class="co">#&gt; [133] "negbinirr"                "negbinmfx"               </span>
-<span class="co">#&gt; [135] "nlrq"                     "nls"                     </span>
-<span class="co">#&gt; [137] "NULL"                     "numeric"                 </span>
-<span class="co">#&gt; [139] "omega"                    "optim"                   </span>
-<span class="co">#&gt; [141] "orcutt"                   "pairwise.htest"          </span>
-<span class="co">#&gt; [143] "pam"                      "parameters_efa"          </span>
-<span class="co">#&gt; [145] "parameters_pca"           "PCA"                     </span>
-<span class="co">#&gt; [147] "plm"                      "poissonirr"              </span>
-<span class="co">#&gt; [149] "poissonmfx"               "poLCA"                   </span>
-<span class="co">#&gt; [151] "polr"                     "Polygon"                 </span>
-<span class="co">#&gt; [153] "Polygons"                 "power.htest"             </span>
-<span class="co">#&gt; [155] "prcomp"                   "principal"               </span>
-<span class="co">#&gt; [157] "probitmfx"                "pyears"                  </span>
-<span class="co">#&gt; [159] "Rchoice"                  "rcorr"                   </span>
-<span class="co">#&gt; [161] "ref.grid"                 "regsubsets"              </span>
-<span class="co">#&gt; [163] "ridgelm"                  "rlm"                     </span>
-<span class="co">#&gt; [165] "rlmerMod"                 "rma"                     </span>
-<span class="co">#&gt; [167] "roc"                      "rq"                      </span>
-<span class="co">#&gt; [169] "rqs"                      "rqss"                    </span>
-<span class="co">#&gt; [171] "sarlm"                    "scam"                    </span>
-<span class="co">#&gt; [173] "sem"                      "sparseMatrix"            </span>
-<span class="co">#&gt; [175] "SpatialLinesDataFrame"    "SpatialPolygons"         </span>
-<span class="co">#&gt; [177] "SpatialPolygonsDataFrame" "spec"                    </span>
-<span class="co">#&gt; [179] "speedglm"                 "speedlm"                 </span>
-<span class="co">#&gt; [181] "stanfit"                  "stanmvreg"               </span>
-<span class="co">#&gt; [183] "stanreg"                  "summary_emm"             </span>
-<span class="co">#&gt; [185] "summary_fixest"           "summary.glht"            </span>
-<span class="co">#&gt; [187] "summary.lm"               "summary.plm"             </span>
-<span class="co">#&gt; [189] "summaryDefault"           "survdiff"                </span>
-<span class="co">#&gt; [191] "survexp"                  "survfit"                 </span>
-<span class="co">#&gt; [193] "survreg"                  "svd"                     </span>
-<span class="co">#&gt; [195] "svyglm"                   "svyolr"                  </span>
-<span class="co">#&gt; [197] "systemfit"                "table"                   </span>
-<span class="co">#&gt; [199] "tobit"                    "ts"                      </span>
-<span class="co">#&gt; [201] "TukeyHSD"                 "vgam"                    </span>
-<span class="co">#&gt; [203] "wbgee"                    "wbm"                     </span>
-<span class="co">#&gt; [205] "xyz"                      "zcpglm"                  </span>
-<span class="co">#&gt; [207] "zerocount"                "zeroinfl"                </span>
-<span class="co">#&gt; [209] "zoo"</span></code></pre></div>
+<span class="co">#&gt;  [39] "cv.glmnet"                "data.frame"              </span>
+<span class="co">#&gt;  [41] "default"                  "density"                 </span>
+<span class="co">#&gt;  [43] "dgCMatrix"                "dgTMatrix"               </span>
+<span class="co">#&gt;  [45] "DirichletRegModel"        "dist"                    </span>
+<span class="co">#&gt;  [47] "drc"                      "durbinWatsonTest"        </span>
+<span class="co">#&gt;  [49] "emm_list"                 "emmeans"                 </span>
+<span class="co">#&gt;  [51] "emmeans_summary"          "emmGrid"                 </span>
+<span class="co">#&gt;  [53] "epi.2by2"                 "ergm"                    </span>
+<span class="co">#&gt;  [55] "fa"                       "factanal"                </span>
+<span class="co">#&gt;  [57] "FAMD"                     "fitdistr"                </span>
+<span class="co">#&gt;  [59] "fixest"                   "ftable"                  </span>
+<span class="co">#&gt;  [61] "gam"                      "Gam"                     </span>
+<span class="co">#&gt;  [63] "gamlss"                   "gamm"                    </span>
+<span class="co">#&gt;  [65] "garch"                    "geeglm"                  </span>
+<span class="co">#&gt;  [67] "glht"                     "glm"                     </span>
+<span class="co">#&gt;  [69] "glmm"                     "glmmTMB"                 </span>
+<span class="co">#&gt;  [71] "glmnet"                   "glmrob"                  </span>
+<span class="co">#&gt;  [73] "glmRob"                   "glmx"                    </span>
+<span class="co">#&gt;  [75] "gmm"                      "HLfit"                   </span>
+<span class="co">#&gt;  [77] "htest"                    "hurdle"                  </span>
+<span class="co">#&gt;  [79] "irlba"                    "ivreg"                   </span>
+<span class="co">#&gt;  [81] "kappa"                    "kde"                     </span>
+<span class="co">#&gt;  [83] "Kendall"                  "kmeans"                  </span>
+<span class="co">#&gt;  [85] "lavaan"                   "Line"                    </span>
+<span class="co">#&gt;  [87] "Lines"                    "list"                    </span>
+<span class="co">#&gt;  [89] "lm"                       "lm.beta"                 </span>
+<span class="co">#&gt;  [91] "lme"                      "lmodel2"                 </span>
+<span class="co">#&gt;  [93] "lmrob"                    "lmRob"                   </span>
+<span class="co">#&gt;  [95] "logical"                  "logistf"                 </span>
+<span class="co">#&gt;  [97] "logitmfx"                 "logitor"                 </span>
+<span class="co">#&gt;  [99] "lqm"                      "lqmm"                    </span>
+<span class="co">#&gt; [101] "lsmobj"                   "manova"                  </span>
+<span class="co">#&gt; [103] "maov"                     "map"                     </span>
+<span class="co">#&gt; [105] "margins"                  "Mclust"                  </span>
+<span class="co">#&gt; [107] "mcmc"                     "mcmc.list"               </span>
+<span class="co">#&gt; [109] "MCMCglmm"                 "mediate"                 </span>
+<span class="co">#&gt; [111] "merMod"                   "merModList"              </span>
+<span class="co">#&gt; [113] "meta_bma"                 "meta_fixed"              </span>
+<span class="co">#&gt; [115] "meta_random"              "metaplus"                </span>
+<span class="co">#&gt; [117] "mfx"                      "mipo"                    </span>
+<span class="co">#&gt; [119] "mira"                     "MixMod"                  </span>
+<span class="co">#&gt; [121] "mixor"                    "mjoint"                  </span>
+<span class="co">#&gt; [123] "mle"                      "mle2"                    </span>
+<span class="co">#&gt; [125] "mlm"                      "mlogit"                  </span>
+<span class="co">#&gt; [127] "model_parameters"         "muhaz"                   </span>
+<span class="co">#&gt; [129] "multinom"                 "negbin"                  </span>
+<span class="co">#&gt; [131] "negbinirr"                "negbinmfx"               </span>
+<span class="co">#&gt; [133] "nlrq"                     "nls"                     </span>
+<span class="co">#&gt; [135] "NULL"                     "numeric"                 </span>
+<span class="co">#&gt; [137] "omega"                    "optim"                   </span>
+<span class="co">#&gt; [139] "orcutt"                   "pairwise.htest"          </span>
+<span class="co">#&gt; [141] "pam"                      "parameters_efa"          </span>
+<span class="co">#&gt; [143] "parameters_pca"           "PCA"                     </span>
+<span class="co">#&gt; [145] "plm"                      "poissonirr"              </span>
+<span class="co">#&gt; [147] "poissonmfx"               "poLCA"                   </span>
+<span class="co">#&gt; [149] "polr"                     "Polygon"                 </span>
+<span class="co">#&gt; [151] "Polygons"                 "power.htest"             </span>
+<span class="co">#&gt; [153] "prcomp"                   "principal"               </span>
+<span class="co">#&gt; [155] "probitmfx"                "pyears"                  </span>
+<span class="co">#&gt; [157] "Rchoice"                  "rcorr"                   </span>
+<span class="co">#&gt; [159] "ref.grid"                 "regsubsets"              </span>
+<span class="co">#&gt; [161] "ridgelm"                  "rlm"                     </span>
+<span class="co">#&gt; [163] "rlmerMod"                 "rma"                     </span>
+<span class="co">#&gt; [165] "roc"                      "rq"                      </span>
+<span class="co">#&gt; [167] "rqs"                      "rqss"                    </span>
+<span class="co">#&gt; [169] "sarlm"                    "scam"                    </span>
+<span class="co">#&gt; [171] "sem"                      "sparseMatrix"            </span>
+<span class="co">#&gt; [173] "SpatialLinesDataFrame"    "SpatialPolygons"         </span>
+<span class="co">#&gt; [175] "SpatialPolygonsDataFrame" "spec"                    </span>
+<span class="co">#&gt; [177] "speedglm"                 "speedlm"                 </span>
+<span class="co">#&gt; [179] "stanfit"                  "stanmvreg"               </span>
+<span class="co">#&gt; [181] "stanreg"                  "summary_emm"             </span>
+<span class="co">#&gt; [183] "summary_fixest"           "summary.glht"            </span>
+<span class="co">#&gt; [185] "summary.lm"               "summary.plm"             </span>
+<span class="co">#&gt; [187] "summaryDefault"           "survdiff"                </span>
+<span class="co">#&gt; [189] "survexp"                  "survfit"                 </span>
+<span class="co">#&gt; [191] "survreg"                  "svd"                     </span>
+<span class="co">#&gt; [193] "svyglm"                   "svyolr"                  </span>
+<span class="co">#&gt; [195] "systemfit"                "table"                   </span>
+<span class="co">#&gt; [197] "tobit"                    "ts"                      </span>
+<span class="co">#&gt; [199] "TukeyHSD"                 "vgam"                    </span>
+<span class="co">#&gt; [201] "wbgee"                    "wbm"                     </span>
+<span class="co">#&gt; [203] "xyz"                      "zcpglm"                  </span>
+<span class="co">#&gt; [205] "zerocount"                "zeroinfl"                </span>
+<span class="co">#&gt; [207] "zoo"</span></pre></body></html></div>
 <p>To see if a given model is supported, you can fit it, and then call this function:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/get_estimates.html">get_estimates</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><html><body><pre class="r"><span class="fu"><a href="../reference/get_estimates.html">get_estimates</a></span>(<span class="no">model</span>)</pre></body></html></div>
 <p>The next section shows that it is</p>
 <p>If this function does not return a valid output, you can easily (really!!) add your own support. See the next section for a tutorial. If you do this, you may consider opening an issue on the Github website of the <code>broom</code> package: <a href="https://github.com/tidymodels/broom/issues" class="uri">https://github.com/tidymodels/broom/issues</a></p>
 <p>Note that several packages supply additional <code>tidy</code> and <code>glance</code> functions. Loading these packages can increase the range of models supported by <code>modelsummary</code>. For example, loading the <a href="https://github.com/bbolker/broom.mixed">broom.mixed package</a> allows modelsummary to support a wide variety of mixed (hierarchical, multi-level) models (e.g., <code>lme4</code>, <code>brms</code>, <code>rstanarm</code>).</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/bbolker/broom.mixed">broom.mixed</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb42"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">broom.mixed</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
 </div>
 <div id="adding-new-models" class="section level1">
 <h1 class="hasAnchor">
 <a href="#adding-new-models" class="anchor"></a>Adding new models</h1>
 <p><code>modelsummary</code> relies on two functions from the <code>broom</code> package to extract model information: <code>tidy</code> and <code>glance</code>. If <code>broom</code> doesn’t support the type of model you are trying to summarize, <code>modelsummary</code> won’t support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.</p>
 <p>For example, models produced by the <code>MCMCglmm</code> package are not currently supported by <code>broom</code>. To add support, you simply need to create a <code>tidy</code> and a <code>glance</code> method:</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># load packages and data</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">MCMCglmm</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">PlodiaPO</span><span class="op">)</span>
+<div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="co"># load packages and data</span>
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">MCMCglmm</span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">PlodiaPO</span>)
 
 <span class="co"># add custom functions to extract estimates (tidy) and goodness-of-fit (glance) information</span>
-<span class="va">tidy.MCMCglmm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-    <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">)</span>,
-                          estimate <span class="op">=</span> <span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,
-                          conf.low <span class="op">=</span> <span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>,
-                          conf.high <span class="op">=</span> <span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span><span class="op">)</span>
-    <span class="va">ret</span>
-<span class="op">}</span>
-<span class="va">glance.MCMCglmm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>dic <span class="op">=</span> <span class="va">object</span><span class="op">$</span><span class="va">DIC</span>,
-                          n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">object</span><span class="op">$</span><span class="va">X</span><span class="op">)</span><span class="op">)</span>
-    <span class="va">ret</span>
-<span class="op">}</span>
+<span class="no">tidy.MCMCglmm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">object</span>, <span class="no">...</span>) {
+    <span class="no">s</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">object</span>, <span class="no">...</span>)
+    <span class="no">ret</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">term</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span>(<span class="no">s</span>$<span class="no">solutions</span>),
+                          <span class="kw">estimate</span> <span class="kw">=</span> <span class="no">s</span>$<span class="no">solutions</span>[, <span class="fl">1</span>],
+                          <span class="kw">conf.low</span> <span class="kw">=</span> <span class="no">s</span>$<span class="no">solutions</span>[, <span class="fl">2</span>],
+                          <span class="kw">conf.high</span> <span class="kw">=</span> <span class="no">s</span>$<span class="no">solutions</span>[, <span class="fl">3</span>])
+    <span class="no">ret</span>
+}
+<span class="no">glance.MCMCglmm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">object</span>, <span class="no">...</span>) {
+    <span class="no">ret</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">dic</span> <span class="kw">=</span> <span class="no">object</span>$<span class="no">DIC</span>,
+                          <span class="kw">n</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">object</span>$<span class="no">X</span>))
+    <span class="no">ret</span>
+}
 
 <span class="co"># estimate a simple model</span>
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MCMCglmm/man/MCMCglmm.html">MCMCglmm</a></span><span class="op">(</span><span class="va">PO</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">plate</span>, random <span class="op">=</span> <span class="op">~</span> <span class="va">FSfamily</span>, data <span class="op">=</span> <span class="va">PlodiaPO</span>, verbose<span class="op">=</span><span class="cn">FALSE</span>, pr<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+<span class="no">model</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MCMCglmm/man/MCMCglmm.html">MCMCglmm</a></span>(<span class="no">PO</span> ~ <span class="fl">1</span> + <span class="no">plate</span>, <span class="kw">random</span> <span class="kw">=</span> ~ <span class="no">FSfamily</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">PlodiaPO</span>, <span class="kw">verbose</span><span class="kw">=</span><span class="fl">FALSE</span>, <span class="kw">pr</span><span class="kw">=</span><span class="fl">TRUE</span>)
 
 <span class="co"># summarize the model</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">model</span>, statistic <span class="op">=</span> <span class="st">'conf.int'</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">model</span>, <span class="kw">statistic</span> <span class="kw">=</span> <span class="st">'conf.int'</span>)</pre></body></html></div>
 <p>Two important things to note. First, the methods are named <code>tidy.MCMCglmm</code> and <code>glance.MCMCglmm</code> because the model object I am trying to summarize is of class <code>MCMCglmm</code>. You can find the class of a model by running: <code><a href="https://rdrr.io/r/base/class.html">class(model)</a></code>.</p>
 <p>Second, in the example above, we used the <code>statistic = 'conf.int'</code> argument. This is because the <code>tidy</code> method produces <code>conf.low</code> and <code>conf.high</code> columns. In most cases, users will define <code>std.error</code> column in their custom <code>tidy</code> methods, so the <code>statistic</code> argument will need to be adjusted.</p>
 <p>If you create new <code>tidy</code> and <code>glance</code> methods, please consider contributing them to <code>broom</code> so that the rest of the community can benefit from your work: <a href="https://github.com/tidymodels/broom" class="uri">https://github.com/tidymodels/broom</a></p>
@@ -3336,26 +3284,25 @@ wt
 <a href="#fixed-effects-regression" class="anchor"></a>Fixed effects regression</h2>
 <p>One common use-case for <code>glance_custom</code> is to display the list of “fixed effects” included in a linear regression model.</p>
 <p>The <code>feols</code> function from the <code>fixest</code> package offers an extremely fast way to estimate fixed effects regression models. The <code>feols</code> function produces an object of class “fixest”, which stores the fixed effects variables in a character vector called “fixef_vars”. To display those fixed effects, we create a <code>glance_custom.fixest</code> and call <code>modelsummary</code>:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">glance_custom.fixest</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>.rows <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-    <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="va">x</span><span class="op">$</span><span class="va">fixef_vars</span><span class="op">)</span> <span class="op">{</span>
-        <span class="va">out</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">'FE: '</span>, <span class="va">n</span><span class="op">)</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">'X'</span>
-    <span class="op">}</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
-<span class="op">}</span>
+<div class="sourceCode" id="cb44"><html><body><pre class="r"><span class="no">glance_custom.fixest</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
+    <span class="no">out</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">.rows</span> <span class="kw">=</span> <span class="fl">1</span>)
+    <span class="kw">for</span> (<span class="no">n</span> <span class="kw">in</span> <span class="no">x</span>$<span class="no">fixef_vars</span>) {
+        <span class="no">out</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">'FE: '</span>, <span class="no">n</span>)]] <span class="kw">&lt;-</span> <span class="st">'X'</span>
+    }
+    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
+}
 
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">fixest</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">fixest</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/plm/EmplUK.csv'</span>
-<span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
-<span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">mod</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span><span class="op">(</span><span class="va">emp</span> <span class="op">~</span> <span class="va">wage</span>, <span class="va">dat</span><span class="op">)</span>
-<span class="va">mod</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span><span class="op">(</span><span class="va">emp</span> <span class="op">~</span> <span class="va">wage</span> <span class="op">|</span> <span class="va">firm</span>, <span class="va">dat</span><span class="op">)</span>
-<span class="va">mod</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span><span class="op">(</span><span class="va">emp</span> <span class="op">~</span> <span class="va">wage</span> <span class="op">|</span> <span class="va">firm</span> <span class="op">+</span> <span class="va">year</span>, <span class="va">dat</span><span class="op">)</span>
+<span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/plm/EmplUK.csv'</span>
+<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)
+<span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+<span class="no">mod</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span>(<span class="no">emp</span> ~ <span class="no">wage</span>, <span class="no">dat</span>)
+<span class="no">mod</span><span class="kw">[[</span><span class="fl">2</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span>(<span class="no">emp</span> ~ <span class="no">wage</span> <span class="kw">|</span> <span class="no">firm</span>, <span class="no">dat</span>)
+<span class="no">mod</span><span class="kw">[[</span><span class="fl">3</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fixest/man/feols.html">feols</a></span>(<span class="no">emp</span> ~ <span class="no">wage</span> <span class="kw">|</span> <span class="no">firm</span> + <span class="no">year</span>, <span class="no">dat</span>)
 
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -3588,24 +3535,23 @@ Clustered (firm)
 </ol>
 <p>For convenience, <code>modelsummary</code> includes two unexported functions which can do most this for you. Reading <a href="https://github.com/vincentarelbundock/modelsummary/blob/master/R/convenience.R">the annotated code for these two functions</a> could be an instructive exercise for those who wish to exploit everything that <code>modelsummary</code> has to offer.</p>
 <p>To print IV regression results from <code><a href="https://rdrr.io/pkg/lfe/man/felm.html">lfe::felm</a></code> models, we execute this code:</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sgaure/lfe">lfe</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">lfe</span>)
 
-<span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html">felm</a></span><span class="op">(</span><span class="va">wt</span> <span class="op">~</span> <span class="va">drat</span> <span class="op">|</span> <span class="fl">0</span> <span class="op">|</span> <span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">hp</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html">felm</a></span><span class="op">(</span><span class="va">wt</span> <span class="op">~</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">vs</span> <span class="op">|</span> <span class="fl">0</span> <span class="op">|</span> <span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">hp</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
-  <span class="op">)</span>
+<span class="no">models</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
+  <span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html">felm</a></span>(<span class="no">wt</span> ~ <span class="no">drat</span> <span class="kw">|</span> <span class="fl">0</span> <span class="kw">|</span> (<span class="no">disp</span> ~ <span class="no">hp</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>),
+  <span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html">felm</a></span>(<span class="no">wt</span> ~ <span class="no">drat</span> + <span class="no">vs</span> <span class="kw">|</span> <span class="fl">0</span> <span class="kw">|</span> (<span class="no">disp</span> ~ <span class="no">hp</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>)
+  )
 
 <span class="co"># define a new method to combine tidy information about both stages</span>
-<span class="va">tidy.iv</span> <span class="op">&lt;-</span> <span class="fu">modelsummary</span><span class="fu">:::</span><span class="va">tidy_felm_iv</span>
+<span class="no">tidy.iv</span> <span class="kw">&lt;-</span> <span class="kw pkg">modelsummary</span><span class="kw ns">:::</span><span class="no">tidy_felm_iv</span>
 
 <span class="co"># change the model classes to trigger the new method</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">models</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">models</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'iv'</span>, <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">models</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">models</span><span class="kw">[[</span><span class="fl">1</span>]]) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">models</span><span class="kw">[[</span><span class="fl">2</span>]]) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'iv'</span>, <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">models</span><span class="kw">[[</span><span class="fl">1</span>]]))
 
 <span class="co"># use helper function to sort coefficients with 1st stage last</span>
-<span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu">modelsummary</span><span class="fu">:::</span><span class="fu">coef_map_felm_iv</span><span class="op">(</span><span class="va">models</span><span class="op">)</span>
+<span class="no">cm</span> <span class="kw">&lt;-</span> <span class="kw pkg">modelsummary</span><span class="kw ns">:::</span><span class="fu">coef_map_felm_iv</span>(<span class="no">models</span>)
 
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_map<span class="op">=</span><span class="va">cm</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">models</span>, <span class="kw">coef_map</span><span class="kw">=</span><span class="no">cm</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -3752,36 +3698,35 @@ Log.Lik.
 <h2 class="hasAnchor">
 <a href="#multiple-imputation" class="anchor"></a>Multiple imputation</h2>
 <p><code>modelsummary</code> can pool and display analyses on several datasets imputed using the <code>mice</code> or <code>Amelia</code> packages. This code illustrates how:</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/amices/mice">mice</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://gking.harvard.edu/amelia">Amelia</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb46"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mice</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">Amelia</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">modelsummary</span>)
 
 <span class="co"># Download data from `Rdatasets`</span>
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
-<span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'Clergy'</span>, <span class="st">'Commerce'</span>, <span class="st">'Literacy'</span><span class="op">)</span><span class="op">]</span>
+<span class="no">url</span> <span class="kw">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span>
+<span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="no">url</span>)[, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Clergy'</span>, <span class="st">'Commerce'</span>, <span class="st">'Literacy'</span>)]
 
 <span class="co"># Insert missing values</span>
-<span class="va">dat</span><span class="op">$</span><span class="va">Clergy</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
-<span class="va">dat</span><span class="op">$</span><span class="va">Commerce</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
-<span class="va">dat</span><span class="op">$</span><span class="va">Literacy</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
+<span class="no">dat</span>$<span class="no">Clergy</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">dat</span>), <span class="fl">10</span>)] <span class="kw">&lt;-</span> <span class="fl">NA</span>
+<span class="no">dat</span>$<span class="no">Commerce</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">dat</span>), <span class="fl">10</span>)] <span class="kw">&lt;-</span> <span class="fl">NA</span>
+<span class="no">dat</span>$<span class="no">Literacy</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">dat</span>), <span class="fl">10</span>)] <span class="kw">&lt;-</span> <span class="fl">NA</span>
 
 <span class="co"># Impute with `mice` and `Amelia`</span>
-<span class="va">dat_mice</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://amices.org/mice/reference/mice.html">mice</a></span><span class="op">(</span><span class="va">dat</span>, m <span class="op">=</span> <span class="fl">5</span>, printFlag <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="va">dat_amelia</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Amelia/man/amelia.html">amelia</a></span><span class="op">(</span><span class="va">dat</span>, m <span class="op">=</span> <span class="fl">5</span>, p2s <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">$</span><span class="va">imputations</span>
+<span class="no">dat_mice</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://amices.org/mice/reference/mice.html">mice</a></span>(<span class="no">dat</span>, <span class="kw">m</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">printFlag</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="no">dat_amelia</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Amelia/man/amelia.html">amelia</a></span>(<span class="no">dat</span>, <span class="kw">m</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="kw">p2s</span> <span class="kw">=</span> <span class="fl">0</span>)$<span class="no">imputations</span>
 
 <span class="co"># Estimate models</span>
-<span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">mod</span><span class="op">[[</span><span class="st">'Listwise deletion'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Clergy</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Commerce</span>, <span class="va">dat</span><span class="op">)</span>
-<span class="va">mod</span><span class="op">[[</span><span class="st">'Mice'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">dat_mice</span>, <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Clergy</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Commerce</span><span class="op">)</span><span class="op">)</span> 
-<span class="va">mod</span><span class="op">[[</span><span class="st">'Amelia'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">dat_amelia</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Clergy</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Commerce</span>, <span class="va">x</span><span class="op">)</span><span class="op">)</span>
+<span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+<span class="no">mod</span><span class="kw">[[</span><span class="st">'Listwise deletion'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="no">dat</span>)
+<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span>(<span class="no">dat_mice</span>, <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>))
+<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">dat_amelia</span>, <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Clergy</span> ~ <span class="no">Literacy</span> + <span class="no">Commerce</span>, <span class="no">x</span>))
 
 <span class="co"># Pool results</span>
-<span class="va">mod</span><span class="op">[[</span><span class="st">'Mice'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">mice</span><span class="fu">::</span><span class="fu"><a href="https://amices.org/mice/reference/pool.html">pool</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[[</span><span class="st">'Mice'</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-<span class="va">mod</span><span class="op">[[</span><span class="st">'Amelia'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">mice</span><span class="fu">::</span><span class="fu"><a href="https://amices.org/mice/reference/pool.html">pool</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[[</span><span class="st">'Amelia'</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mice</span><span class="kw ns">::</span><span class="fu"><a href="https://amices.org/mice/reference/pool.html">pool</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="st">'Mice'</span>]])
+<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mice</span><span class="kw ns">::</span><span class="fu"><a href="https://amices.org/mice/reference/pool.html">pool</a></span>(<span class="no">mod</span><span class="kw">[[</span><span class="st">'Amelia'</span>]])
 
 <span class="co"># Summarize</span>
-<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span>(<span class="no">mod</span>)</pre></body></html></div>
 <table class="table table">
 <thead><tr>
 <th style="text-align:left;">
@@ -3802,26 +3747,26 @@ Amelia
 (Intercept)
 </td>
 <td style="text-align:center;">
-56.258
+79.826
 </td>
 <td style="text-align:center;">
-58.416
+77.639
 </td>
 <td style="text-align:center;">
-63.010
+77.614
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(14.944)
+(15.449)
 </td>
 <td style="text-align:center;">
-(13.088)
+(16.107)
 </td>
 <td style="text-align:center;">
-(16.241)
+(15.882)
 </td>
 </tr>
 <tr>
@@ -3829,26 +3774,26 @@ Amelia
 Literacy
 </td>
 <td style="text-align:center;">
--0.201
+-0.590
 </td>
 <td style="text-align:center;">
--0.238
+-0.491
 </td>
 <td style="text-align:center;">
--0.293
+-0.521
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.228)
+(0.231)
 </td>
 <td style="text-align:center;">
-(0.209)
+(0.237)
 </td>
 <td style="text-align:center;">
-(0.264)
+(0.222)
 </td>
 </tr>
 <tr>
@@ -3856,26 +3801,26 @@ Literacy
 Commerce
 </td>
 <td style="text-align:center;">
--0.056
+-0.283
 </td>
 <td style="text-align:center;">
--0.090
+-0.309
 </td>
 <td style="text-align:center;">
--0.137
+-0.320
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.162)
+(0.170)
 </td>
 <td style="text-align:center;">
-(0.141)
+(0.175)
 </td>
 <td style="text-align:center;">
-(0.157)
+(0.177)
 </td>
 </tr>
 <tr>
@@ -3883,7 +3828,7 @@ Commerce
 Num.Obs.
 </td>
 <td style="text-align:center;">
-59
+58
 </td>
 <td style="text-align:center;">
 86
@@ -3910,13 +3855,13 @@ Num.Imp.
 R2
 </td>
 <td style="text-align:center;">
-0.015
+0.106
 </td>
 <td style="text-align:center;">
-0.017
+0.080
 </td>
 <td style="text-align:center;">
-0.025
+0.090
 </td>
 </tr>
 <tr>
@@ -3924,11 +3869,13 @@ R2
 R2 Adj.
 </td>
 <td style="text-align:center;">
--0.020
+0.074
 </td>
 <td style="text-align:center;">
+0.056
 </td>
 <td style="text-align:center;">
+0.067
 </td>
 </tr>
 <tr>
@@ -3936,7 +3883,7 @@ R2 Adj.
 AIC
 </td>
 <td style="text-align:center;">
-547.9
+542.0
 </td>
 <td style="text-align:center;">
 </td>
@@ -3948,7 +3895,7 @@ AIC
 BIC
 </td>
 <td style="text-align:center;">
-556.2
+550.3
 </td>
 <td style="text-align:center;">
 </td>
@@ -3960,7 +3907,7 @@ BIC
 Log.Lik.
 </td>
 <td style="text-align:center;">
--269.939
+-267.018
 </td>
 <td style="text-align:center;">
 </td>
@@ -3972,7 +3919,7 @@ Log.Lik.
 F
 </td>
 <td style="text-align:center;">
-0.438
+3.265
 </td>
 <td style="text-align:center;">
 </td>
@@ -3995,6 +3942,31 @@ Clergy
 </table>
 </div>
 </div>
+<div id="backends" class="section level1">
+<h1 class="hasAnchor">
+<a href="#backends" class="anchor"></a>Backends</h1>
+<p>The table-making backends supported by <code>modelsummary</code> have overlaping capabilities (e.g., several of them can produce HTML tables). These are the default packages used for different outputs:</p>
+<p><code>kableExtra</code>:</p>
+<ul>
+<li>HTML</li>
+<li>LaTeX / PDF</li>
+</ul>
+<p><code>flextable</code>:</p>
+<ul>
+<li>Word</li>
+<li>Powerpoint</li>
+</ul>
+<p><code>gt</code>:</p>
+<ul>
+<li>jpg</li>
+<li>png</li>
+</ul>
+<p>You can modify these defaults by setting global options such as:</p>
+<div class="sourceCode" id="cb47"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_html</span> <span class="kw">=</span> <span class="st">'kableExtra'</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_latex</span> <span class="kw">=</span> <span class="st">'gt'</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_word</span> <span class="kw">=</span> <span class="st">'huxtable'</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">modelsummary_png</span> <span class="kw">=</span> <span class="st">'gt'</span>)</pre></body></html></div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -4012,7 +3984,7 @@ Clergy
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

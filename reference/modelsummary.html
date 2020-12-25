@@ -122,26 +122,26 @@
     <p>Beautiful, customizable summaries of statistical models</p>
     </div>
 
-    <pre class="usage"><span class='fu'>modelsummary</span><span class='op'>(</span>
-  <span class='va'>models</span>,
-  output <span class='op'>=</span> <span class='st'>"default"</span>,
-  fmt <span class='op'>=</span> <span class='fl'>3</span>,
-  estimate <span class='op'>=</span> <span class='st'>"estimate"</span>,
-  statistic <span class='op'>=</span> <span class='st'>"std.error"</span>,
-  vcov <span class='op'>=</span> <span class='cn'>NULL</span>,
-  conf_level <span class='op'>=</span> <span class='fl'>0.95</span>,
-  stars <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  coef_map <span class='op'>=</span> <span class='cn'>NULL</span>,
-  coef_omit <span class='op'>=</span> <span class='cn'>NULL</span>,
-  coef_rename <span class='op'>=</span> <span class='cn'>NULL</span>,
-  gof_map <span class='op'>=</span> <span class='cn'>NULL</span>,
-  gof_omit <span class='op'>=</span> <span class='cn'>NULL</span>,
-  add_rows <span class='op'>=</span> <span class='cn'>NULL</span>,
-  align <span class='op'>=</span> <span class='cn'>NULL</span>,
-  notes <span class='op'>=</span> <span class='cn'>NULL</span>,
-  title <span class='op'>=</span> <span class='cn'>NULL</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>modelsummary</span>(
+  <span class='no'>models</span>,
+  <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"default"</span>,
+  <span class='kw'>fmt</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+  <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"estimate"</span>,
+  <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>"std.error"</span>,
+  <span class='kw'>vcov</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
+  <span class='kw'>stars</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>coef_map</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>coef_omit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>coef_rename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>gof_map</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>gof_omit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>add_rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>align</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>notes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -307,84 +307,82 @@ will be adjusted by, for example, taking the square root of the matrix's
 diagonal.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 
 <span class='co'># The `modelsummary` website includes \emph{many} examples and tutorials:</span>
 <span class='co'># https://vincentarelbundock.github.io/modelsummary</span>
 
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://vincentarelbundock.github.io/modelsummary/'>modelsummary</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>modelsummary</span>)
 
 <span class='co'># load data and estimate models</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>trees</span><span class='op'>)</span>
-<span class='va'>models</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>models</span><span class='op'>[[</span><span class='st'>'Bivariate'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Girth</span> <span class='op'>~</span> <span class='va'>Height</span>, data <span class='op'>=</span> <span class='va'>trees</span><span class='op'>)</span>
-<span class='va'>models</span><span class='op'>[[</span><span class='st'>'Multivariate'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Girth</span> <span class='op'>~</span> <span class='va'>Height</span> <span class='op'>+</span> <span class='va'>Volume</span>, data <span class='op'>=</span> <span class='va'>trees</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>trees</span>)
+<span class='no'>models</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
+<span class='no'>models</span><span class='kw'>[[</span><span class='st'>'Bivariate'</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>Girth</span> ~ <span class='no'>Height</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>trees</span>)
+<span class='no'>models</span><span class='kw'>[[</span><span class='st'>'Multivariate'</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>Girth</span> ~ <span class='no'>Height</span> + <span class='no'>Volume</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>trees</span>)
 
 <span class='co'># simple table</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>)
 
 <span class='co'># statistic</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='st'>'p.value'</span><span class='op'>)</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='st'>'statistic'</span><span class='op'>)</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='st'>'conf.int'</span>, conf_level <span class='op'>=</span> <span class='fl'>0.99</span><span class='op'>)</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"t = {statistic}"</span>,
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>'p.value'</span>)
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>'statistic'</span>)
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>'conf.int'</span>, <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.99</span>)
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"t = {statistic}"</span>,
                                    <span class='st'>"se = {std.error}"</span>,
-                                   <span class='st'>"conf.int"</span><span class='op'>)</span><span class='op'>)</span>
+                                   <span class='st'>"conf.int"</span>))
 
 <span class='co'># estimate</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, 
-  statistic <span class='op'>=</span> <span class='cn'>NULL</span>,
-  estimate <span class='op'>=</span> <span class='st'>"{estimate} [{conf.low}, {conf.high}]"</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>,
+  <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"{estimate} [{conf.low}, {conf.high}]"</span>)
 
 <span class='co'># vcov</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, vcov <span class='op'>=</span> <span class='st'>"robust"</span><span class='op'>)</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"classical"</span>, <span class='st'>"stata"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, vcov <span class='op'>=</span> <span class='fu'>sandwich</span><span class='fu'>::</span><span class='va'><a href='http://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>vcovHC</a></span><span class='op'>)</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, 
-  vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'>stats</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/r/stats/vcov.html'>vcov</a></span>, <span class='fu'>sandwich</span><span class='fu'>::</span><span class='va'><a href='http://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>vcovHC</a></span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, 
-  vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"(Intercept)"</span><span class='op'>=</span><span class='st'>""</span>, <span class='st'>"Height"</span><span class='op'>=</span><span class='st'>"!"</span><span class='op'>)</span>,
-                            <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"(Intercept)"</span><span class='op'>=</span><span class='st'>""</span>, <span class='st'>"Height"</span><span class='op'>=</span><span class='st'>"!"</span>, <span class='st'>"Volume"</span><span class='op'>=</span><span class='st'>"!!"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>vcov</span> <span class='kw'>=</span> <span class='st'>"robust"</span>)
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>vcov</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>"classical"</span>, <span class='st'>"stata"</span>))
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>vcov</span> <span class='kw'>=</span> <span class='kw pkg'>sandwich</span><span class='kw ns'>::</span><span class='no'><a href='http://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>vcovHC</a></span>)
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>,
+  <span class='kw'>vcov</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/r/stats/vcov.html'>vcov</a></span>, <span class='kw pkg'>sandwich</span><span class='kw ns'>::</span><span class='no'><a href='http://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>vcovHC</a></span>))
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>,
+  <span class='kw'>vcov</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"(Intercept)"</span><span class='kw'>=</span><span class='st'>""</span>, <span class='st'>"Height"</span><span class='kw'>=</span><span class='st'>"!"</span>),
+                            <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"(Intercept)"</span><span class='kw'>=</span><span class='st'>""</span>, <span class='st'>"Height"</span><span class='kw'>=</span><span class='st'>"!"</span>, <span class='st'>"Volume"</span><span class='kw'>=</span><span class='st'>"!!"</span>)))
 
 <span class='co'># coef_rename</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, coef_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Volume'</span> <span class='op'>=</span> <span class='st'>'Large'</span>, <span class='st'>'Height'</span> <span class='op'>=</span> <span class='st'>'Tall'</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>coef_map</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'Volume'</span> <span class='kw'>=</span> <span class='st'>'Large'</span>, <span class='st'>'Height'</span> <span class='kw'>=</span> <span class='st'>'Tall'</span>))
 
 <span class='co'># coef_map</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, coef_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Volume'</span> <span class='op'>=</span> <span class='st'>'Large'</span>, <span class='st'>'Height'</span> <span class='op'>=</span> <span class='st'>'Tall'</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>coef_map</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'Volume'</span> <span class='kw'>=</span> <span class='st'>'Large'</span>, <span class='st'>'Height'</span> <span class='kw'>=</span> <span class='st'>'Tall'</span>))
 
 <span class='co'># title</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, title <span class='op'>=</span> <span class='st'>'This is the title'</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>'This is the title'</span>)
 
 <span class='co'># add_rows</span>
-<span class='va'>rows</span> <span class='op'>&lt;-</span> <span class='fu'>tibble</span><span class='fu'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>term</span>, <span class='op'>~</span><span class='va'>Bivariate</span>, <span class='op'>~</span><span class='va'>Multivariate</span>,
+<span class='no'>rows</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span>(~<span class='no'>term</span>, ~<span class='no'>Bivariate</span>, ~<span class='no'>Multivariate</span>,
   <span class='st'>'Empty row'</span>, <span class='st'>'-'</span>, <span class='st'>'-'</span>,
-  <span class='st'>'Another empty row'</span>, <span class='st'>'?'</span>, <span class='st'>'?'</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>rows</span>, <span class='st'>'position'</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, add_rows <span class='op'>=</span> <span class='va'>rows</span><span class='op'>)</span>
+  <span class='st'>'Another empty row'</span>, <span class='st'>'?'</span>, <span class='st'>'?'</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>rows</span>, <span class='st'>'position'</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>)
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>add_rows</span> <span class='kw'>=</span> <span class='no'>rows</span>)
 
 <span class='co'># notes</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, notes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>'A first note'</span>, <span class='st'>'A second note'</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>notes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>'A first note'</span>, <span class='st'>'A second note'</span>))
 
 <span class='co'># gof_map: data.frame</span>
-<span class='va'>gm</span> <span class='op'>&lt;-</span> <span class='fu'>modelsummary</span><span class='fu'>::</span><span class='va'><a href='gof_map.html'>gof_map</a></span>
-<span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>omit</span><span class='op'>[</span><span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>raw</span> <span class='op'>==</span> <span class='st'>'deviance'</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>FALSE</span>
-<span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>fmt</span><span class='op'>[</span><span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>raw</span> <span class='op'>==</span> <span class='st'>'r.squared'</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='st'>"%.5f"</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, gof_map <span class='op'>=</span> <span class='va'>gof_custom</span><span class='op'>)</span>
+<span class='no'>gm</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>modelsummary</span><span class='kw ns'>::</span><span class='no'><a href='gof_map.html'>gof_map</a></span>
+<span class='no'>gof_custom</span>$<span class='no'>omit</span>[<span class='no'>gof_custom</span>$<span class='no'>raw</span> <span class='kw'>==</span> <span class='st'>'deviance'</span>] <span class='kw'>&lt;-</span> <span class='fl'>FALSE</span>
+<span class='no'>gof_custom</span>$<span class='no'>fmt</span>[<span class='no'>gof_custom</span>$<span class='no'>raw</span> <span class='kw'>==</span> <span class='st'>'r.squared'</span>] <span class='kw'>&lt;-</span> <span class='st'>"%.5f"</span>
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>, <span class='kw'>gof_map</span> <span class='kw'>=</span> <span class='no'>gof_custom</span>)
 
 <span class='co'># gof_map: list of lists</span>
-<span class='va'>f1</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fl'>3</span><span class='op'>)</span>, big.mark<span class='op'>=</span><span class='st'>","</span><span class='op'>)</span>
-<span class='va'>f2</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fl'>0</span><span class='op'>)</span>, big.mark<span class='op'>=</span><span class='st'>","</span><span class='op'>)</span>
-<span class='va'>gm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"raw"</span> <span class='op'>=</span> <span class='st'>"nobs"</span>, <span class='st'>"clean"</span> <span class='op'>=</span> <span class='st'>"N"</span>, <span class='st'>"fmt"</span> <span class='op'>=</span> <span class='va'>f2</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"raw"</span> <span class='op'>=</span> <span class='st'>"AIC"</span>, <span class='st'>"clean"</span> <span class='op'>=</span> <span class='st'>"aic"</span>, <span class='st'>"fmt"</span> <span class='op'>=</span> <span class='va'>f1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>,
-  fmt <span class='op'>=</span> <span class='va'>f1</span>,
-  gof_map <span class='op'>=</span> <span class='va'>gm</span><span class='op'>)</span>
+<span class='no'>f1</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='no'>x</span>, <span class='fl'>3</span>), <span class='kw'>big.mark</span><span class='kw'>=</span><span class='st'>","</span>)
+<span class='no'>f2</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='no'>x</span>, <span class='fl'>0</span>), <span class='kw'>big.mark</span><span class='kw'>=</span><span class='st'>","</span>)
+<span class='no'>gm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>"raw"</span> <span class='kw'>=</span> <span class='st'>"nobs"</span>, <span class='st'>"clean"</span> <span class='kw'>=</span> <span class='st'>"N"</span>, <span class='st'>"fmt"</span> <span class='kw'>=</span> <span class='no'>f2</span>),
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>"raw"</span> <span class='kw'>=</span> <span class='st'>"AIC"</span>, <span class='st'>"clean"</span> <span class='kw'>=</span> <span class='st'>"aic"</span>, <span class='st'>"fmt"</span> <span class='kw'>=</span> <span class='no'>f1</span>))
+<span class='fu'>modelsummary</span>(<span class='no'>models</span>,
+  <span class='kw'>fmt</span> <span class='kw'>=</span> <span class='no'>f1</span>,
+  <span class='kw'>gof_map</span> <span class='kw'>=</span> <span class='no'>gm</span>)
 
-<span class='op'>}</span>
-
-</div></pre>
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -400,7 +398,7 @@ diagonal.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
