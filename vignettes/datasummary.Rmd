@@ -210,7 +210,7 @@ datasummary(Mean ~ flipper_length_mm,
             data = penguins)
 ```
 
-# Custom summary functions
+## Custom summary functions
 
 The `Mean` function is a shortcut supplied by `modelsummary`, and it is equivalent to `mean(x,na.rm=TRUE)`. Since the `flipper_length_mm` variable includes missing observation, using the `mean` formula (with default `na.rm=FALSE`) would produce a missing/empty cell:
 
@@ -235,7 +235,7 @@ datasummary(flipper_length_mm ~ MinMax,
             data = penguins)
 ```
 
-# Concatenating with `+`
+## Concatenating with `+`
 
 To include more rows and columns, we use the `+` sign:
 
@@ -252,7 +252,7 @@ datasummary(All(penguins) ~ Mean + SD,
 ```
 By default, `All` selects all numeric variables. This behavior can be changed by modifying the function's arguments. See `?All` for details.
 
-# Nesting categorical variables with `*`
+## Nesting with `*`
 
 `datasummary` can nest variables and statistics inside categorical variables using the `*` symbol. When applying the the `*` operator to factor, character, or logical variables, columns or rows will automatically be nested. For instance, if we want to display separate means for each value of the variable `sex`, we use `mean * sex`:
 
@@ -299,7 +299,7 @@ datasummary(flipper_length_mm + body_mass_g ~ mean * sex * island,
 
 When using `sparse_header=FALSE`, it is often useful to insert `Heading() *` in the table formula, in order to rename or omit some of the labels manually. Type `?tables::Heading` for details and examples.
 
-# Renaming with `=`
+## Renaming with `=`
 
 Personally, I prefer to rename variables and values *before* drawing my tables, using backticks when variable names include whitespace. For example,
 
@@ -337,7 +337,115 @@ datasummary(sex * (flipper_length_mm + bill_length_mm) + Heading("Body mass (g)"
             data = penguins)
 ```
 
-# Rounding
+
+## Counts and Percentages
+
+The `tables` package allows `datasummary` to use neat tricks to produce frequency tables:
+
+1. Add a `N` to the right-hand side of the equation. 
+2. Add `Percent()` to the right-hand side to calculate the percentage of observations in each cell.
+3. Add `1` to the left-hand side to include a row with the total number of observations:
+
+```{r}
+datasummary(species * sex + 1 ~ N + Percent(),
+            data = penguins)
+```
+
+Note that the `Percent()` function accepts a `denom` argument to determine if percentages should be calculated row or column-wise, or if they should take into account all cells.
+
+## `Factor`
+
+The `*` nesting operator that we used above works automatically for factor, character, and logical variables. Sometimes, it is convenient to use it with other types of variables, such as binary numeric variables. In that case, we can wrap the variable name inside a call to `Factor()`. This allows us to treat a variable as factor, without having to modify it in the original data. For example, in the `mtcars` data, there is a binary numeric variable call `am`. We nest statistics within categories of `am` by typing:
+
+```{r}
+datasummary(mpg + hp ~ Factor(am) * (mean + sd),
+            data = mtcars)
+```
+
+## `Arguments`: `na.rm=TRUE`
+
+We can pass any argument to the summary function by including a call to `Arguments()`. For instance, there are missing values in the `flipper_length_mm` variable of the `penguins` dataset. Therefore, the standard `mean` function will produce no result, because its default argument is `na.rm=FALSE`. We can change that by calling:
+
+```{r}
+datasummary(flipper_length_mm ~ mean + mean*Arguments(na.rm=TRUE),
+            data = penguins)
+```
+
+Notice that there is an empty cell (`NA`) under the normal `mean` function, but that the `mean` call with `Arguments(na.rm=TRUE)` produced a numeric result.
+
+We can pass the same arguments to muliple functions using the parentheses:
+
+```{r}
+datasummary(flipper_length_mm ~ (mean + sd) * Arguments(na.rm=TRUE),
+            data = penguins)
+```
+
+Note that the shortcut functions that `modelsummary` supplies use `na.rm=TRUE` by default, so we can use them directly without arguments, even when there are missing values:
+
+```{r}
+datasummary(flipper_length_mm ~ Mean + Var + P75 + Range,
+            data = penguins)
+```
+
+## Empty cells 
+
+Sometimes, if we nest too much and the dataset is not large/diverse enough, we end up with empty cells. In that case, we add `*DropEmpty()` to the formula:
+
+```{r}
+datasummary(island * species * body_mass_g ~ sex * (Mean + SD), 
+            data = penguins)
+datasummary(island * species * body_mass_g ~ sex * (Mean + SD) * DropEmpty(), 
+            data = penguins)
+```
+
+## Logical subsets
+
+Cool stuff is possible with logical subsets:
+
+```{r}
+datasummary((bill_length_mm > 44.5) + (bill_length_mm <= 44.5) ~ Mean * flipper_length_mm, 
+            data = penguins)
+```
+
+See the `tables` package documentation for more details and examples.
+
+# output
+
+All functions in the `datasummary_*` family accept the same `output` argument. Tables can be saved to several file formats:
+
+```{r, eval=FALSE}
+f <- flipper_length_mm ~ island * (mean + sd)
+datasummary(f, data = penguins, output = 'table.html')
+datasummary(f, data = penguins, output = 'table.tex')
+datasummary(f, data = penguins, output = 'table.docx')
+datasummary(f, data = penguins, output = 'table.pptx')
+datasummary(f, data = penguins, output = 'table.md')
+datasummary(f, data = penguins, output = 'table.rtf')
+datasummary(f, data = penguins, output = 'table.jpg')
+datasummary(f, data = penguins, output = 'table.png')
+```
+
+They can be returned in human-readable data.frames, markdown, html, or LaTeX code to the console:
+
+```{r, eval=FALSE}
+datasummary(f, data = penguins, output = 'data.frame')
+datasummary(f, data = penguins, output = 'markdown')
+datasummary(f, data = penguins, output = 'html')
+datasummary(f, data = penguins, output = 'latex')
+```
+
+`datasummary` can return objects compatible with the `gt`, `kableExtra`, `flextable`, and `huxtable` table creation and customization packages:
+
+```{r, eval=FALSE}
+datasummary(f, data = penguins, output = 'gt')
+datasummary(f, data = penguins, output = 'kableExtra')
+datasummary(f, data = penguins, output = 'flextable')
+datasummary(f, data = penguins, output = 'huxtable')
+```
+
+Please note that hierarchical or "nested" column labels are only available for these output formats: kableExtra, gt, html, rtf, and LaTeX. When saving tables to other formats, nested labels will be combined to a "flat" header.
+
+# fmt
 
 The `fmt` argument allows us to set the printing format of numeric values. It accepts a single number representing the number of digits after the period, or a string to be passed to the `sprintf` function. For instance, setting `fmt="%.4f"` will keep 4 digits after the dot (see `?sprintf` for more options):
 
@@ -367,80 +475,7 @@ datasummary(All(mtcars) ~ Mean + SD,
               locations = cells_body(rows = Mean > 10, columns = 2))
 ```
 
-# Counts and Percentages
-
-The `tables` package allows `datasummary` to use neat tricks to produce frequency tables:
-
-1. Add a `N` to the right-hand side of the equation. 
-2. Add `Percent()` to the right-hand side to calculate the percentage of observations in each cell.
-3. Add `1` to the left-hand side to include a row with the total number of observations:
-
-```{r}
-datasummary(species * sex + 1 ~ N + Percent(),
-            data = penguins)
-```
-
-Note that the `Percent()` function accepts a `denom` argument to determine if percentages should be calculated row or column-wise, or if they should take into account all cells.
-
-# `Arguments`: Missing values
-
-We can pass any argument to the summary function by including a call to `Arguments()`. For instance, there are missing values in the `flipper_length_mm` variable of the `penguins` dataset. Therefore, the standard `mean` function will produce no result, because its default argument is `na.rm=FALSE`. We can change that by calling:
-
-```{r}
-datasummary(flipper_length_mm ~ mean + mean*Arguments(na.rm=TRUE),
-            data = penguins)
-```
-
-Notice that there is an empty cell (`NA`) under the normal `mean` function, but that the `mean` call with `Arguments(na.rm=TRUE)` produced a numeric result.
-
-We can pass the same arguments to muliple functions using the parentheses:
-
-```{r}
-datasummary(flipper_length_mm ~ (mean + sd) * Arguments(na.rm=TRUE),
-            data = penguins)
-```
-
-Note that the shortcut functions that `modelsummary` supplies use `na.rm=TRUE` by default, so we can use them directly without arguments, even when there are missing values:
-
-```{r}
-datasummary(flipper_length_mm ~ Mean + Var + P75 + Range,
-            data = penguins)
-```
-
-
-# `Factor`
-
-The `*` nesting operator that we used above works automatically for factor, character, and logical variables. Sometimes, it is convenient to use it with other types of variables, such as binary numeric variables. In that case, we can wrap the variable name inside a call to `Factor()`. This allows us to treat a variable as factor, without having to modify it in the original data. For example, in the `mtcars` data, there is a binary numeric variable call `am`. We nest statistics within categories of `am` by typing:
-
-```{r}
-datasummary(mpg + hp ~ Factor(am) * (mean + sd),
-            data = mtcars)
-```
-
-
-# Empty cells in crosstabs
-
-Sometimes, if we nest too much and the dataset is not large/diverse enough, we end up with empty cells. In that case, we add `*DropEmpty()` to the formula:
-
-```{r}
-datasummary(island * species * body_mass_g ~ sex * (Mean + SD), 
-            data = penguins)
-datasummary(island * species * body_mass_g ~ sex * (Mean + SD) * DropEmpty(), 
-            data = penguins)
-```
-
-# Logical subsets
-
-Cool stuff is possible with logical subsets:
-
-```{r}
-datasummary((bill_length_mm > 44.5) + (bill_length_mm <= 44.5) ~ Mean * flipper_length_mm, 
-            data = penguins)
-```
-
-See the `tables` package documentation for more details and examples.
-
-# Titles and notes
+# title, notes
 
 `datasummary` includes the same `title` and `notes` arguments as in `modelsummary`:
 
@@ -451,7 +486,7 @@ datasummary(All(penguins) ~ Mean + SD,
             notes = c('A note at the bottom of the table.'))
 ```
 
-# Align columns
+# align
 
 We can align columns using the `align` argument. `align` should be a string of length equal to the number of columns, and which includes only the letters "l", 
 "c", or "r":
@@ -462,7 +497,7 @@ datasummary(flipper_length_mm + bill_length_mm ~ Mean + SD + Range,
             align = 'lrcl')
 ```
 
-# `add_columns` and `add_rows`
+# add_rows
 
 ```{r}
 new_rows <- data.frame('Does',
@@ -475,6 +510,9 @@ new_rows <- data.frame('Does',
 datasummary(flipper_length_mm + body_mass_g ~ species * (Mean + SD),
             data = penguins,
             add_rows = new_rows)
+```
+
+# add_columns
 
 ```{r}
 new_cols <- data.frame('New Stat' = runif(2))
@@ -483,50 +521,31 @@ datasummary(flipper_length_mm + body_mass_g ~ species * (Mean + SD),
             add_columns = new_cols)
 ```
 
+# Missing values
 
+The first issue that one can encounter with missing values is empty cells in the table. If you are using `datasummary`, don't forget to use functions that handle `NA`s correctly, or use the `na.rm=TRUE` argument (see the `Arguments` section above).
 
-# Save and Display
+By default, the `datasummary` family of functions will omit any `NA` or `NaN` symbols from the table automatically. This can be problematic in some cases where, for example, you want to display a `datasummary_balance` table where a factor variable includes missing data. In those cases, it can be useful to recode your factor to include an explicit missing level. The `fct_explict_na` function from the `forcats` package makes it easy to do this:
 
-`datasummary` can save tables to several file formats, using the `output` argument:
+```{r}
+mycars <- mtcars[, c("cyl", "mpg", "hp", "vs")]
+mycars$cyl <- as.factor(mycars$cyl)
+mycars$cyl[c(1, 3, 6, 8)] <- NA
 
-```{r, eval=FALSE}
-f <- flipper_length_mm ~ island * (mean + sd)
-datasummary(f, data = penguins, output = 'table.html')
-datasummary(f, data = penguins, output = 'table.tex')
-datasummary(f, data = penguins, output = 'table.docx')
-datasummary(f, data = penguins, output = 'table.pptx')
-datasummary(f, data = penguins, output = 'table.md')
-datasummary(f, data = penguins, output = 'table.rtf')
-datasummary(f, data = penguins, output = 'table.jpg')
-datasummary(f, data = penguins, output = 'table.png')
+# recode missing factors
+mycars$cyl <- forcats::fct_explicit_na(mycars$cyl)
+
+datasummary_balance(~vs, mycars)
 ```
 
-`datasummary` can return human-readable markdown, html, or LaTeX code to the console:
+# Appearance
 
-```{r, eval=FALSE}
-datasummary(f, data = penguins, output = 'markdown')
-datasummary(f, data = penguins, output = 'html')
-datasummary(f, data = penguins, output = 'latex')
-```
+In the [Appearance Vignette](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html) we saw how to customize the tables produced by the `modelsummary` function. The same customization possibilities are also available for all functions in the `datasummary_*` family of functions. Indeed, we can customize the tables produced by `datasummary` using the functions provided by `gt`, `kableExtra`, `flextable`, and `huxtable`. For instance, to customize tables using `kableExtra`, we can do:
 
-`datasummary` can return objects compatible with the `gt`, `kableExtra`, `flextable`, and `huxtable` table creation and customization packages:
-
-```{r, eval=FALSE}
-datasummary(f, data = penguins, output = 'gt')
-datasummary(f, data = penguins, output = 'kableExtra')
-datasummary(f, data = penguins, output = 'flextable')
-datasummary(f, data = penguins, output = 'huxtable')
-```
-
-Please note that hierarchical or "nested" column labels are only available for these output formats: kableExtra, gt, html, rtf, and LaTeX. When saving tables to other formats, nested labels will be combined to a "flat" header.
-
-# Customize
 
 ```{r, echo=FALSE}
 penguins$sex <- str_to_title(penguins$sex)
 ```
-
-We can customize the tables produced by `datasummary` using the functions provided by `gt`, `kableExtra`, `flextable`, and `huxtable`. For instance, to customize tables using `kableExtra`, we can do:
 
 ```{r}
 library(kableExtra)
@@ -536,6 +555,8 @@ datasummary(All(penguins) ~ sex * (Mean + SD),
             output = 'kableExtra') %>%
   row_spec(3, background = 'cyan', color = 'red')
 ```
+
+To customize a table using the `gt` package, we can:
 
 ```{r, eval=knitr::is_html_output()}
 library(gt)

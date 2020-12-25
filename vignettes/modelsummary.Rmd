@@ -9,6 +9,15 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{css, echo=FALSE}
+tbody {
+  font-size: .8em;
+}
+thead {
+  font-size: .8em;
+}
+```
+
 `modelsummary` includes a powerful set of utilities to customize the information displayed in your model summary tables. You can easily rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to display; display various "robust" standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.
 
 ```{r, message = FALSE}
@@ -103,8 +112,10 @@ You can also use [glue string](https://glue.tidyverse.org/), using curly braces 
 ```{r}
 modelsummary(
   models,
+  fmt = 1,
   estimate  = "{estimate} [{conf.low}, {conf.high}]",
-  statistic = NULL)
+  statistic = NULL,
+  coef_omit = "Intercept")
 ```
 
 # statistic
@@ -121,6 +132,7 @@ You can also display confidence intervals in brackets by setting `statistic="con
 
 ```{r}
 modelsummary(models,
+             fmt = 1,
              statistic = 'conf.int', 
              conf_level = .99)
 ```
