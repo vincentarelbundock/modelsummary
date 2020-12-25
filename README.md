@@ -11,23 +11,24 @@
 
 `modelsummary` creates tables and plots to summarize statistical models and data in `R`. 
 
-The tables produced by `modelsummary` are beautiful and highly customizable. They can be echoed to the `R` console or displayed in the `RStudio` Viewer. They can be saved to a wide variety of formats, including HTML, PDF, Text/Markdown, LaTeX, MS Word, RTF, JPG, and PNG. Tables can easily be embedded in dynamic documents with `Rmarkdown`, `knitr`, or `Sweave`. `modelsummary` supports dozens of model types out-of-the-box. 
+The tables and plots produced by `modelsummary` are beautiful and highly customizable. They can be echoed to the `R` console or displayed in the `RStudio` Viewer. They can be saved to a wide variety of formats, including HTML, PDF, Text/Markdown, LaTeX, MS Word, RTF, JPG, and PNG. Tables can easily be embedded in dynamic documents with `Rmarkdown`, `knitr`, or `Sweave`. `modelsummary` supports *hundreds* of model types out-of-the-box. The look of your tables is infinitely customizable using external package such as `kableExtra`, `gt`, `flextable`, or `huxtable`.
 
-Extensive documentation and examples can be found on the `modelsummary` website: https://vincentarelbundock.github.io/modelsummary
+`modelsummary` includes two families of functions:
 
-`modelsummary` includes three families of functions:
+1. `modelsummary`
+  - `modelsummary`: Regression tables with side-by-side models.
+  - `modelsummary_wide`: Regression tables for categorical response models or grouped coefficients.
+  - `modelplot`: Coefficient plots
+2. `datasummary`
+  - `datasummary`: An incredibly powerful tool to create (multi-level) crosstabs and data summaries.
+  - `datasummary_balance`: Balance tables with subgroup statistics and difference in means (aka "Table 1").
+  - `datasummary_correlation`: Correlation tables.
+  - `datasummary_skim`: Quick overview ("skim") of a dataset.
+  - `datasummary_df`: Turn dataframes into nice tables with titles, notes, etc.
+      
+The `modelsummary` website hosts a *ton* of examples. Make sure you click on the links at the top of this page: https://vincentarelbundock.github.io/modelsummary
 
-1. `modelsummary`: Display results from several statistical models side-by-side. 
-2. `modelplot`: Plot model coefficients and confidence intervals.
-3. `datasummary`: A flexible tool to create crosstabs and data summaries.
-    - `datasummary_balance`: Balance tables with subgroup statistics and difference in means (aka "Table 1").
-    - `datasummary_correlation`: Correlation tables.
-    - `datasummary_skim`: Quick overview of a dataset.
-    - `datasummary_df`: Turn dataframes into nice tables with titles, notes, etc.
-    
-Click on the links at the top of this page to see how these functions are used: https://vincentarelbundock.github.io/modelsummary
-
-These tables and plots were created using `modelsummary`, without any manual editing at all:
+The following tables and plots were created using `modelsummary`, without any manual editing at all:
 
 | | |
 |:-------------------------:|:-------------------------:|
@@ -236,33 +237,6 @@ tab <- modelsummary(models, output = 'kableExtra')
 tab %>% row_spec(3, bold = TRUE, color = 'green')
 ```
 
-# Default table-making backends
-
-The table-making backends supported by `modelsummary` have overlaping capabilities (e.g., several of them can produce HTML tables). These are the default packages used for different outputs:
-
-`kableExtra`:
-
-* HTML
-* LaTeX / PDF
-
-`flextable`:
-
-* Word
-* Powerpoint
-
-`gt`:
-
-* jpg
-* png
-
-You can modify these defaults by setting global options such as:
-
-```r
-options(modelsummary_html = 'kableExtra')
-options(modelsummary_latex = 'gt')
-options(modelsummary_word = 'huxtable')
-options(modelsummary_png = 'gt')
-```
 
 # Alternative packages
 
