@@ -18,14 +18,15 @@ test_that("basic", {
 
 })
 
+
 # # should be fine, but R-CMD-check on github breaks 
 # test_that("tibble input does not error", {
 #   dat <- as_tibble(penguins)
 #   expect_error(datasummary_skim(dat), NA)
 # })
 
-test_that("fmt", {
 
+test_that("fmt", {
   known <- c("33.9000", "8.0000", "472.0000", "335.0000", "4.9300", "5.4240", "22.9000", "1.0000", "8.0000")
   tmp <- datasummary_skim(dat, output="data.frame", fmt="%.4f", histogram=FALSE)
   expect_equal(tmp$Max, known)
@@ -33,34 +34,32 @@ test_that("fmt", {
   known <- c("56.2500", "43.7500", "46.8750", "37.5000", "15.6250")
   tmp <- datasummary_skim(dat, output="data.frame", fmt="%.4f", type="categorical")
   expect_equal(tmp[[4]], known)
-
 })
 
-test_that("empty string factor level (tricky for tables::tabular)", {
 
+test_that("empty string factor level (tricky for tables::tabular)", {
   tmp <- data.frame(a = c(rep("", 3), rep("b", 5), rep("c", 10)))
   tmp <- datasummary_skim(tmp, "categorical", output="data.frame")
   expect_equal(dim(tmp), c(3, 3))
-
 })
+
 
 test_that("too many factor levels", {
-
-  tmp <- data.frame(a = sample(letters, 200, replace = TRUE),
-                    b = sample(c("a", "b", "c"), 200, replace = TRUE))
+  N <- 20000
+  tmp <- data.frame(a = sample(letters, N, replace = TRUE),
+                    b = as.character(sample(1:100, N, replace = TRUE)))
   tmp <- expect_warning(datasummary_skim(tmp, type="categorical", output="data.frame"))
-  expect_equal(dim(tmp), c(3, 3))
-
+  expect_equal(ncol(tmp), 3)
 })
 
-test_that("completely missing variables are dropped", {
 
+test_that("completely missing variables are dropped", {
   tmp <- dat
   tmp$junk <- rep(NA, nrow(dat))
   tmp <- expect_warning(datasummary_skim(tmp, type="categorical", output="data.frame", histogram=FALSE))
   expect_false("junk" %in% tmp[[1]])
-
 })
+
 
 test_that("simple dataset", {
   tab <- datasummary_skim(mtcars, type="dataset", output="data.frame")

@@ -295,7 +295,7 @@ datasummary_skim_categorical <- function(
       } else {
         # factors with too many levels
         if (is.factor(dat_new[[n]])) {
-          if (length(levels(dat_new[[n]])) > 20) {
+          if (length(levels(dat_new[[n]])) > 50) {
             dat_new[[n]] <- NULL
             drop_too_many_levels <- c(drop_too_many_levels, n)
           }
@@ -321,7 +321,7 @@ datasummary_skim_categorical <- function(
   }
 
   if (!is.null(drop_too_many_levels)) {
-    warning(sprintf("These variables were omitted because they include more than 20 levels: %s.", paste(drop_too_many_levels, collapse=", ")))
+    warning(sprintf("These variables were omitted because they include more than 50 levels: %s.", paste(drop_too_many_levels, collapse=", ")))
   }
 
   if (!is.null(drop_entirely_na)) {

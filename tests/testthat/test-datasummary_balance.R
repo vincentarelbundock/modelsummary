@@ -20,6 +20,7 @@ test_that("column percentages sum to 100 within factors", {
   expect_true(all(tapply(as.numeric(tab[[6]]), idx, f)))
 })
 
+
 test_that("palmer penguins was once broken with kableExtra", {
   testthat::skip_if_not_installed("estimatr")
   penguins <- "https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv"
@@ -28,6 +29,7 @@ test_that("palmer penguins was once broken with kableExtra", {
   expect_known_output(cat(raw), "known_output/datasummary_balance_penguins.html", update=FALSE)
 })
 
+
 test_that('variable name with spaces', {
   testthat::skip_if_not_installed("estimatr")
   tmp <- mtcars
@@ -35,6 +37,7 @@ test_that('variable name with spaces', {
   tab <- expect_error(datasummary_balance(~vs, data=tmp, output="dataframe"), NA)
   expect_equal(dim(tab), c(10, 7))
 })
+
 
 test_that('add column', {
   testthat::skip_if_not_installed("estimatr")
@@ -49,6 +52,7 @@ test_that('add column', {
   expect_equal(dim(tab), c(13, 9))
 })
 
+
 test_that('only numeric', {
   testthat::skip_if_not_installed("estimatr")
   tab <- datasummary_balance(~vs, mtcars, output = 'dataframe')
@@ -58,6 +62,7 @@ test_that('only numeric', {
   expect_equal(dim(tab), c(10, 7))
   expect_equal(colnames(tab), truth)
 })
+
 
 test_that('only factors', {
   tmp <- mtcars
@@ -71,6 +76,7 @@ test_that('only factors', {
   expect_equal(dim(tab), c(8, 6))
   expect_equal(colnames(tab), truth)
 })
+
 
 test_that('both factors and numerics', {
   testthat::skip_if_not_installed("estimatr")
@@ -86,6 +92,7 @@ test_that('both factors and numerics', {
   expect_equal(colnames(tab), truth)
 })
 
+
 test_that('more than two conditions', {
   testthat::skip_if_not_installed("estimatr")
   tmp <- mtcars
@@ -94,10 +101,10 @@ test_that('more than two conditions', {
   tab <- datasummary_balance(~gear, tmp, output = 'dataframe', dinm = FALSE)
   expect_s3_class(tab, 'data.frame')
   expect_equal(dim(tab), c(14, 8))
-
   tab <- expect_warning(datasummary_balance(~gear, tmp, output = 'dataframe', dinm = TRUE))
   expect_equal(dim(tab), c(14, 8))
 })
+
 
 test_that('single numeric', {
   testthat::skip_if_not_installed("estimatr")
@@ -107,6 +114,7 @@ test_that('single numeric', {
   expect_equal(dim(tab), c(1, 7))
   expect_equal(tab[[1]], 'mpg')
 })
+
 
 test_that('single factor', {
   testthat::skip_if_not_installed("estimatr")
@@ -118,12 +126,14 @@ test_that('single factor', {
   expect_equal(tab[[2]][1], '3')
 })
 
+
 test_that('dinm=FALSE', {
   tab <- datasummary_balance(~vs, mtcars, dinm = FALSE, output = 'dataframe')
   expect_s3_class(tab, 'data.frame')
   expect_equal(dim(tab), c(10, 5))
   expect_equal(tab[[1]][1], 'mpg')
 })
+
 
 test_that('dinm_statistic = "p.value"', {
   testthat::skip_if_not_installed("estimatr")
@@ -135,6 +145,7 @@ test_that('dinm_statistic = "p.value"', {
   expect_equal(colnames(tab)[ncol(tab)], 'p')
 })
 
+
 test_that('fmt', {
   testthat::skip_if_not_installed("estimatr")
   tmp <- mtcars[, c('am', 'mpg', 'gear')]
@@ -144,7 +155,8 @@ test_that('fmt', {
   expect_equal(tab[[3]], truth)
 })
 
-test_that('too many factor levels', {
+
+test_that('too many factor levels in condition variable', {
   testthat::skip_if_not_installed("estimatr")
   set.seed(10)
   dat <- data.frame(ID = as.character(1:100),
@@ -152,6 +164,17 @@ test_that('too many factor levels', {
     Z_comp = sample(0:20, 100, replace = TRUE))
   expect_error(datasummary_balance(~Z_comp, dat))
 })
+
+
+test_that('too many levels in row variable', {
+  testthat::skip_if_not_installed("estimatr")
+  set.seed(10)
+  dat <- data.frame(ID = as.character(1:100),
+    Y = rnorm(100),
+    Z_comp = sample(0:1, 100, replace = TRUE))
+  expect_warning(datasummary_balance(~Z_comp, dat))
+})
+
 
 test_that('estimatr: clusters, blocks, weights', {
   testthat::skip_if_not_installed("estimatr")
