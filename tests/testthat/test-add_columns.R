@@ -1,5 +1,3 @@
-context('add_rows')
-
 library(modelsummary)
 
 test_that("datasummary add_columns", {

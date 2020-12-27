@@ -1,5 +1,3 @@
-context("bad input")
-
 library(modelsummary)
 
 test_that("coef_map: two variables with the same name within or between models", {

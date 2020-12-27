@@ -1,11 +1,6 @@
 # these tests were all copied over to test-vcov.R, but we keep them here
 # to confirm backward compatibility through ellipsis.
 
-
-context("statistic_override")
-
-library(modelsummary)
-
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
 dat <- read.csv(url)
 dat$Clergy <- ifelse(dat$Clergy > 40, 1, 0) # binary variable for logit model

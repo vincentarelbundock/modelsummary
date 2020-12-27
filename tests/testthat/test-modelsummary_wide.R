@@ -1,7 +1,3 @@
-context("modelsummary_wide")
-
-library(modelsummary)
-
 make_data <- function(response = c("A", "B", "C")) {
   var1 <- sample(response, replace = T, size=100)
   var2 <- sample(c(0,1), size=100, replace=T)

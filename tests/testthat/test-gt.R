@@ -1,7 +1,4 @@
-context("gt")
-
 library(gt)
-library(modelsummary)
 
 models <- list()
 models[['OLS 1']] <- lm(hp ~ mpg + wt, mtcars)

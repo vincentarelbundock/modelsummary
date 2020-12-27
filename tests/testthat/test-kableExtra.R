@@ -1,7 +1,3 @@
-context("kableExtra")
-
-library(kableExtra)
-
 models <- list()
 models[['OLS 1']] <- lm(hp ~ mpg + wt, mtcars)
 models[['Poisson 1']] <- glm(hp ~ mpg + drat, mtcars, family = poisson())

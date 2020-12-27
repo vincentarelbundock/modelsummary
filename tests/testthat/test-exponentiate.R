@@ -1,5 +1,3 @@
-context("exponentiate coefficients") 
-
 library(modelsummary)
 
 fit = glm(am  ~ mpg + factor(cyl), 

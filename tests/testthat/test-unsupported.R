@@ -1,5 +1,3 @@
-context("unsupported models")
-
 test_that('Characters raise error', {
   mod <- list()
   mod[[1]] <- lm(hp ~ mpg, mtcars)

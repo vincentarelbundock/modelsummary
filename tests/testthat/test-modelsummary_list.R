@@ -1,5 +1,3 @@
-context("modelsummary_list")
-
 mod <- lm(mpg ~ hp + drat + vs, mtcars)
 
 # this is tricky because get_estimates doesn't always return predictable results depending on whether parameters, broom, or broom.mixed are loaded. this is a problem.

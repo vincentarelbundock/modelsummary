@@ -1,5 +1,3 @@
-context('coef_omit')
-
 library(modelsummary)
 
 test_that("perl=TRUE allows lookbehind", {

@@ -1,5 +1,3 @@
-context('coef_rename')
-
 library(modelsummary)
 
 mod <- list()

@@ -1,5 +1,3 @@
-context('add_rows')
-
 library(modelsummary)
 library(tibble)
 

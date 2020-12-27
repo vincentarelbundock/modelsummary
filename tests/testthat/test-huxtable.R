@@ -1,10 +1,6 @@
-context("huxtable")
-
 random_string <- function() {
   paste(sample(letters, 30, replace=TRUE), collapse="")
 }
-
-library(modelsummary)
 
 models <- list()
 models[['OLS 1']] <- lm(hp ~ mpg + wt, mtcars)

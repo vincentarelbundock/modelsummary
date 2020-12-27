@@ -1,5 +1,3 @@
-context('ellipses')
-
 library(modelsummary)
 
 test_that("exponentiate logit coefficients", {

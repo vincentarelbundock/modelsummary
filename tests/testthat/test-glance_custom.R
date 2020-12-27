@@ -1,7 +1,3 @@
-context('glance_custom')
-
-library(modelsummary)
-
 test_that("fixed value glance_custom.glm", {
   glance_custom.glm <- function(x) {
     data.frame("test"=1.54, "test2"="lkkd", "test3"=as.integer(2),

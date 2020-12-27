@@ -1,9 +1,5 @@
 # several tests adapted from `parameters` package under GPL3
 
-context('various supported models (soft tests)')
-
-library(modelsummary)
-
 test_that("survival", {
   testthat::skip_if_not_installed("survival")
   library(survival)

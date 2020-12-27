@@ -1,7 +1,3 @@
-context('fmt')
-
-library(modelsummary)
-
 mod <- list()
 mod$OLS <- lm(hp ~ drat, data = mtcars)
 mod$Logit <- glm(am ~ drat + hp, data = mtcars, family = binomial())

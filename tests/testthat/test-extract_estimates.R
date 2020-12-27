@@ -1,5 +1,3 @@
-context('coef_map')
-
 library(modelsummary)
 
 test_that("bad estimate name throws error", {

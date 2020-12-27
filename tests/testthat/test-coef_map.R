@@ -1,5 +1,3 @@
-context('coef_map')
-
 library(modelsummary)
 library(tibble)
 

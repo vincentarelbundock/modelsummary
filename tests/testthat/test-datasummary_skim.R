@@ -1,5 +1,3 @@
-context('datasummary_skim')
-
 library(tibble)
 library(modelsummary)
 dat <- mtcars

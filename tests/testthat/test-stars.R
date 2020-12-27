@@ -1,7 +1,3 @@
-context('stars')
-
-library(modelsummary)
-
 mod <- list()
 mod$OLS <- lm(am ~ drat, data = mtcars)
 mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())

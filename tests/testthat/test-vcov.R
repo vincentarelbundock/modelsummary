@@ -1,7 +1,3 @@
-context("vcov")
-
-library(modelsummary)
-
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
 dat <- read.csv(url)
 dat$Clergy <- ifelse(dat$Clergy > 40, 1, 0) # binary variable for logit model

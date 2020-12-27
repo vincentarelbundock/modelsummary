@@ -1,7 +1,3 @@
-context("glue")
-
-library(modelsummary)
-
 mod <- list(
   lm(mpg ~ hp, data=mtcars),
   glm(vs ~ hp + cyl, data=mtcars, family=binomial))
