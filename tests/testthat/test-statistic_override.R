@@ -55,7 +55,7 @@ test_that("single model", {
   mod <- lm(hp ~ mpg + drat, mtcars)
   x <- modelsummary(mod, statistic_override=vcov, output="data.frame")
   y <- modelsummary(mod, statistic_override=vcov(mod), output="data.frame")
-  z <- modelsummary(mod, statistic_override=sqrt(diag(vcov(mod))), output="data.frame")
+  z <- modelsummary(mod, statistic_override=list(sqrt(diag(vcov(mod)))), output="data.frame")
   expect_equal(x, y)
   expect_equal(y, z)
 })

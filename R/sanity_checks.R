@@ -210,21 +210,15 @@ sanity_add_rows <- function(add_rows, models) {
 #' sanity check
 #'
 #' @noRd
-sanity_vcov <- function(models, vcov) {
+sanitize_vcov <- function(models, vcov) {
 
-  regex = "^robust$|^HC$|^HC0$|^HC1$|^HC2$|^HC3$|^HC4$|^HC4m$|^HC5$|^stata$|^classical$|^constant$|^iid$"
-  checkmate::assert(
-    checkmate::check_formula(vcov, null.ok=TRUE),
-    checkmate::check_character(vcov, len=1, pattern=regex, null.ok=TRUE),
-    checkmate::check_list(vcov, null.ok = TRUE),
-    checkmate::check_function(vcov, null.ok = TRUE),
-    checkmate::check_matrix(vcov, null.ok = TRUE),
-    checkmate::check_atomic_vector(vcov),
-    combine="or"
-  )
+  # default output
+  out <- NULL
 
-  if (class(vcov)[1] == "list" &
-      class(models)[1] == "list") { # must be simple lists
+
+  # list of formulas, functions, matrices, or vectors
+  # first class because some models inherit from "list"
+  if (class(vcov)[1] == "list" & class(models)[1] == "list") {
     checkmate::assert_true(length(vcov) == length(models))
     for (s in vcov) {
       checkmate::assert(
@@ -235,8 +229,40 @@ sanity_vcov <- function(models, vcov) {
         combine="or"
       )
     }
-  } 
+    out <- vcov
+  }
+
+
+  # single formulas/matrices/functions: apply to every model
+  if (isTRUE(checkmate::check_formula(vcov)) ||
+      isTRUE(checkmate::check_matrix(vcov))  ||
+      isTRUE(checkmate::check_function(vcov))) {
+    out <- rep(list(vcov), length(models))
+  }
+
+
+  if (is.character(vcov)) {
+    checkmate::assert(
+      checkmate::check_character(vcov, len=1),
+      checkmate::check_character(vcov, len=length(models)))
+    checkmate::assert_true(all(
+      vcov %in% c("robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m",
+                  "HC5", "stata", "classical", "constant", "iid")))
+    if (length(vcov) == 1) {
+      out <- as.list(rep(vcov, length(models)))
+    } else {
+      out <- as.list(vcov)
+    }
+  }
+
+
+  if (is.null(out)) {
+    stop("Please supply a valid input for the `vcov` argument. Read `?modelsummary`.") 
+  }
+
+  return(out)
 }
+
 
 #' sanity check
 #'

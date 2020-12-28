@@ -9,6 +9,18 @@ models[['Poisson 2']] <- glm(Desertion ~ Crime_prop + Donations, dat, family = p
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 
 
+test_that("character vector", {
+  tab1 = modelsummary(models, vcov="robust", output="data.frame")
+  tab2 = modelsummary(models, vcov=rep("robust", 5), output="data.frame")
+  tab3 = modelsummary(models, vcov=sandwich::vcovHC, output="data.frame")
+  tab4 = modelsummary(models, vcov=list("robust", "robust", "robust", "robust", "robust"), output="data.frame")
+  expect_identical(tab1, tab2)
+  expect_identical(tab1, tab3)
+  expect_identical(tab1, tab4)
+  expect_error(modelsummary(models, vcov="bad", output="data.frame"))
+})
+
+
 test_that("clustered standard errors", {
   # checked manually against fixest clusters
   # testthat::skip_if_not_installed("fixest") 
@@ -68,7 +80,7 @@ test_that("single model", {
   mod <- lm(hp ~ mpg + drat, mtcars)
   x <- modelsummary(mod, vcov=vcov, output="data.frame")
   y <- modelsummary(mod, vcov=vcov(mod), output="data.frame")
-  z <- modelsummary(mod, vcov=sqrt(diag(vcov(mod))), output="data.frame")
+  z <- modelsummary(mod, vcov=list(sqrt(diag(vcov(mod)))), output="data.frame")
   expect_equal(x, y)
   expect_equal(y, z)
 })

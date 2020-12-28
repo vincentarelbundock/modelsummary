@@ -39,7 +39,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' }
 #' @param vcov robust standard errors and other manual statistics. The `vcov` argument accepts five types of input (see the 'Details' and 'Examples' sections below):
 #' \itemize{
-#'   \item string or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").
+#'   \item string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").
 #'   \item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
 #'   \item function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`).
 #'   \item list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
@@ -117,7 +117,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #'
 #' Numeric vectors are formatted according to `fmt` and placed in brackets.
 #' Character vectors printed as given, without parentheses. 
-
+#'
 #' If your model type is supported by the `lmtest` package, the
 #' `vcov` argument will try to use that package to adjust all the
 #' uncertainty estimates, including "std.error", "statistic", "p.value", and
@@ -223,20 +223,11 @@ modelsummary <- function(
   title       = NULL,
   ...) {
 
-  # sanity check functions are hosted in R/sanity_checks.R
-  sanity_output(output)
-  sanity_statistic(statistic)
-  sanity_estimate(estimate)
-  sanity_vcov(models, vcov)
-  sanity_conf_level(conf_level)
-  sanity_coef(coef_map, coef_rename, coef_omit)
-  sanity_gof_map(gof_map, gof_omit)
-  sanity_stars(stars)
-  sanity_fmt(fmt)
+
+  # deprecated arguments
 
   ellip <- list(...)
 
-  # deprecated arguments
   if ("statistic_vertical" %in% names(ellip)) {
     warning("The `statistic_vertical` argument is deprecated and will be ignored. To display uncertainty estimates next to your coefficients, use a `glue` string in the `estimate` argument. See `?modelsummary`")
   }
@@ -248,16 +239,33 @@ modelsummary <- function(
     vcov <- ellip$statistic_override
   }
 
+
+  # models must be a list
+  # first class because some models inherit from list
+  # do this before sanity_vcov
+  if (class(models)[1] != "list") { 
+    models <- list(models)
+  }
+
+
+  # sanity check functions are hosted in R/sanity_checks.R
+  sanity_output(output)
+  sanity_statistic(statistic)
+  sanity_estimate(estimate)
+  sanity_conf_level(conf_level)
+  sanity_coef(coef_map, coef_rename, coef_omit)
+  sanity_gof_map(gof_map, gof_omit)
+  sanity_stars(stars)
+  sanity_fmt(fmt)
+
+  if (!is.null(vcov)) {
+    vcov <- sanitize_vcov(models, vcov)
+  }
+
+
   # output
   output_format <- parse_output_arg(output)$output_format
 
-  # extra arguments
-  ellipsis <- list(...)
-
-  # models must be a list
-  if (!inherits(models, "list")) {
-    models <- list(models)
-  }
 
   # model names dictionary: use unique names for manipulation
   if (is.null(names(models))) {
@@ -267,10 +275,6 @@ modelsummary <- function(
   }
   model_id <- paste("Model", 1:length(models))
 
-  # vcov: must be a list
-  if (!inherits(vcov, "list")) {
-    vcov <- rep(list(vcov), length(models))
-  }
 
   # estimates: extract and combine
   est <- list()

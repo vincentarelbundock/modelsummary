@@ -10,7 +10,6 @@ extract_vcov <- function(model, vcov, conf_level=NULL) {
 
   # vcov = character
   if (is.character(vcov) && length(vcov) == 1) {
-    checkmate::assert_true(vcov %in% c("robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "stata", "classical", "constant", "iid"))
 
     assert_dependency("sandwich")
     if (vcov == "stata") {
