@@ -130,28 +130,28 @@ regression model (e.g., `nnet::multinom`). The `coef_group` argument
 specifies the name of the group identifier.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>modelsummary_wide</span>(
-  <span class='no'>models</span>,
-  <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"default"</span>,
-  <span class='kw'>fmt</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"estimate"</span>,
-  <span class='kw'>statistic</span> <span class='kw'>=</span> <span class='st'>"std.error"</span>,
-  <span class='kw'>vcov</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>conf_level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>stars</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>coef_group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>coef_map</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>coef_omit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>coef_rename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>gof_map</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>gof_omit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>add_rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>align</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>notes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>stacking</span> <span class='kw'>=</span> <span class='st'>"horizontal"</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>modelsummary_wide</span><span class='op'>(</span>
+  <span class='va'>models</span>,
+  output <span class='op'>=</span> <span class='st'>"default"</span>,
+  fmt <span class='op'>=</span> <span class='fl'>3</span>,
+  estimate <span class='op'>=</span> <span class='st'>"estimate"</span>,
+  statistic <span class='op'>=</span> <span class='st'>"std.error"</span>,
+  vcov <span class='op'>=</span> <span class='cn'>NULL</span>,
+  conf_level <span class='op'>=</span> <span class='fl'>0.95</span>,
+  stars <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  coef_group <span class='op'>=</span> <span class='cn'>NULL</span>,
+  coef_map <span class='op'>=</span> <span class='cn'>NULL</span>,
+  coef_omit <span class='op'>=</span> <span class='cn'>NULL</span>,
+  coef_rename <span class='op'>=</span> <span class='cn'>NULL</span>,
+  gof_map <span class='op'>=</span> <span class='cn'>NULL</span>,
+  gof_omit <span class='op'>=</span> <span class='cn'>NULL</span>,
+  add_rows <span class='op'>=</span> <span class='cn'>NULL</span>,
+  align <span class='op'>=</span> <span class='cn'>NULL</span>,
+  notes <span class='op'>=</span> <span class='cn'>NULL</span>,
+  title <span class='op'>=</span> <span class='cn'>NULL</span>,
+  stacking <span class='op'>=</span> <span class='st'>"horizontal"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,9 +178,11 @@ specifies the name of the group identifier.</p>
     </tr>
     <tr>
       <th>estimate</th>
-      <td><p>string or `glue` string of the estimate to display. Valid entries include any column name of the data.frame produced by `get_estimates(model)`. Examples:</p><ul>
+      <td><p>string or `glue` string of the estimate to display (or a
+vector with one string per model). Valid entries include any column name of
+the data.frame produced by `get_estimates(model)`. Examples:</p><ul>
 <li><p>"estimate"</p></li>
-<li><p>"{estimate} ({std.error})"</p></li>
+<li><p>"{estimate} ({std.error})stars"</p></li>
 <li><p>"{estimate} [{conf.low}, {conf.high}]"</p></li>
 </ul></td>
     </tr>
@@ -199,7 +201,7 @@ specifies the name of the group identifier.</p>
     <tr>
       <th>vcov</th>
       <td><p>robust standard errors and other manual statistics. The `vcov` argument accepts five types of input (see the 'Details' and 'Examples' sections below):</p><ul>
-<li><p>string or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").</p></li>
+<li><p>string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").</p></li>
 <li><p>formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).</p></li>
 <li><p>function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`).</p></li>
 <li><p>list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.</p></li>
@@ -310,7 +312,7 @@ set `exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></t
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
