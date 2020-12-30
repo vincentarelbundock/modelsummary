@@ -120,23 +120,17 @@ sanity_conf_level <- function(conf_level) {
 #' @noRd
 sanity_factory <- function(factory_dict) {
   check_option <- function(output_type, valid) {
-    if (!factory_dict[[output_type]] %in% valid) {
-      msg <- paste0("`modelsummary` cannot write a table of type '",
+    if (!factory_dict[output_type] %in% valid) {
+      msg <- sprintf(
+        "`modelsummary` cannot write a table of type '%s' using the '%s' package. You must use one of the following options: %s. Consider setting a global option such as: option(modelsummary_%s=%s)",
         output_type,
-        "' using the ",
-        factory_dict[[output_type]],
-        " package. You must use one of the following packages: ",
+        factory_dict[output_type],
         paste(valid, collapse = ', '),
-        ". Consider setting a global option such as: option(modelsummary_",
-        output_type,
-        "='",
         valid[1],
-        "')"
-      )
+        output_type)
       stop(msg)
     }
   }
-  check_option('default', c('gt', 'kableExtra', 'flextable', 'huxtable'))
   check_option('html', c('gt', 'kableExtra', 'flextable', 'huxtable'))
   check_option('rtf', c('gt', 'huxtable'))
   check_option('latex', c('gt', 'kableExtra', 'huxtable'))
@@ -145,6 +139,14 @@ sanity_factory <- function(factory_dict) {
   check_option('powerpoint', c('flextable', 'huxtable'))
   check_option('png', c('gt', 'flextable', 'kableExtra'))
   check_option('jpg', c('flextable', 'kableExtra'))
+
+  # check default
+  modelsummary_default <- getOption("modelsummary_default", default = "kableExtra")
+  checkmate::assert_true(modelsummary_default %in% c('gt', 'kableExtra',
+                                                     'flextable', 'huxtable',
+                                                     'markdown', 'html',
+                                                     'data.frame', 'dataframe',
+                                                     'latex'))
 }
 
 #' sanity check
@@ -180,8 +182,10 @@ sanity_notes <- function(notes) {
 #' @noRd
 sanity_output <- function(output) {
 
-  object_types <- c('default', 'gt', 'kableExtra', 'flextable', 'huxtable', 'html', 'latex', 'markdown', 'dataframe', 'data.frame')
-  extension_types <- c('html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf', 'jpg', 'png')
+  object_types <- c('default', 'gt', 'kableExtra', 'flextable', 'huxtable',
+                    'html', 'latex', 'markdown', 'dataframe', 'data.frame')
+  extension_types <- c('html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf',
+                       'jpg', 'png')
 
   checkmate::assert_string(output)
 

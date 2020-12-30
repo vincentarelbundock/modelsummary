@@ -7,6 +7,7 @@
 * gof_map accepts list of lists. only needs 3 columns.
 * support officedown Rmd
 * estimate accepts a vector for per model estimates
+* options(modelsummary_default) can be markdown, html, latex
 * bug: passing arguments through ...
 * bug: stars and rounding
 
