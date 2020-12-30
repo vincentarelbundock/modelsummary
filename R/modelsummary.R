@@ -70,10 +70,12 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' See Examples section below.
 #' @param title string
 #' @param notes list or vector of notes to append to the bottom of the table.
-#' @param estimate string or `glue` string of the estimate to display. Valid entries include any column name of the data.frame produced by `get_estimates(model)`. Examples:
+#' @param estimate string or `glue` string of the estimate to display (or a
+#' vector with one string per model). Valid entries include any column name of
+#' the data.frame produced by `get_estimates(model)`. Examples:
 #' \itemize{
 #'   \item "estimate"
-#'   \item "\{estimate\} (\{std.error\})"
+#'   \item "\{estimate\} (\{std.error\}){stars}"
 #'   \item "\{estimate\} [\{conf.low\}, \{conf.high\}]"
 #' }
 #' @param align A character string of length equal to the number of columns in
@@ -154,6 +156,9 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' modelsummary(models, 
 #'   statistic = NULL,
 #'   estimate = "{estimate} [{conf.low}, {conf.high}]")
+#' modelsummary(models,
+#'   estimate = c("{estimate}{stars}",
+#'                "{estimate} ({std.error})"))
 #' 
 #' # vcov
 #' modelsummary(models, vcov = "robust")
@@ -251,7 +256,7 @@ modelsummary <- function(
   # sanity check functions are hosted in R/sanity_checks.R
   sanity_output(output)
   sanity_statistic(statistic)
-  sanity_estimate(estimate)
+  sanity_estimate(models, estimate)
   sanity_conf_level(conf_level)
   sanity_coef(coef_map, coef_rename, coef_omit)
   sanity_gof_map(gof_map, gof_omit)
@@ -265,6 +270,13 @@ modelsummary <- function(
 
   # output
   output_format <- parse_output_arg(output)$output_format
+
+
+  # estimate
+  if (length(estimate) == 1) {
+    estimate <- rep(estimate, length(models))
+  }
+  estimate <- as.list(estimate)
 
 
   # model names dictionary: use unique names for manipulation
@@ -284,7 +296,7 @@ modelsummary <- function(
     tmp <- extract_estimates(
       model              = models[[i]],
       fmt                = fmt,
-      estimate           = estimate,
+      estimate           = estimate[[i]],
       statistic          = statistic,
       vcov               = vcov[[i]],
       conf_level         = conf_level,

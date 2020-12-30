@@ -104,17 +104,33 @@ extract_estimates <- function(
     }
   }
 
+
   # term must be a character (not rounded with decimals when integer)
   est$term <- as.character(est$term)
 
+
   # stars (before rounding)
-  if (!isFALSE(stars)) {
+  # compute stars if: 
+  #   a) stars is not FALSE
+  #   b) {stars} is in glue string 
+  # paste stars if:
+  #   a) stars is not FALSE and is not a glue string
+  is_star <- !isFALSE(stars) || isTRUE(any(grepl("\\{stars\\}", estimate_glue)))
+  is_glue <- grepl("\\{", estimate)
+  if (is_star) {
+    # glue string can include stars even if stars=FALSE 
+    if (isFALSE(stars)) {
+      stars <- TRUE
+    }
     if (!'p.value' %in% colnames(est)) {
       stop('To use the `stars` argument, the `tidy` function must produce a column called "p.value"')
     }
     est$stars <- make_stars(est$p.value, stars)
+  }
+  if (isTRUE(is_star) && isFALSE(is_glue)) {
     estimate_glue[1] <- paste0(estimate_glue[1], "{stars}")
   }
+
 
   # round everything
   for (n in colnames(est)) {
@@ -128,6 +144,7 @@ extract_estimates <- function(
     # avoid empty parentheses for NAs
     est[[paste0("modelsummary_tmp", i)]][est[[s]] == ""] <- ""
   }
+
 
   # subset columns
   cols <- c('term', paste0('modelsummary_tmp', seq_along(estimate_glue)))

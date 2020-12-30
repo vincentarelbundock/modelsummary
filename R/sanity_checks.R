@@ -17,6 +17,7 @@ check_dependency <- function(library_name) {
   requireNamespace(library_name, quietly = TRUE)
 }
 
+
 #' sanity check
 #'
 #' @noRd
@@ -25,6 +26,7 @@ sanity_model_names <- function(modelnames) {
     stop('Model names cannot include empty strings. Please make sure that every object in the `models` list has a unique, non-empty name. If the `models` list has no names at all (NULL), `modelsummary` will create some automatically.')
   }
 }
+
 
 #' sanity check
 #'
@@ -37,10 +39,16 @@ sanity_align <- function(align, tab) {
   )
 }
 
+
 #' sanity check
 #'
 #' @noRd
-sanity_estimate <- function(estimate) checkmate::assert_character(estimate, len=1)
+sanity_estimate <- function(models, estimate) {
+  checkmate::assert(
+    checkmate::check_character(estimate, len=1),
+    checkmate::check_character(estimate, len=length(models)))
+}
+
 
 #' sanity_check
 #'
@@ -49,10 +57,12 @@ sanity_statistic <- function(statistic) {
   checkmate::assert_character(statistic, null.ok=TRUE)
 }
 
+
 #' sanity check
 #'
 #' @noRd
 sanity_title <- function(title) checkmate::assert_character(title, len = 1, null.ok = TRUE)
+
 
 #' sanity check
 #'

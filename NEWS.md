@@ -6,6 +6,7 @@
 * modelsummary_wide has a new "stacking" argument
 * gof_map accepts list of lists. only needs 3 columns.
 * support officedown Rmd
+* estimate accepts a vector for per model estimates
 * bug: passing arguments through ...
 * bug: stars and rounding
 

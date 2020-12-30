@@ -44,10 +44,12 @@ modelsummary_wide(
   \item function: returns a formatted character string.
 }}
 
-\item{estimate}{string or `glue` string of the estimate to display. Valid entries include any column name of the data.frame produced by `get_estimates(model)`. Examples:
+\item{estimate}{string or `glue` string of the estimate to display (or a
+vector with one string per model). Valid entries include any column name of
+the data.frame produced by `get_estimates(model)`. Examples:
 \itemize{
   \item "estimate"
-  \item "\{estimate\} (\{std.error\})"
+  \item "\{estimate\} (\{std.error\}){stars}"
   \item "\{estimate\} [\{conf.low\}, \{conf.high\}]"
 }}
 
