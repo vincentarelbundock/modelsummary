@@ -1,5 +1,4 @@
 library(tibble)
-library(modelsummary)
 dat <- mtcars
 dat$vs <- as.logical(dat$vs)
 dat$gear <- as.factor(dat$gear)
@@ -16,6 +15,44 @@ test_that("basic", {
 
 })
 
+
+test_that("errors and warnings: numeric", {
+
+  # histograms only possible in default, html, or kableExtra
+  expect_warning(datasummary_skim(dat, output="markdown"),
+                 regexp="histogram argument")
+
+  # no numeric variables
+  tmp <- data.frame(a = sample(letters, 20),
+                    b = as.character(sample(1:2000, 20, replace=TRUE)))
+  expect_error(datasummary_skim(tmp),
+               regexp="no numeric")
+
+  # all fully missing
+  tmp <- data.frame(a = rep(NA_real_, 20),
+                    b = rep(NA_character_, 20))
+  expect_error(datasummary_skim(tmp),
+               regexp="missing")
+
+  # too many columns
+  tmp <- data.frame(matrix(rnorm(52*3), ncol = 52))
+  expect_error(datasummary_skim(tmp),
+               regexp = "more than 50 variables")
+})
+
+test_that("errors and warnings: categorical", {
+
+  # no categorical
+  tmp <- data.frame(a = rnorm(10))
+  expect_error(datasummary_skim(tmp, "categorical"),
+               regexp = "contains no logical")
+
+  # too many columns
+  tmp <- data.frame(matrix(as.character(rnorm(52*3)), ncol = 52))
+  expect_error(datasummary_skim(tmp, "categorical"),
+               regexp = "more than 50 variables")
+
+})
 
 # # should be fine, but R-CMD-check on github breaks 
 # test_that("tibble input does not error", {

@@ -9,14 +9,10 @@ extract_gof <- function(model, fmt, gof_map, ...) {
   gof <- get_gof(model, ...)
  
   # lm model: include F-stat by default
-  if (isTRUE(class(model)[1] == "lm")) { # glm also inherits from lm
-    # performance
-    if (inherits(gof, "performance_model")) {
-      gof$F <- attr(gof, "r2")$F
-    # broom
-    } else {
-      gof$F <- gof$statistic
-    }
+  # glm also inherits from lm
+  if (isTRUE(class(model)[1] == "lm") && 
+      "statistic" %in% colnames(gof)) {
+    gof$F <- gof$statistic
   }
 
   # glance_custom

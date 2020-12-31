@@ -157,6 +157,10 @@ test_that("bad function", {
   expect_warning(modelsummary(models, vcov = na.omit))
 })
 
+test_that("bad formula", {
+  expect_warning(modelsummary(models, vcov = ~bad))
+})
+
 test_that("vector must be named", {
   vec <- as.numeric(1:3)
   expect_error(modelsummary(models[[1]], estimate = c("estimate", "std.error"), vcov = vec))

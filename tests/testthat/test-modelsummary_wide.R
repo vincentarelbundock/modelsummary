@@ -7,6 +7,21 @@ make_data <- function(response = c("A", "B", "C")) {
   df1
 }
 
+
+test_that("model names", {
+  testthat::skip_if_not_installed("nnet")
+  testthat::skip_if_not_installed("broom")
+  df1 <- make_data()
+  df2 <- make_data()
+  invisible(capture.output(m1 <- nnet::multinom(var1~var2, data=df1)))
+  invisible(capture.output(m2 <- nnet::multinom(var1~var2, data=df2)))
+  models <- list("a" = m1, "b" = m2)
+  tab <- modelsummary_wide(models, output = "dataframe", statistic="conf.int")
+  truth <- c("part", "term", "statistic", "a B", "a C", "b B", "b C")
+  expect_equal(truth, colnames(tab))
+})
+
+
 test_that("no group", {
   mod <- list(
     lm(hp ~ mpg, mtcars),

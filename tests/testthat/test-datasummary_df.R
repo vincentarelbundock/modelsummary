@@ -1,12 +1,12 @@
 # TODO: add_columns
 
-library(modelsummary)
-
-context("datasummyary_df")
 
 test_that("no error", {
 
   tmp <- head(mtcars)
+
+  # code coverage
+  tmp$cyl <- as.factor(tmp$cyl)
 
   ar <- tail(mtcars, 1)
   ac <- data.frame(new = 1:6)

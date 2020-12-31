@@ -2,12 +2,9 @@
 #'
 #' @noRd
 clean_stars <- function(stars) {
-  if (is.logical(stars)) {
-    if (stars) {
-      stars <- c('*' = .1, '**' = .05, '***' = .01)
-    }
-  }
-  if (is.numeric(stars)) {
+  if (is.logical(stars) && isTRUE(stars)) {
+    out <- c('*' = .1, '**' = .05, '***' = .01)
+  } else if (is.numeric(stars)) {
     out <- sort(stars, decreasing = TRUE)
   } else {
     out <- NULL

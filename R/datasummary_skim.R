@@ -171,13 +171,15 @@ datasummary_skim_numeric <- function(
 
   }
 
-  # subset of numeric variables with non NA values
-  dat_new <- data[, sapply(data, is.numeric), drop=FALSE] 
-  dat_new <- dat_new[, sapply(dat_new, function(x) !all(is.na(x))), drop=FALSE]
+  # subset of numeric variables 
+  idx <- sapply(data, is.numeric)
+  if (!any(idx)) stop('data contains no numeric variable.')
+  dat_new <- data[, idx, drop=FALSE] 
 
-  if (ncol(dat_new) == 0) {
-    stop('data contains no numeric variable.')
-  }
+  # subset of non-NA variables
+  idx <- sapply(dat_new, function(x) !all(is.na(x)))
+  if (!any(idx)) stop('all numeric variables are completely missing.')
+  dat_new <- dat_new[, idx, drop=FALSE]
 
   # pad colnames in case one is named Min, Max, Mean, or other function name
   # colnames(dat_new) <- paste0(colnames(dat_new), " ")

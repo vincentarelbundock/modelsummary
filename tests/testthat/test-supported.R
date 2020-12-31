@@ -1,5 +1,42 @@
 # several tests adapted from `parameters` package under GPL3
 
+test_that("supported_models() returns a long character vector", {
+  x <- supported_models()
+  expect_gt(length(x), 100)
+  expect_true(is.character(x))
+})
+
+
+test_that("nnet::multinom with `y.level` column", {
+  testthat::skip_if_not_installed("nnet")
+  library(nnet)
+  make_data <- function(response = c("A", "B", "C")) {
+    var1 <- sample(response, replace = T, size=100)
+    var2 <- sample(c(0,1), size=100, replace=T)
+    var3 <- rnorm(100, mean=10, sd=2)
+    var1 <- factor(var1)
+    df1 <- data.frame(var1, var2, var3)
+    df1
+  }
+  dat <- make_data()
+  invisible(capture.output(mod <- nnet::multinom(var1~var2, data=dat)))
+  tab <- modelsummary(mod, output="dataframe")
+})
+
+
+test_that("MASS", {
+  testthat::skip_if_not_installed("MASS")
+  suppressMessages(library(MASS))
+
+  # broom::tidy requires p.values=TRUE 
+  fit <- polr(Sat ~ Freq, weights = Freq, data = housing)
+  expect_error(suppressMessages(modelsummary(fit, statistic="p.value")))
+  expect_error(suppressMessages(modelsummary(fit, p.values=TRUE,
+                                             statistic="p.value")), NA)
+  expect_error(suppressMessages(modelsummary(fit, stars=TRUE)))
+})
+
+
 test_that("survival", {
   testthat::skip_if_not_installed("survival")
   library(survival)
@@ -123,6 +160,10 @@ test_that("lme4", {
   tab <- modelsummary(mod, output="dataframe")
   expect_s3_class(tab, "data.frame")
   expect_true(nrow(tab) > 22)
+
+  # sandwich does not support lmer
+  expect_warning(modelsummary(mod, vcov="robust"),
+                 regexp = "uncertainty estimates are unadjusted")
 })
 
 
@@ -149,3 +190,6 @@ test_that("sandwich vignette", {
   expect_s3_class(tab, "data.frame")
   expect_equal(dim(tab), c(11, 4))
 })
+
+
+

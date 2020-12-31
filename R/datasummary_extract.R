@@ -80,11 +80,6 @@ datasummary_extract <- function(tab,
     return(out)
   }
 
-  flatten <- function(h) {
-    out <- apply(h, 2, paste, collapse = ' ')
-    return(out)
-  }
-
   # stub_width attribute before return
   attr(main, 'stub_width') <- stub_width
 

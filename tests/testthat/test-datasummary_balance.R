@@ -1,11 +1,40 @@
 library(modelsummary)
 
+testthat::skip_if_not_installed("estimatr")
 
 random_string <- function() {
   paste(sample(letters, 30, replace=TRUE), collapse="")
 }
 
-context('datasummary_balance')
+test_that("errors and warnings", {
+
+  # missing RHS variable
+  tmp <- data.frame(ID = as.character(1:100),
+    Y = rnorm(100),
+    Z_comp = sample(0:20, 100, replace = TRUE))
+  expect_error(datasummary_balance(~k, tmp),
+               regexp = "must be in data")
+
+  # too many factor levels in condition variable
+  expect_error(datasummary_balance(~Z_comp, tmp),
+               regexp = "wide to be readable")
+
+  # warn about drops
+  tmp <- data.frame(
+    Y = rnorm(100),
+    K = NA_real_,
+    Z_comp = sample(0:1, 100, replace = TRUE))
+  expect_warning(datasummary_balance(~Z_comp, tmp),
+                 regexp = "entirely missing")
+
+  tmp <- data.frame(
+    Y = rnorm(100),
+    K = as.character(1:100),
+    Z_comp = sample(0:1, 100, replace = TRUE))
+  expect_warning(datasummary_balance(~Z_comp, tmp),
+                 regexp = "include more than 50")
+})
+
 
 
 test_that("column percentages sum to 100 within factors", {
@@ -136,13 +165,16 @@ test_that('dinm=FALSE', {
 
 
 test_that('dinm_statistic = "p.value"', {
-  testthat::skip_if_not_installed("estimatr")
   tab <- datasummary_balance(~vs, mtcars, dinm_statistic = 'p.value',
     output = 'dataframe')
   expect_s3_class(tab, 'data.frame')
   expect_equal(dim(tab), c(10, 7))
   expect_equal(tab[[1]][1], 'mpg')
   expect_equal(colnames(tab)[ncol(tab)], 'p')
+
+  # sanity checks prevent other than p.value or std.error
+  expect_error(
+    datasummary_balance(~vs, mtcars, dinm_statistic = 'bad', output = 'dataframe'))
 })
 
 
@@ -156,14 +188,6 @@ test_that('fmt', {
 })
 
 
-test_that('too many factor levels in condition variable', {
-  testthat::skip_if_not_installed("estimatr")
-  set.seed(10)
-  dat <- data.frame(ID = as.character(1:100),
-    Y = rnorm(100),
-    Z_comp = sample(0:20, 100, replace = TRUE))
-  expect_error(datasummary_balance(~Z_comp, dat))
-})
 
 
 test_that('too many levels in row variable', {

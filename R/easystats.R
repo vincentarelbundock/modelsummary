@@ -2,15 +2,7 @@
 #'
 #' @noRd
 glance_easystats <- function(model, ...) {
-  if (!check_dependency("performance")) {
-    return(NULL)
-  }
   error_msg <- utils::capture.output(out <- performance::model_performance(model))
-
-  # lm model: include F-stat by default
-  if (isTRUE(class(model)[1] == "lm")) { # glm also inherits from lm
-    out$F <- attr(out, "r2")$F
-  }
 
   out <- insight::standardize_names(out, style="broom")
   mi <- insight::model_info(model)
@@ -34,9 +26,6 @@ glance_easystats <- function(model, ...) {
 #'
 #' @noRd
 tidy_easystats <- function(model, ...) {
-  if (!check_dependency("parameters")) {
-    return(NULL)
-  }
   msg <- utils::capture.output(out <- parameters::model_parameters(model, ...))
   out <- parameters::standardize_names(out, style="broom")
   return(out)

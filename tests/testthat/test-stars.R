@@ -2,6 +2,10 @@ mod <- list()
 mod$OLS <- lm(am ~ drat, data = mtcars)
 mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 
+test_that("clean_stars unknown (we should never reach this)", {
+  expect_null(modelsummary:::clean_stars(FALSE))
+})
+
 
 test_that("glue stars", {
   tab <- modelsummary(
