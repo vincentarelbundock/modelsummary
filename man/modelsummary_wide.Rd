@@ -2,7 +2,7 @@
 % Please edit documentation in R/modelsummary_wide.R
 \name{modelsummary_wide}
 \alias{modelsummary_wide}
-\title{Beautiful, customizable summaries of statistical models}
+\title{Simple, Beautiful, and Customizable Model Summaries}
 \usage{
 modelsummary_wide(
   models,

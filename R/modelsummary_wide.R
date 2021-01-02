@@ -1,4 +1,4 @@
-#' Beautiful, customizable summaries of statistical models
+#' Simple, Beautiful, and Customizable Model Summaries
 #'
 #' `modelsummary_wide` is a specialized function to display groups of
 #' parameters from a single model in separate columns. This can be useful, for

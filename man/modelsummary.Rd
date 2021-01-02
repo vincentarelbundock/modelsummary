@@ -2,7 +2,7 @@
 % Please edit documentation in R/modelsummary.R
 \name{modelsummary}
 \alias{modelsummary}
-\title{Beautiful, customizable summaries of statistical models}
+\title{Simple, Beautiful, and Customizable Model Summaries}
 \usage{
 modelsummary(
   models,
@@ -124,7 +124,7 @@ set `exponentiate=TRUE` to exponentiate logistic regression coefficients.}
 a regression table in a format determined by the `output` argument.
 }
 \description{
-Beautiful, customizable summaries of statistical models
+Simple, Beautiful, and Customizable Model Summaries
 }
 \details{
 `output` argument:

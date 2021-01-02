@@ -5,7 +5,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 
 
 
-#' Beautiful, customizable summaries of statistical models
+#' Simple, Beautiful, and Customizable Model Summaries
 #'
 #' @param models a model or (optionally named) list of models
 #' @param output filename or object type (character string)

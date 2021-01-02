@@ -1,4 +1,4 @@
-#' Create summary tables using 2-sided formulae: crosstabs, frequencies, table
+#' Summary tables using 2-sided formulae: crosstabs, frequencies, table
 #' 1s and more.
 #'
 #' `datasummary` can use any summary function which produces one numeric or
