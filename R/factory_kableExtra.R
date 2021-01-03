@@ -58,7 +58,15 @@ factory_kableExtra <- function(tab,
   if (!is.null(hrule)) {
     if (output_format %in% 'latex') {
       for (pos in hrule) {
-        out <- kableExtra::row_spec(out, row=pos-1, extra_latex_after='\\midrule')
+        out <- kableExtra::row_spec(out,
+          row = pos - 1, 
+          extra_latex_after = "\\midrule")
+      }
+    } else if (output_format %in% "html") {
+      for (pos in hrule) {
+        out <- kableExtra::row_spec(out,
+          row = pos - 1,
+          extra_css = "box-shadow: 0px 1px")
       }
     }
   }

@@ -4,6 +4,7 @@
 * vcov accepts shortcuts: "robust", "stata", "HC0", etc.
 * vcov accepts formulas for clustered SEs: ~group
 * modelsummary_wide has a new "stacking" argument
+* html horizontal rule to separate estimates form gof
 * gof_map accepts list of lists. only needs 3 columns.
 * support officedown Rmd
 * estimate accepts a vector for per model estimates

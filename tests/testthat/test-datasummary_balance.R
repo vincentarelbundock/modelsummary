@@ -36,7 +36,6 @@ test_that("errors and warnings", {
 })
 
 
-
 test_that("column percentages sum to 100 within factors", {
   testthat::skip_if_not_installed("estimatr")
   dat <- mtcars[, c("vs", "cyl", "gear")]
