@@ -112,8 +112,18 @@ get_gof <- function(model, ...) {
   if (flag(gof)) return(gof)
 
   # performance third
+  f <- function(model, ...) {
+    error_msg <- utils::capture.output(out <- performance::model_performance(model))
+    out <- insight::standardize_names(out, style="broom")
+    mi <- insight::model_info(model)
+    # nobs
+    if ("n_obs" %in% names(mi)) {
+      out$nobs <- mi$n_obs
+    }
+    return(out)
+  }
   gof <- suppressWarnings(try(
-    glance_easystats(model, ...), silent=TRUE))
+    f(model, ...), silent=TRUE))
   if (flag(gof)) return(gof)
 
   # broom.mixed fourth

@@ -691,3 +691,47 @@ options(modelsummary_latex = 'gt')
 options(modelsummary_word = 'huxtable')
 options(modelsummary_png = 'gt')
 ```
+
+# F.A.Q.
+
+## How does `modelsummary` extract estimates and statistics?
+
+A `modelsummary` table is divided in two parts: "Estimates" (top of the table) and "Goodness-of-fit" (bottom of the table). To populate those two parts, `modelsummary` tries several things in sequence.
+
+Estimates:
+
+1. Try the `broom::tidy` function to see if that package supports this model type, or if the user defined a custom `tidy` function in their global environment. If this fails...
+2. Try the `parameters::model_parameters` function to see if the `parameters` package supports this model type. If this fails...
+3. Load the `broom.mixed` package (if installed) and try the `broom.mixed::glance` function.
+
+Goodness-of-fit:
+
+1. Try the `broom::glance` function to see if that package supports this model type, or if the user defined a custom `glance` function in their global environment. If this fails...
+2. Try the `performance::model_performance` function to see if the `performance` package supports this model type. If this fails...
+3. Load the `broom.mixed` package (if installed) and try the `broom.mixed::glance` function.
+
+If all of this fails, `modelsummary` will return an error message.
+
+If you have problems with a model object, you can often diagnose the problem by running the following commands from a *clean* R session:
+
+```r
+# see if broom supports your model type
+library(broom)
+tidy(model)
+glance(model)
+
+# see if parameters and performance support your model type
+library(parameters)
+library(performance)
+model_parameters(model)
+model_performance(model)
+
+# see if broom.mixed supports your model type
+library(broom.mixed)
+tidy(model)
+glance(model)
+```
+
+If none of these options work, you can create your own `tidy` and `glance` methods, as described in the [Adding new models section.](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html#adding-new-models-1)
+
+If one of the extractor functions does not work well or takes too long to process, you can define a new "custom" model class and choose your own extractors, as described in the [Adding new models section.](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html#adding-new-models-1)

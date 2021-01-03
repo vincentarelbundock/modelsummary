@@ -210,8 +210,13 @@ get_estimates <- function(model, conf_level=.95, ...) {
   if (flag(est)) return(est)
 
   # parameters third
+  f <- tidy_easystats <- function(model, ...) {
+    msg <- utils::capture.output(out <- parameters::model_parameters(model, ...))
+    out <- parameters::standardize_names(out, style="broom")
+    return(out)
+  }
   est <- suppressWarnings(try(
-    tidy_easystats(model, ci=conf_level, ...), silent=TRUE))
+    f(model, ci=conf_level, ...), silent=TRUE))
   if (flag(est)) return(est)
 
   # broom.mixed fourth
