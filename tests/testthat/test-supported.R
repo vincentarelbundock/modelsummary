@@ -1,4 +1,5 @@
 # several tests adapted from `parameters` package under GPL3
+skip_on_cran()
 
 test_that("supported_models() returns a long character vector", {
   x <- supported_models()
@@ -21,6 +22,8 @@ test_that("nnet::multinom with `y.level` column", {
   dat <- make_data()
   invisible(capture.output(mod <- nnet::multinom(var1~var2, data=dat)))
   tab <- modelsummary(mod, output="dataframe")
+  expect_s3_class(tab, "data.frame")
+  expect_equal(dim(tab), c(11, 4))
 })
 
 

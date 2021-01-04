@@ -1,3 +1,4 @@
+# CRAN fails on artefacts
 skip_on_cran()
 
 random_string <- function() {

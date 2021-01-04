@@ -1,3 +1,8 @@
+# CRAN fails when trying to load `broom.mixed`
+# unsupported models require `broom.mixed`
+skip_on_cran()
+
+
 test_that('Characters raise error', {
   mod <- list()
   mod[[1]] <- lm(hp ~ mpg, mtcars)
@@ -6,6 +11,7 @@ test_that('Characters raise error', {
   expect_error(modelsummary(mod[[2]]))
 })
 
+
 test_that('Numerics raise error', {
   mod <- list()
   mod[[1]] <- lm(hp ~ mpg, mtcars)
@@ -13,6 +19,7 @@ test_that('Numerics raise error', {
   expect_error(modelsummary(mod))
   expect_error(modelsummary(mod[[2]]))
 })
+
 
 test_that('NULL raises error', {
   mod <- lm(hp ~ mpg, mtcars)

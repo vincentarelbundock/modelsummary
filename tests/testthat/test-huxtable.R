@@ -1,3 +1,4 @@
+# CRAN issues warning because `huxtable` output is not UTF8 encoded
 skip_on_cran()
 
 random_string <- function() {

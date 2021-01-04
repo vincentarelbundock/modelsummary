@@ -10,7 +10,6 @@ make_data <- function(response = c("A", "B", "C")) {
 
 test_that("model names", {
   testthat::skip_if_not_installed("nnet")
-  testthat::skip_if_not_installed("broom")
   df1 <- make_data()
   df2 <- make_data()
   invisible(capture.output(m1 <- nnet::multinom(var1~var2, data=df1)))
@@ -33,7 +32,6 @@ test_that("no group", {
 
 test_that("nnet::multinom one model (factor DV)", {
   testthat::skip_if_not_installed("nnet")
-  testthat::skip_if_not_installed("broom")
   df <- make_data()
   invisible(capture.output(mod <- nnet::multinom(var1~var2, data=df)))
   tmp <- modelsummary_wide(mod, output="data.frame")
@@ -50,7 +48,6 @@ test_that("nnet::multinom one model (factor DV)", {
 
 test_that("2 models: horizontal and vertical", {
   testthat::skip_if_not_installed("nnet")
-  testthat::skip_if_not_installed("broom")
   df1 <- make_data()
   df2 <- make_data()
   invisible(capture.output(m1 <- nnet::multinom(var1~var2, data=df1)))
@@ -91,7 +88,6 @@ test_that("single model: no model names", {
 
 test_that("2 models w/ horizontal stack", {
   testthat::skip_if_not_installed("nnet")
-  testthat::skip_if_not_installed("broom")
 
   var1 <- sample(c('A', 'B', 'C'), replace = T, size=100)
   var2 <- sample(c(0,1), size=100, replace=T)

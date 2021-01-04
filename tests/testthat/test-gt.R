@@ -1,3 +1,4 @@
+# CRAN issues warning because `gt` uses `group_by` with a deprecated argument
 skip_on_cran()
 
 library(gt)
