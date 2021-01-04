@@ -93,9 +93,10 @@ parse_output_arg <- function(output) {
 
   # result
   out <- list(
-    "output_factory" = output_factory,
-    "output_file"    = output_file,
-    "output_format"  = output_format)
+    # unname to avoid weird issue in kableExtra::kbl do.call arguments
+    "output_factory" = unname(output_factory),
+    "output_file"    = unname(output_file),
+    "output_format"  = unname(output_format))
   return(out)
 
 }

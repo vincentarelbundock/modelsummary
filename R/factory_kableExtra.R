@@ -13,6 +13,7 @@ factory_kableExtra <- function(tab,
                                ...) {
 
 
+
   if (is.null(output_format) || !output_format %in% c("latex", "markdown")) {
     output_format <- "html"
   }

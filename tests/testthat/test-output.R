@@ -10,6 +10,17 @@ mod <- list()
 mod[[1]] <- lm(hp ~ mpg, mtcars)
 mod[[2]] <- lm(hp ~ mpg + drat, mtcars)
 
+
+test_that("output='table.tex'", {
+  fn <- paste0(random_string(), ".tex")
+  modelsummary(mod, output = fn)
+  known <- readLines("known_output/msummary_latex_simple.tex")
+  unknown <- readLines(fn)
+  expect_identical(known, unknown)
+  unlink(fn)
+})
+
+
 test_that("table objects from different packages", {
   expect_error(modelsummary(mod), NA)
   expect_error(modelsummary(mod, 'gt'), NA)
