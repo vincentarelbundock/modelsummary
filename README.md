@@ -180,4 +180,4 @@ There are several excellent alternatives to draw model summary tables in `R`:
   - [texreg](https://cran.r-project.org/package=texreg)
   - [stargazer](https://cran.r-project.org/package=stargazer)
   - [apsrtable](https://cran.r-project.org/package=apsrtable)
-  - [huxtable](https://hughjonesd.github.io/huxtable)
+  - [huxtable](https://hughjonesd.github.io/huxtable/)

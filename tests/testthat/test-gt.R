@@ -1,3 +1,5 @@
+skip_on_cran()
+
 library(gt)
 
 models <- list()

@@ -1,6 +1,4 @@
-library(modelsummary)
-
-testthat::skip_if_not_installed("estimatr")
+skip_if_not_installed("estimatr")
 
 random_string <- function() {
   paste(sample(letters, 30, replace=TRUE), collapse="")
@@ -37,7 +35,6 @@ test_that("errors and warnings", {
 
 
 test_that("column percentages sum to 100 within factors", {
-  testthat::skip_if_not_installed("estimatr")
   dat <- mtcars[, c("vs", "cyl", "gear")]
   dat$cyl <- factor(dat$cyl)
   dat$gear <- factor(dat$gear)
@@ -50,7 +47,6 @@ test_that("column percentages sum to 100 within factors", {
 
 
 test_that("palmer penguins was once broken with kableExtra", {
-  testthat::skip_if_not_installed("estimatr")
   penguins <- "https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv"
   penguins <- read.csv(penguins)
   raw <- datasummary_balance(~sex, penguins, output="html")
@@ -59,7 +55,6 @@ test_that("palmer penguins was once broken with kableExtra", {
 
 
 test_that('variable name with spaces', {
-  testthat::skip_if_not_installed("estimatr")
   tmp <- mtcars
   colnames(tmp)[1] <- "testing spaces"
   tab <- expect_error(datasummary_balance(~vs, data=tmp, output="dataframe"), NA)
@@ -68,7 +63,6 @@ test_that('variable name with spaces', {
 
 
 test_that('add column', {
-  testthat::skip_if_not_installed("estimatr")
   tmp <- mtcars
   tmp$gear <- as.factor(tmp$gear)
   tmp$vs <- as.logical(tmp$vs)
@@ -82,7 +76,6 @@ test_that('add column', {
 
 
 test_that('only numeric', {
-  testthat::skip_if_not_installed("estimatr")
   tab <- datasummary_balance(~vs, mtcars, output = 'dataframe')
   truth <- c(" ", "0 Mean", "0 Std. Dev.", "1 Mean",
     "1 Std. Dev.", "Diff. in Means", "Std. Error")
@@ -107,7 +100,6 @@ test_that('only factors', {
 
 
 test_that('both factors and numerics', {
-  testthat::skip_if_not_installed("estimatr")
   tmp <- mtcars
   tmp$cyl <- factor(tmp$cyl)
   tmp$gear <- factor(tmp$gear)
@@ -122,7 +114,6 @@ test_that('both factors and numerics', {
 
 
 test_that('more than two conditions', {
-  testthat::skip_if_not_installed("estimatr")
   tmp <- mtcars
   tmp$cyl <- factor(tmp$cyl)
   tmp$vs <- as.logical(tmp$vs)
@@ -135,7 +126,6 @@ test_that('more than two conditions', {
 
 
 test_that('single numeric', {
-  testthat::skip_if_not_installed("estimatr")
   tmp <- mtcars[, c('am', 'mpg')]
   tab <- datasummary_balance(~am, data = tmp, output = 'dataframe')
   expect_s3_class(tab, 'data.frame')
@@ -145,7 +135,6 @@ test_that('single numeric', {
 
 
 test_that('single factor', {
-  testthat::skip_if_not_installed("estimatr")
   tmp <- mtcars[, c('am', 'gear')]
   tmp$gear <- factor(tmp$gear)
   tab <- datasummary_balance(~am, data = tmp, output = 'dataframe')
@@ -178,7 +167,6 @@ test_that('dinm_statistic = "p.value"', {
 
 
 test_that('fmt', {
-  testthat::skip_if_not_installed("estimatr")
   tmp <- mtcars[, c('am', 'mpg', 'gear')]
   tmp$gear <- factor(tmp$gear)
   truth <- c("17.15", "N", "15", "4", "0")
@@ -190,7 +178,6 @@ test_that('fmt', {
 
 
 test_that('too many levels in row variable', {
-  testthat::skip_if_not_installed("estimatr")
   set.seed(10)
   dat <- data.frame(ID = as.character(1:100),
     Y = rnorm(100),
@@ -200,7 +187,6 @@ test_that('too many levels in row variable', {
 
 
 test_that('estimatr: clusters, blocks, weights', {
-  testthat::skip_if_not_installed("estimatr")
 
   set.seed(286342)
   # clusters

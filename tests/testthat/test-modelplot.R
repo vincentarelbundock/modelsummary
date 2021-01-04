@@ -1,3 +1,5 @@
+skip_on_cran()
+
 expect_doppelganger <- function(title, fig, path = NULL, ...) {
   testthat::skip_if(getRversion() > '4.0.3') # new graphics device
   testthat::skip_if_not_installed("vdiffr")

@@ -1,3 +1,5 @@
+skip_on_cran()
+
 random_string <- function() {
   paste(sample(letters, 30, replace=TRUE), collapse="")
 }
