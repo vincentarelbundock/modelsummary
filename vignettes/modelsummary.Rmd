@@ -186,29 +186,31 @@ modelsummary(models, gof_omit = ".*",
 
 # vcov
 
-You can use clustered or robust uncertainty estimates by modifying the `vcov` parameter. This function accepts 5 different types of input.  You can use a string or list of strings:
+You can use clustered or robust uncertainty estimates by modifying the `vcov` parameter. This function accepts 5 different types of input.  You can use a string or a vector of strings:
 
 ```r
 modelsummary(models, vcov = "robust")
-modelsummary(models, vcov = list("classical", "robust", "stata", "HC4", "HC0"))
+modelsummary(models, vcov = c("classical", "robust", "stata", "HC4", "HC0"))
 ```
 
 You can use a one-sided formula or list of one-sided formulas to use clustered standard errors:
 
 ```r
 modelsummary(models, vcov = ~Region)
+```
 
 You can specify a function that produces variance-covariance matrices:
 
 ```r
 library(sandwich)
-modelsummary(models, vcov = vcovHC, statistic = 'p.value')
+modelsummary(models, vcov = vcovHC)
 ```
 
 You can supply a list of functions of the same length as your model list:
 
 ```r
-modelsummary(models, vcov = list(vcov, vcovHC, vcovHAC, vcovHC, vcov))
+modelsummary(models, 
+  vcov = list(vcov, vcovHC, vcovHAC, vcovHC, vcov))
 ```
 
 You can supply a list of named variance-covariance matrices:
@@ -221,12 +223,13 @@ modelsummary(models, vcov = vcov_matrices)
 You can supply a list of named vectors:
 
 ```r
-custom_stats <- list(`OLS 1` = c(`(Intercept)` = 2, Literacy = 3, Clergy = 4), 
-                     `Poisson 1` = c(`(Intercept)` = 3, Literacy = -5, Commerce = 3),
-                     `OLS 2` = c(`(Intercept)` = 7, Literacy = -6, Clergy = 9), 
-                     `Poisson 2` = c(`(Intercept)` = 4, Literacy = -7, Commerce = -9),
-                     `OLS 3` = c(`(Intercept)` = 1, Literacy = -5, Clergy = -2))
-modelsummary(models, vcov = custom_stats)
+vc <- list(
+  `OLS 1` = c(`(Intercept)` = 2, Literacy = 3, Clergy = 4), 
+  `Poisson 1` = c(`(Intercept)` = 3, Literacy = -5, Commerce = 3),
+  `OLS 2` = c(`(Intercept)` = 7, Literacy = -6, Clergy = 9), 
+  `Poisson 2` = c(`(Intercept)` = 4, Literacy = -7, Commerce = -9),
+  `OLS 3` = c(`(Intercept)` = 1, Literacy = -5, Clergy = -2))
+modelsummary(models, vcov = vc)
 ```
 
 # stars
