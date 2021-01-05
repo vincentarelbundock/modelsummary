@@ -3293,15 +3293,18 @@ F
 <span class="co"># add custom functions to extract estimates (tidy) and goodness-of-fit (glance) information</span>
 <span class="va">tidy.MCMCglmm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>
-    <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">)</span>,
-                          estimate <span class="op">=</span> <span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,
-                          conf.low <span class="op">=</span> <span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>,
-                          conf.high <span class="op">=</span> <span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span><span class="op">)</span>
+    <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+      term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">)</span>,
+      estimate <span class="op">=</span> <span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,
+      conf.low <span class="op">=</span> <span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>,
+      conf.high <span class="op">=</span> <span class="va">s</span><span class="op">$</span><span class="va">solutions</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span><span class="op">)</span>
     <span class="va">ret</span>
 <span class="op">}</span>
+
 <span class="va">glance.MCMCglmm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>dic <span class="op">=</span> <span class="va">object</span><span class="op">$</span><span class="va">DIC</span>,
-                          n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">object</span><span class="op">$</span><span class="va">X</span><span class="op">)</span><span class="op">)</span>
+    <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+      dic <span class="op">=</span> <span class="va">object</span><span class="op">$</span><span class="va">DIC</span>,
+      n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">object</span><span class="op">$</span><span class="va">X</span><span class="op">)</span><span class="op">)</span>
     <span class="va">ret</span>
 <span class="op">}</span>
 
@@ -3314,9 +3317,9 @@ F
 <p>Second, in the example above, we used the <code>statistic = 'conf.int'</code> argument. This is because the <code>tidy</code> method produces <code>conf.low</code> and <code>conf.high</code> columns. In most cases, users will define <code>std.error</code> column in their custom <code>tidy</code> methods, so the <code>statistic</code> argument will need to be adjusted.</p>
 <p>If you create new <code>tidy</code> and <code>glance</code> methods, please consider contributing them to <code>broom</code> so that the rest of the community can benefit from your work: <a href="https://github.com/tidymodels/broom" class="uri">https://github.com/tidymodels/broom</a></p>
 </div>
-<div id="customizing-existing-model-part-i" class="section level1">
+<div id="customizing-existing-models-part-i" class="section level1">
 <h1 class="hasAnchor">
-<a href="#customizing-existing-model-part-i" class="anchor"></a>Customizing existing model (part I)</h1>
+<a href="#customizing-existing-models-part-i" class="anchor"></a>Customizing existing models (part I)</h1>
 <p>Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new <code>glance_custom</code> and <code>tidy_custom</code> methods. To illustrate, we estimate two linear regression models using the <code>lm</code> function:</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
@@ -3332,7 +3335,7 @@ F
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">glance_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html">formula</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>
-    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>`Dependent variable:` <span class="op">=</span> <span class="va">dv</span><span class="op">)</span>
+    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="st">"DV"</span> <span class="op">=</span> <span class="va">dv</span><span class="op">)</span>
     <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>Now, let’s customize the body of the table. The <code>vcov</code> argument already allows users to customize uncertainty estimates. But imagine you want to override the <em>coefficient estimates</em> of your “lm” models. Easy! All you need to do is define a <code>tidy_custom.lm</code> method which returns a data.frame (or tibble) with one column called “term” and one column called “estimate”.</p>
@@ -3340,8 +3343,9 @@ F
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tidy_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span>
-    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span>,
-                          estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">s</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="st">'▲'</span>, <span class="st">'▼'</span><span class="op">)</span><span class="op">)</span>
+    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+      term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span>,
+      estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">s</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="st">'▲'</span>, <span class="st">'▼'</span><span class="op">)</span><span class="op">)</span>
     <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>After you define the <code>glance_custom</code> and <code>tidy_custom</code> methods, <code>modelsummary</code> will automatically display your customized model information:</p>
@@ -3520,7 +3524,7 @@ F
 </tr>
 <tr>
 <td style="text-align:left;">
-Dependent variable:
+DV
 </td>
 <td style="text-align:center;">
 hp
@@ -3533,9 +3537,9 @@ wt
 </table>
 <p>Note that you can define a <code>std.error</code> column in <code>tidy_custom.lm</code> to replace the uncertainty estimates instead of the coefficients.</p>
 </div>
-<div id="customizing-existing-model-part-ii" class="section level1">
+<div id="customizing-existing-models-part-ii" class="section level1">
 <h1 class="hasAnchor">
-<a href="#customizing-existing-model-part-ii" class="anchor"></a>Customizing existing model (part II)</h1>
+<a href="#customizing-existing-models-part-ii" class="anchor"></a>Customizing existing models (part II)</h1>
 <p>An even more fundamental way to customize the output would be to completely bypass <code>modelsummary</code>’s extractor functions by assigning a new class name to your model. For example,</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># estimate a linear model</span>
@@ -3555,7 +3559,7 @@ wt
 
 <span class="va">glance.custom</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
-    `Model type` <span class="op">=</span> <span class="st">"Custom"</span>,
+    <span class="st">"Model"</span> <span class="op">=</span> <span class="st">"Custom"</span>,
     <span class="st">"nobs"</span> <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/nobs.html">nobs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
   <span class="op">)</span>
 <span class="op">}</span>
@@ -3626,7 +3630,7 @@ Num.Obs.
 </tr>
 <tr>
 <td style="text-align:left;">
-Model.type
+Model
 </td>
 <td style="text-align:center;">
 Custom
@@ -4135,26 +4139,26 @@ Amelia
 (Intercept)
 </td>
 <td style="text-align:center;">
-76.026
+72.250
 </td>
 <td style="text-align:center;">
-71.162
+81.572
 </td>
 <td style="text-align:center;">
-74.055
+82.501
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(13.825)
+(13.543)
 </td>
 <td style="text-align:center;">
-(11.476)
+(11.070)
 </td>
 <td style="text-align:center;">
-(12.549)
+(12.526)
 </td>
 </tr>
 <tr>
@@ -4162,26 +4166,26 @@ Amelia
 Literacy
 </td>
 <td style="text-align:center;">
--0.521
+-0.466
 </td>
 <td style="text-align:center;">
--0.389
+-0.562
 </td>
 <td style="text-align:center;">
--0.409
+-0.582
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.229)
+(0.212)
 </td>
 <td style="text-align:center;">
-(0.191)
+(0.181)
 </td>
 <td style="text-align:center;">
-(0.202)
+(0.203)
 </td>
 </tr>
 <tr>
@@ -4189,26 +4193,26 @@ Literacy
 Commerce
 </td>
 <td style="text-align:center;">
--0.304
+-0.208
 </td>
 <td style="text-align:center;">
--0.292
+-0.334
 </td>
 <td style="text-align:center;">
--0.338
+-0.347
 </td>
 </tr>
 <tr>
 <td style="text-align:left;box-shadow: 0px 1px">
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.144)
+(0.157)
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.132)
+(0.124)
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.147)
+(0.138)
 </td>
 </tr>
 <tr>
@@ -4216,7 +4220,7 @@ Commerce
 Num.Obs.
 </td>
 <td style="text-align:center;">
-60
+58
 </td>
 <td style="text-align:center;">
 86
@@ -4243,13 +4247,13 @@ Num.Imp.
 R2
 </td>
 <td style="text-align:center;">
-0.097
+0.081
 </td>
 <td style="text-align:center;">
-0.072
+0.144
 </td>
 <td style="text-align:center;">
-0.093
+0.155
 </td>
 </tr>
 <tr>
@@ -4257,13 +4261,13 @@ R2
 R2 Adj.
 </td>
 <td style="text-align:center;">
-0.065
+0.047
 </td>
 <td style="text-align:center;">
-0.050
+0.123
 </td>
 <td style="text-align:center;">
-0.070
+0.134
 </td>
 </tr>
 <tr>
@@ -4271,7 +4275,7 @@ R2 Adj.
 AIC
 </td>
 <td style="text-align:center;">
-555.8
+530.8
 </td>
 <td style="text-align:center;">
 </td>
@@ -4283,7 +4287,7 @@ AIC
 BIC
 </td>
 <td style="text-align:center;">
-564.1
+539.0
 </td>
 <td style="text-align:center;">
 </td>
@@ -4295,7 +4299,7 @@ BIC
 Log.Lik.
 </td>
 <td style="text-align:center;">
--273.878
+-261.403
 </td>
 <td style="text-align:center;">
 </td>
@@ -4307,7 +4311,7 @@ Log.Lik.
 F
 </td>
 <td style="text-align:center;">
-3.060
+2.421
 </td>
 <td style="text-align:center;">
 </td>
