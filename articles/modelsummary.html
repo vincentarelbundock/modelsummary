@@ -3330,7 +3330,7 @@ F
 <span class="co">#&gt; [1] "lm"</span></code></pre></div>
 <p>Let’s say you would like to print the dependent variable for each model of this particular class. All you need to do is define a new method called <code>glance_custom.lm</code>. This method should return a data.frame (or tibble) with 1 row, and 1 column per piece of information you want to display. For example:</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">glance_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+<code class="sourceCode R"><span class="va">glance_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html">formula</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>
     <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>`Dependent variable:` <span class="op">=</span> <span class="va">dv</span><span class="op">)</span>
     <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
@@ -3338,7 +3338,7 @@ F
 <p>Now, let’s customize the body of the table. The <code>vcov</code> argument already allows users to customize uncertainty estimates. But imagine you want to override the <em>coefficient estimates</em> of your “lm” models. Easy! All you need to do is define a <code>tidy_custom.lm</code> method which returns a data.frame (or tibble) with one column called “term” and one column called “estimate”.</p>
 <p>Here, we’ll substitute estimates by an up/down-pointing triangles which represents their signs:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tidy_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+<code class="sourceCode R"><span class="va">tidy_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span>
     <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span>,
                           estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">s</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="st">'▲'</span>, <span class="st">'▼'</span><span class="op">)</span><span class="op">)</span>
@@ -4135,26 +4135,26 @@ Amelia
 (Intercept)
 </td>
 <td style="text-align:center;">
-68.974
+76.026
 </td>
 <td style="text-align:center;">
-72.958
+71.162
 </td>
 <td style="text-align:center;">
-73.947
+74.055
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(14.031)
+(13.825)
 </td>
 <td style="text-align:center;">
-(14.645)
+(11.476)
 </td>
 <td style="text-align:center;">
-(13.969)
+(12.549)
 </td>
 </tr>
 <tr>
@@ -4162,26 +4162,26 @@ Amelia
 Literacy
 </td>
 <td style="text-align:center;">
--0.410
+-0.521
 </td>
 <td style="text-align:center;">
--0.453
+-0.389
 </td>
 <td style="text-align:center;">
--0.458
+-0.409
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.224)
+(0.229)
 </td>
 <td style="text-align:center;">
-(0.233)
+(0.191)
 </td>
 <td style="text-align:center;">
-(0.223)
+(0.202)
 </td>
 </tr>
 <tr>
@@ -4189,26 +4189,26 @@ Literacy
 Commerce
 </td>
 <td style="text-align:center;">
--0.224
+-0.304
 </td>
 <td style="text-align:center;">
 -0.292
 </td>
 <td style="text-align:center;">
--0.307
+-0.338
 </td>
 </tr>
 <tr>
 <td style="text-align:left;box-shadow: 0px 1px">
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.156)
+(0.144)
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.159)
+(0.132)
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.148)
+(0.147)
 </td>
 </tr>
 <tr>
@@ -4216,13 +4216,13 @@ Commerce
 Num.Obs.
 </td>
 <td style="text-align:center;">
-59
+60
 </td>
 <td style="text-align:center;">
 86
 </td>
 <td style="text-align:center;">
-85
+86
 </td>
 </tr>
 <tr>
@@ -4243,13 +4243,13 @@ Num.Imp.
 R2
 </td>
 <td style="text-align:center;">
-0.058
-</td>
-<td style="text-align:center;">
-0.069
+0.097
 </td>
 <td style="text-align:center;">
 0.072
+</td>
+<td style="text-align:center;">
+0.093
 </td>
 </tr>
 <tr>
@@ -4257,13 +4257,13 @@ R2
 R2 Adj.
 </td>
 <td style="text-align:center;">
-0.024
+0.065
 </td>
 <td style="text-align:center;">
-0.044
+0.050
 </td>
 <td style="text-align:center;">
-0.048
+0.070
 </td>
 </tr>
 <tr>
@@ -4271,7 +4271,7 @@ R2 Adj.
 AIC
 </td>
 <td style="text-align:center;">
-546.6
+555.8
 </td>
 <td style="text-align:center;">
 </td>
@@ -4283,7 +4283,7 @@ AIC
 BIC
 </td>
 <td style="text-align:center;">
-554.9
+564.1
 </td>
 <td style="text-align:center;">
 </td>
@@ -4295,7 +4295,7 @@ BIC
 Log.Lik.
 </td>
 <td style="text-align:center;">
--269.313
+-273.878
 </td>
 <td style="text-align:center;">
 </td>
@@ -4307,7 +4307,7 @@ Log.Lik.
 F
 </td>
 <td style="text-align:center;">
-1.728
+3.060
 </td>
 <td style="text-align:center;">
 </td>
