@@ -415,60 +415,6 @@ Any argument supported by `tidy` is thus supported by `modelsummary`.
 
 Warning: at the moment (2020-05-05), `broom::tidy` still reports `std.error` on the original scale. See this [discussion on the `broom` GitHub page.](https://github.com/tidymodels/broom/issues/422)
 
-# Custom coefficients and statistics
-
-The information that `modelsummary` can display about a model is determined by the output of the `broom::glance` and `broom::tidy` functions. `glance` is used the extract the information at the the bottom of the table, where goodness-of-fit measures are displayed. `tidy` is used to extract the information in the body of the table: parameter and uncertainty estimates.
-
-Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new `glance_custom` and `tidy_custom` methods. To illustrate, we estimate two linear regression models using the `lm` function:
-
-```{r}
-library(modelsummary)
-
-mod <- list()
-mod[[1]] <- lm(hp ~ mpg + drat, mtcars)
-mod[[2]] <- lm(wt ~ mpg + drat + am, mtcars)
-```
-
-In `R`, the `lm` function produces models of class "lm":
-
-```{r}
-class(mod[[1]])
-```
-
-Let's say you would like to print the dependent variable for each model of this particular class. All you need to do is define a new method called `glance_custom.lm`. This method should return a data.frame (or tibble) with 1 row, and 1 column per piece of information you want to display. For example:
-
-```{r}
-glance_custom.lm <- function(x) {
-    dv <- as.character(formula(x)[2])
-    out <- tibble::tibble(`Dependent variable:` = dv)
-    return(out)
-}
-```
-
-Now, let's customize the body of the table. The `vcov` argument already allows users to customize uncertainty estimates. But imagine you want to override the *coefficient estimates* of your "lm" models. Easy! All you need to do is define a `tidy_custom.lm` method which returns a data.frame (or tibble) with one column called "term" and one column called "estimate".
-
-Here, we'll substitute estimates by an up/down-pointing triangles which represents their signs:
-
-```{r}
-tidy_custom.lm <- function(x) {
-    s <- summary(x)$coefficients
-    out <- tibble::tibble(term = row.names(s),
-                          estimate = ifelse(s[,1] > 0, '▲', '▼'))
-    return(out)
-}
-```
-
-After you define the `glance_custom` and `tidy_custom` methods, `modelsummary` will automatically display your customized model information:
-
-```{r}
-modelsummary(mod)
-```
-
-Note that you can define a `std.error` column in `tidy_custom.lm` to replace the uncertainty estimates instead of the coefficients.
-
-```{r, include=FALSE}
-rm("tidy_custom.lm")
-```
 
 # Custom appearance
 
@@ -495,18 +441,7 @@ To see if a given model is supported, you can fit it, and then call this functio
 get_estimates(model)
 ```
 
-The next section shows that it is 
-
 If this function does not return a valid output, you can easily (really!!) add your own support. See the next section for a tutorial. If you do this, you may consider opening an issue on the Github website of the `broom` package: https://github.com/tidymodels/broom/issues
-
-Note that several packages supply additional `tidy` and `glance` functions. Loading these packages can increase the range of models supported by `modelsummary`. For example, loading the [broom.mixed package](https://github.com/bbolker/broom.mixed) allows modelsummary to support a wide variety of mixed (hierarchical, multi-level) models (e.g., `lme4`, `brms`, `rstanarm`).
-
-```{r, eval=FALSE}
-library(broom.mixed)
-library(modelsummary)
-
-modelsummary(mod)
-```
 
 # Adding new models
 
@@ -521,17 +456,20 @@ library(MCMCglmm)
 data(PlodiaPO)
 
 # add custom functions to extract estimates (tidy) and goodness-of-fit (glance) information
-tidy.MCMCglmm <- function(object, ...) {
-    s <- summary(object, ...)
-    ret <- tibble::tibble(term = row.names(s$solutions),
-                          estimate = s$solutions[, 1],
-                          conf.low = s$solutions[, 2],
-                          conf.high = s$solutions[, 3])
+tidy.MCMCglmm <- function(x, ...) {
+    s <- summary(x, ...)
+    ret <- data.frame(
+      term      = row.names(s$solutions),
+      estimate  = s$solutions[, 1],
+      conf.low  = s$solutions[, 2],
+      conf.high = s$solutions[, 3])
     ret
 }
-glance.MCMCglmm <- function(object, ...) {
-    ret <- tibble::tibble(dic = object$DIC,
-                          n = nrow(object$X))
+
+glance.MCMCglmm <- function(x, ...) {
+    ret <- data.frame(
+      dic = x$DIC,
+      n   = nrow(x$X))
     ret
 }
 
@@ -547,6 +485,94 @@ Two important things to note. First, the methods are named `tidy.MCMCglmm` and `
 Second, in the example above, we used the `statistic = 'conf.int'` argument. This is because the `tidy` method produces `conf.low` and `conf.high` columns. In most cases, users will define `std.error` column in their custom `tidy` methods, so the `statistic` argument will need to be adjusted.
 
 If you create new `tidy` and `glance` methods, please consider contributing them to `broom` so that the rest of the community can benefit from your work: https://github.com/tidymodels/broom
+
+# Customizing existing models (part I)
+
+Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new `glance_custom` and `tidy_custom` methods. To illustrate, we estimate two linear regression models using the `lm` function:
+
+```{r}
+library(modelsummary)
+
+mod <- list()
+mod[[1]] <- lm(hp ~ mpg + drat, mtcars)
+mod[[2]] <- lm(wt ~ mpg + drat + am, mtcars)
+```
+
+In `R`, the `lm` function produces models of class "lm":
+
+```{r}
+class(mod[[1]])
+```
+
+Let's say you would like to print the dependent variable for each model of this particular class. All you need to do is define a new method called `glance_custom.lm`. This method should return a data.frame (or tibble) with 1 row, and 1 column per piece of information you want to display. For example:
+
+```{r}
+glance_custom.lm <- function(x, ...) {
+    dv <- as.character(formula(x)[2])
+    out <- data.frame("DV" = dv)
+    return(out)
+}
+```
+
+Now, let's customize the body of the table. The `vcov` argument already allows users to customize uncertainty estimates. But imagine you want to override the *coefficient estimates* of your "lm" models. Easy! All you need to do is define a `tidy_custom.lm` method which returns a data.frame (or tibble) with one column called "term" and one column called "estimate".
+
+Here, we'll substitute estimates by an up/down-pointing triangles which represents their signs:
+
+```{r}
+tidy_custom.lm <- function(x, ...) {
+    s <- summary(x)$coefficients
+    out <- data.frame(
+      term = row.names(s),
+      estimate = ifelse(s[,1] > 0, '▲', '▼'))
+    return(out)
+}
+```
+
+After you define the `glance_custom` and `tidy_custom` methods, `modelsummary` will automatically display your customized model information:
+
+```{r}
+modelsummary(mod)
+```
+
+Note that you can define a `std.error` column in `tidy_custom.lm` to replace the uncertainty estimates instead of the coefficients.
+
+```{r, include=FALSE}
+rm("tidy_custom.lm")
+rm("glance_custom.lm")
+```
+
+# Customizing existing models (part II)
+
+An even more fundamental way to customize the output would be to completely bypass `modelsummary`'s extractor functions by assigning a new class name to your model. For example, 
+
+```{r}
+# estimate a linear model
+mod_custom <- lm(hp ~ mpg + drat, mtcars)
+
+# assign it a new class
+class(mod_custom) <- c("custom", class(mod_custom))
+
+# define tidy and glance methods
+tidy.custom <- function(x, ...) {
+  data.frame(
+    term = names(coef(x)),
+    estimate = letters[1:length(coef(x))],
+    std.error = seq_along(coef(x))
+  )
+}
+
+glance.custom <- function(x, ...) {
+  data.frame(
+    "Model" = "Custom",
+    "nobs" = stats::nobs(x)
+  )
+}
+
+# summarize
+modelsummary(mod_custom)
+```
+
+Warning: When defining new `tidy` and `glance` methods, it is important to include an ellipsis argument (`...`).
 
 # Rmarkdown and knitr
 
@@ -590,45 +616,6 @@ mod[[2]] <- feols(emp ~ wage | firm, dat)
 mod[[3]] <- feols(emp ~ wage | firm + year, dat)
 
 modelsummary(mod)
-```
-
-## 2-stage instrumental variable estimation 
-
-2-stage instrumental variable (IV) estimators are popular in many disciplines. Analysts often want to draw tables that include:
-
-1. The 2nd stage estimates
-2. The 1st stage estimates, but only for variables *not* included in the 2nd stage (i.e., the "instruments").
-
-The problem is that many IV regression packages do not supply results for the 1st stage. Even when these results are accessible, the `tidy` methods supplied by `broom` only return the 2nd stage results.
-
-To achieve our goal, we will:
-
-1. Define a new `tidy.iv` method which extracts information about both stages of the IV estimation.
-2. Change the class of our model objects to `iv`. This ensure that the new `tidy` method is triggered by `modelsummary`.
-3. Sort the coefficients using the `coef_map` argument, to ensure that 1st stage results are displayed below 2nd stage results.
-
-For convenience, `modelsummary` includes two unexported functions which can do most this for you. Reading [the annotated code for these two functions](https://github.com/vincentarelbundock/modelsummary/blob/master/R/convenience.R) could be an instructive exercise for those who wish to exploit everything that `modelsummary` has to offer.
-
-To print IV regression results from `lfe::felm` models, we execute this code:
-
-```{r, message=FALSE}
-library(lfe)
-
-models <- list(
-  felm(wt ~ drat | 0 | (disp ~ hp), data = mtcars),
-  felm(wt ~ drat + vs | 0 | (disp ~ hp), data = mtcars)
-  )
-
-# define a new method to combine tidy information about both stages
-tidy.iv <- modelsummary:::tidy_felm_iv
-
-# change the model classes to trigger the new method
-class(models[[1]]) <- class(models[[2]]) <- c('iv', class(models[[1]]))
-
-# use helper function to sort coefficients with 1st stage last
-cm <- modelsummary:::coef_map_felm_iv(models)
-
-modelsummary(models, coef_map=cm)
 ```
 
 ## Multiple imputation
