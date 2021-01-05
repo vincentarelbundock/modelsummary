@@ -1,4 +1,4 @@
-# modelsummary 0.6.4.9000
+# modelsummary 0.6.5
 
 * `statistic_override` becomes `vcov`
 * vcov accepts shortcuts: "robust", "stata", "HC0", etc.
