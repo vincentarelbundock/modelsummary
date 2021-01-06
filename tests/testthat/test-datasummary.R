@@ -95,17 +95,19 @@ test_that('logical and characters converted to factors automatically', {
 })
 
 test_that('datasummary: output format do not produce errors', {
-
   # output formats do not produce errors
   expect_error(datasummary(All(mtcars) ~ Mean + SD, mtcars, output = 'huxtable'), NA)
-  expect_error(datasummary(All(mtcars) ~ Mean + SD, mtcars, output = 'flextable'), NA)
   expect_error(datasummary(All(mtcars) ~ Mean + SD, mtcars, output = 'kableExtra'), NA)
   expect_error(datasummary(All(mtcars) ~ Mean + SD, mtcars, output = 'huxtable'), NA)
   expect_error(datasummary(All(mtcars) ~ Mean + SD, mtcars, output = 'dataframe'), NA)
   expect_error(datasummary(All(mtcars) ~ Mean + SD, mtcars, output = 'markdown'), NA)
   expect_error(datasummary(All(mtcars) ~ Mean + SD, mtcars, output = 'latex'), NA)
   expect_error(datasummary(All(mtcars) ~ Mean + SD, mtcars, output = 'html'), NA)
+})
 
+test_that('datasummary: output format do not produce errors (flextable)', {
+  skip_if_not_installed("flextable")
+  expect_error(datasummary(All(mtcars) ~ Mean + SD, mtcars, output = 'flextable'), NA)
 })
 
 test_that('failure after move from tables Depends to re-export', {

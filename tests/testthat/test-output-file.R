@@ -1,6 +1,7 @@
 # CRAN fails on artefacts
 skip_on_cran()
 skip_if_not_installed("digest")
+skip_if_not_installed("flextable")
 
 random_string <- function() {
   paste(sample(letters, 30, replace=TRUE), collapse="")
@@ -16,6 +17,7 @@ mod <- list()
 mod[[1]] <- lm(hp ~ mpg, mtcars)
 mod[[2]] <- lm(hp ~ mpg + drat, mtcars)
 
+## save known files
 # modelsummary(mod, output = "known_output/output-file.md")
 # modelsummary(mod, output = "known_output/output-file.tex")
 # modelsummary(mod, output = "known_output/output-file.txt")

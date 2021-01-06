@@ -1,5 +1,7 @@
 # CRAN fails on artefacts
 skip_on_cran()
+skip_if_not_installed("estimatr") 
+skip_if_not_installed("flextable")
 
 random_string <- function() {
   paste(sample(letters, 30, replace=TRUE), collapse="")

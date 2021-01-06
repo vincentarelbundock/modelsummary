@@ -1,3 +1,5 @@
+# flextable is not installed on CRAN's M1 machine
+skip_if_not_installed("flextable")
 
 random_string <- function() {
   paste(sample(letters, 30, replace=TRUE), collapse="")
