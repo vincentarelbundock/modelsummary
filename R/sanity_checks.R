@@ -296,12 +296,10 @@ sanity_tidy <- function(tidy_output, tidy_custom, estimate, statistic, modelclas
   checkmate::assert_true('term' %in% colnames(tidy_output))
 
   # tidy_custom(model)
-  checkmate::assert_data_frame(tidy_custom, nrows = nrow(tidy_output),
-    min.cols = 2, null.ok = TRUE)
-
   if (!is.null(tidy_custom)) {
+    checkmate::assert_data_frame(tidy_custom, 
+      min.rows = 1, min.cols = 2)
     checkmate::assert_true('term' %in% colnames(tidy_custom))
-    checkmate::assert_true(all(tidy_output$term == tidy_custom$term))
   }
 }
 

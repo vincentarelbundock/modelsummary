@@ -1,3 +1,7 @@
+# modelsummary 0.6.5.9000
+
+* `tidy_custom` allows partial term matches.
+
 # modelsummary 0.6.5
 
 * `statistic_override` becomes `vcov`

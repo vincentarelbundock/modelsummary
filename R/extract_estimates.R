@@ -83,8 +83,13 @@ extract_estimates <- function(
   est_custom <- tidy_custom(model)
   sanity_tidy(est, est_custom, estimate, statistic, class(model)[1])
   if (!is.null(est_custom)) {
+    if (!any(est_custom$term %in% est$term)) {
+      stop("The `term` names produced by `tidy_custom` must be the same as the term names produced by `get_estimates`")
+    }
+    est_custom <- est_custom[est_custom$term %in% est$term, , drop = FALSE]
+    idx <- match(est_custom$term, est$term)
     for (n in colnames(est_custom)) {
-      est[[n]] <- est_custom[[n]]
+      est[[n]][idx] <- est_custom[[n]]
     }
   }
 
