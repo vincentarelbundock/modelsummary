@@ -1,6 +1,7 @@
 # modelsummary 0.6.5.9000
 
 * `tidy_custom` allows partial term matches.
+* bug fixes
 
 # modelsummary 0.6.5
 

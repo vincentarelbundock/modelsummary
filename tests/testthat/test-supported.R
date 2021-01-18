@@ -8,6 +8,17 @@ test_that("supported_models() returns a long character vector", {
 })
 
 
+test_that("margins", {
+  testthat::skip_if_not_installed("margins")
+  suppressMessages(library(margins))
+  mod = glm(vs ~ hp + drat, data = mtcars, family = binomial)
+  mfx = margins(mod)
+  tab = modelsummary(mfx, "data.frame")
+  expect_s3_class(tab, "data.frame")
+  expect_equal(dim(tab), c(8, 4))
+})
+
+
 test_that("nnet::multinom with `y.level` column", {
   testthat::skip_if_not_installed("nnet")
   library(nnet)

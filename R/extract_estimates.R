@@ -191,9 +191,9 @@ extract_estimates <- function(
 get_estimates <- function(model, conf_level=.95, ...) {
 
   if (is.null(conf_level)) {
-    conf_int=FALSE
+    conf_int = FALSE
   } else {
-    conf_int=TRUE
+    conf_int = TRUE
   }
 
   flag <- function(x) {
@@ -210,8 +210,16 @@ get_estimates <- function(model, conf_level=.95, ...) {
   # broom second 
   # can't use generics::tidy here otherwise broom only gets loaded the second
   # time modelsummary is called, and the first attempt fails.
-  est <- suppressWarnings(try(
-    broom::tidy(model, conf.int=conf_int, conf.level=conf_level, ...), silent=TRUE))
+  if (isTRUE(conf_int)) {
+    est <- suppressWarnings(try(
+      broom::tidy(model, conf.int = conf_int, conf.level = conf_level, ...), 
+      silent=TRUE))
+  # conf_level=NULL breaks broom::tidy.margins
+  } else {
+    est <- suppressWarnings(try(
+      broom::tidy(model, conf.int = conf_int, ...), 
+      silent=TRUE))
+  }
   if (flag(est)) return(est)
 
   # parameters third
@@ -226,8 +234,15 @@ get_estimates <- function(model, conf_level=.95, ...) {
 
   # broom.mixed fourth
   if (check_dependency("broom.mixed")) {
-    est <- suppressWarnings(try(
-      broom.mixed::tidy(model, conf.int=TRUE, conf.level=conf_level, ...), silent=TRUE))
+    if (isTRUE(conf_int)) {
+      est <- suppressWarnings(try(
+        broom.mixed::tidy(model, conf.int=TRUE, conf.level=conf_level, ...), 
+        silent=TRUE))
+    } else {
+      est <- suppressWarnings(try(
+          broom.mixed::tidy(model, conf.int = FALSE, ...), 
+          silent=TRUE))
+    }
   }
   if (flag(est)) return(est)
 
