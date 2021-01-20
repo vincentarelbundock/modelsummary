@@ -55,9 +55,11 @@ used to draw the plot.}
 plot.  This is especially useful to display annotations "behind" the
 'geom_pointrange' that 'modelplot' draws.}
 
-\item{...}{all other arguments are passed to the `tidy` and `glance` methods
-used to extract estimates from the model. For example, this allows users to
-set `exponentiate=TRUE` to exponentiate logistic regression coefficients.}
+\item{...}{all other arguments are passed through to the extractor and
+table-making functions. This allows users to specify additional options such
+as set `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
+coefficients or `kableExtra::kbl(escape=FALSE)` to avoid escaping math
+characters in `kableExtra` tables.}
 }
 \description{
 Plot model coefficients using points or point-ranges

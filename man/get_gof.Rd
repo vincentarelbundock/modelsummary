@@ -10,9 +10,11 @@ get_gof(model, ...)
 \arguments{
 \item{model}{a single model object}
 
-\item{...}{all other arguments are passed to the `tidy` and `glance` methods
-used to extract estimates from the model. For example, this allows users to
-set `exponentiate=TRUE` to exponentiate logistic regression coefficients.}
+\item{...}{all other arguments are passed through to the extractor and
+table-making functions. This allows users to specify additional options such
+as set `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
+coefficients or `kableExtra::kbl(escape=FALSE)` to avoid escaping math
+characters in `kableExtra` tables.}
 }
 \description{
 Extract model gof A mostly internal function with some potential uses
