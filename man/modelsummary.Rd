@@ -47,7 +47,7 @@ vector with one string per model). Valid entries include any column name of
 the data.frame produced by `get_estimates(model)`. Examples:
 \itemize{
   \item "estimate"
-  \item "\{estimate\} (\{std.error\}){stars}"
+  \item "\{estimate\} (\{std.error\})\{stars\}"
   \item "\{estimate\} [\{conf.low\}, \{conf.high\}]"
 }}
 

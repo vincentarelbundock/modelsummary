@@ -75,7 +75,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' the data.frame produced by `get_estimates(model)`. Examples:
 #' \itemize{
 #'   \item "estimate"
-#'   \item "\{estimate\} (\{std.error\}){stars}"
+#'   \item "\{estimate\} (\{std.error\})\{stars\}"
 #'   \item "\{estimate\} [\{conf.low\}, \{conf.high\}]"
 #' }
 #' @param align A character string of length equal to the number of columns in
