@@ -33,7 +33,7 @@ modelsummary_wide(
 \item{output}{filename or object type (character string)
 \itemize{
   \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
-  \item Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
+  \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
   \item Warning: the `output` argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
 }}
 
@@ -49,7 +49,7 @@ vector with one string per model). Valid entries include any column name of
 the data.frame produced by `get_estimates(model)`. Examples:
 \itemize{
   \item "estimate"
-  \item "\{estimate\} (\{std.error\}){stars}"
+  \item "\{estimate\} (\{std.error\})\{stars\}"
   \item "\{estimate\} [\{conf.low\}, \{conf.high\}]"
 }}
 

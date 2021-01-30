@@ -1,5 +1,6 @@
 # modelsummary 0.6.5.9000
 
+* new output format: latex_tabular
 * `tidy_custom` allows partial term matches.
 * bug fixes
 
