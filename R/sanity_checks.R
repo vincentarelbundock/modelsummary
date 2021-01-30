@@ -146,7 +146,7 @@ sanity_factory <- function(factory_dict) {
                                                      'flextable', 'huxtable',
                                                      'markdown', 'html',
                                                      'data.frame', 'dataframe',
-                                                     'latex'))
+                                                     'latex', 'latex_tabular'))
 }
 
 #' sanity check
@@ -183,7 +183,8 @@ sanity_notes <- function(notes) {
 sanity_output <- function(output) {
 
   object_types <- c('default', 'gt', 'kableExtra', 'flextable', 'huxtable',
-                    'html', 'latex', 'markdown', 'dataframe', 'data.frame')
+                    'html', 'latex', 'latex_tabular', 'markdown', 'dataframe',
+                    'data.frame')
   extension_types <- c('html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf',
                        'jpg', 'png')
 

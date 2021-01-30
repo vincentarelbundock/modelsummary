@@ -21,20 +21,21 @@ parse_output_arg <- function(output) {
     "html" = "html")
   
   factory_dict <- c(
-    "dataframe"  = "dataframe",
-    "data.frame" = "dataframe",
-    "flextable"  = "flextable",
-    "gt"         = "gt",
-    "huxtable"   = "huxtable",
-    "kableExtra" = "kableExtra",
-    "markdown"   = "kableExtra",
-    "html"       = getOption("modelsummary_html", default = "kableExtra"),
-    "latex"      = getOption("modelsummary_latex", default = "kableExtra"),
-    "jpg"        = getOption("modelsummary_jpg", default = "kableExtra"),
-    "png"        = getOption("modelsummary_png", default = "kableExtra"),
-    "rtf"        = getOption("modelsummary_rtf", default = "gt"),
-    "word"       = getOption("modelsummary_word", default = "flextable"),
-    "powerpoint" = getOption("modelsummary_powerpoint", default = "flextable"))
+    "dataframe"      = "dataframe",
+    "data.frame"     = "dataframe",
+    "flextable"      = "flextable",
+    "gt"             = "gt",
+    "huxtable"       = "huxtable",
+    "kableExtra"     = "kableExtra",
+    "markdown"       = "kableExtra",
+    "latex_tabular"  = "kableExtra",
+    "latex"          = getOption("modelsummary_latex", default      = "kableExtra"),
+    "html"           = getOption("modelsummary_html", default       = "kableExtra"),
+    "jpg"            = getOption("modelsummary_jpg", default        = "kableExtra"),
+    "png"            = getOption("modelsummary_png", default        = "kableExtra"),
+    "rtf"            = getOption("modelsummary_rtf", default        = "gt"),
+    "word"           = getOption("modelsummary_word", default       = "flextable"),
+    "powerpoint"     = getOption("modelsummary_powerpoint", default = "flextable"))
 
   # sanity check: are user-supplied global options ok?
   sanity_factory(factory_dict)

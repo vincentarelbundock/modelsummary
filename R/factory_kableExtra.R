@@ -12,9 +12,19 @@ factory_kableExtra <- function(tab,
                                title = NULL,
                                ...) {
 
+  if (output_format == "latex_tabular") {
+    latex_tabular_only <- TRUE
+  } else {
+    latex_tabular_only <- FALSE
+  }
 
-
-  if (is.null(output_format) || !output_format %in% c("latex", "markdown")) {
+  if (is.null(output_format)) {
+    output_format <- "html"
+  } else if (output_format == "latex_tabular") {
+    output_format <- "latex"
+  } else if (output_format %in% c("markdown", "latex")) {
+    output_format <- output_format
+  } else {
     output_format <- "html"
   }
 
@@ -101,8 +111,10 @@ factory_kableExtra <- function(tab,
   }
 
   # styling (can be overriden manually by calling again)
-  if (output_format %in% c("latex", "html")) {
-    out <- kableExtra::kable_styling(out, full_width = FALSE)
+  if (isFALSE(latex_tabular_only)) {
+    if (output_format %in% c("latex", "html")) {
+      out <- kableExtra::kable_styling(out, full_width = FALSE)
+    }
   }
 
   # output

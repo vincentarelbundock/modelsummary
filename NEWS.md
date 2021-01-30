@@ -1,3 +1,7 @@
+# modelsummary 0.6.5.9000
+
+* new output format: latex_tabular
+
 # modelsummary 0.6.5
 
 * `statistic_override` becomes `vcov`
