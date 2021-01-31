@@ -1,5 +1,6 @@
 # CRAN issues warning because `gt` uses `group_by` with a deprecated argument
 skip_on_cran()
+skip_if(getRversion() < '4.0.0')
 
 library(gt)
 
