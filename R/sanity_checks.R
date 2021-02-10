@@ -68,13 +68,21 @@ sanity_title <- function(title) checkmate::assert_character(title, len = 1, null
 #'
 #' @noRd
 sanity_coef <- function(coef_map, coef_rename, coef_omit) {
-  checkmate::assert_character(coef_map, null.ok=TRUE)
-  checkmate::assert_character(names(coef_map), null.ok=TRUE, unique=TRUE)
-  checkmate::assert_character(coef_rename, null.ok=TRUE)
-  checkmate::assert_character(names(coef_rename), null.ok=TRUE, unique=TRUE)
+
   checkmate::assert_string(coef_omit, null.ok = TRUE)
+
   if (!is.null(coef_rename) & !is.null(coef_map)) {
     stop("coef_map and coef_rename cannot be used together.")
+  }
+
+  checkmate::assert_character(coef_map, null.ok=TRUE)
+  checkmate::assert_character(names(coef_map), null.ok=TRUE, unique=TRUE)
+
+  if (is.character(coef_rename)) {
+    checkmate::assert_character(coef_rename, null.ok=TRUE)
+    checkmate::assert_character(names(coef_rename), null.ok=TRUE, unique=TRUE)
+  } else {
+    checkmate::assert_function(coef_rename, null.ok = TRUE)
   }
 }
 

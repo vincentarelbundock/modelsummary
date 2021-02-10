@@ -1,7 +1,9 @@
 # modelsummary 0.6.5.9000
 
 * new output format: latex_tabular
-* `tidy_custom` allows partial term matches.
+* `tidy_custom` allows partial term matches
+* modelsummary(coef_rename=) accepts functions
+* new function `coef_rename` for use in modelsummary(coef_rename=)
 * bug fixes
 
 # modelsummary 0.6.5

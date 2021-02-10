@@ -308,7 +308,12 @@ modelsummary <- function(
 
     # coef_rename: before merge to collapse rows
     if (!is.null(coef_rename)) {
-      tmp$term <- replace_dict(tmp$term, coef_rename)
+      if (is.character(coef_rename)) {
+        dict <- coef_rename
+      } else if (is.function(coef_rename)) {
+        dict <- stats::setNames(coef_rename(tmp$term), tmp$term)
+      }
+      tmp$term <- replace_dict(tmp$term, dict)
     }
 
     # coef_map
