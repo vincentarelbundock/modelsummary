@@ -33,6 +33,18 @@
 #' models[['Large model']] <- lm(hp ~ vs + drat + factor(cyl), mtcars)
 #' modelplot(models)
 #'
+#' # add_rows: add an empty reference category
+#' 
+#' mod <- lm(hp ~ factor(cyl), mtcars)
+#' 
+#' add_rows = data.frame(
+#'   term = "factory(cyl)4",
+#'   model = "Model 1",
+#'   estimate = NA)
+#' attr(add_rows, "position") = 3
+#' modelplot(mod, add_rows = add_rows) 
+#' 
+#'
 #' # customize your plots with 'ggplot2' functions
 #' library(ggplot2)
 #'
@@ -60,6 +72,7 @@ modelplot <- function(models,
                       coef_omit   = NULL,
                       coef_rename = NULL,
                       vcov        = NULL,
+                      add_rows    = NULL,
                       facet       = FALSE,
                       draw        = TRUE,
                       background  = NULL,
@@ -79,6 +92,7 @@ modelplot <- function(models,
     estimate="{estimate}|{conf.low}|{conf.high}"
   }
 
+
   out <- modelsummary(
     output      = "dataframe",
     models      = models,
@@ -94,6 +108,9 @@ modelplot <- function(models,
     ...
   )
   out$part <- out$statistic <- NULL
+
+  # print(str(out))
+
 
   # save for sorting later
   term_order <- unique(out$term)
@@ -121,6 +138,25 @@ modelplot <- function(models,
   dat$term <- factor(dat$term, rev(term_order))
   dat <- dat[order(dat$term, dat$model),]
 
+  # add_rows
+  if (!is.null(add_rows)) {
+    pos <- attr(add_rows, 'position')
+    for (i in 1:nrow(add_rows)) {
+      if (!is.null(pos) && !is.na(pos[i]) && pos[i] <= nrow(dat)) {
+        top <- dat[-c(pos[i]:nrow(dat)), , drop=FALSE]
+        bot <- dat[c(pos[i]:nrow(dat)), , drop=FALSE]
+        dat <- bind_rows(top, add_rows[i, , drop=FALSE], bot)
+      } else {
+        dat <- bind_rows(dat, add_rows[i, , drop=FALSE])
+      }
+    }
+    dat$term <- as.character(dat$term)
+    dat$model <- as.character(dat$model)
+    dat$term <- factor(dat$term, unique(dat$term))
+    dat$model <- factor(dat$model, unique(dat$model))
+  }
+
+  # draw
   if (!draw) {
     return(dat)
   } else {

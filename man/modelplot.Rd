@@ -11,6 +11,7 @@ modelplot(
   coef_omit = NULL,
   coef_rename = NULL,
   vcov = NULL,
+  add_rows = NULL,
   facet = FALSE,
   draw = TRUE,
   background = NULL,
@@ -43,6 +44,11 @@ in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
   \item list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
   \item a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. 
 }}
+
+\item{add_rows}{a data.frame (or tibble) with the same number of columns as
+your main table. By default, rows are appended to the bottom of the table.
+You can define a "position" attribute of integers to set the row positions.
+See Examples section below.}
 
 \item{facet}{TRUE or FALSE. When the 'models' argument includes several
 model objects, TRUE draws terms in separate facets, and FALSE draws terms
@@ -87,6 +93,18 @@ models[['Small model']] <- lm(hp ~ vs, mtcars)
 models[['Medium model']] <- lm(hp ~ vs + factor(cyl), mtcars)
 models[['Large model']] <- lm(hp ~ vs + drat + factor(cyl), mtcars)
 modelplot(models)
+
+# add_rows: add an empty reference category
+
+mod <- lm(hp ~ factor(cyl), mtcars)
+
+add_rows = data.frame(
+  term = "factory(cyl)4",
+  model = "Model 1",
+  estimate = NA)
+attr(add_rows, "position") = 3
+modelplot(mod, add_rows = add_rows) 
+
 
 # customize your plots with 'ggplot2' functions
 library(ggplot2)

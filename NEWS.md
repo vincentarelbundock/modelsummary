@@ -4,6 +4,7 @@
 * `tidy_custom` allows partial term matches
 * modelsummary(coef_rename=) accepts functions
 * new function `coef_rename` for use in modelsummary(coef_rename=)
+* `modelplot` accepts `add_rows` to add reference categories
 * bug fixes
 
 # modelsummary 0.6.5
