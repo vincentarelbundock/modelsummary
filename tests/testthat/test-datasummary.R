@@ -95,6 +95,8 @@ test_that('logical and characters converted to factors automatically', {
 })
 
 test_that('datasummary: output format do not produce errors', {
+  skip_if_not_installed("huxtable")
+  skip_if_not_installed("kableExtra")
   # output formats do not produce errors
   expect_error(datasummary(All(mtcars) ~ Mean + SD, mtcars, output = 'huxtable'), NA)
   expect_error(datasummary(All(mtcars) ~ Mean + SD, mtcars, output = 'kableExtra'), NA)
