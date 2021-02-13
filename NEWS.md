@@ -2,9 +2,10 @@
 
 * new output format: latex_tabular
 * `tidy_custom` allows partial term matches
-* modelsummary(coef_rename=) accepts functions
-* new function `coef_rename` for use in modelsummary(coef_rename=coef_rename)
+* `modelsummary(coef_rename)` accepts functions
+* new function `coef_rename` for use in `modelsummary(coef_rename=coef_rename)`
 * `modelplot` accepts `add_rows` to add reference categories
+* informative error message when estimate or statistic is not available
 * bug fixes
 
 # modelsummary 0.6.5

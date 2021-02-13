@@ -71,7 +71,7 @@ test_that("mgcv::gam", {
     formula = mpg ~ s(hp) + s(wt) + factor(cyl) + am + qsec,
     family = stats::quasi(),
     data = mtcars)
-  tab <- modelsummary(mod, output="data.frame", statistic="p.value") 
+  tab <- modelsummary(mod, estimate = "edf", output="data.frame", statistic="p.value") 
   expect_is(tab, "data.frame")
   expect_true(nrow(tab) > 5)
 })

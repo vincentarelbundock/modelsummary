@@ -2,6 +2,15 @@ mod <- list()
 mod$OLS <- lm(am ~ drat, data = mtcars)
 mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 
+
+test_that("informative errors", {
+  bad_esti <- "bad_estimate"
+  bad_stat <- c("bad1", "{bad2}", "another {bad3}", "another {bad3}", "{stars}")
+  expect_error(modelsummary(mod, estimate = bad_esti, statistic = bad_stat),
+               regexp = "do not seem to be available")
+})
+
+
 test_that("std.error", {
   raw <- modelsummary(mod, statistic = 'std.error', output="dataframe")
   truth <- c('(0.434)', '(0.120)')
