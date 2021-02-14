@@ -7,7 +7,7 @@
 Histogram(x, bins = 10)
 }
 \arguments{
-\item{x}{varible to summarize}
+\item{x}{variable to summarize}
 
 \item{bins}{number of histogram bars}
 }

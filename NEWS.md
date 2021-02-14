@@ -137,7 +137,7 @@
 * Better clean_latex function
 * Can display R2 and confidence intervals for mice-imputed lm-models
 * Internal functions have @keywords internal to avoid inclusion in docs
-* Statistic override accepts pre-formated character vectors
+* Statistic override accepts pre-formatted character vectors
 
 # modelsummary 0.1.0
 

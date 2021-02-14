@@ -1,6 +1,6 @@
 # reexport from tables
 
-#' @title Include all columsn of a dataframe.
+#' @title Include all columns of a dataframe.
 #' @export
 #' @keywords internal
 #' @name All

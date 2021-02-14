@@ -7,7 +7,7 @@
 PercentMissing(x)
 }
 \arguments{
-\item{x}{varible to summarize}
+\item{x}{variable to summarize}
 }
 \description{
 datasummary statistic shortcut

@@ -7,7 +7,7 @@
 NPercent(x, y)
 }
 \arguments{
-\item{x}{varible to summarize}
+\item{x}{variable to summarize}
 
 \item{y}{denominator variable}
 }

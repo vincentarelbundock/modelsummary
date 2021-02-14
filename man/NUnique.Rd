@@ -7,7 +7,7 @@
 NUnique(x, ...)
 }
 \arguments{
-\item{x}{varible to summarize}
+\item{x}{variable to summarize}
 
 \item{...}{unused}
 }
