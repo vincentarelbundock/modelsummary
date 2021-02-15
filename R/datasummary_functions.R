@@ -1,15 +1,15 @@
 #' datasummary statistic shortcut
 #'
 #' @export
-#' @param x varible to summarize
+#' @param x variable to summarize
 #' @param fmt passed to the `modelsummary:::rounding` function
 #' @param na.rm  a logical value indicating whether ‘NA’ values should be
 #'   stripped before the computation proceeds.
 #' @param ... unused
 #' @examples
 #' \dontrun{
-#' datasummary(mpg + hp ~ Mean + P0 + P25 + P50 + P75 + P100 + 
-#'             Min + Max + SD + Var, 
+#' datasummary(mpg + hp ~ Mean + P0 + P25 + P50 + P75 + P100 +
+#'             Min + Max + SD + Var,
 #'             data = mtcars)
 #' }
 Mean <- function(x, fmt = NULL, na.rm = TRUE, ...) {
@@ -36,8 +36,8 @@ N <- function(x) sprintf("%.0f", length(x))
 #' @export
 #' @examples
 #' \dontrun{
-#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
-#'             Min + Max + SD + Var, 
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
+#'             Min + Max + SD + Var,
 #'             data = mtcars)
 #' }
 Median <- function(x, fmt = NULL, na.rm = TRUE, ...) {
@@ -53,8 +53,8 @@ Median <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @export
 #' @examples
 #' \dontrun{
-#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
-#'             Min + Max + SD + Var, 
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
+#'             Min + Max + SD + Var,
 #'             data = mtcars)
 #' }
 Min <- function(x, fmt = NULL, na.rm = TRUE, ...) {
@@ -74,8 +74,8 @@ Min <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @export
 #' @examples
 #' \dontrun{
-#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
-#'             Min + Max + SD + Var, 
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
+#'             Min + Max + SD + Var,
 #'             data = mtcars)
 #' }
 Max <- function(x, fmt = NULL, na.rm = TRUE, ...) {
@@ -94,8 +94,8 @@ Max <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @export
 #' @examples
 #' \dontrun{
-#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
-#'             Min + Max + SD + Var, 
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
+#'             Min + Max + SD + Var,
 #'             data = mtcars)
 #' }
 SD <- function(x, fmt = NULL, na.rm = TRUE, ...) {
@@ -111,8 +111,8 @@ SD <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @export
 #' @examples
 #' \dontrun{
-#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
-#'             Min + Max + SD + Var, 
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
+#'             Min + Max + SD + Var,
 #'             data = mtcars)
 #' }
 Var <- function(x, fmt = NULL, na.rm = TRUE, ...) {
@@ -160,8 +160,8 @@ NUnique <- function(x, ...) sprintf("%.0f", length(unique(x)))
 #' @export
 #' @examples
 #' \dontrun{
-#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
-#'             Min + Max + SD + Var, 
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
+#'             Min + Max + SD + Var,
 #'             data = mtcars)
 #' }
 P0 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
@@ -177,8 +177,8 @@ P0 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @export
 #' @examples
 #' \dontrun{
-#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
-#'             Min + Max + SD + Var, 
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
+#'             Min + Max + SD + Var,
 #'             data = mtcars)
 #' }
 P25 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
@@ -194,8 +194,8 @@ P25 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @export
 #' @examples
 #' \dontrun{
-#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
-#'             Min + Max + SD + Var, 
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
+#'             Min + Max + SD + Var,
 #'             data = mtcars)
 #' }
 P50 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
@@ -211,8 +211,8 @@ P50 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @export
 #' @examples
 #' \dontrun{
-#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
-#'             Min + Max + SD + Var, 
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
+#'             Min + Max + SD + Var,
 #'             data = mtcars)
 #' }
 P75 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
@@ -228,8 +228,8 @@ P75 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @export
 #' @examples
 #' \dontrun{
-#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
-#'             Min + Max + SD + Var, 
+#' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
+#'             Min + Max + SD + Var,
 #'             data = mtcars)
 #' }
 P100 <- function(x, fmt = NULL, na.rm = TRUE, ...) {

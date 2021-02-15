@@ -7,7 +7,7 @@
 P0(x, fmt = NULL, na.rm = TRUE, ...)
 }
 \arguments{
-\item{x}{varible to summarize}
+\item{x}{variable to summarize}
 
 \item{fmt}{passed to the `modelsummary:::rounding` function}
 
@@ -21,8 +21,8 @@ datasummary statistic shortcut
 }
 \examples{
 \dontrun{
-datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 + 
-            Min + Max + SD + Var, 
+datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
+            Min + Max + SD + Var,
             data = mtcars)
 }
 }
