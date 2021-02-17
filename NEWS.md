@@ -1,4 +1,4 @@
-# modelsummary 0.6.5.9000
+# modelsummary 0.6.6
 
 * new output format: latex_tabular
 * `tidy_custom` allows partial term matches
