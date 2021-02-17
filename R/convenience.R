@@ -16,12 +16,12 @@
 #' @noRd
 #' @note This function only works for HTML output, since the `gt` render tools
 #' are less developed for LaTeX and RTF output.
-fmt_labels_md <- function(tab, position = c('both', 'row', 'column')) {
+fmt_labels_md <- function(tab, position = c("both", "row", "column")) {
   out <- tab
-  if (match.arg(position) %in% c('both', 'row')) {
+  if (match.arg(position) %in% c("both", "row")) {
     out <- gt::fmt_markdown(out, columns = 1)
   }
-  if (match.arg(position) %in% c('both', 'column')) {
+  if (match.arg(position) %in% c("both", "column")) {
     f <- function(x) stats::setNames(lapply(names(x$`_data`), gt::md), names(x$`_data`))
     out <- gt::cols_label(out, .list = f(out))
   }
@@ -44,7 +44,7 @@ tidy_felm_iv <- function(x, ...) {
 
   # keep only the stage1 terms if they are not in stage2
   idx <- !stage1$term %in% stage2$term
-  stage1 <- stage1[idx, , drop=FALSE]
+  stage1 <- stage1[idx, , drop = FALSE]
   stage1$term <- paste("Stage 1", stage1$term)
 
   # combine stage1 and stage2 results

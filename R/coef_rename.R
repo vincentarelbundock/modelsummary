@@ -13,7 +13,7 @@
 #' @param asis boolean remove the `I` from as-is formula calls
 #'
 #' @export
-coef_rename = function(x, 
+coef_rename <- function(x, 
                        factor = TRUE, 
                        factor_name = TRUE,
                        backticks = TRUE,

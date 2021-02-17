@@ -4,7 +4,7 @@
 #' @param formula a one-sided formula with the "condition" or "column" variable
 #'   on the right-hand side.
 #' @param data A data.frame (or tibble). If this data includes columns called
-#'   "blocks", "clusters", and/or "weights", the 'estimatr' package will
+#'   "blocks", "clusters", and/or "weights", the "estimatr" package will
 #'   consider them when calculating the difference in means.
 #' @param dinm TRUE calculates a difference in means with uncertainty
 #'   estimates. This option is only available if the `estimatr` package is
@@ -21,7 +21,7 @@
 #' }
 datasummary_balance <- function(formula,
                                 data,
-                                output = 'default',
+                                output = "default",
                                 fmt = 1,
                                 title = NULL,
                                 notes = NULL,
@@ -29,7 +29,7 @@ datasummary_balance <- function(formula,
                                 add_columns = NULL,
                                 add_rows = NULL,
                                 dinm = TRUE,
-                                dinm_statistic = 'std.error',
+                                dinm_statistic = "std.error",
                                 ...) {
 
   # sanity checks
@@ -47,13 +47,13 @@ datasummary_balance <- function(formula,
   rhs <- labels(stats::terms(formula))
 
   if (!rhs %in% colnames(data)) {
-    stop('Variable ', rhs, ' must be in data.')
+    stop("Variable ", rhs, " must be in data.")
   }
 
   if (length(unique(data[[rhs]])) > 10) {
-    stop(sprintf('Each value of the `%s` variable will create two separate
+    stop(sprintf("Each value of the `%s` variable will create two separate
                  columns. This variable has more than 10 unique values, so the
-                 table would be too wide to be readable.', rhs))
+                 table would be too wide to be readable.", rhs))
   }
 
   # sanity checks on other variables
@@ -94,9 +94,6 @@ datasummary_balance <- function(formula,
     warning(sprintf("These variables were omitted because they are entirely missing: %s.", paste(drop_entirely_na, collapse=", ")))
   }
 
-
-
-
   # nobs in column spans via factor levels
   lev <- table(data[[rhs]])
   lev <- paste0(names(lev), " (N=", lev, ")")
@@ -104,7 +101,7 @@ datasummary_balance <- function(formula,
 
   # exclude otherwise All() makes them appear as rows 
   idx <- setdiff(colnames(data), 
-                 c(rhs, 'clusters', 'blocks', 'weights'))
+                 c(rhs, "clusters", "blocks", "weights"))
   data_norhs <- data[, idx, drop = FALSE]
 
   # 3-parts table: numeric + dinm / factor
