@@ -46,11 +46,13 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #'   \item a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. 
 #' }
 #' @param conf_level confidence level to use for confidence intervals
-#' @param coef_map named character vector. Values refer to the variable names
-#' that will appear in the table. Names refer to the original term names stored
-#' in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
-#' Coefficients that are omitted from this vector will be omitted from the
-#' table. The table will be ordered in the same order as this vector.
+#' @param coef_map character vector. Subset, rename, and reorder coefficients.
+#' Coefficients omitted from this vector are omitted from the table. The order
+#' of the vector determines the order of the table.  `coef_map` can be a named
+#' or an unnamed character vector (see the Examples section below). If
+#' `coef_map` is a named vector, its values define the labels that must appear
+#' in the table, and its names identify the original term names stored in the
+#' model object: `c("hp:mpg"="HPxM/G")`.
 #' @param coef_omit string regular expression. Omits all matching coefficients
 #' from the table using `grepl(perl=TRUE)`.
 #' @param coef_rename named character vector. Values refer to the variable names
@@ -177,6 +179,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #'
 #' # coef_map
 #' modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
+#' modelsummary(models, coef_map = c('Volume', 'Height'))
 #'
 #' # title
 #' modelsummary(models, title = 'This is the title')
@@ -318,6 +321,9 @@ modelsummary <- function(
 
     # coef_map
     if (!is.null(coef_map)) {
+      if (is.null(names(coef_map))) {
+        coef_map <- stats::setNames(coef_map, coef_map)
+      }
       tmp <- tmp[tmp$term %in% names(coef_map), , drop=FALSE]
       tmp$term <- replace_dict(tmp$term, coef_map)
     }

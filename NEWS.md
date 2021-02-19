@@ -1,3 +1,7 @@
+# modelsummary 0.6.6.9000
+
+* `coef_map` accepts unnamed vectors
+
 # modelsummary 0.6.6
 
 * new output format: latex_tabular

@@ -1,6 +1,19 @@
 library(modelsummary)
 library(tibble)
 
+
+test_that("combine different regressors and collapse rows", {
+  mod = lm(hp ~ mpg + factor(cyl), mtcars)
+  tab1 <- modelsummary(mod, output = "data.frame", 
+    coef_map = c("(Intercept)", "factor(cyl)6"))
+  tab2 <- modelsummary(mod, output = "data.frame", 
+    coef_map = c("(Intercept)" = "blah", "factor(cyl)6" = "blah blah"))
+  expect_equal(tab1[[4]], tab2[[4]])
+  tab1[[2]][1:4] = c("(Intercept)", "(Intercept)", "factory(cyl)6", "factory(cyl)6")
+  tab2[[2]][1:4] = c("blah", "blah", "blah blah", "blah blah")
+})
+
+
 test_that("combine different regressors and collapse rows", {
   cmap <- c('(Intercept)' = 'Constant', 'drat' = 'Combined', 'qsec' = 'Combined')
   mod <- list()

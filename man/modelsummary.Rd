@@ -81,11 +81,13 @@ the data.frame produced by `get_estimates(model)`. Examples:
   \item Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
 }}
 
-\item{coef_map}{named character vector. Values refer to the variable names
-that will appear in the table. Names refer to the original term names stored
-in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
-Coefficients that are omitted from this vector will be omitted from the
-table. The table will be ordered in the same order as this vector.}
+\item{coef_map}{character vector. Subset, rename, and reorder coefficients.
+Coefficients omitted from this vector are omitted from the table. The order
+of the vector determines the order of the table.  `coef_map` can be a named
+or an unnamed character vector (see the Examples section below). If
+`coef_map` is a named vector, its values define the labels that must appear
+in the table, and its names identify the original term names stored in the
+model object: `c("hp:mpg"="HPxM/G")`.}
 
 \item{coef_omit}{string regular expression. Omits all matching coefficients
 from the table using `grepl(perl=TRUE)`.}
@@ -218,6 +220,7 @@ modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 
 # coef_map
 modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
+modelsummary(models, coef_map = c('Volume', 'Height'))
 
 # title
 modelsummary(models, title = 'This is the title')

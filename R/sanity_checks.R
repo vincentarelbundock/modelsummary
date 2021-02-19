@@ -75,8 +75,13 @@ sanity_coef <- function(coef_map, coef_rename, coef_omit) {
     stop("coef_map and coef_rename cannot be used together.")
   }
 
-  checkmate::assert_character(coef_map, null.ok=TRUE)
-  checkmate::assert_character(names(coef_map), null.ok=TRUE, unique=TRUE)
+  if (!is.null(coef_map)) {
+    if (is.null(names(coef_map))) {
+      checkmate::assert_character(coef_map, null.ok=TRUE, unique=TRUE)
+    } else {
+      checkmate::assert_character(names(coef_map), null.ok=TRUE, unique=TRUE)
+    }
+  }
 
   if (is.character(coef_rename)) {
     checkmate::assert_character(coef_rename, null.ok=TRUE)
