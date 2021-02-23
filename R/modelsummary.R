@@ -234,31 +234,10 @@ modelsummary <- function(
   ...) {
 
 
-  # deprecated arguments
-
-  ellip <- list(...)
-
-  if ("statistic_vertical" %in% names(ellip)) {
-    warning("The `statistic_vertical` argument is deprecated and will be ignored. To display uncertainty estimates next to your coefficients, use a `glue` string in the `estimate` argument. See `?modelsummary`")
-  }
-
-  if ("statistic_override" %in% names(ellip)) {
-    if (!is.null(vcov)) {
-      stop("The `vcov` and `statistic_override` arguments cannot be used at the same time. The `statistic_override` argument is deprecated. Please use `vcov` instead.")
-    }
-    vcov <- ellip$statistic_override
-  }
-
-
-  # models must be a list
-  # first class because some models inherit from list
-  # do this before sanity_vcov
-  if (class(models)[1] != "list") { 
-    models <- list(models)
-  }
-
-
-  # sanity check functions are hosted in R/sanity_checks.R
+  # sanitation
+  sanity_ellipsis(vcov, ...)        # before sanitize_vcov
+  models <- sanitize_models(models) # before sanitize_vcov
+  vcov <- sanitize_vcov(models, vcov, ...)
   sanity_output(output)
   sanity_statistic(statistic)
   sanity_estimate(models, estimate)
@@ -267,10 +246,6 @@ modelsummary <- function(
   sanity_gof_map(gof_map, gof_omit)
   sanity_stars(stars)
   sanity_fmt(fmt)
-
-  if (!is.null(vcov)) {
-    vcov <- sanitize_vcov(models, vcov)
-  }
 
 
   # output

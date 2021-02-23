@@ -2,6 +2,8 @@ library(modelsummary)
 
 test_that("coef_map: two variables with the same name within or between models", {
 
+  skip_if_not_installed("gt")
+
   set.seed(1)
 
   # within one model produces an error

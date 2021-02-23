@@ -1,6 +1,7 @@
 # modelsummary 0.6.6.9000
 
 * `coef_map` accepts unnamed vectors
+* `fixest::fixest_multi` support
 
 # modelsummary 0.6.6
 

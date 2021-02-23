@@ -10,11 +10,28 @@ assert_dependency <- function(library_name, msg=NULL) {
   }
 }
 
+
 #' check if dependency is installed
 #'
 #' @noRd
 check_dependency <- function(library_name) {
   requireNamespace(library_name, quietly = TRUE)
+}
+
+
+#' sanity check
+#'
+#' @noRd
+sanity_ellipsis <- function(vcov, ...) {
+  ellip <- list(...)
+
+  if ("statistic_vertical" %in% names(ellip)) {
+    warning("The `statistic_vertical` argument is deprecated and will be ignored. To display uncertainty estimates next to your coefficients, use a `glue` string in the `estimate` argument. See `?modelsummary`")
+  }
+
+  if (!is.null(vcov) && ("statistic_override" %in% names(ellip))) {
+    stop("The `vcov` and `statistic_override` arguments cannot be used at the same time. The `statistic_override` argument is deprecated. Please use `vcov` instead.")
+  }
 }
 
 
@@ -121,12 +138,14 @@ sanity_fmt <- function(fmt) {
   )
 }
 
+
 #' sanity check
 #'
 #' @noRd
 sanity_conf_level <- function(conf_level) {
   checkmate::assert_number(conf_level, lower = 0, upper = .999999999999, null.ok=TRUE)
 }
+
 
 #' sanity check
 #'
@@ -162,6 +181,7 @@ sanity_factory <- function(factory_dict) {
                                                      'latex', 'latex_tabular'))
 }
 
+
 #' sanity check
 #'
 #' @noRd
@@ -171,6 +191,7 @@ sanity_stars <- function(stars) {
     checkmate::check_numeric(stars, lower = 0, upper = 1, names = 'unique')
   )
 }
+
 
 #' sanity check
 #'
@@ -189,6 +210,7 @@ sanity_notes <- function(notes) {
     }
   }
 }
+
 
 #' sanity check
 #'
@@ -232,63 +254,6 @@ sanity_add_rows <- function(add_rows, models) {
     checkmate::assert_true(all(c('section', 'position') %in% colnames(add_rows)))
     checkmate::assert_true(all(colnames(add_rows) %in% c('term', 'section', 'position', names(models))))
   }
-}
-
-
-#' sanity check
-#'
-#' @noRd
-sanitize_vcov <- function(models, vcov) {
-
-  # default output
-  out <- NULL
-
-
-  # list of formulas, functions, matrices, or vectors
-  # first class because some models inherit from "list"
-  if (class(vcov)[1] == "list" & class(models)[1] == "list") {
-    checkmate::assert_true(length(vcov) == length(models))
-    for (s in vcov) {
-      checkmate::assert(
-        checkmate::check_formula(s),
-        checkmate::check_function(s),
-        checkmate::check_matrix(s),
-        checkmate::check_vector(s),
-        combine="or"
-      )
-    }
-    out <- vcov
-  }
-
-
-  # single formulas/matrices/functions: apply to every model
-  if (isTRUE(checkmate::check_formula(vcov)) ||
-      isTRUE(checkmate::check_matrix(vcov))  ||
-      isTRUE(checkmate::check_function(vcov))) {
-    out <- rep(list(vcov), length(models))
-  }
-
-
-  if (is.character(vcov)) {
-    checkmate::assert(
-      checkmate::check_character(vcov, len=1),
-      checkmate::check_character(vcov, len=length(models)))
-    checkmate::assert_true(all(
-      vcov %in% c("robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m",
-                  "HC5", "stata", "classical", "constant", "iid")))
-    if (length(vcov) == 1) {
-      out <- as.list(rep(vcov, length(models)))
-    } else {
-      out <- as.list(vcov)
-    }
-  }
-
-
-  if (is.null(out)) {
-    stop("Please supply a valid input for the `vcov` argument. Read `?modelsummary`.") 
-  }
-
-  return(out)
 }
 
 
