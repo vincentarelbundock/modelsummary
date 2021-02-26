@@ -1,6 +1,4 @@
 library(modelsummary)
-library(tibble)
-
 
 test_that("combine different regressors and collapse rows", {
   mod = lm(hp ~ mpg + factor(cyl), mtcars)
@@ -56,10 +54,10 @@ test_that("coef_map with multiple vertical statistics", {
   expect_s3_class(mat, 'data.frame')
   expect_equal(dim(mat), c(16, 5))
 
-  rows <- tibble::tribble(
-    ~term, ~OLS, ~Logit,
-    '4-cylinder', '-', '-',
-    '12-cylinder', '-', '-')
+  rows <- read.csv(text =
+    "term        , OLS , Logit
+     4-cylinder  , -   , -
+     12-cylinder , -   , -")
 
   mat <- modelsummary(models,
     output = 'dataframe',

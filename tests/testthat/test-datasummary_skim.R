@@ -1,4 +1,3 @@
-library(tibble)
 dat <- mtcars
 dat$vs <- as.logical(dat$vs)
 dat$gear <- as.factor(dat$gear)
@@ -56,7 +55,7 @@ test_that("errors and warnings: categorical", {
 
 # # should be fine, but R-CMD-check on github breaks 
 # test_that("tibble input does not error", {
-#   dat <- as_tibble(penguins)
+#   dat <- tibble::as_tibble(penguins)
 #   expect_error(datasummary_skim(dat), NA)
 # })
 

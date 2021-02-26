@@ -2,9 +2,10 @@ library(modelsummary)
 
 test_that("datasummary add_columns", {
 
-  ac <- tibble::tribble(~first, ~last,
-    'blah', 2,
-    'junk', 4)
+  ac <- read.csv(text = 
+    "first,last
+     blah,2
+     junk,4")
   attr(ac, 'position') <- c(1, NA)
 
   tab <- datasummary(mpg + hp ~ mean + sd,
@@ -23,10 +24,12 @@ test_that("datasummary add_columns", {
 
 test_that("too many rows in add_columns", {
 
-  ac <- tibble::tribble(~first, ~last,
-    'blah', 2,
-    'junk', 4,
-    'another', 5)
+
+  ac <- read.csv(text = 
+    "first,last
+     blah,2
+     junk,4
+     another,5")
 
   expect_error(datasummary(mpg + hp ~ mean + sd, data = mtcars, add_columns = ac))
 

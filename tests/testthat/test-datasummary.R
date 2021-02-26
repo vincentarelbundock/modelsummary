@@ -1,5 +1,4 @@
 library(modelsummary)
-library(tibble)
 penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
 
 context('datasummary')

@@ -1,5 +1,4 @@
 library(modelsummary)
-library(tibble)
 
 mod <- list()
 dat <- mtcars
@@ -7,13 +6,15 @@ dat$cyl <- factor(dat$cyl)
 mod$OLS <- lm(am ~ cyl, data = dat)
 mod$Logit <- glm(am ~ cyl, data = dat, family = binomial())
 
-test_that("tibble", {
+test_that("data.frame", {
 
-  rows <- tibble::tribble(~term,       ~OLS, ~Logit,
-    'cyl4',      '-',  '-',
-    'NEW GOF 1', '?',  '?',
-    'NEW GOF 2', 'X',  'X',
-    'NEW GOF 3', 'Y',  'Y')
+  rows = read.csv(text = 
+    "term      , OLS , Logit
+     cyl4      , -   , - 
+     NEW GOF 1 , ?   , ?
+     NEW GOF 2 , X   , X
+     NEW GOF 3 , Y   , Y")
+
   attr(rows, 'position') <- c(3, 8, 9, 12)
 
   expect_known_output(
