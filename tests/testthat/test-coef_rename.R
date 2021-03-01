@@ -4,6 +4,16 @@ mod <- list()
 mod$OLS <- lm(am ~ drat, data = mtcars)
 mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 
+test_that("unique names", {
+  cmap <- c('drat'='Constant', 'drat'='Rear axle ratio')
+  expect_error(modelsummary(mod, "data.frame", coef_rename = cmap),
+               regexp = "duplicated")
+
+  cmap <- c('Constant', 'Rear axle ratio')
+  expect_error(modelsummary(mod, "data.frame", coef_rename = cmap),
+               regexp = "Must have names")
+})
+
 test_that("rename 2 out of 3 coefficients", {
   cmap <- c('(Intercept)'='Constant', 'drat'='Rear axle ratio')
   mod <- modelsummary(mod, "dataframe", coef_rename=cmap)

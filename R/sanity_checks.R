@@ -101,8 +101,7 @@ sanity_coef <- function(coef_map, coef_rename, coef_omit) {
   }
 
   if (is.character(coef_rename)) {
-    checkmate::assert_character(coef_rename, null.ok=TRUE)
-    checkmate::assert_character(names(coef_rename), null.ok=TRUE, unique=TRUE)
+    checkmate::assert_character(coef_rename, null.ok = TRUE, names = "unique")
   } else {
     checkmate::assert_function(coef_rename, null.ok = TRUE)
   }
