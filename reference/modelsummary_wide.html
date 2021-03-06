@@ -78,7 +78,7 @@ specifies the name of the group identifier." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.6</span>
       </span>
     </div>
 
@@ -164,7 +164,7 @@ specifies the name of the group identifier.</p>
       <th>output</th>
       <td><p>filename or object type (character string)</p><ul>
 <li><p>Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.</p></li>
-<li><p>Supported object types: "default", "html", "markdown", "latex", "data.frame", "gt", "kableExtra", "huxtable", "flextable".</p></li>
+<li><p>Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".</p></li>
 <li><p>Warning: the `output` argument <em>cannot</em> be used when customizing tables with external packages. See the 'Details' section below.</p></li>
 </ul></td>
     </tr>
@@ -182,7 +182,7 @@ specifies the name of the group identifier.</p>
 vector with one string per model). Valid entries include any column name of
 the data.frame produced by `get_estimates(model)`. Examples:</p><ul>
 <li><p>"estimate"</p></li>
-<li><p>"{estimate} ({std.error})stars"</p></li>
+<li><p>"{estimate} ({std.error}){stars}"</p></li>
 <li><p>"{estimate} [{conf.low}, {conf.high}]"</p></li>
 </ul></td>
     </tr>
@@ -230,11 +230,13 @@ load the `broom` or `broom.mixed` package before executing `tidy(model)`.</p></t
     </tr>
     <tr>
       <th>coef_map</th>
-      <td><p>named character vector. Values refer to the variable names
-that will appear in the table. Names refer to the original term names stored
-in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
-Coefficients that are omitted from this vector will be omitted from the
-table. The table will be ordered in the same order as this vector.</p></td>
+      <td><p>character vector. Subset, rename, and reorder coefficients.
+Coefficients omitted from this vector are omitted from the table. The order
+of the vector determines the order of the table.  `coef_map` can be a named
+or an unnamed character vector (see the Examples section below). If
+`coef_map` is a named vector, its values define the labels that must appear
+in the table, and its names identify the original term names stored in the
+model object: `c("hp:mpg"="HPxM/G")`.</p></td>
     </tr>
     <tr>
       <th>coef_omit</th>
@@ -287,9 +289,11 @@ column center-aligned, and the 3rd column right-aligned.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>all other arguments are passed to the `tidy` and `glance` methods
-used to extract estimates from the model. For example, this allows users to
-set `exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></td>
+      <td><p>all other arguments are passed through to the extractor and
+table-making functions. This allows users to specify additional options such
+as set `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
+coefficients or `kableExtra::kbl(escape=FALSE)` to avoid escaping math
+characters in `kableExtra` tables.</p></td>
     </tr>
     </table>
 

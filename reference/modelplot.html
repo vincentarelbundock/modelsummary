@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.6</span>
       </span>
     </div>
 
@@ -129,6 +129,7 @@
   coef_omit <span class='op'>=</span> <span class='cn'>NULL</span>,
   coef_rename <span class='op'>=</span> <span class='cn'>NULL</span>,
   vcov <span class='op'>=</span> <span class='cn'>NULL</span>,
+  add_rows <span class='op'>=</span> <span class='cn'>NULL</span>,
   facet <span class='op'>=</span> <span class='cn'>FALSE</span>,
   draw <span class='op'>=</span> <span class='cn'>TRUE</span>,
   background <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -148,11 +149,13 @@
     </tr>
     <tr>
       <th>coef_map</th>
-      <td><p>named character vector. Values refer to the variable names
-that will appear in the table. Names refer to the original term names stored
-in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
-Coefficients that are omitted from this vector will be omitted from the
-table. The table will be ordered in the same order as this vector.</p></td>
+      <td><p>character vector. Subset, rename, and reorder coefficients.
+Coefficients omitted from this vector are omitted from the table. The order
+of the vector determines the order of the table.  `coef_map` can be a named
+or an unnamed character vector (see the Examples section below). If
+`coef_map` is a named vector, its values define the labels that must appear
+in the table, and its names identify the original term names stored in the
+model object: `c("hp:mpg"="HPxM/G")`.</p></td>
     </tr>
     <tr>
       <th>coef_omit</th>
@@ -176,6 +179,13 @@ in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.</p></t
 </ul></td>
     </tr>
     <tr>
+      <th>add_rows</th>
+      <td><p>a data.frame (or tibble) with the same number of columns as
+your main table. By default, rows are appended to the bottom of the table.
+You can define a "position" attribute of integers to set the row positions.
+See Examples section below.</p></td>
+    </tr>
+    <tr>
       <th>facet</th>
       <td><p>TRUE or FALSE. When the 'models' argument includes several
 model objects, TRUE draws terms in separate facets, and FALSE draws terms
@@ -194,9 +204,11 @@ plot.  This is especially useful to display annotations "behind" the
     </tr>
     <tr>
       <th>...</th>
-      <td><p>all other arguments are passed to the `tidy` and `glance` methods
-used to extract estimates from the model. For example, this allows users to
-set `exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></td>
+      <td><p>all other arguments are passed through to the extractor and
+table-making functions. This allows users to specify additional options such
+as set `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
+coefficients or `kableExtra::kbl(escape=FALSE)` to avoid escaping math
+characters in `kableExtra` tables.</p></td>
     </tr>
     </table>
 
@@ -224,6 +236,18 @@ set `exponentiate=TRUE` to exponentiate logistic regression coefficients.</p></t
 <span class='va'>models</span><span class='op'>[[</span><span class='st'>'Medium model'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>hp</span> <span class='op'>~</span> <span class='va'>vs</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>, <span class='va'>mtcars</span><span class='op'>)</span>
 <span class='va'>models</span><span class='op'>[[</span><span class='st'>'Large model'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>hp</span> <span class='op'>~</span> <span class='va'>vs</span> <span class='op'>+</span> <span class='va'>drat</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>, <span class='va'>mtcars</span><span class='op'>)</span>
 <span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>models</span><span class='op'>)</span>
+
+<span class='co'># add_rows: add an empty reference category</span>
+
+<span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>hp</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>, <span class='va'>mtcars</span><span class='op'>)</span>
+
+<span class='va'>add_rows</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+  term <span class='op'>=</span> <span class='st'>"factory(cyl)4"</span>,
+  model <span class='op'>=</span> <span class='st'>"Model 1"</span>,
+  estimate <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>add_rows</span>, <span class='st'>"position"</span><span class='op'>)</span> <span class='op'>=</span> <span class='fl'>3</span>
+<span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>mod</span>, add_rows <span class='op'>=</span> <span class='va'>add_rows</span><span class='op'>)</span> 
+
 
 <span class='co'># customize your plots with 'ggplot2' functions</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
