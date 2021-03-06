@@ -590,6 +590,47 @@ This .Rmd file shows how to customize tables in PDF and HTML files using `gt` an
 
 # Case studies
 
+## Bootstrap
+
+Users often want to use estimates or standard errors that have been obtained using a custom strategy. To achieve this in an automated and replicable way, it can be useful to use the `tidy_custom` strategy described above in the "Cutomizing Existing Models" section. 
+
+For example, we can use the `modelr` package to draw 500 resamples of a dataset, and compute bootstrap standard errors by taking the standard deviation of estimates computed in all of those resampled datasets. To do this, we defined `tidy_custom.lm` function that will automatically bootstrap any `lm` model supplied to `modelsummary`, and replace the values in the table automatically.
+
+Note that the `tidy_custom_lm` returns a data.frame with 3 columns: `term`, `estimate`, and `std.error`: 
+
+```{r, message=FALSE}
+library("modelsummary")
+library("broom")
+library("tidyverse")
+library("modelr")
+
+tidy_custom.lm <- function(x, ...) {
+  # extract data from the model
+  model.frame(x) %>%
+    # draw 500 bootstrap resamples
+    modelr::bootstrap(n = 500) %>%
+    # estimate the model 500 times
+    mutate(results = map(strap, ~ update(x, data = .))) %>%
+    # extract results using `broom::tidy`
+    mutate(results = map(results, tidy)) %>%
+    # unnest and summarize
+    unnest(results) %>%
+    group_by(term) %>%
+    summarize(std.error = sd(estimate),
+              estimate = mean(estimate))
+}
+
+mod = list(
+  lm(hp ~ mpg, mtcars) ,
+  lm(hp ~ mpg + drat, mtcars))
+
+modelsummary(mod)
+```
+
+```{r, include=FALSE}
+rm("tidy_custom.lm")
+```
+
 ## Fixed effects regression
 
 One common use-case for `glance_custom` is to display the list of "fixed effects" included in a linear regression model.  
