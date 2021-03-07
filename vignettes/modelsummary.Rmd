@@ -443,7 +443,31 @@ get_estimates(model)
 
 If this function does not return a valid output, you can easily (really!!) add your own support. See the next section for a tutorial. If you do this, you may consider opening an issue on the Github website of the `broom` package: https://github.com/tidymodels/broom/issues
 
-# Adding new models
+# Adding new models (part I)
+
+The simplest way to summarize an unsupported model is to create a `modelsummary_list` object. This approach is super flexible, but it requires manual intervention, and it can become tedious if you need to summarize many models. The next section shows how to add formal support for an unsupported model type.
+
+A `modelsummary_list` is a list with two element that conform to the `broom` package specification: `tidy` and `glance`. `tidy` is a data.frame with at least three columns: `term`, `estimate`, and `std.error`. `glance` is a data.frame with only a single row, and where each column will be displayed at the bottom of the table in the goodness-of-fit section. Finally, we wrap those two elements in a list and assign it a `modelsummary_list` class:
+
+```{r}
+ti <- data.frame(
+  term = c("coef1", "coef2", "coef3"),
+  estimate = 1:3,
+  std.error = c(pi, exp(1), sqrt(2)))
+
+gl <- data.frame(
+  stat1 = "blah",
+  stat2 = "blah blah")
+
+mod <- list(
+  tidy = ti,
+  glance = gl)
+class(mod) <- "modelsummary_list"
+
+modelsummary(mod)
+```
+
+# Adding new models (part II)
 
 `modelsummary` relies on two functions from the `broom` package to extract model information: `tidy` and `glance`. If `broom` doesn't support the type of model you are trying to summarize, `modelsummary` won't support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.
 
