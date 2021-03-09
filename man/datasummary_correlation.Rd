@@ -9,7 +9,8 @@ datasummary_correlation(
   output = "default",
   fmt = 2,
   title = NULL,
-  notes = NULL
+  notes = NULL,
+  method = "pearson"
 )
 }
 \arguments{
@@ -32,6 +33,13 @@ datasummary_correlation(
 \item{title}{string}
 
 \item{notes}{list or vector of notes to append to the bottom of the table.}
+
+\item{method}{character or function
+\itemize{
+  \item character: "pearson", "kendall", or "spearman"
+  \item function: takes a data.frame with numeric columns and returns a
+  square matrix with unique row.names and colnames.
+}}
 }
 \description{
 Generate a correlation table for all numeric variables in your dataset.

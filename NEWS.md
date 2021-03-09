@@ -1,5 +1,6 @@
 # modelsummary 0.6.6.9000
 
+* `method` argument for `datasummary_correlation`
 * `coef_map` accepts unnamed vectors
 * `fixest::fixest_multi` support
 
