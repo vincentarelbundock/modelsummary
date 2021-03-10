@@ -3,6 +3,7 @@
 * `method` argument for `datasummary_correlation`
 * `coef_map` accepts unnamed vectors
 * `fixest::fixest_multi` support
+* `get_gof` forwards ... to `model_performance`
 
 # modelsummary 0.6.6
 

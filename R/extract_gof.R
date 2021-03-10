@@ -113,7 +113,8 @@ get_gof <- function(model, ...) {
 
   # performance third
   f <- function(model, ...) {
-    error_msg <- utils::capture.output(out <- performance::model_performance(model))
+    error_msg <- utils::capture.output(
+      out <- performance::model_performance(model, ...))
     out <- insight::standardize_names(out, style="broom")
     mi <- insight::model_info(model)
     # nobs
