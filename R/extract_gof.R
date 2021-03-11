@@ -134,6 +134,19 @@ get_gof <- function(model, ...) {
     if (flag(gof)) return(gof)
   }
 
-  stop(sprintf('Cannot extract information from models of class "%s". Consider installing `broom.mixed` or any other package with `tidy` and `glance` functions appropriate for this model type. Alternatively, you can define your own `tidy` method, following the instructions on the `modelsummary` website: https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html', class(model)[1]))
 
+  stop(sprintf(
+  'Cannot extract the required information from models of class "%s". 
+  `modelsummary` tries a sequence of 3 helper functions to gof statistics:
+
+  broom::glance(model)
+  performance::model_performance(model)
+  broom.mixed::glance(model)
+
+  To draw a table, one of these commands must return a one-row `data.frame`.
+  The `modelsummary` website explains how to summarize unsupported models or
+  add support for new models:
+
+  https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html',
+  class(model)[1]))
 }

@@ -260,7 +260,20 @@ get_estimates <- function(model, conf_level=.95, ...) {
   }
   if (flag(est)) return(est)
 
-  stop(sprintf('Cannot extract the required information from models of class "%s". Consider installing `broom.mixed`, or any other package that includes `tidy` and `glance` methods appropriate for this model type. Alternatively, you can easily define your own methods by following the instructions on the `modelsummary` website: https://vincentarelbundock.github.io/modelsummary/articles/newmodels.html', class(model)[1]))
+  stop(sprintf(
+  'Cannot extract the required information from models of class "%s". 
+  `modelsummary` tries a sequence of 3 helper functions to extract estimates:
+
+  broom::tidy(model)
+  parameters::parameters(model)
+  broom.mixed::tidy(model)
+
+  To draw a table, one of these commands must return a `data.frame` with one
+  column named `term`.  The `modelsummary` website explains how to summarize
+  unsupported models or add support for new models:
+
+  https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html',
+  class(model)[1]))
 
 }
  
