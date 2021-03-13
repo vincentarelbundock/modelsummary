@@ -3,7 +3,8 @@
 #' @inheritParams datasummary
 #' @param method character or function
 #' \itemize{
-#'   \item character: "pearson", "kendall", or "spearman"
+#'   \item character: "pearson", "kendall", "spearman", or "pearspear"
+#'     (Pearson correlations above and Spearman correlations below the diagonal)
 #'   \item function: takes a data.frame with numeric columns and returns a
 #'   square matrix with unique row.names and colnames.
 #' }
@@ -24,11 +25,19 @@ datasummary_correlation <- function(data,
   }
 
   checkmate::assert(
-    checkmate::check_choice(method, c("pearson", "kendall", "spearman")),
+    checkmate::check_choice(method, c("pearson", "kendall", "spearman", "pearspear")),
     checkmate::check_function(method))
 
   if (is.character(method)) {
-    fn = function(x) stats::cor(x, use = "pairwise.complete.obs", method = method)
+    if (method == "pearspear") {
+      fn = function(x) {
+        out <- stats::cor(x, use = "pairwise.complete.obs", method = "pearson")
+        out[lower.tri(out)] <- stats::cor(
+          x, use = "pairwise.complete.obs", method = "spearman"
+        )[lower.tri(out)]
+        out
+      }
+    } else fn = function(x) stats::cor(x, use = "pairwise.complete.obs", method = method)
   } else {
     fn = method
   }
@@ -57,12 +66,13 @@ datasummary_correlation <- function(data,
     }
   }
 
-  for (i in 1:nrow(out)) {
-    for (j in 2:ncol(out)) {
-      out[i, j] <- ifelse(i + 1 < j, '.', out[i, j])
+  if(is.function(method) || method != "pearspear") {
+    for (i in 1:nrow(out)) {
+      for (j in 2:ncol(out)) {
+        out[i, j] <- ifelse(i + 1 < j, '.', out[i, j])
+      }
     }
   }
-
   colnames(out) <- c(' ', out[[1]])
 
   align <- paste0('l', strrep('r', ncol(out) - 1))

@@ -11,7 +11,7 @@ test_that("pearson equals pearson", {
   expect_equal(a, b)
 })
 
-test_that("pearson, kendall, spearman", {
+test_that("pearson, kendall, spearman, pearspear", {
   dat <- mtcars[, c("mpg", "hp")]
 
   # pearson
@@ -28,5 +28,11 @@ test_that("pearson, kendall, spearman", {
   tab <- datasummary_correlation(dat, output = "data.frame", method = "spearman")
   truth <- structure(list(` ` = c("mpg", "hp"), mpg = c("1", "-.89"), hp = c(".", "1")), row.names = c(NA, -2L), class = "data.frame", align = "lrr", output_format = "dataframe")
   expect_equal(truth, tab)
+
+  # pearspear
+  tab <- datasummary_correlation(dat, output = "data.frame", method = "pearspear")
+  truth <- structure(list(` ` = c("mpg", "hp"), mpg = c("1", "-.89"), hp = c("-.78", "1")), row.names = c(NA, -2L), class = "data.frame", align = "lrr", output_format = "dataframe")
+  expect_equal(truth, tab)
+
 })
 
