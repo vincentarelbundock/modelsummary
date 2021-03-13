@@ -25,54 +25,48 @@ datasummary_correlation <- function(data,
   }
 
   checkmate::assert(
-    checkmate::check_choice(method, c("pearson", "kendall", "spearman", "pearspear")),
+    checkmate::check_choice(
+      method, 
+      c("pearson", "kendall", "spearman", "pearspear")),
     checkmate::check_function(method))
 
-  if (is.character(method)) {
-    if (method == "pearspear") {
-      fn = function(x) {
-        out <- stats::cor(x, use = "pairwise.complete.obs", method = "pearson")
-        out[lower.tri(out)] <- stats::cor(
-          x, use = "pairwise.complete.obs", method = "spearman"
-        )[lower.tri(out)]
-        out
-      }
-    } else fn = function(x) stats::cor(x, use = "pairwise.complete.obs", method = method)
+  # assign correlation computation function
+  if (is.function(method)) {
+    fn <- method
+  } else if (method == "pearspear") {
+    fn <- correlation_pearspear
   } else {
-    fn = method
-  }
+    fn <- function(x) stats::cor(
+      x, 
+      use = "pairwise.complete.obs", 
+      method = method)
+  } 
 
   # subset numeric and compute correlation
   out <- data[, sapply(data, is.numeric), drop = FALSE]
   out <- fn(out)
 
-  if (is.function(method) && !is.matrix(out)) {
+  if (!is.matrix(out) ||
+      is.null(row.names(out)) ||
+      is.null(colnames(out)) ||
+      nrow(out) != ncol(out)) {
     stop("The function supplied to the `method` argument did not return a square matrix with row.names and colnames.")
   }
 
-  out <- data.frame(out)
-  out <- cbind(rowname=row.names(out), out)
-
-  clean_r <- function(x) {
-    x <- rounding(x, fmt)
-    x <- gsub('0\\.', '\\.', x)
-    x <- gsub('1\\.0*', '1', x)
-    return(x)
+  if (is.character(method) && method != "pearspear") {
+    out <- correlation_clean(
+      out,
+      fmt = fmt,
+      triangle = TRUE)
+  } else {
+    out <- correlation_clean(
+      out,
+      fmt = fmt,
+      triangle = FALSE)
   }
 
-  for (i in seq_along(out)) {
-    if (is.numeric(out[[i]])) {
-      out[[i]] <- clean_r(out[[i]])
-    }
-  }
+  out <- cbind(rowname = row.names(out), out)
 
-  if(is.function(method) || method != "pearspear") {
-    for (i in 1:nrow(out)) {
-      for (j in 2:ncol(out)) {
-        out[i, j] <- ifelse(i + 1 < j, '.', out[i, j])
-      }
-    }
-  }
   colnames(out) <- c(' ', out[[1]])
 
   align <- paste0('l', strrep('r', ncol(out) - 1))
@@ -83,5 +77,43 @@ datasummary_correlation <- function(data,
     notes = notes,
     output = output,
     title = title)
-
 }
+
+correlation_pearspear <- function(x) {
+
+  pea <- stats::cor(
+    x, 
+    use = "pairwise.complete.obs", 
+    method = "pearson")
+
+  spe <- stats::cor(
+    x, 
+    use = "pairwise.complete.obs", 
+    method = "spearman")
+
+  pea[lower.tri(pea)] <- spe[lower.tri(spe)]
+
+  return(pea)
+}
+
+correlation_clean <- function(x, fmt, triangle) {
+
+  out <- data.frame(x)
+
+  for (i in seq_along(out)) {
+    out[[i]] <- rounding(out[[i]], fmt)
+    out[[i]] <- gsub('0\\.', '\\.', out[[i]])
+    out[[i]] <- gsub('1\\.0*', '1', out[[i]])
+  }
+
+  if (triangle == TRUE) {
+    for (i in 1:nrow(out)) {
+      for (j in 1:ncol(out)) {
+        out[i, j] <- ifelse(i < j, '.', out[i, j])
+      }
+    }
+  }
+
+  return(out)
+}
+

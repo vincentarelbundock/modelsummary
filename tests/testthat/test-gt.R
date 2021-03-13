@@ -29,22 +29,25 @@ test_that("complex html table", {
     'disp' = 'Displacement',
     '(Intercept)' = 'Constant')
 
-  raw <-
-    modelsummary(
-      models,
-      output = "gt",
-      coef_map = cm,
-      stars = TRUE,
-      gof_omit = "Statistics|^p$|Deviance|Resid|Sigma|Log.Lik|^DF$",
-      notes = c('First custom note to contain text.',
-        'Second custom note with different content.')
-    ) %>%
-    gt::tab_spanner(label = 'Horsepower', columns = c('OLS 1', 'Poisson 1')) %>%
-    gt::tab_spanner(label = 'V-Shape', columns = c('OLS 2', 'Logit 1')) %>%
-    gt::tab_spanner(label = 'Transmission', columns = 'Logit 2') %>%
-    gt::tab_header(title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
-      subtitle = 'Models estimated using the mtcars dataset.') %>%
-    gt::as_raw_html()
+  # not sure why gt produces a warning here
+  expect_warning(
+    raw <-
+      modelsummary(
+        models,
+        output = "gt",
+        coef_map = cm,
+        stars = TRUE,
+        gof_omit = "Statistics|^p$|Deviance|Resid|Sigma|Log.Lik|^DF$",
+        notes = c('First custom note to contain text.',
+          'Second custom note with different content.')
+      ) %>%
+      gt::tab_spanner(label = 'Horsepower', columns = c('OLS 1', 'Poisson 1')) %>%
+      gt::tab_spanner(label = 'V-Shape', columns = c('OLS 2', 'Logit 1')) %>%
+      gt::tab_spanner(label = 'Transmission', columns = 'Logit 2') %>%
+      gt::tab_header(title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
+        subtitle = 'Models estimated using the mtcars dataset.') %>%
+      gt::as_raw_html()
+  )
 
   expect_known_output(cat(raw), "known_output/complex_table.html", update=FALSE)
 

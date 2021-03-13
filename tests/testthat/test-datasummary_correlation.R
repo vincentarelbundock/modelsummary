@@ -6,8 +6,13 @@ test_that("diagonal rounding", {
 })
 
 test_that("pearson equals pearson", {
+  f <- function(x) {
+    out <- cor(x, use = "pairwise.complete.obs", method = "pearson")
+    out <- correlation_clean(out, fmt = 2, triangle = TRUE)
+    out <- as.matrix(out)
+  }
   a <- datasummary_correlation(mtcars, method = "pearson")
-  b <- datasummary_correlation(mtcars, method = function(x) cor(x, use = "pairwise.complete.obs", method = "pearson"))
+  b <- datasummary_correlation(mtcars, method = f)
   expect_equal(a, b)
 })
 
@@ -35,4 +40,3 @@ test_that("pearson, kendall, spearman, pearspear", {
   expect_equal(truth, tab)
 
 })
-
