@@ -10,14 +10,11 @@ test_that('gof_omit omits everything', {
 
 
 test_that('custom gof_map omits everything by default', {
-
   gm = read.csv(text = 
-   "raw,clean,fmt,omit
-    nobs,Num.Obs,0,FALSE
-    r.squared,R2,2,FALSE
-    r2,R2,2,FALSE")
-
-  tab = modelsummary(mod, gof_map=gm, output="data.frame")
+"raw,clean,fmt
+nobs,Num.Obs,0
+r.squared,R2,2")
+  tab = modelsummary(mod, gof_map=gm, output = "dataframe")
   expect_equal(dim(tab), c(8, 5))
 })
 
