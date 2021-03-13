@@ -36,7 +36,8 @@ datasummary_correlation(
 
 \item{method}{character or function
 \itemize{
-  \item character: "pearson", "kendall", or "spearman"
+  \item character: "pearson", "kendall", "spearman", or "pearspear"
+    (Pearson correlations above and Spearman correlations below the diagonal)
   \item function: takes a data.frame with numeric columns and returns a
   square matrix with unique row.names and colnames.
 }}
