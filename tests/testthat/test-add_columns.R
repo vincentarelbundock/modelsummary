@@ -3,9 +3,9 @@ library(modelsummary)
 test_that("datasummary add_columns", {
 
   ac <- read.csv(text = 
-    "first,last
-     blah,2
-     junk,4")
+"first,last
+blah,2
+junk,4")
   attr(ac, 'position') <- c(1, NA)
 
   tab <- datasummary(mpg + hp ~ mean + sd,
