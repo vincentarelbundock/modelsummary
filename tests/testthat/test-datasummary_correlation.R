@@ -1,3 +1,5 @@
+skip_if(getRversion() < '4.0.0')
+
 test_that("diagonal rounding", {
   k <- datasummary_correlation(mtcars, output = "data.frame", fmt = 4)
   k[[1]] <- NULL
