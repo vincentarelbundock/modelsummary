@@ -43,5 +43,37 @@ datasummary_correlation(
 }}
 }
 \description{
-Generate a correlation table for all numeric variables in your dataset.
+The names of the variables displayed in the correlation table are the names
+of the columns in the `data`. You can rename those columns (with or without
+spaces) to produce a table of human-readable variables.
+}
+\examples{
+library(modelsummary)
+
+# clean variable names (base R)
+dat <- mtcars[, c("mpg", "hp")]
+colnames(dat) <- c("Miles / Gallon", "Horse Power")
+datasummary_correlation(dat)
+
+# clean variable names (tidyverse)
+library(tidyverse)
+dat <- mtcars \%>\% 
+  select(`Miles / Gallon` = mpg,
+         `Horse Power` = hp)
+datasummary_correlation(dat)
+
+# alternative methods
+datasummary_correlation(dat, method = "pearspear")
+
+# custom function
+cor_fun <- function(x) cor(x, method = "kendall")
+datasummary_correlation(dat, method = cor_fun)
+
+# rename columns alphabetically and include a footnote for reference
+note <- sprintf("(\%s) \%s", letters[1:ncol(dat)], colnames(dat))
+note <- paste(note, collapse = "; ")
+
+colnames(dat) <- sprintf("(\%s)", letters[1:ncol(dat)])
+
+datasummary_correlation(dat, notes = note)
 }
