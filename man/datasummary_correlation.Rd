@@ -10,7 +10,8 @@ datasummary_correlation(
   fmt = 2,
   title = NULL,
   notes = NULL,
-  method = "pearson"
+  method = "pearson",
+  ...
 )
 }
 \arguments{
@@ -39,7 +40,10 @@ datasummary_correlation(
   \item character: "pearson", "kendall", "spearman", or "pearspear"
     (Pearson correlations above and Spearman correlations below the diagonal)
   \item function: takes a data.frame with numeric columns and returns a
-  square matrix with unique row.names and colnames.
+    square matrix or data.frame with unique row.names and colnames
+    corresponding to variable names. Note that the
+    `datasummary_correlation_format` can often be useful for formatting the
+    output of custom correlation functions.
 }}
 }
 \description{
@@ -76,4 +80,46 @@ note <- paste(note, collapse = "; ")
 colnames(dat) <- sprintf("(\%s)", letters[1:ncol(dat)])
 
 datasummary_correlation(dat, notes = note)
+
+# `datasummary_correlation_format`: custom function with formatting
+dat <- mtcars[, c("mpg", "hp", "disp")]
+
+cor_fun <- function(x) {
+  out <- cor(x, method = "kendall")
+  datasummary_correlation_format(
+    out,
+    fmt = 2,
+    upper_triangle = "x",
+    diagonal = ".")
+}
+
+datasummary_correlation(dat, method = cor_fun)
+
+# use kableExtra and psych to color significant cells
+library(psych)
+library(kableExtra)
+
+dat <- mtcars[, c("vs", "hp", "gear")]
+
+cor_fun <- function(dat) {
+  # compute correlations and format them
+  correlations <- data.frame(cor(dat))
+  correlations <- datasummary_correlation_format(correlations, fmt = 2)
+
+  # calculate pvalues using the `psych` package
+  pvalues <- psych::corr.test(dat)$p
+
+  # use `kableExtra::cell_spec` to color significant cells
+  for (i in 1:nrow(correlations)) {
+    for (j in 1:ncol(correlations)) {
+      if (pvalues[i, j] < 0.05 && i != j) {
+        correlations[i, j] <- cell_spec(correlations[i, j], background = "pink")
+      }
+    }
+  }
+  return(correlations)
+}
+
+# The `escape=FALSE` is important here!
+datasummary_correlation(dat, method = cor_fun, escape = FALSE)
 }

@@ -10,7 +10,10 @@
 #'   \item character: "pearson", "kendall", "spearman", or "pearspear"
 #'     (Pearson correlations above and Spearman correlations below the diagonal)
 #'   \item function: takes a data.frame with numeric columns and returns a
-#'   square matrix with unique row.names and colnames.
+#'     square matrix or data.frame with unique row.names and colnames
+#'     corresponding to variable names. Note that the
+#'     `datasummary_correlation_format` can often be useful for formatting the
+#'     output of custom correlation functions.
 #' }
 #' @export
 #' @examples
@@ -42,12 +45,55 @@
 #' colnames(dat) <- sprintf("(%s)", letters[1:ncol(dat)])
 #'
 #' datasummary_correlation(dat, notes = note)
+#' 
+#' # `datasummary_correlation_format`: custom function with formatting
+#' dat <- mtcars[, c("mpg", "hp", "disp")]
+#' 
+#' cor_fun <- function(x) {
+#'   out <- cor(x, method = "kendall")
+#'   datasummary_correlation_format(
+#'     out,
+#'     fmt = 2,
+#'     upper_triangle = "x",
+#'     diagonal = ".")
+#' }
+#' 
+#' datasummary_correlation(dat, method = cor_fun)
+#' 
+#' # use kableExtra and psych to color significant cells
+#' library(psych)
+#' library(kableExtra)
+#' 
+#' dat <- mtcars[, c("vs", "hp", "gear")]
+#' 
+#' cor_fun <- function(dat) {
+#'   # compute correlations and format them
+#'   correlations <- data.frame(cor(dat))
+#'   correlations <- datasummary_correlation_format(correlations, fmt = 2)
+#'
+#'   # calculate pvalues using the `psych` package
+#'   pvalues <- psych::corr.test(dat)$p
+#'
+#'   # use `kableExtra::cell_spec` to color significant cells
+#'   for (i in 1:nrow(correlations)) {
+#'     for (j in 1:ncol(correlations)) {
+#'       if (pvalues[i, j] < 0.05 && i != j) {
+#'         correlations[i, j] <- cell_spec(correlations[i, j], background = "pink")
+#'       }
+#'     }
+#'   }
+#'   return(correlations)
+#' }
+#'
+#' # The `escape=FALSE` is important here!
+#' datasummary_correlation(dat, method = cor_fun, escape = FALSE)
 datasummary_correlation <- function(data,
                                     output = 'default',
                                     fmt = 2,
                                     title = NULL,
                                     notes = NULL,
-                                    method = "pearson") {
+                                    method = "pearson",
+                                    ...) {
 
   # sanity checks
   sanity_output(output)
@@ -79,23 +125,25 @@ datasummary_correlation <- function(data,
   out <- data[, sapply(data, is.numeric), drop = FALSE]
   out <- fn(out)
 
-  if (!is.matrix(out) ||
+  if ((!is.matrix(out) && !inherits(out, "data.frame")) ||
       is.null(row.names(out)) ||
       is.null(colnames(out)) ||
       nrow(out) != ncol(out)) {
-    stop("The function supplied to the `method` argument did not return a square matrix with row.names and colnames.")
+    stop("The function supplied to the `method` argument did not return a square matrix or data.frame with row.names and colnames.")
   }
 
   if (is.character(method) && method != "pearspear") {
-    out <- correlation_clean(
+    out <- datasummary_correlation_format(
       out,
       fmt = fmt,
-      triangle = TRUE)
+      diagonal = "1",
+      upper_triangle = ".")
   } else {
-    out <- correlation_clean(
+    out <- datasummary_correlation_format(
       out,
       fmt = fmt,
-      triangle = FALSE)
+      diagonal = NULL,
+      upper_triangle = NULL)
   }
 
   out <- cbind(rowname = row.names(out), out)
@@ -109,7 +157,8 @@ datasummary_correlation <- function(data,
     hrule = NULL,
     notes = notes,
     output = output,
-    title = title)
+    title = title,
+    ...)
 }
 
 correlation_pearspear <- function(x) {
@@ -129,24 +178,65 @@ correlation_pearspear <- function(x) {
   return(pea)
 }
 
-correlation_clean <- function(x, fmt, triangle) {
+
+#' Format the content of a correlation table
+#'
+#' Mostly for internal use, but can be useful when users supply a function to
+#' the `method` argument of `datasummary_correlation`.
+#' @inheritParams datasummary_correlation
+#' @param x square numeric matrix
+#' @param leading_zero boolean. If FALSE, leading zeros are removed
+#' @param diagonal character or NULL. If character, all elements of the
+#' diagonal are replaced by the same character (e.g., "1").
+#' @param upper_triangle character or NULL. If character, all elements of the
+#' upper triangle are replaced by the same character (e.g., "" or ".").
+#' @export
+#' @examples
+#' library(modelsummary)
+#' 
+#' dat <- mtcars[, c("mpg", "hp", "disp")]
+#' 
+#' cor_fun <- function(x) {
+#'   out <- cor(x, method = "kendall")
+#'   datasummary_correlation_format(
+#'     out,
+#'     fmt = 2,
+#'     upper_triangle = "x",
+#'     diagonal = ".")
+#' }
+#' 
+#' datasummary_correlation(dat, method = cor_fun)
+datasummary_correlation_format <- function(
+  x, 
+  fmt, 
+  leading_zero = FALSE,
+  diagonal = NULL, 
+  upper_triangle = NULL) {
+
+  # sanity
+  checkmate::assert_character(diagonal, len = 1, null.ok = TRUE)
+  checkmate::assert_character(upper_triangle, len = 1, null.ok = TRUE)
+  checkmate::assert_flag(leading_zero)
 
   out <- data.frame(x)
 
   for (i in seq_along(out)) {
     out[[i]] <- rounding(out[[i]], fmt)
-    out[[i]] <- gsub('0\\.', '\\.', out[[i]])
-    out[[i]] <- gsub('1\\.0*', '1', out[[i]])
+    if (leading_zero == FALSE) {
+      out[[i]] <- gsub('0\\.', '\\.', out[[i]])
+    }
   }
 
-  if (triangle == TRUE) {
-    for (i in 1:nrow(out)) {
-      for (j in 1:ncol(out)) {
-        out[i, j] <- ifelse(i < j, '.', out[i, j])
+  for (i in 1:nrow(out)) {
+    for (j in 1:ncol(out)) {
+      if (!is.null(upper_triangle)) {
+        out[i, j] <- ifelse(i < j, upper_triangle, out[i, j])
+      }
+      if (!is.null(diagonal)) {
+        out[i, j] <- ifelse(i == j, diagonal, out[i, j])
       }
     }
   }
 
   return(out)
 }
-

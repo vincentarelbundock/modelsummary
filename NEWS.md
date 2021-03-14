@@ -1,9 +1,11 @@
 # modelsummary 0.6.6.9000
 
-* `method` argument for `datasummary_correlation`, including "pearspear" for Pearson correlations above and Spearman correlations below the diagonal
 * `coef_map` accepts unnamed vectors
 * `fixest::fixest_multi` support
 * `get_gof` forwards ... to `model_performance`
+* `method` argument for `datasummary_correlation`, which accepts functions and "pearspear" for Pearson correlations above and Spearman correlations below the diagonal (thanks to @joachim-gassen)
+* `datasummary_correlation` passes `...` forward
+* New `datasummary_correlation_format` function
 
 # modelsummary 0.6.6
 
