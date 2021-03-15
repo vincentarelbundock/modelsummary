@@ -146,9 +146,9 @@ datasummary_correlation <- function(data,
       upper_triangle = NULL)
   }
 
+  col_names <- colnames(out)  
   out <- cbind(rowname = row.names(out), out)
-
-  colnames(out) <- c(' ', out[[1]])
+  colnames(out) <- c(' ', col_names)
 
   align <- paste0('l', strrep('r', ncol(out) - 1))
 
@@ -218,7 +218,7 @@ datasummary_correlation_format <- function(
   checkmate::assert_character(upper_triangle, len = 1, null.ok = TRUE)
   checkmate::assert_flag(leading_zero)
 
-  out <- data.frame(x)
+  out <- data.frame(x, check.names = FALSE)
 
   for (i in seq_along(out)) {
     out[[i]] <- rounding(out[[i]], fmt)

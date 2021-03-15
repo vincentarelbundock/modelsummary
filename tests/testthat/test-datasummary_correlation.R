@@ -1,5 +1,19 @@
 skip_if(getRversion() < '4.0.0')
 
+test_that("different rows and columns", {
+  dat <- mtcars[, c("mpg", "hp", "vs")]
+  cor_fun <- function(x) {
+      out <- cor(x)
+      row.names(out) <- sprintf("(%s) %s", 1:nrow(out), row.names(out))
+      colnames(out) <- sprintf("(%s)", 1:nrow(out))
+      return(out)
+  }
+  tab <- datasummary_correlation(dat, method = cor_fun, output = "data.frame")
+  truth <- structure(list(` ` = c("(1) mpg", "(2) hp", "(3) vs"), `(1)` = c("1.00", "-.78", ".66"), `(2)` = c("-.78", "1.00", "-.72"), `(3)` = c(".66", "-.72", "1.00")), class = "data.frame", row.names = c(NA, -3L ), align = "lrrr", output_format = "dataframe")
+  expect_equal(tab, truth)
+})
+    
+    
 test_that("diagonal rounding", {
   k <- datasummary_correlation(mtcars, output = "data.frame", fmt = 4)
   k[[1]] <- NULL
