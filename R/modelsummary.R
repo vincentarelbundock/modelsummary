@@ -236,11 +236,17 @@ modelsummary <- function(
 
   # sanitation
   sanity_ellipsis(vcov, ...)        # before sanitize_vcov
+
   models <- sanitize_models(models) # before sanitize_vcov
-  vcov <- sanitize_vcov(models, vcov, ...)
+
+  vcov <- sanitize_vcov(vcov, length(models), ...)
+
+  number_of_models <- max(length(models), length(vcov))
+
+  estimate <- sanitize_estimate(estimate, number_of_models)
+
   sanity_output(output)
   sanity_statistic(statistic)
-  sanity_estimate(models, estimate)
   sanity_conf_level(conf_level)
   sanity_coef(coef_map, coef_rename, coef_omit)
   sanity_gof_map(gof_map, gof_omit)
@@ -252,29 +258,25 @@ modelsummary <- function(
   output_format <- parse_output_arg(output)$output_format
 
 
-  # estimate
-  if (length(estimate) == 1) {
-    estimate <- rep(estimate, length(models))
-  }
-  estimate <- as.list(estimate)
-
-
   # model names dictionary: use unique names for manipulation
   if (is.null(names(models))) {
-    model_names <- paste("Model", 1:length(models))
+    model_names <- paste("Model", 1:number_of_models)
   } else {
     model_names <- names(models)
   }
-  model_id <- paste("Model", 1:length(models))
+  model_id <- paste("Model", 1:number_of_models)
 
 
   # estimates: extract and combine
   est <- list()
 
-  for (i in seq_along(models)) {
+  for (i in 1:number_of_models) {
+
+    # recycling when 1 model and many vcov
+    j <- ifelse(length(models) == 1, 1, i)
 
     tmp <- extract_estimates(
-      model              = models[[i]],
+      model              = models[[j]],
       fmt                = fmt,
       estimate           = estimate[[i]],
       statistic          = statistic,
@@ -283,6 +285,7 @@ modelsummary <- function(
       stars              = stars,
       ...
     )
+
 
     # coef_rename: before merge to collapse rows
     if (!is.null(coef_rename)) {
@@ -324,6 +327,7 @@ modelsummary <- function(
 
   }
 
+
   term_order <- lapply(est, function(x) x$term)
   term_order <- unique(unlist(term_order))
 
@@ -347,8 +351,12 @@ modelsummary <- function(
   # gof: extract and combine
   gof <- list()
 
-  for (i in seq_along(models)) {
-    gof[[i]] <- extract_gof(models[[i]], fmt=fmt, gof_map=gof_map, ...)
+  for (i in 1:number_of_models) {
+
+    # recycling models when multiple vcov
+    j <- ifelse(length(models) == 1, 1, i)
+      
+    gof[[i]] <- extract_gof(models[[j]], fmt = fmt, gof_map = gof_map, ...)
     colnames(gof[[i]])[2] <- model_id[i]
   }
 

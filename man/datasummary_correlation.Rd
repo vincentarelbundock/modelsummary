@@ -52,6 +52,7 @@ of the columns in the `data`. You can rename those columns (with or without
 spaces) to produce a table of human-readable variables.
 }
 \examples{
+\dontrun{
 library(modelsummary)
 
 # clean variable names (base R)
@@ -122,4 +123,5 @@ cor_fun <- function(dat) {
 
 # The `escape=FALSE` is important here!
 datasummary_correlation(dat, method = cor_fun, escape = FALSE)
+}
 }

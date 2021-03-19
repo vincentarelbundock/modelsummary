@@ -60,10 +60,19 @@ sanity_align <- function(align, tab) {
 #' sanity check
 #'
 #' @noRd
-sanity_estimate <- function(models, estimate) {
+sanitize_estimate <- function(estimate, number_of_models) {
   checkmate::assert(
     checkmate::check_character(estimate, len=1),
-    checkmate::check_character(estimate, len=length(models)))
+    checkmate::check_character(estimate, len=number_of_models))
+
+  if (length(estimate) == 1) {
+    out <- rep(estimate, number_of_models)
+    out <- as.list(out)
+  } else {
+    out <- as.list(estimate)
+  }    
+  
+  return(out)
 }
 
 

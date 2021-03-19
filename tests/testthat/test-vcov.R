@@ -9,6 +9,17 @@ models[['Poisson 2']] <- glm(Desertion ~ Crime_prop + Donations, dat, family = p
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 
 
+test_that("multi vcov with model recycling", {
+    mod <- lm(hp ~ 1, mtcars)
+    vc <- list("HC0", "classical", ~cyl)
+    tab <- modelsummary(mod, output = "data.frame",
+      estimate = "std.error", statistic = NULL, vcov = vc, gof_omit = ".*")
+    expect_equal(tab[["Model 1"]], "11.929")
+    expect_equal(tab[["Model 2"]], "12.120")
+    expect_equal(tab[["Model 3"]], "43.502")
+})
+
+
 test_that("character vector", {
   tab1 = modelsummary(models, vcov="robust", output="data.frame")
   tab2 = modelsummary(models, vcov=rep("robust", 5), output="data.frame")

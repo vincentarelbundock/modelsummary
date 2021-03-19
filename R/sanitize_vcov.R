@@ -1,7 +1,7 @@
 #' sanity check
 #'
 #' @noRd
-sanitize_vcov <- function(models, vcov, ...) {
+sanitize_vcov <- function(vcov, number_of_models, ...) {
 
   ellip <- list(...)
 
@@ -11,7 +11,9 @@ sanitize_vcov <- function(models, vcov, ...) {
   }
 
   if (is.null(vcov)) {
-    return(NULL)
+    # lengths must match to allow model recycling with multiple vcov 
+    out <- rep(list(NULL), number_of_models)
+    return(out)
   }
 
   # default output
@@ -19,8 +21,10 @@ sanitize_vcov <- function(models, vcov, ...) {
 
   # list of formulas, functions, matrices, or vectors
   # first class because some models inherit from "list"
-  if (class(vcov)[1] == "list" & class(models)[1] == "list") {
-    checkmate::assert_true(length(vcov) == length(models))
+  if (class(vcov)[1] == "list") {
+    checkmate::assert(
+      checkmate::check_true(length(vcov) == number_of_models),
+      checkmate::check_true(number_of_models == 1))
     for (s in vcov) {
       checkmate::assert(
         checkmate::check_formula(s),
@@ -37,18 +41,19 @@ sanitize_vcov <- function(models, vcov, ...) {
   if (isTRUE(checkmate::check_formula(vcov)) ||
       isTRUE(checkmate::check_matrix(vcov))  ||
       isTRUE(checkmate::check_function(vcov))) {
-    out <- rep(list(vcov), length(models))
+    out <- rep(list(vcov), number_of_models)
   }
 
   if (is.character(vcov)) {
     checkmate::assert(
       checkmate::check_character(vcov, len=1),
-      checkmate::check_character(vcov, len=length(models)))
+      checkmate::check_character(vcov, len=number_of_models),
+      checkmate::check_true(number_of_models == 1))
     checkmate::assert_true(all(
       vcov %in% c("robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m",
                   "HC5", "stata", "classical", "constant", "iid")))
     if (length(vcov) == 1) {
-      out <- as.list(rep(vcov, length(models)))
+      out <- as.list(rep(vcov, number_of_models))
     } else {
       out <- as.list(vcov)
     }

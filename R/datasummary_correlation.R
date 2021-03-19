@@ -17,6 +17,7 @@
 #' }
 #' @export
 #' @examples
+#' \dontrun{
 #' library(modelsummary)
 #' 
 #' # clean variable names (base R)
@@ -87,6 +88,7 @@
 #'
 #' # The `escape=FALSE` is important here!
 #' datasummary_correlation(dat, method = cor_fun, escape = FALSE)
+#' }
 datasummary_correlation <- function(data,
                                     output = 'default',
                                     fmt = 2,
