@@ -181,6 +181,11 @@ datasummary_skim_numeric <- function(
   if (!any(idx)) stop('all numeric variables are completely missing.')
   dat_new <- dat_new[, idx, drop=FALSE]
 
+  # convert to numeric (tables does not play well with haven_labelled)
+  for (i in seq_along(dat_new)) {
+    dat_new[[i]] <- as.numeric(dat_new[[i]])
+  }
+
   # pad colnames in case one is named Min, Max, Mean, or other function name
   # colnames(dat_new) <- paste0(colnames(dat_new), " ")
 

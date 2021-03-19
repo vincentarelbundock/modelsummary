@@ -9,6 +9,7 @@
   Spearman correlations below the diagonal (thanks to @joachim-gassen)
 * `datasummary_correlation` passes `...` forward
 * New `datasummary_correlation_format` function
+* `datasummary_skim` works with haven_labelled numeric
 
 # modelsummary 0.6.6
 
