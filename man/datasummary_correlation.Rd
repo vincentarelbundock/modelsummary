@@ -45,6 +45,10 @@ datasummary_correlation(
     `datasummary_correlation_format` can often be useful for formatting the
     output of custom correlation functions.
 }}
+
+\item{...}{other parameters are passed through to the table-making
+packages. This can be used, for example, to pass arguments such
+as `escape=FALSE` to `kableExtra`.}
 }
 \description{
 The names of the variables displayed in the correlation table are the names

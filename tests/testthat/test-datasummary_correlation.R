@@ -24,11 +24,13 @@ test_that("diagonal rounding", {
 test_that("pearson equals pearson", {
   f <- function(x) {
     out <- cor(x, use = "pairwise.complete.obs", method = "pearson")
-    out <- correlation_clean(out, fmt = 2, triangle = TRUE)
+    out <- datasummary_correlation_format(out, fmt = 2,
+                                          upper_triangle = ".",
+                                          diagonal = "1")
     out <- as.matrix(out)
   }
-  a <- datasummary_correlation(mtcars, method = "pearson")
-  b <- datasummary_correlation(mtcars, method = f)
+  a <- datasummary_correlation(mtcars, method = "pearson", output = "dataframe")
+  b <- datasummary_correlation(mtcars, method = f, output = "dataframe")
   expect_equal(a, b)
 })
 

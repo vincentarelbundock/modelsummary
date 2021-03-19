@@ -15,6 +15,9 @@
 #'     `datasummary_correlation_format` can often be useful for formatting the
 #'     output of custom correlation functions.
 #' }
+#' @param ... other parameters are passed through to the table-making
+#'     packages. This can be used, for example, to pass arguments such
+#'     as `escape=FALSE` to `kableExtra`.
 #' @export
 #' @examples
 #' \dontrun{
@@ -134,18 +137,23 @@ datasummary_correlation <- function(data,
     stop("The function supplied to the `method` argument did not return a square matrix or data.frame with row.names and colnames.")
   }
 
-  if (is.character(method) && method != "pearspear") {
-    out <- datasummary_correlation_format(
-      out,
-      fmt = fmt,
-      diagonal = "1",
-      upper_triangle = ".")
+  if (is.character(method)) {
+    if (method == "pearspear") {
+      out <- datasummary_correlation_format(
+        out,
+        fmt = fmt,
+        diagonal = "1")
+    } else {
+      out <- datasummary_correlation_format(
+        out,
+        fmt = fmt,
+        diagonal = "1",
+        upper_triangle = ".")
+    }
   } else {
     out <- datasummary_correlation_format(
       out,
-      fmt = fmt,
-      diagonal = NULL,
-      upper_triangle = NULL)
+      fmt = fmt)
   }
 
   col_names <- colnames(out)  
