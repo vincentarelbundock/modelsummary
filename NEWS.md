@@ -1,5 +1,6 @@
 # modelsummary 0.6.6.9000
 
+* `datasummary` functions and `rounding` accept ..., big.mark, etc.
 * `coef_map` accepts unnamed vectors
 * `modelsummary` recycles a single `model` with multiple `vcov`
 * `fixest::fixest_multi` support

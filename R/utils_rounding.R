@@ -7,7 +7,7 @@
 #'
 #' @return a rounded number as character
 #' @noRd
-rounding <- function(x, fmt = '%.3f') {
+rounding <- function(x, fmt = '%.3f', ...) {
 
   # do not round character, factor, logical
   if (is.factor(x) || is.logical(x)) {
@@ -18,9 +18,9 @@ rounding <- function(x, fmt = '%.3f') {
     out <- x
   } else {
     if (is.character(fmt)) {
-      out <- sprintf(fmt, x)
+      out <- sprintf(fmt, x, ...)
     } else if (is.numeric(fmt)) {
-      out <- trimws(format(round(x, fmt), nsmall=fmt))
+      out <- trimws(format(round(x, fmt), nsmall = fmt, ...))
     } else if (is.function(fmt)) {
       out <- fmt(x)
     } else {

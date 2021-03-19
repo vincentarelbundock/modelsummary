@@ -1,7 +1,21 @@
 library(modelsummary)
 penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
 
-context('datasummary')
+
+## This doesn't work in the test_that suite, but it works manually. But be random seed related.
+
+## test_that("big.mark formatting", {
+##     set.seed(10)
+##     rock <- data.frame(
+##         area = runif(100, 1000, 10000),
+##         shape = runif(100, 0, 1))
+##     f <- area * Arguments(fmt = 1, big.mark = ",") +
+##         shape * Arguments(fmt = 3) ~
+##         Min + Mean + Max
+##     tab <- datasummary(f, data = rock, output = "data.frame")
+##     truth <- structure(list(` ` = c("area", "shape"), Min = c("1129.9", "0.047"), Mean = c("5,007.9", "0.502"), Max = c("9,651.7", "0.987")), class = "data.frame", row.names = c(NA, -2L), stub_width = 1L, align = "lrrr", output_format = "dataframe")
+##     expect_equal(tab, truth)
+## })
 
 test_that("cannot nest two continuous variables", {
   expect_error(datasummary(mpg * hp ~ Mean + SD, mtcars))
