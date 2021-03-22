@@ -27,6 +27,7 @@ gof_map_build <- function() {
   std.error.type,            Std.Error Type,     3, FALSE,
   F,                         F,                  3, FALSE,
   deviance,                  Deviance,           2, TRUE,
+  vcov.type,                 Std. Errors,        0, FALSE,
   df.residual,               DF Resid,           0, TRUE,
   df.null,                   DF Null,            0, TRUE,
   sigma,                     Sigma,              3, TRUE,

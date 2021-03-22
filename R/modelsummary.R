@@ -348,6 +348,20 @@ modelsummary <- function(
     est <- est[order(idx, est[["statistic"]]),]
   }
 
+  # vcov_type: at least two distinct strings or formulas
+  vcov_type_flag <- length(unique(vcov)) > 1
+  for (v in vcov) {
+    if (!checkmate::test_formula(v) &&
+        !checkmate::test_character(v, len = 1, null.ok = TRUE)) {
+       vcov_type_flag <- FALSE 
+    }
+  }
+  if (vcov_type_flag == TRUE) {
+    vcov_type <- sapply(vcov, get_vcov_type)
+  } else {
+    vcov_type <- NULL
+  }
+
   # gof: extract and combine
   gof <- list()
 
@@ -356,7 +370,8 @@ modelsummary <- function(
     # recycling models when multiple vcov
     j <- ifelse(length(models) == 1, 1, i)
       
-    gof[[i]] <- extract_gof(models[[j]], fmt = fmt, gof_map = gof_map, ...)
+    gof[[i]] <- extract_gof(models[[j]], fmt = fmt, gof_map = gof_map,
+                            vcov_type = vcov_type[[i]], ...)
     colnames(gof[[i]])[2] <- model_id[i]
   }
 

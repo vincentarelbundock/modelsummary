@@ -1,12 +1,21 @@
 #' Extract goodness-of-fit statistics from a single model
+#'
 #' @param model object type with an available `glance` method.
+#' @param vcov_type character to include in the GOF section to
+#'     describe standard errors
 #' @inheritParams modelsummary
 #' @return data.frame with goodness-of-fit  statistics
 #' @noRd
-extract_gof <- function(model, fmt, gof_map, ...) {
+extract_gof <- function(model, fmt, gof_map, vcov_type = NULL, ...) {
 
   # extract gof from model object
   gof <- get_gof(model, ...)
+
+  # vcov_type
+  if (is.character(vcov_type)) {
+    gof$vcov.type <- vcov_type
+  }
+  
  
   # lm model: include F-stat by default
   # glm also inherits from lm

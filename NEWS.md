@@ -2,6 +2,8 @@
 
 * `datasummary` functions and `rounding` accept ..., big.mark, etc.
 * `coef_map` accepts unnamed vectors
+* Standard error type is automatically added to GOF when users supply
+  more than 1 distinct string or formula to the `vcov` argument.
 * `modelsummary` recycles a single `model` with multiple `vcov`
 * `fixest::fixest_multi` support
 * `get_gof` forwards ... to `model_performance`
@@ -10,7 +12,7 @@
   Spearman correlations below the diagonal (thanks to @joachim-gassen)
 * `datasummary_correlation` passes `...` forward
 * New `datasummary_correlation_format` function
-* `datasummary_skim` works with haven_labelled numeric
+* `datasummary_skim` works with haven_labeled numeric
 
 # modelsummary 0.6.6
 
