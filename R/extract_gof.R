@@ -120,20 +120,9 @@ get_gof <- function(model, ...) {
     broom::glance(model, ...), silent=TRUE))
   if (flag(gof)) return(gof)
 
-  # performance third
-  f <- function(model, ...) {
-    error_msg <- utils::capture.output(
-      out <- performance::model_performance(model, ...))
-    out <- insight::standardize_names(out, style="broom")
-    mi <- insight::model_info(model)
-    # nobs
-    if ("n_obs" %in% names(mi)) {
-      out$nobs <- mi$n_obs
-    }
-    return(out)
-  }
+
   gof <- suppressWarnings(try(
-    f(model, ...), silent=TRUE))
+    get_gof_performance(model, ...), silent=TRUE))
   if (flag(gof)) return(gof)
 
   # broom.mixed fourth
@@ -158,4 +147,35 @@ get_gof <- function(model, ...) {
 
   https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html',
   class(model)[1]))
+}
+
+
+#' Extract goodness-of-fit statistics from a single model using
+#' the `performance` package
+#'
+#' @keywords internal
+get_gof_performance <- function(model, ...) {
+  if ("metrics" %in% names(list(...))) {
+    out <- performance::model_performance(model, ...)
+  } else {
+    # stan models: r2_adjusted is veeeery slow
+    if (inherits(model, "stanreg") ||
+        inherits(model, "brmsfit") ||
+        inherits(model, "stanmvreg")) {
+      # this is the list of "common" metrics in `performance`
+      # documentation, but their code includes R2_adj, which produces
+      # a two-row glance and gives us issues.
+      metrics <- c("LOOIC", "WAIC", "R2", "RMSE")
+    } else {
+      metrics <- "all"
+    }
+    out <- performance::model_performance(model, metrics = metrics, ...)
+  }
+  out <- insight::standardize_names(out, style="broom")
+  mi <- insight::model_info(model)
+  # nobs
+  if ("n_obs" %in% names(mi)) {
+    out$nobs <- mi$n_obs
+  }
+  return(out)
 }

@@ -26,6 +26,11 @@ gof_map_build <- function() {
   logLik,                    Log.Lik.,           3, FALSE,
   std.error.type,            Std.Error Type,     3, FALSE,
   F,                         F,                  3, FALSE,
+  elpd,                      ELPD,               1, FALSE,
+  elpd.se,                   ELPD s.e.,          1, FALSE,
+  looic,                     LOOIC,              1, FALSE
+  looic.se,                  LOOIC s.e.,         1, FALSE
+  waic,                      WAIC,               1, FALSE
   deviance,                  Deviance,           2, TRUE,
   vcov.type,                 Std. Errors,        0, FALSE,
   df.residual,               DF Resid,           0, TRUE,

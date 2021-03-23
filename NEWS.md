@@ -13,6 +13,9 @@
 * `datasummary_correlation` passes `...` forward
 * New `datasummary_correlation_format` function
 * `datasummary_skim` works with haven_labeled numeric
+* fewer default gofs with `brsm` and `rstan` models to prevent issues.
+  More are available by passing a `metrics` argument to
+  `performance::model_performance` via the ellipsis (...)
 * bugfixes
 
 # modelsummary 0.6.6
