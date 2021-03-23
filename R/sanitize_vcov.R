@@ -25,12 +25,16 @@ sanitize_vcov <- function(vcov, number_of_models, ...) {
     checkmate::assert(
       checkmate::check_true(length(vcov) == number_of_models),
       checkmate::check_true(number_of_models == 1))
-    for (s in vcov) {
+    for (vcov_element in vcov) {
       checkmate::assert(
-        checkmate::check_formula(s),
-        checkmate::check_function(s),
-        checkmate::check_matrix(s),
-        checkmate::check_vector(s),
+        checkmate::check_formula(vcov_element),
+        checkmate::check_function(vcov_element),
+        checkmate::check_matrix(vcov_element),
+        checkmate::check_numeric(vcov_element),
+        checkmate::check_character(vcov_element,
+          len = 1,
+          pattern = "robust|HC|HC0|HC1|HC2|HC3|HC4|HC4m|HC5|stata|classical|constant|iid"),
+        checkmate::check_character(vcov_element, min.len = 2),
         combine="or"
       )
     }

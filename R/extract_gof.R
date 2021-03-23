@@ -29,7 +29,11 @@ extract_gof <- function(model, fmt, gof_map, vcov_type = NULL, ...) {
   sanity_gof(gof, gof_custom)
   if (!is.null(gof_custom)) {
     for (n in colnames(gof_custom)) {
-      gof[[n]] <- gof_custom[[n]]
+      # modelsummary's vcov argument has precedence
+      # mainly useful to avoid collision with `fixet::glance_custom`
+      if (is.null(vcov_type) || n != "vcov.type") {
+        gof[[n]] <- gof_custom[[n]]
+      }
     }
   }
 

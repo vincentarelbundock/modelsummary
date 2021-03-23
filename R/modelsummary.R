@@ -349,7 +349,7 @@ modelsummary <- function(
   }
 
   # vcov_type: at least two distinct strings or formulas
-  vcov_type_flag <- length(unique(vcov)) > 1
+  vcov_type_flag <- !all(sapply(vcov, is.null))
   for (v in vcov) {
     if (!checkmate::test_formula(v) &&
         !checkmate::test_character(v, len = 1, null.ok = TRUE)) {

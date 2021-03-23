@@ -1,22 +1,21 @@
 # modelsummary 0.6.6.9000
 
+* `vcov` adds a row to note the type of standard errors.
+* `modelsummary` accepts a single model with multiple `vcov`s. 
+* `get_gof` forwards ... to `model_performance`
+* `datasummary_correlation` passes `...` forward
+* `datasummary_correlation_format`: new function
+* `datasummry_correlation`'s `method` argument accepts functions and
+  "pearspear" (thanks to @joachim-gassen)
 * `datasummary` functions and `rounding` accept ..., big.mark, etc.
 * `coef_map` accepts unnamed vectors
-* Standard error type is automatically added to GOF when users supply
-  more than 1 distinct string or formula to the `vcov` argument.
-* `modelsummary` recycles a single `model` with multiple `vcov`
 * `fixest::fixest_multi` support
-* `get_gof` forwards ... to `model_performance`
-* `method` argument for `datasummary_correlation`, which accepts
-  functions and "pearspear" for Pearson correlations above and
-  Spearman correlations below the diagonal (thanks to @joachim-gassen)
-* `datasummary_correlation` passes `...` forward
-* New `datasummary_correlation_format` function
 * `datasummary_skim` works with haven_labeled numeric
-* fewer default gofs with `brsm` and `rstan` models to prevent issues.
-  More are available by passing a `metrics` argument to
-  `performance::model_performance` via the ellipsis (...)
-* bugfixes
+* faster tables with bayesian models. 
+* `metrics` argument of `performance::model_performance` is available
+  via `modelsummary`'s ... ellipsis to limit the GOF statistics in
+  Bayesian models.
+* bug fixes
 
 # modelsummary 0.6.6
 

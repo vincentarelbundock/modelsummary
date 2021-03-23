@@ -23,12 +23,14 @@ test_that("multi vcov with model recycling", {
 test_that("character vector", {
   tab1 = modelsummary(models, vcov="robust", output="data.frame")
   tab2 = modelsummary(models, vcov=rep("robust", 5), output="data.frame")
-  tab3 = modelsummary(models, vcov=sandwich::vcovHC, output="data.frame")
-  tab4 = modelsummary(models, vcov=list("robust", "robust", "robust", "robust", "robust"), output="data.frame")
+  tab3 = modelsummary(models, vcov=list("robust", "robust", "robust", "robust", "robust"), output="data.frame")
+  tab4 = modelsummary(models, vcov=sandwich::vcovHC, output="data.frame")
   expect_identical(tab1, tab2)
   expect_identical(tab1, tab3)
-  expect_identical(tab1, tab4)
+  # bad input
   expect_error(modelsummary(models, vcov="bad", output="data.frame"))
+  # no standard error row when `vcov` is an unknown function
+  expect_equal(nrow(tab1), nrow(tab4) + 1)
 })
 
 
