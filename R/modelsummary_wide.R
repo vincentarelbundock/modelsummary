@@ -87,11 +87,13 @@ modelsummary_wide <- function(
 
   # unique group names
   group_names <- unique(ti[[coef_group]])
+  group_names <- as.character(group_names) # weird bug otherwise when groups are integers
 
   # vertical stacking: model_names are groups
   if (stacking == "vertical") {
     results <- list()
     for (g in group_names) {
+      results[[g]] <- list()
       results[[g]]$tidy <- ti[ti[[coef_group]] == g, , drop=FALSE]
       results[[g]]$tidy$term <- paste(results[[g]]$tidy$model,
                                       results[[g]]$tidy$term)
@@ -101,7 +103,7 @@ modelsummary_wide <- function(
       class(results[[g]]) <- c("modelsummary_list", "list")
     }
   }
-      
+
   # horizontal stacking: model_names are model/group combinations
   if (stacking == "horizontal") {
     results <- list()

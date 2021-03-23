@@ -13,6 +13,7 @@
 * `datasummary_correlation` passes `...` forward
 * New `datasummary_correlation_format` function
 * `datasummary_skim` works with haven_labeled numeric
+* bugfixes
 
 # modelsummary 0.6.6
 
