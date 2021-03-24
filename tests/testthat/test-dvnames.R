@@ -10,7 +10,7 @@ test_that("dvnames adds names", {
     nondvn <- list('y' = m1, 'x' = m2)
 
     expect_identical(dvnout, nondvn)
-}
+})
 
 test_that("dvnames with single input", {
     d <- data.frame(x = 1:10, y = 2:11)
@@ -21,7 +21,7 @@ test_that("dvnames with single input", {
     nondvn <- list('y' = m1)
 
     expect_identical(dvnout, nondvn)
-}
+})
 
 test_that("dvnames numbering", {
     d <- data.frame(x = 1:10, y = 2:11)
@@ -33,7 +33,7 @@ test_that("dvnames numbering", {
     nondvn <- list('y (1)' = m1, 'x (2)' = m2)
 
     expect_identical(dvnout, nondvn)
-}
+})
 
 test_that("dvnames fill", {
     d <- data.frame(x = 1:10, y = 2:11)
@@ -45,4 +45,4 @@ test_that("dvnames fill", {
     nondvn <- list('y' = m1, 'x' = m2, 'Model' = 1)
 
     expect_identical(dvnout, nondvn)
-}
+})
