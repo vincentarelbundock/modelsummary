@@ -20,7 +20,7 @@
 #' @export
 
 dvnames <- function(models, number = FALSE, fill = 'Model') {
-    if (!is.list(models)) {
+    if (!('list' %in% class(models))) {
         models <- list(models)
     }
 

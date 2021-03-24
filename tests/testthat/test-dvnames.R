@@ -12,6 +12,17 @@ test_that("dvnames adds names", {
     expect_identical(dvnout, nondvn)
 }
 
+test_that("dvnames with single input", {
+    d <- data.frame(x = 1:10, y = 2:11)
+    m1 <- lm(y~x, data = d)
+
+    dvnout <- dvnames(m1)
+
+    nondvn <- list('y' = m1)
+
+    expect_identical(dvnout, nondvn)
+}
+
 test_that("dvnames numbering", {
     d <- data.frame(x = 1:10, y = 2:11)
     m1 <- lm(y~x, data = d)
