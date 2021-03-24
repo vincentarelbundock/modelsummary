@@ -16,6 +16,7 @@
   via `modelsummary`'s ... ellipsis to limit the GOF statistics in
   Bayesian models.
 * bug fixes
+* `dvnames()` makes it easy to get dependent variable column titles
 
 # modelsummary 0.6.6
 
