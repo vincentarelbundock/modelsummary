@@ -395,7 +395,7 @@ modelsummary <- function(
       if (is.null(gof_map)) {
         # assign here and not in the function definition because we use NULL to
         # figure out if F-stat should be included by default for lm models.
-        gm_list <- get("gof_map", as.environment("package:modelsummary"))
+        gm_list <- get("gof_map", envir = loadNamespace("modelsummary"))
         gm_list <- lapply(1:nrow(gm_list), function(i) gm_list[i, ])
       } else if (inherits(gof_map, "data.frame")) {
         gm_list <- lapply(1:nrow(gof_map), function(i) gof_map[i, ])

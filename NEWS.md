@@ -1,11 +1,12 @@
 # modelsummary 0.6.6.9000
 
+* `dvnames()` makes it easy to get dependent variable column titles
 * `vcov` adds a row to note the type of standard errors.
 * `modelsummary` accepts a single model with multiple `vcov`s. 
 * `get_gof` forwards ... to `model_performance`
 * `datasummary_correlation` passes `...` forward
 * `datasummary_correlation_format`: new function
-* `datasummry_correlation`'s `method` argument accepts functions and
+* `datasummary_correlation`'s `method` argument accepts functions and
   "pearspear" (thanks to @joachim-gassen)
 * `datasummary` functions and `rounding` accept ..., big.mark, etc.
 * `coef_map` accepts unnamed vectors
@@ -16,7 +17,6 @@
   via `modelsummary`'s ... ellipsis to limit the GOF statistics in
   Bayesian models.
 * bug fixes
-* `dvnames()` makes it easy to get dependent variable column titles
 
 # modelsummary 0.6.6
 
