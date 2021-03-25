@@ -109,48 +109,92 @@ extract_gof <- function(model, fmt, gof_map, vcov_type = NULL, ...) {
 #' @export
 get_gof <- function(model, ...) {
 
-  flag <- function(x) {
-    inherits(x, "data.frame") &&
-    nrow(x) == 1
+  get_priority <- getOption("modelsummary_get", default = "broom")
+  checkmate::assert_choice(get_priority, choices = c("broom", "performance", "all"))
+
+  warning_msg <- NULL
+
+  # broom priority
+  if (get_priority == "broom") {
+    gof <- get_gof_broom(model, ...)
+    if (is.character(gof)) {
+      warning_msg <- c(warning_msg, gof)
+      gof <- get_gof_performance(model, ...)
+      if (is.character(gof)) {
+        warning_msg <- c(warning_msg, gof)
+      }
+    }
+
+  # performance priority
+  } else if (get_priority == "performance") {
+    gof <- get_gof_performance(model, ...)
+    if (is.character(gof)) {
+      warning_msg <- c(warning_msg, gof)
+      gof <- get_gof_broom(model, ...)
+      if (is.character(gof)) {
+        warning_msg <- c(warning_msg, gof)
+      }
+    }
+
+  # combine broom + performance
+  } else {
+    gof1 <- get_gof_broom(model, ...)
+    gof2 <- get_gof_performance(model, ...)
+    if (inherits(gof1, "data.frame") && inherits(gof2, "data.frame")) {
+      gof <- bind_cols(gof1, gof2)
+    } else if (inherits(gof1, "data.frame")) {
+      gof <- gof1
+      warning_msg <- c(warning_msg, gof2)
+    } else if (inherits(gof2, "data.frame")) {
+      gof <- gof2
+      warning_msg <- c(warning_msg, gof1)
+    }
   }
 
-  # generics first
-  gof <- suppressWarnings(try(
-    generics::glance(model, ...), silent=TRUE))
-  if (flag(gof)) return(gof)
-
-  # broom second
-  gof <- suppressWarnings(try(
-    broom::glance(model, ...), silent=TRUE))
-  if (flag(gof)) return(gof)
-
-
-  gof <- suppressWarnings(try(
-    get_gof_performance(model, ...), silent=TRUE))
-  if (flag(gof)) return(gof)
-
-  # broom.mixed fourth
-  if (check_dependency("broom.mixed")) {
-    gof <- suppressWarnings(try(
-      broom.mixed::glance(model, ...), silent=TRUE))
-    if (flag(gof)) return(gof)
+  if (inherits(gof, "data.frame")) {
+    return(gof)
   }
-
 
   stop(sprintf(
-  'Cannot extract the required information from models of class "%s". 
-  `modelsummary` tries a sequence of 3 helper functions to gof statistics:
+  '`modelsummary could not extract the required information from a model
+  of class "%s". The package tried a sequence of 2 helper functions to extract
+  goodness-of-fit statistics:
 
   broom::glance(model)
   performance::model_performance(model)
-  broom.mixed::glance(model)
 
   To draw a table, one of these commands must return a one-row `data.frame`.
   The `modelsummary` website explains how to summarize unsupported models or
-  add support for new models:
+  add support for new models yourself:
 
-  https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html',
-  class(model)[1]))
+  https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html
+
+  These errors messages were generated during extraction:
+  %s',
+  class(model)[1], paste(warning_msg, collapse = "\n")))
+}
+
+
+#' Extract goodness-of-fit statistics from a single model using the
+#' `broom` package or another package with package which supplies a
+#' method for the `generics::glance` generic.
+#'
+#' @keywords internal
+get_gof_broom <- function(model, ...) {
+
+  out <- suppressWarnings(try(
+    broom::glance(model, ...),
+    silent=TRUE))
+
+  if (!inherits(out, "data.frame")) {
+    return("`broom::glance(model)` did not return a data.frame.")
+  }
+
+  if (nrow(out) > 1) {
+    return("`broom::glance(model)` returned a data.frame with more than 1 row.")   
+  }
+
+  return(out)
 }
 
 
@@ -159,8 +203,11 @@ get_gof <- function(model, ...) {
 #'
 #' @keywords internal
 get_gof_performance <- function(model, ...) {
+
+  # select appropriate metrics to compute
   if ("metrics" %in% names(list(...))) {
-    out <- performance::model_performance(model, ...)
+    out <- suppressWarnings(try(
+      performance::model_performance(model, ...)))
   } else {
     # stan models: r2_adjusted is veeeery slow
     if (inherits(model, "stanreg") ||
@@ -173,13 +220,27 @@ get_gof_performance <- function(model, ...) {
     } else {
       metrics <- "all"
     }
-    out <- performance::model_performance(model, metrics = metrics, ...)
+    out <- suppressWarnings(try(
+      performance::model_performance(model, metrics = metrics, ...)))
   }
+
+  # sanity
+  if (!inherits(out, "data.frame")) {
+    return("`performance::model_performance(model)` did not return a data.frame.")
+  }
+
+  if (nrow(out) > 1) {
+    return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")   
+  }
+
+  # cleanup
   out <- insight::standardize_names(out, style="broom")
-  mi <- insight::model_info(model)
+
   # nobs
+  mi <- insight::model_info(model)
   if ("n_obs" %in% names(mi)) {
     out$nobs <- mi$n_obs
   }
+
   return(out)
 }
