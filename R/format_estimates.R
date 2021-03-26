@@ -3,7 +3,8 @@
 #' @inheritParams modelsummary
 #' @return data.frame with side-by-side model summaries
 #' @noRd
-extract_estimates <- function(
+format_estimates <- function(
+  est,
   model,
   estimate   = "estimate",
   statistic  = "std.error",
@@ -48,13 +49,6 @@ extract_estimates <- function(
   # combine estimate and statistics
   estimate_glue <- c(estimate_glue, statistic_glue)
   
-  # extract estimates using broom or parameters
-  if (any(grepl("conf", estimate_glue))) {
-    est <- get_estimates(model, conf_level=conf_level, ...)
-  } else {
-    est <- get_estimates(model, conf_level=NULL, ...)
-  }
-  
   # estimate override
   flag1 <- !is.null(vcov)
   flag2 <- isFALSE(all.equal(vcov, stats::vcov))
@@ -67,8 +61,8 @@ extract_estimates <- function(
     # extract overriden estimates
     so <- extract_vcov(
       model,
-      vcov=vcov,
-      conf_level=conf_level)
+      vcov = vcov,
+      conf_level = conf_level)
 
     if (!is.null(so) && nrow(est) == nrow(so)) {
       # keep only columns that do not appear in so
@@ -195,85 +189,3 @@ extract_estimates <- function(
   # output
   return(est)
 }
-
-#' Extract model estimates. A mostly internal function with some potential uses
-#' outside.
-#'
-#' @inheritParams modelsummary
-#' @param model a single model object
-#' @export
-get_estimates <- function(model, conf_level=.95, ...) {
-
-  if (is.null(conf_level)) {
-    conf_int = FALSE
-  } else {
-    conf_int = TRUE
-  }
-
-  flag <- function(x) {
-    inherits(x, "data.frame") &&
-    nrow(x) > 0 &&
-    "term" %in% colnames(x)
-  }
-
-  # generics first
-  est <- suppressWarnings(try(
-    generics::tidy(model, conf.int=conf_int, conf.level=conf_level, ...), silent=TRUE))
-  if (flag(est)) return(est)
-
-  # broom second 
-  # can't use generics::tidy here otherwise broom only gets loaded the second
-  # time modelsummary is called, and the first attempt fails.
-  if (isTRUE(conf_int)) {
-    est <- suppressWarnings(try(
-      broom::tidy(model, conf.int = conf_int, conf.level = conf_level, ...), 
-      silent=TRUE))
-  # conf_level=NULL breaks broom::tidy.margins
-  } else {
-    est <- suppressWarnings(try(
-      broom::tidy(model, conf.int = conf_int, ...), 
-      silent=TRUE))
-  }
-  if (flag(est)) return(est)
-
-  # parameters third
-  f <- tidy_easystats <- function(model, ...) {
-    msg <- utils::capture.output(out <- parameters::model_parameters(model, ...))
-    out <- parameters::standardize_names(out, style="broom")
-    return(out)
-  }
-  est <- suppressWarnings(try(
-    f(model, ci=conf_level, ...), silent=TRUE))
-  if (flag(est)) return(est)
-
-  # broom.mixed fourth
-  if (check_dependency("broom.mixed")) {
-    if (isTRUE(conf_int)) {
-      est <- suppressWarnings(try(
-        broom.mixed::tidy(model, conf.int=TRUE, conf.level=conf_level, ...), 
-        silent=TRUE))
-    } else {
-      est <- suppressWarnings(try(
-          broom.mixed::tidy(model, conf.int = FALSE, ...), 
-          silent=TRUE))
-    }
-  }
-  if (flag(est)) return(est)
-
-  stop(sprintf(
-  'Cannot extract the required information from models of class "%s". 
-  `modelsummary` tries a sequence of 3 helper functions to extract estimates:
-
-  broom::tidy(model)
-  parameters::parameters(model)
-  broom.mixed::tidy(model)
-
-  To draw a table, one of these commands must return a `data.frame` with one
-  column named `term`.  The `modelsummary` website explains how to summarize
-  unsupported models or add support for new models:
-
-  https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html',
-  class(model)[1]))
-
-}
- 

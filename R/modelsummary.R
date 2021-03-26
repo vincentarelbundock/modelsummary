@@ -275,7 +275,15 @@ modelsummary <- function(
     # recycling when 1 model and many vcov
     j <- ifelse(length(models) == 1, 1, i)
 
-    tmp <- extract_estimates(
+    # extract estimates using broom or parameters
+    if (any(grepl("conf", c(estimate, statistic)))) {
+        tmp <- get_estimates(models[[j]], conf_level = conf_level, ...)
+    } else {
+        tmp <- get_estimates(models[[j]], conf_level = NULL, ...)
+    }
+
+    tmp <- format_estimates(
+      est = tmp,
       model              = models[[j]],
       fmt                = fmt,
       estimate           = estimate[[i]],
@@ -370,8 +378,13 @@ modelsummary <- function(
     # recycling models when multiple vcov
     j <- ifelse(length(models) == 1, 1, i)
       
-    gof[[i]] <- extract_gof(models[[j]], fmt = fmt, gof_map = gof_map,
-                            vcov_type = vcov_type[[i]], ...)
+    gof[[i]] <- get_gof(models[[j]], ...)
+    gof[[i]] <- format_gof(models[[j]],
+                           gof[[i]],
+                           fmt = fmt,
+                           gof_map = gof_map,
+                           vcov_type = vcov_type[[i]],
+                           ...)
     colnames(gof[[i]])[2] <- model_id[i]
   }
 
