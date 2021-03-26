@@ -5,60 +5,54 @@
 #' @export
 get_gof <- function(model, ...) {
 
-  get_priority <- getOption("modelsummary_get", default = "broom")
-  checkmate::assert_choice(get_priority, choices = c("broom", "easystats", "parameters", "performance", "all"))
+    get_priority <- getOption("modelsummary_get", default = "broom")
+    checkmate::assert_choice(get_priority, choices = c("broom", "easystats", "parameters", "performance", "all"))
 
-  warning_msg <- NULL
+    # priority
+    get_priority <- getOption("modelsummary_get", default = "broom")
+    checkmate::assert_choice(get_priority, choices = c("broom", "easystats", "parameters", "performance", "all"))
 
-  # broom priority
-  if (get_priority == "broom") {
-    gof <- get_gof_broom(model, ...)
-    if (is.character(gof)) {
-      warning_msg <- c(warning_msg, gof)
-      gof <- get_gof_performance(model, ...)
-      if (is.character(gof)) {
-        warning_msg <- c(warning_msg, gof)
-      }
+    if (get_priority %in% c("all", "broom")) {
+        funs <- list(get_gof_broom, get_gof_parameters)
+    } else {
+        funs <- list(get_gof_parameters, get_gof_broom)
     }
 
-  # performance priority
-  } else if (get_priority == "performance") {
-    gof <- get_gof_performance(model, ...)
-    if (is.character(gof)) {
-      warning_msg <- c(warning_msg, gof)
-      gof <- get_gof_broom(model, ...)
-      if (is.character(gof)) {
-        warning_msg <- c(warning_msg, gof)
-      }
+    warning_msg <- NULL
+
+    gof <- NULL
+
+    for (f in funs) {
+        if (get_priority == "all") {
+            tmp <- f(model, ...)
+            if (inherits(tmp, "data.frame") &&
+                inherits(gof, "data.frame")) {
+                gof <- bind_cols(tmp, tmp)
+            } else if (inherits(tmp, "data.frame")) {
+                gof <- tmp
+            } else {
+                warning_msg <- c(warning_msg, tmp)
+            }
+        } else {
+            if (!inherits(gof, "data.frame")) {
+                gof <- f(model, ...)
+            }
+        }
+    }
+    
+    # lm model: include F-stat by default
+    # glm also inherits from lm
+    if (isTRUE(class(model)[1] == "lm") && 
+        inherits(gof, "data.frame") &&
+        "statistic" %in% colnames(gof)) {
+        gof$F <- gof$statistic
     }
 
-  # combine broom + performance
-  } else {
-    gof1 <- get_gof_broom(model, ...)
-    gof2 <- get_gof_performance(model, ...)
-    if (inherits(gof1, "data.frame") && inherits(gof2, "data.frame")) {
-      gof <- bind_cols(gof1, gof2)
-    } else if (inherits(gof1, "data.frame")) {
-      gof <- gof1
-      warning_msg <- c(warning_msg, gof2)
-    } else if (inherits(gof2, "data.frame")) {
-      gof <- gof2
-      warning_msg <- c(warning_msg, gof1)
+    if (inherits(gof, "data.frame")) {
+        return(gof)
     }
-  }
 
-  # lm model: include F-stat by default
-  # glm also inherits from lm
-  if (isTRUE(class(model)[1] == "lm") && 
-      "statistic" %in% colnames(gof)) {
-    gof$F <- gof$statistic
-  }
-
-  if (inherits(gof, "data.frame")) {
-    return(gof)
-  }
-
-  stop(sprintf(
+    stop(sprintf(
 '`modelsummary could not extract the required information from a model
 of class "%s". The package tried a sequence of 2 helper functions to extract
 goodness-of-fit statistics:
@@ -105,7 +99,7 @@ get_gof_broom <- function(model, ...) {
 #' the `performance` package
 #'
 #' @keywords internal
-get_gof_performance <- function(model, ...) {
+get_gof_parameters <- function(model, ...) {
 
   # select appropriate metrics to compute
   if ("metrics" %in% names(list(...))) {
