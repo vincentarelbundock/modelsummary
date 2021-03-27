@@ -1,24 +1,39 @@
 # modelsummary 0.6.6.9000
 
-* `dvnames()` makes it easy to get dependent variable column titles
+`modelsummary`:
+
+* new arguments for `modelsummary`: `group` and `group_map` for grouped
+  parameters (e.g., outcome levels in multinomial logit or components of gamlss
+  model).
+* `dvnames()` makes it easy to get dependent variable column titles (thanks to @NickCH-K)
 * `vcov` adds a row to note the type of standard errors.
 * `modelsummary` accepts a single model with multiple `vcov`s. 
 * `get_gof` forwards ... to `model_performance`
-* `datasummary_correlation` passes `...` forward
-* `datasummary_correlation_format`: new function
-* `datasummary_correlation`'s `method` argument accepts functions and
-  "pearspear" (thanks to @joachim-gassen)
-* `datasummary` functions and `rounding` accept ..., big.mark, etc.
-* `coef_map` accepts unnamed vectors
+* `coef_map` accepts unnamed vectors for easy subsetting
 * `fixest::fixest_multi` support
-* `datasummary_skim` works with haven_labeled numeric
-* faster tables with bayesian models. 
 * `options(modelsummary_get)` to set the order of extraction functions
   to use under the hood (broom vs. easystats vs. all)
 * `metrics` argument of `performance::model_performance` is available
   via `modelsummary`'s ... ellipsis to limit the GOF statistics in
   Bayesian models.
-* bug fixes
+
+`datasummary_correlation`:
+
+* passes `...` forward
+* new function: `datasummary_correlation_format`
+* `datasummary_correlation`'s `method` argument accepts functions and
+  "pearspear" (thanks to @joachim-gassen)
+  
+`datasummary`:
+
+* `datasummary` functions and `rounding` accept ..., big.mark, etc.
+
+`datasummary_skim`:
+
+* now works with haven_labeled numeric
+* faster tables with bayesian models. 
+  
+Bug fixes
 
 # modelsummary 0.6.6
 
