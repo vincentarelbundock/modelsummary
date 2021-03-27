@@ -1,6 +1,6 @@
 #' Summary Tables for Models with Grouped Coefficients
 #'
-#' `modelsummary_group` summarizes models with grouped coefficients. For
+#' `modelsummary_wide` summarizes models with grouped coefficients. For
 #' example, these groups could correspond to levels of a multinomial logit
 #' outcome variable, or to parameters of a GAMLSS model. This function's
 #' arguments are the same as in `modelsummary`, except for the `coef_group` and
@@ -15,7 +15,7 @@
 #' @inheritParams modelsummary
 #' @return a regression table in a format determined by the `output` argument.
 #' @export
-modelsummary_group <- function(
+modelsummary_wide <- function(
   models,
   output      = "default",
   fmt         = 3,
@@ -158,12 +158,3 @@ modelsummary_group <- function(
     ...) 
 
 }
-
-
-
-#' `modelsummary_wide()` is an alternative name for `modelsummary_group()`
-#'
-#' @inherit modelsummary_group
-#' @keywords internal
-#' @export
-modelsummary_wide <- modelsummary_group

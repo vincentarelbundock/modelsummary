@@ -141,7 +141,7 @@ a regression table in a format determined by the \code{output} argument.
 The content of the tables can be altered with the function's arguments, or by
 calling \code{options}, as described in the \emph{Details} section below. The look of
 the tables can be customized by specifying the \code{output} argument, and by
-using functions from one of the supported table-customization packages:
+using functions from one of the supported table customization packages:
 \code{kableExtra}, \code{gt}, \code{flextable}, \code{huxtable}.
 }
 \details{

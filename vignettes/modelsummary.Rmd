@@ -719,6 +719,57 @@ mod[['Amelia']] <- mice::pool(mod[['Amelia']])
 modelsummary(mod)
 ```
 
+## Grouped coefficients: multinomial logit or GAMMLS
+
+Some models return *groups* of parameters. For instance, multinomial logit models produce coefficients for each level of the outcome (`y.level`), and GAMLSS models produce estimates for different "components".
+
+```{r, message=FALSE, warning=FALSE}
+library(gamlss)
+data(abdom)
+mod <- gamlss(y ~ pb(x), sigma.fo = ~pb(x), family = BCT,
+              data = abdom, method = mixed(1,20))
+
+get_estimates(mod)
+```
+
+Above, we see that the data.frame produced by `get_estimates` includes a `component` column which identifies term groups. The `modelsummary_wide` function can be used to summarize these kinds of models, by displaying each "group" in separate columns:
+
+```{r}
+modelsummary_wide(mod, coef_group = "component")
+```
+
+Alternatively, it is easy to create custom summaries by building objects of class `modelsummary_list` (a list of two data.frames names `tidy` and `glance`, and with class `modelsummary_list`; see the "Adding New Models" section of this page). 
+
+For example, if we only wish to summarize the "mu" component:
+
+```{r, warning=FALSE, message=FALSE}
+get_modelsummary_list <- function(x) {
+    ti <- get_estimates(x)
+    ti <- ti[ti$component == "conditional",]
+    gl <- get_gof(x)
+    out <- list("tidy" = ti, "glance" = gl)
+    class(out) <- "modelsummary_list"
+    return(out)
+}
+
+modelsummary(get_modelsummary_list(mod))
+```
+
+If we want to combine the "component" and the "term" labels:
+
+```{r, warning=FALSE, message=FALSE}
+get_modelsummary_list <- function(x) {
+    ti <- get_estimates(x)
+    ti$term <- paste(ti$component, ti$term)
+    gl <- get_gof(x)
+    out <- list("tidy" = ti, "glance" = gl)
+    class(out) <- "modelsummary_list"
+    return(out)
+}
+
+modelsummary(get_modelsummary_list(mod))
+```
+
 # Backends
 
 The table-making backends supported by `modelsummary` have overlapping capabilities (e.g., several of them can produce HTML tables). These are the default packages used for different outputs:

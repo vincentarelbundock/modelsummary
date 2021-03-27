@@ -12,7 +12,6 @@
 * `coef_map` accepts unnamed vectors
 * `fixest::fixest_multi` support
 * `datasummary_skim` works with haven_labeled numeric
-* `modelsummary_wide` becomes `modelsummary_group`
 * faster tables with bayesian models. 
 * `options(modelsummary_get)` to set the order of extraction functions
   to use under the hood (broom vs. easystats vs. all)

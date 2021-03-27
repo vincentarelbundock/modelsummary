@@ -1,5 +1,13 @@
 # reexport from tables
 
+#' tidy generic
+#' @export
+generics::tidy
+
+#' glance generic
+#' @export
+generics::glance
+
 #' @title Include all columns of a dataframe.
 #' @export
 #' @keywords internal
