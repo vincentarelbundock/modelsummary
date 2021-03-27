@@ -1,6 +1,6 @@
 #' Simple, Beautiful, and Customizable Model Summaries
 #'
-#' `modelsummary_wide` is a specialized function to display groups of
+#' `modelsummary_group` is a specialized function to display groups of
 #' parameters from a single model in separate columns. This can be useful, for
 #' example, to display the different levels of coefficients in a multinomial
 #' regression model (e.g., `nnet::multinom`). The `coef_group` argument
@@ -15,7 +15,7 @@
 #' @inheritParams modelsummary
 #' @return a regression table in a format determined by the `output` argument.
 #' @export
-modelsummary_wide <- function(
+modelsummary_group <- function(
   models,
   output      = "default",
   fmt         = 3,
@@ -158,3 +158,12 @@ modelsummary_wide <- function(
     ...) 
 
 }
+
+
+
+#' `modelsummary_wide()` is an alternative name for `modelsummary_group()`
+#'
+#' @inherit modelsummary_group
+#' @keywords internal
+#' @export
+modelsummary_wide <- modelsummary_group

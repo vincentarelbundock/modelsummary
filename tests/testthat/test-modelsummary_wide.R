@@ -15,7 +15,7 @@ test_that("model names", {
   invisible(capture.output(m1 <- nnet::multinom(var1~var2, data=df1)))
   invisible(capture.output(m2 <- nnet::multinom(var1~var2, data=df2)))
   models <- list("a" = m1, "b" = m2)
-  tab <- modelsummary_wide(models, output = "dataframe", statistic="conf.int")
+  tab <- modelsummary_group(models, output = "dataframe", statistic="conf.int")
   truth <- c("part", "term", "statistic", "a B", "a C", "b B", "b C")
   expect_equal(truth, colnames(tab))
 })
@@ -26,7 +26,7 @@ test_that("no group", {
     lm(hp ~ mpg, mtcars),
     lm(hp ~ mpg + drat + vs, mtcars)
   )
-  expect_error(modelsummary_wide(mod))
+  expect_error(modelsummary_group(mod))
 })
 
 
@@ -34,10 +34,10 @@ test_that("nnet::multinom one model (factor DV)", {
   testthat::skip_if_not_installed("nnet")
   df <- make_data()
   invisible(capture.output(mod <- nnet::multinom(var1~var2, data=df)))
-  tmp <- modelsummary_wide(mod, output="data.frame")
+  tmp <- modelsummary_group(mod, output="data.frame")
   expect_is(tmp, "data.frame")
   expect_equal(dim(tmp), c(7, 5))
-  tmp <- modelsummary_wide(mod, output="data.frame", stacking="vertical")
+  tmp <- modelsummary_group(mod, output="data.frame", stacking="vertical")
   expect_is(tmp, "data.frame")
   expect_equal(dim(tmp), c(7, 5))
   # no model label in gof for single model
@@ -52,10 +52,10 @@ test_that("2 models: horizontal and vertical", {
   df2 <- make_data()
   invisible(capture.output(m1 <- nnet::multinom(var1~var2, data=df1)))
   invisible(capture.output(m2 <- nnet::multinom(var1~var2, data=df2)))
-  tmp <- modelsummary_wide(list(m1, m2), output="data.frame", stacking="horizontal")
+  tmp <- modelsummary_group(list(m1, m2), output="data.frame", stacking="horizontal")
   expect_is(tmp, "data.frame")
   expect_equal(dim(tmp), c(7, 7))
-  tmp <- modelsummary_wide(list(m1, m2), output="data.frame", stacking="vertical")
+  tmp <- modelsummary_group(list(m1, m2), output="data.frame", stacking="vertical")
   expect_is(tmp, "data.frame")
   expect_equal(dim(tmp), c(16, 5))
 })
@@ -68,11 +68,11 @@ test_that("2 models with different response levels", {
   invisible(capture.output(m1 <- nnet::multinom(var1~var2, data=df1)))
   invisible(capture.output(m2 <- nnet::multinom(var1~var2, data=df2)))
 
-  tmp <- modelsummary_wide(list(m1, m2), output="data.frame", stacking="horizontal")
+  tmp <- modelsummary_group(list(m1, m2), output="data.frame", stacking="horizontal")
   expect_is(tmp, "data.frame")
   expect_equal(dim(tmp), c(7, 7))
 
-  tmp <- modelsummary_wide(list(m1, m2), output="data.frame", stacking="vertical")
+  tmp <- modelsummary_group(list(m1, m2), output="data.frame", stacking="vertical")
   expect_is(tmp, "data.frame")
   expect_equal(dim(tmp), c(16, 6))
 })
@@ -81,7 +81,7 @@ test_that("2 models with different response levels", {
 test_that("single model: no model names", {
   df1 <- make_data()
   invisible(capture.output(m1 <- nnet::multinom(var1~var2, data=df1)))
-  tmp <- modelsummary_wide(m1, output="data.frame")
+  tmp <- modelsummary_group(m1, output="data.frame")
   truth <- c("part", "term", "statistic", "B", "C")
   expect_equal(truth, colnames(tmp))
 })
@@ -104,7 +104,7 @@ test_that("2 models w/ horizontal stack", {
   invisible(capture.output(m1 <- nnet::multinom(var1~var2, data=df1)))
   invisible(capture.output(m2 <- nnet::multinom(var1~var2, data=df2)))
 
-  tmp <- modelsummary_wide(list(m1, m2), output="data.frame", stacking="horizontal")
+  tmp <- modelsummary_group(list(m1, m2), output="data.frame", stacking="horizontal")
   expect_is(tmp, "data.frame")
   # expect_equal(dim(tmp), c(20, 5))
   # expect_equal(dim(tmp), c(16, 5))
