@@ -49,24 +49,29 @@ modelsummary_wide(
 vector with one string per model). Valid entries include any column name of
 the data.frame produced by \code{get_estimates(model)}. Examples:
 \itemize{
-\item "estimate"
-\item "\{estimate\} (\{std.error\})\{stars\}"
-\item "\{estimate\} \link[=\\{conf.low\\}, \\{conf.high\\}]{\{conf.low\}, \{conf.high\}}"
+\item \code{"estimate"}
+\item \code{"{estimate} ({std.error}){stars}"}
+\item \code{"{estimate} [{conf.low}, {conf.high}]"}
 }}
 
-\item{statistic}{vector of strings or \code{glue} strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics.
+\item{statistic}{vector of strings or \code{glue} strings which select uncertainty
+statistics to report vertically below the estimate. NULL omits all
+uncertainty statistics.
 \itemize{
-\item "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", or any column name produced by: \code{get_estimates(model)}
+\item "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high",
+or any column name produced by: \code{get_estimates(model)}
 \item \code{glue} package strings with braces, such as:
 \itemize{
-\item "\{p.value\} \link[=\\{conf.low\\}, \\{conf.high\\}]{\{conf.low\}, \{conf.high\}}"
-\item "Std.Error: \{std.error\}"
+\item \code{"{p.value} [{conf.low}, {conf.high}]"}
+\item \code{"Std.Error: {std.error}"}
 }
-\item Note: Parentheses are added automatically unless the string includes \code{glue} curly braces \{\}.
-\item Note: To report uncertainty statistics \emph{next} to coefficients, you can supply a \code{glue} string to the \code{estimate} argument.
+\item Note: Parentheses are added automatically unless the string includes \code{glue} curly braces \code{{}}.
+\item Note: To report uncertainty statistics \emph{next} to coefficients, you can #'   supply a \code{glue} string to the \code{estimate} argument.
 }}
 
-\item{vcov}{robust standard errors and other manual statistics. The \code{vcov} argument accepts five types of input (see the 'Details' and 'Examples' sections below):
+\item{vcov}{robust standard errors and other manual statistics. The \code{vcov}
+argument accepts five types of input (see the 'Details' and 'Examples'
+sections below):
 \itemize{
 \item string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").
 \item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
@@ -86,9 +91,8 @@ the data.frame produced by \code{get_estimates(model)}. Examples:
 
 \item{coef_group}{the name of the coefficient groups to use as columns (NULL
 or character). If \code{coef_group} is NULL, \code{modelsummary} tries to guess the
-correct coefficient group identifier. To be valid, this identifier must be a
-column in the data.frame produced by \code{tidy(model)}. Note: you may have to
-load the \code{broom} or \code{broom.mixed} package before executing \code{tidy(model)}.}
+correct coefficient group identifier. To be valid, this identifier must
+be a column in the data.frame produced by \code{get_estimates(model)}.}
 
 \item{coef_map}{character vector. Subset, rename, and reorder coefficients.
 Coefficients omitted from this vector are omitted from the table. The order
@@ -127,7 +131,8 @@ column center-aligned, and the 3rd column right-aligned.}
 
 \item{title}{string}
 
-\item{stacking}{direction in which models are stacked: "horizontal" or "vertical"}
+\item{stacking}{direction in which models are stacked: "horizontal" or
+"vertical"}
 
 \item{...}{all other arguments are passed through to the extractor and
 table-making functions. This allows users to pass arguments directly to
@@ -135,21 +140,18 @@ table-making functions. This allows users to pass arguments directly to
 the scenes. Examples include:
 \itemize{
 \item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression
-\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in
-\code{kableExtra} tables.
-\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit
-statistics to extract using the \code{performance} package (must have set
-\code{options(modelsummary_get="easystats")} first).
+\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in #'   \code{kableExtra} tables.
+\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit #'   statistics to extract using the \code{performance} package (must have set #'   \code{options(modelsummary_get="easystats")} first).
 }}
 }
 \value{
 a regression table in a format determined by the \code{output} argument.
 }
 \description{
-\code{modelsummary_group} is a specialized function to display groups of
-parameters from a single model in separate columns. This can be useful, for
-example, to display the different levels of coefficients in a multinomial
-regression model (e.g., \code{nnet::multinom}). The \code{coef_group} argument
-specifies the name of the group identifier.
+\code{modelsummary_group} summarizes models with grouped coefficients. For
+example, these groups could correspond to levels of a multinomial logit
+outcome variable, or to parameters of a GAMLSS model. This function's
+arguments are the same as in \code{modelsummary}, except for the \code{coef_group} and
+the \code{stacking} arguments.
 }
 \keyword{internal}

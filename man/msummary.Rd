@@ -47,24 +47,29 @@ msummary(
 vector with one string per model). Valid entries include any column name of
 the data.frame produced by \code{get_estimates(model)}. Examples:
 \itemize{
-\item "estimate"
-\item "\{estimate\} (\{std.error\})\{stars\}"
-\item "\{estimate\} \link[=\\{conf.low\\}, \\{conf.high\\}]{\{conf.low\}, \{conf.high\}}"
+\item \code{"estimate"}
+\item \code{"{estimate} ({std.error}){stars}"}
+\item \code{"{estimate} [{conf.low}, {conf.high}]"}
 }}
 
-\item{statistic}{vector of strings or \code{glue} strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics.
+\item{statistic}{vector of strings or \code{glue} strings which select uncertainty
+statistics to report vertically below the estimate. NULL omits all
+uncertainty statistics.
 \itemize{
-\item "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", or any column name produced by: \code{get_estimates(model)}
+\item "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high",
+or any column name produced by: \code{get_estimates(model)}
 \item \code{glue} package strings with braces, such as:
 \itemize{
-\item "\{p.value\} \link[=\\{conf.low\\}, \\{conf.high\\}]{\{conf.low\}, \{conf.high\}}"
-\item "Std.Error: \{std.error\}"
+\item \code{"{p.value} [{conf.low}, {conf.high}]"}
+\item \code{"Std.Error: {std.error}"}
 }
-\item Note: Parentheses are added automatically unless the string includes \code{glue} curly braces \{\}.
-\item Note: To report uncertainty statistics \emph{next} to coefficients, you can supply a \code{glue} string to the \code{estimate} argument.
+\item Note: Parentheses are added automatically unless the string includes \code{glue} curly braces \code{{}}.
+\item Note: To report uncertainty statistics \emph{next} to coefficients, you can #'   supply a \code{glue} string to the \code{estimate} argument.
 }}
 
-\item{vcov}{robust standard errors and other manual statistics. The \code{vcov} argument accepts five types of input (see the 'Details' and 'Examples' sections below):
+\item{vcov}{robust standard errors and other manual statistics. The \code{vcov}
+argument accepts five types of input (see the 'Details' and 'Examples'
+sections below):
 \itemize{
 \item string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").
 \item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
@@ -125,30 +130,21 @@ table-making functions. This allows users to pass arguments directly to
 the scenes. Examples include:
 \itemize{
 \item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression
-\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in
-\code{kableExtra} tables.
-\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit
-statistics to extract using the \code{performance} package (must have set
-\code{options(modelsummary_get="easystats")} first).
+\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in #'   \code{kableExtra} tables.
+\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit #'   statistics to extract using the \code{performance} package (must have set #'   \code{options(modelsummary_get="easystats")} first).
 }}
 }
 \value{
 a regression table in a format determined by the \code{output} argument.
 }
 \description{
-Create beautiful and customizable tables to summarize several
-statistical models side-by-side. Draw coefficient plots,
-multi-level cross-tabs, dataset summaries, balance tables (a.k.a.
-"Table 1s"), and correlation matrices. This package supports dozens
-of statistical models, and it can produce tables in HTML, LaTeX,
-Word, Markdown, PDF, PowerPoint, Excel, RTF, JPG, or PNG. Tables
-can easily be embedded in 'Rmarkdown' or 'knitr' dynamic documents.
+The content of the tables can be altered with the function's arguments, or by
+calling \code{options}, as described in the \emph{Details} section below. The look of
+the tables can be customized by specifying the \code{output} argument, and by
+using functions from one of the supported table-customization packages:
+\code{kableExtra}, \code{gt}, \code{flextable}, \code{huxtable}.
 }
 \details{
-The behavior of \code{modelsummary} can be altered with arguments or
-with the \code{options} function. See the Details section for a list of
-those options.
-
 \code{options}
 
 \code{modelsummary} supports 4 table-making packages: \code{kableExtra}, \code{gt},

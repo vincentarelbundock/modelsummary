@@ -2,7 +2,7 @@
 % Please edit documentation in R/modelplot.R
 \name{modelplot}
 \alias{modelplot}
-\title{Plot model coefficients using points or point-ranges}
+\title{Model Summary Plots with Estimates and Confidence Intervals}
 \usage{
 modelplot(
   models,
@@ -38,7 +38,9 @@ from the table using \code{grepl(perl=TRUE)}.}
 that will appear in the table. Names refer to the original term names stored
 in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
 
-\item{vcov}{robust standard errors and other manual statistics. The \code{vcov} argument accepts five types of input (see the 'Details' and 'Examples' sections below):
+\item{vcov}{robust standard errors and other manual statistics. The \code{vcov}
+argument accepts five types of input (see the 'Details' and 'Examples'
+sections below):
 \itemize{
 \item string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").
 \item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
@@ -69,15 +71,12 @@ table-making functions. This allows users to pass arguments directly to
 the scenes. Examples include:
 \itemize{
 \item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression
-\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in
-\code{kableExtra} tables.
-\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit
-statistics to extract using the \code{performance} package (must have set
-\code{options(modelsummary_get="easystats")} first).
+\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in #'   \code{kableExtra} tables.
+\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit #'   statistics to extract using the \code{performance} package (must have set #'   \code{options(modelsummary_get="easystats")} first).
 }}
 }
 \description{
-Plot model coefficients using points or point-ranges
+Model Summary Plots with Estimates and Confidence Intervals
 }
 \examples{
 \dontrun{

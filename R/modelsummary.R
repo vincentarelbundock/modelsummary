@@ -5,59 +5,46 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 
 
 
-#' Simple, Beautiful, and Customizable Model Summaries
+#' Model Summary Tables
 #'
-#' Create beautiful and customizable tables to summarize several
-#' statistical models side-by-side. Draw coefficient plots,
-#' multi-level cross-tabs, dataset summaries, balance tables (a.k.a.
-#' "Table 1s"), and correlation matrices. This package supports dozens
-#' of statistical models, and it can produce tables in HTML, LaTeX,
-#' Word, Markdown, PDF, PowerPoint, Excel, RTF, JPG, or PNG. Tables
-#' can easily be embedded in 'Rmarkdown' or 'knitr' dynamic documents.
-#'
-#' The behavior of `modelsummary` can be altered with arguments or
-#' with the `options` function. See the Details section for a list of
-#' those options.
+#' The content of the tables can be altered with the function's arguments, or by
+#' calling `options`, as described in the _Details_ section below. The look of
+#' the tables can be customized by specifying the `output` argument, and by
+#' using functions from one of the supported table customization packages:
+#' `kableExtra`, `gt`, `flextable`, `huxtable`.
 #' 
 #' @param models a model or (optionally named) list of models
 #' @param output filename or object type (character string)
-#' \itemize{
-#'   \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
-#'   \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
-#'   \item To change the default output format, type `options(modelsummary_default = "latex")`, where `latex` can be any of the valid object types listed above. 
-#'   \item Warning: the `output` argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
-#' }
+#' * Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
+#' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
+#' * To change the default output format, type `options(modelsummary_default = "latex")`, where `latex` can be any of the valid object types listed above. 
+#' * Warning: the `output` argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
 #' @param fmt determines how to format numeric values
-#' \itemize{
-#'   \item integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
-#'   \item character: passed to the `sprintf` function (e.g., '\%.3f' keeps 3 digits with trailing zero). See `?sprintf`
-#'   \item function: returns a formatted character string.
-#' }
+#' * integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
+#' * character: passed to the `sprintf` function (e.g., '\%.3f' keeps 3 digits with trailing zero). See `?sprintf`
+#' * function: returns a formatted character string.
 #' @param stars to indicate statistical significance
-#' \itemize{
-#'   \item FALSE (default): no significance stars.
-#'   \item TRUE: *=.1, **=.05, ***=.01
-#'   \item Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
-#' }
-#' @param statistic vector of strings or `glue` strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics. 
-#' \itemize{
-#'   \item "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", or any column name produced by: `get_estimates(model)`
-#'   \item `glue` package strings with braces, such as: 
-#'   \itemize{
-#'     \item "\{p.value\} [\{conf.low\}, \{conf.high\}]"
-#'     \item "Std.Error: \{std.error\}"
-#'   }
-#'   \item Note: Parentheses are added automatically unless the string includes `glue` curly braces \{\}.
-#'   \item Note: To report uncertainty statistics \emph{next} to coefficients, you can supply a `glue` string to the `estimate` argument.
-#' }
-#' @param vcov robust standard errors and other manual statistics. The `vcov` argument accepts five types of input (see the 'Details' and 'Examples' sections below):
-#' \itemize{
-#'   \item string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").
-#'   \item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
-#'   \item function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`).
-#'   \item list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
-#'   \item a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. 
-#' }
+#' * FALSE (default): no significance stars.
+#' * TRUE: *=.1, **=.05, ***=.01
+#' * Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
+#' @param statistic vector of strings or `glue` strings which select uncertainty
+#' statistics to report vertically below the estimate. NULL omits all
+#' uncertainty statistics.
+#' * "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high",
+#'    or any column name produced by: `get_estimates(model)`
+#' * `glue` package strings with braces, such as: 
+#'   - `"{p.value} [{conf.low}, {conf.high}]"`
+#'   - `"Std.Error: {std.error}"`
+#' * Note: Parentheses are added automatically unless the string includes `glue` curly braces `{}`.
+#' * Note: To report uncertainty statistics \emph{next} to coefficients, you can #'   supply a `glue` string to the `estimate` argument.
+#' @param vcov robust standard errors and other manual statistics. The `vcov`
+#'   argument accepts five types of input (see the 'Details' and 'Examples'
+#'   sections below):
+#' * string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").
+#' * formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
+#' * function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`).
+#' * list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+#' * a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. 
 #' @param conf_level confidence level to use for confidence intervals
 #' @param coef_map character vector. Subset, rename, and reorder coefficients.
 #' Coefficients omitted from this vector are omitted from the table. The order
@@ -72,11 +59,9 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' that will appear in the table. Names refer to the original term names stored
 #' in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
 #' @param gof_map 
-#' \itemize{
-#'   \item NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.
-#'   \item data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
-#'   \item list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
-#' }
+#' * NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.
+#' * data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
+#' * list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
 #' @param gof_omit string regular expression. Omits all matching gof statistics from
 #' the table (using `grepl(perl=TRUE)`).
 #' @param add_rows a data.frame (or tibble) with the same number of columns as
@@ -88,11 +73,9 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' @param estimate string or `glue` string of the estimate to display (or a
 #' vector with one string per model). Valid entries include any column name of
 #' the data.frame produced by `get_estimates(model)`. Examples:
-#' \itemize{
-#'   \item "estimate"
-#'   \item "\{estimate\} (\{std.error\})\{stars\}"
-#'   \item "\{estimate\} [\{conf.low\}, \{conf.high\}]"
-#' }
+#' * `"estimate"`
+#' * `"{estimate} ({std.error}){stars}"`
+#' * `"{estimate} [{conf.low}, {conf.high}]"`
 #' @param align A character string of length equal to the number of columns in
 #' the table.  "lcr" means that the first column will be left-aligned, the 2nd
 #' column center-aligned, and the 3rd column right-aligned.
@@ -101,12 +84,10 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' `modelsummary` in order to affect the behavior of other functions behind
 #' the scenes. Examples include:
 #' * `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
-#' * `kableExtra::kbl(escape=FALSE)` to avoid escaping math characters in
-#'   `kableExtra` tables.
-#' * `performance::model_performance(metrics="RMSE")` to select goodness-of-fit
-#'   statistics to extract using the `performance` package (must have set
-#'   `options(modelsummary_get="easystats")` first).
+#' * `kableExtra::kbl(escape=FALSE)` to avoid escaping math characters in #'   `kableExtra` tables.
+#' * `performance::model_performance(metrics="RMSE")` to select goodness-of-fit #'   statistics to extract using the `performance` package (must have set #'   `options(modelsummary_get="easystats")` first).
 #' @return a regression table in a format determined by the `output` argument.
+#' @importFrom generics glance tidy
 #' @details 
 #'
 #' `options`
@@ -139,10 +120,8 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' it with an external package, you need to choose a different output format
 #' and saving mechanism. Unfortunately, the approach differs from package to
 #' package:
-#' \itemize{
-#'   \item `gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave` function.
-#'   \item `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.
-#' }
+#' * `gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave` function.
+#' * `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.
 #'
 #'
 #' `vcov` argument:

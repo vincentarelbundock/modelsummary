@@ -1,4 +1,4 @@
-#' Plot model coefficients using points or point-ranges
+#' Model Summary Plots with Estimates and Confidence Intervals
 #'
 #' @inheritParams modelsummary
 #' @param draw TRUE returns a 'ggplot2' object, FALSE returns the data.frame

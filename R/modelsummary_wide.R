@@ -1,17 +1,17 @@
-#' Simple, Beautiful, and Customizable Model Summaries
+#' Summary Tables for Models with Grouped Coefficients
 #'
-#' `modelsummary_group` is a specialized function to display groups of
-#' parameters from a single model in separate columns. This can be useful, for
-#' example, to display the different levels of coefficients in a multinomial
-#' regression model (e.g., `nnet::multinom`). The `coef_group` argument
-#' specifies the name of the group identifier.
+#' `modelsummary_group` summarizes models with grouped coefficients. For
+#' example, these groups could correspond to levels of a multinomial logit
+#' outcome variable, or to parameters of a GAMLSS model. This function's
+#' arguments are the same as in `modelsummary`, except for the `coef_group` and
+#' the `stacking` arguments.
 #'
 #' @param coef_group the name of the coefficient groups to use as columns (NULL
 #' or character). If `coef_group` is NULL, `modelsummary` tries to guess the
-#' correct coefficient group identifier. To be valid, this identifier must be a
-#' column in the data.frame produced by `tidy(model)`. Note: you may have to
-#' load the `broom` or `broom.mixed` package before executing `tidy(model)`.
-#' @param stacking direction in which models are stacked: "horizontal" or "vertical"
+#' correct coefficient group identifier. To be valid, this identifier must
+#' be a column in the data.frame produced by `get_estimates(model)`.
+#' @param stacking direction in which models are stacked: "horizontal" or
+#' "vertical"
 #' @inheritParams modelsummary
 #' @return a regression table in a format determined by the `output` argument.
 #' @export
