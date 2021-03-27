@@ -2,7 +2,7 @@ library(modelsummary)
 
 test_that("bad estimate name throws error", {
   mod <- lm(am ~ drat, data = mtcars)
-  expect_error(modelsummary:::extract_estimates(mod, estimate = "junk"))
+  expect_error(modelsummary:::format_estimates(mod, estimate = "junk"))
 })
 
 test_that("bad statistic name throws error", {
