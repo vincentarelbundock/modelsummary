@@ -7,11 +7,24 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 
 #' Simple, Beautiful, and Customizable Model Summaries
 #'
+#' Create beautiful and customizable tables to summarize several
+#' statistical models side-by-side. Draw coefficient plots,
+#' multi-level cross-tabs, dataset summaries, balance tables (a.k.a.
+#' "Table 1s"), and correlation matrices. This package supports dozens
+#' of statistical models, and it can produce tables in HTML, LaTeX,
+#' Word, Markdown, PDF, PowerPoint, Excel, RTF, JPG, or PNG. Tables
+#' can easily be embedded in 'Rmarkdown' or 'knitr' dynamic documents.
+#'
+#' The behavior of `modelsummary` can be altered with arguments or
+#' with the `options` function. See the Details section for a list of
+#' those options.
+#' 
 #' @param models a model or (optionally named) list of models
 #' @param output filename or object type (character string)
 #' \itemize{
 #'   \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
 #'   \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
+#'   \item To change the default output format, type `options(modelsummary_default = "latex")`, where `latex` can be any of the valid object types listed above. 
 #'   \item Warning: the `output` argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
 #' }
 #' @param fmt determines how to format numeric values
@@ -84,13 +97,41 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' the table.  "lcr" means that the first column will be left-aligned, the 2nd
 #' column center-aligned, and the 3rd column right-aligned.
 #' @param ... all other arguments are passed through to the extractor and
-#' table-making functions. This allows users to specify additional options such
-#' as set `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
-#' coefficients or `kableExtra::kbl(escape=FALSE)` to avoid escaping math
-#' characters in `kableExtra` tables.
+#' table-making functions. This allows users to pass arguments directly to
+#' `modelsummary` in order to affect the behavior of other functions behind
+#' the scenes. Examples include:
+#' * `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
+#' * `kableExtra::kbl(escape=FALSE)` to avoid escaping math characters in
+#'   `kableExtra` tables.
+#' * `performance::model_performance(metrics="RMSE")` to select goodness-of-fit
+#'   statistics to extract using the `performance` package (must have set
+#'   `options(modelsummary_get="easystats")` first).
 #' @return a regression table in a format determined by the `output` argument.
-#' @importFrom generics glance tidy
 #' @details 
+#'
+#' `options`
+#' 
+#' `modelsummary` supports 4 table-making packages: `kableExtra`, `gt`,
+#' `flextable`, and `huxtable`. Some of these packages have overlapping
+#' functionalities. For example, 3 of those packages can export to LaTeX. To
+#' change the default backend used for a specific file format, you can use
+#' the `options` function:
+#'
+#' options(modelsummary_html = 'kableExtra')
+#' options(modelsummary_latex = 'gt')
+#' options(modelsummary_word = 'huxtable')
+#' options(modelsummary_png = 'gt')
+#'
+#' `modelsummary` can use two sets of packages to extract information from
+#' statistical models: `broom` and the `easystats` family (`performance` and
+#' `parameters`). By default, it uses `broom` first and `easystats` as a
+#' fallback if `broom` fails. You can change the order of priorities 
+#' or include goodness-of-fit extracted by *both* packages by setting:
+#'
+#' `options(modelsummary_get = "easystats")`
+#' `options(modelsummary_get = "easystats")`
+#'
+#'
 #' `output` argument:
 #'
 #' When a file name is supplied to the `output` argument, the table is written
@@ -102,7 +143,8 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #'   \item `gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave` function.
 #'   \item `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.
 #' }
-#' 
+#'
+#'
 #' `vcov` argument:
 #'
 #' To use a string such as "robust" or "HC0", your model must be supported
@@ -508,9 +550,8 @@ modelsummary <- function(
 
 }
 
-#' Beautiful, customizable summaries of statistical models
-#'
 #' `msummary()` is a shortcut to `modelsummary()`
+#'
 #' @inherit modelsummary
 #' @keywords internal
 #' @export

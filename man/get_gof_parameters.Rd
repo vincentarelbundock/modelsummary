@@ -3,12 +3,12 @@
 \name{get_gof_parameters}
 \alias{get_gof_parameters}
 \title{Extract goodness-of-fit statistics from a single model using
-the `performance` package}
+the \code{performance} package}
 \usage{
 get_gof_parameters(model, ...)
 }
 \description{
 Extract goodness-of-fit statistics from a single model using
-the `performance` package
+the \code{performance} package
 }
 \keyword{internal}

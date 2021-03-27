@@ -2,12 +2,12 @@
 % Please edit documentation in R/supported_models.R
 \name{supported_models}
 \alias{supported_models}
-\title{List of model objects from which `modelsummary` can extract estimates and
+\title{List of model objects from which \code{modelsummary} can extract estimates and
 statistics}
 \usage{
 supported_models()
 }
 \description{
-List of model objects from which `modelsummary` can extract estimates and
+List of model objects from which \code{modelsummary} can extract estimates and
 statistics
 }

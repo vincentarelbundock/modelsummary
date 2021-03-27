@@ -27,16 +27,17 @@ more resources.}
 
 \item{output}{filename or object type (character string)
 \itemize{
-  \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
-  \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
-  \item Warning: the `output` argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
+\item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
+\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
+\item To change the default output format, type \code{options(modelsummary_default = "latex")}, where \code{latex} can be any of the valid object types listed above.
+\item Warning: the \code{output} argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
 }}
 
 \item{fmt}{determines how to format numeric values
 \itemize{
-  \item integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
-  \item character: passed to the `sprintf` function (e.g., '\%.3f' keeps 3 digits with trailing zero). See `?sprintf`
-  \item function: returns a formatted character string.
+\item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
+\item character: passed to the \code{sprintf} function (e.g., '\\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
+\item function: returns a formatted character string.
 }}
 
 \item{title}{string}
@@ -59,11 +60,11 @@ See Examples section below.}
 have a unique label across all columns, except for the row immediately above
 the data. FALSE keeps all headers. The order in which terms are entered in
 the formula determines the order in which headers appear. For example,
-`x~mean*z` will print the `mean`-related header above the `z`-related
+\code{x~mean*z} will print the \code{mean}-related header above the \code{z}-related
 header.`}
 }
 \description{
-`datasummary` can use any summary function which produces one numeric or
+\code{datasummary} can use any summary function which produces one numeric or
 character value per variable. The examples section of this documentation
 shows how to define custom summary functions. The package also ships with
 several shortcut summary functions: Min, Max, Mean, Median, Var, SD,

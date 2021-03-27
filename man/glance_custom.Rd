@@ -11,8 +11,8 @@ glance_custom(x)
 \item{x}{model or other R object to convert to single-row data frame}
 }
 \description{
-To customize the output of a model of class `lm`, you can define a new
-method called `glance_custom.lm` which returns a one-row data.frame.
+To customize the output of a model of class \code{lm}, you can define a new
+method called \code{glance_custom.lm} which returns a one-row data.frame.
 }
 \section{Methods}{
 

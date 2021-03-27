@@ -3,14 +3,14 @@
 \name{get_gof_broom}
 \alias{get_gof_broom}
 \title{Extract goodness-of-fit statistics from a single model using the
-`broom` package or another package with package which supplies a
-method for the `generics::glance` generic.}
+\code{broom} package or another package with package which supplies a
+method for the \code{generics::glance} generic.}
 \usage{
 get_gof_broom(model, ...)
 }
 \description{
 Extract goodness-of-fit statistics from a single model using the
-`broom` package or another package with package which supplies a
-method for the `generics::glance` generic.
+\code{broom} package or another package with package which supplies a
+method for the \code{generics::glance} generic.
 }
 \keyword{internal}

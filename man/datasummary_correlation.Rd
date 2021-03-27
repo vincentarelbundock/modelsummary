@@ -19,16 +19,17 @@ datasummary_correlation(
 
 \item{output}{filename or object type (character string)
 \itemize{
-  \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
-  \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
-  \item Warning: the `output` argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
+\item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
+\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
+\item To change the default output format, type \code{options(modelsummary_default = "latex")}, where \code{latex} can be any of the valid object types listed above.
+\item Warning: the \code{output} argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
 }}
 
 \item{fmt}{determines how to format numeric values
 \itemize{
-  \item integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
-  \item character: passed to the `sprintf` function (e.g., '\%.3f' keeps 3 digits with trailing zero). See `?sprintf`
-  \item function: returns a formatted character string.
+\item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
+\item character: passed to the \code{sprintf} function (e.g., '\\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
+\item function: returns a formatted character string.
 }}
 
 \item{title}{string}
@@ -37,22 +38,22 @@ datasummary_correlation(
 
 \item{method}{character or function
 \itemize{
-  \item character: "pearson", "kendall", "spearman", or "pearspear"
-    (Pearson correlations above and Spearman correlations below the diagonal)
-  \item function: takes a data.frame with numeric columns and returns a
-    square matrix or data.frame with unique row.names and colnames
-    corresponding to variable names. Note that the
-    `datasummary_correlation_format` can often be useful for formatting the
-    output of custom correlation functions.
+\item character: "pearson", "kendall", "spearman", or "pearspear"
+(Pearson correlations above and Spearman correlations below the diagonal)
+\item function: takes a data.frame with numeric columns and returns a
+square matrix or data.frame with unique row.names and colnames
+corresponding to variable names. Note that the
+\code{datasummary_correlation_format} can often be useful for formatting the
+output of custom correlation functions.
 }}
 
 \item{...}{other parameters are passed through to the table-making
 packages. This can be used, for example, to pass arguments such
-as `escape=FALSE` to `kableExtra`.}
+as \code{escape=FALSE} to \code{kableExtra}.}
 }
 \description{
 The names of the variables displayed in the correlation table are the names
-of the columns in the `data`. You can rename those columns (with or without
+of the columns in the \code{data}. You can rename those columns (with or without
 spaces) to produce a table of human-readable variables.
 }
 \examples{

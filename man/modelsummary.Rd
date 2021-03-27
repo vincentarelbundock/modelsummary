@@ -30,80 +30,81 @@ modelsummary(
 
 \item{output}{filename or object type (character string)
 \itemize{
-  \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
-  \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
-  \item Warning: the `output` argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
+\item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
+\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
+\item To change the default output format, type \code{options(modelsummary_default = "latex")}, where \code{latex} can be any of the valid object types listed above.
+\item Warning: the \code{output} argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
 }}
 
 \item{fmt}{determines how to format numeric values
 \itemize{
-  \item integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
-  \item character: passed to the `sprintf` function (e.g., '\%.3f' keeps 3 digits with trailing zero). See `?sprintf`
-  \item function: returns a formatted character string.
+\item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
+\item character: passed to the \code{sprintf} function (e.g., '\\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
+\item function: returns a formatted character string.
 }}
 
-\item{estimate}{string or `glue` string of the estimate to display (or a
+\item{estimate}{string or \code{glue} string of the estimate to display (or a
 vector with one string per model). Valid entries include any column name of
-the data.frame produced by `get_estimates(model)`. Examples:
+the data.frame produced by \code{get_estimates(model)}. Examples:
 \itemize{
-  \item "estimate"
-  \item "\{estimate\} (\{std.error\})\{stars\}"
-  \item "\{estimate\} [\{conf.low\}, \{conf.high\}]"
+\item "estimate"
+\item "\{estimate\} (\{std.error\})\{stars\}"
+\item "\{estimate\} \link[=\\{conf.low\\}, \\{conf.high\\}]{\{conf.low\}, \{conf.high\}}"
 }}
 
-\item{statistic}{vector of strings or `glue` strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics. 
+\item{statistic}{vector of strings or \code{glue} strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics.
 \itemize{
-  \item "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", or any column name produced by: `get_estimates(model)`
-  \item `glue` package strings with braces, such as: 
-  \itemize{
-    \item "\{p.value\} [\{conf.low\}, \{conf.high\}]"
-    \item "Std.Error: \{std.error\}"
-  }
-  \item Note: Parentheses are added automatically unless the string includes `glue` curly braces \{\}.
-  \item Note: To report uncertainty statistics \emph{next} to coefficients, you can supply a `glue` string to the `estimate` argument.
+\item "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", or any column name produced by: \code{get_estimates(model)}
+\item \code{glue} package strings with braces, such as:
+\itemize{
+\item "\{p.value\} \link[=\\{conf.low\\}, \\{conf.high\\}]{\{conf.low\}, \{conf.high\}}"
+\item "Std.Error: \{std.error\}"
+}
+\item Note: Parentheses are added automatically unless the string includes \code{glue} curly braces \{\}.
+\item Note: To report uncertainty statistics \emph{next} to coefficients, you can supply a \code{glue} string to the \code{estimate} argument.
 }}
 
-\item{vcov}{robust standard errors and other manual statistics. The `vcov` argument accepts five types of input (see the 'Details' and 'Examples' sections below):
+\item{vcov}{robust standard errors and other manual statistics. The \code{vcov} argument accepts five types of input (see the 'Details' and 'Examples' sections below):
 \itemize{
-  \item string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").
-  \item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
-  \item function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`).
-  \item list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
-  \item a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. 
+\item string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").
+\item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
+\item function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., \code{stats::vcov}, \code{sandwich::vcovHC}).
+\item list of \code{length(models)} variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+\item a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below.
 }}
 
 \item{conf_level}{confidence level to use for confidence intervals}
 
 \item{stars}{to indicate statistical significance
 \itemize{
-  \item FALSE (default): no significance stars.
-  \item TRUE: *=.1, **=.05, ***=.01
-  \item Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
+\item FALSE (default): no significance stars.
+\item TRUE: *=.1, **=.05, ***=.01
+\item Named numeric vector for custom stars such as \code{c('*' = .1, '+' = .05)}
 }}
 
 \item{coef_map}{character vector. Subset, rename, and reorder coefficients.
 Coefficients omitted from this vector are omitted from the table. The order
-of the vector determines the order of the table.  `coef_map` can be a named
+of the vector determines the order of the table.  \code{coef_map} can be a named
 or an unnamed character vector (see the Examples section below). If
-`coef_map` is a named vector, its values define the labels that must appear
+\code{coef_map} is a named vector, its values define the labels that must appear
 in the table, and its names identify the original term names stored in the
-model object: `c("hp:mpg"="HPxM/G")`.}
+model object: \code{c("hp:mpg"="HPxM/G")}.}
 
 \item{coef_omit}{string regular expression. Omits all matching coefficients
-from the table using `grepl(perl=TRUE)`.}
+from the table using \code{grepl(perl=TRUE)}.}
 
 \item{coef_rename}{named character vector. Values refer to the variable names
 that will appear in the table. Names refer to the original term names stored
 in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
 
 \item{gof_map}{\itemize{
-  \item NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.
-  \item data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
-  \item list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
+\item NULL (default): the \code{modelsummary::gof_map} dictionary is used for formatting, and all unknown statistic are included.
+\item data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
+\item list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
 }}
 
 \item{gof_omit}{string regular expression. Omits all matching gof statistics from
-the table (using `grepl(perl=TRUE)`).}
+the table (using \code{grepl(perl=TRUE)}).}
 
 \item{add_rows}{a data.frame (or tibble) with the same number of columns as
 your main table. By default, rows are appended to the bottom of the table.
@@ -119,55 +120,94 @@ column center-aligned, and the 3rd column right-aligned.}
 \item{title}{string}
 
 \item{...}{all other arguments are passed through to the extractor and
-table-making functions. This allows users to specify additional options such
-as set `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
-coefficients or `kableExtra::kbl(escape=FALSE)` to avoid escaping math
-characters in `kableExtra` tables.}
+table-making functions. This allows users to pass arguments directly to
+\code{modelsummary} in order to affect the behavior of other functions behind
+the scenes. Examples include:
+\itemize{
+\item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression
+\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in
+\code{kableExtra} tables.
+\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit
+statistics to extract using the \code{performance} package (must have set
+\code{options(modelsummary_get="easystats")} first).
+}}
 }
 \value{
-a regression table in a format determined by the `output` argument.
+a regression table in a format determined by the \code{output} argument.
 }
 \description{
-Simple, Beautiful, and Customizable Model Summaries
+Create beautiful and customizable tables to summarize several
+statistical models side-by-side. Draw coefficient plots,
+multi-level cross-tabs, dataset summaries, balance tables (a.k.a.
+"Table 1s"), and correlation matrices. This package supports dozens
+of statistical models, and it can produce tables in HTML, LaTeX,
+Word, Markdown, PDF, PowerPoint, Excel, RTF, JPG, or PNG. Tables
+can easily be embedded in 'Rmarkdown' or 'knitr' dynamic documents.
 }
 \details{
-`output` argument:
+The behavior of \code{modelsummary} can be altered with arguments or
+with the \code{options} function. See the Details section for a list of
+those options.
 
-When a file name is supplied to the `output` argument, the table is written
+\code{options}
+
+\code{modelsummary} supports 4 table-making packages: \code{kableExtra}, \code{gt},
+\code{flextable}, and \code{huxtable}. Some of these packages have overlapping
+functionalities. For example, 3 of those packages can export to LaTeX. To
+change the default backend used for a specific file format, you can use
+the \code{options} function:
+
+options(modelsummary_html = 'kableExtra')
+options(modelsummary_latex = 'gt')
+options(modelsummary_word = 'huxtable')
+options(modelsummary_png = 'gt')
+
+\code{modelsummary} can use two sets of packages to extract information from
+statistical models: \code{broom} and the \code{easystats} family (\code{performance} and
+\code{parameters}). By default, it uses \code{broom} first and \code{easystats} as a
+fallback if \code{broom} fails. You can change the order of priorities
+or include goodness-of-fit extracted by \emph{both} packages by setting:
+
+\code{options(modelsummary_get = "easystats")}
+\code{options(modelsummary_get = "easystats")}
+
+\code{output} argument:
+
+When a file name is supplied to the \code{output} argument, the table is written
 immediately to file. If you want to customize your table by post-processing
 it with an external package, you need to choose a different output format
 and saving mechanism. Unfortunately, the approach differs from package to
 package:
 \itemize{
-  \item `gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave` function.
-  \item `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.
+\item \code{gt}: set \code{output="gt"}, post-process your table, and use the \code{gt::gtsave} function.
+\item \code{kableExtra}: set \code{output} to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use \code{kableExtra::save_kable} function.
 }
 
-`vcov` argument:
+\code{vcov} argument:
 
 To use a string such as "robust" or "HC0", your model must be supported
-by the `sandwich` package. This includes objects such as: lm, glm,
+by the \code{sandwich} package. This includes objects such as: lm, glm,
 survreg, coxph, mlogit, polr, hurdle, zeroinfl, and more.
 
 "classical", "iid", and "constant" are aliases which do not modify
 uncertainty estimates and simply report the default standard errors stored
 in the model object.
 
-One-sided formulas such as `~clusterid` are passed to the `sandwich::vcovCL`
+One-sided formulas such as \code{~clusterid} are passed to the \code{sandwich::vcovCL}
 function.
 
 Matrices and functions producing variance-covariance matrices are first
-passed to `lmtest`. If this does not work, `modelsummary` attempts to take
+passed to \code{lmtest}. If this does not work, \code{modelsummary} attempts to take
 the square root of the diagonal to adjust "std.error", but the other
 uncertainty estimates are not be adjusted.
 
-Numeric vectors are formatted according to `fmt` and placed in brackets.
-Character vectors printed as given, without parentheses. 
+Numeric vectors are formatted according to \code{fmt} and placed in brackets.
+Character vectors printed as given, without parentheses.
 
-If your model type is supported by the `lmtest` package, the
-`vcov` argument will try to use that package to adjust all the
+If your model type is supported by the \code{lmtest} package, the
+\code{vcov} argument will try to use that package to adjust all the
 uncertainty estimates, including "std.error", "statistic", "p.value", and
-"conf.int". If your model is not supported by `lmtest`, only the "std.error"
+"conf.int". If your model is not supported by \code{lmtest}, only the "std.error"
 will be adjusted by, for example, taking the square root of the matrix's
 diagonal.
 }

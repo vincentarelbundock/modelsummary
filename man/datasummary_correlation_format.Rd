@@ -17,9 +17,9 @@ datasummary_correlation_format(
 
 \item{fmt}{determines how to format numeric values
 \itemize{
-  \item integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
-  \item character: passed to the `sprintf` function (e.g., '\%.3f' keeps 3 digits with trailing zero). See `?sprintf`
-  \item function: returns a formatted character string.
+\item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
+\item character: passed to the \code{sprintf} function (e.g., '\\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
+\item function: returns a formatted character string.
 }}
 
 \item{leading_zero}{boolean. If FALSE, leading zeros are removed}
@@ -32,7 +32,7 @@ upper triangle are replaced by the same character (e.g., "" or ".").}
 }
 \description{
 Mostly for internal use, but can be useful when users supply a function to
-the `method` argument of `datasummary_correlation`.
+the \code{method} argument of \code{datasummary_correlation}.
 }
 \examples{
 library(modelsummary)

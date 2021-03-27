@@ -25,26 +25,26 @@ modelplot(
 
 \item{coef_map}{character vector. Subset, rename, and reorder coefficients.
 Coefficients omitted from this vector are omitted from the table. The order
-of the vector determines the order of the table.  `coef_map` can be a named
+of the vector determines the order of the table.  \code{coef_map} can be a named
 or an unnamed character vector (see the Examples section below). If
-`coef_map` is a named vector, its values define the labels that must appear
+\code{coef_map} is a named vector, its values define the labels that must appear
 in the table, and its names identify the original term names stored in the
-model object: `c("hp:mpg"="HPxM/G")`.}
+model object: \code{c("hp:mpg"="HPxM/G")}.}
 
 \item{coef_omit}{string regular expression. Omits all matching coefficients
-from the table using `grepl(perl=TRUE)`.}
+from the table using \code{grepl(perl=TRUE)}.}
 
 \item{coef_rename}{named character vector. Values refer to the variable names
 that will appear in the table. Names refer to the original term names stored
 in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
 
-\item{vcov}{robust standard errors and other manual statistics. The `vcov` argument accepts five types of input (see the 'Details' and 'Examples' sections below):
+\item{vcov}{robust standard errors and other manual statistics. The \code{vcov} argument accepts five types of input (see the 'Details' and 'Examples' sections below):
 \itemize{
-  \item string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").
-  \item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
-  \item function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`).
-  \item list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
-  \item a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. 
+\item string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").
+\item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
+\item function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., \code{stats::vcov}, \code{sandwich::vcovHC}).
+\item list of \code{length(models)} variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+\item a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below.
 }}
 
 \item{add_rows}{a data.frame (or tibble) with the same number of columns as
@@ -64,10 +64,17 @@ plot.  This is especially useful to display annotations "behind" the
 'geom_pointrange' that 'modelplot' draws.}
 
 \item{...}{all other arguments are passed through to the extractor and
-table-making functions. This allows users to specify additional options such
-as set `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
-coefficients or `kableExtra::kbl(escape=FALSE)` to avoid escaping math
-characters in `kableExtra` tables.}
+table-making functions. This allows users to pass arguments directly to
+\code{modelsummary} in order to affect the behavior of other functions behind
+the scenes. Examples include:
+\itemize{
+\item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression
+\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in
+\code{kableExtra} tables.
+\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit
+statistics to extract using the \code{performance} package (must have set
+\code{options(modelsummary_get="easystats")} first).
+}}
 }
 \description{
 Plot model coefficients using points or point-ranges

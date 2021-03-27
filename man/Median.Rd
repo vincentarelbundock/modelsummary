@@ -9,7 +9,7 @@ Median(x, fmt = NULL, na.rm = TRUE, ...)
 \arguments{
 \item{x}{variable to summarize}
 
-\item{fmt}{passed to the `modelsummary:::rounding` function}
+\item{fmt}{passed to the \code{modelsummary:::rounding} function}
 
 \item{na.rm}{a logical value indicating whether ‘NA’ values should be
 stripped before the computation proceeds.}

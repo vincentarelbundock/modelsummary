@@ -23,16 +23,17 @@ datasummary_skim(
 
 \item{output}{filename or object type (character string)
 \itemize{
-  \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
-  \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
-  \item Warning: the `output` argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
+\item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
+\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
+\item To change the default output format, type \code{options(modelsummary_default = "latex")}, where \code{latex} can be any of the valid object types listed above.
+\item Warning: the \code{output} argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
 }}
 
 \item{fmt}{determines how to format numeric values
 \itemize{
-  \item integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
-  \item character: passed to the `sprintf` function (e.g., '\%.3f' keeps 3 digits with trailing zero). See `?sprintf`
-  \item function: returns a formatted character string.
+\item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
+\item character: passed to the \code{sprintf} function (e.g., '\\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
+\item function: returns a formatted character string.
 }}
 
 \item{histogram}{include a histogram (TRUE/FALSE). Supported for:
@@ -41,7 +42,7 @@ datasummary_skim(
 \item output is "html", "default", "jpg", "png", or "kableExtra"
 \item PDF and HTML documents compiled via Rmarkdown or knitr
 \item See the examples section below for an example of how to use
-`datasummary` to include histograms in other formats such as markdown.
+\code{datasummary} to include histograms in other formats such as markdown.
 }}
 
 \item{title}{string}
@@ -53,13 +54,20 @@ the table.  "lcr" means that the first column will be left-aligned, the 2nd
 column center-aligned, and the 3rd column right-aligned.}
 
 \item{...}{all other arguments are passed through to the extractor and
-table-making functions. This allows users to specify additional options such
-as set `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
-coefficients or `kableExtra::kbl(escape=FALSE)` to avoid escaping math
-characters in `kableExtra` tables.}
+table-making functions. This allows users to pass arguments directly to
+\code{modelsummary} in order to affect the behavior of other functions behind
+the scenes. Examples include:
+\itemize{
+\item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression
+\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in
+\code{kableExtra} tables.
+\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit
+statistics to extract using the \code{performance} package (must have set
+\code{options(modelsummary_get="easystats")} first).
+}}
 }
 \description{
-This function was inspired by the excellent `skimr` package for R.
+This function was inspired by the excellent \code{skimr} package for R.
 }
 \examples{
 

@@ -30,16 +30,17 @@ consider them when calculating the difference in means.}
 
 \item{output}{filename or object type (character string)
 \itemize{
-  \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
-  \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
-  \item Warning: the `output` argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
+\item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
+\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
+\item To change the default output format, type \code{options(modelsummary_default = "latex")}, where \code{latex} can be any of the valid object types listed above.
+\item Warning: the \code{output} argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
 }}
 
 \item{fmt}{determines how to format numeric values
 \itemize{
-  \item integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
-  \item character: passed to the `sprintf` function (e.g., '\%.3f' keeps 3 digits with trailing zero). See `?sprintf`
-  \item function: returns a formatted character string.
+\item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
+\item character: passed to the \code{sprintf} function (e.g., '\\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
+\item function: returns a formatted character string.
 }}
 
 \item{title}{string}
@@ -59,18 +60,25 @@ You can define a "position" attribute of integers to set the row positions.
 See Examples section below.}
 
 \item{dinm}{TRUE calculates a difference in means with uncertainty
-estimates. This option is only available if the `estimatr` package is
-installed. If `data` includes columns named "blocks", "clusters", or
+estimates. This option is only available if the \code{estimatr} package is
+installed. If \code{data} includes columns named "blocks", "clusters", or
 "weights", this information will be taken into account automatically by
-`estimatr::difference_in_means`.}
+\code{estimatr::difference_in_means}.}
 
 \item{dinm_statistic}{string: "std.error" or "p.value"}
 
 \item{...}{all other arguments are passed through to the extractor and
-table-making functions. This allows users to specify additional options such
-as set `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
-coefficients or `kableExtra::kbl(escape=FALSE)` to avoid escaping math
-characters in `kableExtra` tables.}
+table-making functions. This allows users to pass arguments directly to
+\code{modelsummary} in order to affect the behavior of other functions behind
+the scenes. Examples include:
+\itemize{
+\item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression
+\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in
+\code{kableExtra} tables.
+\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit
+statistics to extract using the \code{performance} package (must have set
+\code{options(modelsummary_get="easystats")} first).
+}}
 }
 \description{
 Balance table: Summary statistics for different subsets of the data (e.g.,

@@ -28,9 +28,9 @@ variable}
 
 \item{underscore}{boolean replace underscores by spaces}
 
-\item{asis}{boolean remove the `I` from as-is formula calls}
+\item{asis}{boolean remove the \code{I} from as-is formula calls}
 }
 \description{
-A convenience function which can be passed to the `coef_rename` argument of
-the `modelsummary` function.
+A convenience function which can be passed to the \code{coef_rename} argument of
+the \code{modelsummary} function.
 }

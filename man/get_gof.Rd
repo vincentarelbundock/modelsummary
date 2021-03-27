@@ -11,10 +11,17 @@ get_gof(model, ...)
 \item{model}{a single model object}
 
 \item{...}{all other arguments are passed through to the extractor and
-table-making functions. This allows users to specify additional options such
-as set `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
-coefficients or `kableExtra::kbl(escape=FALSE)` to avoid escaping math
-characters in `kableExtra` tables.}
+table-making functions. This allows users to pass arguments directly to
+\code{modelsummary} in order to affect the behavior of other functions behind
+the scenes. Examples include:
+\itemize{
+\item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression
+\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in
+\code{kableExtra} tables.
+\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit
+statistics to extract using the \code{performance} package (must have set
+\code{options(modelsummary_get="easystats")} first).
+}}
 }
 \description{
 Extract model gof A mostly internal function with some potential uses
