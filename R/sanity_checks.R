@@ -22,6 +22,19 @@ check_dependency <- function(library_name) {
 #' sanity check
 #'
 #' @noRd
+sanity_group_map <- function(group_map) {
+  if (!is.null(group_map)) {
+    if (is.null(names(group_map))) {
+      checkmate::assert_character(group_map, unique = TRUE)
+    } else {
+      checkmate::assert_character(names(group_map), null.ok = TRUE, unique = TRUE)
+    }
+  }
+}
+
+#' sanity check
+#'
+#' @noRd
 sanity_ellipsis <- function(vcov, ...) {
   ellip <- list(...)
 

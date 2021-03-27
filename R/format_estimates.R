@@ -12,6 +12,7 @@ format_estimates <- function(
   conf_level = .95,
   fmt        = "%.3f",
   stars      = FALSE,
+  group_name = NULL,
   ...) {
 
   # conf.int to glue
@@ -68,11 +69,10 @@ format_estimates <- function(
       # keep only columns that do not appear in so
       est <- est[, c('term', base::setdiff(colnames(est), colnames(so))), drop = FALSE]
       # merge vcov and estimates
-      est <- merge(est, so, by="term", sort=FALSE)
+      est <- merge(est, so, by = "term", sort = FALSE)
 
     } 
   }
-
 
   # tidy_custom
   est_custom <- tidy_custom(model)
@@ -85,22 +85,6 @@ format_estimates <- function(
     idx <- match(est_custom$term, est$term)
     for (n in colnames(est_custom)) {
       est[[n]][idx] <- est_custom[[n]]
-    }
-  }
-
-  # group coefficients
-  if (anyDuplicated(est$term) > 0) {
-    # broom.mixed `group` column
-    if ("group" %in% colnames(est)) {
-      est$term <- ifelse(is.na(est$group), 
-                         est$term, 
-                         paste0(est$group, " | ", est$term))
-    }
-    # nnet::multinom `y.level` column
-    if ("y.level" %in% colnames(est)) {
-      est$term <- ifelse(is.na(est$y.level), 
-                         est$term, 
-                         paste0(est$y.level, " | ", est$term))
     }
   }
 
@@ -159,8 +143,21 @@ format_estimates <- function(
   }
 
 
+  if (!is.null(group_name) && group_name %in% colnames(est)) {
+    est[["group"]] <- est[[group_name]]
+  } else if (!is.null(group_name)) {
+    est[["group"]] <- ""
+    warning(sprintf('Group name "%s" was not found in the extracted data. The "group" argument must be a column name in the data.frame produced by `get_estimates(model)`', group_name))
+  } else {
+    # cannot be NA because we need to merge
+    est[["group"]] <- "" 
+  }
+        
+
   # subset columns
-  cols <- c('term', paste0('modelsummary_tmp', seq_along(estimate_glue)))
+  cols <- c('group', 'term',
+            paste0('modelsummary_tmp', seq_along(estimate_glue)))
+  cols <- intersect(cols, colnames(est))
   est <- est[, cols, drop = FALSE]
 
   # reshape to vertical

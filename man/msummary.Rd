@@ -18,6 +18,8 @@ msummary(
   coef_rename = NULL,
   gof_map = NULL,
   gof_omit = NULL,
+  group = NULL,
+  group_map = NULL,
   add_rows = NULL,
   align = NULL,
   notes = NULL,
@@ -110,6 +112,15 @@ in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
 
 \item{gof_omit}{string regular expression. Omits all matching gof statistics from
 the table (using \code{grepl(perl=TRUE)}).}
+
+\item{group}{a two-sided formula with three components: "term", "model", and a
+parameter group identifier (e.g., outcome levels of a multinomial logit model).
+The group identifier must be the name of a column in the data.frame produced by
+\code{get_estimates(model)}. The "term" component must be on the left-hand side of
+the formula.}
+
+\item{group_map}{named or unnamed character vector. Subset, rename, and
+reorder coefficient groups specified in the \code{group} argument. See \code{coef_map}.}
 
 \item{add_rows}{a data.frame (or tibble) with the same number of columns as
 your main table. By default, rows are appended to the bottom of the table.
