@@ -161,14 +161,15 @@ consider them when calculating the difference in means.</p></td>
       <td><p>filename or object type (character string)</p><ul>
 <li><p>Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.</p></li>
 <li><p>Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".</p></li>
-<li><p>Warning: the `output` argument <em>cannot</em> be used when customizing tables with external packages. See the 'Details' section below.</p></li>
+<li><p>To change the default output format, type <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_default = "latex")</a></code>, where <code>latex</code> can be any of the valid object types listed above.</p></li>
+<li><p>Warning: the <code>output</code> argument <em>cannot</em> be used when customizing tables with external packages. See the 'Details' section below.</p></li>
 </ul></td>
     </tr>
     <tr>
       <th>fmt</th>
       <td><p>determines how to format numeric values</p><ul>
-<li><p>integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`</p></li>
-<li><p>character: passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`</p></li>
+<li><p>integer: the number of digits to keep after the period <code><a href='https://rdrr.io/r/base/format.html'>format(round(x, fmt), nsmall=fmt)</a></code></p></li>
+<li><p>character: passed to the <code>sprintf</code> function (e.g., '\<!-- %.3f' keeps 3 digits with trailing zero). See \code{?sprintf} --></p></li>
 <li><p>function: returns a formatted character string.</p></li>
 </ul></td>
     </tr>
@@ -201,10 +202,10 @@ See Examples section below.</p></td>
     <tr>
       <th>dinm</th>
       <td><p>TRUE calculates a difference in means with uncertainty
-estimates. This option is only available if the `estimatr` package is
-installed. If `data` includes columns named "blocks", "clusters", or
+estimates. This option is only available if the <code>estimatr</code> package is
+installed. If <code>data</code> includes columns named "blocks", "clusters", or
 "weights", this information will be taken into account automatically by
-`estimatr::difference_in_means`.</p></td>
+<code><a href='https://declaredesign.org/r/estimatr/reference/difference_in_means.html'>estimatr::difference_in_means</a></code>.</p></td>
     </tr>
     <tr>
       <th>dinm_statistic</th>
@@ -213,10 +214,13 @@ installed. If `data` includes columns named "blocks", "clusters", or
     <tr>
       <th>...</th>
       <td><p>all other arguments are passed through to the extractor and
-table-making functions. This allows users to specify additional options such
-as set `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
-coefficients or `kableExtra::kbl(escape=FALSE)` to avoid escaping math
-characters in `kableExtra` tables.</p></td>
+table-making functions. This allows users to pass arguments directly to
+<code>modelsummary</code> in order to affect the behavior of other functions behind
+the scenes. Examples include:</p><ul>
+<li><p><code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy(exponentiate=TRUE)</a></code> to exponentiate logistic regression</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/kableExtra/man/kbl.html'>kableExtra::kbl(escape=FALSE)</a></code> to avoid escaping math characters in #'   <code>kableExtra</code> tables.</p></li>
+<li><p><code><a href='https://easystats.github.io/performance/reference/model_performance.html'>performance::model_performance(metrics="RMSE")</a></code> to select goodness-of-fit #'   statistics to extract using the <code>performance</code> package (must have set #'   <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get="easystats")</a></code> first).</p></li>
+</ul></td>
     </tr>
     </table>
 

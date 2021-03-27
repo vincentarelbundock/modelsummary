@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Draw a table from a data.frame — datasummary_df • modelsummary</title>
+<title>Format the content of a correlation table — datasummary_correlation_format • modelsummary</title>
 
 
 <!-- jquery -->
@@ -41,8 +41,9 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Draw a table from a data.frame — datasummary_df" />
-<meta property="og:description" content="Draw a table from a data.frame" />
+<meta property="og:title" content="Format the content of a correlation table — datasummary_correlation_format" />
+<meta property="og:description" content="Mostly for internal use, but can be useful when users supply a function to
+the method argument of datasummary_correlation." />
 
 
 
@@ -113,43 +114,30 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Draw a table from a data.frame</h1>
-    <small class="dont-index">Source: <a href='https://github.com/vincentarelbundock/modelsummary/blob/master/R/datasummary_df.R'><code>R/datasummary_df.R</code></a></small>
-    <div class="hidden name"><code>datasummary_df.Rd</code></div>
+    <h1>Format the content of a correlation table</h1>
+    <small class="dont-index">Source: <a href='https://github.com/vincentarelbundock/modelsummary/blob/master/R/datasummary_correlation.R'><code>R/datasummary_correlation.R</code></a></small>
+    <div class="hidden name"><code>datasummary_correlation_format.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Draw a table from a data.frame</p>
+    <p>Mostly for internal use, but can be useful when users supply a function to
+the <code>method</code> argument of <code>datasummary_correlation</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>datasummary_df</span><span class='op'>(</span>
-  <span class='va'>data</span>,
-  output <span class='op'>=</span> <span class='st'>"default"</span>,
-  fmt <span class='op'>=</span> <span class='fl'>2</span>,
-  align <span class='op'>=</span> <span class='cn'>NULL</span>,
-  hrule <span class='op'>=</span> <span class='cn'>NULL</span>,
-  title <span class='op'>=</span> <span class='cn'>NULL</span>,
-  notes <span class='op'>=</span> <span class='cn'>NULL</span>,
-  add_rows <span class='op'>=</span> <span class='cn'>NULL</span>,
-  add_columns <span class='op'>=</span> <span class='cn'>NULL</span>,
-  <span class='va'>...</span>
+    <pre class="usage"><span class='fu'>datasummary_correlation_format</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>fmt</span>,
+  leading_zero <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  diagonal <span class='op'>=</span> <span class='cn'>NULL</span>,
+  upper_triangle <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>A data.frame (or tibble)</p></td>
-    </tr>
-    <tr>
-      <th>output</th>
-      <td><p>filename or object type (character string)</p><ul>
-<li><p>Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.</p></li>
-<li><p>Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".</p></li>
-<li><p>To change the default output format, type <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_default = "latex")</a></code>, where <code>latex</code> can be any of the valid object types listed above.</p></li>
-<li><p>Warning: the <code>output</code> argument <em>cannot</em> be used when customizing tables with external packages. See the 'Details' section below.</p></li>
-</ul></td>
+      <th>x</th>
+      <td><p>square numeric matrix</p></td>
     </tr>
     <tr>
       <th>fmt</th>
@@ -160,49 +148,67 @@
 </ul></td>
     </tr>
     <tr>
-      <th>align</th>
-      <td><p>A character string of length equal to the number of columns in
-the table.  "lcr" means that the first column will be left-aligned, the 2nd
-column center-aligned, and the 3rd column right-aligned.</p></td>
+      <th>leading_zero</th>
+      <td><p>boolean. If FALSE, leading zeros are removed</p></td>
     </tr>
     <tr>
-      <th>hrule</th>
-      <td><p>position of horizontal rules (integer vector)</p></td>
+      <th>diagonal</th>
+      <td><p>character or NULL. If character, all elements of the
+diagonal are replaced by the same character (e.g., "1").</p></td>
     </tr>
     <tr>
-      <th>title</th>
-      <td><p>string</p></td>
-    </tr>
-    <tr>
-      <th>notes</th>
-      <td><p>list or vector of notes to append to the bottom of the table.</p></td>
-    </tr>
-    <tr>
-      <th>add_rows</th>
-      <td><p>a data.frame (or tibble) with the same number of columns as
-your main table. By default, rows are appended to the bottom of the table.
-You can define a "position" attribute of integers to set the row positions.
-See Examples section below.</p></td>
-    </tr>
-    <tr>
-      <th>add_columns</th>
-      <td><p>a data.frame (or tibble) with the same number of rows as
-your main table.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>all other arguments are passed through to the extractor and
-table-making functions. This allows users to pass arguments directly to
-<code>modelsummary</code> in order to affect the behavior of other functions behind
-the scenes. Examples include:</p><ul>
-<li><p><code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy(exponentiate=TRUE)</a></code> to exponentiate logistic regression</p></li>
-<li><p><code><a href='https://rdrr.io/pkg/kableExtra/man/kbl.html'>kableExtra::kbl(escape=FALSE)</a></code> to avoid escaping math characters in #'   <code>kableExtra</code> tables.</p></li>
-<li><p><code><a href='https://easystats.github.io/performance/reference/model_performance.html'>performance::model_performance(metrics="RMSE")</a></code> to select goodness-of-fit #'   statistics to extract using the <code>performance</code> package (must have set #'   <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get="easystats")</a></code> first).</p></li>
-</ul></td>
+      <th>upper_triangle</th>
+      <td><p>character or NULL. If character, all elements of the
+upper triangle are replaced by the same character (e.g., "" or ".").</p></td>
     </tr>
     </table>
 
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://vincentarelbundock.github.io/modelsummary/'>modelsummary</a></span><span class='op'>)</span>
+
+<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mpg"</span>, <span class='st'>"hp"</span>, <span class='st'>"disp"</span><span class='op'>)</span><span class='op'>]</span>
+
+<span class='va'>cor_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='st'>"kendall"</span><span class='op'>)</span>
+  <span class='fu'>datasummary_correlation_format</span><span class='op'>(</span>
+    <span class='va'>out</span>,
+    fmt <span class='op'>=</span> <span class='fl'>2</span>,
+    upper_triangle <span class='op'>=</span> <span class='st'>"x"</span>,
+    diagonal <span class='op'>=</span> <span class='st'>"."</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='fu'><a href='datasummary_correlation.html'>datasummary_correlation</a></span><span class='op'>(</span><span class='va'>dat</span>, method <span class='op'>=</span> <span class='va'>cor_fun</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; &lt;table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;"&gt;
+#&gt;  &lt;thead&gt;
+#&gt;   &lt;tr&gt;
+#&gt;    &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+#&gt;    &lt;th style="text-align:right;"&gt; mpg &lt;/th&gt;
+#&gt;    &lt;th style="text-align:right;"&gt; hp &lt;/th&gt;
+#&gt;    &lt;th style="text-align:right;"&gt; disp &lt;/th&gt;
+#&gt;   &lt;/tr&gt;
+#&gt;  &lt;/thead&gt;
+#&gt; &lt;tbody&gt;
+#&gt;   &lt;tr&gt;
+#&gt;    &lt;td style="text-align:left;"&gt; mpg &lt;/td&gt;
+#&gt;    &lt;td style="text-align:right;"&gt; . &lt;/td&gt;
+#&gt;    &lt;td style="text-align:right;"&gt; x &lt;/td&gt;
+#&gt;    &lt;td style="text-align:right;"&gt; x &lt;/td&gt;
+#&gt;   &lt;/tr&gt;
+#&gt;   &lt;tr&gt;
+#&gt;    &lt;td style="text-align:left;"&gt; hp &lt;/td&gt;
+#&gt;    &lt;td style="text-align:right;"&gt; -.74 &lt;/td&gt;
+#&gt;    &lt;td style="text-align:right;"&gt; . &lt;/td&gt;
+#&gt;    &lt;td style="text-align:right;"&gt; x &lt;/td&gt;
+#&gt;   &lt;/tr&gt;
+#&gt;   &lt;tr&gt;
+#&gt;    &lt;td style="text-align:left;"&gt; disp &lt;/td&gt;
+#&gt;    &lt;td style="text-align:right;"&gt; -.77 &lt;/td&gt;
+#&gt;    &lt;td style="text-align:right;"&gt; .67 &lt;/td&gt;
+#&gt;    &lt;td style="text-align:right;"&gt; . &lt;/td&gt;
+#&gt;   &lt;/tr&gt;
+#&gt; &lt;/tbody&gt;
+#&gt; &lt;/table&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

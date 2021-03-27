@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot model coefficients using points or point-ranges — modelplot • modelsummary</title>
+<title>Model Summary Plots with Estimates and Confidence Intervals — modelplot • modelsummary</title>
 
 
 <!-- jquery -->
@@ -41,8 +41,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Plot model coefficients using points or point-ranges — modelplot" />
-<meta property="og:description" content="Plot model coefficients using points or point-ranges" />
+<meta property="og:title" content="Model Summary Plots with Estimates and Confidence Intervals — modelplot" />
+<meta property="og:description" content="Model Summary Plots with Estimates and Confidence Intervals" />
 
 
 
@@ -113,13 +113,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot model coefficients using points or point-ranges</h1>
+    <h1>Model Summary Plots with Estimates and Confidence Intervals</h1>
     <small class="dont-index">Source: <a href='https://github.com/vincentarelbundock/modelsummary/blob/master/R/modelplot.R'><code>R/modelplot.R</code></a></small>
     <div class="hidden name"><code>modelplot.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plot model coefficients using points or point-ranges</p>
+    <p>Model Summary Plots with Estimates and Confidence Intervals</p>
     </div>
 
     <pre class="usage"><span class='fu'>modelplot</span><span class='op'>(</span>
@@ -151,16 +151,16 @@
       <th>coef_map</th>
       <td><p>character vector. Subset, rename, and reorder coefficients.
 Coefficients omitted from this vector are omitted from the table. The order
-of the vector determines the order of the table.  `coef_map` can be a named
+of the vector determines the order of the table.  <code>coef_map</code> can be a named
 or an unnamed character vector (see the Examples section below). If
-`coef_map` is a named vector, its values define the labels that must appear
+<code>coef_map</code> is a named vector, its values define the labels that must appear
 in the table, and its names identify the original term names stored in the
-model object: `c("hp:mpg"="HPxM/G")`.</p></td>
+model object: <code><a href='https://rdrr.io/r/base/c.html'>c("hp:mpg"="HPxM/G")</a></code>.</p></td>
     </tr>
     <tr>
       <th>coef_omit</th>
       <td><p>string regular expression. Omits all matching coefficients
-from the table using `grepl(perl=TRUE)`.</p></td>
+from the table using <code><a href='https://rdrr.io/r/base/grep.html'>grepl(perl=TRUE)</a></code>.</p></td>
     </tr>
     <tr>
       <th>coef_rename</th>
@@ -170,11 +170,13 @@ in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.</p></t
     </tr>
     <tr>
       <th>vcov</th>
-      <td><p>robust standard errors and other manual statistics. The `vcov` argument accepts five types of input (see the 'Details' and 'Examples' sections below):</p><ul>
+      <td><p>robust standard errors and other manual statistics. The <code>vcov</code>
+argument accepts five types of input (see the 'Details' and 'Examples'
+sections below):</p><ul>
 <li><p>string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").</p></li>
 <li><p>formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).</p></li>
-<li><p>function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`).</p></li>
-<li><p>list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.</p></li>
+<li><p>function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., <code><a href='https://rdrr.io/r/stats/vcov.html'>stats::vcov</a></code>, <code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>sandwich::vcovHC</a></code>).</p></li>
+<li><p>list of <code><a href='https://rdrr.io/r/base/length.html'>length(models)</a></code> variance-covariance matrices with row and column names equal to the names of your coefficient estimates.</p></li>
 <li><p>a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below.</p></li>
 </ul></td>
     </tr>
@@ -205,10 +207,13 @@ plot.  This is especially useful to display annotations "behind" the
     <tr>
       <th>...</th>
       <td><p>all other arguments are passed through to the extractor and
-table-making functions. This allows users to specify additional options such
-as set `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
-coefficients or `kableExtra::kbl(escape=FALSE)` to avoid escaping math
-characters in `kableExtra` tables.</p></td>
+table-making functions. This allows users to pass arguments directly to
+<code>modelsummary</code> in order to affect the behavior of other functions behind
+the scenes. Examples include:</p><ul>
+<li><p><code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy(exponentiate=TRUE)</a></code> to exponentiate logistic regression</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/kableExtra/man/kbl.html'>kableExtra::kbl(escape=FALSE)</a></code> to avoid escaping math characters in #'   <code>kableExtra</code> tables.</p></li>
+<li><p><code><a href='https://easystats.github.io/performance/reference/model_performance.html'>performance::model_performance(metrics="RMSE")</a></code> to select goodness-of-fit #'   statistics to extract using the <code>performance</code> package (must have set #'   <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get="easystats")</a></code> first).</p></li>
+</ul></td>
     </tr>
     </table>
 

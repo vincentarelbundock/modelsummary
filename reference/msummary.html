@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Beautiful, customizable summaries of statistical models — msummary • modelsummary</title>
+<title>msummary() is a shortcut to modelsummary() — msummary • modelsummary</title>
 
 
 <!-- jquery -->
@@ -41,8 +41,12 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Beautiful, customizable summaries of statistical models — msummary" />
-<meta property="og:description" content="`msummary()` is a shortcut to `modelsummary()`" />
+<meta property="og:title" content="msummary() is a shortcut to modelsummary() — msummary" />
+<meta property="og:description" content="The content of the tables can be altered with the function's arguments, or by
+calling options, as described in the Details section below. The look of
+the tables can be customized by specifying the output argument, and by
+using functions from one of the supported table customization packages:
+kableExtra, gt, flextable, huxtable." />
 
 
 
@@ -113,13 +117,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Beautiful, customizable summaries of statistical models</h1>
+    <h1><code>msummary()</code> is a shortcut to <code>modelsummary()</code></h1>
     <small class="dont-index">Source: <a href='https://github.com/vincentarelbundock/modelsummary/blob/master/R/modelsummary.R'><code>R/modelsummary.R</code></a></small>
     <div class="hidden name"><code>msummary.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>`msummary()` is a shortcut to `modelsummary()`</p>
+    <p>The content of the tables can be altered with the function's arguments, or by
+calling <code>options</code>, as described in the <em>Details</em> section below. The look of
+the tables can be customized by specifying the <code>output</code> argument, and by
+using functions from one of the supported table customization packages:
+<code>kableExtra</code>, <code>gt</code>, <code>flextable</code>, <code>huxtable</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>msummary</span><span class='op'>(</span>
@@ -155,46 +163,52 @@
       <td><p>filename or object type (character string)</p><ul>
 <li><p>Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.</p></li>
 <li><p>Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".</p></li>
-<li><p>Warning: the `output` argument <em>cannot</em> be used when customizing tables with external packages. See the 'Details' section below.</p></li>
+<li><p>To change the default output format, type <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_default = "latex")</a></code>, where <code>latex</code> can be any of the valid object types listed above.</p></li>
+<li><p>Warning: the <code>output</code> argument <em>cannot</em> be used when customizing tables with external packages. See the 'Details' section below.</p></li>
 </ul></td>
     </tr>
     <tr>
       <th>fmt</th>
       <td><p>determines how to format numeric values</p><ul>
-<li><p>integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`</p></li>
-<li><p>character: passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`</p></li>
+<li><p>integer: the number of digits to keep after the period <code><a href='https://rdrr.io/r/base/format.html'>format(round(x, fmt), nsmall=fmt)</a></code></p></li>
+<li><p>character: passed to the <code>sprintf</code> function (e.g., '\<!-- %.3f' keeps 3 digits with trailing zero). See \code{?sprintf} --></p></li>
 <li><p>function: returns a formatted character string.</p></li>
 </ul></td>
     </tr>
     <tr>
       <th>estimate</th>
-      <td><p>string or `glue` string of the estimate to display (or a
+      <td><p>string or <code>glue</code> string of the estimate to display (or a
 vector with one string per model). Valid entries include any column name of
-the data.frame produced by `get_estimates(model)`. Examples:</p><ul>
-<li><p>"estimate"</p></li>
-<li><p>"{estimate} ({std.error}){stars}"</p></li>
-<li><p>"{estimate} [{conf.low}, {conf.high}]"</p></li>
+the data.frame produced by <code><a href='get_estimates.html'>get_estimates(model)</a></code>. Examples:</p><ul>
+<li><p><code>"estimate"</code></p></li>
+<li><p><code>"{estimate} ({std.error}){stars}"</code></p></li>
+<li><p><code>"{estimate} [{conf.low}, {conf.high}]"</code></p></li>
 </ul></td>
     </tr>
     <tr>
       <th>statistic</th>
-      <td><p>vector of strings or `glue` strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics.</p><ul>
-<li><p>"conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", or any column name produced by: `get_estimates(model)`</p></li>
-<li><p>`glue` package strings with braces, such as:</p><ul>
-<li><p>"{p.value} [{conf.low}, {conf.high}]"</p></li>
-<li><p>"Std.Error: {std.error}"</p></li>
+      <td><p>vector of strings or <code>glue</code> strings which select uncertainty
+statistics to report vertically below the estimate. NULL omits all
+uncertainty statistics.</p><ul>
+<li><p>"conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high",
+or any column name produced by: <code><a href='get_estimates.html'>get_estimates(model)</a></code></p></li>
+<li><p><code>glue</code> package strings with braces, such as:</p><ul>
+<li><p><code>"{p.value} [{conf.low}, {conf.high}]"</code></p></li>
+<li><p><code>"Std.Error: {std.error}"</code></p></li>
 </ul></li>
-<li><p>Note: Parentheses are added automatically unless the string includes `glue` curly braces {}.</p></li>
-<li><p>Note: To report uncertainty statistics <em>next</em> to coefficients, you can supply a `glue` string to the `estimate` argument.</p></li>
+<li><p>Note: Parentheses are added automatically unless the string includes <code>glue</code> curly braces <code>{}</code>.</p></li>
+<li><p>Note: To report uncertainty statistics <em>next</em> to coefficients, you can #'   supply a <code>glue</code> string to the <code>estimate</code> argument.</p></li>
 </ul></td>
     </tr>
     <tr>
       <th>vcov</th>
-      <td><p>robust standard errors and other manual statistics. The `vcov` argument accepts five types of input (see the 'Details' and 'Examples' sections below):</p><ul>
+      <td><p>robust standard errors and other manual statistics. The <code>vcov</code>
+argument accepts five types of input (see the 'Details' and 'Examples'
+sections below):</p><ul>
 <li><p>string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").</p></li>
 <li><p>formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).</p></li>
-<li><p>function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`).</p></li>
-<li><p>list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.</p></li>
+<li><p>function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., <code><a href='https://rdrr.io/r/stats/vcov.html'>stats::vcov</a></code>, <code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>sandwich::vcovHC</a></code>).</p></li>
+<li><p>list of <code><a href='https://rdrr.io/r/base/length.html'>length(models)</a></code> variance-covariance matrices with row and column names equal to the names of your coefficient estimates.</p></li>
 <li><p>a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below.</p></li>
 </ul></td>
     </tr>
@@ -207,23 +221,23 @@ the data.frame produced by `get_estimates(model)`. Examples:</p><ul>
       <td><p>to indicate statistical significance</p><ul>
 <li><p>FALSE (default): no significance stars.</p></li>
 <li><p>TRUE: *=.1, **=.05, ***=.01</p></li>
-<li><p>Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`</p></li>
+<li><p>Named numeric vector for custom stars such as <code><a href='https://rdrr.io/r/base/c.html'>c('*' = .1, '+' = .05)</a></code></p></li>
 </ul></td>
     </tr>
     <tr>
       <th>coef_map</th>
       <td><p>character vector. Subset, rename, and reorder coefficients.
 Coefficients omitted from this vector are omitted from the table. The order
-of the vector determines the order of the table.  `coef_map` can be a named
+of the vector determines the order of the table.  <code>coef_map</code> can be a named
 or an unnamed character vector (see the Examples section below). If
-`coef_map` is a named vector, its values define the labels that must appear
+<code>coef_map</code> is a named vector, its values define the labels that must appear
 in the table, and its names identify the original term names stored in the
-model object: `c("hp:mpg"="HPxM/G")`.</p></td>
+model object: <code><a href='https://rdrr.io/r/base/c.html'>c("hp:mpg"="HPxM/G")</a></code>.</p></td>
     </tr>
     <tr>
       <th>coef_omit</th>
       <td><p>string regular expression. Omits all matching coefficients
-from the table using `grepl(perl=TRUE)`.</p></td>
+from the table using <code><a href='https://rdrr.io/r/base/grep.html'>grepl(perl=TRUE)</a></code>.</p></td>
     </tr>
     <tr>
       <th>coef_rename</th>
@@ -234,7 +248,7 @@ in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.</p></t
     <tr>
       <th>gof_map</th>
       <td><ul>
-<li><p>NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.</p></li>
+<li><p>NULL (default): the <code><a href='gof_map.html'>modelsummary::gof_map</a></code> dictionary is used for formatting, and all unknown statistic are included.</p></li>
 <li><p>data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.</p></li>
 <li><p>list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.</p></li>
 </ul></td>
@@ -242,7 +256,7 @@ in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.</p></t
     <tr>
       <th>gof_omit</th>
       <td><p>string regular expression. Omits all matching gof statistics from
-the table (using `grepl(perl=TRUE)`).</p></td>
+the table (using <code><a href='https://rdrr.io/r/base/grep.html'>grepl(perl=TRUE)</a></code>).</p></td>
     </tr>
     <tr>
       <th>add_rows</th>
@@ -268,47 +282,67 @@ column center-aligned, and the 3rd column right-aligned.</p></td>
     <tr>
       <th>...</th>
       <td><p>all other arguments are passed through to the extractor and
-table-making functions. This allows users to specify additional options such
-as set `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
-coefficients or `kableExtra::kbl(escape=FALSE)` to avoid escaping math
-characters in `kableExtra` tables.</p></td>
+table-making functions. This allows users to pass arguments directly to
+<code>modelsummary</code> in order to affect the behavior of other functions behind
+the scenes. Examples include:</p><ul>
+<li><p><code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy(exponentiate=TRUE)</a></code> to exponentiate logistic regression</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/kableExtra/man/kbl.html'>kableExtra::kbl(escape=FALSE)</a></code> to avoid escaping math characters in #'   <code>kableExtra</code> tables.</p></li>
+<li><p><code><a href='https://easystats.github.io/performance/reference/model_performance.html'>performance::model_performance(metrics="RMSE")</a></code> to select goodness-of-fit #'   statistics to extract using the <code>performance</code> package (must have set #'   <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get="easystats")</a></code> first).</p></li>
+</ul></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a regression table in a format determined by the `output` argument.</p>
+    <p>a regression table in a format determined by the <code>output</code> argument.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>`output` argument:</p>
-<p>When a file name is supplied to the `output` argument, the table is written
+    <p><code>options</code></p>
+<p><code>modelsummary</code> supports 4 table-making packages: <code>kableExtra</code>, <code>gt</code>,
+<code>flextable</code>, and <code>huxtable</code>. Some of these packages have overlapping
+functionalities. For example, 3 of those packages can export to LaTeX. To
+change the default backend used for a specific file format, you can use
+the <code>options</code> function:</p>
+<p>options(modelsummary_html = 'kableExtra')
+options(modelsummary_latex = 'gt')
+options(modelsummary_word = 'huxtable')
+options(modelsummary_png = 'gt')</p>
+<p><code>modelsummary</code> can use two sets of packages to extract information from
+statistical models: <code>broom</code> and the <code>easystats</code> family (<code>performance</code> and
+<code>parameters</code>). By default, it uses <code>broom</code> first and <code>easystats</code> as a
+fallback if <code>broom</code> fails. You can change the order of priorities
+or include goodness-of-fit extracted by <em>both</em> packages by setting:</p>
+<p><code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get = "easystats")</a></code>
+<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get = "easystats")</a></code></p>
+<p><code>output</code> argument:</p>
+<p>When a file name is supplied to the <code>output</code> argument, the table is written
 immediately to file. If you want to customize your table by post-processing
 it with an external package, you need to choose a different output format
 and saving mechanism. Unfortunately, the approach differs from package to
 package:</p><ul>
-<li><p>`gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave` function.</p></li>
-<li><p>`kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.</p></li>
+<li><p><code>gt</code>: set <code>output="gt"</code>, post-process your table, and use the <code><a href='https://rdrr.io/pkg/gt/man/gtsave.html'>gt::gtsave</a></code> function.</p></li>
+<li><p><code>kableExtra</code>: set <code>output</code> to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use <code><a href='https://rdrr.io/pkg/kableExtra/man/save_kable.html'>kableExtra::save_kable</a></code> function.</p></li>
 </ul>
 
-<p>`vcov` argument:</p>
+<p><code>vcov</code> argument:</p>
 <p>To use a string such as "robust" or "HC0", your model must be supported
-by the `sandwich` package. This includes objects such as: lm, glm,
+by the <code>sandwich</code> package. This includes objects such as: lm, glm,
 survreg, coxph, mlogit, polr, hurdle, zeroinfl, and more.</p>
 <p>"classical", "iid", and "constant" are aliases which do not modify
 uncertainty estimates and simply report the default standard errors stored
 in the model object.</p>
-<p>One-sided formulas such as `~clusterid` are passed to the `sandwich::vcovCL`
+<p>One-sided formulas such as <code>~clusterid</code> are passed to the <code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovCL.html'>sandwich::vcovCL</a></code>
 function.</p>
 <p>Matrices and functions producing variance-covariance matrices are first
-passed to `lmtest`. If this does not work, `modelsummary` attempts to take
+passed to <code>lmtest</code>. If this does not work, <code>modelsummary</code> attempts to take
 the square root of the diagonal to adjust "std.error", but the other
 uncertainty estimates are not be adjusted.</p>
-<p>Numeric vectors are formatted according to `fmt` and placed in brackets.
+<p>Numeric vectors are formatted according to <code>fmt</code> and placed in brackets.
 Character vectors printed as given, without parentheses.</p>
-<p>If your model type is supported by the `lmtest` package, the
-`vcov` argument will try to use that package to adjust all the
+<p>If your model type is supported by the <code>lmtest</code> package, the
+<code>vcov</code> argument will try to use that package to adjust all the
 uncertainty estimates, including "std.error", "statistic", "p.value", and
-"conf.int". If your model is not supported by `lmtest`, only the "std.error"
+"conf.int". If your model is not supported by <code>lmtest</code>, only the "std.error"
 will be adjusted by, for example, taking the square root of the matrix's
 diagonal.</p>
 
