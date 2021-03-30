@@ -39,60 +39,10 @@ datasummary_balance <- function(formula,
   checkmate::assert_data_frame(data, min.rows = 1, min.cols = 1)
   checkmate::assert_flag(dinm)
   checkmate::assert_string(dinm_statistic, pattern="^std.error$|^p.value$")
-
-  # tables::tabular does not play well with tibbles
-  data <- as.data.frame(data)
+  data <- sanitize_datasummary_balance_data(formula, data)
 
   # rhs condition variable
   rhs <- labels(stats::terms(formula))
-
-  if (!rhs %in% colnames(data)) {
-    stop("Variable ", rhs, " must be in data.")
-  }
-
-  if (length(unique(data[[rhs]])) > 10) {
-    stop(sprintf("Each value of the `%s` variable will create two separate
-                 columns. This variable has more than 10 unique values, so the
-                 table would be too wide to be readable.", rhs))
-  }
-
-  # sanity checks on other variables
-  data <- data[!is.na(data[[rhs]]), , drop = FALSE]
-
-  drop_too_many_levels <- NULL
-  drop_entirely_na <- NULL
-
-  for (n in colnames(data)) {
-    # categorical data must be factor
-    if (is.character(data[[n]]) || is.logical(data[[n]])) {
-      data[[n]] <- as.factor(data[[n]])
-    }
-
-    if (n != rhs) {
-      # completely missing
-      if (all(is.na(data[[n]]))) {
-        data[[n]] <- NULL
-        drop_entirely_na <- c(drop_entirely_na, n)
-      } else {
-
-        # factors with too many levels
-        if (is.factor(data[[n]])) {
-          if (length(levels(data[[n]])) > 50) {
-            data[[n]] <- NULL
-            drop_too_many_levels <- c(drop_too_many_levels, n)
-          }
-        }
-      }
-    }
-  }
-
-  if (!is.null(drop_too_many_levels)) {
-    warning(sprintf("These variables were omitted because they include more than 50 levels: %s.", paste(drop_too_many_levels, collapse=", ")))
-  }
-
-  if (!is.null(drop_entirely_na)) {
-    warning(sprintf("These variables were omitted because they are entirely missing: %s.", paste(drop_entirely_na, collapse=", ")))
-  }
 
   # nobs in column spans via factor levels
   lev <- table(data[[rhs]])
@@ -320,4 +270,67 @@ DinM <- function(lhs, rhs, data, fmt, statistic) {
   }
   out
 
+}
+
+
+#' internal function for sanity checks
+#'
+#' @noRd
+#' @keywords internal
+sanitize_datasummary_balance_data <- function(formula, data) {
+
+  # tables::tabular does not play well with tibbles
+  data <- as.data.frame(data)
+
+  # rhs condition variable
+  rhs <- labels(stats::terms(formula))
+
+  if (!rhs %in% colnames(data)) {
+    stop("Variable ", rhs, " must be in data.")
+  }
+
+  if (length(unique(data[[rhs]])) > 10) {
+    stop(sprintf("Each value of the `%s` variable will create two separate columns. This variable has more than 10 unique values, so the table would be too wide to be readable.",
+        rhs))
+  }
+
+  # sanity checks on other variables
+  data <- data[!is.na(data[[rhs]]), , drop = FALSE]
+
+  drop_too_many_levels <- NULL
+  drop_entirely_na <- NULL
+
+  for (n in colnames(data)) {
+    # categorical data must be factor
+    if (is.character(data[[n]]) || is.logical(data[[n]])) {
+      data[[n]] <- as.factor(data[[n]])
+    }
+
+    if (n != rhs) {
+      # completely missing
+      if (all(is.na(data[[n]]))) {
+        data[[n]] <- NULL
+        drop_entirely_na <- c(drop_entirely_na, n)
+      } else {
+
+        # factors with too many levels
+        if (is.factor(data[[n]])) {
+          if (length(levels(data[[n]])) > 50) {
+            data[[n]] <- NULL
+            drop_too_many_levels <- c(drop_too_many_levels, n)
+          }
+        }
+      }
+    }
+  }
+
+  if (!is.null(drop_too_many_levels)) {
+    warning(sprintf("These variables were omitted because they include more than 50 levels: %s.", paste(drop_too_many_levels, collapse=", ")))
+  }
+
+  if (!is.null(drop_entirely_na)) {
+    warning(sprintf("These variables were omitted because they are entirely missing: %s.", paste(drop_entirely_na, collapse=", ")))
+  }
+
+  return(data)
 }
