@@ -485,9 +485,14 @@ modelsummary <- function(
 
     # HACK: arbitrary spaces to avoid name conflict
     if ("term" %in% colnames(tab)) colnames(tab)[colnames(tab) == "term"]   <- "       "
-    if ("group" %in% colnames(tab)) colnames(tab)[colnames(tab) == "group"] <- "        "
     if ("model" %in% colnames(tab)) colnames(tab)[colnames(tab) == "model"] <- "         "
 
+    # only show group label if it is a row-property (lhs of the group formula)
+    if (!is.null(group) && group$group_name %in% group$rhs) {
+        tab$group <- NULL
+    } else {
+        colnames(tab)[colnames(tab) == "group"] <- "        "
+    }
   }
 
 
@@ -649,7 +654,7 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
     } else if (all(c("term", "model") %in% lhs)) {
         out <- estimates
         out <- tidyr::pivot_longer(out,
-                                   cols = 5:ncol(out),
+                                   cols = !any_of(c("part", "group", "term", "statistic")),
                                    names_to = "model")
         out <- tidyr::pivot_wider(out,
                                   names_from = "group",
@@ -661,9 +666,9 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
     } else if (all(c("group", "model") %in% rhs)) {
         out <- estimates
         out <- tidyr::pivot_longer(out,
-                                   cols = 5:ncol(out),
+                                   cols = !any_of(c("part", "group", "term", "statistic")),
                                    names_to = "model")
-        out$idx_col <- paste(out[[rhs[1]]], out[[rhs[2]]])
+        out$idx_col <- paste(out[[rhs[1]]], "/", out[[rhs[2]]])
         out$model <- out$group <- NULL
         out <- tidyr::pivot_wider(out,
                                   names_from = "idx_col",
@@ -679,7 +684,7 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
     out <- out[, idx, drop = FALSE]
 
     # empty rows
-    idx <- setdiff(colnames(out), c("term", "statistic", "model"))
+    idx <- setdiff(colnames(out), c("part", "term", "statistic", "model"))
     tmp <- out[, idx, drop = FALSE]
     idx <- apply(tmp, 1, function(x) !all(x == ""))
     out <- out[idx,]
@@ -691,3 +696,4 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
 
     return(out)
 }
+

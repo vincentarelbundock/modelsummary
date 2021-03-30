@@ -307,9 +307,8 @@ You can chain those look-behinds as needed to match multiple patterns (noting th
 modelsummary(models, coef_omit = "^(?!.*Commerce)(?!.*\\(Int)", gof_omit=".*")
 ```
 
-# gof: omit/map
 
-## gof_omit
+# gof_omit
 
 `gof_omit` is a regular expression which will be fed to `stringr::str_detect` to detect the names of the statistics which should be excluded from the table.
 
@@ -317,7 +316,7 @@ modelsummary(models, coef_omit = "^(?!.*Commerce)(?!.*\\(Int)", gof_omit=".*")
 modelsummary(models, gof_omit = 'DF|Deviance|R2|AIC|BIC')
 ```
 
-## gof_map
+# gof_map
 
 A more powerful mechanism is to supply a `data.frame` (or `tibble`) through the `gof_map` argument. This data.frame must include 3 columns:
 
@@ -344,6 +343,37 @@ modelsummary(models, gof_map = gm)
 ```
 
 Notice the subtle difference between `coef_map` and `gof_map`. On the one hand, `coef_map` works as a "white list": any coefficient not explicitly entered will be omitted from the table. On the other, `gof_map` works as a "black list": statistics need to be explicitly marked for omission.
+
+# group
+
+Some models produce "grouped" parameter estimates. For example, multinomial logit models produce estimates for each level of the outcome variable, and GAMLSS models produce estimates for different "components." To display the results of such models, we can specify the kind of table we want by feeding a two sided formula to the `group` argument.
+
+The left-hand side of the formula governs rows, and the right-hand side governs columns. The order of terms determines the order of columns in the final table. The formula must have 3 terms: "model", "term", and the name of the group identifier. 
+
+The group identifier must be one of the column names produced by `get_estimates(model)`. For example, in models produced by `nnet::multinom`, the group identifier is called "response":
+
+```{r}
+library(nnet)
+
+dat_multinom <- mtcars
+dat_multinom$cyl <- sprintf("Cyl: %s", dat_multinom$cyl)
+
+mod <- list(
+    nnet::multinom(cyl ~ mpg, data = dat_multinom, trace = FALSE),
+    nnet::multinom(cyl ~ mpg + drat, data = dat_multinom, trace = FALSE))
+
+get_estimates(mod[[1]])
+```
+
+To summarize the results, we can type: 
+
+```{r, warning=FALSE}
+modelsummary(mod, group = response + term ~ model)
+
+modelsummary(mod, group = model + term ~ response)
+
+modelsummary(mod, group = term ~ model + response)
+```
 
 # align
 
