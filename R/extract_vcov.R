@@ -3,7 +3,9 @@
 #' @inheritParams modelsummary
 #' @noRd
 #' @return a numeric vector of test statistics
-extract_vcov <- function(model, vcov, conf_level=NULL) {
+extract_vcov <- function(model, vcov = NULL, conf_level=NULL) {
+
+  if (all(sapply(vcov, is.null))) return(NULL)
 
   # needed for logic tests
   out <- mat <- NULL
@@ -35,6 +37,7 @@ extract_vcov <- function(model, vcov, conf_level=NULL) {
     mat <- try(sandwich::vcovCL(model, cluster=vcov), silent=TRUE)
 
     if (!inherits(mat, "matrix")) {
+
       msg <- "Unable to extract a clustered variance-covariance matrix from model of class %s. The uncertainty estimates are unadjusted."
       warning(sprintf(msg, class(model)[1]))
       return(NULL)
@@ -51,6 +54,7 @@ extract_vcov <- function(model, vcov, conf_level=NULL) {
     }
 
     if (!inherits(mat, "matrix")) {
+
       msg <- "Unable to use function to extract a variance-covariance matrix from model of class %s. The uncertainty estimates are unadjusted."
       warning(sprintf(msg, class(model)[1]))
       return(NULL)
@@ -86,6 +90,7 @@ extract_vcov <- function(model, vcov, conf_level=NULL) {
 
     # lmtest::coeftest failed. adjust std.error manually
     if (!inherits(out, "data.frame")) {
+
       out <- sqrt(base::diag(mat))
       out <- data.frame(term=colnames(mat), std.error=out)
       msg <- "The `lmtest::coeftest` function does not seem to produce a valid result when applied to a model of class %s. Only `std.error` can be adjusted."
@@ -95,7 +100,7 @@ extract_vcov <- function(model, vcov, conf_level=NULL) {
   }
 
   msg <- "Unable to extract a clustered variance-covariance matrix from model of class %s. The uncertainty estimates are unadjusted."
-  warning(sprintf(msg), class(model)[1])
+  warning(sprintf(msg, class(model)[1]))
   return(NULL)
 }
 
@@ -131,4 +136,3 @@ get_coeftest <- function(model, vcov, conf_level) {
 
   return(gof)
 }
-

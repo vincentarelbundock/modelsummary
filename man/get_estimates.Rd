@@ -5,12 +5,23 @@
 \title{Extract model estimates. A mostly internal function with some potential uses
 outside.}
 \usage{
-get_estimates(model, conf_level = 0.95, ...)
+get_estimates(model, conf_level = 0.95, vcov = NULL, ...)
 }
 \arguments{
 \item{model}{a single model object}
 
 \item{conf_level}{confidence level to use for confidence intervals}
+
+\item{vcov}{robust standard errors and other manual statistics. The \code{vcov}
+argument accepts five types of input (see the 'Details' and 'Examples'
+sections below):
+\itemize{
+\item string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").
+\item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
+\item function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., \code{stats::vcov}, \code{sandwich::vcovHC}).
+\item list of \code{length(models)} variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+\item a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below.
+}}
 
 \item{...}{all other arguments are passed through to the extractor and
 table-making functions. This allows users to pass arguments directly to

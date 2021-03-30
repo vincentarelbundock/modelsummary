@@ -35,9 +35,9 @@ test_that("grouped coefficients: gamlss", {
 
     data(abdom)
     mod <- list(
-    gamlss(y ~ pb(x), sigma.fo = ~ pb(x),
+    gamlss(y ~ pb(x), sigma.fo = ~ pb(x),  trace = FALSE,
             family = BCT, data = abdom, method = mixed(1, 20)),
-    gamlss(y ~ x, sigma.fo = ~ pb(x),
+    gamlss(y ~ x, sigma.fo = ~ pb(x), trace = FALSE,
             family = BCT, data = abdom, method = mixed(1, 20)))
         tab <- modelsummary(mod, "data.frame", group = term + component ~ model)
 

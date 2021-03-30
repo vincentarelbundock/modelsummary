@@ -5,10 +5,12 @@
 \title{Extract model gof A mostly internal function with some potential uses
 outside.}
 \usage{
-get_gof(model, ...)
+get_gof(model, vcov_type = NULL, ...)
 }
 \arguments{
 \item{model}{a single model object}
+
+\item{vcov_type}{string vcov type to add at the bottom of the table}
 
 \item{...}{all other arguments are passed through to the extractor and
 table-making functions. This allows users to pass arguments directly to

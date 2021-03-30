@@ -2,7 +2,8 @@
 % Please edit documentation in R/modelsummary.R
 \name{map_omit_rename_estimates}
 \alias{map_omit_rename_estimates}
-\title{rename and reorder estimates}
+\title{rename and reorder estimates from a \emph{single} model
+(before merging to collapse)}
 \usage{
 map_omit_rename_estimates(
   estimates,
@@ -13,6 +14,7 @@ map_omit_rename_estimates(
 )
 }
 \description{
-rename and reorder estimates
+rename and reorder estimates from a \emph{single} model
+(before merging to collapse)
 }
 \keyword{internal}

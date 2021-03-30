@@ -2,8 +2,9 @@
 #' outside.
 #'
 #' @inheritParams get_estimates
+#' @param vcov_type string vcov type to add at the bottom of the table
 #' @export
-get_gof <- function(model, ...) {
+get_gof <- function(model, vcov_type = NULL, ...) {
 
     get_priority <- getOption("modelsummary_get", default = "broom")
     checkmate::assert_choice(get_priority, choices = c("broom", "easystats", "parameters", "performance", "all"))
@@ -46,6 +47,24 @@ get_gof <- function(model, ...) {
         inherits(gof, "data.frame") &&
         "statistic" %in% colnames(gof)) {
         gof$F <- gof$statistic
+    }
+
+    # vcov_type
+    if (is.character(vcov_type)) {
+        gof$vcov.type <- vcov_type
+    }
+
+    # glance_custom
+    gof_custom <- glance_custom(model)
+    sanity_gof(gof, gof_custom)
+    if (!is.null(gof_custom)) {
+        for (n in colnames(gof_custom)) {
+            # modelsummary's vcov argument has precedence
+            # mainly useful to avoid collision with `fixet::glance_custom`
+            if (is.null(vcov_type) || n != "vcov.type") {
+                gof[[n]] <- gof_custom[[n]]
+            }
+        }
     }
 
     if (inherits(gof, "data.frame")) {

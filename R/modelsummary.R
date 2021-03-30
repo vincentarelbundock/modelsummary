@@ -282,6 +282,10 @@ modelsummary <- function(
   sanity_stars(stars)
   sanity_fmt(fmt)
 
+  # confidence intervals are expensive
+  if (!any(grepl("conf", c(estimate, statistic)))) {
+    conf_level <- NULL
+  }
 
   # model names dictionary: use unique names for manipulation
   if (is.null(names(models))) {
@@ -292,24 +296,22 @@ modelsummary <- function(
   model_id <- paste("Model", 1:number_of_models)
 
 
-  # estimates: extract and combine
+  #######################
+  #  modelsummary_list  #
+  #######################
+  msl <- get_list_of_modelsummary_lists(models = models,
+                                        conf_level = conf_level,
+                                        vcov = vcov,
+                                        ...)
+
+  ###############
+  #  estimates  #
+  ###############
   est <- list()
-
-  for (i in 1:number_of_models) {
-
-    # recycling when 1 model and many vcov
-    j <- ifelse(length(models) == 1, 1, i)
-
-    # extract estimates using broom or parameters
-    if (!any(grepl("conf", c(estimate, statistic)))) {
-      conf_level <- NULL
-    }
-
-    tmp <- get_estimates(models[[j]], conf_level = conf_level, ...)
+  for (i in seq_along(msl)) {
 
     tmp <- format_estimates(
-      est        = tmp,
-      model      = models[[j]],
+      est        = msl[[i]]$tidy,
       fmt        = fmt,
       estimate   = estimate[[i]],
       statistic  = statistic,
@@ -317,101 +319,80 @@ modelsummary <- function(
       conf_level = conf_level,
       stars      = stars,
       group_name = group$group_name,
-      ...
-    )
+      ...)
 
-    # rename and subset before merging to collapse rows
+    # before merging to collapse
     tmp <- map_omit_rename_estimates(
-      tmp,
-      coef_rename = coef_rename,
-      coef_map = coef_map,
-      coef_omit = coef_omit,
-      group_map = group_map)
+        tmp,
+        coef_rename = coef_rename,
+        coef_map = coef_map,
+        coef_omit = coef_omit,
+        group_map = group_map)
 
-    # informative warning about group duplicates
-    if (!"group" %in% colnames(tmp)) {
-      idx <- paste(tmp$term, tmp$statistic)
-      if (anyDuplicated(idx) > 0) {
-        warning('The table includes duplicate term names. This can sometimes happen when a model produces "grouped" terms, such as in a multinomial logit or a gamlss model. Consider using the the `group` argument.')
-      }
-    }
-                                  
-    # model name is temporarily a unique id
     colnames(tmp)[4] <- model_id[i]
 
-    # assign to estimate list
     est[[model_id[i]]] <- tmp
 
   }
 
-  # order: store for later
-  if (is.null(coef_map)) {
-    term_order <- lapply(est, function(x) x$term)
-    term_order <- unique(unlist(term_order))
-  } else {
-    term_order <- unique(coef_map)
-  }
+  term_order <- unique(unlist(lapply(est, function(x) x$term)))
+  group_order <- unique(unlist(lapply(est, function(x) x$group)))
 
-  if (is.null(group_map)) {
-    group_order <- lapply(est, function(x) x$group)
-    group_order <- unique(unlist(group_order))
-  } else {
-    group_order <- unique(group_map)
-  }
-      
+  f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE, by = c("group", "term", "statistic"))
+  est <- Reduce(f, est)
 
-  # merge models
-  f <- function(x, y) {
-    merge(x, y, all = TRUE, sort = FALSE, by = c("group", "term", "statistic"))
-  }
-  est <- Reduce(f, est) 
-
-  est <- est[, unique(c("group", "term", "statistic", names(est)))]
-
-  # group reshape
-  if (!is.null(group)) {
-    est <- group_reshape(est, group$lhs, group$rhs, group$group_name)
-  }
-
-  # sort rows
-  idx <- est
-  idx$term <- match(idx$term, term_order)
-  if ("group" %in% colnames(idx)) {
-      idx$group <- match(idx$group, group_order)
-  }
-  est <- est[do.call("order", as.list(idx)),]
-
-  # vcov_type: at least two distinct strings or formulas
-  vcov_type <- get_vcov_type(vcov) 
-
-  # distinguish between estimates and gof
-  # (first column for tests)
+  est <- group_reshape(est, group$lhs, group$rhs, group$group_name)
+  
+  # distinguish between estimates and gof (first column for tests)
   est$part <- "estimates"
-  est <- est[, unique(c("part", colnames(est)))]
+  est <- est[, unique(c("part", names(est)))]
 
-  # gof: extract and combine
+  # empty cells (needed for factor sorting
+  est[is.na(est)] <- ""
+
+  # sort rows using factor trick
+  if (!is.null(coef_map)) {
+    term_order <- coef_map
+    est$term <- factor(est$term, unique(term_order))
+  } else {
+    est$term <- factor(est$term, unique(term_order))
+  }
+
+  if (!is.null(group_map)) {
+    group_order <- group_map
+    est$group <- factor(est$term, group_order)
+  } else {
+    est$group <- factor(est$group, unique(est$group))
+  }
+
+  est <- est[do.call(order, as.list(est)),]
+
+  # character for binding
+  est$term <- as.character(est$term)
+  est$group <- as.character(est$group)
+
+  # group duplicates
+  idx <- paste(as.character(est$term), est$statistic)
+  if (is.null(group) && anyDuplicated(idx) > 0) {
+    warning('The table includes duplicate term names. This can sometimes happen when a model produces "grouped" terms, such as in a multinomial logit or a gamlss model. Consider using the the `group` argument.')
+  }
+
+
+  #####################
+  #  goodness-of-fit  #
+  #####################
   gof <- list()
-
-  for (i in 1:number_of_models) {
-
-    # recycling models when multiple vcov
-    j <- ifelse(length(models) == 1, 1, i)
-      
-    gof[[i]] <- get_gof(models[[j]], ...)
-    gof[[i]] <- format_gof(models[[j]],
-                           gof[[i]],
+  for (i in seq_along(msl)) {
+    gof[[i]] <- format_gof(msl[[i]]$glance,
                            fmt = fmt,
                            gof_map = gof_map,
-                           vcov_type = vcov_type[[i]],
                            ...)
     colnames(gof[[i]])[2] <- model_id[i]
   }
 
-  # merge
   f <- function(x, y) merge(x, y, all=TRUE, sort=FALSE, by="term")
   gof <- Reduce(f, gof)
 
-  # subset, rename, reorder
   gof <- map_omit_gof(gof, gof_omit, gof_map)
 
   # combine estimates and gof
@@ -421,6 +402,11 @@ modelsummary <- function(
   } else {
     tab <- est
   }
+
+
+  ##################
+  #  output table  #
+  ##################
 
   # empty cells
   tab[is.na(tab)] <- ''
@@ -455,27 +441,11 @@ modelsummary <- function(
   }
 
   # data.frame output keeps redundant info
-  clean_redundancy <- function(dat, column) { 
-    if (!column %in% colnames(dat)) {
-      return(dat)
-    }
-    for (i in nrow(dat):2) {
-      if (dat$part[i] == "estimates" &&
-        dat[[column]][i - 1] == dat[[column]][i]) {
-        dat[[column]][i] <- ""
-      }
-    }
-    return(dat)
-  }
-         
   if (output_format != "dataframe") {
-    if (is.null(group)) {
-        tab$group <-NULL
-    }              
 
-    tab <- clean_redundancy(tab, "model")
-    tab <- clean_redundancy(tab, "group")
-    tab <- clean_redundancy(tab, "term")
+    tab <- redundant_labels(tab, "model")
+    tab <- redundant_labels(tab, "group")
+    tab <- redundant_labels(tab, "term")
 
     # after label redundancy
     tab$statistic <- tab$part <- NULL
@@ -484,19 +454,14 @@ modelsummary <- function(
     if ("term" %in% colnames(tab)) colnames(tab)[colnames(tab) == "term"]   <- "       "
     if ("model" %in% colnames(tab)) colnames(tab)[colnames(tab) == "model"] <- "         "
 
-    # only show group label if it is a row-property (lhs of the group formula)
-    if (!is.null(group) && group$group_name %in% group$rhs) {
-        tab$group <- NULL
-    } else {
-        colnames(tab)[colnames(tab) == "group"] <- "        "
-    }
   }
-
-
-  # not optimal, but messes up all the tests, and do we need a "group" column?
-  # need to fix table alignment if this isn't what we want
-  if (length(unique(tab$group)) == 1) {
-      tab$group <- NULL
+    
+  # only show group label if it is a row-property (lhs of the group formula)
+  if (is.null(group) ||
+    group$group_name %in% group$rhs) {
+    tab$group <- NULL
+  } else if (output_format != "dataframe") {
+    colnames(tab)[colnames(tab) == "group"] <- "        "
   }
 
   # align
@@ -539,7 +504,8 @@ modelsummary <- function(
 msummary <- modelsummary
 
 
-#' rename and reorder estimates
+#' rename and reorder estimates from a *single* model
+#' (before merging to collapse)
 #'
 #' @keywords internal
 map_omit_rename_estimates <- function(estimates,
@@ -641,6 +607,8 @@ map_omit_gof <- function(gof, gof_omit, gof_map) {
 #' @noRd
 group_reshape <- function(estimates, lhs, rhs, group_name) {
 
+    if (is.null(lhs)) return(estimates)
+    
     lhs[lhs == group_name] <- "group"
     rhs[rhs == group_name] <- "group"
 
@@ -694,3 +662,40 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
     return(out)
 }
 
+
+get_list_of_modelsummary_lists <- function(models, conf_level, vcov, ...) {
+
+    number_of_models <- max(length(models), length(vcov))
+
+    vcov_type <- get_vcov_type(vcov) 
+
+    out <- list()
+
+    for (i in 1:number_of_models) {
+        # recycling when 1 model and many vcov
+        j <- ifelse(length(models) == 1, 1, i)
+
+
+        tid <- get_estimates(models[[j]], conf_level = conf_level, vcov = vcov[[i]], ...)
+        gla <- get_gof(models[[j]], vcov_type[[i]], ...)
+
+        out[[i]] <- list("tidy" = tid, "glance" = gla)
+        class(out[[i]]) <- c("modelsummary_list", "list")
+    }
+
+    return(out)
+}
+
+
+redundant_labels <- function(dat, column) { 
+    if (!column %in% colnames(dat)) {
+        return(dat)
+    }
+    for (i in nrow(dat):2) {
+        if (dat$part[i] == "estimates" &&
+        dat[[column]][i - 1] == dat[[column]][i]) {
+        dat[[column]][i] <- ""
+        }
+    }
+    return(dat)
+}

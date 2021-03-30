@@ -1,30 +1,10 @@
 #' Extract goodness-of-fit statistics from a single model
 #'
 #' @param model object type with an available `glance` method.
-#' @param vcov_type character to include in the GOF section to
-#'     describe standard errors
 #' @inheritParams modelsummary
 #' @return data.frame with goodness-of-fit  statistics
 #' @noRd
-format_gof <- function(model, gof, fmt, gof_map, vcov_type = NULL, ...) {
-
-  # vcov_type
-  if (is.character(vcov_type)) {
-    gof$vcov.type <- vcov_type
-  }
-
-  # glance_custom
-  gof_custom <- glance_custom(model)
-  sanity_gof(gof, gof_custom)
-  if (!is.null(gof_custom)) {
-    for (n in colnames(gof_custom)) {
-      # modelsummary's vcov argument has precedence
-      # mainly useful to avoid collision with `fixet::glance_custom`
-      if (is.null(vcov_type) || n != "vcov.type") {
-        gof[[n]] <- gof_custom[[n]]
-      }
-    }
-  }
+format_gof <- function(gof, fmt, gof_map, ...) {
 
   # convert gof_map to list and vectors
   if (is.null(gof_map)) {

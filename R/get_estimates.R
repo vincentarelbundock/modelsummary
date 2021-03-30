@@ -4,7 +4,7 @@
 #' @inheritParams modelsummary
 #' @param model a single model object
 #' @export
-get_estimates <- function(model, conf_level = .95, ...) {
+get_estimates <- function(model, conf_level = .95, vcov = NULL, ...) {
 
     if (is.null(conf_level)) {
         conf_int = FALSE
@@ -36,6 +36,48 @@ get_estimates <- function(model, conf_level = .95, ...) {
         }
     }
 
+    # tidy_custom
+    out_custom <- tidy_custom(model)
+    if (inherits(out_custom, "data.frame") && nrow(out_custom) > 0) {
+        if (!any(out_custom$term %in% out$term)) {
+            warning('Elements of the "term" column produced by `tidy_custom` must match model terms. `tidy_custom` was ignored.')
+        } else {
+            out_custom <- out_custom[out_custom$term %in% out$term, , drop = FALSE]
+            idx <- match(out_custom$term, out$term)
+            for (n in colnames(out_custom)) {
+                out[[n]][idx] <- out_custom[[n]]
+            }
+        }
+    }
+
+    # vcov override
+    flag1 <- !is.null(vcov)
+    flag2 <- isFALSE(all.equal(vcov, stats::vcov))
+    flag3 <- !is.character(vcov)
+    flag4 <- is.character(vcov) && length(vcov) == 1 && !vcov %in% c("classical", "iid", "constant")
+    flag5 <- is.character(vcov) && length(vcov) > 1
+  
+    if (flag1 && (flag2 || flag3 || flag4 || flag5)) {
+  
+      # extract overriden estimates
+      so <- extract_vcov(
+        model,
+        vcov = vcov,
+        conf_level = conf_level)
+  
+      if (!is.null(so) && nrow(out) == nrow(so)) {
+        # keep only columns that do not appear in so
+        out <- out[, c('term', base::setdiff(colnames(out), colnames(so))), drop = FALSE]
+        # merge vcov and estimates
+        out <- merge(out, so, by = "term", sort = FALSE)
+  
+      } 
+    }
+  
+    # term must be a character (not rounded with decimals when integer)
+    out$term <- as.character(out$term)
+
+    
     if (inherits(out, "data.frame")) {
         return(out)
     }

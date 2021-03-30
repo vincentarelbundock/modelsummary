@@ -5,7 +5,6 @@
 #' @noRd
 format_estimates <- function(
   est,
-  model,
   estimate   = "estimate",
   statistic  = "std.error",
   vcov       = NULL,
@@ -50,49 +49,6 @@ format_estimates <- function(
   # combine estimate and statistics
   estimate_glue <- c(estimate_glue, statistic_glue)
   
-  # estimate override
-  flag1 <- !is.null(vcov)
-  flag2 <- isFALSE(all.equal(vcov, stats::vcov))
-  flag3 <- !is.character(vcov)
-  flag4 <- is.character(vcov) && length(vcov) == 1 && !vcov %in% c("classical", "iid", "constant")
-  flag5 <- is.character(vcov) && length(vcov) > 1
-
-  if (flag1 && (flag2 || flag3 || flag4 || flag5)) {
-
-    # extract overriden estimates
-    so <- extract_vcov(
-      model,
-      vcov = vcov,
-      conf_level = conf_level)
-
-    if (!is.null(so) && nrow(est) == nrow(so)) {
-      # keep only columns that do not appear in so
-      est <- est[, c('term', base::setdiff(colnames(est), colnames(so))), drop = FALSE]
-      # merge vcov and estimates
-      est <- merge(est, so, by = "term", sort = FALSE)
-
-    } 
-  }
-
-  # tidy_custom
-  est_custom <- tidy_custom(model)
-  sanity_tidy(est, est_custom, estimate, statistic, class(model)[1])
-  if (!is.null(est_custom)) {
-    if (!any(est_custom$term %in% est$term)) {
-      stop("The `term` names produced by `tidy_custom` must be the same as the term names produced by `get_estimates`")
-    }
-    est_custom <- est_custom[est_custom$term %in% est$term, , drop = FALSE]
-    idx <- match(est_custom$term, est$term)
-    for (n in colnames(est_custom)) {
-      est[[n]][idx] <- est_custom[[n]]
-    }
-  }
-
-
-  # term must be a character (not rounded with decimals when integer)
-  est$term <- as.character(est$term)
-
-
   # stars (before rounding)
   # compute stars if: 
   #   a) stars is not FALSE

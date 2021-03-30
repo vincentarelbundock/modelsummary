@@ -67,7 +67,7 @@ test_that("tidy_custom.glm wrong term names", {
   }
   # beware of testthat scoping issue
   assign("tidy_custom.glm", tidy_custom.glm, envir=.GlobalEnv)
-  expect_error(modelsummary(mod, 
+  expect_warning(modelsummary(mod, 
     output = "data.frame", 
     gof_omit = "",
     statistic = NULL))
