@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.6.9000</span>
       </span>
     </div>
 
@@ -2874,19 +2874,16 @@ Commerce
 </table>
 </div>
 </div>
-<div id="gof-omitmap" class="section level1">
+<div id="gof_omit" class="section level1">
 <h1 class="hasAnchor">
-<a href="#gof-omitmap" class="anchor"></a>gof: omit/map</h1>
-<div id="gof_omit" class="section level2">
-<h2 class="hasAnchor">
-<a href="#gof_omit" class="anchor"></a>gof_omit</h2>
+<a href="#gof_omit" class="anchor"></a>gof_omit</h1>
 <p><code>gof_omit</code> is a regular expression which will be fed to <code><a href="https://stringr.tidyverse.org/reference/str_detect.html">stringr::str_detect</a></code> to detect the names of the statistics which should be excluded from the table.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_omit <span class="op">=</span> <span class="st">'DF|Deviance|R2|AIC|BIC'</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="gof_map" class="section level2">
-<h2 class="hasAnchor">
-<a href="#gof_map" class="anchor"></a>gof_map</h2>
+<div id="gof_map" class="section level1">
+<h1 class="hasAnchor">
+<a href="#gof_map" class="anchor"></a>gof_map</h1>
 <p>A more powerful mechanism is to supply a <code>data.frame</code> (or <code>tibble</code>) through the <code>gof_map</code> argument. This data.frame must include 3 columns:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -2910,12 +2907,511 @@ Commerce
 <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_map <span class="op">=</span> <span class="va">gm</span><span class="op">)</span></code></pre></div>
 <p>Notice the subtle difference between <code>coef_map</code> and <code>gof_map</code>. On the one hand, <code>coef_map</code> works as a “white list”: any coefficient not explicitly entered will be omitted from the table. On the other, <code>gof_map</code> works as a “black list”: statistics need to be explicitly marked for omission.</p>
 </div>
+<div id="group" class="section level1">
+<h1 class="hasAnchor">
+<a href="#group" class="anchor"></a>group</h1>
+<p>Some models produce “grouped” parameter estimates. For example, multinomial logit models produce estimates for each level of the outcome variable, and GAMLSS models produce estimates for different “components.” To display the results of such models, we can specify the kind of table we want by feeding a two sided formula to the <code>group</code> argument.</p>
+<p>The left-hand side of the formula governs rows, and the right-hand side governs columns. The order of terms determines the order of columns in the final table. The formula must have 3 terms: “model”, “term”, and the name of the group identifier.</p>
+<p>The group identifier must be one of the column names produced by <code><a href="../reference/get_estimates.html">get_estimates(model)</a></code>. For example, in models produced by <code><a href="https://rdrr.io/pkg/nnet/man/multinom.html">nnet::multinom</a></code>, the group identifier is called “response”:</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">nnet</a></span><span class="op">)</span>
+
+<span class="va">dat_multinom</span> <span class="op">&lt;-</span> <span class="va">mtcars</span>
+<span class="va">dat_multinom</span><span class="op">$</span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"Cyl: %s"</span>, <span class="va">dat_multinom</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span>
+
+<span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    <span class="fu">nnet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nnet/man/multinom.html">multinom</a></span><span class="op">(</span><span class="va">cyl</span> <span class="op">~</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">dat_multinom</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
+    <span class="fu">nnet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/nnet/man/multinom.html">multinom</a></span><span class="op">(</span><span class="va">cyl</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span>, data <span class="op">=</span> <span class="va">dat_multinom</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="../reference/get_estimates.html">get_estimates</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+<span class="co">#&gt;          term  estimate std.error    conf.low   conf.high statistic df.error</span>
+<span class="co">#&gt; 1 (Intercept) 47.252432 34.975171 -21.2976435 115.8025065  1.351028       28</span>
+<span class="co">#&gt; 2         mpg -2.205418  1.637963  -5.4157653   1.0049299 -1.346440       28</span>
+<span class="co">#&gt; 3 (Intercept) 72.440246 37.175162  -0.4217332 145.3022247  1.948619       28</span>
+<span class="co">#&gt; 4         mpg -3.579991  1.774693  -7.0583242  -0.1016573 -2.017246       28</span>
+<span class="co">#&gt;      p.value response</span>
+<span class="co">#&gt; 1 0.17668650   Cyl: 6</span>
+<span class="co">#&gt; 2 0.17816078   Cyl: 6</span>
+<span class="co">#&gt; 3 0.05134088   Cyl: 8</span>
+<span class="co">#&gt; 4 0.04366989   Cyl: 8</span></code></pre></div>
+<p>To summarize the results, we can type:</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, group <span class="op">=</span> <span class="va">response</span> <span class="op">+</span> <span class="va">term</span> <span class="op">~</span> <span class="va">model</span><span class="op">)</span></code></pre></div>
+<table class="table table">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+Model 1
+</th>
+<th style="text-align:center;">
+Model 2
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Cyl: 6
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
+47.252
+</td>
+<td style="text-align:center;">
+89.573
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+(34.975)
+</td>
+<td style="text-align:center;">
+(86.884)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+mpg
+</td>
+<td style="text-align:center;">
+-2.205
+</td>
+<td style="text-align:center;">
+-3.627
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+(1.638)
+</td>
+<td style="text-align:center;">
+(3.869)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+drat
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+-3.210
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+(3.810)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cyl: 8
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
+72.440
+</td>
+<td style="text-align:center;">
+117.971
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+(37.175)
+</td>
+<td style="text-align:center;">
+(87.998)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+mpg
+</td>
+<td style="text-align:center;">
+-3.580
+</td>
+<td style="text-align:center;">
+-4.838
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+(1.775)
+</td>
+<td style="text-align:center;">
+(3.915)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+drat
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+-5.028
+</td>
+</tr>
+<tr>
+<td style="text-align:left;box-shadow: 0px 1px">
+</td>
+<td style="text-align:left;box-shadow: 0px 1px">
+</td>
+<td style="text-align:center;box-shadow: 0px 1px">
+</td>
+<td style="text-align:center;box-shadow: 0px 1px">
+(4.199)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Num.Obs.
+</td>
+<td style="text-align:center;">
+32
+</td>
+<td style="text-align:center;">
+32
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+AIC
+</td>
+<td style="text-align:center;">
+24.1
+</td>
+<td style="text-align:center;">
+24.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+edf
+</td>
+<td style="text-align:center;">
+4.000
+</td>
+<td style="text-align:center;">
+6.000
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, group <span class="op">=</span> <span class="va">model</span> <span class="op">+</span> <span class="va">term</span> <span class="op">~</span> <span class="va">response</span><span class="op">)</span>
+<span class="co">#&gt; Warning: Unknown or uninitialised column: `group`.</span></code></pre></div>
+<table class="table table">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+Cyl: 6
+</th>
+<th style="text-align:center;">
+Cyl: 8
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Model 1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
+47.252
+</td>
+<td style="text-align:center;">
+72.440
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+(34.975)
+</td>
+<td style="text-align:center;">
+(37.175)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+mpg
+</td>
+<td style="text-align:center;">
+-2.205
+</td>
+<td style="text-align:center;">
+-3.580
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+(1.638)
+</td>
+<td style="text-align:center;">
+(1.775)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Model 2
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
+89.573
+</td>
+<td style="text-align:center;">
+117.971
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+(86.884)
+</td>
+<td style="text-align:center;">
+(87.998)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+mpg
+</td>
+<td style="text-align:center;">
+-3.627
+</td>
+<td style="text-align:center;">
+-4.838
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+(3.869)
+</td>
+<td style="text-align:center;">
+(3.915)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+drat
+</td>
+<td style="text-align:center;">
+-3.210
+</td>
+<td style="text-align:center;">
+-5.028
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+(3.810)
+</td>
+<td style="text-align:center;">
+(4.199)
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, group <span class="op">=</span> <span class="va">term</span> <span class="op">~</span> <span class="va">model</span> <span class="op">+</span> <span class="va">response</span><span class="op">)</span>
+<span class="co">#&gt; Warning: Unknown or uninitialised column: `group`.</span></code></pre></div>
+<table class="table table">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+Model 1 / Cyl: 6
+</th>
+<th style="text-align:center;">
+Model 2 / Cyl: 6
+</th>
+<th style="text-align:center;">
+Model 1 / Cyl: 8
+</th>
+<th style="text-align:center;">
+Model 2 / Cyl: 8
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
+47.252
+</td>
+<td style="text-align:center;">
+89.573
+</td>
+<td style="text-align:center;">
+72.440
+</td>
+<td style="text-align:center;">
+117.971
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+(34.975)
+</td>
+<td style="text-align:center;">
+(86.884)
+</td>
+<td style="text-align:center;">
+(37.175)
+</td>
+<td style="text-align:center;">
+(87.998)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+mpg
+</td>
+<td style="text-align:center;">
+-2.205
+</td>
+<td style="text-align:center;">
+-3.627
+</td>
+<td style="text-align:center;">
+-3.580
+</td>
+<td style="text-align:center;">
+-4.838
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+(1.638)
+</td>
+<td style="text-align:center;">
+(3.869)
+</td>
+<td style="text-align:center;">
+(1.775)
+</td>
+<td style="text-align:center;">
+(3.915)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+drat
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+-3.210
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+-5.028
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+(3.810)
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+(4.199)
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="align" class="section level1">
 <h1 class="hasAnchor">
 <a href="#align" class="anchor"></a>align</h1>
 <p>By default, <code>modelsummary</code> will align the first column (with coefficient names) to the left, and will center the results columns. To change this default, you can use the align argument, which accepts a string or vector of strings:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, align<span class="op">=</span><span class="st">"lrrrrr"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, align<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"l"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span>, <span class="st">"r"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Many users want to align values on the decimal dot. Unfortunately, I am not aware of a single way to achieve this outcome for all output formats (pdf/latex, markdown, html). However, it is possible to do decimal alignment in LaTeX or Rmarkdown PDF documents, by using the <code>dcolumn</code> LaTeX package. Consider this Rmarkdown document:</p>
@@ -2927,7 +3423,7 @@ Commerce
 <h1 class="hasAnchor">
 <a href="#notes" class="anchor"></a>notes</h1>
 <p>Add notes to the bottom of your table:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, 
    notes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'Text of the first note.'</span>, 
                 <span class="st">'Text of the second note.'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -2936,7 +3432,7 @@ Commerce
 <h1 class="hasAnchor">
 <a href="#title" class="anchor"></a>title</h1>
 <p>You can add a title to your table as follows:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, title <span class="op">=</span> <span class="st">'This is a title for my table.'</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="add_rows" class="section level1">
@@ -2944,12 +3440,12 @@ Commerce
 <a href="#add_rows" class="anchor"></a><code>add_rows</code>
 </h1>
 <p>Use the <code>add_rows</code> argument to add rows manually to a table. For example, let’s say you estimate two models with a factor variables and you want to insert (a) an empty line to identify the category of reference, and (b) customized information at the bottom of the table:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">models</span><span class="op">[[</span><span class="st">'OLS'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, <span class="va">mtcars</span><span class="op">)</span>
 <span class="va">models</span><span class="op">[[</span><span class="st">'Logit'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, <span class="va">mtcars</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></code></pre></div>
 <p>We create a data.frame with the same number of columns as the summary table. Then, we define a “position” attribute to specify where the new rows should be inserted in the table. Finally, we pass this data.frame to the <code>add_rows</code> argument:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/">tibble</a></span><span class="op">)</span>
 <span class="va">rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span><span class="op">~</span><span class="va">term</span>,          <span class="op">~</span><span class="va">OLS</span>,  <span class="op">~</span><span class="va">Logit</span>,
                 <span class="st">'factor(cyl)4'</span>, <span class="st">'-'</span>,   <span class="st">'-'</span>,
@@ -3135,7 +3631,7 @@ F
 <h1 class="hasAnchor">
 <a href="#exponentiated-coefficients-and-other-extras" class="anchor"></a>Exponentiated coefficients (and other extras)</h1>
 <p>Users can pass any additional argument they want to the <code>tidy</code> method which is used to extract estimates from a model. For example, in logistic or Cox proportional hazard models, many users want to exponentiate coefficients to facilitate interpretation. The <code>tidy</code> functions supplied by the <code>broom</code> package allow users to set <code>exponentiate=TRUE</code> to achieve this. In <code>modelsummary</code>, users can use the same argument:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mod_logit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span>
 <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod_logit</span>, exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>Any argument supported by <code>tidy</code> is thus supported by <code>modelsummary</code>.</p>
@@ -3157,7 +3653,7 @@ F
 <h1 class="hasAnchor">
 <a href="#supported-models" class="anchor"></a>Supported models</h1>
 <p><code>modelsummary</code> automatically supports all the models supported by the <code>tidy</code> function of the <a href="broom.tidymodels.org">broom package</a> or the <code>parameters</code> function of the <a href="https://easystats.github.io/parameters/">parameters package</a>. The list of supported models is rapidly expanding. At the moment, it covers the following model classes:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/supported_models.html">supported_models</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt;   [1] "aareg"                    "acf"                     </span>
 <span class="co">#&gt;   [3] "afex_aov"                 "anova"                   </span>
@@ -3173,108 +3669,106 @@ F
 <span class="co">#&gt;  [23] "boot"                     "bracl"                   </span>
 <span class="co">#&gt;  [25] "brmsfit"                  "brmultinom"              </span>
 <span class="co">#&gt;  [27] "btergm"                   "cch"                     </span>
-<span class="co">#&gt;  [29] "censReg"                  "cgam"                    </span>
-<span class="co">#&gt;  [31] "character"                "cld"                     </span>
-<span class="co">#&gt;  [33] "clm"                      "clm2"                    </span>
-<span class="co">#&gt;  [35] "clmm"                     "clmm2"                   </span>
-<span class="co">#&gt;  [37] "coeftest"                 "confint.glht"            </span>
-<span class="co">#&gt;  [39] "confusionMatrix"          "coxph"                   </span>
-<span class="co">#&gt;  [41] "cpglmm"                   "crr"                     </span>
-<span class="co">#&gt;  [43] "cv.glmnet"                "data.frame"              </span>
-<span class="co">#&gt;  [45] "default"                  "density"                 </span>
-<span class="co">#&gt;  [47] "dgCMatrix"                "dgTMatrix"               </span>
-<span class="co">#&gt;  [49] "DirichletRegModel"        "dist"                    </span>
-<span class="co">#&gt;  [51] "drc"                      "durbinWatsonTest"        </span>
-<span class="co">#&gt;  [53] "emm_list"                 "emmeans"                 </span>
-<span class="co">#&gt;  [55] "emmeans_summary"          "emmGrid"                 </span>
-<span class="co">#&gt;  [57] "epi.2by2"                 "ergm"                    </span>
-<span class="co">#&gt;  [59] "fa"                       "factanal"                </span>
-<span class="co">#&gt;  [61] "FAMD"                     "felm"                    </span>
-<span class="co">#&gt;  [63] "fitdistr"                 "fixest"                  </span>
-<span class="co">#&gt;  [65] "ftable"                   "gam"                     </span>
-<span class="co">#&gt;  [67] "Gam"                      "gamlss"                  </span>
-<span class="co">#&gt;  [69] "gamm"                     "garch"                   </span>
-<span class="co">#&gt;  [71] "geeglm"                   "glht"                    </span>
-<span class="co">#&gt;  [73] "glimML"                   "glm"                     </span>
-<span class="co">#&gt;  [75] "glmm"                     "glmmTMB"                 </span>
-<span class="co">#&gt;  [77] "glmnet"                   "glmrob"                  </span>
-<span class="co">#&gt;  [79] "glmRob"                   "glmx"                    </span>
-<span class="co">#&gt;  [81] "gmm"                      "HLfit"                   </span>
-<span class="co">#&gt;  [83] "htest"                    "hurdle"                  </span>
-<span class="co">#&gt;  [85] "irlba"                    "ivFixed"                 </span>
-<span class="co">#&gt;  [87] "ivprobit"                 "ivreg"                   </span>
-<span class="co">#&gt;  [89] "kappa"                    "kde"                     </span>
-<span class="co">#&gt;  [91] "Kendall"                  "kmeans"                  </span>
-<span class="co">#&gt;  [93] "lavaan"                   "leveneTest"              </span>
-<span class="co">#&gt;  [95] "Line"                     "Lines"                   </span>
-<span class="co">#&gt;  [97] "list"                     "lm"                      </span>
-<span class="co">#&gt;  [99] "lm.beta"                  "lme"                     </span>
-<span class="co">#&gt; [101] "lmodel2"                  "lmrob"                   </span>
-<span class="co">#&gt; [103] "lmRob"                    "logical"                 </span>
-<span class="co">#&gt; [105] "logistf"                  "logitmfx"                </span>
-<span class="co">#&gt; [107] "logitor"                  "lqm"                     </span>
-<span class="co">#&gt; [109] "lqmm"                     "lsmobj"                  </span>
-<span class="co">#&gt; [111] "manova"                   "maov"                    </span>
-<span class="co">#&gt; [113] "map"                      "margins"                 </span>
-<span class="co">#&gt; [115] "maxim"                    "maxLik"                  </span>
-<span class="co">#&gt; [117] "Mclust"                   "mcmc"                    </span>
-<span class="co">#&gt; [119] "mcmc.list"                "MCMCglmm"                </span>
-<span class="co">#&gt; [121] "mcp1"                     "mcp2"                    </span>
-<span class="co">#&gt; [123] "mediate"                  "merMod"                  </span>
-<span class="co">#&gt; [125] "merModList"               "meta_bma"                </span>
-<span class="co">#&gt; [127] "meta_fixed"               "meta_random"             </span>
-<span class="co">#&gt; [129] "metaplus"                 "mfx"                     </span>
-<span class="co">#&gt; [131] "mipo"                     "mira"                    </span>
-<span class="co">#&gt; [133] "MixMod"                   "mixor"                   </span>
-<span class="co">#&gt; [135] "mjoint"                   "mle"                     </span>
-<span class="co">#&gt; [137] "mle2"                     "mlm"                     </span>
-<span class="co">#&gt; [139] "mlogit"                   "model_parameters"        </span>
-<span class="co">#&gt; [141] "muhaz"                    "multinom"                </span>
-<span class="co">#&gt; [143] "negbin"                   "negbinirr"               </span>
-<span class="co">#&gt; [145] "negbinmfx"                "nlrq"                    </span>
-<span class="co">#&gt; [147] "nls"                      "NULL"                    </span>
-<span class="co">#&gt; [149] "numeric"                  "omega"                   </span>
-<span class="co">#&gt; [151] "onesampb"                 "optim"                   </span>
-<span class="co">#&gt; [153] "orcutt"                   "osrt"                    </span>
-<span class="co">#&gt; [155] "pairwise.htest"           "pam"                     </span>
-<span class="co">#&gt; [157] "parameters_efa"           "parameters_pca"          </span>
-<span class="co">#&gt; [159] "PCA"                      "plm"                     </span>
-<span class="co">#&gt; [161] "PMCMR"                    "poissonirr"              </span>
-<span class="co">#&gt; [163] "poissonmfx"               "poLCA"                   </span>
-<span class="co">#&gt; [165] "polr"                     "Polygon"                 </span>
-<span class="co">#&gt; [167] "Polygons"                 "power.htest"             </span>
-<span class="co">#&gt; [169] "prcomp"                   "principal"               </span>
-<span class="co">#&gt; [171] "probitmfx"                "pyears"                  </span>
-<span class="co">#&gt; [173] "Rchoice"                  "rcorr"                   </span>
-<span class="co">#&gt; [175] "ref.grid"                 "regsubsets"              </span>
-<span class="co">#&gt; [177] "ridgelm"                  "rlm"                     </span>
-<span class="co">#&gt; [179] "rlmerMod"                 "rma"                     </span>
-<span class="co">#&gt; [181] "roc"                      "rq"                      </span>
-<span class="co">#&gt; [183] "rqs"                      "rqss"                    </span>
-<span class="co">#&gt; [185] "sarlm"                    "scam"                    </span>
-<span class="co">#&gt; [187] "sem"                      "sparseMatrix"            </span>
-<span class="co">#&gt; [189] "SpatialLinesDataFrame"    "SpatialPolygons"         </span>
-<span class="co">#&gt; [191] "SpatialPolygonsDataFrame" "spec"                    </span>
-<span class="co">#&gt; [193] "speedglm"                 "speedlm"                 </span>
-<span class="co">#&gt; [195] "stanfit"                  "stanmvreg"               </span>
-<span class="co">#&gt; [197] "stanreg"                  "summary_emm"             </span>
-<span class="co">#&gt; [199] "summary_fixest"           "summary.glht"            </span>
-<span class="co">#&gt; [201] "summary.lm"               "summary.plm"             </span>
-<span class="co">#&gt; [203] "summaryDefault"           "survdiff"                </span>
-<span class="co">#&gt; [205] "survexp"                  "survfit"                 </span>
-<span class="co">#&gt; [207] "survreg"                  "svd"                     </span>
-<span class="co">#&gt; [209] "svyglm"                   "svyolr"                  </span>
-<span class="co">#&gt; [211] "systemfit"                "t1way"                   </span>
-<span class="co">#&gt; [213] "table"                    "tobit"                   </span>
-<span class="co">#&gt; [215] "trendPMCMR"               "ts"                      </span>
-<span class="co">#&gt; [217] "TukeyHSD"                 "varest"                  </span>
-<span class="co">#&gt; [219] "vgam"                     "wbgee"                   </span>
-<span class="co">#&gt; [221] "wbm"                      "xyz"                     </span>
-<span class="co">#&gt; [223] "yuen"                     "zcpglm"                  </span>
-<span class="co">#&gt; [225] "zerocount"                "zeroinfl"                </span>
-<span class="co">#&gt; [227] "zoo"</span></code></pre></div>
+<span class="co">#&gt;  [29] "cgam"                     "character"               </span>
+<span class="co">#&gt;  [31] "cld"                      "clm"                     </span>
+<span class="co">#&gt;  [33] "clm2"                     "clmm"                    </span>
+<span class="co">#&gt;  [35] "clmm2"                    "coeftest"                </span>
+<span class="co">#&gt;  [37] "confint.glht"             "confusionMatrix"         </span>
+<span class="co">#&gt;  [39] "coxph"                    "cpglmm"                  </span>
+<span class="co">#&gt;  [41] "crr"                      "cv.glmnet"               </span>
+<span class="co">#&gt;  [43] "data.frame"               "default"                 </span>
+<span class="co">#&gt;  [45] "density"                  "dgCMatrix"               </span>
+<span class="co">#&gt;  [47] "dgTMatrix"                "DirichletRegModel"       </span>
+<span class="co">#&gt;  [49] "dist"                     "drc"                     </span>
+<span class="co">#&gt;  [51] "durbinWatsonTest"         "emm_list"                </span>
+<span class="co">#&gt;  [53] "emmeans"                  "emmeans_summary"         </span>
+<span class="co">#&gt;  [55] "emmGrid"                  "epi.2by2"                </span>
+<span class="co">#&gt;  [57] "ergm"                     "fa"                      </span>
+<span class="co">#&gt;  [59] "factanal"                 "FAMD"                    </span>
+<span class="co">#&gt;  [61] "felm"                     "fitdistr"                </span>
+<span class="co">#&gt;  [63] "fixest"                   "ftable"                  </span>
+<span class="co">#&gt;  [65] "gam"                      "Gam"                     </span>
+<span class="co">#&gt;  [67] "gamlss"                   "gamm"                    </span>
+<span class="co">#&gt;  [69] "garch"                    "geeglm"                  </span>
+<span class="co">#&gt;  [71] "glht"                     "glimML"                  </span>
+<span class="co">#&gt;  [73] "glm"                      "glmm"                    </span>
+<span class="co">#&gt;  [75] "glmmTMB"                  "glmnet"                  </span>
+<span class="co">#&gt;  [77] "glmrob"                   "glmRob"                  </span>
+<span class="co">#&gt;  [79] "glmx"                     "gmm"                     </span>
+<span class="co">#&gt;  [81] "HLfit"                    "htest"                   </span>
+<span class="co">#&gt;  [83] "hurdle"                   "irlba"                   </span>
+<span class="co">#&gt;  [85] "ivFixed"                  "ivprobit"                </span>
+<span class="co">#&gt;  [87] "ivreg"                    "kappa"                   </span>
+<span class="co">#&gt;  [89] "kde"                      "Kendall"                 </span>
+<span class="co">#&gt;  [91] "kmeans"                   "lavaan"                  </span>
+<span class="co">#&gt;  [93] "leveneTest"               "Line"                    </span>
+<span class="co">#&gt;  [95] "Lines"                    "list"                    </span>
+<span class="co">#&gt;  [97] "lm"                       "lm.beta"                 </span>
+<span class="co">#&gt;  [99] "lme"                      "lmodel2"                 </span>
+<span class="co">#&gt; [101] "lmrob"                    "lmRob"                   </span>
+<span class="co">#&gt; [103] "logical"                  "logistf"                 </span>
+<span class="co">#&gt; [105] "logitmfx"                 "logitor"                 </span>
+<span class="co">#&gt; [107] "lqm"                      "lqmm"                    </span>
+<span class="co">#&gt; [109] "lsmobj"                   "manova"                  </span>
+<span class="co">#&gt; [111] "maov"                     "map"                     </span>
+<span class="co">#&gt; [113] "margins"                  "Mclust"                  </span>
+<span class="co">#&gt; [115] "mcmc"                     "mcmc.list"               </span>
+<span class="co">#&gt; [117] "MCMCglmm"                 "mcp1"                    </span>
+<span class="co">#&gt; [119] "mcp2"                     "mediate"                 </span>
+<span class="co">#&gt; [121] "merMod"                   "merModList"              </span>
+<span class="co">#&gt; [123] "meta_bma"                 "meta_fixed"              </span>
+<span class="co">#&gt; [125] "meta_random"              "metaplus"                </span>
+<span class="co">#&gt; [127] "mfx"                      "mipo"                    </span>
+<span class="co">#&gt; [129] "mira"                     "MixMod"                  </span>
+<span class="co">#&gt; [131] "mixor"                    "mjoint"                  </span>
+<span class="co">#&gt; [133] "mle"                      "mle2"                    </span>
+<span class="co">#&gt; [135] "mlm"                      "mlogit"                  </span>
+<span class="co">#&gt; [137] "model_parameters"         "muhaz"                   </span>
+<span class="co">#&gt; [139] "multinom"                 "negbin"                  </span>
+<span class="co">#&gt; [141] "negbinirr"                "negbinmfx"               </span>
+<span class="co">#&gt; [143] "nlrq"                     "nls"                     </span>
+<span class="co">#&gt; [145] "NULL"                     "numeric"                 </span>
+<span class="co">#&gt; [147] "omega"                    "onesampb"                </span>
+<span class="co">#&gt; [149] "optim"                    "orcutt"                  </span>
+<span class="co">#&gt; [151] "osrt"                     "pairwise.htest"          </span>
+<span class="co">#&gt; [153] "pam"                      "parameters_efa"          </span>
+<span class="co">#&gt; [155] "parameters_pca"           "PCA"                     </span>
+<span class="co">#&gt; [157] "plm"                      "PMCMR"                   </span>
+<span class="co">#&gt; [159] "poissonirr"               "poissonmfx"              </span>
+<span class="co">#&gt; [161] "poLCA"                    "polr"                    </span>
+<span class="co">#&gt; [163] "Polygon"                  "Polygons"                </span>
+<span class="co">#&gt; [165] "power.htest"              "prcomp"                  </span>
+<span class="co">#&gt; [167] "principal"                "probitmfx"               </span>
+<span class="co">#&gt; [169] "pyears"                   "Rchoice"                 </span>
+<span class="co">#&gt; [171] "rcorr"                    "ref.grid"                </span>
+<span class="co">#&gt; [173] "regsubsets"               "ridgelm"                 </span>
+<span class="co">#&gt; [175] "rlm"                      "rlmerMod"                </span>
+<span class="co">#&gt; [177] "rma"                      "roc"                     </span>
+<span class="co">#&gt; [179] "rq"                       "rqs"                     </span>
+<span class="co">#&gt; [181] "rqss"                     "sarlm"                   </span>
+<span class="co">#&gt; [183] "scam"                     "sem"                     </span>
+<span class="co">#&gt; [185] "sparseMatrix"             "SpatialLinesDataFrame"   </span>
+<span class="co">#&gt; [187] "SpatialPolygons"          "SpatialPolygonsDataFrame"</span>
+<span class="co">#&gt; [189] "spec"                     "speedglm"                </span>
+<span class="co">#&gt; [191] "speedlm"                  "stanfit"                 </span>
+<span class="co">#&gt; [193] "stanmvreg"                "stanreg"                 </span>
+<span class="co">#&gt; [195] "summary.glht"             "summary.lm"              </span>
+<span class="co">#&gt; [197] "summary.plm"              "summary_emm"             </span>
+<span class="co">#&gt; [199] "summary_fixest"           "summaryDefault"          </span>
+<span class="co">#&gt; [201] "survdiff"                 "survexp"                 </span>
+<span class="co">#&gt; [203] "survfit"                  "survreg"                 </span>
+<span class="co">#&gt; [205] "svd"                      "svyglm"                  </span>
+<span class="co">#&gt; [207] "svyolr"                   "systemfit"               </span>
+<span class="co">#&gt; [209] "t1way"                    "table"                   </span>
+<span class="co">#&gt; [211] "tobit"                    "trendPMCMR"              </span>
+<span class="co">#&gt; [213] "ts"                       "TukeyHSD"                </span>
+<span class="co">#&gt; [215] "varest"                   "vgam"                    </span>
+<span class="co">#&gt; [217] "wbgee"                    "wbm"                     </span>
+<span class="co">#&gt; [219] "xyz"                      "yuen"                    </span>
+<span class="co">#&gt; [221] "zcpglm"                   "zerocount"               </span>
+<span class="co">#&gt; [223] "zeroinfl"                 "zoo"</span></code></pre></div>
 <p>To see if a given model is supported, you can fit it, and then call this function:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/get_estimates.html">get_estimates</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
 <p>If this function does not return a valid output, you can easily (really!!) add your own support. See the next section for a tutorial. If you do this, you may consider opening an issue on the Github website of the <code>broom</code> package: <a href="https://github.com/tidymodels/broom/issues" class="uri">https://github.com/tidymodels/broom/issues</a></p>
 </div>
@@ -3283,7 +3777,7 @@ F
 <a href="#adding-new-models-part-i" class="anchor"></a>Adding new models (part I)</h1>
 <p>The simplest way to summarize an unsupported model is to create a <code>modelsummary_list</code> object. This approach is super flexible, but it requires manual intervention, and it can become tedious if you need to summarize many models. The next section shows how to add formal support for an unsupported model type.</p>
 <p>A <code>modelsummary_list</code> is a list with two element that conform to the <code>broom</code> package specification: <code>tidy</code> and <code>glance</code>. <code>tidy</code> is a data.frame with at least three columns: <code>term</code>, <code>estimate</code>, and <code>std.error</code>. <code>glance</code> is a data.frame with only a single row, and where each column will be displayed at the bottom of the table in the goodness-of-fit section. Finally, we wrap those two elements in a list and assign it a <code>modelsummary_list</code> class:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ti</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
   term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"coef1"</span>, <span class="st">"coef2"</span>, <span class="st">"coef3"</span><span class="op">)</span>,
   estimate <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,
@@ -3377,7 +3871,7 @@ blah blah
 <a href="#adding-new-models-part-ii" class="anchor"></a>Adding new models (part II)</h1>
 <p><code>modelsummary</code> relies on two functions from the <code>broom</code> package to extract model information: <code>tidy</code> and <code>glance</code>. If <code>broom</code> doesn’t support the type of model you are trying to summarize, <code>modelsummary</code> won’t support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.</p>
 <p>For example, models produced by the <code>MCMCglmm</code> package are not currently supported by <code>broom</code>. To add support, you simply need to create a <code>tidy</code> and a <code>glance</code> method:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># load packages and data</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">MCMCglmm</span><span class="op">)</span>
@@ -3414,18 +3908,18 @@ blah blah
 <h1 class="hasAnchor">
 <a href="#customizing-existing-models-part-i" class="anchor"></a>Customizing existing models (part I)</h1>
 <p>Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new <code>glance_custom</code> and <code>tidy_custom</code> methods. To illustrate, we estimate two linear regression models using the <code>lm</code> function:</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
 
 <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">mod</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span>, <span class="va">mtcars</span><span class="op">)</span>
 <span class="va">mod</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">wt</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">am</span>, <span class="va">mtcars</span><span class="op">)</span></code></pre></div>
 <p>In <code>R</code>, the <code>lm</code> function produces models of class “lm”:</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt; [1] "lm"</span></code></pre></div>
 <p>Let’s say you would like to print the dependent variable for each model of this particular class. All you need to do is define a new method called <code>glance_custom.lm</code>. This method should return a data.frame (or tibble) with 1 row, and 1 column per piece of information you want to display. For example:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">glance_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html">formula</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>
     <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="st">"DV"</span> <span class="op">=</span> <span class="va">dv</span><span class="op">)</span>
@@ -3433,7 +3927,7 @@ blah blah
 <span class="op">}</span></code></pre></div>
 <p>Now, let’s customize the body of the table. The <code>vcov</code> argument already allows users to customize uncertainty estimates. But imagine you want to override the <em>coefficient estimates</em> of your “lm” models. Easy! All you need to do is define a <code>tidy_custom.lm</code> method which returns a data.frame (or tibble) with one column called “term” and one column called “estimate”.</p>
 <p>Here, we’ll substitute estimates by an up/down-pointing triangles which represents their signs:</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tidy_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span>
     <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
@@ -3442,7 +3936,7 @@ blah blah
     <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>After you define the <code>glance_custom</code> and <code>tidy_custom</code> methods, <code>modelsummary</code> will automatically display your customized model information:</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
 <table class="table table">
 <thead><tr>
@@ -3461,10 +3955,10 @@ Model 2
 (Intercept)
 </td>
 <td style="text-align:center;">
-▲
+&lt;U+25B2&gt;
 </td>
 <td style="text-align:center;">
-▲
+&lt;U+25B2&gt;
 </td>
 </tr>
 <tr>
@@ -3482,10 +3976,10 @@ Model 2
 mpg
 </td>
 <td style="text-align:center;">
-▼
+&lt;U+25BC&gt;
 </td>
 <td style="text-align:center;">
-▼
+&lt;U+25BC&gt;
 </td>
 </tr>
 <tr>
@@ -3503,10 +3997,10 @@ mpg
 drat
 </td>
 <td style="text-align:center;">
-▲
+&lt;U+25B2&gt;
 </td>
 <td style="text-align:center;">
-▼
+&lt;U+25BC&gt;
 </td>
 </tr>
 <tr>
@@ -3526,7 +4020,7 @@ am
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
-▼
+&lt;U+25BC&gt;
 </td>
 </tr>
 <tr>
@@ -3634,7 +4128,7 @@ wt
 <h1 class="hasAnchor">
 <a href="#customizing-existing-models-part-ii" class="anchor"></a>Customizing existing models (part II)</h1>
 <p>An even more fundamental way to customize the output would be to completely bypass <code>modelsummary</code>’s extractor functions by assigning a new class name to your model. For example,</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># estimate a linear model</span>
 <span class="va">mod_custom</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span>, <span class="va">mtcars</span><span class="op">)</span>
 
@@ -3758,7 +4252,7 @@ Custom
 <p>Users often want to use estimates or standard errors that have been obtained using a custom strategy. To achieve this in an automated and replicable way, it can be useful to use the <code>tidy_custom</code> strategy described above in the “Cutomizing Existing Models” section.</p>
 <p>For example, we can use the <code>modelr</code> package to draw 500 resamples of a dataset, and compute bootstrap standard errors by taking the standard deviation of estimates computed in all of those resampled datasets. To do this, we defined <code>tidy_custom.lm</code> function that will automatically bootstrap any <code>lm</code> model supplied to <code>modelsummary</code>, and replace the values in the table automatically.</p>
 <p>Note that the <code>tidy_custom_lm</code> returns a data.frame with 3 columns: <code>term</code>, <code>estimate</code>, and <code>std.error</code>:</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://vincentarelbundock.github.io/modelsummary/">"modelsummary"</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://broom.tidymodels.org/">"broom"</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="http://tidyverse.tidyverse.org">"tidyverse"</a></span><span class="op">)</span>
@@ -3802,20 +4296,20 @@ Model 2
 (Intercept)
 </td>
 <td style="text-align:center;">
-327.257
+326.006
 </td>
 <td style="text-align:center;">
-284.620
+281.729
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(31.756)
+(30.858)
 </td>
 <td style="text-align:center;">
-(43.140)
+(42.627)
 </td>
 </tr>
 <tr>
@@ -3823,20 +4317,20 @@ Model 2
 mpg
 </td>
 <td style="text-align:center;">
--8.999
+-8.966
 </td>
 <td style="text-align:center;">
--10.038
+-10.258
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(1.423)
+(1.376)
 </td>
 <td style="text-align:center;">
-(2.367)
+(2.336)
 </td>
 </tr>
 <tr>
@@ -3846,7 +4340,7 @@ drat
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
-17.510
+19.620
 </td>
 </tr>
 <tr>
@@ -3855,7 +4349,7 @@ drat
 <td style="text-align:center;box-shadow: 0px 1px">
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(21.010)
+(21.292)
 </td>
 </tr>
 <tr>
@@ -3943,7 +4437,7 @@ F
 <a href="#fixed-effects-regression" class="anchor"></a>Fixed effects regression</h2>
 <p>One common use-case for <code>glance_custom</code> is to display the list of “fixed effects” included in a linear regression model.</p>
 <p>The <code>feols</code> function from the <code>fixest</code> package offers an extremely fast way to estimate fixed effects regression models. The <code>feols</code> function produces an object of class “fixest”, which stores the fixed effects variables in a character vector called “fixef_vars”. To display those fixed effects, we create a <code>glance_custom.fixest</code> and call <code>modelsummary</code>:</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">glance_custom.fixest</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>.rows <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
     <span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="va">x</span><span class="op">$</span><span class="va">fixef_vars</span><span class="op">)</span> <span class="op">{</span>
@@ -4182,7 +4676,7 @@ X
 <h2 class="hasAnchor">
 <a href="#multiple-imputation" class="anchor"></a>Multiple imputation</h2>
 <p><code>modelsummary</code> can pool and display analyses on several datasets imputed using the <code>mice</code> or <code>Amelia</code> packages. This code illustrates how:</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/amices/mice">mice</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://gking.harvard.edu/amelia">Amelia</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
@@ -4232,26 +4726,26 @@ Amelia
 (Intercept)
 </td>
 <td style="text-align:center;">
-78.518
+92.231
 </td>
 <td style="text-align:center;">
-87.687
+93.787
 </td>
 <td style="text-align:center;">
-88.059
+99.535
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(13.448)
+(15.182)
 </td>
 <td style="text-align:center;">
-(10.932)
+(17.118)
 </td>
 <td style="text-align:center;">
-(12.304)
+(13.190)
 </td>
 </tr>
 <tr>
@@ -4259,26 +4753,26 @@ Amelia
 Literacy
 </td>
 <td style="text-align:center;">
--0.518
+-0.736
 </td>
 <td style="text-align:center;">
--0.657
+-0.722
 </td>
 <td style="text-align:center;">
--0.707
+-0.797
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.222)
+(0.236)
 </td>
 <td style="text-align:center;">
-(0.186)
+(0.273)
 </td>
 <td style="text-align:center;">
-(0.198)
+(0.203)
 </td>
 </tr>
 <tr>
@@ -4286,26 +4780,26 @@ Literacy
 Commerce
 </td>
 <td style="text-align:center;">
--0.396
+-0.502
 </td>
 <td style="text-align:center;">
--0.432
+-0.538
 </td>
 <td style="text-align:center;">
--0.401
+-0.588
 </td>
 </tr>
 <tr>
 <td style="text-align:left;box-shadow: 0px 1px">
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.149)
+(0.168)
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.139)
+(0.178)
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.141)
+(0.146)
 </td>
 </tr>
 <tr>
@@ -4313,7 +4807,7 @@ Commerce
 Num.Obs.
 </td>
 <td style="text-align:center;">
-61
+58
 </td>
 <td style="text-align:center;">
 86
@@ -4340,13 +4834,13 @@ Num.Imp.
 R2
 </td>
 <td style="text-align:center;">
-0.125
+0.168
 </td>
 <td style="text-align:center;">
-0.178
+0.172
 </td>
 <td style="text-align:center;">
-0.180
+0.216
 </td>
 </tr>
 <tr>
@@ -4354,13 +4848,13 @@ R2
 R2 Adj.
 </td>
 <td style="text-align:center;">
-0.095
+0.138
 </td>
 <td style="text-align:center;">
-0.158
+0.151
 </td>
 <td style="text-align:center;">
-0.160
+0.197
 </td>
 </tr>
 <tr>
@@ -4368,7 +4862,7 @@ R2 Adj.
 AIC
 </td>
 <td style="text-align:center;">
-564.4
+530.6
 </td>
 <td style="text-align:center;">
 </td>
@@ -4380,7 +4874,7 @@ AIC
 BIC
 </td>
 <td style="text-align:center;">
-572.9
+538.9
 </td>
 <td style="text-align:center;">
 </td>
@@ -4392,7 +4886,7 @@ BIC
 Log.Lik.
 </td>
 <td style="text-align:center;">
--278.216
+-261.317
 </td>
 <td style="text-align:center;">
 </td>
@@ -4404,7 +4898,7 @@ Log.Lik.
 F
 </td>
 <td style="text-align:center;">
-4.143
+5.568
 </td>
 <td style="text-align:center;">
 </td>
@@ -4418,7 +4912,7 @@ F
 <h2 class="hasAnchor">
 <a href="#grouped-coefficients-multinomial-logit-or-gammls" class="anchor"></a>Grouped coefficients: multinomial logit or GAMMLS</h2>
 <p>Some models return <em>groups</em> of parameters. For instance, multinomial logit models produce coefficients for each level of the outcome (<code>y.level</code>), and GAMLSS models produce estimates for different “components”.</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.gamlss.com/">gamlss</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">abdom</span><span class="op">)</span>
 <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/gamlss.html">gamlss</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/ps.html">pb</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, sigma.fo <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/ps.html">pb</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, family <span class="op">=</span> <span class="va">BCT</span>,
@@ -4429,22 +4923,22 @@ F
 <span class="co">#&gt; GAMLSS-CG iteration 3: Global Deviance = 4770.994</span>
 
 <span class="fu"><a href="../reference/get_estimates.html">get_estimates</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
-<span class="co">#&gt;          term     estimate   std.error conf.level     conf.low     conf.high</span>
-<span class="co">#&gt; 1 (Intercept) -64.44299460 1.333967122       0.95 -67.05752211 -61.828467083</span>
-<span class="co">#&gt; 2       pb(x)  10.69463541 0.057870867       0.95  10.58121059  10.808060221</span>
-<span class="co">#&gt; 3 (Intercept)  -2.65041283 0.108590623       0.95  -2.86324654  -2.437579121</span>
-<span class="co">#&gt; 4       pb(x)  -0.01002512 0.003799914       0.95  -0.01747281  -0.002577425</span>
-<span class="co">#&gt; 5 (Intercept)  -0.10715726 0.629608885       0.95  -1.34116800   1.126853480</span>
-<span class="co">#&gt; 6 (Intercept)   2.49483399 0.426092619       0.95   1.65970780   3.329960173</span>
-<span class="co">#&gt;     statistic df.error       p.value   component</span>
-<span class="co">#&gt; 1 -48.3092825 598.2397 1.209072e-208 conditional</span>
-<span class="co">#&gt; 2 184.8017133 598.2397  0.000000e+00 conditional</span>
-<span class="co">#&gt; 3 -24.4073822 598.2397  7.822613e-92       sigma</span>
-<span class="co">#&gt; 4  -2.6382492 598.2397  8.550415e-03       sigma</span>
-<span class="co">#&gt; 5  -0.1701965 598.2397  8.649131e-01          nu</span>
-<span class="co">#&gt; 6   5.8551448 598.2397  7.863078e-09         tau</span></code></pre></div>
+<span class="co">#&gt;          term     estimate   std.error     conf.low     conf.high   statistic</span>
+<span class="co">#&gt; 1 (Intercept) -64.44299460 1.333967379 -67.05752262 -61.828466579 -48.3092732</span>
+<span class="co">#&gt; 2       pb(x)  10.69463541 0.057870877  10.58121057  10.808060240 184.8016813</span>
+<span class="co">#&gt; 3 (Intercept)  -2.65041283 0.108590623  -2.86324654  -2.437579121 -24.4073822</span>
+<span class="co">#&gt; 4       pb(x)  -0.01002512 0.003799914  -0.01747281  -0.002577425  -2.6382492</span>
+<span class="co">#&gt; 5 (Intercept)  -0.10715726 0.629608966  -1.34116816   1.126853640  -0.1701965</span>
+<span class="co">#&gt; 6 (Intercept)   2.49483399 0.426092618   1.65970780   3.329960172   5.8551448</span>
+<span class="co">#&gt;   df.error       p.value   component</span>
+<span class="co">#&gt; 1 598.2397 1.209184e-208 conditional</span>
+<span class="co">#&gt; 2 598.2397  0.000000e+00 conditional</span>
+<span class="co">#&gt; 3 598.2397  7.822617e-92       sigma</span>
+<span class="co">#&gt; 4 598.2397  8.550415e-03       sigma</span>
+<span class="co">#&gt; 5 598.2397  8.649131e-01          nu</span>
+<span class="co">#&gt; 6 598.2397  7.863078e-09         tau</span></code></pre></div>
 <p>Above, we see that the data.frame produced by <code>get_estimates</code> includes a <code>component</code> column which identifies term groups. The <code>modelsummary_wide</code> function can be used to summarize these kinds of models, by displaying each “group” in separate columns:</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary_wide.html">modelsummary_wide</a></span><span class="op">(</span><span class="va">mod</span>, coef_group <span class="op">=</span> <span class="st">"component"</span><span class="op">)</span>
 <span class="co">#&gt; Objects of class 'NULL' are currently not supported.</span>
 <span class="co">#&gt; Objects of class 'NULL' are currently not supported.</span>
@@ -4590,7 +5084,7 @@ Log.Lik.
 </table>
 <p>Alternatively, it is easy to create custom summaries by building objects of class <code>modelsummary_list</code> (a list of two data.frames names <code>tidy</code> and <code>glance</code>, and with class <code>modelsummary_list</code>; see the “Adding New Models” section of this page).</p>
 <p>For example, if we only wish to summarize the “mu” component:</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">get_modelsummary_list</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">ti</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_estimates.html">get_estimates</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
     <span class="va">ti</span> <span class="op">&lt;-</span> <span class="va">ti</span><span class="op">[</span><span class="va">ti</span><span class="op">$</span><span class="va">component</span> <span class="op">==</span> <span class="st">"conditional"</span>,<span class="op">]</span>
@@ -4675,7 +5169,7 @@ Log.Lik.
 </tbody>
 </table>
 <p>If we want to combine the “component” and the “term” labels:</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">get_modelsummary_list</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">ti</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_estimates.html">get_estimates</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
     <span class="va">ti</span><span class="op">$</span><span class="va">term</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">ti</span><span class="op">$</span><span class="va">component</span>, <span class="va">ti</span><span class="op">$</span><span class="va">term</span><span class="op">)</span>
@@ -4841,7 +5335,7 @@ Log.Lik.
 <li>png</li>
 </ul>
 <p>You can modify these defaults by setting global options such as:</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>modelsummary_html <span class="op">=</span> <span class="st">'kableExtra'</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>modelsummary_latex <span class="op">=</span> <span class="st">'gt'</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>modelsummary_word <span class="op">=</span> <span class="st">'huxtable'</span><span class="op">)</span>
@@ -4868,7 +5362,7 @@ Log.Lik.
 </ol>
 <p>If all of this fails, <code>modelsummary</code> will return an error message.</p>
 <p>If you have problems with a model object, you can often diagnose the problem by running the following commands from a <em>clean</em> R session:</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># see if broom supports your model type</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://broom.tidymodels.org/">broom</a></span><span class="op">)</span>
 <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
