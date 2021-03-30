@@ -272,6 +272,7 @@ modelsummary <- function(
   number_of_models <- max(length(models), length(vcov))
   estimate <- sanitize_estimate(estimate, number_of_models)
   group <- sanitize_group(group)
+  output_format <- sanitize_output(output)$output_format
   sanity_group_map(group_map)
   sanity_output(output)
   sanity_statistic(statistic)
@@ -280,10 +281,6 @@ modelsummary <- function(
   sanity_gof_map(gof_map, gof_omit)
   sanity_stars(stars)
   sanity_fmt(fmt)
-
-
-  # output
-  output_format <- parse_output_arg(output)$output_format
 
 
   # model names dictionary: use unique names for manipulation

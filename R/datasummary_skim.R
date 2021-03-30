@@ -130,7 +130,7 @@ datasummary_skim_numeric <- function(
   ...) {
 
   # output format
-  output_info <- parse_output_arg(output)
+  output_info <- sanitize_output(output)
 
   # draw histogram?
   if (histogram) {

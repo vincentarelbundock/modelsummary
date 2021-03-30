@@ -24,7 +24,7 @@ factory <- function(tab,
   sanity_notes(notes)
 
   # parse output
-  output_list <- parse_output_arg(output)
+  output_list <- sanitize_output(output)
 
   if (output_list$output_factory == 'gt') {
     f <- factory_gt

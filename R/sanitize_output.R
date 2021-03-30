@@ -2,7 +2,7 @@
 #' format to use.
 #'
 #' @noRd
-parse_output_arg <- function(output) {
+sanitize_output <- function(output) {
 
   extension_dict <- c(
     "md"   = "markdown",
