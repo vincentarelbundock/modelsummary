@@ -33,7 +33,7 @@ msummary(
 \item{output}{filename or object type (character string)
 \itemize{
 \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
-\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
+\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable".
 \item To change the default output format, type \code{options(modelsummary_default = "latex")}, where \code{latex} can be any of the valid object types listed above.
 \item Warning: the \code{output} argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
 }}
@@ -100,9 +100,10 @@ model object: \code{c("hp:mpg"="HPxM/G")}.}
 \item{coef_omit}{string regular expression. Omits all matching coefficients
 from the table using \code{grepl(perl=TRUE)}.}
 
-\item{coef_rename}{named character vector. Values refer to the variable names
-that will appear in the table. Names refer to the original term names stored
-in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
+\item{coef_rename}{named character vector or function which returns a named
+vector. Values of the vector refer to the variable names that will appear
+in the table. Names refer to the original term names stored in the model
+object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
 
 \item{gof_map}{\itemize{
 \item NULL (default): the \code{modelsummary::gof_map} dictionary is used for formatting, and all unknown statistic are included.

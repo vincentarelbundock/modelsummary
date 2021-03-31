@@ -34,9 +34,10 @@ model object: \code{c("hp:mpg"="HPxM/G")}.}
 \item{coef_omit}{string regular expression. Omits all matching coefficients
 from the table using \code{grepl(perl=TRUE)}.}
 
-\item{coef_rename}{named character vector. Values refer to the variable names
-that will appear in the table. Names refer to the original term names stored
-in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
+\item{coef_rename}{named character vector or function which returns a named
+vector. Values of the vector refer to the variable names that will appear
+in the table. Names refer to the original term names stored in the model
+object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
 
 \item{vcov}{robust standard errors and other manual statistics. The \code{vcov}
 argument accepts five types of input (see the 'Details' and 'Examples'

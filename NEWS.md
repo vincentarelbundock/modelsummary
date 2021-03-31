@@ -6,6 +6,9 @@
   parameters (e.g., outcome levels in multinomial logit or components of gamlss
   model).
 * `dvnames()` makes it easy to get dependent variable column titles (thanks to @NickCH-K)
+* `output="modelsummary_list"` to save a lightweight list-based representation
+  of the table which can be saved and fed to `modelsummary` once more to get a
+  full table.
 * `vcov` adds a row to note the type of standard errors.
 * `modelsummary` accepts a single model with multiple `vcov`s. 
 * `get_gof` forwards ... to `model_performance`

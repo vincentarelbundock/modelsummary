@@ -240,7 +240,7 @@ sanity_output <- function(output) {
 
   object_types <- c('default', 'gt', 'kableExtra', 'flextable', 'huxtable',
                     'html', 'latex', 'latex_tabular', 'markdown', 'dataframe',
-                    'data.frame')
+                    'data.frame', 'modelsummary_list')
   extension_types <- c('html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf',
                        'jpg', 'png')
 

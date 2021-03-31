@@ -29,6 +29,7 @@ sanitize_output <- function(output) {
     "kableExtra"     = "kableExtra",
     "markdown"       = "kableExtra",
     "latex_tabular"  = "kableExtra",
+    "modelsummary_list" = "modelsummary_list",
     "latex"          = getOption("modelsummary_latex", default      = "kableExtra"),
     "html"           = getOption("modelsummary_html", default       = "kableExtra"),
     "jpg"            = getOption("modelsummary_jpg", default        = "kableExtra"),

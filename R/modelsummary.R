@@ -16,7 +16,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' @param models a model or (optionally named) list of models
 #' @param output filename or object type (character string)
 #' * Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
-#' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable".
+#' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable".
 #' * To change the default output format, type `options(modelsummary_default = "latex")`, where `latex` can be any of the valid object types listed above. 
 #' * Warning: the `output` argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
 #' @param fmt determines how to format numeric values
@@ -55,9 +55,10 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' model object: `c("hp:mpg"="HPxM/G")`.
 #' @param coef_omit string regular expression. Omits all matching coefficients
 #' from the table using `grepl(perl=TRUE)`.
-#' @param coef_rename named character vector. Values refer to the variable names
-#' that will appear in the table. Names refer to the original term names stored
-#' in the model object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
+#' @param coef_rename named character vector or function which returns a named
+#' vector. Values of the vector refer to the variable names that will appear
+#' in the table. Names refer to the original term names stored in the model
+#' object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
 #' @param gof_map 
 #' * NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.
 #' * data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
@@ -272,15 +273,16 @@ modelsummary <- function(
   number_of_models <- max(length(models), length(vcov))
   estimate <- sanitize_estimate(estimate, number_of_models)
   group <- sanitize_group(group)
-  output_format <- sanitize_output(output)$output_format
   sanity_group_map(group_map)
-  sanity_output(output)
   sanity_statistic(statistic)
   sanity_conf_level(conf_level)
   sanity_coef(coef_map, coef_rename, coef_omit)
   sanity_gof_map(gof_map, gof_omit)
   sanity_stars(stars)
   sanity_fmt(fmt)
+
+  sanity_output(output)
+  output_format <- sanitize_output(output)$output_format
 
   # confidence intervals are expensive
   if (!any(grepl("conf", c(estimate, statistic)))) {
@@ -303,6 +305,12 @@ modelsummary <- function(
                                         conf_level = conf_level,
                                         vcov = vcov,
                                         ...)
+
+  if (output_format == "modelsummary_list") {
+    names(msl) <- model_names
+    return(msl)
+  }
+
 
   ###############
   #  estimates  #
@@ -334,6 +342,7 @@ modelsummary <- function(
     est[[model_id[i]]] <- tmp
 
   }
+
 
   term_order <- unique(unlist(lapply(est, function(x) x$term)))
   group_order <- unique(unlist(lapply(est, function(x) x$group)))
@@ -378,6 +387,7 @@ modelsummary <- function(
   }
 
 
+
   #####################
   #  goodness-of-fit  #
   #####################
@@ -402,6 +412,7 @@ modelsummary <- function(
   } else {
     tab <- est
   }
+
 
 
   ##################
@@ -495,13 +506,6 @@ modelsummary <- function(
 
 }
 
-
-#' `msummary()` is a shortcut to `modelsummary()`
-#'
-#' @inherit modelsummary
-#' @keywords internal
-#' @export
-msummary <- modelsummary
 
 
 #' rename and reorder estimates from a *single* model
@@ -618,13 +622,15 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
 
     } else if (all(c("term", "model") %in% lhs)) {
         out <- estimates
-        out <- tidyr::pivot_longer(out,
-                                   cols = !any_of(c("part", "group", "term", "statistic")),
-                                   names_to = "model")
-        out <- tidyr::pivot_wider(out,
-                                  names_from = "group",
-                                  values_from = "value",
-                                  values_fill = "")
+        out <- tidyr::pivot_longer(
+            out,
+            cols = !tidyselect::any_of(c("part", "group", "term", "statistic")),
+            names_to = "model")
+        out <- tidyr::pivot_wider(
+            out,
+            names_from = "group",
+            values_from = "value",
+            values_fill = "")
         idx <- unique(c(lhs, colnames(out)))
         out <- out[, idx, drop = FALSE]
 
@@ -699,3 +705,11 @@ redundant_labels <- function(dat, column) {
     }
     return(dat)
 }
+
+
+#' `msummary()` is a shortcut to `modelsummary()`
+#'
+#' @inherit modelsummary
+#' @keywords internal
+#' @export
+msummary <- modelsummary

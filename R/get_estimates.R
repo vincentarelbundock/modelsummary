@@ -15,10 +15,11 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, ...) {
     # priority
     get_priority <- getOption("modelsummary_get", default = "broom")
     checkmate::assert_choice(get_priority, choices = c("broom", "easystats", "parameters", "performance", "all"))
+
     if (get_priority %in% c("easystats", "parameters", "performance")) {
-        funs <- list(get_estimates_broom, get_estimates_parameters)
-    } else {
         funs <- list(get_estimates_parameters, get_estimates_broom)
+    } else {
+        funs <- list(get_estimates_broom, get_estimates_parameters)
     }
 
     warning_msg <- NULL
