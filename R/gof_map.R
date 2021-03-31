@@ -31,6 +31,7 @@ gof_map_build <- function() {
   looic,                     LOOIC,              1, FALSE
   looic.se,                  LOOIC s.e.,         1, FALSE
   waic,                      WAIC,               1, FALSE
+  rmse,                      RMSE,               2, FALSE,
   deviance,                  Deviance,           2, TRUE,
   vcov.type,                 Std. Errors,        0, FALSE,
   df.residual,               DF Resid,           0, TRUE,
@@ -47,7 +48,6 @@ gof_map_build <- function() {
   p.value,                   p,                  3, TRUE,
   df,                        DF,                 0, TRUE,
   null.deviance,             Deviance Null,      2, TRUE,
-  rmse,                      RMSE,               2, TRUE,
   statistic.Weak.instrument, Weak IV F-stat,     1, FALSE,
   statistic.Wu.Hausman,      Wu-Hausman Chi-Sq., 1, FALSE,
   statistic.Sargan,          Sargan J-stat,      1, FALSE,

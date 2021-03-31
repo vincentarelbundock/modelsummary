@@ -109,8 +109,6 @@ modelplot <- function(models,
   )
   out$part <- out$statistic <- NULL
 
-  # print(str(out))
-
 
   # save for sorting later
   term_order <- unique(out$term)

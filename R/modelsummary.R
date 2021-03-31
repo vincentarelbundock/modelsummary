@@ -601,6 +601,8 @@ map_omit_gof <- function(gof, gof_omit, gof_map) {
   idx <- match(gof$term, gm_clean)
   gof <- gof[order(idx, gof$term), ]
 
+  gof <- unique(gof) # modelsummary_get="all"
+
   return(gof)
 }
 

@@ -1,3 +1,4 @@
+# TODO: test mix of grouped and non grouped
 
 test_that("group: nnet::multinom", {
     skip_if_not_installed("nnet")

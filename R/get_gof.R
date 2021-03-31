@@ -28,12 +28,17 @@ get_gof <- function(model, vcov_type = NULL, ...) {
             tmp <- f(model, ...)
             if (inherits(tmp, "data.frame") &&
                 inherits(gof, "data.frame")) {
-                gof <- bind_cols(tmp, tmp)
+                idx <- !tolower(colnames(tmp)) %in% tolower(colnames(gof))
+                tmp <- tmp[, idx, drop = FALSE]
+                if (ncol(tmp) > 0) {
+                    gof <- bind_cols(gof, tmp)
+                }
             } else if (inherits(tmp, "data.frame")) {
                 gof <- tmp
             } else {
                 warning_msg <- c(warning_msg, tmp)
             }
+
         } else {
             if (!inherits(gof, "data.frame")) {
                 gof <- f(model, ...)
