@@ -127,7 +127,7 @@ outside.</h1>
 outside.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_estimates</span><span class='op'>(</span><span class='va'>model</span>, conf_level <span class='op'>=</span> <span class='fl'>0.95</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_estimates</span><span class='op'>(</span><span class='va'>model</span>, conf_level <span class='op'>=</span> <span class='fl'>0.95</span>, vcov <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,6 +139,18 @@ outside.</p>
     <tr>
       <th>conf_level</th>
       <td><p>confidence level to use for confidence intervals</p></td>
+    </tr>
+    <tr>
+      <th>vcov</th>
+      <td><p>robust standard errors and other manual statistics. The <code>vcov</code>
+argument accepts five types of input (see the 'Details' and 'Examples'
+sections below):</p><ul>
+<li><p>string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", or "classical" (alias "constant" or "iid").</p></li>
+<li><p>formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).</p></li>
+<li><p>function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., <code><a href='https://rdrr.io/r/stats/vcov.html'>stats::vcov</a></code>, <code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>sandwich::vcovHC</a></code>).</p></li>
+<li><p>list of <code><a href='https://rdrr.io/r/base/length.html'>length(models)</a></code> variance-covariance matrices with row and column names equal to the names of your coefficient estimates.</p></li>
+<li><p>a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below.</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>...</th>
