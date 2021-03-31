@@ -295,7 +295,6 @@ modelsummary <- function(
   } else {
     model_names <- names(models)
   }
-  model_id <- paste("Model", 1:number_of_models)
 
 
   #######################
@@ -306,8 +305,9 @@ modelsummary <- function(
                                         vcov = vcov,
                                         ...)
 
+  names(msl) <- model_names
+
   if (output_format == "modelsummary_list") {
-    names(msl) <- model_names
     return(msl)
   }
 
@@ -337,17 +337,17 @@ modelsummary <- function(
         coef_omit = coef_omit,
         group_map = group_map)
 
-    colnames(tmp)[4] <- model_id[i]
+    colnames(tmp)[4] <- model_names[i]
 
-    est[[model_id[i]]] <- tmp
+    est[[model_names[i]]] <- tmp
 
   }
-
 
   term_order <- unique(unlist(lapply(est, function(x) x$term)))
   group_order <- unique(unlist(lapply(est, function(x) x$group)))
 
-  f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE, by = c("group", "term", "statistic"))
+  f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE,
+                            by = c("group", "term", "statistic"))
   est <- Reduce(f, est)
 
   est <- group_reshape(est, group$lhs, group$rhs, group$group_name)
@@ -397,7 +397,7 @@ modelsummary <- function(
                            fmt = fmt,
                            gof_map = gof_map,
                            ...)
-    colnames(gof[[i]])[2] <- model_id[i]
+    colnames(gof[[i]])[2] <- model_names[i]
   }
 
   f <- function(x, y) merge(x, y, all=TRUE, sort=FALSE, by="term")
@@ -482,12 +482,6 @@ modelsummary <- function(
     } else {
       align <- paste0("l", strrep("c", ncol(tab) - 1))
     }
-  }
-
-  # restore original model names
-  if (is.null(group)) {
-    idx <- match(model_id, colnames(tab))
-    colnames(tab)[idx] <- model_names
   }
 
 

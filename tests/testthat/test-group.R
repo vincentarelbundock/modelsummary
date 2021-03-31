@@ -1,5 +1,13 @@
 # TODO: test mix of grouped and non grouped
 
+library(gamlss)
+data(trees)
+models <- list()
+models[['Bivariate']] <- lm(Girth ~ Height, data = trees)
+models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
+models[["GAMLSS"]] <- gamlss(y~pb(x),sigma.fo=~pb(x),family=BCT, data=abdom, method=mixed(1,20), trace=FALSE)
+
+
 test_that("group: nnet::multinom", {
     skip_if_not_installed("nnet")
 
@@ -63,4 +71,17 @@ test_that("grouped coefficients: gamlss", {
     tab <- modelsummary(mod, "data.frame", group = model + term ~ parameter)
     expect_s3_class(tab, "data.frame")
 
+})
+
+
+test_that("model names are preserved", {
+    skip_if_not_installed("gamlss")
+    library(gamlss)
+    dat <- rgamma(100, shape=1, scale=10)
+    models <- list()
+    models[["GA"]] <- gamlss(dat ~ 1, family = GA, trace = FALSE)
+    models[["GA 2"]] <- gamlss(dat ~ 1, family = GA, trace = FALSE)
+    tab <- modelsummary(models, output = "data.frame",
+                 group = parameter + term ~ model)
+    expect_true(all(c("GA", "GA 2") %in% colnames(tab)))
 })
