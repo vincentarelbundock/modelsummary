@@ -103,7 +103,8 @@ format_estimates <- function(
     est[["group"]] <- est[[group_name]]
   } else if (!is.null(group_name)) {
     est[["group"]] <- ""
-    warning(sprintf('Group name "%s" was not found in the extracted data. The "group" argument must be a column name in the data.frame produced by `get_estimates(model)`', group_name))
+    warning(sprintf('Group name "%s" was not found in the extracted data. The "group" argument must be a column name in the data.frame produced by `get_estimates(model)`.  If you wish to combine models with and without grouped estimates, you will find examples on the modelsummary website:
+https://vincentarelbundock.github.io/modelsummary', group_name))
   } else {
     # cannot be NA because we need to merge
     est[["group"]] <- "" 
