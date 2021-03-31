@@ -266,6 +266,7 @@ modelsummary <- function(
   ...) {
 
 
+
   # sanitation
   sanity_ellipsis(vcov, ...)        # before sanitize_vcov
   models <- sanitize_models(models) # before sanitize_vcov
@@ -280,6 +281,8 @@ modelsummary <- function(
   sanity_gof_map(gof_map, gof_omit)
   sanity_stars(stars)
   sanity_fmt(fmt)
+
+
 
   sanity_output(output)
   output_format <- sanitize_output(output)$output_format
@@ -304,8 +307,9 @@ modelsummary <- function(
                                         conf_level = conf_level,
                                         vcov = vcov,
                                         ...)
-
   names(msl) <- model_names
+
+
 
   if (output_format == "modelsummary_list") {
     if (length(msl) == 1) {
@@ -346,6 +350,7 @@ modelsummary <- function(
     est[[model_names[i]]] <- tmp
 
   }
+
 
   term_order <- unique(unlist(lapply(est, function(x) x$term)))
   group_order <- unique(unlist(lapply(est, function(x) x$group)))
@@ -675,18 +680,18 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, ...) {
 
     vcov_type <- get_vcov_type(vcov) 
 
+
     out <- list()
 
     for (i in 1:number_of_models) {
         # recycling when 1 model and many vcov
         j <- ifelse(length(models) == 1, 1, i)
 
-
-        tid <- get_estimates(models[[j]], conf_level = conf_level, vcov = vcov[[i]], ...)
         gla <- get_gof(models[[j]], vcov_type[[i]], ...)
+        tid <- get_estimates(models[[j]], conf_level = conf_level, vcov = vcov[[i]], ...)
 
         out[[i]] <- list("tidy" = tid, "glance" = gla)
-        class(out[[i]]) <- c("modelsummary_list", "list")
+        class(out[[i]]) <- "modelsummary_list"
     }
 
     return(out)

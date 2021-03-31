@@ -382,13 +382,13 @@ library(gamlss)
 dat <- rgamma(100, shape=1, scale=10)
 
 mod <- list(
-  "GA" = gamlss(dat ~ 1, trace = FALSE),
+  "GA" = gamlss(dat ~ 1, family = GA, trace = FALSE),
   "GAGLM" = glm(dat ~ 1, family = Gamma("log")))
 
 modelsummary(mod, group = parameter + term ~ model)
 ```
 
-This table is "OK", but the GLM intercept is very similar to the GAMLSS "sigma" intercept, so we may want to align those quantities. The problem is that `modelsummary` doesn't have the same statistical knowledge we do: Applying the `get_estimates` function to the GLM model does not produce a `parameter` column.
+This table is "OK", but the GLM intercept corresponds to the GAMLSS "mu" intercept, so we may want to align those quantities. The problem is that `modelsummary` doesn't have the same statistical knowledge we do: Applying the `get_estimates` function to the GLM model does not produce a `parameter` column.
 
 From the `modelsummary` developpers' perspective, it is impossible to know in advance how users will want to align grouped and non-grouped coefficients. (What if a user tries to combine a GLM with a multinomial logit?!) As a result, some additional user intervention is necessary to clearly indicate which rows need to be aligned.
 
@@ -402,7 +402,7 @@ mod_glm <- glm(dat ~ 1, family = Gamma("log"))
 mod_glm <- modelsummary(mod_glm, output = "modelsummary_list")
 
 # add a group id
-mod_glm$tidy$parameter <- "sigma"
+mod_glm$tidy$parameter <- "mu"
 
 # summarize the table
 modelsummary(list(mod_ga, mod_glm),

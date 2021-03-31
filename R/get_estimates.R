@@ -130,19 +130,19 @@ get_estimates_broom <- function(model, conf_int, conf_level, ...) {
 
 get_estimates_parameters <- function(model, conf_int, conf_level, ...) {
 
-    f <- tidy_easystats <- function(model, ...) {
-        msg <- utils::capture.output(out <- parameters::model_parameters(model, ...))
-        parameters::standardize_names(out, style="broom")
+    f <- tidy_easystats <- function(x, ...) {
+        out <- parameters::parameters(x, ...)
+        out <- parameters::standardize_names(out, style = "broom")
     }
 
     if (isTRUE(conf_int)) {
-        out <- suppressWarnings(try(
+        out <- suppressMessages(suppressWarnings(try(
             f(model, ci = conf_level, ...),
-            silent = TRUE))
+            silent = TRUE)))
     } else {
-        out <- suppressWarnings(try(
+        out <- suppressMessages(suppressWarnings(try(
             f(model, ...),
-            silent = TRUE))
+            silent = TRUE)))
     }
 
     if (!inherits(out, "data.frame") || nrow(out) < 1) {
