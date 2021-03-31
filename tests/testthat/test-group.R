@@ -1,5 +1,3 @@
-# TODO: test mix of grouped and non grouped
-
 library(gamlss)
 data(trees)
 models <- list()

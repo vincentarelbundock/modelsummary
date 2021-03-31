@@ -308,7 +308,11 @@ modelsummary <- function(
   names(msl) <- model_names
 
   if (output_format == "modelsummary_list") {
-    return(msl)
+    if (length(msl) == 1) {
+      return(msl[[1]])
+    } else {
+      return(msl)
+    }
   }
 
 

@@ -6,9 +6,6 @@
 #' @export
 get_gof <- function(model, vcov_type = NULL, ...) {
 
-    get_priority <- getOption("modelsummary_get", default = "broom")
-    checkmate::assert_choice(get_priority, choices = c("broom", "easystats", "parameters", "performance", "all"))
-
     # priority
     get_priority <- getOption("modelsummary_get", default = "broom")
     checkmate::assert_choice(get_priority, choices = c("broom", "easystats", "parameters", "performance", "all"))

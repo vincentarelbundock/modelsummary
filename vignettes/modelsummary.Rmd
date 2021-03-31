@@ -368,11 +368,45 @@ get_estimates(mod[[1]])
 To summarize the results, we can type: 
 
 ```{r, warning=FALSE}
-modelsummary(mod, group = response + term ~ model)
+modelsummary(mod, group = y.level + term ~ model)
 
-modelsummary(mod, group = model + term ~ response)
+modelsummary(mod, group = model + term ~ y.level)
 
-modelsummary(mod, group = term ~ model + response)
+modelsummary(mod, group = term ~ model + y.level)
+```
+
+Sometimes, we want to combine models with and without grouped parameters. For instance, we may want to compare the results from a GAMLSS model to the results from a GLM model. In GAMLSS models, the group id is called `parameter`, so we call:
+
+```{r, message=FALSE, warning=FALSE}
+library(gamlss)
+dat <- rgamma(100, shape=1, scale=10)
+
+mod <- list(
+  "GA" = gamlss(dat ~ 1, trace = FALSE),
+  "GAGLM" = glm(dat ~ 1, family = Gamma("log")))
+
+modelsummary(mod, group = parameter + term ~ model)
+```
+
+This table is "OK", but the GLM intercept is very similar to the GAMLSS "sigma" intercept, so we may want to align those quantities. The problem is that `modelsummary` doesn't have the same statistical knowledge we do: Applying the `get_estimates` function to the GLM model does not produce a `parameter` column.
+
+From the `modelsummary` developpers' perspective, it is impossible to know in advance how users will want to align grouped and non-grouped coefficients. (What if a user tries to combine a GLM with a multinomial logit?!) As a result, some additional user intervention is necessary to clearly indicate which rows need to be aligned.
+
+To do this, we create a `modelsummary_list` object for our GLM model, and we add a new `parameter` column to its `tidy` component (See section on "Adding New Models" below).
+
+```{r, warning=FALSE}
+mod_ga <- gamlss(dat ~ 1, trace = FALSE)
+mod_glm <- glm(dat ~ 1, family = Gamma("log"))
+
+# convert glm to `modelsummary_list` object
+mod_glm <- modelsummary(mod_glm, output = "modelsummary_list")
+
+# add a group id
+mod_glm$tidy$parameter <- "sigma"
+
+# summarize the table
+modelsummary(list(mod_ga, mod_glm),
+             group = parameter + term ~ model)
 ```
 
 # align
@@ -747,57 +781,6 @@ mod[['Amelia']] <- mice::pool(mod[['Amelia']])
 
 # Summarize
 modelsummary(mod)
-```
-
-## Grouped coefficients: multinomial logit or GAMMLS
-
-Some models return *groups* of parameters. For instance, multinomial logit models produce coefficients for each level of the outcome (`y.level`), and GAMLSS models produce estimates for different "components".
-
-```{r, message=FALSE, warning=FALSE}
-library(gamlss)
-data(abdom)
-mod <- gamlss(y ~ pb(x), sigma.fo = ~pb(x), family = BCT,
-              data = abdom, method = mixed(1,20))
-
-get_estimates(mod)
-```
-
-Above, we see that the data.frame produced by `get_estimates` includes a `component` column which identifies term groups. The `modelsummary_wide` function can be used to summarize these kinds of models, by displaying each "group" in separate columns:
-
-```{r}
-modelsummary_wide(mod, coef_group = "component")
-```
-
-Alternatively, it is easy to create custom summaries by building objects of class `modelsummary_list` (a list of two data.frames names `tidy` and `glance`, and with class `modelsummary_list`; see the "Adding New Models" section of this page). 
-
-For example, if we only wish to summarize the "mu" component:
-
-```{r, warning=FALSE, message=FALSE}
-get_modelsummary_list <- function(x) {
-    ti <- get_estimates(x)
-    ti <- ti[ti$component == "conditional",]
-    gl <- get_gof(x)
-    out <- list("tidy" = ti, "glance" = gl)
-    class(out) <- "modelsummary_list"
-    return(out)
-}
-
-modelsummary(get_modelsummary_list(mod))
-```
-
-If we want to combine the "component" and the "term" labels:
-
-```{r, warning=FALSE, message=FALSE}
-get_modelsummary_list <- function(x) {
-    ti <- get_estimates(x)
-    ti$term <- paste(ti$component, ti$term)
-    gl <- get_gof(x)
-    out <- list("tidy" = ti, "glance" = gl)
-    class(out) <- "modelsummary_list"
-    return(out)
-}
-
-modelsummary(get_modelsummary_list(mod))
 ```
 
 # Backends
