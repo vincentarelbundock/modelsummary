@@ -67,9 +67,9 @@ factory_gt <- function(tab,
   # output
   if (is.null(output_file)) {
     if (output_format == 'html') {
-      return(as.character(gt::as_raw_html(out)))
+      return(gt::as_raw_html(out))
     } else if (output_format == 'latex') {
-      return(as.character(gt::as_latex(out)))
+      return(gt::as_latex(out))
     } else if (output_format %in% c('default', 'gt')) {
       return(out)
     }

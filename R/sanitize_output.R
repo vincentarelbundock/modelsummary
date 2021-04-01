@@ -47,7 +47,7 @@ sanitize_output <- function(output) {
   }
 
   # kableExtra is the only factory that produces human-readable code
-  if (output %in% c('markdown', 'html', 'latex')) {
+  if (output == 'markdown') {
     out <- list(
       'output_factory' = 'kableExtra',
       'output_file'    = NULL,

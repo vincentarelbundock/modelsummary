@@ -19,6 +19,7 @@
 * `metrics` argument of `performance::model_performance` is available
   via `modelsummary`'s ... ellipsis to limit the GOF statistics in
   Bayesian models.
+* output="html" can use `gt` by setting `options(modelsummary_html="gt")` 
 
 `datasummary_correlation`:
 
