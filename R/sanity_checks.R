@@ -1,7 +1,7 @@
 #' assert if dependency is installed
 #'
 #' @noRd
-assert_dependency <- function(library_name, msg=NULL) {
+assert_dependency <- function(library_name, msg = NULL) {
   if (is.null(msg)) {
     msg <- "Please install the %s package."
   }
@@ -63,9 +63,9 @@ sanity_model_names <- function(modelnames) {
 #' @noRd
 sanity_align <- function(align, tab) {
   checkmate::assert(
-    checkmate::check_character(align, len=1, null.ok = TRUE),
-    checkmate::check_character(align, len=ncol(tab), null.ok = TRUE),
-    combine="or"
+    checkmate::check_character(align, len = 1, null.ok = TRUE),
+    checkmate::check_character(align, len = ncol(tab), null.ok = TRUE),
+    combine = "or"
   )
 }
 
@@ -75,16 +75,16 @@ sanity_align <- function(align, tab) {
 #' @noRd
 sanitize_estimate <- function(estimate, number_of_models) {
   checkmate::assert(
-    checkmate::check_character(estimate, len=1),
-    checkmate::check_character(estimate, len=number_of_models))
+    checkmate::check_character(estimate, len = 1),
+    checkmate::check_character(estimate, len = number_of_models))
 
   if (length(estimate) == 1) {
     out <- rep(estimate, number_of_models)
     out <- as.list(out)
   } else {
     out <- as.list(estimate)
-  }    
-  
+  }
+
   return(out)
 }
 
@@ -93,7 +93,7 @@ sanitize_estimate <- function(estimate, number_of_models) {
 #'
 #' @noRd
 sanity_statistic <- function(statistic) {
-  checkmate::assert_character(statistic, null.ok=TRUE)
+  checkmate::assert_character(statistic, null.ok = TRUE)
 }
 
 
@@ -116,9 +116,9 @@ sanity_coef <- function(coef_map, coef_rename, coef_omit) {
 
   if (!is.null(coef_map)) {
     if (is.null(names(coef_map))) {
-      checkmate::assert_character(coef_map, null.ok=TRUE, unique=TRUE)
+      checkmate::assert_character(coef_map, null.ok = TRUE, unique = TRUE)
     } else {
-      checkmate::assert_character(names(coef_map), null.ok=TRUE, unique=TRUE)
+      checkmate::assert_character(names(coef_map), null.ok = TRUE, unique = TRUE)
     }
   }
 
@@ -153,8 +153,8 @@ sanity_gof_map <- function(gof_map, gof_omit) {
 #' @noRd
 sanity_fmt <- function(fmt) {
   checkmate::assert(
-    checkmate::check_character(fmt, len=1),
-    checkmate::check_numeric(fmt, len=1, lower=0),
+    checkmate::check_character(fmt, len = 1),
+    checkmate::check_numeric(fmt, len = 1, lower = 0),
     checkmate::check_function(fmt)
   )
 }
@@ -164,7 +164,7 @@ sanity_fmt <- function(fmt) {
 #'
 #' @noRd
 sanity_conf_level <- function(conf_level) {
-  checkmate::assert_number(conf_level, lower = 0, upper = .999999999999, null.ok=TRUE)
+  checkmate::assert_number(conf_level, lower = 0, upper = .999999999999, null.ok = TRUE)
 }
 
 
@@ -174,8 +174,7 @@ sanity_conf_level <- function(conf_level) {
 sanity_factory <- function(factory_dict) {
   check_option <- function(output_type, valid) {
     if (!factory_dict[output_type] %in% valid) {
-      msg <- sprintf(
-        "`modelsummary` cannot write a table of type '%s' using the '%s' package. You must use one of the following options: %s. Consider setting a global option such as: option(modelsummary_%s=%s)",
+      msg <- sprintf("`modelsummary` cannot write a table of type '%s' using the '%s' package. You must use one of the following options: %s. Consider setting a global option such as: option(modelsummary_%s=%s)",
         output_type,
         factory_dict[output_type],
         paste(valid, collapse = ', '),
@@ -273,7 +272,8 @@ sanity_add_rows <- function(add_rows, models) {
     }
   } else if (inherits(add_rows, 'data.frame')) {
     checkmate::assert_true(all(c('section', 'position') %in% colnames(add_rows)))
-    checkmate::assert_true(all(colnames(add_rows) %in% c('term', 'section', 'position', names(models))))
+    checkmate::assert_true(all(
+      colnames(add_rows) %in% c('term', 'section', 'position', names(models))))
   }
 }
 
@@ -297,7 +297,7 @@ sanity_tidy <- function(tidy_output, tidy_custom, estimate, statistic, modelclas
 
   # tidy_custom(model)
   if (!is.null(tidy_custom)) {
-    checkmate::assert_data_frame(tidy_custom, 
+    checkmate::assert_data_frame(tidy_custom,
       min.rows = 1, min.cols = 2)
     checkmate::assert_true('term' %in% colnames(tidy_custom))
   }
@@ -313,8 +313,7 @@ sanity_ds_nesting_factor <- function(formula, data) {
   termlabs <- labels(stats::terms(formula))
   warn <- any(sapply(idx, function(x) any(grepl(x, termlabs))))
   if (warn) {
-    warning(
-      'You are trying to create a nested table by applying the * operator to a character or a logical variable. It is usually a good idea to convert such variables to a factor before calling datasummary: dat$y<-as.factor(dat$y). Alternatively, you could wrap your categorical variable inside Factor() in the datasummary call itself: datasummary(x ~ Factor(y) * z, data)\n')
+    warning('You are trying to create a nested table by applying the * operator to a character or a logical variable. It is usually a good idea to convert such variables to a factor before calling datasummary: dat$y<-as.factor(dat$y). Alternatively, you could wrap your categorical variable inside Factor() in the datasummary call itself: datasummary(x ~ Factor(y) * z, data)\n')
   }
 }
 

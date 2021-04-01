@@ -2,7 +2,7 @@
 #'
 #' The names of the variables displayed in the correlation table are the names
 #' of the columns in the `data`. You can rename those columns (with or without
-#' spaces) to produce a table of human-readable variables. 
+#' spaces) to produce a table of human-readable variables.
 #'
 #' @inheritParams datasummary
 #' @param method character or function
@@ -22,7 +22,7 @@
 #' @examples
 #' \dontrun{
 #' library(modelsummary)
-#' 
+#'
 #' # clean variable names (base R)
 #' dat <- mtcars[, c("mpg", "hp")]
 #' colnames(dat) <- c("Miles / Gallon", "Horse Power")
@@ -30,7 +30,7 @@
 #'
 #' # clean variable names (tidyverse)
 #' library(tidyverse)
-#' dat <- mtcars %>% 
+#' dat <- mtcars %>%
 #'   select(`Miles / Gallon` = mpg,
 #'          `Horse Power` = hp)
 #' datasummary_correlation(dat)
@@ -41,18 +41,18 @@
 #' # custom function
 #' cor_fun <- function(x) cor(x, method = "kendall")
 #' datasummary_correlation(dat, method = cor_fun)
-#' 
+#'
 #' # rename columns alphabetically and include a footnote for reference
 #' note <- sprintf("(%s) %s", letters[1:ncol(dat)], colnames(dat))
 #' note <- paste(note, collapse = "; ")
-#' 
+#'
 #' colnames(dat) <- sprintf("(%s)", letters[1:ncol(dat)])
 #'
 #' datasummary_correlation(dat, notes = note)
-#' 
+#'
 #' # `datasummary_correlation_format`: custom function with formatting
 #' dat <- mtcars[, c("mpg", "hp", "disp")]
-#' 
+#'
 #' cor_fun <- function(x) {
 #'   out <- cor(x, method = "kendall")
 #'   datasummary_correlation_format(
@@ -61,15 +61,15 @@
 #'     upper_triangle = "x",
 #'     diagonal = ".")
 #' }
-#' 
+#'
 #' datasummary_correlation(dat, method = cor_fun)
-#' 
+#'
 #' # use kableExtra and psych to color significant cells
 #' library(psych)
 #' library(kableExtra)
-#' 
+#'
 #' dat <- mtcars[, c("vs", "hp", "gear")]
-#' 
+#'
 #' cor_fun <- function(dat) {
 #'   # compute correlations and format them
 #'   correlations <- data.frame(cor(dat))
@@ -110,7 +110,7 @@ datasummary_correlation <- function(data,
 
   checkmate::assert(
     checkmate::check_choice(
-      method, 
+      method,
       c("pearson", "kendall", "spearman", "pearspear")),
     checkmate::check_function(method))
 
@@ -121,10 +121,10 @@ datasummary_correlation <- function(data,
     fn <- correlation_pearspear
   } else {
     fn <- function(x) stats::cor(
-      x, 
-      use = "pairwise.complete.obs", 
+      x,
+      use = "pairwise.complete.obs",
       method = method)
-  } 
+  }
 
   # subset numeric and compute correlation
   out <- data[, sapply(data, is.numeric), drop = FALSE]
@@ -156,7 +156,7 @@ datasummary_correlation <- function(data,
       fmt = fmt)
   }
 
-  col_names <- colnames(out)  
+  col_names <- colnames(out)
   out <- cbind(rowname = row.names(out), out)
   colnames(out) <- c(' ', col_names)
 
@@ -174,13 +174,13 @@ datasummary_correlation <- function(data,
 correlation_pearspear <- function(x) {
 
   pea <- stats::cor(
-    x, 
-    use = "pairwise.complete.obs", 
+    x,
+    use = "pairwise.complete.obs",
     method = "pearson")
 
   spe <- stats::cor(
-    x, 
-    use = "pairwise.complete.obs", 
+    x,
+    use = "pairwise.complete.obs",
     method = "spearman")
 
   pea[lower.tri(pea)] <- spe[lower.tri(spe)]
@@ -203,9 +203,9 @@ correlation_pearspear <- function(x) {
 #' @export
 #' @examples
 #' library(modelsummary)
-#' 
+#'
 #' dat <- mtcars[, c("mpg", "hp", "disp")]
-#' 
+#'
 #' cor_fun <- function(x) {
 #'   out <- cor(x, method = "kendall")
 #'   datasummary_correlation_format(
@@ -214,13 +214,13 @@ correlation_pearspear <- function(x) {
 #'     upper_triangle = "x",
 #'     diagonal = ".")
 #' }
-#' 
+#'
 #' datasummary_correlation(dat, method = cor_fun)
 datasummary_correlation_format <- function(
-  x, 
-  fmt, 
+  x,
+  fmt,
   leading_zero = FALSE,
-  diagonal = NULL, 
+  diagonal = NULL,
   upper_triangle = NULL) {
 
   # sanity

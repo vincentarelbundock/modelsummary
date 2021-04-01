@@ -47,7 +47,7 @@ factory <- function(tab,
       output_list$output_format %in% flat_formats) {
       attr(tab, "header_bottom") <- colnames(tab)
 
-      # datasummary_balance with dinm produces more cols than flat_header 
+      # datasummary_balance with dinm produces more cols than flat_header
       for (i in seq_along(flat_header)) {
         colnames(tab)[i] <- flat_header[i]
       }
@@ -87,8 +87,8 @@ factory <- function(tab,
     # append
     for (i in seq_along(add_columns)) {
       if (!is.null(pos) && !is.na(pos[i])) {
-        lef <- tab[, -c(pos[i]:ncol(tab)), drop=FALSE]
-        rig <- tab[, c(pos[i]:ncol(tab)), drop=FALSE]
+        lef <- tab[, -c(pos[i]:ncol(tab)), drop = FALSE]
+        rig <- tab[, c(pos[i]:ncol(tab)), drop = FALSE]
         tab <- bind_cols(lef, add_columns[i], rig)
       } else {
         tab <- bind_cols(tab, add_columns[i])
@@ -140,11 +140,11 @@ factory <- function(tab,
     for (i in 1:nrow(add_rows)) {
       # append
       if (!is.null(pos) && !is.na(pos[i])) {
-        top <- tab[-c(pos[i]:nrow(tab)), , drop=FALSE]
-        bot <- tab[c(pos[i]:nrow(tab)), , drop=FALSE]
-        tab <- bind_rows(top, add_rows[i, , drop=FALSE], bot)
+        top <- tab[-c(pos[i]:nrow(tab)), , drop = FALSE]
+        bot <- tab[c(pos[i]:nrow(tab)), , drop = FALSE]
+        tab <- bind_rows(top, add_rows[i, , drop = FALSE], bot)
       } else {
-        tab <- bind_rows(tab, add_rows[i, , drop=FALSE])
+        tab <- bind_rows(tab, add_rows[i, , drop = FALSE])
       }
     }
   }

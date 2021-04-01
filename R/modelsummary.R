@@ -12,7 +12,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' the tables can be customized by specifying the `output` argument, and by
 #' using functions from one of the supported table customization packages:
 #' `kableExtra`, `gt`, `flextable`, `huxtable`.
-#' 
+#'
 #' @param models a model or (optionally named) list of models
 #' @param output filename or object type (character string)
 #' * Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
@@ -99,7 +99,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' @details 
 #'
 #' `options`
-#' 
+#'
 #' `modelsummary` supports 4 table-making packages: `kableExtra`, `gt`,
 #' `flextable`, and `huxtable`. Some of these packages have overlapping
 #' functionalities. For example, 3 of those packages can export to LaTeX. To
@@ -138,14 +138,14 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' To use a string such as "robust" or "HC0", your model must be supported
 #' by the `sandwich` package. This includes objects such as: lm, glm,
 #' survreg, coxph, mlogit, polr, hurdle, zeroinfl, and more.
-#' 
+#'
 #' "classical", "iid", and "constant" are aliases which do not modify
 #' uncertainty estimates and simply report the default standard errors stored
 #' in the model object.
 #'
 #' One-sided formulas such as `~clusterid` are passed to the `sandwich::vcovCL`
 #' function.
-#' 
+#'
 #' Matrices and functions producing variance-covariance matrices are first
 #' passed to `lmtest`. If this does not work, `modelsummary` attempts to take
 #' the square root of the diagonal to adjust "std.error", but the other
@@ -165,7 +165,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #'
 #' # The `modelsummary` website includes \emph{many} examples and tutorials:
 #' # https://vincentarelbundock.github.io/modelsummary
-#' 
+#'
 #' library(modelsummary)
 #'
 #' # load data and estimate models
@@ -185,7 +185,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' modelsummary(models, statistic = c("t = {statistic}",
 #'                                    "se = {std.error}",
 #'                                    "conf.int"))
-#' 
+#'
 #' # estimate
 #' modelsummary(models, 
 #'   statistic = NULL,
@@ -193,7 +193,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' modelsummary(models,
 #'   estimate = c("{estimate}{stars}",
 #'                "{estimate} ({std.error})"))
-#' 
+#'
 #' # vcov
 #' modelsummary(models, vcov = "robust")
 #' modelsummary(models, vcov = list("classical", "stata"))
@@ -229,7 +229,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE
 #' gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "%.5f"
 #' modelsummary(models, gof_map = gof_custom)
-#' 
+#'
 #' # gof_map: list of lists
 #' f1 <- function(x) format(round(x, 3), big.mark=",")
 #' f2 <- function(x) format(round(x, 0), big.mark=",")
@@ -239,7 +239,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' modelsummary(models,
 #'   fmt = f1,
 #'   gof_map = gm)
-#' 
+#'
 #' }
 #'
 #' @export
@@ -360,7 +360,7 @@ modelsummary <- function(
   est <- Reduce(f, est)
 
   est <- group_reshape(est, group$lhs, group$rhs, group$group_name)
-  
+
   # distinguish between estimates and gof (first column for tests)
   est$part <- "estimates"
   est <- est[, unique(c("part", names(est)))]
@@ -383,7 +383,7 @@ modelsummary <- function(
     est$group <- factor(est$group, unique(est$group))
   }
 
-  est <- est[do.call(order, as.list(est)),]
+  est <- est[do.call(order, as.list(est)), ]
 
   # character for binding
   est$term <- as.character(est$term)
@@ -409,7 +409,7 @@ modelsummary <- function(
     colnames(gof[[i]])[2] <- model_names[i]
   }
 
-  f <- function(x, y) merge(x, y, all=TRUE, sort=FALSE, by="term")
+  f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE, by = "term")
   gof <- Reduce(f, gof)
 
   gof <- map_omit_gof(gof, gof_omit, gof_map)
@@ -475,7 +475,7 @@ modelsummary <- function(
     if ("model" %in% colnames(tab)) colnames(tab)[colnames(tab) == "model"] <- "         "
 
   }
-    
+
   # only show group label if it is a row-property (lhs of the group formula)
   if (is.null(group) ||
     group$group_name %in% group$rhs) {
@@ -520,7 +520,7 @@ map_omit_rename_estimates <- function(estimates,
                              coef_map,
                              coef_omit,
                              group_map) {
-                                 
+
     # coef_rename
     if (!is.null(coef_rename)) {
         if (is.character(coef_rename)) {
@@ -550,7 +550,7 @@ map_omit_rename_estimates <- function(estimates,
         if (is.null(names(group_map))) {
             group_map <- stats::setNames(group_map, group_map)
         }
-        estimates <- estimates[estimates$group %in% names(group_map), , drop = FALSE] 
+        estimates <- estimates[estimates$group %in% names(group_map), , drop = FALSE]
         estimates$group <- replace_dict(estimates$group, group_map)
     }
 
@@ -580,8 +580,8 @@ map_omit_gof <- function(gof, gof_omit, gof_map) {
 
   # omit
   if (!is.null(gof_omit)) {
-    idx <- !grepl(gof_omit, gof$term, perl=TRUE)
-    gof <- gof[idx, , drop=FALSE]
+    idx <- !grepl(gof_omit, gof$term, perl = TRUE)
+    gof <- gof[idx, , drop = FALSE]
   }
 
   # map
@@ -589,9 +589,9 @@ map_omit_gof <- function(gof, gof_omit, gof_map) {
     # assign here and not in the function definition because we use NULL to
     # figure out if F-stat should be included by default for lm models.
     gm_list <- get("gof_map", envir = loadNamespace("modelsummary"))
-    gm_list <- lapply(1:nrow(gm_list), function(i) gm_list[i, ])
+    gm_list <- lapply(seq_len(nrow(gm_list)), function(i) gm_list[i, ])
   } else if (inherits(gof_map, "data.frame")) {
-    gm_list <- lapply(1:nrow(gof_map), function(i) gof_map[i, ])
+    gm_list <- lapply(seq_len(nrow(gof_map)), function(i) gof_map[i, ])
   } else {
     gm_list <- gof_map
   }
@@ -604,7 +604,8 @@ map_omit_gof <- function(gof, gof_omit, gof_map) {
   idx <- match(gof$term, gm_clean)
   gof <- gof[order(idx, gof$term), ]
 
-  gof <- unique(gof) # modelsummary_get="all"
+  # important for modelsummary_get="all"
+  gof <- unique(gof)
 
   return(gof)
 }
@@ -617,7 +618,7 @@ map_omit_gof <- function(gof, gof_omit, gof_map) {
 group_reshape <- function(estimates, lhs, rhs, group_name) {
 
     if (is.null(lhs)) return(estimates)
-    
+
     lhs[lhs == group_name] <- "group"
     rhs[rhs == group_name] <- "group"
 
@@ -649,7 +650,7 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
         out <- tidyr::pivot_wider(out,
                                   names_from = "idx_col",
                                   values_from = "value",
-                                  values_fill = "") 
+                                  values_fill = "")
     }
 
     out[out == "NA"] <- ""
@@ -663,8 +664,8 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
     idx <- setdiff(colnames(out), c("part", "term", "statistic", "model"))
     tmp <- out[, idx, drop = FALSE]
     idx <- apply(tmp, 1, function(x) !all(x == ""))
-    out <- out[idx,]
-    
+    out <- out[idx, ]
+
     # make sure there is a group column for merging in `modelsummary`
     if (!"group" %in% colnames(out)) {
       out$group <- "group"
@@ -678,7 +679,7 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, ...) {
 
     number_of_models <- max(length(models), length(vcov))
 
-    vcov_type <- get_vcov_type(vcov) 
+    vcov_type <- get_vcov_type(vcov)
 
 
     out <- list()
@@ -698,7 +699,7 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, ...) {
 }
 
 
-redundant_labels <- function(dat, column) { 
+redundant_labels <- function(dat, column) {
     if (!column %in% colnames(dat)) {
         return(dat)
     }

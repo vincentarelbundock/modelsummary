@@ -1,4 +1,4 @@
-#' Rename model terms 
+#' Rename model terms
 #'
 #' A convenience function which can be passed to the `coef_rename` argument of
 #' the `modelsummary` function.
@@ -13,8 +13,8 @@
 #' @param asis boolean remove the `I` from as-is formula calls
 #'
 #' @export
-coef_rename <- function(x, 
-                       factor = TRUE, 
+coef_rename <- function(x,
+                       factor = TRUE,
                        factor_name = TRUE,
                        backticks = TRUE,
                        titlecase = TRUE,

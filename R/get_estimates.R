@@ -7,14 +7,16 @@
 get_estimates <- function(model, conf_level = .95, vcov = NULL, ...) {
 
     if (is.null(conf_level)) {
-        conf_int = FALSE
+        conf_int <- FALSE
     } else {
-        conf_int = TRUE
+        conf_int <- TRUE
     }
 
     # priority
     get_priority <- getOption("modelsummary_get", default = "broom")
-    checkmate::assert_choice(get_priority, choices = c("broom", "easystats", "parameters", "performance", "all"))
+    checkmate::assert_choice(
+      get_priority,
+      choices = c("broom", "easystats", "parameters", "performance", "all"))
 
     if (get_priority %in% c("easystats", "parameters", "performance")) {
         funs <- list(get_estimates_parameters, get_estimates_broom)
@@ -57,28 +59,28 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, ...) {
     flag3 <- !is.character(vcov)
     flag4 <- is.character(vcov) && length(vcov) == 1 && !vcov %in% c("classical", "iid", "constant")
     flag5 <- is.character(vcov) && length(vcov) > 1
-  
+
     if (flag1 && (flag2 || flag3 || flag4 || flag5)) {
-  
+
       # extract overriden estimates
       so <- extract_vcov(
         model,
         vcov = vcov,
         conf_level = conf_level)
-  
+
       if (!is.null(so) && nrow(out) == nrow(so)) {
         # keep only columns that do not appear in so
         out <- out[, c('term', base::setdiff(colnames(out), colnames(so))), drop = FALSE]
         # merge vcov and estimates
         out <- merge(out, so, by = "term", sort = FALSE)
-  
-      } 
+
+      }
     }
-  
+
     # term must be a character (not rounded with decimals when integer)
     out$term <- as.character(out$term)
 
-    
+
     if (inherits(out, "data.frame")) {
         return(out)
     }
@@ -107,12 +109,12 @@ get_estimates_broom <- function(model, conf_int, conf_level, ...) {
 
     if (isTRUE(conf_int)) {
         out <- suppressWarnings(try(
-            broom::tidy(model, conf.int = conf_int, conf.level = conf_level, ...), 
-            silent=TRUE))
+            broom::tidy(model, conf.int = conf_int, conf.level = conf_level, ...),
+            silent = TRUE))
     } else {
         out <- suppressWarnings(try(
-            broom::tidy(model, conf.int = conf_int, ...), 
-            silent=TRUE))
+            broom::tidy(model, conf.int = conf_int, ...),
+            silent = TRUE))
     }
 
     if (!inherits(out, "data.frame") || nrow(out) < 1) {

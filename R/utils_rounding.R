@@ -12,7 +12,7 @@ rounding <- function(x, fmt = '%.3f', ...) {
   # do not round character, factor, logical
   if (is.factor(x) || is.logical(x)) {
     x <- as.character(x)
-  } 
+  }
 
   if (is.character(x)) {
     out <- x

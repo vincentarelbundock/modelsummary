@@ -11,7 +11,7 @@ sanitize_vcov <- function(vcov, number_of_models, ...) {
   }
 
   if (is.null(vcov)) {
-    # lengths must match to allow model recycling with multiple vcov 
+    # lengths must match to allow model recycling with multiple vcov
     out <- rep(list(NULL), number_of_models)
     return(out)
   }
@@ -35,7 +35,7 @@ sanitize_vcov <- function(vcov, number_of_models, ...) {
           len = 1,
           pattern = "robust|HC|HC0|HC1|HC2|HC3|HC4|HC4m|HC5|stata|classical|constant|iid"),
         checkmate::check_character(vcov_element, min.len = 2),
-        combine="or"
+        combine = "or"
       )
     }
     out <- vcov
@@ -50,8 +50,8 @@ sanitize_vcov <- function(vcov, number_of_models, ...) {
 
   if (is.character(vcov)) {
     checkmate::assert(
-      checkmate::check_character(vcov, len=1),
-      checkmate::check_character(vcov, len=number_of_models),
+      checkmate::check_character(vcov, len = 1),
+      checkmate::check_character(vcov, len = number_of_models),
       checkmate::check_true(number_of_models == 1))
     checkmate::assert_true(all(
       vcov %in% c("robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m",
@@ -64,7 +64,7 @@ sanitize_vcov <- function(vcov, number_of_models, ...) {
   }
 
   if (is.null(out)) {
-    stop("Please supply a valid input for the `vcov` argument. Read `?modelsummary`.") 
+    stop("Please supply a valid input for the `vcov` argument. Read `?modelsummary`.")
   }
 
   return(out)

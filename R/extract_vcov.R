@@ -3,7 +3,7 @@
 #' @inheritParams modelsummary
 #' @noRd
 #' @return a numeric vector of test statistics
-extract_vcov <- function(model, vcov = NULL, conf_level=NULL) {
+extract_vcov <- function(model, vcov = NULL, conf_level = NULL) {
 
   if (all(sapply(vcov, is.null))) return(NULL)
 
@@ -22,7 +22,7 @@ extract_vcov <- function(model, vcov = NULL, conf_level=NULL) {
       vcovtype <- vcov
     }
 
-    mat <- try(sandwich::vcovHC(model, type=vcovtype), silent=TRUE)
+    mat <- try(sandwich::vcovHC(model, type = vcovtype), silent = TRUE)
 
     if (!inherits(mat, "matrix")) {
       msg <- "Unable to extract a variance-covariance matrix of type %s from model of class %s. The uncertainty estimates are unadjusted."
@@ -34,7 +34,7 @@ extract_vcov <- function(model, vcov = NULL, conf_level=NULL) {
   # vcov = formula (clusters)
   if (isTRUE(checkmate::check_formula(vcov))) {
     assert_dependency("sandwich")
-    mat <- try(sandwich::vcovCL(model, cluster=vcov), silent=TRUE)
+    mat <- try(sandwich::vcovCL(model, cluster = vcov), silent = TRUE)
 
     if (!inherits(mat, "matrix")) {
 
@@ -46,10 +46,10 @@ extract_vcov <- function(model, vcov = NULL, conf_level=NULL) {
 
   # vcov = function
   if (is.function(vcov)) {
-    mat <- try(vcov(model), silent=TRUE)
+    mat <- try(vcov(model), silent = TRUE)
 
     # lme4::lmer
-    if (inherits(mat, "dpoMatrix")) { 
+    if (inherits(mat, "dpoMatrix")) {
       mat <- as.matrix(mat)
     }
 
@@ -67,8 +67,8 @@ extract_vcov <- function(model, vcov = NULL, conf_level=NULL) {
   }
 
   # vcov = atomic vector
-  if (isTRUE(checkmate::check_atomic_vector(vcov, names="named"))) {
-    out <- data.frame(term=names(vcov), std.error=vcov)
+  if (isTRUE(checkmate::check_atomic_vector(vcov, names = "named"))) {
+    out <- data.frame(term = names(vcov), std.error = vcov)
 
     # factor -> character (important for R<4.0.0)
     for (i in seq_along(out)) {
@@ -79,7 +79,7 @@ extract_vcov <- function(model, vcov = NULL, conf_level=NULL) {
     return(out)
   }
 
-  # try lmtest::coeftest 
+  # try lmtest::coeftest
   if (is.matrix(mat)) {
     out <- get_coeftest(model, mat, conf_level)
 
@@ -92,7 +92,7 @@ extract_vcov <- function(model, vcov = NULL, conf_level=NULL) {
     if (!inherits(out, "data.frame")) {
 
       out <- sqrt(base::diag(mat))
-      out <- data.frame(term=colnames(mat), std.error=out)
+      out <- data.frame(term = colnames(mat), std.error = out)
       msg <- "The `lmtest::coeftest` function does not seem to produce a valid result when applied to a model of class %s. Only `std.error` can be adjusted."
       warning(sprintf(msg, class(model)[1]))
       return(out)
@@ -110,11 +110,11 @@ get_coeftest <- function(model, vcov, conf_level) {
   if (!check_dependency("lmtest")) return(NULL)
 
   gof <- try(
-    lmtest::coeftest(model, vcov.=vcov), silent=TRUE)
+    lmtest::coeftest(model, vcov. = vcov), silent = TRUE)
 
   gof_ci <- try(
-    lmtest::coefci(model, vcov.=vcov, level=conf_level),
-    silent=TRUE)
+    lmtest::coefci(model, vcov. = vcov, level = conf_level),
+    silent = TRUE)
 
   if (!inherits(gof, "try-error")) {
     gof <- as.data.frame(unclass(gof))
@@ -127,7 +127,7 @@ get_coeftest <- function(model, vcov, conf_level) {
     gof_ci <- as.data.frame(unclass(gof_ci))
     colnames(gof_ci) <- c("conf.low", "conf.high")
     gof_ci$term <- row.names(gof_ci)
-    gof <- merge(gof, gof_ci, by="term")
+    gof <- merge(gof, gof_ci, by = "term")
   }
 
   if (inherits(gof, "try-error")) {

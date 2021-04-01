@@ -30,7 +30,7 @@ format_estimates <- function(
     grepl("\\{", estimate_glue),
     estimate_glue,
     sprintf("{%s}", estimate_glue))
-    
+
   # statistics to glue
   if (!is.null(vcov) &&     # don't add parentheses
       is.character(vcov) && # to manual strings
@@ -48,17 +48,17 @@ format_estimates <- function(
 
   # combine estimate and statistics
   estimate_glue <- c(estimate_glue, statistic_glue)
-  
+
   # stars (before rounding)
-  # compute stars if: 
+  # compute stars if:
   #   a) stars is not FALSE
-  #   b) {stars} is in glue string 
+  #   b) {stars} is in glue string
   # paste stars if:
   #   a) stars is not FALSE and is not a glue string
   is_star <- !isFALSE(stars) || isTRUE(any(grepl("\\{stars\\}", estimate_glue)))
   is_glue <- grepl("\\{", estimate)
   if (is_star) {
-    # glue string can include stars even if stars=FALSE 
+    # glue string can include stars even if stars=FALSE
     if (isFALSE(stars)) {
       stars <- TRUE
     }
@@ -79,7 +79,7 @@ format_estimates <- function(
   estimate_glue_strip <- gsub("\\{|\\}", "", estimate_glue_strip)
   estimate_glue_strip <- setdiff(estimate_glue_strip, colnames(est))
   if (length(estimate_glue_strip) > 0) {
-    stop(sprintf("These estimates or statistics do not seem to be available: %s. You can use the `get_estimates` function to see which statistics are available.", 
+    stop(sprintf("These estimates or statistics do not seem to be available: %s. You can use the `get_estimates` function to see which statistics are available.",
                  paste(estimate_glue_strip, collapse = ", ")))
   }
 
@@ -107,9 +107,9 @@ format_estimates <- function(
 https://vincentarelbundock.github.io/modelsummary', group_name))
   } else {
     # cannot be NA because we need to merge
-    est[["group"]] <- "" 
+    est[["group"]] <- ""
   }
-        
+
 
   # subset columns
   cols <- c('group', 'term',
@@ -120,12 +120,12 @@ https://vincentarelbundock.github.io/modelsummary', group_name))
   # reshape to vertical
   # sort by statistic to have se below coef, but don't sort terms
   # use factor hack to preserve order with weird names like cor__(Inter.)
-  # especially important for broom.mixed models 
+  # especially important for broom.mixed models
   est$term <- factor(est$term, unique(est$term))
   est <- stats::reshape(
     data.frame(est),
-    varying       = grep("modelsummary_tmp\\d+$", colnames(est), value=TRUE),
-    times         = grep("modelsummary_tmp\\d+$", colnames(est), value=TRUE),
+    varying       = grep("modelsummary_tmp\\d+$", colnames(est), value = TRUE),
+    times         = grep("modelsummary_tmp\\d+$", colnames(est), value = TRUE),
     v.names       = "value",
     timevar       = "statistic",
     direction     = "long",
@@ -133,7 +133,7 @@ https://vincentarelbundock.github.io/modelsummary', group_name))
   est$id <- NULL
 
   # sort then convert back to character
-  est <- est[order(est$term, est$statistic),]
+  est <- est[order(est$term, est$statistic), ]
   est$term <- as.character(est$term)
 
   # drop empty rows (important for broom.mixed which produces group

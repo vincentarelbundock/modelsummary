@@ -19,7 +19,7 @@ sanitize_output <- function(output) {
     "rtf"  = "rtf",
     "htm"  = "html",
     "html" = "html")
-  
+
   factory_dict <- c(
     "dataframe"      = "dataframe",
     "data.frame"     = "dataframe",

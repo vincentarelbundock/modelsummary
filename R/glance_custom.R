@@ -26,7 +26,7 @@ glance_custom.default <- function(x) NULL
 #' @export
 glance_custom.fixest <- function(x) {
   assert_dependency("fixest")
-  out <- data.frame(row.names="firstrow")
+  out <- data.frame(row.names = "firstrow")
   for (n in x$fixef_vars) {
     out[[paste('FE:', n)]] <- 'X'
   }

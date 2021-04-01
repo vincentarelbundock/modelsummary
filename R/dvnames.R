@@ -28,7 +28,7 @@ dvnames <- function(models, number = FALSE, fill = 'Model') {
     dvs <- sapply(models, insight::find_response)
     # Replace nulls with fill
     dvs <- sapply(dvs, function(x)
-        ifelse(is.null(x), fill, x) )
+        ifelse(is.null(x), fill, x))
     # Append numbers
     if (number) {
         dvs <- paste0(dvs, ' (', 1:length(dvs), ')')
