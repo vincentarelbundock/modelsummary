@@ -112,7 +112,7 @@ add_rows = data.frame(
   model = "Model 1",
   estimate = NA)
 attr(add_rows, "position") = 3
-modelplot(mod, add_rows = add_rows) 
+modelplot(mod, add_rows = add_rows)
 
 
 # customize your plots with 'ggplot2' functions

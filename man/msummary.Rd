@@ -35,7 +35,8 @@ msummary(
 \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
 \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable".
 \item To change the default output format, type \code{options(modelsummary_default = "latex")}, where \code{latex} can be any of the valid object types listed above.
-\item Warning: the \code{output} argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
+\item Warning: the \code{output} argument \emph{cannot} be used when customizing tables with external packages.
+\item See the 'Details' section below for more information.
 }}
 
 \item{fmt}{determines how to format numeric values
@@ -182,11 +183,23 @@ or include goodness-of-fit extracted by \emph{both} packages by setting:
 
 \code{output} argument:
 
-When a file name is supplied to the \code{output} argument, the table is written
-immediately to file. If you want to customize your table by post-processing
-it with an external package, you need to choose a different output format
-and saving mechanism. Unfortunately, the approach differs from package to
-package:
+The \code{modelsummary_list} output type is a lightweight representation of the
+model results. The \code{modelsummary} function can export to this format by
+setting the \code{output} argument, and it can accept objects of this format
+as input models to create a table. This can be useful to save raw
+results, in order to print a table later, without having to save and
+extract from the entire model object. Note that the confidence intervals
+are only stored in a \code{modelsummary_list} if explicitly requested:
+
+\verb{backup <- modelsummary(models, output = "modelsummary_list"}
+\verb{                       statistic = "conf.int")}
+\code{modelsummary(backup)}
+
+When a file name with a valid extension is supplied to the \code{output} argument,
+the table is written immediately to file. If you want to customize your table
+by post-processing it with an external package, you need to choose a
+different output format and saving mechanism. Unfortunately, the approach
+differs from package to package:
 \itemize{
 \item \code{gt}: set \code{output="gt"}, post-process your table, and use the \code{gt::gtsave} function.
 \item \code{kableExtra}: set \code{output} to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use \code{kableExtra::save_kable} function.

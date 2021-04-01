@@ -18,7 +18,8 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #' * Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
 #' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable".
 #' * To change the default output format, type `options(modelsummary_default = "latex")`, where `latex` can be any of the valid object types listed above. 
-#' * Warning: the `output` argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
+#' * Warning: the `output` argument \emph{cannot} be used when customizing tables with external packages.
+#' * See the 'Details' section below for more information.
 #' @param fmt determines how to format numeric values
 #' * integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
 #' * character: passed to the `sprintf` function (e.g., '\%.3f' keeps 3 digits with trailing zero). See `?sprintf`
@@ -124,11 +125,23 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low', 'val
 #'
 #' `output` argument:
 #'
-#' When a file name is supplied to the `output` argument, the table is written
-#' immediately to file. If you want to customize your table by post-processing
-#' it with an external package, you need to choose a different output format
-#' and saving mechanism. Unfortunately, the approach differs from package to
-#' package:
+#' The `modelsummary_list` output type is a lightweight representation of the
+#' model results. The `modelsummary` function can export to this format by
+#' setting the `output` argument, and it can accept objects of this format
+#' as input models to create a table. This can be useful to save raw
+#' results, in order to print a table later, without having to save and
+#' extract from the entire model object. Note that the confidence intervals
+#' are only stored in a `modelsummary_list` if explicitly requested:
+#'
+#' `backup <- modelsummary(models, output = "modelsummary_list"`
+#' `                       statistic = "conf.int")`
+#' `modelsummary(backup)`
+#'
+#' When a file name with a valid extension is supplied to the `output` argument,
+#' the table is written immediately to file. If you want to customize your table
+#' by post-processing it with an external package, you need to choose a
+#' different output format and saving mechanism. Unfortunately, the approach
+#' differs from package to package:
 #' * `gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave` function.
 #' * `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.
 #'
@@ -711,7 +724,6 @@ redundant_labels <- function(dat, column) {
     }
     return(dat)
 }
-
 
 #' `msummary()` is a shortcut to `modelsummary()`
 #'

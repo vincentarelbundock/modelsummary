@@ -30,7 +30,8 @@ more resources.}
 \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
 \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable".
 \item To change the default output format, type \code{options(modelsummary_default = "latex")}, where \code{latex} can be any of the valid object types listed above.
-\item Warning: the \code{output} argument \emph{cannot} be used when customizing tables with external packages. See the 'Details' section below.
+\item Warning: the \code{output} argument \emph{cannot} be used when customizing tables with external packages.
+\item See the 'Details' section below for more information.
 }}
 
 \item{fmt}{determines how to format numeric values
