@@ -99,7 +99,7 @@ datasummary_skim_dataset <- function(
     `% Missing` = rounding(mean(is.na(data) * 100), 0)
   )
   out <- data.frame(names(out), out)
-  out <- out[out[[2]] != "0" | out[[1]] == "% Missing",]
+  out <- out[out[[2]] != "0" | out[[1]] == "% Missing", ]
   row.names(out) <- NULL
   colnames(out) <- c(" ", "  ")
 
@@ -335,7 +335,7 @@ datasummary_skim_categorical <- function(
     warning(sprintf("These variables were omitted because they are entirely missing: %s.", paste(drop_entirely_na, collapse=", ")))
   }
 
-  pctformat = function(x) rounding(x, fmt)
+  pctformat <- function(x) rounding(x, fmt)
   f <- All(dat_new, numeric = FALSE, factor = TRUE, logical = TRUE, character = TRUE) ~
        (N = 1) * Format(digits=0) + (`%` = Percent()) * Format(pctformat())
 

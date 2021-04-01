@@ -33,7 +33,7 @@ datasummary_extract <- function(tab,
 
   # fill-in spanning column labels horizontally
   carry_forward <- function(x, empty = '') {
-    out <- trimws(x)
+    x <- trimws(x)
     if (length(x) > 1) {
       for (i in 2:length(x)) {
         if (is.na(x[i])) {
