@@ -24,7 +24,7 @@ factory_gt <- function(tab,
   if (!is.null(hrule)) { # check if there are >0 GOF
     for (pos in hrule) {
       out <- gt::tab_style(
-        out, 
+        out,
         style = gt::cell_borders(sides = 'bottom', color = '#000000'),
         locations = gt::cells_body(columns = 1:idx_col, rows = (pos - 1))
       )
@@ -58,10 +58,10 @@ factory_gt <- function(tab,
     left <- grep('l', align)
     center <- grep('c', align)
     right <- grep('r', align)
-    out <- 
-    out <- gt::cols_align(out, align='center', columns=center)
-    out <- gt::cols_align(out, align='left', columns=left) 
-    out <- gt::cols_align(out, align='right', column=right)
+    out <-
+    out <- gt::cols_align(out, align = 'center', columns = center)
+    out <- gt::cols_align(out, align = 'left', columns = left)
+    out <- gt::cols_align(out, align = 'right', column = right)
   }
 
   # output

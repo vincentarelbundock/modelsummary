@@ -8,9 +8,9 @@ format_gof <- function(gof, fmt, gof_map, ...) {
 
   # convert gof_map to list and vectors
   if (is.null(gof_map)) {
-    gm_list <- lapply(1:nrow(modelsummary::gof_map), function(i) 
+    gm_list <- lapply(1:nrow(modelsummary::gof_map), function(i)
                   as.list(modelsummary::gof_map[i, ]))
-    gm_omit <- sapply(gm_list, function(x) x$omit) 
+    gm_omit <- sapply(gm_list, function(x) x$omit)
   } else if (inherits(gof_map, "data.frame")) {
     gm_list <- lapply(1:nrow(gof_map), function(i)
                   as.list(gof_map[i, ]))
@@ -18,9 +18,9 @@ format_gof <- function(gof, fmt, gof_map, ...) {
     gm_list <- gof_map
   }
   gm_raw <- sapply(gm_list, function(x) x$raw)
-  gm_clean <- sapply(gm_list, function(x) x$clean) 
+  gm_clean <- sapply(gm_list, function(x) x$clean)
 
-  # round 
+  # round
   unknown <- setdiff(colnames(gof), gm_raw)
   for (u in unknown) {
     gof[[u]] <- rounding(gof[[u]], fmt)
@@ -33,10 +33,10 @@ format_gof <- function(gof, fmt, gof_map, ...) {
 
   # gof_map = NULL: drop explicit omit
   if (is.null(gof_map)) {
-    gof <- gof[, !colnames(gof) %in% gm_raw[gm_omit], drop=FALSE]
+    gof <- gof[, !colnames(gof) %in% gm_raw[gm_omit], drop = FALSE]
   # gof_map != NULL: drop unknown
   } else {
-    gof <- gof[, colnames(gof) %in% gm_raw, drop=FALSE]
+    gof <- gof[, colnames(gof) %in% gm_raw, drop = FALSE]
   }
 
   # reorder
@@ -52,9 +52,9 @@ format_gof <- function(gof, fmt, gof_map, ...) {
 
     # reshape
     out <- data.frame(term = names(gof), value = unlist(gof))
-  
+
   # all gof are excluded return an empty tibble (needs character to match merge type)
-  } else { 
+  } else {
     out <- data.frame(term = NA_character_, value = NA_character_)
     out <- stats::na.omit(out)
   }
@@ -69,5 +69,3 @@ format_gof <- function(gof, fmt, gof_map, ...) {
   # output
   return(out)
 }
-
-

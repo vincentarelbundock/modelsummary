@@ -25,7 +25,7 @@ get_vcov_type <- function(vcov) {
   for (v in vcov) {
     if (!checkmate::test_formula(v) &&
         !checkmate::test_character(v, len = 1, null.ok = TRUE)) {
-       vcov_type_flag <- FALSE 
+       vcov_type_flag <- FALSE
     }
   }
 
@@ -37,4 +37,3 @@ get_vcov_type <- function(vcov) {
 
   return(vcov_type)
 }
-

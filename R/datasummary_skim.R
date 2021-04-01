@@ -15,14 +15,14 @@
 #' @param type of variables to summarize: "numeric" or "categorical" (character)
 #'
 #' @examples
-#' 
+#'
 #' \dontrun{
 #' dat <- mtcars
 #' dat$vs <- as.logical(dat$vs)
 #' dat$cyl <- as.factor(dat$vs)
 #' datasummary_skim(dat)
 #' datasummary_skim(dat, "categorical")
-#' 
+#'
 #' # You can use `datasummary` to produce a similar table in different formats.
 #' # Note that the `Histogram` function relies on unicode characters. These
 #' # characters will only display correctly in some operating systems, under some
@@ -56,13 +56,13 @@ datasummary_skim <- function(data,
     out <- datasummary_skim_numeric(data, output=output, fmt=fmt,
                                     histogram=histogram, title=title,
                                     notes=notes, align=align, ...)
-  } 
+  }
 
   if (type == "categorical") {
     out <- datasummary_skim_categorical(data, output=output, fmt=fmt,
                                         title=title, notes=notes, align=align,
                                         ...)
-  } 
+  }
 
   if (type == "dataset") {
     out <- datasummary_skim_dataset(data, output=output, title=title,
@@ -171,10 +171,10 @@ datasummary_skim_numeric <- function(
 
   }
 
-  # subset of numeric variables 
+  # subset of numeric variables
   idx <- sapply(data, is.numeric)
   if (!any(idx)) stop('data contains no numeric variable.')
-  dat_new <- data[, idx, drop=FALSE] 
+  dat_new <- data[, idx, drop=FALSE]
 
   # subset of non-NA variables
   idx <- sapply(dat_new, function(x) !all(is.na(x)))
@@ -195,7 +195,7 @@ datasummary_skim_numeric <- function(
     histogram_col <- function(x) ""
 
     f <- All(dat_new, numeric=TRUE, factor=FALSE) ~
-         Heading("Unique (#)") * NUnique + 
+         Heading("Unique (#)") * NUnique +
          Heading("Missing (%)") * PercentMissing +
          (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
          Heading("") * histogram_col
@@ -215,7 +215,7 @@ datasummary_skim_numeric <- function(
     }
 
     # don't use output=filepath.html when post-processing
-    if (!is.null(output_info$output_file)) { 
+    if (!is.null(output_info$output_file)) {
       output <- "kableExtra"
     }
 
@@ -225,10 +225,10 @@ datasummary_skim_numeric <- function(
         output = output,
         title = title,
         align = align,
-        notes = notes) 
+        notes = notes)
     out <- kableExtra::column_spec(out,
-        column=9, 
-        image=kableExtra::spec_hist(histogram_list, 
+        column=9,
+        image=kableExtra::spec_hist(histogram_list,
                                     col="black",
                                     same_lim=FALSE)
       )
@@ -243,7 +243,7 @@ datasummary_skim_numeric <- function(
   } else {
 
     f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
-         Heading("Unique (#)") * NUnique + 
+         Heading("Unique (#)") * NUnique +
          Heading("Missing (%)") * PercentMissing +
          (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt)
 
@@ -252,7 +252,7 @@ datasummary_skim_numeric <- function(
         output = output,
         title = title,
         align = align,
-        notes = notes) 
+        notes = notes)
 
   }
 
@@ -283,8 +283,8 @@ datasummary_skim_categorical <- function(
 
   for (n in colnames(dat_new)) {
 
-    if (is.logical(dat_new[[n]]) | 
-        is.character(dat_new[[n]]) | 
+    if (is.logical(dat_new[[n]]) |
+        is.character(dat_new[[n]]) |
         is.factor(dat_new[[n]])) {
 
       # convert to factor
@@ -345,8 +345,8 @@ datasummary_skim_categorical <- function(
     output = output,
     title = title,
     align = align,
-    notes = notes) 
+    notes = notes)
 
   return(out)
 
-} 
+}

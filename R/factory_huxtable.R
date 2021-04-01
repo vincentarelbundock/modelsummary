@@ -29,7 +29,7 @@ factory_huxtable <- function(tab,
     row = 1,
     col = 1:ncol(out),
     value = 1
-  ) 
+  )
   out <- huxtable::set_top_border(
     out,
     row = 1,

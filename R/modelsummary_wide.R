@@ -37,7 +37,7 @@ modelsummary_wide <- function(
   stacking    = "horizontal",
   ...) {
 
-  checkmate::assert_character(stacking, pattern="^horizontal$|^vertical$")
+  checkmate::assert_character(stacking, pattern = "^horizontal$|^vertical$")
 
   # models must be a list of models
   if (!'list' %in% class(models)) {
@@ -54,10 +54,10 @@ modelsummary_wide <- function(
 
   # tidy
   if (statistic == "conf.int") {
-    ti <- lapply(models, function(x) 
-                 get_estimates(x, conf_level=conf_level, ...))
+    ti <- lapply(models, function(x)
+                 get_estimates(x, conf_level = conf_level, ...))
   } else {
-    ti <- lapply(models, function(x) 
+    ti <- lapply(models, function(x)
                  get_estimates(x, ...))
   }
 
@@ -81,7 +81,7 @@ modelsummary_wide <- function(
   if (is.null(coef_group)) {
     coef_group <- intersect(c("y.level", "response", "group"), colnames(ti))[1]
     if (is.na(coef_group)) {
-      stop("You must specify a valid character value for the `coef_group` argument. To find this value for your type of model, load the `broom` and/or `broom.mixed` libraries, then call `tidy(model)` on your model object. The `coef_group` value must be a column in the resulting data.frame. This column includes identifiers which determine which coefficients appear in which columns of your table.") 
+      stop("You must specify a valid character value for the `coef_group` argument. To find this value for your type of model, load the `broom` and/or `broom.mixed` libraries, then call `tidy(model)` on your model object. The `coef_group` value must be a column in the resulting data.frame. This column includes identifiers which determine which coefficients appear in which columns of your table.")
     }
   }
 
@@ -94,7 +94,7 @@ modelsummary_wide <- function(
     results <- list()
     for (g in group_names) {
       results[[g]] <- list()
-      results[[g]]$tidy <- ti[ti[[coef_group]] == g, , drop=FALSE]
+      results[[g]]$tidy <- ti[ti[[coef_group]] == g, , drop = FALSE]
       results[[g]]$tidy$term <- paste(results[[g]]$tidy$model,
                                       results[[g]]$tidy$term)
       if (g == group_names[1]) {
@@ -119,12 +119,12 @@ modelsummary_wide <- function(
           idx <- g
         }
 
-        tmp_ti <- ti[ti[[coef_group]] == g & ti$model == m, , drop=FALSE]
-        tmp_gl <- gl[gl$model == m,]
+        tmp_ti <- ti[ti[[coef_group]] == g & ti$model == m, , drop = FALSE]
+        tmp_gl <- gl[gl$model == m, , drop = FALSE]
         tmp_gl$model <- NULL
 
         # skip missing response levels
-        if (nrow(tmp_ti) > 0) { 
+        if (nrow(tmp_ti) > 0) {
           results[[idx]] <- list()
           results[[idx]]$tidy <- tmp_ti
           if (first) {
@@ -155,6 +155,6 @@ modelsummary_wide <- function(
     notes       = notes,
     estimate    = estimate,
     align       = align,
-    ...) 
+    ...)
 
 }

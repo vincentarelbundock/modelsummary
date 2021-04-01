@@ -34,16 +34,16 @@
 #' modelplot(models)
 #'
 #' # add_rows: add an empty reference category
-#' 
+#'
 #' mod <- lm(hp ~ factor(cyl), mtcars)
-#' 
+#'
 #' add_rows = data.frame(
 #'   term = "factory(cyl)4",
 #'   model = "Model 1",
 #'   estimate = NA)
 #' attr(add_rows, "position") = 3
-#' modelplot(mod, add_rows = add_rows) 
-#' 
+#' modelplot(mod, add_rows = add_rows)
+#'
 #'
 #' # customize your plots with 'ggplot2' functions
 #' library(ggplot2)
@@ -89,7 +89,7 @@ modelplot <- function(models,
   if (is.null(conf_level)) {
     estimate <- "estimate"
   } else {
-    estimate="{estimate}|{conf.low}|{conf.high}"
+    estimate = "{estimate}|{conf.low}|{conf.high}"
   }
 
 
@@ -114,7 +114,7 @@ modelplot <- function(models,
   term_order <- unique(out$term)
 
   out <- stats::reshape(
-    out, 
+    out,
     varying = colnames(out)[2:ncol(out)],
     times = colnames(out)[2:ncol(out)],
     v.names = "value",
@@ -134,18 +134,18 @@ modelplot <- function(models,
   dat <- stats::na.omit(out)
   row.names(dat) <- dat$value <- dat$id <- NULL
   dat$term <- factor(dat$term, rev(term_order))
-  dat <- dat[order(dat$term, dat$model),]
+  dat <- dat[order(dat$term, dat$model), ]
 
   # add_rows
   if (!is.null(add_rows)) {
     pos <- attr(add_rows, 'position')
     for (i in 1:nrow(add_rows)) {
       if (!is.null(pos) && !is.na(pos[i]) && pos[i] <= nrow(dat)) {
-        top <- dat[-c(pos[i]:nrow(dat)), , drop=FALSE]
-        bot <- dat[c(pos[i]:nrow(dat)), , drop=FALSE]
-        dat <- bind_rows(top, add_rows[i, , drop=FALSE], bot)
+        top <- dat[-c(pos[i]:nrow(dat)), , drop = FALSE]
+        bot <- dat[c(pos[i]:nrow(dat)), , drop = FALSE]
+        dat <- bind_rows(top, add_rows[i, , drop = FALSE], bot)
       } else {
-        dat <- bind_rows(dat, add_rows[i, , drop=FALSE])
+        dat <- bind_rows(dat, add_rows[i, , drop = FALSE])
       }
     }
     dat$term <- as.character(dat$term)
@@ -178,39 +178,40 @@ modelplot <- function(models,
   # geom_pointrange: with confidence interval
   if (!is.null(conf_level)) {
     if (length(unique(dat$model)) == 1) {
-      p <- p + 
-        ggplot2::geom_pointrange(ggplot2::aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high), ...)
+      p <- p + ggplot2::geom_pointrange(
+        ggplot2::aes(y = term, x = estimate,
+          xmin = conf.low, xmax = conf.high), ...)
     } else {
       if (facet) {
-        p <- p + 
-          ggplot2::geom_pointrange(ggplot2::aes(y=model, x=estimate, xmin=conf.low, xmax=conf.high), ...) + 
-          ggplot2::facet_grid(term ~ ., scales='free_y')
+        p <- p +
+            ggplot2::geom_pointrange(ggplot2::aes(y = model, x = estimate,
+                                                  xmin = conf.low, xmax = conf.high), ...) +
+            ggplot2::facet_grid(term ~ ., scales = 'free_y')
       } else {
-        p <- p + 
+        p <- p +
           ggplot2::geom_pointrange(
-            ggplot2::aes(y=term, x=estimate, xmin=conf.low, xmax=conf.high, color=model),
-            position=ggplot2::position_dodge(width=.5), ...)
+            ggplot2::aes(y = term, x = estimate, xmin = conf.low, xmax = conf.high, color = model),
+            position = ggplot2::position_dodge(width = .5), ...)
       }
     }
     tmp <- sprintf('Coefficient estimates and %s%% confidence intervals', conf_level * 100)
-    p <- p + ggplot2::labs(x=tmp, y='')
+    p <- p + ggplot2::labs(x = tmp, y = '')
     # geom_point: without confidence interval
   } else {
     if (length(unique(dat$model)) == 1) {
-      p <- p + ggplot2::geom_point(ggplot2::aes(y=term, x=estimate), ...)
+      p <- p + ggplot2::geom_point(ggplot2::aes(y = term, x = estimate), ...)
     } else {
       if (facet) {
-        p <- p + 
-          ggplot2::geom_point(ggplot2::aes(y=model, x=estimate), ...) +
-          ggplot2::facet_grid(term ~ ., scales='free_y')
+        p <- p +
+          ggplot2::geom_point(ggplot2::aes(y = model, x = estimate), ...) +
+          ggplot2::facet_grid(term ~ ., scales = 'free_y')
       } else {
-        p <- p + ggplot2::geom_point(ggplot2::aes(y=term, x=estimate), 
-                                     position=ggplot2::position_dodge(width=.5), ...)
+        p <- p + ggplot2::geom_point(ggplot2::aes(y = term, x = estimate),
+                                     position = ggplot2::position_dodge(width = .5), ...)
       }
     }
-    p <- p + ggplot2::labs(x='Coefficient estimates', y='')
+    p <- p + ggplot2::labs(x = 'Coefficient estimates', y = '')
   }
 
   return(p)
-
 }

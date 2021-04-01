@@ -54,7 +54,9 @@ gof_map_build <- function() {
   p.value.Weak.instrument,   Weak IV p,          3, TRUE,
   p.value.Wu.Hausman,        Wu-Hausman p,       3, TRUE,
   p.value.Sargan,            Sargan p,           3, TRUE'
-  out <- utils::read.csv(text=text, colClasses=c("character", "character", "numeric", "logical", "NULL"))
+  out <- utils::read.csv(
+    text = text,
+    colClasses = c("character", "character", "numeric", "logical", "NULL"))
   for (i in 1:2) {
     out[[i]] <- trimws(out[[i]])
   }
@@ -83,4 +85,4 @@ gof_map_build <- function() {
 #' }
 #'
 #' @export
-gof_map <- gof_map_build() 
+gof_map <- gof_map_build()

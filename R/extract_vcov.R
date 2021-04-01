@@ -49,7 +49,7 @@ extract_vcov <- function(model, vcov = NULL, conf_level=NULL) {
     mat <- try(vcov(model), silent=TRUE)
 
     # lme4::lmer
-    if (inherits(mat, "dpoMatrix")) { 
+    if (inherits(mat, "dpoMatrix")) {
       mat <- as.matrix(mat)
     }
 
@@ -79,7 +79,7 @@ extract_vcov <- function(model, vcov = NULL, conf_level=NULL) {
     return(out)
   }
 
-  # try lmtest::coeftest 
+  # try lmtest::coeftest
   if (is.matrix(mat)) {
     out <- get_coeftest(model, mat, conf_level)
 
@@ -110,10 +110,10 @@ get_coeftest <- function(model, vcov, conf_level) {
   if (!check_dependency("lmtest")) return(NULL)
 
   gof <- try(
-    lmtest::coeftest(model, vcov.=vcov), silent=TRUE)
+    lmtest::coeftest(model, vcov. = vcov), silent = TRUE)
 
   gof_ci <- try(
-    lmtest::coefci(model, vcov.=vcov, level=conf_level),
+    lmtest::coefci(model, vcov. = vcov, level = conf_level),
     silent=TRUE)
 
   if (!inherits(gof, "try-error")) {
@@ -127,7 +127,7 @@ get_coeftest <- function(model, vcov, conf_level) {
     gof_ci <- as.data.frame(unclass(gof_ci))
     colnames(gof_ci) <- c("conf.low", "conf.high")
     gof_ci$term <- row.names(gof_ci)
-    gof <- merge(gof, gof_ci, by="term")
+    gof <- merge(gof, gof_ci, by = "term")
   }
 
   if (inherits(gof, "try-error")) {

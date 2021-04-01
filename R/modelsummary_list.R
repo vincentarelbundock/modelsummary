@@ -35,7 +35,7 @@ glance.modelsummary_list <- function(x, ...) {
   if ("glance" %in% names(x)) {
     out <- x[["glance"]]
   } else {
-    out <- data.frame(row.names=1)
+    out <- data.frame(row.names = 1)
   }
   out
 }

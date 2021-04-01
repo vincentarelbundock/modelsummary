@@ -24,13 +24,13 @@ datasummary_df <- function(data,
   }
 
   factory(data,
-          align=align,
-          hrule=hrule,
-          notes=notes,
-          output=output,
-          title=title,
-          add_rows=add_rows,
-          add_columns=add_columns,
+          align = align,
+          hrule = hrule,
+          notes = notes,
+          output = output,
+          title = title,
+          add_rows = add_rows,
+          add_columns = add_columns,
           ...)
 
 }

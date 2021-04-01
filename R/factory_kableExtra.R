@@ -32,7 +32,7 @@ factory_kableExtra <- function(tab,
   valid <- c("x", "align", "caption", "format", "booktabs", "linesep",
              "format.args", "escape", "table.attr", "longtable", "valign",
              "position", "centering", "vline", "toprule", "bottomrule",
-             "midrule", "caption.short", "table.envir") 
+             "midrule", "caption.short", "table.envir")
   arguments <- c(
     list(...),
     "caption"   = title,
@@ -47,7 +47,7 @@ factory_kableExtra <- function(tab,
     arguments[["align"]] <- align
 
     # if dcolumn, wrap model names in multicolumn to avoid math mode
-    if (output_format == "latex" && 
+    if (output_format == "latex" &&
         any(grepl("D\\{", align)) &&
         !"escape" %in% names(arguments)) {
       colnames(tab) <- paste0("\\multicolumn{1}{c}{", colnames(tab), "}")
@@ -70,7 +70,7 @@ factory_kableExtra <- function(tab,
     if (output_format %in% 'latex') {
       for (pos in hrule) {
         out <- kableExtra::row_spec(out,
-          row = pos - 1, 
+          row = pos - 1,
           extra_latex_after = "\\midrule")
       }
     } else if (output_format %in% "html") {
@@ -90,11 +90,11 @@ factory_kableExtra <- function(tab,
       # otherwise stars_note breaks in PDF output under pdflatex
       if (output_format == "latex" && isTRUE(grepl(" < ", n))) {
         n <- gsub(" < ", " $<$ ", n)
-        out <- kableExtra::add_footnote(out, label=n, notation='none',
-                                        escape=FALSE)
+        out <- kableExtra::add_footnote(out, label = n, notation = 'none',
+                                        escape = FALSE)
       } else {
-        out <- kableExtra::add_footnote(out, label=n, notation='none',
-                                        escape=TRUE)
+        out <- kableExtra::add_footnote(out, label = n, notation = 'none',
+                                        escape = TRUE)
       }
     }
   }
@@ -122,7 +122,7 @@ factory_kableExtra <- function(tab,
     return(out)
   } else {
     if (output_format == "markdown") {
-      writeLines(paste(out, collapse="\n"), con=output_file)
+      writeLines(paste(out, collapse = "\n"), con = output_file)
     } else {
       kableExtra::save_kable(out, file = output_file)
     }

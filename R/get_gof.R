@@ -8,7 +8,9 @@ get_gof <- function(model, vcov_type = NULL, ...) {
 
     # priority
     get_priority <- getOption("modelsummary_get", default = "broom")
-    checkmate::assert_choice(get_priority, choices = c("broom", "easystats", "parameters", "performance", "all"))
+    checkmate::assert_choice(
+      get_priority,
+      choices = c("broom", "easystats", "parameters", "performance", "all"))
 
     if (get_priority %in% c("all", "broom")) {
         funs <- list(get_gof_broom, get_gof_parameters)
@@ -42,10 +44,10 @@ get_gof <- function(model, vcov_type = NULL, ...) {
             }
         }
     }
-    
+
     # lm model: include F-stat by default
     # glm also inherits from lm
-    if (isTRUE(class(model)[1] == "lm") && 
+    if (isTRUE(class(model)[1] == "lm") &&
         inherits(gof, "data.frame") &&
         "statistic" %in% colnames(gof)) {
         gof$F <- gof$statistic
@@ -102,14 +104,14 @@ get_gof_broom <- function(model, ...) {
 
   out <- suppressWarnings(try(
     broom::glance(model, ...),
-    silent=TRUE))
+    silent = TRUE))
 
   if (!inherits(out, "data.frame")) {
     return("`broom::glance(model)` did not return a data.frame.")
   }
 
   if (nrow(out) > 1) {
-    return("`broom::glance(model)` returned a data.frame with more than 1 row.")   
+    return("`broom::glance(model)` returned a data.frame with more than 1 row.")
   }
 
   return(out)
@@ -148,11 +150,11 @@ get_gof_parameters <- function(model, ...) {
   }
 
   if (nrow(out) > 1) {
-    return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")   
+    return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")
   }
 
   # cleanup
-  out <- insight::standardize_names(out, style="broom")
+  out <- insight::standardize_names(out, style = "broom")
 
   # nobs
   mi <- insight::model_info(model)

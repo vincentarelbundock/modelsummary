@@ -49,8 +49,8 @@ datasummary_balance <- function(formula,
   lev <- paste0(names(lev), " (N=", lev, ")")
   levels(data[[rhs]]) <- lev
 
-  # exclude otherwise All() makes them appear as rows 
-  idx <- setdiff(colnames(data), 
+  # exclude otherwise All() makes them appear as rows
+  idx <- setdiff(colnames(data),
                  c(rhs, "clusters", "blocks", "weights"))
   data_norhs <- data[, idx, drop = FALSE]
 
@@ -77,11 +77,11 @@ datasummary_balance <- function(formula,
   }
 
   if (any_factor) {
-    tab_fac <- datasummary_balance_factor(rhs, data, data_norhs, any_numeric) 
+    tab_fac <- datasummary_balance_factor(rhs, data, data_norhs, any_numeric)
   }
 
   if (any_numeric) {
-    tab_num <- datasummary_balance_numeric(rhs, data, data_norhs, fmt, dinm, dinm_statistic) 
+    tab_num <- datasummary_balance_numeric(rhs, data, data_norhs, fmt, dinm, dinm_statistic)
   }
 
   if (any_numeric && any_factor) {
@@ -96,7 +96,7 @@ datasummary_balance <- function(formula,
     }
     tab_fac <- bind_rows(header, tab_fac)
 
-    # bind tables and reorder columns 
+    # bind tables and reorder columns
     tab <- bind_rows(tab_num, tab_fac)
     tab <- tab[, unique(c(" ", "  ", colnames(tab)))]
 
@@ -152,8 +152,8 @@ datasummary_balance_factor <- function(rhs, data, data_norhs, any_numeric){
   data_norhs$badfactordropthis <- factor(c("badfactordropthis1", rep("badfactordropthis2", nrow(data_norhs)-1)))
 
   pctformat = function(x) sprintf("%.1f", x)
-  f_fac <- 'All(data_norhs, factor=TRUE, numeric=FALSE) ~ 
-            Factor(%s) * (Heading("N")*1 * Format(digits=0) + 
+  f_fac <- 'All(data_norhs, factor=TRUE, numeric=FALSE) ~
+            Factor(%s) * (Heading("N")*1 * Format(digits=0) +
             Heading("%%") * Percent("col") * Format(pctformat()))'
   f_fac <- sprintf(f_fac, rhs)
   if (any_numeric) {
@@ -185,16 +185,16 @@ datasummary_balance_numeric <- function(rhs, data, data_norhs, fmt, dinm, dinm_s
   tab_num <- datasummary(f_num, data=data, output="data.frame")
 
   # otherwise colnames: female (N=140) Mean
-  colnames(tab_num) <- pad(attr(tab_num, "header_bottom")) 
+  colnames(tab_num) <- pad(attr(tab_num, "header_bottom"))
 
   # difference in means
   if (dinm) {
     numeric_variables <- colnames(data_norhs)[sapply(data_norhs, is.numeric)]
     tmp <- lapply(numeric_variables,
-                  function(lhs) DinM(lhs=lhs, 
-                                     rhs=rhs, 
-                                     data=data, 
-                                     fmt=fmt, 
+                  function(lhs) DinM(lhs=lhs,
+                                     rhs=rhs,
+                                     data=data,
+                                     fmt=fmt,
                                      statistic=dinm_statistic))
     tmp <- do.call("rbind", tmp)
 
@@ -214,7 +214,7 @@ datasummary_balance_numeric <- function(rhs, data, data_norhs, fmt, dinm, dinm_s
 
     # after DinM, pad the spanning columns if tab_num has new columns
     for (i in seq_along(span_kableExtra)) {
-      span_kableExtra[[i]] <- c(span_kableExtra[[i]], 
+      span_kableExtra[[i]] <- c(span_kableExtra[[i]],
                                 rep("    ", ncol(tab_num) - sum(span_kableExtra[[i]])))
     }
     attr(tab_num, "span_kableExtra") <- span_kableExtra
