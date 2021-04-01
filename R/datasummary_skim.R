@@ -53,20 +53,20 @@ datasummary_skim <- function(data,
   data <- as.data.frame(data)
 
   if (type == "numeric") {
-    out <- datasummary_skim_numeric(data, output=output, fmt=fmt,
-                                    histogram=histogram, title=title,
-                                    notes=notes, align=align, ...)
+    out <- datasummary_skim_numeric(data, output = output, fmt = fmt,
+                                    histogram = histogram, title = title,
+                                    notes = notes, align = align, ...)
   }
 
   if (type == "categorical") {
-    out <- datasummary_skim_categorical(data, output=output, fmt=fmt,
-                                        title=title, notes=notes, align=align,
+    out <- datasummary_skim_categorical(data, output = output, fmt = fmt,
+                                        title = title, notes = notes, align = align,
                                         ...)
   }
 
   if (type == "dataset") {
-    out <- datasummary_skim_dataset(data, output=output, title=title,
-                                    notes=notes, align=align, ...)
+    out <- datasummary_skim_dataset(data, output = output, title = title,
+                                    notes = notes, align = align, ...)
   }
 
   return(out)
@@ -89,8 +89,8 @@ datasummary_skim_dataset <- function(
     tryCatch(length(unique(stats::na.omit(x))) == 2, error = function(e) FALSE, silent = TRUE)
   }
   out <- c(
-    Rows = rounding(nrow(data), fmt=0),
-    Columns = rounding(ncol(data), fmt=0),
+    Rows = rounding(nrow(data), fmt = 0),
+    Columns = rounding(ncol(data), fmt = 0),
     # `# Binary` = rounding(sum(sapply(data, is.binary)), 0),
     `# Character` = rounding(sum(sapply(data, is.character)), 0),
     `# Factor` = rounding(sum(sapply(data, is.factor)), 0),
@@ -174,12 +174,12 @@ datasummary_skim_numeric <- function(
   # subset of numeric variables
   idx <- sapply(data, is.numeric)
   if (!any(idx)) stop('data contains no numeric variable.')
-  dat_new <- data[, idx, drop=FALSE]
+  dat_new <- data[, idx, drop = FALSE]
 
   # subset of non-NA variables
   idx <- sapply(dat_new, function(x) !all(is.na(x)))
   if (!any(idx)) stop('all numeric variables are completely missing.')
-  dat_new <- dat_new[, idx, drop=FALSE]
+  dat_new <- dat_new[, idx, drop = FALSE]
 
   # convert to numeric (tables does not play well with haven_labelled)
   for (i in seq_along(dat_new)) {
@@ -194,7 +194,7 @@ datasummary_skim_numeric <- function(
 
     histogram_col <- function(x) ""
 
-    f <- All(dat_new, numeric=TRUE, factor=FALSE) ~
+    f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
          Heading("Unique (#)") * NUnique +
          Heading("Missing (%)") * PercentMissing +
          (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
@@ -205,8 +205,8 @@ datasummary_skim_numeric <- function(
     # know the exact subset of variables kept by tabular, in the exact
     # order, to print the right histograms.
 
-    idx <- datasummary(f, data=dat_new, output="data.frame")[[1]]
-    histogram_list <- as.list(dat_new[, idx, drop=FALSE])
+    idx <- datasummary(f, data = dat_new, output = "data.frame")[[1]]
+    histogram_list <- as.list(dat_new[, idx, drop = FALSE])
     histogram_list <- lapply(histogram_list, stats::na.omit)
 
     # too large
@@ -227,15 +227,15 @@ datasummary_skim_numeric <- function(
         align = align,
         notes = notes)
     out <- kableExtra::column_spec(out,
-        column=9,
-        image=kableExtra::spec_hist(histogram_list,
-                                    col="black",
-                                    same_lim=FALSE)
+        column = 9,
+        image = kableExtra::spec_hist(histogram_list,
+                                      col = "black",
+                                      same_lim = FALSE)
       )
 
     # don't use output=filepath.html when post-processing
     if (!is.null(output_info$output_file)) {
-      kableExtra::save_kable(out, file=output_info$output_file)
+      kableExtra::save_kable(out, file = output_info$output_file)
       return(invisible(out))
     }
 
@@ -336,7 +336,7 @@ datasummary_skim_categorical <- function(
   }
 
   pctformat = function(x) rounding(x, fmt)
-  f <- All(dat_new, numeric=FALSE, factor=TRUE, logical=TRUE, character=TRUE) ~
+  f <- All(dat_new, numeric = FALSE, factor = TRUE, logical = TRUE, character = TRUE) ~
        (N = 1) * Format(digits=0) + (`%` = Percent()) * Format(pctformat())
 
   out <- datasummary(

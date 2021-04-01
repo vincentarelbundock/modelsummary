@@ -38,7 +38,7 @@ datasummary_balance <- function(formula,
   checkmate::assert_formula(formula)
   checkmate::assert_data_frame(data, min.rows = 1, min.cols = 1)
   checkmate::assert_flag(dinm)
-  checkmate::assert_string(dinm_statistic, pattern="^std.error$|^p.value$")
+  checkmate::assert_string(dinm_statistic, pattern = "^std.error$|^p.value$")
   data <- sanitize_datasummary_balance_data(formula, data)
 
   # rhs condition variable
@@ -87,7 +87,7 @@ datasummary_balance <- function(formula,
   if (any_numeric && any_factor) {
 
     # header compatibility + new header
-    header <- tab_fac[1, , drop=FALSE]
+    header <- tab_fac[1, , drop = FALSE]
     cols <- trimws(colnames(header)) # we padded colnames above
     for (i in seq_along(header)) {
       header[1, i] <- ifelse(!cols[i] %in% c("Mean", "Std. Dev."), "", header[1, i])
@@ -152,20 +152,20 @@ datasummary_balance_factor <- function(rhs, data, data_norhs, any_numeric){
   data_norhs$badfactordropthis <- factor(c("badfactordropthis1", rep("badfactordropthis2", nrow(data_norhs)-1)))
 
   pctformat = function(x) sprintf("%.1f", x)
-  f_fac <- 'All(data_norhs, factor=TRUE, numeric=FALSE) ~
-            Factor(%s) * (Heading("N")*1 * Format(digits=0) +
+  f_fac <- 'All(data_norhs, factor = TRUE, numeric = FALSE) ~
+            Factor(%s) * (Heading("N")*1 * Format(digits = 0) +
             Heading("%%") * Percent("col") * Format(pctformat()))'
   f_fac <- sprintf(f_fac, rhs)
   if (any_numeric) {
     f_fac <- gsub('\\"\\%\\"', '\\"Std. Dev.\\"', f_fac)
     f_fac <- gsub('\\"N\\"', '\\"Mean\\"', f_fac)
   }
-  tab_fac <- datasummary(stats::formula(f_fac), data=data, output="data.frame")
+  tab_fac <- datasummary(stats::formula(f_fac), data = data, output = "data.frame")
 
   colnames(tab_fac) <- pad(attr(tab_fac, "header_bottom"))
 
   idx <- !grepl("^badfactordropthis\\d$", tab_fac[[2]])
-  tab_fac <- tab_fac[idx, , drop=FALSE]
+  tab_fac <- tab_fac[idx, , drop = FALSE]
 
   # hack
   data_norhs$badfactordropthis <- data$badfactordropthis <- NULL
@@ -179,10 +179,10 @@ datasummary_balance_numeric <- function(rhs, data, data_norhs, fmt, dinm, dinm_s
 
   # create table as data.frame
   f_num <- sprintf(
-    'All(data_norhs) ~ Factor(%s) * (Mean + Heading("Std. Dev.") * SD) * Arguments(fmt=fmt)',
+    'All(data_norhs) ~ Factor(%s) * (Mean + Heading("Std. Dev.") * SD) * Arguments(fmt = fmt)',
     rhs)
   f_num <- stats::formula(f_num)
-  tab_num <- datasummary(f_num, data=data, output="data.frame")
+  tab_num <- datasummary(f_num, data = data, output = "data.frame")
 
   # otherwise colnames: female (N=140) Mean
   colnames(tab_num) <- pad(attr(tab_num, "header_bottom"))
@@ -191,11 +191,11 @@ datasummary_balance_numeric <- function(rhs, data, data_norhs, fmt, dinm, dinm_s
   if (dinm) {
     numeric_variables <- colnames(data_norhs)[sapply(data_norhs, is.numeric)]
     tmp <- lapply(numeric_variables,
-                  function(lhs) DinM(lhs=lhs,
-                                     rhs=rhs,
-                                     data=data,
-                                     fmt=fmt,
-                                     statistic=dinm_statistic))
+                  function(lhs) DinM(lhs = lhs,
+                                     rhs = rhs,
+                                     data = data,
+                                     fmt = fmt,
+                                     statistic = dinm_statistic))
     tmp <- do.call("rbind", tmp)
 
     # save attributes because merge wipes them out
@@ -205,7 +205,7 @@ datasummary_balance_numeric <- function(rhs, data, data_norhs, fmt, dinm, dinm_s
     span_kableExtra <- attr(tab_num, "span_kableExtra")
 
     # merge
-    tab_num <- merge(tab_num, tmp, all.x=TRUE, by=" ", sort=FALSE)
+    tab_num <- merge(tab_num, tmp, all.x = TRUE, by = " ", sort = FALSE)
 
     # restore attributes
     attr(tab_num, "header_sparse_flat") <- header_sparse_flat
@@ -222,7 +222,7 @@ datasummary_balance_numeric <- function(rhs, data, data_norhs, fmt, dinm, dinm_s
     if (ncol(tab_num) > length(header_sparse_flat)) {
       attr(tab_num, "header_sparse_flat") <- c(header_sparse_flat, colnames(tab_num)[-c(1:length(header_sparse_flat))])
     }
-    attr(tab_num, "header_sparse_flat") <- gsub(" \\(N=\\d+\\)", "", attr(tab_num, "header_sparse_flat"))
+    attr(tab_num, "header_sparse_flat") <- gsub(" \\(N = \\d+\\)", "", attr(tab_num, "header_sparse_flat"))
     attr(tab_num, "header_sparse_flat") <- pad(attr(tab_num, "header_sparse_flat"))
 
   }
@@ -256,7 +256,7 @@ DinM <- function(lhs, rhs, data, fmt, statistic) {
 
   out <- estimatr::tidy(out)
 
-  out <- out[, c("estimate", statistic), drop=FALSE]
+  out <- out[, c("estimate", statistic), drop = FALSE]
   out[[1]] <- rounding(out[[1]], fmt)
   out[[2]] <- rounding(out[[2]], fmt)
   out$variable <- lhs
@@ -325,11 +325,11 @@ sanitize_datasummary_balance_data <- function(formula, data) {
   }
 
   if (!is.null(drop_too_many_levels)) {
-    warning(sprintf("These variables were omitted because they include more than 50 levels: %s.", paste(drop_too_many_levels, collapse=", ")))
+    warning(sprintf("These variables were omitted because they include more than 50 levels: %s.", paste(drop_too_many_levels, collapse = ", ")))
   }
 
   if (!is.null(drop_entirely_na)) {
-    warning(sprintf("These variables were omitted because they are entirely missing: %s.", paste(drop_entirely_na, collapse=", ")))
+    warning(sprintf("These variables were omitted because they are entirely missing: %s.", paste(drop_entirely_na, collapse = ", ")))
   }
 
   return(data)
