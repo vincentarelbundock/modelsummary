@@ -10,7 +10,7 @@ extract_vcov <- function(model, vcov = NULL, conf_level = NULL) {
   # needed for logic tests
   out <- mat <- NULL
 
-  # vcov = character
+  # vcov is character
   if (is.character(vcov) && length(vcov) == 1) {
 
     assert_dependency("sandwich")
@@ -31,7 +31,7 @@ extract_vcov <- function(model, vcov = NULL, conf_level = NULL) {
     }
   }
 
-  # vcov = formula (clusters)
+  # vcov is formula (clusters)
   if (isTRUE(checkmate::check_formula(vcov))) {
     assert_dependency("sandwich")
     mat <- try(sandwich::vcovCL(model, cluster = vcov), silent = TRUE)
@@ -61,7 +61,7 @@ extract_vcov <- function(model, vcov = NULL, conf_level = NULL) {
     }
   }
 
-  # vcov = matrix
+  # vcov is matrix
   if (is.matrix(vcov)) {
     mat <- vcov
   }

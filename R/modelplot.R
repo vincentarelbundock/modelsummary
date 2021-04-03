@@ -89,7 +89,7 @@ modelplot <- function(models,
   if (is.null(conf_level)) {
     estimate <- "estimate"
   } else {
-    estimate = "{estimate}|{conf.low}|{conf.high}"
+    estimate <- "{estimate}|{conf.low}|{conf.high}"
   }
 
 

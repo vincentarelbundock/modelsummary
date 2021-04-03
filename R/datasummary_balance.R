@@ -144,12 +144,16 @@ datasummary_balance <- function(formula,
 
 }
 
-datasummary_balance_factor <- function(rhs, data, data_norhs, any_numeric){
+datasummary_balance_factor <- function(rhs, data, data_norhs, any_numeric) {
 
   # hack: `tables::tabular` produces different # of cols with a single or
   # multiple factors. Make sure there are multiple.
-  data$badfactordropthis <- factor(c("badfactordropthis1", rep("badfactordropthis2", nrow(data)-1)))
-  data_norhs$badfactordropthis <- factor(c("badfactordropthis1", rep("badfactordropthis2", nrow(data_norhs)-1)))
+  data$badfactordropthis <- factor(
+    c("badfactordropthis1",
+    rep("badfactordropthis2", nrow(data) - 1)))
+  data_norhs$badfactordropthis <- factor(
+    c("badfactordropthis1",
+      rep("badfactordropthis2", nrow(data_norhs) - 1)))
 
   pctformat = function(x) sprintf("%.1f", x)
   f_fac <- 'All(data_norhs, factor = TRUE, numeric = FALSE) ~
@@ -220,9 +224,11 @@ datasummary_balance_numeric <- function(rhs, data, data_norhs, fmt, dinm, dinm_s
     attr(tab_num, "span_kableExtra") <- span_kableExtra
 
     if (ncol(tab_num) > length(header_sparse_flat)) {
-      attr(tab_num, "header_sparse_flat") <- c(header_sparse_flat, colnames(tab_num)[-c(1:length(header_sparse_flat))])
+      attr(tab_num, "header_sparse_flat") <- c(header_sparse_flat,
+                                               colnames(tab_num)[-c(1:length(header_sparse_flat))])
     }
-    attr(tab_num, "header_sparse_flat") <- gsub(" \\(N = \\d+\\)", "", attr(tab_num, "header_sparse_flat"))
+    attr(tab_num, "header_sparse_flat") <- gsub(
+        " \\(N = \\d+\\)", "", attr(tab_num, "header_sparse_flat"))
     attr(tab_num, "header_sparse_flat") <- pad(attr(tab_num, "header_sparse_flat"))
 
   }

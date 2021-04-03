@@ -291,11 +291,11 @@ sanity_gof <- function(gof_output, gof_custom) {
 #' @noRd
 sanity_tidy <- function(tidy_output, tidy_custom, estimate, statistic, modelclass) {
 
-  # tidy(model)
+  # tidy model
   checkmate::assert_data_frame(tidy_output, min.rows = 1, min.cols = 3)
   checkmate::assert_true('term' %in% colnames(tidy_output))
 
-  # tidy_custom(model)
+  # tidy_custom model
   if (!is.null(tidy_custom)) {
     checkmate::assert_data_frame(tidy_custom,
       min.rows = 1, min.cols = 2)

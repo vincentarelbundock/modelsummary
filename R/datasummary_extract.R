@@ -20,9 +20,6 @@ datasummary_extract <- function(tab,
     }
   }
 
-  # output object
-  out <- list()
-
   # NA to empty cells
   clean_na <- function(x) {
     out <- trimws(x)

@@ -37,7 +37,7 @@
 * now works with haven_labeled numeric
 * faster tables with bayesian models. 
   
-Bug fixes
+Bug fixes and lints
 
 # modelsummary 0.6.6
 

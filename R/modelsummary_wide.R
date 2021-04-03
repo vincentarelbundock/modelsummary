@@ -98,7 +98,7 @@ modelsummary_wide <- function(
       results[[g]]$tidy$term <- paste(results[[g]]$tidy$model,
                                       results[[g]]$tidy$term)
       if (g == group_names[1]) {
-        results[[g]]$glance = gl_wide
+        results[[g]]$glance <- gl_wide
       }
       class(results[[g]]) <- c("modelsummary_list", "list")
     }
