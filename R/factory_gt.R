@@ -66,15 +66,28 @@ factory_gt <- function(tab,
 
   # output
   if (is.null(output_file)) {
-    if (output_format == 'html') {
-      return(gt::as_raw_html(out))
-    } else if (output_format == 'latex') {
-      return(gt::as_latex(out))
-    } else if (output_format %in% c('default', 'gt')) {
+
+    if (output_format == "html") {
+      out <- gt::as_raw_html(out)
+    }
+
+    if (output_format == "latex") {
+      out <- gt::as_latex(out)
+    }
+
+    if (!is.null(getOption("modelsummary_orgmode")) &&
+      output_format %in% c("html", "latex")) {
+      out <- sprintf(
+        "#+BEGIN_EXPORT %s\n%s\n#+END_EXPORT",
+        output_format, out)
       return(out)
     }
+
+    if (output_format %in% c('default', 'gt')) {
+      return(out)
+    }
+
   } else {
     gt::gtsave(out, output_file)
   }
-
 }

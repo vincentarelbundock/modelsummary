@@ -41,12 +41,25 @@ sanitize_output <- function(output) {
   # sanity check: are user-supplied global options ok?
   sanity_factory(factory_dict)
 
-  # valid defaults are set in `sanity_output`
+  # org-mode default
   if (output == "default") {
-    output <- getOption('modelsummary_default', default = 'kableExtra')
+      default <- getOption("modelsummary_default", default = NULL)
+      orgmode <- getOption("modelsummary_orgmode", default = NULL)
+      if (!is.null(default) && !is.null(orgmode)) {
+          stop('The "modelsummary_default" and "modelsummary_orgmode" global options cannot be used simultaneously. One of them must be set to NULL.')
+      }
+
+      # valid defaults are set in `sanity_output`
+      if (!is.null(orgmode)) {
+          output <- orgmode
+      } else if (!is.null(default)) {
+          output <- default
+      } else {
+          output <- "kableExtra"
+      }
   }
 
-  # kableExtra is the only factory that produces human-readable code
+  # kableExtra is the only factory that I use for markdown
   if (output == 'markdown') {
     out <- list(
       'output_factory' = 'kableExtra',

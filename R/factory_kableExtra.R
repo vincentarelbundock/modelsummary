@@ -119,7 +119,19 @@ factory_kableExtra <- function(tab,
 
   # output
   if (is.null(output_file)) {
-    return(out)
+
+    if (!is.null(getOption("modelsummary_orgmode")) &&
+      output_format %in% c("html", "latex")) {
+
+      out <- sprintf(
+        "#+BEGIN_EXPORT %s\n%s\n#+END_EXPORT",
+        output_format, out)
+      return(out)
+
+    } else {
+      return(out)
+    }
+
   } else {
     if (output_format == "markdown") {
       writeLines(paste(out, collapse = "\n"), con = output_file)

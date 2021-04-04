@@ -20,6 +20,8 @@
   via `modelsummary`'s ... ellipsis to limit the GOF statistics in
   Bayesian models.
 * output="html" can use `gt` by setting `options(modelsummary_html="gt")` 
+* org-mode integration by specifying the export format as:
+  options(modelsummary_orgmode = "latex")
 
 `datasummary_correlation`:
 
