@@ -12,6 +12,7 @@ factory_kableExtra <- function(tab,
                                title = NULL,
                                ...) {
  
+    
   # new variable "kable_format" because "kableExtra" and "html" both produce
   # html, but we need to distinguish the two.
   kable_format <- "html"
@@ -53,10 +54,13 @@ factory_kableExtra <- function(tab,
     }
   }
 
+
+
   # combine arguments
   arguments <- arguments[base::intersect(names(arguments), valid)]
   arguments <- c(list(tab), arguments)
   out <- do.call(kableExtra::kbl, arguments)
+
 
   # horizontal rule to separate coef/gof not supported in markdown
   # TODO: support HTML
@@ -76,6 +80,7 @@ factory_kableExtra <- function(tab,
     }
   }
 
+
   # user-supplied notes at the bottom of table
   if (!is.null(notes) && output_format %in% c("kableExtra", "html", "latex", "markdown")) {
     # threeparttable only works with 1 note. But it creates a weird bug
@@ -88,6 +93,7 @@ factory_kableExtra <- function(tab,
       out <- kableExtra::add_footnote(out, label = n, notation = "none", escape = FALSE)
     }
   }
+
 
   span <- attr(tab, "span_kableExtra")
   if (!is.null(span) && output_format %in% c("kableExtra", "latex", "html")) {
@@ -103,6 +109,7 @@ factory_kableExtra <- function(tab,
     out <- kableExtra::kable_styling(out, full_width = FALSE)
   }
 
+
   # user wants raw html but kableExtra objects use a different print method
   if (output_format == "html") {
     class(out) <- "knitr_kable"
@@ -110,19 +117,7 @@ factory_kableExtra <- function(tab,
 
   # output
   if (is.null(output_file)) {
-
-    if (!is.null(getOption("modelsummary_orgmode")) &&
-      output_format %in% c("html", "latex")) {
-
-      out <- sprintf(
-        "#+BEGIN_EXPORT %s\n%s\n#+END_EXPORT",
-        output_format, out)
-      return(out)
-
-    } else {
-      return(out)
-    }
-
+    return(out)
   } else {
     if (output_format == "markdown") {
       writeLines(paste(out, collapse = "\n"), con = output_file)

@@ -43,28 +43,15 @@ sanitize_output <- function(output) {
 
   # org-mode default
   if (output == "default") {
-      default <- getOption("modelsummary_default", default = NULL)
-      orgmode <- getOption("modelsummary_orgmode", default = NULL)
-      if (!is.null(default) && !is.null(orgmode)) {
-          stop('The "modelsummary_default" and "modelsummary_orgmode" global options cannot be used simultaneously. One of them must be set to NULL.')
-      }
-
-      # valid defaults are set in `sanity_output`
-      if (!is.null(orgmode)) {
-          output <- orgmode
-      } else if (!is.null(default)) {
-          output <- default
-      } else {
-          output <- "kableExtra"
-      }
+      output <- getOption("modelsummary_default", default = "kableExtra")
   }
 
   # kableExtra is the only factory that I use for markdown
   if (output == 'markdown') {
     out <- list(
-      'output_factory' = 'kableExtra',
-      'output_file'    = NULL,
-      'output_format'  = output)
+      "output_factory" = "kableExtra",
+      "output_file"    = NULL,
+      "output_format"  = "markdown")
     return(out)
   }
 
@@ -101,9 +88,9 @@ sanitize_output <- function(output) {
 
   # kableExtra must specify output_format ex ante (but after factory choice)
   if (output_factory == 'kableExtra' &&
-      output_format %in% c('default', 'kableExtra')) {
-    automatic <- ifelse(knitr::is_latex_output(), 'latex', 'html')
-    output_format <- getOption('modelsummary_kableExtra', default = automatic)
+      output_format %in% c('default', 'kableExtra') &&
+      knitr::is_latex_output()) {
+    output_format <- "latex"
   }
 
   # result
