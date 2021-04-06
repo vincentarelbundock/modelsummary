@@ -1,3 +1,6 @@
+# replicability: this gets reverted at the end of the file 
+options(modelsummary_get = "easystats")
+
 library(gamlss)
 data(trees)
 models <- list()
@@ -17,17 +20,17 @@ test_that("group: nnet::multinom", {
         nnet::multinom(cyl ~ mpg, data = dat_multinom, trace = FALSE),
         nnet::multinom(cyl ~ mpg + drat, data = dat_multinom, trace = FALSE))
 
-    tab <- modelsummary(mod, "data.frame", group = y.level + term ~ model)
+    tab <- modelsummary(mod, "data.frame", group = response + term ~ model)
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
                  c("part", "group", "term", "statistic", "Model 1", "Model 2"))
 
-    tab <- modelsummary(mod, "data.frame", group = model + term ~ y.level)
+    tab <- modelsummary(mod, "data.frame", group = model + term ~ response)
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
                  c("part", "model", "term", "statistic", "6", "8"))
 
-    tab <- modelsummary(mod, "data.frame", group = term ~ model + y.level)
+    tab <- modelsummary(mod, "data.frame", group = term ~ model + response)
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
                  c("part", "term", "statistic", "Model 1 / 6", "Model 2 / 6",
@@ -42,31 +45,34 @@ test_that("grouped coefficients: gamlss", {
 
     data(abdom)
     mod <- list(
-    gamlss(y ~ pb(x), sigma.fo = ~ pb(x),  trace = FALSE,
+        gamlss(y ~ pb(x),
+            sigma.fo = ~ pb(x), trace = FALSE,
             family = BCT, data = abdom, method = mixed(1, 20)),
-    gamlss(y ~ x, sigma.fo = ~ pb(x), trace = FALSE,
+        gamlss(y ~ x,
+            sigma.fo = ~ pb(x), trace = FALSE,
             family = BCT, data = abdom, method = mixed(1, 20)))
-    tab <- modelsummary(mod, "data.frame", group = term + parameter ~ model)
+
+    tab <- modelsummary(mod, "data.frame", group = term + component ~ model)
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
                  c("part", "term", "group", "statistic", "Model 1", "Model 2"))
 
-    tab <- modelsummary(mod, "data.frame", group = parameter + term ~ model)
+    tab <- modelsummary(mod, "data.frame", group = component + term ~ model)
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
                  c("part", "group", "term", "statistic", "Model 1", "Model 2"))
 
-    tab <- modelsummary(mod, "data.frame", group = term ~ model + parameter)
+    tab <- modelsummary(mod, "data.frame", group = term ~ model + component)
     expect_s3_class(tab, "data.frame")
 
-    tab <- modelsummary(mod, "data.frame", group = term ~ parameter + model)
+    tab <- modelsummary(mod, "data.frame", group = term ~ component + model)
     expect_s3_class(tab, "data.frame")
 
     
-    tab <- modelsummary(mod, "data.frame", group = term + model ~ parameter)
+    tab <- modelsummary(mod, "data.frame", group = term + model ~ component)
     expect_s3_class(tab, "data.frame")
 
-    tab <- modelsummary(mod, "data.frame", group = model + term ~ parameter)
+    tab <- modelsummary(mod, "data.frame", group = model + term ~ component)
     expect_s3_class(tab, "data.frame")
 
 })
@@ -80,6 +86,10 @@ test_that("model names are preserved", {
     models[["GA"]] <- gamlss(dat ~ 1, family = GA, trace = FALSE)
     models[["GA 2"]] <- gamlss(dat ~ 1, family = GA, trace = FALSE)
     tab <- modelsummary(models, output = "data.frame",
-                 group = parameter + term ~ model)
+                 group = component + term ~ model)
     expect_true(all(c("GA", "GA 2") %in% colnames(tab)))
 })
+
+
+
+options(modelsummary_get = NULL)

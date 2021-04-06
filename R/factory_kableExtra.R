@@ -77,7 +77,7 @@ factory_kableExtra <- function(tab,
   }
 
   # user-supplied notes at the bottom of table
-  if (!is.null(notes) && output_format %in% c("kableExtra", "html", "latex")) {
+  if (!is.null(notes) && output_format %in% c("kableExtra", "html", "latex", "markdown")) {
     # threeparttable only works with 1 note. But it creates a weird bug
     # when using coef_map and stars in Rmarkdown PDF output
     for (n in notes) {
