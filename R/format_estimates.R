@@ -138,7 +138,7 @@ https://vincentarelbundock.github.io/modelsummary', group_name))
 
   # drop empty rows (important for broom.mixed which produces group
   # estimates without standard errors)
-  est <- est[est$value != "", ]
+  est <- est[!est$value %in% c("", "()", "(NA)"), ]
 
   # output
   return(est)
