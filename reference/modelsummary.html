@@ -166,7 +166,8 @@ using functions from one of the supported table customization packages:
 <li><p>Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.</p></li>
 <li><p>Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable".</p></li>
 <li><p>To change the default output format, type <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_default = "latex")</a></code>, where <code>latex</code> can be any of the valid object types listed above.</p></li>
-<li><p>Warning: the <code>output</code> argument <em>cannot</em> be used when customizing tables with external packages. See the 'Details' section below.</p></li>
+<li><p>Warning: the <code>output</code> argument <em>cannot</em> be used when customizing tables with external packages.</p></li>
+<li><p>See the 'Details' section below for more information.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -332,12 +333,22 @@ or include goodness-of-fit extracted by <em>both</em> packages by setting:</p>
 <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get = "easystats")</a></code>
 <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get = "all")</a></code></p>
 <p><code>output</code> argument:</p>
-<p>When a file name is supplied to the <code>output</code> argument, the table is written
-immediately to file. If you want to customize your table by post-processing
-it with an external package, you need to choose a different output format
-and saving mechanism. Unfortunately, the approach differs from package to
-package:</p><ul>
-<li><p><code>gt</code>: set <code>output="gt"</code>, post-process your table, and use the <code><a href='https://rdrr.io/pkg/gt/man/gtsave.html'>gt::gtsave</a></code> function.</p></li>
+<p>The <code>modelsummary_list</code> output type is a lightweight representation of the
+model results. The <code>modelsummary</code> function can export to this format by
+setting the <code>output</code> argument, and it can accept objects of this format
+as input models to create a table. This can be useful to save raw
+results, in order to print a table later, without having to save and
+extract from the entire model object. Note that the confidence intervals
+are only stored in a <code>modelsummary_list</code> if explicitly requested:</p>
+<p><code>backup &lt;- modelsummary(models, output = "modelsummary_list"</code>
+<code>                       statistic = "conf.int")</code>
+<code>modelsummary(backup)</code></p>
+<p>When a file name with a valid extension is supplied to the <code>output</code> argument,
+the table is written immediately to file. If you want to customize your table
+by post-processing it with an external package, you need to choose a
+different output format and saving mechanism. Unfortunately, the approach
+differs from package to package:</p><ul>
+<li><p><code>gt</code>: set <code>output="gt"</code>, post-process your table, and use the <code><a href='https://gt.rstudio.com/reference/gtsave.html'>gt::gtsave</a></code> function.</p></li>
 <li><p><code>kableExtra</code>: set <code>output</code> to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use <code><a href='https://rdrr.io/pkg/kableExtra/man/save_kable.html'>kableExtra::save_kable</a></code> function.</p></li>
 </ul>
 
