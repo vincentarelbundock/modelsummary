@@ -662,7 +662,7 @@ modelsummary(mod_custom)
 
 Warning: When defining new `tidy` and `glance` methods, it is important to include an ellipsis argument (`...`).
 
-# Rmarkdown and knitr
+# Rmarkdown
 
 You can use `modelsummary` to insert tables into dynamic documents with `knitr` or `Rmarkdown`. This minimal .Rmd file can produce tables in PDF, HTML, or RTF documents:
 
@@ -675,6 +675,51 @@ This .Rmd file shows illustrates how to use table numbering and cross-references
 This .Rmd file shows how to customize tables in PDF and HTML files using `gt` and `kableExtra` functions:
 
 * [appearance.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/appearance.Rmd)
+
+# Emacs Org-Mode
+
+You can use `modelsummary` to insert tables into Emacs Org-Mode documents, which can be exported to a variety of formats, including HTML and PDF (via LaTeX). As with anything Emacs-related, there are many ways to achieve the outcomes you want. Here is one example of an Org-Mode document which can automatically export tables to HTML and PDF without manual tweaks:
+
+````
+#+PROPERTY: header-args:R :var orgbackend=(prin1-to-string org-export-current-backend)
+#+MACRO: Rtable (eval (concat "#+header: :results output " (prin1-to-string org-export-current-backend)))
+
+{{{Rtable}}}
+#+BEGIN_SRC R :exports both
+library(modelsummary)
+options(modelsummary_default = orgbackend)
+
+mod = lm(hp ~ mpg, data = mtcars)
+
+modelsummary(mod)
+#+END_SRC
+````
+
+The first line tells Org-mode to assign a variable called `orgbackend`. This variable will be accessible by the `R` session, and will be equal to "html" or "latex", depending on the export format.
+
+The second line creates an Org macro which we will use to automatically add useful information to the header of source blocks. For instance, when we export to HTML, the macro will expand to `:results output html`. This tells Org-Mode to insert the last printed output from the `R` session, and to treat it as raw HTML. 
+
+The `{{{Rtable}}}` call expands the macro to add information to the header of the block that follows.
+
+`#+BEGIN_SRC R :exports both` says that we want to print both the original code and the output (`:exports results` would omit the code, for example).
+
+Finally, `options(modelsummary_default=orgbackend` uses the variable we defined to set the default output format. That way, we don't have to use the `output` argument every time.
+
+One potentially issue to keep in mind is that the code above extracts the printout from the `R` console. However, when we customize tables with `kableExtra` or `gt` functions, those functions do not always return printed raw HTML or LaTeX code. Sometimes, it can be necessary to add a call to `cat` at the end of a table customization pipeline. For example:
+
+````
+{{{Rtable}}}
+#+BEGIN_SRC R :exports both
+library(modelsummary)
+library(kableExtra)
+
+mod = lm(hp ~ mpg, data = mtcars)
+
+modelsummary(mod, output = orgbackend) %>%
+  row_spec(1, background = "pink") %>%
+  cat()
+#+END_SRC
+````
 
 # Case studies
 

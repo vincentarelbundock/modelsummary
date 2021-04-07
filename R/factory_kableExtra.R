@@ -11,8 +11,7 @@ factory_kableExtra <- function(tab,
                                output_format = 'kableExtra',
                                title = NULL,
                                ...) {
- 
-    
+
   # new variable "kable_format" because "kableExtra" and "html" both produce
   # html, but we need to distinguish the two.
   kable_format <- "html"
@@ -32,6 +31,7 @@ factory_kableExtra <- function(tab,
              "format.args", "escape", "table.attr", "longtable", "valign",
              "position", "centering", "vline", "toprule", "bottomrule",
              "midrule", "caption.short", "table.envir")
+
   arguments <- c(
     list(...),
     "caption"   = title,
@@ -54,13 +54,10 @@ factory_kableExtra <- function(tab,
     }
   }
 
-
-
   # combine arguments
   arguments <- arguments[base::intersect(names(arguments), valid)]
   arguments <- c(list(tab), arguments)
   out <- do.call(kableExtra::kbl, arguments)
-
 
   # horizontal rule to separate coef/gof not supported in markdown
   # TODO: support HTML
@@ -80,7 +77,6 @@ factory_kableExtra <- function(tab,
     }
   }
 
-
   # user-supplied notes at the bottom of table
   if (!is.null(notes) && output_format %in% c("kableExtra", "html", "latex", "markdown")) {
     # threeparttable only works with 1 note. But it creates a weird bug
@@ -94,7 +90,6 @@ factory_kableExtra <- function(tab,
     }
   }
 
-
   span <- attr(tab, "span_kableExtra")
   if (!is.null(span) && output_format %in% c("kableExtra", "latex", "html")) {
     # add_header_above not supported in markdown
@@ -104,15 +99,14 @@ factory_kableExtra <- function(tab,
     }
   }
 
-  # styling (can be overriden manually by calling again)
-  if (output_format %in% c("kableExtra", "latex", "html")) {
+  # styling can be overriden by user by calling again
+  if (!output_format %in% c("markdown", "latex_tabular")) {
     out <- kableExtra::kable_styling(out, full_width = FALSE)
   }
 
-
-  # user wants raw html but kableExtra objects use a different print method
-  if (output_format == "html") {
-    class(out) <- "knitr_kable"
+  # html & latex get a new class to use print.modelsummary_string
+  if (output_format %in% c("latex", "latex_tabular", "html")) {
+    class(out) <- c("modelsummary_string", class(out))
   }
 
   # output
@@ -125,5 +119,4 @@ factory_kableExtra <- function(tab,
       kableExtra::save_kable(out, file = output_file)
     }
   }
-
 }

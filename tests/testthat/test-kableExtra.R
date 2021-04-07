@@ -12,7 +12,7 @@ test_that("knitr::kable_latex ignores bad arguments passed through ...", {
 
 test_that('output="html" returns raw html', {
     tab <- modelsummary(models, output = "html")
-    expect_identical(class(tab), "knitr_kable")
+    expect_identical(class(tab), c("modelsummary_string", "kableExtra", "knitr_kable"))
 })
 
 test_that("kable markdown: complex table", {
