@@ -130,7 +130,7 @@ get_estimates_broom <- function(model, conf_int, conf_level, ...) {
 }
 
 
-get_estimates_parameters <- function(model, conf_int, conf_level, ...) {
+get_estimates_parameters <- function(model, conf_int, conf_level, effects = "all", ...) {
 
     f <- tidy_easystats <- function(x, ...) {
         out <- parameters::parameters(x, ...)
@@ -139,11 +139,11 @@ get_estimates_parameters <- function(model, conf_int, conf_level, ...) {
 
     if (isTRUE(conf_int)) {
         out <- suppressMessages(suppressWarnings(try(
-            f(model, ci = conf_level, ...),
+            f(model, ci = conf_level, effects = effects, ...),
             silent = TRUE)))
     } else {
         out <- suppressMessages(suppressWarnings(try(
-            f(model, ...),
+            f(model, effects = effects, ...),
             silent = TRUE)))
     }
 

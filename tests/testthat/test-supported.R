@@ -181,6 +181,35 @@ test_that("lme4", {
 })
 
 
+test_that("lme4 with parameter's effects argument", {
+  testthat::skip_if_not_installed("lme4")
+  library(lme4)
+  d <- as.data.frame(ChickWeight)
+  colnames(d) <- c("y", "x", "subj", "tx")
+  mod <- lmer(y ~ tx * x + (x | subj), data = d)
+  
+  # all effects implicit
+  tab <- modelsummary(mod, output="dataframe")
+  tab <- tab[tab$part == "estimates",]
+  expect_equal(nrow(tab), 20)
+
+  # all effects explicit
+  tab <- modelsummary(mod, output="dataframe", effects = "all")
+  tab <- tab[tab$part == "estimates",]
+  expect_equal(nrow(tab), 20)
+
+  # fixed effects explicit
+  tab <- modelsummary(mod, output="dataframe", effects = "fixed")
+  tab <- tab[tab$part == "estimates",]
+  expect_equal(nrow(tab), 16)
+
+  # random effects explicit
+  tab <- modelsummary(mod, output="dataframe", effects = "random")
+  tab <- tab[tab$part == "estimates",]
+  expect_equal(nrow(tab), 4)
+})
+ 
+
 test_that("sandwich vignette", {
   testthat::skip_if_not_installed("sandwich")
   testthat::skip_if_not_installed("lmtest")
