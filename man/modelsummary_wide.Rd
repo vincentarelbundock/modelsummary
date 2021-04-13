@@ -88,6 +88,7 @@ sections below):
 \item FALSE (default): no significance stars.
 \item TRUE: *=.1, **=.05, ***=.01
 \item Named numeric vector for custom stars such as \code{c('*' = .1, '+' = .05)}
+\item Note: a legend will not be inserted at the bottom of the table when the \code{estimate} or \code{statistic} arguments use "glue strings" with \code{{stars}}.
 }}
 
 \item{coef_group}{the name of the coefficient groups to use as columns (NULL

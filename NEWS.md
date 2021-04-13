@@ -19,6 +19,8 @@
 * `metrics` argument of `performance::model_performance` is available
   via `modelsummary`'s ... ellipsis to limit the GOF statistics in
   Bayesian models.
+* users can omit the stars legend note by using glue strings:
+  `estimate="{estimate}{stars}"`
 * output="html" can use `gt` by setting `options(modelsummary_html="gt")` 
 * org-mode integration by specifying the export format as:
   options(modelsummary_orgmode = "latex")

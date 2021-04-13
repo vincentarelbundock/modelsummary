@@ -7,6 +7,30 @@ test_that("clean_stars unknown (we should never reach this)", {
 })
 
 
+test_that("no automatic note with glue stars", {
+  tab <- modelsummary(
+    mod,
+    output = "markdown",
+    estimate = "{estimate}{stars}",
+    stars = c("+" = .1))
+  expect_false(any(grepl("Note:", as.character(tab))))
+
+  tab <- modelsummary(
+    mod,
+    output = "markdown",
+    estimate = "estimate",
+    statistic = "{std.error}{stars}",
+    stars = c("+" = .1))
+  expect_false(any(grepl("Note:", as.character(tab))))
+
+  tab <- modelsummary(
+    mod,
+    output = "markdown",
+    stars = c("+" = .1))
+  expect_true(any(grepl("Note:", as.character(tab))))
+})
+
+
 test_that("glue stars", {
   tab <- modelsummary(
     mod, 

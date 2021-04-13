@@ -246,14 +246,15 @@ modelsummary(models, stars = TRUE)
 modelsummary(models, stars = c('+' = .1, '&' = .01)) 
 ```
 
-Whenever `stars != FALSE`, `modelsummary` adds a note at the bottom of the table automatically. If you would like to omit this note, just use the `stars_note` argument:
+Whenever `stars` is not `NULL`, `modelsummary` adds a note at the bottom of the table automatically. If you would like to add stars but *not* include a note at the bottom of the table, you can define the display of your estimate manually using a `glue` string, as described in the [`estimate` argument section of the documentation.](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html#estimate-1) Whenever the `{stars}` string appears in the `estimate` or `statistic` arguments, `modelsummary` will assume that you want fine-grained control over your table, and will *not* include a note about stars.
 
-```r
-modelsummary(models, stars = TRUE, stars_note = FALSE) 
+```{r}
+modelsummary(models,
+             estimate = "{estimate}{stars}",
+             gof_omit = ".*")
 ```
 
 If you want to create your own stars description, you can add custom notes with the [`notes`](https://github.com/vincentarelbundock/modelsummary#notes) argument.
-
 
 # coef: rename/omit/map
 

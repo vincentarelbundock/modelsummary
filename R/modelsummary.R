@@ -31,6 +31,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * FALSE (default): no significance stars.
 #' * TRUE: *=.1, **=.05, ***=.01
 #' * Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
+#' * Note: a legend will not be inserted at the bottom of the table when the `estimate` or `statistic` arguments use "glue strings" with `{stars}`.
 #' @param statistic vector of strings or `glue` strings which select uncertainty
 #' statistics to report vertically below the estimate. NULL omits all
 #' uncertainty statistics.
@@ -467,7 +468,7 @@ modelsummary <- function(
   }
 
   # stars
-  if (!isFALSE(stars)) {
+  if (!isFALSE(stars) && !any(grepl("\\{stars\\}", c(estimate, statistic)))) {
     stars_note <- make_stars_note(stars)
     if (is.null(notes)) {
       notes <- stars_note
