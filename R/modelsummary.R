@@ -70,11 +70,14 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
 #' @param gof_omit string regular expression. Omits all matching gof statistics from
 #' the table (using `grepl(perl=TRUE)`).
-#' @param group a two-sided formula with three components: "term", "model", and
-#' a parameter group identifier (e.g., outcome levels of a multinomial logit
-#' model). Example: `term+groupid~model` The group identifier must be the name
-#' of a column in the data.frame produced by `get_estimates(model)`. The
-#' "term" component must be on the left-hand side of the formula.
+#' @param group a two-sided formula with two or three components. The "term" and
+#' "model" are mandatory. In addition, an additional component can be used to
+#' identify groups of parameters (e.g., outcome levels of a multinomial logit
+#' model). This group identifier must be the name of a column in the
+#' data.frame produced by `get_estimates(model)`.
+#' * `term ~ model` displays coefficients as rows and models as columns
+#' * `model ~ term` displays models as rows and coefficients as columns
+#' * `response + term ~ model` displays response levels and coefficients as rows and models as columns.
 #' @param group_map named or unnamed character vector. Subset, rename, and
 #' reorder coefficient groups specified in the `group` argument. See `coef_map`.
 #' @param add_rows a data.frame (or tibble) with the same number of columns as
@@ -274,7 +277,7 @@ modelsummary <- function(
   coef_rename = NULL,
   gof_map     = NULL,
   gof_omit    = NULL,
-  group       = NULL,
+  group       = term ~ model,
   group_map   = NULL,
   add_rows    = NULL,
   align       = NULL,
@@ -368,7 +371,6 @@ modelsummary <- function(
 
   }
 
-
   term_order <- unique(unlist(lapply(est, function(x) x$term)))
   group_order <- unique(unlist(lapply(est, function(x) x$group)))
 
@@ -386,32 +388,41 @@ modelsummary <- function(
   est[is.na(est)] <- ""
 
   # sort rows using factor trick
-  if (!is.null(coef_map)) {
-    term_order <- coef_map
-    est$term <- factor(est$term, unique(term_order))
-  } else {
-    est$term <- factor(est$term, unique(term_order))
-  }
+  if ("term" %in% colnames(est)) {
+    if (!is.null(coef_map)) {
+        term_order <- coef_map
+        est$term <- factor(est$term, unique(term_order))
+    } else {
+        est$term <- factor(est$term, unique(term_order))
+    }
 
-  if (!is.null(group_map)) {
-    group_order <- group_map
-    est$group <- factor(est$term, group_order)
-  } else {
-    est$group <- factor(est$group, unique(est$group))
+    if (!is.null(group_map)) {
+        group_order <- group_map
+        est$group <- factor(est$term, group_order)
+    } else {
+        est$group <- factor(est$group, unique(est$group))
+    }
+
+  } else if ("model" %in% colnames(est)) {
+    est$model <- factor(est$model, model_names)
   }
 
   est <- est[do.call(order, as.list(est)), ]
 
   # character for binding
-  est$term <- as.character(est$term)
-  est$group <- as.character(est$group)
-
-  # group duplicates
-  idx <- paste(as.character(est$term), est$statistic)
-  if (is.null(group) && anyDuplicated(idx) > 0) {
-    warning('The table includes duplicate term names. This can sometimes happen when a model produces "grouped" terms, such as in a multinomial logit or a gamlss model. Consider using the the `group` argument.')
+  for (col in c("term", "group", "model")) {
+    if (col %in% colnames(est)) {
+      est[[col]] <- as.character(est[[col]])
+    }
   }
 
+  # group duplicates
+  if ("term" %in% colnames(est)) {
+    idx <- paste(as.character(est$term), est$statistic)
+    if (is.null(group) && anyDuplicated(idx) > 0) {
+        warning('The table includes duplicate term names. This can sometimes happen when a model produces "grouped" terms, such as in a multinomial logit or a gamlss model. Consider using the the `group` argument.')
+    }
+  }
 
 
   #####################
@@ -440,7 +451,6 @@ modelsummary <- function(
   }
 
 
-
   ##################
   #  output table  #
   ##################
@@ -449,11 +459,11 @@ modelsummary <- function(
   tab[is.na(tab)] <- ''
 
   # interaction : becomes ×
-  if (is.null(coef_map)) {
-    if (output_format != 'rtf') {
-      idx <- tab$part != 'gof'
-      tab$term <- ifelse(idx, gsub(':', ' \u00d7 ', tab$term), tab$term)
-    }
+  if (is.null(coef_map) &&
+      "term" %in% colnames(tab) &&
+      output_format != 'rtf') {
+    idx <- tab$part != 'gof'
+    tab$term <- ifelse(idx, gsub(':', ' \u00d7 ', tab$term), tab$term)
   }
 
   # measure table
@@ -494,8 +504,8 @@ modelsummary <- function(
   }
 
   # only show group label if it is a row-property (lhs of the group formula)
-  if (is.null(group) ||
-    group$group_name %in% group$rhs) {
+  tmp <- setdiff(group$lhs, c("model", "term"))
+  if (length(tmp) == 0) {
     tab$group <- NULL
   } else if (output_format != "dataframe") {
     colnames(tab)[colnames(tab) == "group"] <- "        "
@@ -593,6 +603,7 @@ map_omit_gof <- function(gof, gof_omit, gof_map) {
 
   # row identifier
   gof$part <- "gof"
+
   gof <- gof[, unique(c("part", "term", names(gof)))]
 
   # omit
@@ -634,12 +645,28 @@ map_omit_gof <- function(gof, gof_omit, gof_map) {
 #' @noRd
 group_reshape <- function(estimates, lhs, rhs, group_name) {
 
-    if (is.null(lhs)) return(estimates)
-
     lhs[lhs == group_name] <- "group"
     rhs[rhs == group_name] <- "group"
 
-    if (all(c("term", "group") %in% lhs)) {
+    # term ~ model (standard)
+    if (is.null(lhs) ||
+        (length(lhs) == 1 && lhs == "term" &&
+         length(rhs) == 1 && rhs == "model")) {
+      return(estimates)
+
+    # model ~ term 
+    } else if (length(lhs) == 1 && lhs == "model" &&
+        length(rhs) == 1 && rhs == "term") {
+      out <- tidyr::pivot_longer(estimates,
+                                 cols = -c("group", "term", "statistic"),
+                                 names_to = "model")
+      out <- tidyr::pivot_wider(out, names_from = "term")
+
+      # order matters for sorting
+      out <- out[, unique(c("group", "model", "statistic", colnames(out)))]
+
+    # term + group ~ model
+    } else if (all(c("term", "group") %in% lhs)) {
         idx <- unique(c(lhs, colnames(estimates)))
         out <- estimates[, idx, drop = FALSE]
 
@@ -660,7 +687,7 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
     } else if (all(c("group", "model") %in% rhs)) {
         out <- estimates
         out <- tidyr::pivot_longer(out,
-                                   cols = !any_of(c("part", "group", "term", "statistic")),
+                                   cols = !tidyselect::any_of(c("part", "group", "term", "statistic")),
                                    names_to = "model")
         out$idx_col <- paste(out[[rhs[1]]], "/", out[[rhs[2]]])
         out$model <- out$group <- NULL
