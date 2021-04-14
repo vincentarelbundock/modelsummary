@@ -9,6 +9,17 @@ models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
 models[["GAMLSS"]] <- gamlss(y~pb(x),sigma.fo=~pb(x),family=BCT, data=abdom, method=mixed(1,20), trace=FALSE)
 
 
+test_that("flipped table (no groups)", {
+    mod = list(
+    lm(hp ~ mpg, mtcars),
+    lm(hp ~ mpg + drat, mtcars))
+    tab = modelsummary(mod,
+                    output = "data.frame",
+                    group = model ~ term)
+    expect_true("model" %in% colnames(tab))
+})
+
+
 test_that("group: nnet::multinom", {
     skip_if_not_installed("nnet")
 
