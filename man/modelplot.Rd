@@ -47,7 +47,7 @@ sections below):
 \item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
 \item function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., \code{stats::vcov}, \code{sandwich::vcovHC}).
 \item list of \code{length(models)} variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
-\item a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below.
+\item a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, \code{modelsummary} cannot automatically calculate p values. The \code{stars} argument may thus use incorrect significance thresholds when \code{vcov} is a list of vectors.
 }}
 
 \item{add_rows}{a data.frame (or tibble) with the same number of columns as

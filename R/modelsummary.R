@@ -49,7 +49,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
 #' * function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`).
 #' * list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
-#' * a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. 
+#' * a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, `modelsummary` cannot automatically calculate p values. The `stars` argument may thus use incorrect significance thresholds when `vcov` is a list of vectors.
 #' @param conf_level confidence level to use for confidence intervals
 #' @param coef_map character vector. Subset, rename, and reorder coefficients.
 #' Coefficients omitted from this vector are omitted from the table. The order
