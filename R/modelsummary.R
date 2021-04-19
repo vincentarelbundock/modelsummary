@@ -71,7 +71,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @param gof_omit string regular expression. Omits all matching gof statistics from
 #' the table (using `grepl(perl=TRUE)`).
 #' @param group a two-sided formula with two or three components which describes
-#' how groups of parameters should be displayed. The formula msut include both
+#' how groups of parameters should be displayed. The formula must include both
 #' a "term" and a "model" component. In addition, a component can be used to
 #' identify groups of parameters (e.g., outcome levels of a multinomial logit
 #' model). This group identifier must be the name of a column in the

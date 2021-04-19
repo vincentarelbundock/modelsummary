@@ -117,7 +117,7 @@ object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
 the table (using \code{grepl(perl=TRUE)}).}
 
 \item{group}{a two-sided formula with two or three components which describes
-how groups of parameters should be displayed. The formula msut include both
+how groups of parameters should be displayed. The formula must include both
 a "term" and a "model" component. In addition, a component can be used to
 identify groups of parameters (e.g., outcome levels of a multinomial logit
 model). This group identifier must be the name of a column in the
