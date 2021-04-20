@@ -21,7 +21,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
 #' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable".
 #' * To change the default output format, type `options(modelsummary_default = "latex")`, where `latex` can be any of the valid object types listed above. 
-#' * Warning: the `output` argument \emph{cannot} be used when customizing tables with external packages.
+#' * Warning: users should not supply a file name to the `output` argument if they intend to customize the table with external packages.
 #' * See the 'Details' section below for more information.
 #' @param fmt determines how to format numeric values
 #' * integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
