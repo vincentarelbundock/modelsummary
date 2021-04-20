@@ -30,6 +30,7 @@ sanitize_output <- function(output) {
     "markdown"       = "kableExtra",
     "latex_tabular"  = "kableExtra",
     "modelsummary_list" = "modelsummary_list",
+    "jupyter"        = getOption("modelsummary_html", default       = "kableExtra"),
     "latex"          = getOption("modelsummary_latex", default      = "kableExtra"),
     "html"           = getOption("modelsummary_html", default       = "kableExtra"),
     "jpg"            = getOption("modelsummary_jpg", default        = "kableExtra"),
@@ -41,9 +42,11 @@ sanitize_output <- function(output) {
   # sanity check: are user-supplied global options ok?
   sanity_factory(factory_dict)
 
-  # org-mode default
+  # defaults
   if (output == "default") {
       output <- getOption("modelsummary_default", default = "kableExtra")
+  } else if (output == "jupyter") {
+      output <- "html"
   }
 
   # kableExtra is the only factory that I use for markdown

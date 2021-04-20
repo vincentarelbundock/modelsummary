@@ -303,8 +303,6 @@ modelsummary <- function(
   sanity_stars(stars)
   sanity_fmt(fmt)
 
-
-
   sanity_output(output)
   output_format <- sanitize_output(output)$output_format
 

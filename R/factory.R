@@ -153,7 +153,7 @@ factory <- function(tab,
   sanity_align(align, tab)
 
   # build table
-  f(tab,
+  out <- f(tab,
     align = align,
     hrule = hrule,
     notes = notes,
@@ -162,4 +162,12 @@ factory <- function(tab,
     title = title,
     ...)
 
+  if (output == "jupyter" ||
+      (output == "default" && getOption("modelsummary_default", "kableExtra") == "jupyter")) {
+    assert_dependency("IRdisplay")
+    out <- as.character(out)
+    out <- IRdisplay::display_html(out)
+  }
+
+  return(out)
 }
