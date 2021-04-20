@@ -165,9 +165,8 @@ factory <- function(tab,
   if (output == "jupyter" ||
       (output == "default" && getOption("modelsummary_default", "kableExtra") == "jupyter")) {
     assert_dependency("IRdisplay")
-    out <- as.character(out)
-    out <- IRdisplay::display_html(out)
+    IRdisplay::display_html(as.character(out))
+  } else {
+    return(out)
   }
-
-  return(out)
 }
