@@ -194,11 +194,12 @@ sanity_factory <- function(factory_dict) {
 
   # check default
   modelsummary_default <- getOption("modelsummary_default", default = "kableExtra")
-  checkmate::assert_true(modelsummary_default %in% c('gt', 'kableExtra',
-                                                     'flextable', 'huxtable',
-                                                     'markdown', 'html',
-                                                     'data.frame', 'dataframe',
-                                                     'latex', 'latex_tabular'))
+  checkmate::assert_true(modelsummary_default %in% c("gt", "kableExtra",
+                                                     "flextable", "huxtable",
+                                                     "jupyter", "markdown",
+                                                     "html", "data.frame",
+                                                     "dataframe", "latex",
+                                                     "latex_tabular"))
 }
 
 
@@ -238,8 +239,8 @@ sanity_notes <- function(notes) {
 sanity_output <- function(output) {
 
   object_types <- c('default', 'gt', 'kableExtra', 'flextable', 'huxtable',
-                    'html', 'latex', 'latex_tabular', 'markdown', 'dataframe',
-                    'data.frame', 'modelsummary_list')
+                    'html', 'jupyter', 'latex', 'latex_tabular', 'markdown',
+                    'dataframe', 'data.frame', 'modelsummary_list')
   extension_types <- c('html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf',
                        'jpg', 'png')
 

@@ -1,3 +1,7 @@
+# modelsummary 0.7.0.9000
+
+* Jupyter notebook support via `output="jupyter"`
+
 # modelsummary 0.7.0
 
 `modelsummary`:
