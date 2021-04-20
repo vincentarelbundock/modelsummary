@@ -134,7 +134,8 @@ datasummary <- function(formula,
                         align = NULL,
                         add_columns = NULL,
                         add_rows = NULL,
-                        sparse_header = TRUE) {
+                        sparse_header = TRUE,
+                        ...) {
 
   sanity_output(output)
 
@@ -196,7 +197,8 @@ datasummary <- function(formula,
     output = output,
     title = title,
     add_columns = add_columns,
-    add_rows = add_rows)
+    add_rows = add_rows,
+    ...)
 
   return(out)
 

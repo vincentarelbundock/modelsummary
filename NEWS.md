@@ -1,4 +1,4 @@
-# modelsummary 0.6.6.9000
+# modelsummary 0.7.0
 
 `modelsummary`:
 

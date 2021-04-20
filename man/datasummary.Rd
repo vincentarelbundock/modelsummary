@@ -15,7 +15,8 @@ datasummary(
   align = NULL,
   add_columns = NULL,
   add_rows = NULL,
-  sparse_header = TRUE
+  sparse_header = TRUE,
+  ...
 )
 }
 \arguments{
@@ -30,7 +31,7 @@ more resources.}
 \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
 \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable".
 \item To change the default output format, type \code{options(modelsummary_default = "latex")}, where \code{latex} can be any of the valid object types listed above.
-\item Warning: the \code{output} argument \emph{cannot} be used when customizing tables with external packages.
+\item Warning: users should not supply a file name to the \code{output} argument if they intend to customize the table with external packages.
 \item See the 'Details' section below for more information.
 }}
 
@@ -63,6 +64,16 @@ the data. FALSE keeps all headers. The order in which terms are entered in
 the formula determines the order in which headers appear. For example,
 \code{x~mean*z} will print the \code{mean}-related header above the \code{z}-related
 header.`}
+
+\item{...}{all other arguments are passed through to the extractor and
+table-making functions. This allows users to pass arguments directly to
+\code{modelsummary} in order to affect the behavior of other functions behind
+the scenes. Examples include:
+\itemize{
+\item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression
+\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in \code{kableExtra} tables.
+\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit statistics to extract using the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first).
+}}
 }
 \description{
 \code{datasummary} can use any summary function which produces one numeric or
