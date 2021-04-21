@@ -6,7 +6,7 @@
 [![R build status](https://github.com/vincentarelbundock/modelsummary/workflows/R-CMD-check/badge.svg)](https://github.com/vincentarelbundock/modelsummary/actions)
 [![codecov](https://codecov.io/gh/vincentarelbundock/modelsummary/branch/master/graph/badge.svg)](https://codecov.io/gh/vincentarelbundock/modelsummary)
 [![status](https://tinyverse.netlify.com/badge/modelsummary)](https://CRAN.R-project.org/package=modelsummary)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/modelsummary?color=orange)](https://cran.r-project.org/package=modelsummary)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/modelsummary?color=green)](https://cran.r-project.org/package=modelsummary)
 <!-- badges: end -->
 
 `modelsummary` creates tables and plots to summarize statistical models and data in `R`. 
