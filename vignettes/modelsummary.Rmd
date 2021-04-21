@@ -345,6 +345,21 @@ modelsummary(models, gof_map = gm)
 
 Notice the subtle difference between `coef_map` and `gof_map`. On the one hand, `coef_map` works as a "white list": any coefficient not explicitly entered will be omitted from the table. On the other, `gof_map` works as a "black list": statistics need to be explicitly marked for omission.
 
+Another convenient way to build a `gof_map` argument is to use the `tribble` function from the `tibble` package. In this example, we insert special HTML code to display a superscript, so we use the `escape=FALSE` argument, which is passed through the ellipsis (`...`) to the `kableExtra` table-making package:
+
+```{r}
+gm <- tibble::tribble(
+  ~raw,        ~clean,          ~fmt,
+  "nobs",      "N",             0,
+  "r.squared", "R<sup>2</sup>", 2)
+
+modelsummary(
+  models,
+  statistic = NULL,
+  gof_map = gm,
+  escape = FALSE)
+```
+
 # group
 
 Some models produce "grouped" parameter estimates. For example, multinomial logit models produce estimates for each level of the outcome variable, and GAMLSS models produce estimates for different "components." To display the results of such models, we can specify the kind of table we want by feeding a two sided formula to the `group` argument.

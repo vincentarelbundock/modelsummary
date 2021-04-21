@@ -64,7 +64,8 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' vector. Values of the vector refer to the variable names that will appear
 #' in the table. Names refer to the original term names stored in the model
 #' object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
-#' @param gof_map 
+#' @param gof_map rename, reorder, and omit goodness-of-fit statistics and other
+#'   model information. This argument accepts 3 types of values:
 #' * NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.
 #' * data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
 #' * list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
