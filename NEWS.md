@@ -3,6 +3,11 @@
 * Jupyter notebook support via `output="jupyter"`
 * A valid `get_gof` (`glance`) is now optional.
 
+`datasummary`:
+
+* `N` is smart enought to return either the number of elements in a subset or
+  the number of non-missing observations in a variable
+
 # modelsummary 0.7.0
 
 `modelsummary`:

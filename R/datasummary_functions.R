@@ -28,7 +28,15 @@ Mean <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' \dontrun{
 #' datasummary(Factor(cyl) ~ N, data = mtcars)
 #' }
-N <- function(x) sprintf("%.0f", length(x))
+N <- function(x) {
+  # number of elements in a subgroup (factor)
+  if (is.logical(x) && all(is.na(x))) {
+    sprintf("%.0f", length(x))
+  # number of non-missing observations
+  } else {
+    sprintf("%.0f", sum(!is.na(x)))
+  }
+}
 
 
 #' datasummary statistic shortcut
