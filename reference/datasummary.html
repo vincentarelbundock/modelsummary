@@ -80,7 +80,7 @@ NPercent, NUnique, Ncol, P0, P25, P50, P75, P100." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.6.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -143,7 +143,8 @@ NPercent, NUnique, Ncol, P0, P25, P50, P75, P100.</p>
   align <span class='op'>=</span> <span class='cn'>NULL</span>,
   add_columns <span class='op'>=</span> <span class='cn'>NULL</span>,
   add_rows <span class='op'>=</span> <span class='cn'>NULL</span>,
-  sparse_header <span class='op'>=</span> <span class='cn'>TRUE</span>
+  sparse_header <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -165,7 +166,7 @@ more resources.</p></td>
 <li><p>Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.</p></li>
 <li><p>Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable".</p></li>
 <li><p>To change the default output format, type <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_default = "latex")</a></code>, where <code>latex</code> can be any of the valid object types listed above.</p></li>
-<li><p>Warning: the <code>output</code> argument <em>cannot</em> be used when customizing tables with external packages.</p></li>
+<li><p>Warning: users should not supply a file name to the <code>output</code> argument if they intend to customize the table with external packages.</p></li>
 <li><p>See the 'Details' section below for more information.</p></li>
 </ul></td>
     </tr>
@@ -211,6 +212,17 @@ the data. FALSE keeps all headers. The order in which terms are entered in
 the formula determines the order in which headers appear. For example,
 <code>x~mean*z</code> will print the <code>mean</code>-related header above the <code>z</code>-related
 header.`</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>all other arguments are passed through to the extractor and
+table-making functions. This allows users to pass arguments directly to
+<code>modelsummary</code> in order to affect the behavior of other functions behind
+the scenes. Examples include:</p><ul>
+<li><p><code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy(exponentiate=TRUE)</a></code> to exponentiate logistic regression</p></li>
+<li><p><code><a href='https://rdrr.io/pkg/kableExtra/man/kbl.html'>kableExtra::kbl(escape=FALSE)</a></code> to avoid escaping math characters in <code>kableExtra</code> tables.</p></li>
+<li><p><code><a href='https://easystats.github.io/performance/reference/model_performance.html'>performance::model_performance(metrics="RMSE")</a></code> to select goodness-of-fit statistics to extract using the <code>performance</code> package (must have set <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get="easystats")</a></code> first).</p></li>
+</ul></td>
     </tr>
     </table>
 
