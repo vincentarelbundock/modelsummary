@@ -60,8 +60,7 @@ get_gof <- function(model, vcov_type = NULL, ...) {
 
     # glance_custom
     gof_custom <- glance_custom(model)
-    sanity_gof(gof, gof_custom)
-    if (!is.null(gof_custom)) {
+    if (!is.null(gof_custom) && is.data.frame(gof)) {
         for (n in colnames(gof_custom)) {
             # modelsummary's vcov argument has precedence
             # mainly useful to avoid collision with `fixet::glance_custom`
@@ -75,23 +74,17 @@ get_gof <- function(model, vcov_type = NULL, ...) {
         return(gof)
     }
 
-    stop(sprintf(
-'`modelsummary could not extract the required information from a model
-of class "%s". The package tried a sequence of 2 helper functions to extract
-goodness-of-fit statistics:
+    warning(sprintf(
+'`modelsummary could not extract goodness-of-fit statistics from a model
+of class "%s". The package tried a sequence of 2 helper functions:
 
 broom::glance(model)
 performance::model_performance(model)
 
-To draw a table, one of these commands must return a one-row `data.frame`.
-The `modelsummary` website explains how to summarize unsupported models or
-add support for new models yourself:
+One of these functions must return a one-row `data.frame`. The `modelsummary` website explains how to summarize unsupported models or add support for new models yourself:
 
-https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html
-
-These errors messages were generated during extraction:
-%s',
-class(model)[1], paste(warning_msg, collapse = "\n")))
+https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html',
+class(model)[1]))
 }
 
 

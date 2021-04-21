@@ -299,7 +299,8 @@ modelsummary <- function(
   sanity_statistic(statistic)
   sanity_conf_level(conf_level)
   sanity_coef(coef_map, coef_rename, coef_omit)
-  sanity_gof_map(gof_map, gof_omit)
+  # no gof should be OK
+  ## sanity_gof_map(gof_map, gof_omit)
   sanity_stars(stars)
   sanity_fmt(fmt)
 
@@ -429,12 +430,17 @@ modelsummary <- function(
   #####################
   gof <- list()
   for (i in seq_along(msl)) {
-    gof[[i]] <- format_gof(msl[[i]]$glance,
-                           fmt = fmt,
-                           gof_map = gof_map,
-                           ...)
-    colnames(gof[[i]])[2] <- model_names[i]
+    if (is.data.frame(msl[[i]]$glance)) {
+      gof[[i]] <- format_gof(msl[[i]]$glance,
+                             fmt = fmt,
+                             gof_map = gof_map,
+                             ...)
+      colnames(gof[[i]])[2] <- model_names[i]
+    } else {
+      gof[[i]] <- NULL
+    }
   }
+
 
   f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE, by = "term")
   gof <- Reduce(f, gof)
@@ -442,7 +448,8 @@ modelsummary <- function(
   gof <- map_omit_gof(gof, gof_omit, gof_map)
 
   # combine estimates and gof
-  if (nrow(gof) > 0 &&
+  if (is.data.frame(gof) &&
+      nrow(gof) > 0 &&
       all(colnames(gof) %in% colnames(est))) {
     tab <- bind_rows(est, gof)
   } else {
@@ -596,7 +603,8 @@ map_omit_rename_estimates <- function(estimates,
 #' @keywords internal
 map_omit_gof <- function(gof, gof_omit, gof_map) {
 
-  if (nrow(gof) == 0) {
+  if (is.null(gof) ||
+      is.data.frame(gof) && nrow(gof) == 0) {
     return(gof)
   }
 

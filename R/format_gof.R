@@ -6,6 +6,10 @@
 #' @noRd
 format_gof <- function(gof, fmt, gof_map, ...) {
 
+  if (!is.data.frame(gof)) {
+    return(NULL)
+  }
+
   # convert gof_map to list and vectors
   if (is.null(gof_map)) {
     gm_list <- lapply(1:nrow(modelsummary::gof_map), function(i)

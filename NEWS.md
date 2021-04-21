@@ -1,6 +1,7 @@
 # modelsummary 0.7.0.9000
 
 * Jupyter notebook support via `output="jupyter"`
+* A valid `get_gof` (`glance`) is now optional.
 
 # modelsummary 0.7.0
 
