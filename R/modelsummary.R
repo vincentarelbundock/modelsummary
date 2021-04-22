@@ -236,6 +236,9 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' # title
 #' modelsummary(models, title = 'This is the title')
 #'
+#' # title with LaTeX label (for numbering and referencing)
+#' modelsummary(models, title = 'This is the title \\label{tab:description}')
+#'
 #' # add_rows
 #' rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,
 #'   'Empty row', '-', '-',
