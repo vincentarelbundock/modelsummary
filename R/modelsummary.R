@@ -528,6 +528,12 @@ modelsummary <- function(
   }
 
 
+  # remove "empty" confidence intervals or standard errors (HACK)
+  for (i in seq_along(tab)) {
+    tab[[i]] <- gsub("\\[,\\s*\\]|\\(\\s*\\)", "", tab[[i]])
+  }
+
+
   # build table
   factory(
     tab,
