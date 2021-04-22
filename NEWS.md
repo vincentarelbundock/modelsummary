@@ -2,11 +2,15 @@
 
 * Jupyter notebook support via `output="jupyter"`
 * A valid `get_gof` (`glance`) is now optional.
+* new vcov options: "bootstrap", "HAC", "NeweyWest", "Andrews",
+  "panel-corrected", "weave", "outer-product"
+* ... is pushed through to `sandwich`, which allows things like:
+  `modelsummary(model, vcov = "bootstrap", R = 1000, cluster = "firm")`
 
 `datasummary`:
 
-* `N` is smart enought to return either the number of elements in a subset or
-  the number of non-missing observations in a variable
+* `N` is smart enough to return either the number of elements in a subset or the
+  number of non-missing observations in a variable
 
 # modelsummary 0.7.0
 
