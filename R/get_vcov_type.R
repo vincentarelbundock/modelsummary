@@ -7,10 +7,13 @@ get_vcov_type <- function(vcov) {
 
   get_vcov_type_inner <- function(v) {
     if (is.character(v)) {
-       if (v %in% c("robust", "classical", "stata", "classical", "constant")) {
-          out <- tools::toTitleCase(v)
+      if (v %in% c("robust", "classical", "stata", "classical", "constant",
+                   "panel-corrected", "Andrews", "outer-product")) {
+         out <- tools::toTitleCase(v)
+       } else if (v == "NeweyWest") {
+         out <- "Newey-West"
        } else {
-          out <- toupper(v)
+         out <- toupper(v)
        }
     } else if (inherits(v, "formula")) {
       out <- paste("C:", as.character(v)[2])

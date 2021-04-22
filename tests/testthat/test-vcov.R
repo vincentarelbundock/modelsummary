@@ -9,6 +9,24 @@ models[['Poisson 2']] <- glm(Desertion ~ Crime_prop + Donations, dat, family = p
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 
 
+test_that("sandwich arguments in ellipsis", {
+  library(sandwich)
+  data(PetersenCL)
+  mod <- lm(y ~ x, PetersenCL)
+  tab <- modelsummary(mod,
+                      output = "dataframe",
+                      fmt = 7,
+                      estimate = "std.error",
+                      gof_omit = ".*",
+                      statistic = NULL,
+                      vcov = "panel-corrected",
+                      cluster = "firm")
+  v <- vcovPC(mod, cluster = "firm")
+  v <- modelsummary:::rounding(sqrt(diag(v)), 7)
+  expect_equal(unname(v), tab[["Model 1"]])
+})
+  
+
 test_that("multi vcov with model recycling", {
     mod <- lm(hp ~ 1, mtcars)
     vc <- list("HC0", "classical", ~cyl)

@@ -190,7 +190,13 @@ You can use clustered or robust uncertainty estimates by modifying the `vcov` pa
 
 ```r
 modelsummary(models, vcov = "robust")
-modelsummary(models, vcov = c("classical", "robust", "stata", "HC4", "HC0"))
+modelsummary(models, vcov = c("classical", "robust", "bootstrap", "stata", "HC4"))
+```
+
+These variance-covariance matrices are calculated using the `sandwich` package. You can pass arguments to the `sandwich` functions directly from the `modelsummary` function. For instance, to change the number of bootstrap replicates and to specify a clustering variable we could call:
+
+```r
+modelsummary(mod, vcov = "bootstrap", R = 1000, cluster = "country")
 ```
 
 You can use a one-sided formula or list of one-sided formulas to use clustered standard errors:

@@ -31,9 +31,11 @@ sanitize_vcov <- function(vcov, number_of_models, ...) {
         checkmate::check_function(vcov_element),
         checkmate::check_matrix(vcov_element),
         checkmate::check_numeric(vcov_element),
-        checkmate::check_character(vcov_element,
-          len = 1,
-          pattern = "robust|HC|HC0|HC1|HC2|HC3|HC4|HC4m|HC5|stata|classical|constant|iid"),
+        checkmate::check_choice(vcov_element,
+          choices = c("robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m",
+                      "HC5", "stata", "classical", "constant", "iid", "HAC",
+                      "NeweyWest", "bootstrap", "Andrews", "panel-corrected",
+                      "outer-product", "weave")),
         checkmate::check_character(vcov_element, min.len = 2),
         combine = "or"
       )
@@ -55,7 +57,9 @@ sanitize_vcov <- function(vcov, number_of_models, ...) {
       checkmate::check_true(number_of_models == 1))
     checkmate::assert_true(all(
       vcov %in% c("robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m",
-                  "HC5", "stata", "classical", "constant", "iid")))
+                  "HC5", "stata", "classical", "constant", "iid", "HAC",
+                  "NeweyWest", "bootstrap", "Andrews", "panel-corrected",
+                  "outer-product", "weave")))
     if (length(vcov) == 1) {
       out <- as.list(rep(vcov, number_of_models))
     } else {

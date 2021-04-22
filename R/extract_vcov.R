@@ -3,7 +3,7 @@
 #' @inheritParams modelsummary
 #' @noRd
 #' @return a numeric vector of test statistics
-extract_vcov <- function(model, vcov = NULL, conf_level = NULL) {
+extract_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
 
   if (all(sapply(vcov, is.null))) return(NULL)
 
@@ -12,6 +12,10 @@ extract_vcov <- function(model, vcov = NULL, conf_level = NULL) {
 
   # vcov is character
   if (is.character(vcov) && length(vcov) == 1) {
+
+    if (vcov %in% c("classical", "constant", "iid")) {
+      return(NULL)
+    }
 
     assert_dependency("sandwich")
     if (vcov == "stata") {
@@ -22,7 +26,38 @@ extract_vcov <- function(model, vcov = NULL, conf_level = NULL) {
       vcovtype <- vcov
     }
 
-    mat <- try(sandwich::vcovHC(model, type = vcovtype), silent = TRUE)
+    HC <- c("HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5")
+    if (vcovtype %in% HC) {
+      mat <- try(sandwich::vcovHC(model, type = vcovtype, ...), silent = TRUE)
+    }
+
+    if (vcovtype == "HAC") {
+      mat <- try(sandwich::vcovHAC(model, ...), silent = TRUE)
+    }
+
+    if (vcovtype == "NeweyWest") {
+      mat <- try(sandwich::NeweyWest(model, ...), silent = TRUE)
+    }
+
+    if (vcovtype == "bootstrap") {
+      mat <- try(sandwich::vcovBS(model, ...), silent = TRUE)
+    }
+
+    if (vcovtype == "Andrews") {
+      mat <- try(sandwich::kernHAC(model, ...), silent = TRUE)
+    }
+
+    if (vcovtype == "panel-corrected") {
+      mat <- try(sandwich::vcovPC(model, ...), silent = TRUE)
+    }
+
+    if (vcovtype == "outer-product") {
+      mat <- try(sandwich::OPG(model, ...), silent = TRUE)
+    }
+
+    if (vcovtype == "weave") {
+      mat <- try(sandwich::weave(model, ...), silent = TRUE)
+    }
 
     if (!inherits(mat, "matrix")) {
       msg <- "Unable to extract a variance-covariance matrix of type %s from model of class %s. The uncertainty estimates are unadjusted."

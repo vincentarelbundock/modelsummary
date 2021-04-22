@@ -66,7 +66,8 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, ...) {
       so <- extract_vcov(
         model,
         vcov = vcov,
-        conf_level = conf_level)
+        conf_level = conf_level,
+        ...)
 
       if (!is.null(so) && nrow(out) == nrow(so)) {
         # keep only columns that do not appear in so
