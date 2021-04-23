@@ -63,7 +63,7 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, ...) {
     if (flag1 && (flag2 || flag3 || flag4 || flag5)) {
 
       # extract overriden estimates
-      so <- extract_vcov(
+      so <- get_vcov(
         model,
         vcov = vcov,
         conf_level = conf_level,
