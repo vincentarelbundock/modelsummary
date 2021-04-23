@@ -128,8 +128,7 @@ https://vincentarelbundock.github.io/modelsummary', group_name))
     times         = grep("modelsummary_tmp\\d+$", colnames(est), value = TRUE),
     v.names       = "value",
     timevar       = "statistic",
-    direction     = "long",
-    new.row.names = 1:1000)
+    direction     = "long")
   est$id <- NULL
 
   # sort then convert back to character
