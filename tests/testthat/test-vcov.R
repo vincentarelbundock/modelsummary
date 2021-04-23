@@ -8,6 +8,15 @@ models[['OLS 2']] <- lm(Desertion ~ Crime_prop + Infants, dat)
 models[['Poisson 2']] <- glm(Desertion ~ Crime_prop + Donations, dat, family = poisson())
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 
+test_that("user-supplied vcov_type in gof section", {
+    mod <- lm(hp ~ mpg, data = mtcars)
+    vc <- list("Rob" = "robust",
+            "Stata Corp" = "stata",
+            "Newey Lewis & the News" = "NeweyWest")
+    tab <- modelsummary(mod, output = "data.frame", vcov = vc)
+    row <- unname(unlist(tab[nrow(tab), 4:6]))
+    expect_equal(row, c("Rob", "Stata Corp", "Newey Lewis & the News"))
+})
 
 test_that("sandwich arguments in ellipsis", {
   library(sandwich)

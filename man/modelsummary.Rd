@@ -74,11 +74,11 @@ or any column name produced by: \code{get_estimates(model)}
 argument accepts five types of input (see the 'Details' and 'Examples'
 sections below):
 \itemize{
-\item string, vector, or list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", "weave", or "classical" (alias "constant" or "iid"). These variance-covariance matrices are computed using functions from the \code{sandwich} package. The behavior of those functions can (and sometimes \emph{must}) be altered by passing arguments to \code{sandwich} directly from \code{modelsummary} through the ellipsis (\code{...}), but it is safer to define your own custom functions as described in the next bullet.
-\item function or list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., \code{stats::vcov}, \code{sandwich::vcovHC}, \code{function(x) vcovPC(x, cluster="country")}).
-\item formula or list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
-\item list of \code{length(models)} variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
-\item a list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, \code{modelsummary} cannot automatically calculate p values. The \code{stars} argument may thus use incorrect significance thresholds when \code{vcov} is a list of vectors.
+\item string, vector, or (named) list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", "weave", or "classical" (alias "constant" or "iid"). These variance-covariance matrices are computed using functions from the \code{sandwich} package. The behavior of those functions can (and sometimes \emph{must}) be altered by passing arguments to \code{sandwich} directly from \code{modelsummary} through the ellipsis (\code{...}), but it is safer to define your own custom functions as described in the next bullet.
+\item function or (named) list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., \code{stats::vcov}, \code{sandwich::vcovHC}, \code{function(x) vcovPC(x, cluster="country")}).
+\item formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
+\item (named) list of \code{length(models)} variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+\item a (named) list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, \code{modelsummary} cannot automatically calculate p values. The \code{stars} argument may thus use incorrect significance thresholds when \code{vcov} is a list of vectors.
 }}
 
 \item{conf_level}{confidence level to use for confidence intervals}
@@ -286,6 +286,12 @@ modelsummary(models,
   vcov = list(c("(Intercept)"="", "Height"="!"),
                             c("(Intercept)"="", "Height"="!", "Volume"="!!")))
 
+# vcov with custom names
+modelsummary(
+  models,
+  vcov = list("Stata Corp" = "stata",
+              "Newey Lewis & the News" = "NeweyWest"))
+                                  
 # coef_rename
 modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 
@@ -295,6 +301,9 @@ modelsummary(models, coef_map = c('Volume', 'Height'))
 
 # title
 modelsummary(models, title = 'This is the title')
+
+# title with LaTeX label (for numbering and referencing)
+modelsummary(models, title = 'This is the title \\\\label{tab:description}')
 
 # add_rows
 rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,

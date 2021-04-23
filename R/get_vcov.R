@@ -181,6 +181,9 @@ get_coeftest <- function(model, vcov, conf_level) {
 
 get_vcov_type <- function(vcov) {
 
+  # user-supplied std.error names
+  if (!is.null(names(vcov))) return(names(vcov))
+
   get_vcov_type_inner <- function(v) {
     if (is.character(v)) {
       if (v %in% c("robust", "classical", "stata", "classical", "constant",
