@@ -18,6 +18,7 @@
 #'
 #' modelsummary(mod)
 #' }
+#' @noRd
 #' @export
 tidy.modelsummary_list <- function(x, ...) {
   if ("tidy" %in% names(x)) {
@@ -30,6 +31,7 @@ tidy.modelsummary_list <- function(x, ...) {
 #' Extract goodness-of-fit statistics from a `modelsummary_list` object.
 #'
 #' @inherit tidy.modelsummary_list
+#' @noRd
 #' @export
 glance.modelsummary_list <- function(x, ...) {
   if ("glance" %in% names(x)) {

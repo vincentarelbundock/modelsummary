@@ -11,6 +11,10 @@ sanitize_group <- function(group) {
   lhs <- all.vars(stats::update(group, ". ~ 0"))
   variables <- c(rhs, lhs)
 
+  if (length(intersect(rhs, lhs) > 0)) {
+    stop("The `group` formula cannot include the same variable on both sides.")
+  }
+
   if (!all(c("model", "term") %in% c(lhs, rhs))) {
     flag_error <- TRUE
   }
