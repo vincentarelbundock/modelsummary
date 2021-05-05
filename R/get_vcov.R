@@ -18,6 +18,7 @@ get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
     }
 
     assert_dependency("sandwich")
+
     if (vcov == "stata") {
       vcovtype <- "HC1"
     } else if (vcov == "robust") {
@@ -52,7 +53,7 @@ get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
     }
 
     if (vcovtype == "outer-product") {
-      mat <- try(sandwich::OPG(model, ...), silent = TRUE)
+      mat <- try(sandwich::vcovOPG(model, ...), silent = TRUE)
     }
 
     if (vcovtype == "weave") {
