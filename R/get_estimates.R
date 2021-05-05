@@ -45,6 +45,9 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, ...) {
         if (!any(out_custom$term %in% out$term)) {
             warning('Elements of the "term" column produced by `tidy_custom` must match model terms. `tidy_custom` was ignored.')
         } else {
+            # R 3.6 doesn't deal well with factors
+            out_custom$term <- as.character(out_custom$term)
+            out$term <- as.character(out$term)
             out_custom <- out_custom[out_custom$term %in% out$term, , drop = FALSE]
             idx <- match(out_custom$term, out$term)
             for (n in colnames(out_custom)) {
