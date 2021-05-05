@@ -43,13 +43,15 @@ test_that("tidy.custom p values in polr models", {
     out
     }
 
-    mod = list(
+    mod <- list(
       "LM" = lm(gear ~ hp + mpg, data = mtcars),
       "POLR" = polr(as.ordered(gear) ~ hp + mpg, data = mtcars))
 
-    tab = modelsummary(mod, stars = TRUE, output = "data.frame")
-    expect_equal(tab$LM[c(1, 3, 5)],
-                 c("0.339", "0.007**", "0.118***"))
+    tab <- modelsummary(mod, stars = TRUE, output = "data.frame")
+    truth <- c("", "", "0.020**", "(0.010)", "0.373***", "(0.123)", "10.158***",
+               "(3.660)", "12.798***")
+    expect_equal(tab$POLR[1:9], truth)
+
 
     rm("tidy_custom.polr")
 })
