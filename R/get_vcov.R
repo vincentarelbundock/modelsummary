@@ -10,6 +10,10 @@ get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
   # needed for logic tests
   out <- mat <- NULL
 
+  if (is.null(vcov)) {
+    return(NULL)
+  }
+
   # vcov is character
   if (is.character(vcov) && length(vcov) == 1) {
 

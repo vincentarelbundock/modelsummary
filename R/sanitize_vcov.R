@@ -27,6 +27,7 @@ sanitize_vcov <- function(vcov, number_of_models, ...) {
       checkmate::check_true(number_of_models == 1))
     for (vcov_element in vcov) {
       checkmate::assert(
+        checkmate::check_null(vcov_element),
         checkmate::check_formula(vcov_element),
         checkmate::check_function(vcov_element),
         checkmate::check_matrix(vcov_element),
