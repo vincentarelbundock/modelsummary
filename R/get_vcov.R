@@ -65,9 +65,11 @@ get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
     }
 
     if (!inherits(mat, "matrix")) {
-      msg <- "Unable to extract a variance-covariance matrix of type %s from model of class %s. The uncertainty estimates are unadjusted."
-      warning(sprintf(msg, vcov, class(model)[1]))
-      return(NULL)
+      msg <- paste0("Unable to extract a variance-covariance matrix of type %s from model of class %s. ",
+        "You might be able to calculate a variance-covariance matrix for the model by using ",
+        "an external function, and then supply this matrix to modelsummary directly using the vcov argument.",
+        collapse = "")
+      stop(sprintf(msg, vcov, class(model)[1]))
     }
   }
 
@@ -77,10 +79,11 @@ get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
     mat <- try(sandwich::vcovCL(model, cluster = vcov), silent = TRUE)
 
     if (!inherits(mat, "matrix")) {
-
-      msg <- "Unable to extract a clustered variance-covariance matrix from model of class %s. The uncertainty estimates are unadjusted."
-      warning(sprintf(msg, class(model)[1]))
-      return(NULL)
+      msg <- paste0("Unable to extract a clustered variance-covariance matrix from model of class %s. ",
+        "You might be able to calculate a variance-covariance matrix for the model by using ",
+        "an external function, and then supply this matrix to modelsummary directly using the vcov argument.",
+        collapse = "")
+      stop(sprintf(msg, class(model)[1]))
     }
   }
 
@@ -94,10 +97,11 @@ get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
     }
 
     if (!inherits(mat, "matrix")) {
-
-      msg <- "Unable to use function to extract a variance-covariance matrix from model of class %s. The uncertainty estimates are unadjusted."
-      warning(sprintf(msg, class(model)[1]))
-      return(NULL)
+      msg <- paste0("Unable to use the supplied function to a variance-covariance matrix from model of class %s. ",
+        "You might be able to calculate a variance-covariance matrix for the model by using ",
+        "an external function, and then supply this matrix to modelsummary directly using the vcov argument.",
+        collapse = "")
+      stop(sprintf(msg, class(model)[1]))
     }
   }
 
@@ -133,15 +137,21 @@ get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
 
       out <- sqrt(base::diag(mat))
       out <- data.frame(term = colnames(mat), std.error = out)
-      msg <- "The `lmtest::coeftest` function does not seem to produce a valid result when applied to a model of class %s. Only `std.error` can be adjusted."
+      msg <- paste0(
+        "The `lmtest::coeftest` function does not seem to produce a valid result ",
+        "when applied to a model of class %s. Only `std.error` can be adjusted, ",
+        "but p values and confidence intervals might not be correct.", collapse = "")
       warning(sprintf(msg, class(model)[1]))
       return(out)
     }
   }
 
-  msg <- "Unable to extract a clustered variance-covariance matrix from model of class %s. The uncertainty estimates are unadjusted."
-  warning(sprintf(msg, class(model)[1]))
-  return(NULL)
+  msg <- paste0(
+    "Unable to extract a clustered variance-covariance matrix from model of class %s. ",
+    "You might be able to calculate a variance-covariance matrix for the model by using ",
+    "an external function, and then supply this matrix to modelsummary directly using the vcov argument.",
+    collapse = "")
+  stop(sprintf(msg, class(model)[1]))
 }
 
 

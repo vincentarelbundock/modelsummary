@@ -100,14 +100,15 @@ test_that("ivreg::ivreg", {
   expect_is(tab, "data.frame")
   expect_true(nrow(tab) > 5)
 })
- 
+
 
 test_that("pscl::hurdle", {
+  testthat::skip_if_not_installed("pscl")
   set.seed(123)
   data("bioChemists", package = "pscl")
-  mod<- pscl::hurdle(formula = art ~ ., 
+  mod<- pscl::hurdle(formula = art ~ .,
                data = bioChemists, zero = "geometric")
-  tab <- modelsummary(mod, output="data.frame") 
+  tab <- modelsummary(mod, output="data.frame")
   expect_is(tab, "data.frame")
   expect_true(nrow(tab) > 25)
 })
@@ -176,8 +177,10 @@ test_that("lme4", {
   expect_true(nrow(tab) > 22)
 
   # sandwich does not support lmer
-  expect_warning(modelsummary(mod, vcov="robust"),
-                 regexp = "uncertainty estimates are unadjusted")
+  expect_error(modelsummary(mod, vcov="robust"),
+               regexp = "Unable to extract")
+  expect_error(modelsummary(mod, vcov=~subj),
+               regexp = "Unable to extract")
 })
 
 
@@ -187,7 +190,7 @@ test_that("lme4 with parameter's effects argument", {
   d <- as.data.frame(ChickWeight)
   colnames(d) <- c("y", "x", "subj", "tx")
   mod <- lmer(y ~ tx * x + (x | subj), data = d)
-  
+
   # all effects implicit
   tab <- modelsummary(mod, output="dataframe")
   tab <- tab[tab$part == "estimates",]
