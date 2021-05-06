@@ -203,3 +203,10 @@ datasummary <- function(formula,
   return(out)
 
 }
+
+#' `dsummary()` is a shortcut to `datasummary()`
+#'
+#' @inherit datasummary
+#' @keywords internal
+#' @export
+dsummary <- datasummary
