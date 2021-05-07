@@ -201,6 +201,8 @@ get_vcov_type <- function(vcov) {
        }
     } else if (inherits(v, "formula")) {
       out <- paste("C:", as.character(v)[2])
+    } else if (is.null(v)) {
+      out <- NULL
     } else {
       out <- ""
     }
