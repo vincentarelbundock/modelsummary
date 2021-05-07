@@ -43,8 +43,9 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * Note: Parentheses are added automatically unless the string includes `glue` curly braces `{}`.
 #' * Note: To report uncertainty statistics \emph{next} to coefficients, you can #'   supply a `glue` string to the `estimate` argument.
 #' @param vcov robust standard errors and other manual statistics. The `vcov`
-#'   argument accepts five types of input (see the 'Details' and 'Examples'
+#'   argument accepts six types of input (see the 'Details' and 'Examples'
 #'   sections below):
+#' * NULL returns the default uncertainty estimates of the model object
 #' * string, vector, or (named) list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", "weave", or "classical" (alias "constant" or "iid"). These variance-covariance matrices are computed using functions from the `sandwich` package. The behavior of those functions can (and sometimes *must*) be altered by passing arguments to `sandwich` directly from `modelsummary` through the ellipsis (`...`), but it is safer to define your own custom functions as described in the next bullet. 
 #' * function or (named) list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`, `function(x) vcovPC(x, cluster="country")`).
 #' * formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
@@ -161,7 +162,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' by the `sandwich` package. This includes objects such as: lm, glm,
 #' survreg, coxph, mlogit, polr, hurdle, zeroinfl, and more.
 #'
-#' "classical", "iid", and "constant" are aliases which do not modify
+#' NULL, "classical", "iid", and "constant" are aliases which do not modify
 #' uncertainty estimates and simply report the default standard errors stored
 #' in the model object.
 #'
@@ -224,7 +225,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   vcov = list(stats::vcov, sandwich::vcovHC))
 #' modelsummary(models, 
 #'   vcov = list(c("(Intercept)"="", "Height"="!"),
-#'                             c("(Intercept)"="", "Height"="!", "Volume"="!!")))
+#'               c("(Intercept)"="", "Height"="!", "Volume"="!!")))
 #'
 #' # vcov with custom names
 #' modelsummary(
