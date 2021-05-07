@@ -85,16 +85,15 @@ test_that("lme4 and various warnings", {
   tab = modelsummary(models, output="dataframe", vcov=list("robust", "classical"))
   expect_s3_class(tab, "data.frame")
   expect_equal(ncol(tab), 5)
-  expect_warning(modelsummary(models, output="dataframe", vcov="robust"))
+  expect_error(modelsummary(models, output="dataframe", vcov="robust"), regexp = "Unable to extract")
   expect_warning(modelsummary(models, output="dataframe", vcov="classical"), NA)
   expect_warning(modelsummary(models, output="dataframe", vcov=list("robust", "classical")), NA)
   expect_warning(modelsummary(models[[2]], vcov=stats::vcov), regexp="Only.*error.*adjusted")
-  expect_warning(modelsummary(models, output="dataframe", vcov="robust"), regexp="are unadjusted")
 })
 
 
 test_that("robust character shortcuts", {
-  testthat::skip_if_not_installed("estimatr") 
+  testthat::skip_if_not_installed("estimatr")
 
   mod = lm(hp ~ mpg, mtcars)
   mod_estimatr = estimatr::lm_robust(hp ~ mpg, mtcars)
@@ -194,11 +193,11 @@ reference <- readRDS(file = "known_output/statistic-override.rds")
 
 
 test_that("bad function", {
-  expect_warning(modelsummary(models, vcov = na.omit))
+  expect_error(modelsummary(models, vcov = na.omit))
 })
 
 test_that("bad formula", {
-  expect_warning(modelsummary(models, vcov = ~bad))
+  expect_error(modelsummary(models, vcov = ~bad))
 })
 
 test_that("vector must be named", {

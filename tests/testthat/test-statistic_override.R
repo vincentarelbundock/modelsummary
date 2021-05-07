@@ -129,7 +129,7 @@ reference <- readRDS(file = "known_output/statistic-override.rds")
 
 
 test_that("bad function", {
-  expect_warning(modelsummary(models, statistic_override = na.omit))
+  expect_error(modelsummary(models, statistic_override = na.omit))
 })
 
 test_that("vector must be named", {
