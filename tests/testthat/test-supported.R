@@ -132,6 +132,27 @@ test_that("fixest", {
   expect_equal(dim(raw), c(1, 2))
 })
 
+test_that("fixest std.error labels", {
+  testthat::skip_if_not_installed("fixest")
+  library(fixest)
+  
+  mod <- feols(hp ~ mpg + drat, mtcars, cluster = "vs")
+  tab <- modelsummary(mod, output = "data.frame")
+  expect_equal(tab[tab$term == "Std. Errors", "Model 1"],
+               "Clustered (vs)")
+
+  tab <- modelsummary(mod, vcov = list(NULL), output = "data.frame")
+  expect_equal(tab[tab$term == "Std. Errors", "Model 1"],
+               "Clustered (vs)")
+
+  tab <- modelsummary(mod, vcov = list(NULL, "iid"), output = "data.frame")
+  expect_equal(tab[tab$term == "Std. Errors", "Model 1"],
+               "Clustered (vs)")
+  expect_equal(tab[tab$term == "Std. Errors", "Model 2"],
+               "IID")
+})
+
+
 
 test_that("mice", {
   testthat::skip_if_not_installed("mice")
