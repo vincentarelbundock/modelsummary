@@ -8,6 +8,13 @@ datasummary_crosstab(
   formula,
   statistic = 1 ~ 1 + N + Percent("row"),
   data,
+  output = "default",
+  fmt = 1,
+  title = NULL,
+  notes = NULL,
+  align = NULL,
+  add_columns = NULL,
+  add_rows = NULL,
   sparse_header = FALSE,
   ...
 )
@@ -15,35 +22,80 @@ datasummary_crosstab(
 \arguments{
 \item{formula}{A two-sided formula to describe the table: rows ~ columns, where
 rows and columns are variables in the data. Both rows and column may contain
-interactions, e.g., var1 * var2 ~ var3.}
+interactions, e.g., \code{var1 * var2 ~ var3}.}
 
-\item{statistic}{A formula of the form 1 ~ 1 + N + Percent("row"). The left-hand
-side may only be empty or contain a 1 to include row totals.
-The right-hand side may contain: 1 for column totals, N for counts, Percent() for
-cell percentages, Percent("row") for row percentages, Percent("col") for column
+\item{statistic}{A formula of the form \code{1 ~ 1 + N + Percent("row")}. The left-hand
+side may only be empty or contain a \code{1} to include row totals.
+The right-hand side may contain: \code{1} for column totals, \code{N} for counts, \code{Percent()} for
+cell percentages, \code{Percent("row")} for row percentages, \code{Percent("col")} for column
 percentages.}
 
 \item{data}{A data.frame (or tibble)}
 
+\item{output}{filename or object type (character string)
+\itemize{
+\item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
+\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable".
+\item To change the default output format, type \code{options(modelsummary_default = "latex")}, where \code{latex} can be any of the valid object types listed above.
+\item Warning: users should not supply a file name to the \code{output} argument if they intend to customize the table with external packages.
+\item See the 'Details' section below for more information.
+}}
+
+\item{fmt}{determines how to format numeric values
+\itemize{
+\item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
+\item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
+\item function: returns a formatted character string.
+}}
+
+\item{title}{string}
+
+\item{notes}{list or vector of notes to append to the bottom of the table.}
+
+\item{align}{A character string of length equal to the number of columns in
+the table.  "lcr" means that the first column will be left-aligned, the 2nd
+column center-aligned, and the 3rd column right-aligned.}
+
+\item{add_columns}{a data.frame (or tibble) with the same number of rows as
+your main table.}
+
+\item{add_rows}{a data.frame (or tibble) with the same number of columns as
+your main table. By default, rows are appended to the bottom of the table.
+You can define a "position" attribute of integers to set the row positions.
+See Examples section below.}
+
 \item{sparse_header}{TRUE or FALSE. TRUE eliminates column headers which
 have a unique label across all columns, except for the row immediately above
 the data. FALSE keeps all headers. The order in which terms are entered in
-the formula determines the order in which headers appear.}
+the formula determines the order in which headers appear. For example,
+\code{x~mean*z} will print the \code{mean}-related header above the \code{z}-related
+header.`}
 
-\item{...}{passed to datasummary}
-}
-\value{
-a crosstab
+\item{...}{all other arguments are passed through to the
+table-making functions. This allows users to pass arguments directly to
+\code{datasummary} in order to affect the behavior of other functions behind
+the scenes, for instance:
+\itemize{
+\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in \code{kableExtra} tables.
+}}
 }
 \description{
 Convenience function to tabulate counts, cell percentages, and row/column
-percentages for categorical variables.
+percentages for categorical variables. This a wrapper around \link{datasummary}.
+For more complex cross tabulations, use \link{datasummary} directly.
 }
 \details{
-X
+Variables in \code{formula} are automatically wrapped in \code{Factor()}.
 }
 \examples{
+
 \dontrun{
+  # crosstab of two variables, showing counts, row percentages, and row/column totals
+  datasummary_crosstab(cyl ~ gear, data = mtcars)
+  # crosstab of two variables, showing counts only and no totals
+  datasummary_crosstab(cyl ~ gear, statistic = ~ N, data = mtcars)
+  # crosstab of two interacted variables
+  datasummary_crosstab(am * cyl ~ gear, data = mtcars)
 }
 
 }

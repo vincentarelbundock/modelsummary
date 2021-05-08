@@ -38,7 +38,7 @@ more resources.}
 \item{fmt}{determines how to format numeric values
 \itemize{
 \item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
-\item character: passed to the \code{sprintf} function (e.g., '\\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
+\item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
 \item function: returns a formatted character string.
 }}
 
@@ -65,14 +65,12 @@ the formula determines the order in which headers appear. For example,
 \code{x~mean*z} will print the \code{mean}-related header above the \code{z}-related
 header.`}
 
-\item{...}{all other arguments are passed through to the extractor and
+\item{...}{all other arguments are passed through to the
 table-making functions. This allows users to pass arguments directly to
-\code{modelsummary} in order to affect the behavior of other functions behind
-the scenes. Examples include:
+\code{datasummary} in order to affect the behavior of other functions behind
+the scenes, for instance:
 \itemize{
-\item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression
 \item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in \code{kableExtra} tables.
-\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit statistics to extract using the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first).
 }}
 }
 \description{

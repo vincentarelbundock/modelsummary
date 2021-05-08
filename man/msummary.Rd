@@ -42,7 +42,7 @@ msummary(
 \item{fmt}{determines how to format numeric values
 \itemize{
 \item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
-\item character: passed to the \code{sprintf} function (e.g., '\\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
+\item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
 \item function: returns a formatted character string.
 }}
 
@@ -269,7 +269,7 @@ modelsummary(models, statistic = c("t = {statistic}",
                                    "conf.int"))
 
 # estimate
-modelsummary(models, 
+modelsummary(models,
   statistic = NULL,
   estimate = "{estimate} [{conf.low}, {conf.high}]")
 modelsummary(models,
@@ -280,9 +280,9 @@ modelsummary(models,
 modelsummary(models, vcov = "robust")
 modelsummary(models, vcov = list("classical", "stata"))
 modelsummary(models, vcov = sandwich::vcovHC)
-modelsummary(models, 
+modelsummary(models,
   vcov = list(stats::vcov, sandwich::vcovHC))
-modelsummary(models, 
+modelsummary(models,
   vcov = list(c("(Intercept)"="", "Height"="!"),
                             c("(Intercept)"="", "Height"="!", "Volume"="!!")))
 
@@ -291,7 +291,7 @@ modelsummary(
   models,
   vcov = list("Stata Corp" = "stata",
               "Newey Lewis & the News" = "NeweyWest"))
-                                  
+
 # coef_rename
 modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 
