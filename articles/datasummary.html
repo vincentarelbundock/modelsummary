@@ -1240,74 +1240,9 @@ N
 </tr>
 </tbody>
 </table>
-<p>By default, the cell counts and row percentages are shown for each cell, and both row and column totals are calculated. To show cell percentages or column percentages, or to drop row and column totals, adjust the <code>statistic</code> argument. For example:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/datasummary_crosstab.html">datasummary_crosstab</a></span><span class="op">(</span><span class="va">species</span> <span class="op">~</span> <span class="va">sex</span>,
-                     statistic <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="../reference/Percent.html">Percent</a></span><span class="op">(</span><span class="st">"col"</span><span class="op">)</span>,
-                     data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
-<table class="table table">
-<thead><tr>
-<th style="text-align:left;">
-species
-</th>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
-female
-</th>
-<th style="text-align:right;">
-male
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Adelie
-</td>
-<td style="text-align:left;">
-% col
-</td>
-<td style="text-align:right;">
-44.2
-</td>
-<td style="text-align:right;">
-43.5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Chinstrap
-</td>
-<td style="text-align:left;">
-% col
-</td>
-<td style="text-align:right;">
-20.6
-</td>
-<td style="text-align:right;">
-20.2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Gentoo
-</td>
-<td style="text-align:left;">
-% col
-</td>
-<td style="text-align:right;">
-35.2
-</td>
-<td style="text-align:right;">
-36.3
-</td>
-</tr>
-</tbody>
-</table>
 <p>You can create multi-level crosstabs by specifying interactions using the <code><a href="https://rdrr.io/r/base/Arithmetic.html">*</a></code> operator:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/datasummary_crosstab.html">datasummary_crosstab</a></span><span class="op">(</span><span class="va">species</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">island</span>, data <span class="op">=</span> <span class="va">penguins</span>,
-                     sparse_header <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/datasummary_crosstab.html">datasummary_crosstab</a></span><span class="op">(</span><span class="va">species</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">island</span>, data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table">
 <thead>
 <tr>
@@ -1579,6 +1514,84 @@ N
 </td>
 <td style="text-align:right;">
 6.7
+</td>
+<td style="text-align:right;">
+100.0
+</td>
+</tr>
+</tbody>
+</table>
+<p>By default, the cell counts and row percentages are shown for each cell, and both row and column totals are calculated. To show cell percentages or column percentages, or to drop row and column totals, adjust the <code>statistic</code> argument. This argument accepts a formula that follows the <code>datasummary</code> “language”. To understand exactly how it works, you may find it useful to skip to the <code>datasummary</code> tutorial in the next section. Example:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/datasummary_crosstab.html">datasummary_crosstab</a></span><span class="op">(</span><span class="va">species</span> <span class="op">~</span> <span class="va">sex</span>,
+                     statistic <span class="op">=</span> <span class="fl">1</span> <span class="op">~</span> <span class="fu"><a href="../reference/Percent.html">Percent</a></span><span class="op">(</span><span class="st">"col"</span><span class="op">)</span>,
+                     data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
+<table class="table table">
+<thead><tr>
+<th style="text-align:left;">
+species
+</th>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+female
+</th>
+<th style="text-align:right;">
+male
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Adelie
+</td>
+<td style="text-align:left;">
+% col
+</td>
+<td style="text-align:right;">
+44.2
+</td>
+<td style="text-align:right;">
+43.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chinstrap
+</td>
+<td style="text-align:left;">
+% col
+</td>
+<td style="text-align:right;">
+20.6
+</td>
+<td style="text-align:right;">
+20.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gentoo
+</td>
+<td style="text-align:left;">
+% col
+</td>
+<td style="text-align:right;">
+35.2
+</td>
+<td style="text-align:right;">
+36.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+All
+</td>
+<td style="text-align:left;">
+% col
+</td>
+<td style="text-align:right;">
+100.0
 </td>
 <td style="text-align:right;">
 100.0
@@ -3568,12 +3581,12 @@ flipper_length_mm
             output <span class="op">=</span> <span class="st">'gt'</span><span class="op">)</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cell_fill.html">cell_fill</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"pink"</span><span class="op">)</span>,
               locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="va">Mean</span> <span class="op">&gt;</span> <span class="fl">10</span>, columns <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div id="fxyxjoiaon" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="onhxxxeyqk" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#fxyxjoiaon .gt_table {
+#onhxxxeyqk .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -3598,7 +3611,7 @@ flipper_length_mm
   border-left-color: #D3D3D3;
 }
 
-#fxyxjoiaon .gt_heading {
+#onhxxxeyqk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3610,7 +3623,7 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#fxyxjoiaon .gt_title {
+#onhxxxeyqk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3620,7 +3633,7 @@ flipper_length_mm
   border-bottom-width: 0;
 }
 
-#fxyxjoiaon .gt_subtitle {
+#onhxxxeyqk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3630,13 +3643,13 @@ flipper_length_mm
   border-top-width: 0;
 }
 
-#fxyxjoiaon .gt_bottom_border {
+#onhxxxeyqk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#fxyxjoiaon .gt_col_headings {
+#onhxxxeyqk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3651,7 +3664,7 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#fxyxjoiaon .gt_col_heading {
+#onhxxxeyqk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3671,7 +3684,7 @@ flipper_length_mm
   overflow-x: hidden;
 }
 
-#fxyxjoiaon .gt_column_spanner_outer {
+#onhxxxeyqk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3683,15 +3696,15 @@ flipper_length_mm
   padding-right: 4px;
 }
 
-#fxyxjoiaon .gt_column_spanner_outer:first-child {
+#onhxxxeyqk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#fxyxjoiaon .gt_column_spanner_outer:last-child {
+#onhxxxeyqk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#fxyxjoiaon .gt_column_spanner {
+#onhxxxeyqk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3703,7 +3716,7 @@ flipper_length_mm
   width: 100%;
 }
 
-#fxyxjoiaon .gt_group_heading {
+#onhxxxeyqk .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3725,7 +3738,7 @@ flipper_length_mm
   vertical-align: middle;
 }
 
-#fxyxjoiaon .gt_empty_group_heading {
+#onhxxxeyqk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3740,15 +3753,15 @@ flipper_length_mm
   vertical-align: middle;
 }
 
-#fxyxjoiaon .gt_from_md > :first-child {
+#onhxxxeyqk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#fxyxjoiaon .gt_from_md > :last-child {
+#onhxxxeyqk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#fxyxjoiaon .gt_row {
+#onhxxxeyqk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3767,7 +3780,7 @@ flipper_length_mm
   overflow-x: hidden;
 }
 
-#fxyxjoiaon .gt_stub {
+#onhxxxeyqk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3779,7 +3792,7 @@ flipper_length_mm
   padding-left: 12px;
 }
 
-#fxyxjoiaon .gt_summary_row {
+#onhxxxeyqk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3789,7 +3802,7 @@ flipper_length_mm
   padding-right: 5px;
 }
 
-#fxyxjoiaon .gt_first_summary_row {
+#onhxxxeyqk .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3799,7 +3812,7 @@ flipper_length_mm
   border-top-color: #D3D3D3;
 }
 
-#fxyxjoiaon .gt_grand_summary_row {
+#onhxxxeyqk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3809,7 +3822,7 @@ flipper_length_mm
   padding-right: 5px;
 }
 
-#fxyxjoiaon .gt_first_grand_summary_row {
+#onhxxxeyqk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3819,11 +3832,11 @@ flipper_length_mm
   border-top-color: #D3D3D3;
 }
 
-#fxyxjoiaon .gt_striped {
+#onhxxxeyqk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#fxyxjoiaon .gt_table_body {
+#onhxxxeyqk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3832,7 +3845,7 @@ flipper_length_mm
   border-bottom-color: #D3D3D3;
 }
 
-#fxyxjoiaon .gt_footnotes {
+#onhxxxeyqk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3846,13 +3859,13 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#fxyxjoiaon .gt_footnote {
+#onhxxxeyqk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#fxyxjoiaon .gt_sourcenotes {
+#onhxxxeyqk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3866,41 +3879,41 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#fxyxjoiaon .gt_sourcenote {
+#onhxxxeyqk .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#fxyxjoiaon .gt_left {
+#onhxxxeyqk .gt_left {
   text-align: left;
 }
 
-#fxyxjoiaon .gt_center {
+#onhxxxeyqk .gt_center {
   text-align: center;
 }
 
-#fxyxjoiaon .gt_right {
+#onhxxxeyqk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#fxyxjoiaon .gt_font_normal {
+#onhxxxeyqk .gt_font_normal {
   font-weight: normal;
 }
 
-#fxyxjoiaon .gt_font_bold {
+#onhxxxeyqk .gt_font_bold {
   font-weight: bold;
 }
 
-#fxyxjoiaon .gt_font_italic {
+#onhxxxeyqk .gt_font_italic {
   font-style: italic;
 }
 
-#fxyxjoiaon .gt_super {
+#onhxxxeyqk .gt_super {
   font-size: 65%;
 }
 
-#fxyxjoiaon .gt_footnote_marks {
+#onhxxxeyqk .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
@@ -4312,7 +4325,7 @@ flipper_length_mm
 6.48
 </td>
 <td style="text-align:right;">
-0.33
+0.94
 </td>
 </tr>
 <tr>
@@ -4338,7 +4351,7 @@ body_mass_g
 504.12
 </td>
 <td style="text-align:right;">
-0.89
+0.20
 </td>
 </tr>
 </tbody>
@@ -4743,12 +4756,12 @@ year
     <span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://gt.rstudio.com/reference/cell_text.html">cell_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#007377"</span>, size <span class="op">=</span> <span class="st">'x-large'</span><span class="op">)</span><span class="op">)</span>, locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="https://gt.rstudio.com/reference/tab_options.html">tab_options</a></span><span class="op">(</span>table_body.hlines.width <span class="op">=</span> <span class="fl">0</span>, table.border.top.width <span class="op">=</span> <span class="fl">0</span>, table.border.bottom.width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="https://gt.rstudio.com/reference/cols_align.html">cols_align</a></span><span class="op">(</span><span class="st">'center'</span>, columns <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span></code></pre></div>
-<div id="bznokiuyij" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="yxqgbcxozl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#bznokiuyij .gt_table {
+#yxqgbcxozl .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -4773,7 +4786,7 @@ year
   border-left-color: #D3D3D3;
 }
 
-#bznokiuyij .gt_heading {
+#yxqgbcxozl .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -4785,7 +4798,7 @@ year
   border-right-color: #D3D3D3;
 }
 
-#bznokiuyij .gt_title {
+#yxqgbcxozl .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -4795,7 +4808,7 @@ year
   border-bottom-width: 0;
 }
 
-#bznokiuyij .gt_subtitle {
+#yxqgbcxozl .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -4805,13 +4818,13 @@ year
   border-top-width: 0;
 }
 
-#bznokiuyij .gt_bottom_border {
+#yxqgbcxozl .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#bznokiuyij .gt_col_headings {
+#yxqgbcxozl .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4826,7 +4839,7 @@ year
   border-right-color: #D3D3D3;
 }
 
-#bznokiuyij .gt_col_heading {
+#yxqgbcxozl .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4846,7 +4859,7 @@ year
   overflow-x: hidden;
 }
 
-#bznokiuyij .gt_column_spanner_outer {
+#yxqgbcxozl .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4858,15 +4871,15 @@ year
   padding-right: 4px;
 }
 
-#bznokiuyij .gt_column_spanner_outer:first-child {
+#yxqgbcxozl .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#bznokiuyij .gt_column_spanner_outer:last-child {
+#yxqgbcxozl .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#bznokiuyij .gt_column_spanner {
+#yxqgbcxozl .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -4878,7 +4891,7 @@ year
   width: 100%;
 }
 
-#bznokiuyij .gt_group_heading {
+#yxqgbcxozl .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -4900,7 +4913,7 @@ year
   vertical-align: middle;
 }
 
-#bznokiuyij .gt_empty_group_heading {
+#yxqgbcxozl .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -4915,15 +4928,15 @@ year
   vertical-align: middle;
 }
 
-#bznokiuyij .gt_from_md > :first-child {
+#yxqgbcxozl .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#bznokiuyij .gt_from_md > :last-child {
+#yxqgbcxozl .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#bznokiuyij .gt_row {
+#yxqgbcxozl .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4942,7 +4955,7 @@ year
   overflow-x: hidden;
 }
 
-#bznokiuyij .gt_stub {
+#yxqgbcxozl .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4954,7 +4967,7 @@ year
   padding-left: 12px;
 }
 
-#bznokiuyij .gt_summary_row {
+#yxqgbcxozl .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4964,7 +4977,7 @@ year
   padding-right: 5px;
 }
 
-#bznokiuyij .gt_first_summary_row {
+#yxqgbcxozl .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4974,7 +4987,7 @@ year
   border-top-color: #D3D3D3;
 }
 
-#bznokiuyij .gt_grand_summary_row {
+#yxqgbcxozl .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4984,7 +4997,7 @@ year
   padding-right: 5px;
 }
 
-#bznokiuyij .gt_first_grand_summary_row {
+#yxqgbcxozl .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4994,11 +5007,11 @@ year
   border-top-color: #D3D3D3;
 }
 
-#bznokiuyij .gt_striped {
+#yxqgbcxozl .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#bznokiuyij .gt_table_body {
+#yxqgbcxozl .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -5007,7 +5020,7 @@ year
   border-bottom-color: #D3D3D3;
 }
 
-#bznokiuyij .gt_footnotes {
+#yxqgbcxozl .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5021,13 +5034,13 @@ year
   border-right-color: #D3D3D3;
 }
 
-#bznokiuyij .gt_footnote {
+#yxqgbcxozl .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#bznokiuyij .gt_sourcenotes {
+#yxqgbcxozl .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5041,41 +5054,41 @@ year
   border-right-color: #D3D3D3;
 }
 
-#bznokiuyij .gt_sourcenote {
+#yxqgbcxozl .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#bznokiuyij .gt_left {
+#yxqgbcxozl .gt_left {
   text-align: left;
 }
 
-#bznokiuyij .gt_center {
+#yxqgbcxozl .gt_center {
   text-align: center;
 }
 
-#bznokiuyij .gt_right {
+#yxqgbcxozl .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#bznokiuyij .gt_font_normal {
+#yxqgbcxozl .gt_font_normal {
   font-weight: normal;
 }
 
-#bznokiuyij .gt_font_bold {
+#yxqgbcxozl .gt_font_bold {
   font-weight: bold;
 }
 
-#bznokiuyij .gt_font_italic {
+#yxqgbcxozl .gt_font_italic {
   font-style: italic;
 }
 
-#bznokiuyij .gt_super {
+#yxqgbcxozl .gt_super {
   font-size: 65%;
 }
 
-#bznokiuyij .gt_footnote_marks {
+#yxqgbcxozl .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
