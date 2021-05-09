@@ -174,7 +174,7 @@ using functions from one of the supported table customization packages:
       <th>fmt</th>
       <td><p>determines how to format numeric values</p><ul>
 <li><p>integer: the number of digits to keep after the period <code><a href='https://rdrr.io/r/base/format.html'>format(round(x, fmt), nsmall=fmt)</a></code></p></li>
-<li><p>character: passed to the <code>sprintf</code> function (e.g., '\<!-- %.3f' keeps 3 digits with trailing zero). See \code{?sprintf} --></p></li>
+<li><p>character: passed to the <code>sprintf</code> function (e.g., '%.3f' keeps 3 digits with trailing zero). See <code><a href='https://rdrr.io/r/base/sprintf.html'>?sprintf</a></code></p></li>
 <li><p>function: returns a formatted character string.</p></li>
 </ul></td>
     </tr>
@@ -206,8 +206,9 @@ or any column name produced by: <code><a href='get_estimates.html'>get_estimates
     <tr>
       <th>vcov</th>
       <td><p>robust standard errors and other manual statistics. The <code>vcov</code>
-argument accepts five types of input (see the 'Details' and 'Examples'
+argument accepts six types of input (see the 'Details' and 'Examples'
 sections below):</p><ul>
+<li><p>NULL returns the default uncertainty estimates of the model object</p></li>
 <li><p>string, vector, or (named) list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", "weave", or "classical" (alias "constant" or "iid"). These variance-covariance matrices are computed using functions from the <code>sandwich</code> package. The behavior of those functions can (and sometimes <em>must</em>) be altered by passing arguments to <code>sandwich</code> directly from <code>modelsummary</code> through the ellipsis (<code>...</code>), but it is safer to define your own custom functions as described in the next bullet.</p></li>
 <li><p>function or (named) list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., <code><a href='https://rdrr.io/r/stats/vcov.html'>stats::vcov</a></code>, <code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>sandwich::vcovHC</a></code>, <code>function(x) vcovPC(x, cluster="country")</code>).</p></li>
 <li><p>formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).</p></li>
@@ -355,7 +356,7 @@ the table is written immediately to file. If you want to customize your table
 by post-processing it with an external package, you need to choose a
 different output format and saving mechanism. Unfortunately, the approach
 differs from package to package:</p><ul>
-<li><p><code>gt</code>: set <code>output="gt"</code>, post-process your table, and use the <code><a href='https://rdrr.io/pkg/gt/man/gtsave.html'>gt::gtsave</a></code> function.</p></li>
+<li><p><code>gt</code>: set <code>output="gt"</code>, post-process your table, and use the <code><a href='https://gt.rstudio.com/reference/gtsave.html'>gt::gtsave</a></code> function.</p></li>
 <li><p><code>kableExtra</code>: set <code>output</code> to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use <code><a href='https://rdrr.io/pkg/kableExtra/man/save_kable.html'>kableExtra::save_kable</a></code> function.</p></li>
 </ul>
 
@@ -363,7 +364,7 @@ differs from package to package:</p><ul>
 <p>To use a string such as "robust" or "HC0", your model must be supported
 by the <code>sandwich</code> package. This includes objects such as: lm, glm,
 survreg, coxph, mlogit, polr, hurdle, zeroinfl, and more.</p>
-<p>"classical", "iid", and "constant" are aliases which do not modify
+<p>NULL, "classical", "iid", and "constant" are aliases which do not modify
 uncertainty estimates and simply report the default standard errors stored
 in the model object.</p>
 <p>One-sided formulas such as <code>~clusterid</code> are passed to the <code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovCL.html'>sandwich::vcovCL</a></code>
@@ -423,7 +424,7 @@ diagonal.</p>
   vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'>stats</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/r/stats/vcov.html'>vcov</a></span>, <span class='fu'>sandwich</span><span class='fu'>::</span><span class='va'><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>vcovHC</a></span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>modelsummary</span><span class='op'>(</span><span class='va'>models</span>, 
   vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"(Intercept)"</span><span class='op'>=</span><span class='st'>""</span>, <span class='st'>"Height"</span><span class='op'>=</span><span class='st'>"!"</span><span class='op'>)</span>,
-                            <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"(Intercept)"</span><span class='op'>=</span><span class='st'>""</span>, <span class='st'>"Height"</span><span class='op'>=</span><span class='st'>"!"</span>, <span class='st'>"Volume"</span><span class='op'>=</span><span class='st'>"!!"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"(Intercept)"</span><span class='op'>=</span><span class='st'>""</span>, <span class='st'>"Height"</span><span class='op'>=</span><span class='st'>"!"</span>, <span class='st'>"Volume"</span><span class='op'>=</span><span class='st'>"!!"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># vcov with custom names</span>
 <span class='fu'>modelsummary</span><span class='op'>(</span>

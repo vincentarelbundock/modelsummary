@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Draw a table from a data.frame — datasummary_df • modelsummary</title>
+<title>Cross tabulations for categorical variables — datasummary_crosstab • modelsummary</title>
 
 
 <!-- jquery -->
@@ -41,8 +41,11 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Draw a table from a data.frame — datasummary_df" />
-<meta property="og:description" content="Draw a table from a data.frame" />
+<meta property="og:title" content="Cross tabulations for categorical variables — datasummary_crosstab" />
+<meta property="og:description" content="Convenience function to tabulate counts, cell percentages, and row/column
+percentages for categorical variables. See the Details section for a
+description of the internal design. For more complex cross tabulations, use
+datasummary directly." />
 
 
 
@@ -113,31 +116,50 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Draw a table from a data.frame</h1>
-    <small class="dont-index">Source: <a href='https://github.com/vincentarelbundock/modelsummary/blob/master/R/datasummary_df.R'><code>R/datasummary_df.R</code></a></small>
-    <div class="hidden name"><code>datasummary_df.Rd</code></div>
+    <h1>Cross tabulations for categorical variables</h1>
+    <small class="dont-index">Source: <a href='https://github.com/vincentarelbundock/modelsummary/blob/master/R/datasummary_crosstab.R'><code>R/datasummary_crosstab.R</code></a></small>
+    <div class="hidden name"><code>datasummary_crosstab.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Draw a table from a data.frame</p>
+    <p>Convenience function to tabulate counts, cell percentages, and row/column
+percentages for categorical variables. See the Details section for a
+description of the internal design. For more complex cross tabulations, use
+<a href='datasummary.html'>datasummary</a> directly.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>datasummary_df</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>datasummary_crosstab</span><span class='op'>(</span>
+  <span class='va'>formula</span>,
+  statistic <span class='op'>=</span> <span class='fl'>1</span> <span class='op'>~</span> <span class='fl'>1</span> <span class='op'>+</span> <span class='va'>N</span> <span class='op'>+</span> <span class='fu'><a href='Percent.html'>Percent</a></span><span class='op'>(</span><span class='st'>"row"</span><span class='op'>)</span>,
   <span class='va'>data</span>,
   output <span class='op'>=</span> <span class='st'>"default"</span>,
-  fmt <span class='op'>=</span> <span class='fl'>2</span>,
-  align <span class='op'>=</span> <span class='cn'>NULL</span>,
-  hrule <span class='op'>=</span> <span class='cn'>NULL</span>,
+  fmt <span class='op'>=</span> <span class='fl'>1</span>,
   title <span class='op'>=</span> <span class='cn'>NULL</span>,
   notes <span class='op'>=</span> <span class='cn'>NULL</span>,
-  add_rows <span class='op'>=</span> <span class='cn'>NULL</span>,
+  align <span class='op'>=</span> <span class='cn'>NULL</span>,
   add_columns <span class='op'>=</span> <span class='cn'>NULL</span>,
+  add_rows <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sparse_header <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>formula</th>
+      <td><p>A two-sided formula to describe the table: rows ~ columns,
+where rows and columns are variables in the data. Rows and columns may
+contain interactions, e.g., <code>var1 * var2 ~ var3</code>.</p></td>
+    </tr>
+    <tr>
+      <th>statistic</th>
+      <td><p>A formula of the form <code>1 ~ 1 + N + Percent("row")</code>. The
+left-hand side may only be empty or contain a <code>1</code> to include row totals.
+The right-hand side may contain: <code>1</code> for column totals, <code>N</code> for counts,
+<code><a href='Percent.html'>Percent()</a></code> for cell percentages, <code><a href='Percent.html'>Percent("row")</a></code> for row percentages,
+<code><a href='Percent.html'>Percent("col")</a></code> for column percentages.</p></td>
+    </tr>
     <tr>
       <th>data</th>
       <td><p>A data.frame (or tibble)</p></td>
@@ -161,22 +183,23 @@
 </ul></td>
     </tr>
     <tr>
-      <th>align</th>
-      <td><p>A character string of length equal to the number of columns in
-the table.  "lcr" means that the first column will be left-aligned, the 2nd
-column center-aligned, and the 3rd column right-aligned.</p></td>
-    </tr>
-    <tr>
-      <th>hrule</th>
-      <td><p>position of horizontal rules (integer vector)</p></td>
-    </tr>
-    <tr>
       <th>title</th>
       <td><p>string</p></td>
     </tr>
     <tr>
       <th>notes</th>
       <td><p>list or vector of notes to append to the bottom of the table.</p></td>
+    </tr>
+    <tr>
+      <th>align</th>
+      <td><p>A character string of length equal to the number of columns in
+the table.  "lcr" means that the first column will be left-aligned, the 2nd
+column center-aligned, and the 3rd column right-aligned.</p></td>
+    </tr>
+    <tr>
+      <th>add_columns</th>
+      <td><p>a data.frame (or tibble) with the same number of rows as
+your main table.</p></td>
     </tr>
     <tr>
       <th>add_rows</th>
@@ -186,24 +209,57 @@ You can define a "position" attribute of integers to set the row positions.
 See Examples section below.</p></td>
     </tr>
     <tr>
-      <th>add_columns</th>
-      <td><p>a data.frame (or tibble) with the same number of rows as
-your main table.</p></td>
+      <th>sparse_header</th>
+      <td><p>TRUE or FALSE. TRUE eliminates column headers which
+have a unique label across all columns, except for the row immediately above
+the data. FALSE keeps all headers. The order in which terms are entered in
+the formula determines the order in which headers appear. For example,
+<code>x~mean*z</code> will print the <code>mean</code>-related header above the <code>z</code>-related
+header.`</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>all other arguments are passed through to the extractor and
+      <td><p>all other arguments are passed through to the
 table-making functions. This allows users to pass arguments directly to
-<code>modelsummary</code> in order to affect the behavior of other functions behind
-the scenes. Examples include:</p><ul>
-<li><p><code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy(exponentiate=TRUE)</a></code> to exponentiate logistic regression</p></li>
+<code>datasummary</code> in order to affect the behavior of other functions behind
+the scenes, for instance:</p><ul>
 <li><p><code><a href='https://rdrr.io/pkg/kableExtra/man/kbl.html'>kableExtra::kbl(escape=FALSE)</a></code> to avoid escaping math characters in <code>kableExtra</code> tables.</p></li>
-<li><p><code><a href='https://easystats.github.io/performance/reference/model_performance.html'>performance::model_performance(metrics="RMSE")</a></code> to select goodness-of-fit statistics to extract using the <code>performance</code> package (must have set <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get="easystats")</a></code> first).</p></li>
 </ul></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p><code>datasummary_crosstab</code> is a wrapper around the <a href='datasummary.html'>datasummary</a>
+function. This wrapper works by creating a customized formula and by
+feeding it to <code>datasummary</code>. The cutomized formula comes in two parts.</p>
+<p>First, we take a two-sided formula supplied by the <code>formula</code> argument.
+All variables of that formula are wrapped in a <code><a href='Factor.html'>Factor()</a></code> call to ensure
+that the variables are treated as categorical.</p>
+<p>Second, the <code>statistic</code> argument gives a two-sided formula which specifies
+the statistics to include in the table. <code>datasummary_crosstab</code> modifies
+this formula automatically to include "clean" labels.</p>
+<p>Finally, the <code>formula</code> and <code>statistic</code> formulas are combined into a single
+formula which is fed directly to the <code>datasummary</code> function to produce the
+table.</p>
+<p>Variables in <code>formula</code> are automatically wrapped in <code><a href='Factor.html'>Factor()</a></code>.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='co'># crosstab of two variables, showing counts, row percentages, and row/column totals</span>
+  <span class='fu'>datasummary_crosstab</span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='va'>gear</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+
+  <span class='co'># crosstab of two variables, showing counts only and no totals</span>
+  <span class='fu'>datasummary_crosstab</span><span class='op'>(</span><span class='va'>cyl</span> <span class='op'>~</span> <span class='va'>gear</span>, statistic <span class='op'>=</span> <span class='op'>~</span> <span class='va'>N</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+
+  <span class='co'># crosstab of three variables</span>
+  <span class='fu'>datasummary_crosstab</span><span class='op'>(</span><span class='va'>am</span> <span class='op'>*</span> <span class='va'>cyl</span> <span class='op'>~</span> <span class='va'>gear</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+  
+  <span class='co'># crosstab with two variables and column percentages </span>
+  <span class='fu'>datasummary_crosstab</span><span class='op'>(</span><span class='va'>am</span> <span class='op'>~</span> <span class='va'>gear</span>, statistic <span class='op'>=</span> <span class='op'>~</span> <span class='fu'>Percentage</span><span class='op'>(</span><span class='st'>"col"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

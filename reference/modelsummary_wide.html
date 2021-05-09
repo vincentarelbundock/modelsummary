@@ -174,7 +174,7 @@ the <code>stacking</code> arguments.</p>
       <th>fmt</th>
       <td><p>determines how to format numeric values</p><ul>
 <li><p>integer: the number of digits to keep after the period <code><a href='https://rdrr.io/r/base/format.html'>format(round(x, fmt), nsmall=fmt)</a></code></p></li>
-<li><p>character: passed to the <code>sprintf</code> function (e.g., '\<!-- %.3f' keeps 3 digits with trailing zero). See \code{?sprintf} --></p></li>
+<li><p>character: passed to the <code>sprintf</code> function (e.g., '%.3f' keeps 3 digits with trailing zero). See <code><a href='https://rdrr.io/r/base/sprintf.html'>?sprintf</a></code></p></li>
 <li><p>function: returns a formatted character string.</p></li>
 </ul></td>
     </tr>
@@ -206,8 +206,9 @@ or any column name produced by: <code><a href='get_estimates.html'>get_estimates
     <tr>
       <th>vcov</th>
       <td><p>robust standard errors and other manual statistics. The <code>vcov</code>
-argument accepts five types of input (see the 'Details' and 'Examples'
+argument accepts six types of input (see the 'Details' and 'Examples'
 sections below):</p><ul>
+<li><p>NULL returns the default uncertainty estimates of the model object</p></li>
 <li><p>string, vector, or (named) list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", "weave", or "classical" (alias "constant" or "iid"). These variance-covariance matrices are computed using functions from the <code>sandwich</code> package. The behavior of those functions can (and sometimes <em>must</em>) be altered by passing arguments to <code>sandwich</code> directly from <code>modelsummary</code> through the ellipsis (<code>...</code>), but it is safer to define your own custom functions as described in the next bullet.</p></li>
 <li><p>function or (named) list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., <code><a href='https://rdrr.io/r/stats/vcov.html'>stats::vcov</a></code>, <code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>sandwich::vcovHC</a></code>, <code>function(x) vcovPC(x, cluster="country")</code>).</p></li>
 <li><p>formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).</p></li>
