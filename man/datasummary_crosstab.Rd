@@ -20,15 +20,15 @@ datasummary_crosstab(
 )
 }
 \arguments{
-\item{formula}{A two-sided formula to describe the table: rows ~ columns, where
-rows and columns are variables in the data. Both rows and column may contain
-interactions, e.g., \code{var1 * var2 ~ var3}.}
+\item{formula}{A two-sided formula to describe the table: rows ~ columns,
+where rows and columns are variables in the data. Rows and columns may
+contain interactions, e.g., \code{var1 * var2 ~ var3}.}
 
-\item{statistic}{A formula of the form \code{1 ~ 1 + N + Percent("row")}. The left-hand
-side may only be empty or contain a \code{1} to include row totals.
-The right-hand side may contain: \code{1} for column totals, \code{N} for counts, \code{Percent()} for
-cell percentages, \code{Percent("row")} for row percentages, \code{Percent("col")} for column
-percentages.}
+\item{statistic}{A formula of the form \code{1 ~ 1 + N + Percent("row")}. The
+left-hand side may only be empty or contain a \code{1} to include row totals.
+The right-hand side may contain: \code{1} for column totals, \code{N} for counts,
+\code{Percent()} for cell percentages, \code{Percent("row")} for row percentages,
+\code{Percent("col")} for column percentages.}
 
 \item{data}{A data.frame (or tibble)}
 
@@ -81,21 +81,42 @@ the scenes, for instance:
 }
 \description{
 Convenience function to tabulate counts, cell percentages, and row/column
-percentages for categorical variables. This a wrapper around \link{datasummary}.
-For more complex cross tabulations, use \link{datasummary} directly.
+percentages for categorical variables. See the Details section for a
+description of the internal design. For more complex cross tabulations, use
+\link{datasummary} directly.
 }
 \details{
+\code{datasummary_crosstab} is a wrapper around the \link{datasummary}
+function. This wrapper works by creating a customized formula and by
+feeding it to \code{datasummary}. The cutomized formula from two parts.
+
+First, we take a two-sided formula supplied by the \code{formula} argument.
+All variables of that formula are wrapped in a \code{Factor()} call to ensure
+that the variables are treated as categorical.
+
+Second, \code{statistic} argument gives a two-sided formula which specifies the
+statistics to include in the table. \code{datasummary_crosstab} modifies this
+formula automatically to include "clean" labels.
+
+Finally, the \code{formula} and \code{statistic} formulas are combined into a single
+formula which is fed directly to the \code{datasummary} function to produce the
+table.
+
 Variables in \code{formula} are automatically wrapped in \code{Factor()}.
 }
 \examples{
-
 \dontrun{
   # crosstab of two variables, showing counts, row percentages, and row/column totals
   datasummary_crosstab(cyl ~ gear, data = mtcars)
+
   # crosstab of two variables, showing counts only and no totals
   datasummary_crosstab(cyl ~ gear, statistic = ~ N, data = mtcars)
-  # crosstab of two interacted variables
+
+  # crosstab of three variables
   datasummary_crosstab(am * cyl ~ gear, data = mtcars)
+  
+  # crosstab with two variables and column percentages 
+  datasummary_crosstab(am ~ gear, statistic = ~ Percentage("col"), data = mtcars)
 }
 
 }

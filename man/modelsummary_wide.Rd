@@ -71,9 +71,10 @@ or any column name produced by: \code{get_estimates(model)}
 }}
 
 \item{vcov}{robust standard errors and other manual statistics. The \code{vcov}
-argument accepts five types of input (see the 'Details' and 'Examples'
+argument accepts six types of input (see the 'Details' and 'Examples'
 sections below):
 \itemize{
+\item NULL returns the default uncertainty estimates of the model object
 \item string, vector, or (named) list of strings: "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", "weave", or "classical" (alias "constant" or "iid"). These variance-covariance matrices are computed using functions from the \code{sandwich} package. The behavior of those functions can (and sometimes \emph{must}) be altered by passing arguments to \code{sandwich} directly from \code{modelsummary} through the ellipsis (\code{...}), but it is safer to define your own custom functions as described in the next bullet.
 \item function or (named) list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., \code{stats::vcov}, \code{sandwich::vcovHC}, \code{function(x) vcovPC(x, cluster="country")}).
 \item formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).

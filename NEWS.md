@@ -1,9 +1,14 @@
 # modelsummary 0.7.0.9000
 
-* Jupyter notebook support via `output="jupyter"`
-* A valid `get_gof` (`glance`) is now optional.
+`datasummary_crosstab`:
+
+* New function to produce cross-tabulations
+
+`modelsummary`:
+
 * new vcov options: "bootstrap", "HAC", "NeweyWest", "Andrews",
   "panel-corrected", "weave", "outer-product"
+* A valid `get_gof` (`glance`) is now optional.
 * ... is pushed through to `sandwich`, which allows things like:
   `modelsummary(model, vcov = "bootstrap", R = 1000, cluster = "firm")`
 
@@ -11,6 +16,11 @@
 
 * `N` is smart enough to return either the number of elements in a subset or the
   number of non-missing observations in a variable
+  
+Other:
+
+* Jupyter notebook support via `output="jupyter"`
+* Bug fixes
 
 # modelsummary 0.7.0
 

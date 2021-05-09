@@ -202,12 +202,26 @@ library(modelsummary)
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv'
 penguins <- read.csv(url)
 
+
 datasummary_crosstab(species ~ sex, data = penguins)
 ```
 
-By default, the cell counts and row percentages are shown for each cell, and both row and
-column totals are calculated. To show cell percentages or column
-percentages, or to drop row and column totals, adjust the `statistic` argument.
+By default, the cell counts and row percentages are shown for each cell, and both row and column totals are calculated. To show cell percentages or column percentages, or to drop row and column totals, adjust the `statistic` argument. For example:
+
+```{r}
+datasummary_crosstab(species ~ sex,
+                     statistic = ~ Percent("col"),
+                     data = penguins)
+```
+
+You can create multi-level crosstabs by specifying interactions using the `*` operator:
+
+```{r}
+datasummary_crosstab(species ~ sex * island, data = penguins,
+                     sparse_header = TRUE)
+```
+
+See `?datasummary_crosstab` for more details.
 
 # `datasummary`
 

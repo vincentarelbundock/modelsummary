@@ -1,28 +1,48 @@
 #' Cross tabulations for categorical variables
 #'
 #' Convenience function to tabulate counts, cell percentages, and row/column
-#' percentages for categorical variables. This a wrapper around \link{datasummary}.
-#' For more complex cross tabulations, use \link{datasummary} directly.
+#' percentages for categorical variables. See the Details section for a
+#' description of the internal design. For more complex cross tabulations, use
+#' \link{datasummary} directly.
 #'
 #' @inheritParams datasummary
 #' @import tables
-#' @param formula A two-sided formula to describe the table: rows ~ columns, where
-#' rows and columns are variables in the data. Both rows and column may contain
-#' interactions, e.g., `var1 * var2 ~ var3`.
-#' @param statistic A formula of the form `1 ~ 1 + N + Percent("row")`. The left-hand
-#' side may only be empty or contain a `1` to include row totals.
-#' The right-hand side may contain: `1` for column totals, `N` for counts, `Percent()` for
-#' cell percentages, `Percent("row")` for row percentages, `Percent("col")` for column
-#' percentages.
-#' @examples
+#' @param formula A two-sided formula to describe the table: rows ~ columns,
+#'   where rows and columns are variables in the data. Rows and columns may
+#'   contain interactions, e.g., `var1 * var2 ~ var3`.
+#' @param statistic A formula of the form `1 ~ 1 + N + Percent("row")`. The
+#'   left-hand side may only be empty or contain a `1` to include row totals.
+#'   The right-hand side may contain: `1` for column totals, `N` for counts,
+#'   `Percent()` for cell percentages, `Percent("row")` for row percentages,
+#'   `Percent("col")` for column percentages.
+#' @details `datasummary_crosstab` is a wrapper around the \link{datasummary}
+#'   function. This wrapper works by creating a customized formula and by
+#'   feeding it to `datasummary`. The cutomized formula comes in two parts.
 #'
+#'   First, we take a two-sided formula supplied by the `formula` argument.
+#'   All variables of that formula are wrapped in a `Factor()` call to ensure
+#'   that the variables are treated as categorical.
+#'
+#'   Second, the `statistic` argument gives a two-sided formula which specifies
+#'   the statistics to include in the table. `datasummary_crosstab` modifies
+#'   this formula automatically to include "clean" labels.
+#'
+#'   Finally, the `formula` and `statistic` formulas are combined into a single
+#'   formula which is fed directly to the `datasummary` function to produce the
+#'   table.
+#' @examples
 #' \dontrun{
 #'   # crosstab of two variables, showing counts, row percentages, and row/column totals
 #'   datasummary_crosstab(cyl ~ gear, data = mtcars)
+#'
 #'   # crosstab of two variables, showing counts only and no totals
 #'   datasummary_crosstab(cyl ~ gear, statistic = ~ N, data = mtcars)
-#'   # crosstab of two interacted variables
+#'
+#'   # crosstab of three variables
 #'   datasummary_crosstab(am * cyl ~ gear, data = mtcars)
+#'   
+#'   # crosstab with two variables and column percentages 
+#'   datasummary_crosstab(am ~ gear, statistic = ~ Percentage("col"), data = mtcars)
 #' }
 #'
 #' @details
