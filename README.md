@@ -21,6 +21,7 @@ The tables and plots produced by `modelsummary` are beautiful and highly customi
     - `modelplot`: Coefficient plots.
 2. Data Summary
     - `datasummary`: Powerful tool to create (multi-level) cross-tabs and data summaries.
+    - `datasummary_crosstab`: Cross-tabulations.
     - `datasummary_balance`: Balance tables with subgroup statistics and difference in means (aka "Table 1").
     - `datasummary_correlation`: Correlation tables.
     - `datasummary_skim`: Quick overview ("skim") of a dataset.

@@ -205,20 +205,20 @@ penguins <- read.csv(url)
 datasummary_crosstab(species ~ sex, data = penguins)
 ```
 
-By default, the cell counts and row percentages are shown for each cell, and both row and column totals are calculated. To show cell percentages or column percentages, or to drop row and column totals, adjust the `statistic` argument. For example:
-
-```{r}
-datasummary_crosstab(species ~ sex,
-                     statistic = ~ Percent("col"),
-                     data = penguins)
-```
-
 You can create multi-level crosstabs by specifying interactions using the `*` operator:
 
 ```{r}
-datasummary_crosstab(species ~ sex * island, data = penguins,
-                     sparse_header = TRUE)
+datasummary_crosstab(species ~ sex * island, data = penguins)
 ```
+
+By default, the cell counts and row percentages are shown for each cell, and both row and column totals are calculated. To show cell percentages or column percentages, or to drop row and column totals, adjust the `statistic` argument. This argument accepts a formula that follows the `datasummary` "language". To understand exactly how it works, you may find it useful to skip to the `datasummary` tutorial in the next section. Example:
+
+```{r}
+datasummary_crosstab(species ~ sex,
+                     statistic = 1 ~ Percent("col"),
+                     data = penguins)
+```
+
 
 See `?datasummary_crosstab` for more details.
 
