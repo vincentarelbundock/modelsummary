@@ -20,12 +20,12 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @param output filename or object type (character string)
 #' * Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
 #' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable".
-#' * To change the default output format, type `options(modelsummary_default = "latex")`, where `latex` can be any of the valid object types listed above. 
+#' * To change the default output format, type `options(modelsummary_default = "latex")`, where `latex` can be any of the valid object types listed above.
 #' * Warning: users should not supply a file name to the `output` argument if they intend to customize the table with external packages.
 #' * See the 'Details' section below for more information.
 #' @param fmt determines how to format numeric values
 #' * integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
-#' * character: passed to the `sprintf` function (e.g., '\%.3f' keeps 3 digits with trailing zero). See `?sprintf`
+#' * character: passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`
 #' * function: returns a formatted character string.
 #' @param stars to indicate statistical significance
 #' * FALSE (default): no significance stars.
