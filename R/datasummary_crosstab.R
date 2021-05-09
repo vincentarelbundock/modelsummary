@@ -47,25 +47,30 @@ datasummary_crosstab <- function(formula,
     # `formula` may not contain +
     formula_str <- deparse(formula, width.cutoff = 500)
     if (grepl("+", formula_str, fixed = TRUE)) {
-        stop("`formula` may not contain variables connected by +, only interactions with * are allowed.")
+        stop(paste0("`formula` may not contain variables connected by +, only interactions with * are allowed. ",
+            "To produce more complex tables, consider using the datasummary() function.", collapse = ""))
     }
     # `formula` must be length 3
     if (length(formula) != 3) {
-        stop("`formula` needs to be a two-sided formula, e.g. var1 ~ var2.")
+        stop(paste0("`formula` needs to be a two-sided formula, e.g. var1 ~ var2. ",
+            "To produce more complex tables, consider using the datasummary() function.", collapse = ""))
     }
     # check statistic formula
     lhs_statistic <- ifelse(length(statistic) == 2, "", deparse(statistic[[2]]))
     if (!(lhs_statistic %in% c("", ".", "1"))) {
-        stop("The left-hand side of `statistic` must either be empty of 1.")
+        stop(paste0("The left-hand side of `statistic` must either be empty of 1. ",
+            "To produce more complex tables, consider using the datasummary() function.", collapse = ""))
+    }
+    rhs_statistic <- utils::tail(as.character(statistic), 1)
+    if (grepl("*", rhs_statistic, fixed = TRUE)) {
+        stop(paste0("`statistic` may not contain interactions. ",
+            "To produce more complex tables, consider using the datasummary() function.", collapse = ""))
     }
     statistic_terms <- stats::terms(statistic)
     allowed <- c("N", "Percent()", 'Percent("row")', 'Percent("col")')
     if (!all(labels(statistic_terms) %in% allowed)) {
-        stop("The right-hand side of `statistic` may only contain 1, N, Percent(), Percent('row'), or Percent('col').")
-    }
-    rhs_statistic <- utils::tail(as.character(statistic), 1)
-    if (grepl("*", rhs_statistic, fixed = TRUE)) {
-        stop("`statistic` may not contain interactions.")
+        stop(paste0("The right-hand side of `statistic` may only contain 1, N, Percent(), Percent('row'), or Percent('col'). ",
+            "To produce more complex tables, consider using the datasummary() function.", collapse = ""))
     }
 
     # find out if row/column totals should be included
