@@ -15,7 +15,7 @@ datasummary_crosstab(
   align = NULL,
   add_columns = NULL,
   add_rows = NULL,
-  sparse_header = FALSE,
+  sparse_header = TRUE,
   ...
 )
 }
@@ -88,15 +88,15 @@ description of the internal design. For more complex cross tabulations, use
 \details{
 \code{datasummary_crosstab} is a wrapper around the \link{datasummary}
 function. This wrapper works by creating a customized formula and by
-feeding it to \code{datasummary}. The cutomized formula from two parts.
+feeding it to \code{datasummary}. The cutomized formula comes in two parts.
 
 First, we take a two-sided formula supplied by the \code{formula} argument.
 All variables of that formula are wrapped in a \code{Factor()} call to ensure
 that the variables are treated as categorical.
 
-Second, \code{statistic} argument gives a two-sided formula which specifies the
-statistics to include in the table. \code{datasummary_crosstab} modifies this
-formula automatically to include "clean" labels.
+Second, the \code{statistic} argument gives a two-sided formula which specifies
+the statistics to include in the table. \code{datasummary_crosstab} modifies
+this formula automatically to include "clean" labels.
 
 Finally, the \code{formula} and \code{statistic} formulas are combined into a single
 formula which is fed directly to the \code{datasummary} function to produce the

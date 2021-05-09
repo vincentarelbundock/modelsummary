@@ -58,8 +58,9 @@ datasummary_crosstab <- function(formula,
                                  align = NULL,
                                  add_columns = NULL,
                                  add_rows = NULL,
-                                 sparse_header = FALSE,
+                                 sparse_header = TRUE,
                                  ...) {
+
     # argument checking
     checkmate::assert_formula(formula)
     checkmate::assert_formula(statistic)
