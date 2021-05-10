@@ -553,19 +553,34 @@ datasummary(flipper_length_mm + body_mass_g ~ species * (Mean + SD),
 
 # Missing values
 
-The first issue that one can encounter with missing values is empty cells in the table. If you are using `datasummary`, don't forget to use functions that handle `NA`s correctly, or use the `na.rm=TRUE` argument (see the `Arguments` section above).
+At least 3 distinct issues can arise related to missing values.
 
-By default, the `datasummary` family of functions will omit any `NA` or `NaN` symbols from the table automatically. This can be problematic in some cases where, for example, you want to display a `datasummary_balance` table where a factor variable includes missing data. In those cases, it can be useful to recode your factor to include an explicit missing level. The `fct_explict_na` function from the `forcats` package makes it easy to do this:
+## Functions and `na.rm`
+
+An empty cell can appear in the table when a statistical function returns `NA` instead of a numeric value. In those cases, you should:
+
+1. Make sure that your statistical function (e.g., `mean` or `sd`) uses `na.rm=TRUE` by default
+2. Use the `Arguments` strategy to set `na.rm=TRUE` (see the `Arguments` section of this vignette).
+3. Use a convenience function supplied by `modelsummary`, where `na.rm` is `TRUE` by default: `Mean`, `SD`, `P25`, etc.
+
+## Empty crosstab cells
+
+An empty cell can appear in the table when a crosstab is deeply nested, and there are no observations for a given combination of covariates. In those cases, you can use the `* DropEmpty` pseudo-function. See the "Empty cells" section of this vignette for examples.
+
+## Factors
+
+By default, the `factor` function in `R` does *not* assign a distinct factor level to missing values: the `factor` function's `exclude` argument is set to `NA` by default. To ensure that `NA`s appear in your table, make sure you set `exclude=NULL` when you create the factor.
+
+Internally, the `datasummary_balance` and `datasummary_crosstab` functions convert logical and character variables to factor with the `exclude=NULL` argument. This means that `NA`s will appear in the table as distinct rows/columns. If you do *not* want `NA`s to appear in your table, convert them to factors yourself ahead of time. For example:
 
 ```{r}
 mycars <- mtcars[, c("cyl", "mpg", "hp", "vs")]
-mycars$cyl <- as.factor(mycars$cyl)
 mycars$cyl[c(1, 3, 6, 8)] <- NA
+mycars$cyl_nona <- factor(mycars$cyl)
+mycars$cyl_na <- factor(mycars$cyl, exclude = NULL)
 
-# recode missing factors
-mycars$cyl <- forcats::fct_explicit_na(mycars$cyl)
-
-datasummary_balance(~vs, mycars)
+datasummary_crosstab(cyl_nona ~ vs, data = mycars)
+datasummary_crosstab(cyl_na ~ vs, data = mycars)
 ```
 
 # Appearance
