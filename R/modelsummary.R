@@ -430,10 +430,10 @@ modelsummary <- function(
 
   # make sure there are no duplicate estimate names *within* a single model.
   # this cannot be in input sanity checks. idx paste allows multiple statistics.
-  if (is.null(group$group_name)) {
+  if (is.null(group$group_name) && "term" %in% group$lhs) {
     idx <- paste(est$term, est$statistic)
-    if (anyDuplicated(idx) > 2) {
-      warning('The table includes duplicate term names. This can sometimes happen when a model produces "grouped" terms, such as in multinomial logit or gamlss models. You may want to call `get_estimates(model)` to see how estimates are labelled internally, and use the `group` argument of the `modelsummary` function.')
+    if (anyDuplicated(idx) > 1) {
+      warning('The table includes duplicate term names. This can happen when `coef_map` or `coef_rename` are misused. This can also happen when a model produces "grouped" terms, such as in multinomial logit or gamlss models. You may want to call `get_estimates(model)` to see how estimates are labelled internally, and use the `group` argument of the `modelsummary` function.')
     }
   }
 

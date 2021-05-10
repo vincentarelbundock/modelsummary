@@ -10,6 +10,7 @@ models[["GAMLSS"]] <- gamlss(y~pb(x),sigma.fo=~pb(x),family=BCT, data=abdom, met
 
 
 test_that("flipped table (no groups)", {
+
     mod = list(
     lm(hp ~ mpg, mtcars),
     lm(hp ~ mpg + drat, mtcars))

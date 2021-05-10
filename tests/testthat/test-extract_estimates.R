@@ -10,8 +10,9 @@ test_that("bad statistic name throws error", {
   expect_error(
     modelsummary(mod, output="dataframe", statistic = "junk")
   )
+
   expect_error(
-    modelsummary(models, 
+    modelsummary(mod, 
                  statistic="junk",
                  output="dataframe",
                  statistic_override = vcov)
