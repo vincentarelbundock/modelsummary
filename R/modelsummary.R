@@ -382,6 +382,7 @@ modelsummary <- function(
 
   }
 
+
   term_order <- unique(unlist(lapply(est, function(x) x$term)))
   group_order <- unique(unlist(lapply(est, function(x) x$group)))
 
@@ -427,11 +428,12 @@ modelsummary <- function(
     }
   }
 
-  # group duplicates
-  if ("term" %in% colnames(est)) {
-    idx <- paste(as.character(est$term), est$statistic)
-    if (is.null(group) && anyDuplicated(idx) > 0) {
-        warning('The table includes duplicate term names. This can sometimes happen when a model produces "grouped" terms, such as in a multinomial logit or a gamlss model. Consider using the the `group` argument.')
+  # make sure there are no duplicate estimate names *within* a single model.
+  # this cannot be in input sanity checks. idx paste allows multiple statistics.
+  if (is.null(group$group_name)) {
+    idx <- paste(est$term, est$statistic)
+    if (anyDuplicated(idx) > 2) {
+      warning('The table includes duplicate term names. This can sometimes happen when a model produces "grouped" terms, such as in multinomial logit or gamlss models. You may want to call `get_estimates(model)` to see how estimates are labelled internally, and use the `group` argument of the `modelsummary` function.')
     }
   }
 
@@ -466,6 +468,7 @@ modelsummary <- function(
   } else {
     tab <- est
   }
+
 
 
   ##################
@@ -571,6 +574,13 @@ map_omit_rename_estimates <- function(estimates,
                              coef_omit,
                              group_map) {
 
+
+    # coef_omit
+    if (!is.null(coef_omit)) {
+        idx <- !grepl(coef_omit, estimates$term, perl = TRUE)
+        estimates <- estimates[idx, , drop = FALSE]
+    }
+
     # coef_rename
     if (!is.null(coef_rename)) {
         if (is.character(coef_rename)) {
@@ -581,6 +591,7 @@ map_omit_rename_estimates <- function(estimates,
         estimates$term <- replace_dict(estimates$term, dict)
     }
 
+
     # coef_map
     if (!is.null(coef_map)) {
         if (is.null(names(coef_map))) {
@@ -590,12 +601,8 @@ map_omit_rename_estimates <- function(estimates,
         estimates$term <- replace_dict(estimates$term, coef_map)
     }
 
-    # coef_omit
-    if (!is.null(coef_omit)) {
-        idx <- !grepl(coef_omit, estimates$term, perl = TRUE)
-        estimates <- estimates[idx, , drop = FALSE]
-    }
 
+    # group_map
     if (!is.null(group_map)) {
         if (is.null(names(group_map))) {
             group_map <- stats::setNames(group_map, group_map)
@@ -604,14 +611,8 @@ map_omit_rename_estimates <- function(estimates,
         estimates$group <- replace_dict(estimates$group, group_map)
     }
 
-    # make sure no duplicate estimate names *within* a single model. this
-    # cannot be in input sanity checks. idx paste allows multiple statistics.
-    idx <- paste(estimates$term, estimates$statistic)
-    if (anyDuplicated(idx) > 2) {
-      stop('Two coefficients from a single model cannot share the same name.')
-    }
 
-  return(estimates)
+    return(estimates)
 }
 
 
