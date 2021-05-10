@@ -204,6 +204,20 @@ test_that("lme4", {
                regexp = "Unable to extract")
 })
 
+test_that("lme4 with 2 random effects", {
+  testthat::skip_if_not_installed("lme4")
+  library(lme4)
+  mod <- lmer(mpg ~ hp + (1|am) + (1|cyl), data = mtcars)
+  tab <- expect_warning(modelsummary(mod, output = "data.frame", gof_omit = ".*"),
+                        regexp = "duplicate")
+  expect_s3_class(tab, "data.frame")
+
+  tab <- modelsummary(mod, output = "data.frame", gof_omit = ".*",
+                      group = group + term ~ model)
+  expect_s3_class(tab, "data.frame")
+  expect_equal(dim(tab), c(7, 5))
+})
+
 
 test_that("lme4 with parameter's effects argument", {
   testthat::skip_if_not_installed("lme4")
