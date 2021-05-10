@@ -4,6 +4,16 @@
 
 * New function to produce cross-tabulations
 
+`datasummary`:
+
+* `N` is smart enough to return either the number of elements in a subset or the
+  number of non-missing observations in a variable
+  
+`datasummary_balance`:
+
+* Keeps `NA`s in factor variables by default. Users can convert their variables
+  with the `factor()` function to omit `NA`s automatically.
+
 `modelsummary`:
 
 * new vcov options: "bootstrap", "HAC", "NeweyWest", "Andrews",
@@ -11,12 +21,7 @@
 * A valid `get_gof` (`glance`) is now optional.
 * ... is pushed through to `sandwich`, which allows things like:
   `modelsummary(model, vcov = "bootstrap", R = 1000, cluster = "firm")`
-
-`datasummary`:
-
-* `N` is smart enough to return either the number of elements in a subset or the
-  number of non-missing observations in a variable
-  
+ 
 Other:
 
 * Jupyter notebook support via `output="jupyter"`

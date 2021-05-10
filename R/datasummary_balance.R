@@ -146,28 +146,51 @@ datasummary_balance <- function(formula,
 
 datasummary_balance_factor <- function(rhs, data, data_norhs, any_numeric) {
 
+  # formatting function
+  pctformat = function(x) sprintf("%.1f", x)
+
   # hack: `tables::tabular` produces different # of cols with a single or
   # multiple factors. Make sure there are multiple.
   data$badfactordropthis <- factor(
     c("badfactordropthis1",
     rep("badfactordropthis2", nrow(data) - 1)))
+
   data_norhs$badfactordropthis <- factor(
     c("badfactordropthis1",
       rep("badfactordropthis2", nrow(data_norhs) - 1)))
 
-  pctformat = function(x) sprintf("%.1f", x)
+  # convert to factor; drop non categorical
+  for (v in colnames(data_norhs)) {
+    if (is.factor(data_norhs[[v]])) {
+      # do nothing
+    } else if (is.character(data_norhs[[v]]) || is.logical(data_norhs[[v]])) {
+      data[[v]] <- factor(data[[v]], exclude = NULL)
+      data_norhs[[v]] <- factor(data_norhs[[v]], exclude = NULL)
+    } else {
+      data[[v]] <- NULL
+      data_norhs[[v]] <- NULL
+    }
+  }
+
+  # formula
   f_fac <- 'All(data_norhs, factor = TRUE, numeric = FALSE) ~
             Factor(%s) * (Heading("N")*1 * Format(digits = 0) +
             Heading("%%") * Percent("col") * Format(pctformat()))'
   f_fac <- sprintf(f_fac, rhs)
-  if (any_numeric) {
+
+  if (any_numeric) { # before removing numerics
     f_fac <- gsub('\\"\\%\\"', '\\"Std. Dev.\\"', f_fac)
     f_fac <- gsub('\\"N\\"', '\\"Mean\\"', f_fac)
   }
-  tab_fac <- datasummary(stats::formula(f_fac), data = data, output = "data.frame")
+  f_fac <- stats::formula(f_fac)
 
+  # process
+  tab_fac <- datasummary(f_fac,
+                         data = data,
+                         output = "data.frame")
+
+  # cleanup
   colnames(tab_fac) <- pad(attr(tab_fac, "header_bottom"))
-
   idx <- !grepl("^badfactordropthis\\d$", tab_fac[[2]])
   tab_fac <- tab_fac[idx, , drop = FALSE]
 
@@ -175,7 +198,6 @@ datasummary_balance_factor <- function(rhs, data, data_norhs, any_numeric) {
   data_norhs$badfactordropthis <- data$badfactordropthis <- NULL
 
   return(tab_fac)
-
 }
 
 
@@ -309,7 +331,7 @@ sanitize_datasummary_balance_data <- function(formula, data) {
   for (n in colnames(data)) {
     # categorical data must be factor
     if (is.character(data[[n]]) || is.logical(data[[n]])) {
-      data[[n]] <- as.factor(data[[n]])
+      data[[n]] <- factor(data[[n]], exclude = NULL)
     }
 
     if (n != rhs) {
