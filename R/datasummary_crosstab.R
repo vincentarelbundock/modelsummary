@@ -106,8 +106,16 @@ datasummary_crosstab <- function(formula,
     labels[labels == 'Percent("col")'] <- 'Heading("% col")*Percent("col")'
 
     # treat all variables as Factors
-    lhs_formula <- paste0("Factor(", all.vars(formula[[2]]), ")")
-    rhs_formula <- paste0("Factor(", all.vars(formula[[3]]), ")")
+    ## lhs_formula <- paste0("Factor(", all.vars(formula[[2]]), ")")
+    ## rhs_formula <- paste0("Factor(", all.vars(formula[[3]]), ")")
+    lhs_formula <- paste0(all.vars(formula[[2]]))
+    rhs_formula <- paste0(all.vars(formula[[3]]))
+
+    for (v in all.vars(formula)) {
+      if (!is.factor(data[[v]])) {
+        data[[v]] <- factor(data[[v]], exclude = NULL)
+      }
+    }
 
     d_formula <- sprintf("(%s%s) * (%s) ~ %s%s",
         paste(lhs_formula, collapse = " * "), total_row,

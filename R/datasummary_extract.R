@@ -5,7 +5,6 @@ datasummary_extract <- function(tab,
                                 fmt = NULL,
                                 sparse_header = TRUE) {
 
-
   # arbitrary length of no formatting requested
   if (is.null(fmt)) fmt <- '%.50f'
 
@@ -20,36 +19,15 @@ datasummary_extract <- function(tab,
     }
   }
 
-  # NA to empty cells
-  clean_na <- function(x) {
-    out <- trimws(x)
-    out[is.na(out)] <- ''
-    out <- ifelse(out %in% c('NA', 'NaN'), '', out)
-    return(out)
-  }
-
-  # fill-in spanning column labels horizontally
-  carry_forward <- function(x, empty = '') {
-    x <- trimws(x)
-    if (length(x) > 1) {
-      for (i in 2:length(x)) {
-        if (is.na(x[i])) {
-          x[i] <- x[i - 1]
-        }
-      }
-    }
-    x
-  }
-
   # extract
   idx <- nrow(tables::colLabels(tab))
   mat <- as.matrix(tab)
 
   # header
   header <- as.matrix(tables::colLabels(tab))
+
   for (i in 1:nrow(header)) {
     header[i, ] <- carry_forward(header[i, , drop = TRUE])
-    header[i, ] <- clean_na(header[i, , drop = TRUE])
   }
 
   stub_width <- ncol(mat) - ncol(header)
@@ -61,20 +39,15 @@ datasummary_extract <- function(tab,
 
   # main --- TODO: test if main has only one row
   main <- mat[(idx + 1):nrow(mat), , drop = FALSE]
-  for (i in 1:nrow(main)) {
-    main[i, ] <- clean_na(main[i, ])
-  }
   main <- data.frame(main)
 
-  # clean columns
-  colnames(main) <- clean_na(as.vector(mat[idx, ]))
+  colnames(main) <- as.vector(mat[idx, ])
 
-  # utility functions
-  sparsify <- function(h) {
-    unique_na <- function(x) length(unique(base::setdiff(x, ''))) > 1
-    idx <- apply(h, 1, unique_na)
-    out <- h[idx, , drop = FALSE]
-    return(out)
+  # remove NAs, but not in stub or header
+  for (i in (stub_width + 1):ncol(main)) {
+    main[, i] <- trimws(main[, i])
+    main[, i] <- ifelse(is.na(main[, i]) | is.nan(main[, i]), "", main[, i])
+    main[, i] <- ifelse(main[, i] %in% c("NA", "NaN"), "", main[, i])
   }
 
   # stub_width attribute before return
@@ -116,12 +89,10 @@ datasummary_extract <- function(tab,
     h <- header_nocolnames
   }
 
-  clean <- function(x) ifelse(x == '', ' ', x) # needed in factory_kableExtra
-
   if (nrow(h) > 0) { # are there any spans?
     span <- list()
     for (i in 1:nrow(h)) {
-      z <- clean(h[i, ])
+      z <- ifelse(h[i, ] == "", " ", h[i, ]) # needed in factory_kableExtra
       idx <- rle(z)
       span[[i]] <- stats::setNames(idx$lengths, idx$values)
     }
@@ -136,4 +107,25 @@ datasummary_extract <- function(tab,
   # return
   return(main)
 
+}
+
+# fill-in spanning column labels horizontally
+carry_forward <- function(x, empty = '') {
+    x <- trimws(x)
+    if (length(x) > 1) {
+        for (i in 2:length(x)) {
+        if (is.na(x[i])) {
+            x[i] <- x[i - 1]
+        }
+        }
+    }
+    x
+}
+
+# utility functions
+sparsify <- function(h) {
+    unique_na <- function(x) length(unique(base::setdiff(x, ''))) > 1
+    idx <- apply(h, 1, unique_na)
+    out <- h[idx, , drop = FALSE]
+    return(out)
 }
