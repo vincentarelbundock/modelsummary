@@ -164,7 +164,7 @@ sanity_fmt <- function(fmt) {
 #'
 #' @noRd
 sanity_conf_level <- function(conf_level) {
-  checkmate::assert_number(conf_level, len = 1, lower = 0, upper = .999999999999, null.ok = TRUE)
+  checkmate::assert_number(conf_level, lower = 0, upper = .999999999999, null.ok = TRUE)
 }
 
 

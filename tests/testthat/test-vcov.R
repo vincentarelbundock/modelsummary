@@ -28,7 +28,9 @@ test_that("warning for non-iid hardcoded vcov", {
     data("SchoolingReturns", package = "ivreg")
     mod <- feols(log(wage) ~ ethnicity + experience + smsa | education ~ nearcollege,
                  data = SchoolingReturns)
-    expect_warning(modelsummary(mod, vcov = list(NULL, "robust", vcov(mod, se = "hetero")), output = "data.frame"),
+    expect_warning(modelsummary(mod, vcov = list(NULL, "robust", "iid" = vcov(mod, se = "hetero")), output = "data.frame"),
+                   regexp = "IID")
+    expect_warning(modelsummary(mod, vcov = list(NULL, "classical", vcov(mod, se = "hetero")), output = "data.frame"),
                    regexp = "IID")
 })
     
