@@ -54,10 +54,10 @@ get_gof <- function(model, vcov_type = NULL, ...) {
     }
 
     # vcov_type: nothing if unnamed matrix, vector, or function
-    if (is.character(vcov_type) &&
-        !vcov_type %in% c("matrix", "vector", "function")) {
+    if (is.character(vcov_type) && !vcov_type %in% c("matrix", "vector", "function")) {
         gof$vcov.type <- vcov_type
     }
+
 
     # glance_custom (vcov_type arg is needed for glance_custom.fixest)
     gof_custom <- glance_custom(model)

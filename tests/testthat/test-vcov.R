@@ -8,6 +8,31 @@ models[['OLS 2']] <- lm(Desertion ~ Crime_prop + Infants, dat)
 models[['Poisson 2']] <- glm(Desertion ~ Crime_prop + Donations, dat, family = poisson())
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 
+test_that("warning for non-iid hardcoded vcov", {
+    testthat::skip_if_not_installed("fixest")
+    testthat::skip_if_not_installed("estimatr")
+    testthat::skip_if_not_installed("ivreg")
+
+    library(fixest)
+    library(estimatr)
+
+    mod <- feols(hp ~ mpg + drat, mtcars, cluster = "vs")
+    expect_warning(modelsummary(mod, vcov = "iid", output = "data.frame"), regexp = "IID")
+
+    mod <- lm_robust(hp ~ mpg + drat, mtcars)
+    expect_warning(modelsummary(mod, vcov = "iid", output = "data.frame"), regexp = "IID")
+
+    mod <- feols(hp ~ mpg + drat | cyl, mtcars)
+    expect_warning(modelsummary(mod, vcov = "iid", output = "data.frame"), regexp = "IID")
+
+    data("SchoolingReturns", package = "ivreg")
+    mod <- feols(log(wage) ~ ethnicity + experience + smsa | education ~ nearcollege,
+                 data = SchoolingReturns)
+    expect_warning(modelsummary(mod, vcov = list(NULL, "robust", vcov(mod, se = "hetero")), output = "data.frame"),
+                   regexp = "IID")
+})
+    
+
 test_that("user-supplied vcov_type in gof section", {
     mod <- lm(hp ~ mpg, data = mtcars)
     vc <- list("Rob" = "robust",
@@ -17,6 +42,7 @@ test_that("user-supplied vcov_type in gof section", {
     row <- unname(unlist(tab[nrow(tab), 4:6]))
     expect_equal(row, c("Rob", "Stata Corp", "Newey Lewis & the News"))
 })
+
 
 test_that("sandwich arguments in ellipsis", {
   library(sandwich)
