@@ -164,6 +164,9 @@ sanity_fmt <- function(fmt) {
 #'
 #' @noRd
 sanity_conf_level <- function(conf_level) {
+  if(is.list(conf_level)){
+    stop("The argument 'conf_level' must be numeric.\nIf you have have entered multiple models, make sure to include them as a list object i.e. in the form 'modelplot(list(model1, model2))' and not like this: 'modelplot(model1,model2)'")
+  }
   checkmate::assert_number(conf_level, lower = 0, upper = .999999999999, null.ok = TRUE)
 }
 
