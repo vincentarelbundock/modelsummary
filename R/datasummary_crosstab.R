@@ -17,7 +17,7 @@
 #'   `Percent("col")` for column percentages.
 #' @details `datasummary_crosstab` is a wrapper around the \link{datasummary}
 #'   function. This wrapper works by creating a customized formula and by
-#'   feeding it to `datasummary`. The cutomized formula comes in two parts.
+#'   feeding it to `datasummary`. The customized formula comes in two parts.
 #'
 #'   First, we take a two-sided formula supplied by the `formula` argument.
 #'   All variables of that formula are wrapped in a `Factor()` call to ensure
