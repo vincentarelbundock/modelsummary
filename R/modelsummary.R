@@ -330,7 +330,6 @@ modelsummary <- function(
     model_names <- names(models)
   }
 
-
   #######################
   #  modelsummary_list  #
   #######################

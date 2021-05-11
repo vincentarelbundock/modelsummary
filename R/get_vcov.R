@@ -139,7 +139,7 @@ get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
       msg <- paste0(
         "The `lmtest::coeftest` function does not seem to produce a valid result ",
         "when applied to a model of class %s. Only the standard errors have been adjusted, ",
-        "but p-values and confidence intervals might not be correct.", collapse = "")
+        "but p-values and confdence intervals might not be correct.", collapse = "")
       warning(sprintf(msg, class(model)[1]))
       return(out)
     }
@@ -189,7 +189,6 @@ get_coeftest <- function(model, vcov, conf_level) {
 #'
 #' @param v a string or formula describing the standard error type
 #' @keywords internal
-
 get_vcov_type <- function(vcov) {
 
   # user-supplied std.error names
@@ -209,26 +208,19 @@ get_vcov_type <- function(vcov) {
       out <- paste("C:", as.character(v)[2])
     } else if (is.null(v)) {
       out <- NULL
+    } else if (is.function(v)) {
+      out <- "function"
+    } else if (is.matrix(v)) {
+      out <- "matrix"
+    } else if (checkmate::test_atomic_vector(v)) {
+      out <- "vector"
     } else {
-      out <- ""
+      out <- NULL
     }
     return(out)
   }
 
-  vcov_type_flag <- !all(sapply(vcov, is.null))
-
-  for (v in vcov) {
-    if (!checkmate::test_formula(v) &&
-        !checkmate::test_character(v, len = 1, null.ok = TRUE)) {
-       vcov_type_flag <- FALSE
-    }
-  }
-
-  if (vcov_type_flag == TRUE) {
-    vcov_type <- sapply(vcov, get_vcov_type_inner)
-  } else {
-    vcov_type <- NULL
-  }
+  vcov_type <- sapply(vcov, get_vcov_type_inner)
 
   return(vcov_type)
 }

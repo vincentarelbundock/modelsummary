@@ -5,12 +5,13 @@
 #' method called `glance_custom.lm` which returns a one-row data.frame.
 #'
 #' @param x model or other R object to convert to single-row data frame
+#' @param ... ellipsis
 #'
 #' @section Methods:
 #' \Sexpr[stage=render,results=rd]{generics:::methods_rd("glance")}
 #'
 #' @export
-glance_custom <- function(x) {
+glance_custom <- function(x, ...) {
   UseMethod("glance_custom")
 }
 
@@ -18,19 +19,21 @@ glance_custom <- function(x) {
 #' @inherit glance_custom
 #' @noRd
 #' @export
-glance_custom.default <- function(x) NULL
+glance_custom.default <- function(x, ...) NULL
 
 
 #' @inherit glance_custom
 #' @noRd
 #' @export
-glance_custom.fixest <- function(x) {
+glance_custom.fixest <- function(x, vcov_type = NULL, ...) {
   assert_dependency("fixest")
   out <- data.frame(row.names = "firstrow")
   for (n in x$fixef_vars) {
     out[[paste('FE:', n)]] <- 'X'
   }
-  out[['vcov.type']] <- attr(fixest::coeftable(x), "type")
+  if (is.null(vcov_type) || !vcov_type %in% c("vector", "matrix", "function")) {
+    out[['vcov.type']] <- attr(fixest::coeftable(x), "type")
+  }
   row.names(out) <- NULL
   return(out)
 }

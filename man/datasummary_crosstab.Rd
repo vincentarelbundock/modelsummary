@@ -88,7 +88,7 @@ description of the internal design. For more complex cross tabulations, use
 \details{
 \code{datasummary_crosstab} is a wrapper around the \link{datasummary}
 function. This wrapper works by creating a customized formula and by
-feeding it to \code{datasummary}. The cutomized formula comes in two parts.
+feeding it to \code{datasummary}. The customized formula comes in two parts.
 
 First, we take a two-sided formula supplied by the \code{formula} argument.
 All variables of that formula are wrapped in a \code{Factor()} call to ensure

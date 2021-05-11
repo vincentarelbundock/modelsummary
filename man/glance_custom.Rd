@@ -5,10 +5,12 @@
 \title{Extract custom information from a model object and turn it into a tidy
 data.frame or tibble with a single row.}
 \usage{
-glance_custom(x)
+glance_custom(x, ...)
 }
 \arguments{
 \item{x}{model or other R object to convert to single-row data frame}
+
+\item{...}{ellipsis}
 }
 \description{
 To customize the output of a model of class \code{lm}, you can define a new

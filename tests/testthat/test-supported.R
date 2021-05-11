@@ -137,6 +137,7 @@ test_that("fixest std.error labels", {
   library(fixest)
   
   mod <- feols(hp ~ mpg + drat, mtcars, cluster = "vs")
+
   tab <- modelsummary(mod, output = "data.frame")
   expect_equal(tab[tab$term == "Std. Errors", "Model 1"],
                "Clustered (vs)")
@@ -150,6 +151,18 @@ test_that("fixest std.error labels", {
                "Clustered (vs)")
   expect_equal(tab[tab$term == "Std. Errors", "Model 2"],
                "IID")
+
+  # unnamed function includes no label
+  tab1 <- modelsummary(mod, vcov = vcov(mod, se = "standard"),
+                       output = "data.frame")
+  tab2 <- modelsummary(mod, vcov = list(vcov(mod, se = "standard")),
+                       output = "data.frame")
+  tab3 <- modelsummary(mod, vcov = list("test " = vcov(mod, se = "standard")),
+                       output = "data.frame")
+  expect_false("Std. Errors" %in% tab1$term)
+  expect_false("Std. Errors" %in% tab2$term)
+  expect_true("Std. Errors" %in% tab3$term)
+
 })
 
 
