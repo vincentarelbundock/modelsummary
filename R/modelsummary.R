@@ -749,11 +749,16 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, ...) {
 
     vcov_type <- get_vcov_type(vcov)
 
+    vcov_names <- names(vcov)
+
+
     # warning for models with hard-coded non-IID vcov
-    if (is.null(names(vcov))) {
-        hardcoded <- c("fixest", "lm_robust")
-        flag_vcov <- NULL
-        for (i in 1:number_of_models) {
+    hardcoded <- c("fixest", "lm_robust")
+    flag_vcov <- NULL
+
+    for (i in 1:number_of_models) {
+        # trust users when they specify vcov names
+        if (is.null(vcov_names[[i]]) || vcov_names[[i]] == "") {
             j <- ifelse(length(models) == 1, 1, i)
             if (is.character(vcov_type[[i]]) &&
                 tolower(vcov_type[[i]]) %in% c("iid", "classical", "constant") &&
@@ -761,10 +766,11 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, ...) {
                 flag_vcov <- i
             }
         }
-        if (!is.null(flag_vcov)) {
-            j <- ifelse(length(models) == 1, 1, flag_vcov)
-            warning(sprintf('When the `vcov` argument is set to "iid", "classical", or "constant", `modelsummary` extracts the default variance-covariance matrix from the model object. For objects of class `%s`, the default vcov is not always IID. Please make sure that the standard error label matches the numeric results in the table. Note that the `vcov` argument accepts a named list for users who want to customize the standard error labels in their regression tables.', class(models[[j]])[1]))
-        }
+    }
+
+    if (!is.null(flag_vcov)) {
+        j <- ifelse(length(models) == 1, 1, flag_vcov)
+        warning(sprintf('When the `vcov` argument is set to "iid", "classical", or "constant", `modelsummary` extracts the default variance-covariance matrix from the model object. For objects of class `%s`, the default vcov is not always IID. Please make sure that the standard error label matches the numeric results in the table. Note that the `vcov` argument accepts a named list for users who want to customize the standard error labels in their regression tables.', class(models[[j]])[1]))
     }
 
     # extract

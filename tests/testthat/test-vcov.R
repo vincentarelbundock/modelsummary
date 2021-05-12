@@ -25,19 +25,22 @@ test_that("warning for non-iid hardcoded vcov", {
     mod <- feols(hp ~ mpg + drat | cyl, mtcars)
     expect_warning(modelsummary(mod, vcov = "iid", output = "data.frame"), regexp = "IID")
 
+    # assume user knows that they are doing
     mod <- feols(mpg ~ cyl | am, data = mtcars)
-    tab <- expect_warning(
-        modelsummary(mod,
-            vcov = list("IID" = vcov(mod, se = "standard")),
-            output = "data.frame"
-        ), NA)
+    tab <- modelsummary(mod, vcov = list("IID" = vcov(mod, se = "standard")), output = "data.frame")
     expect_true("IID" %in% tab[["Model 1"]])
 
     data("SchoolingReturns", package = "ivreg")
     mod <- feols(log(wage) ~ ethnicity + experience + smsa | education ~ nearcollege,
                  data = SchoolingReturns)
-    expect_warning(modelsummary(mod, vcov = list(NULL, "robust", "iid" = vcov(mod, se = "hetero")), output = "data.frame"),
-                   regexp = "IID")
+
+    # assume sandwich works with fixest
+    expect_warning(modelsummary(mod, vcov = list(NULL, "robust"), output = "data.frame"), NA)
+
+    # assume user knows that they are doing
+    expect_warning(modelsummary(mod, vcov = list(NULL, "robust", "iid" = vcov(mod, se = "hetero")), output = "data.frame"), NA)
+
+    # no explicit vcov names, so we raise the warning
     expect_warning(modelsummary(mod, vcov = list(NULL, "classical", vcov(mod, se = "hetero")), output = "data.frame"),
                    regexp = "IID")
 })
