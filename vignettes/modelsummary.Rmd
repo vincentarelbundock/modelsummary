@@ -725,6 +725,46 @@ modelsummary(mod_custom)
 
 Warning: When defining new `tidy` and `glance` methods, it is important to include an ellipsis argument (`...`).
 
+# Customizing existing models (part III)
+
+Another flexible way to customize model output is to use `output = "modelsummary_list"`.
+With this output option, `modelsummary()` returns a list with two elements:
+`tidy` contains parameter estimates, standard errors, etc., and `glance` contains
+model statistics such as the AIC. For example,
+
+```{r}
+mod <- lm(hp ~ mpg + drat, mtcars)
+mod_list <- modelsummary(mod, output = "modelsummary_list")
+mod_list$tidy
+mod_list$glance
+```
+Both `tidy` and `glance` can now be customized, and the updated model can be passed
+back to modelsummary using `modelsummary(mod_list)`.
+All information that is displayed in the table is contained in `mod_list`, so
+this pattern allows for very flexible adjustments of output tables.
+
+A useful example for this pattern concerns mixed models using `lme4`. Assume we want to 
+compare the effect of using different degrees-of-freedom adjustments on the significance 
+of the coefficients. The models have identical parameter estimates, standard errors, and
+model fit statistics - we only want to change the p-values.
+We use the `parameters` package to compute the adjusted p-values.
+
+```{r include = FALSE}
+library("lme4")
+```
+
+```{r}
+library("lme4")
+mod <- lmer(mpg ~ drat + (1 | am), data = mtcars)
+mod_list <- modelsummary(mod, output = "modelsummary_list", effects = "fixed")
+# create a copy, where we'll change the p-values
+mod_list_kenward <- as.list(mod_list)
+mod_list_kenward$tidy$p.value <- parameters::p_value_kenward(mod)$p
+
+modelsummary(list("Wald" = mod_list, "Kenward" = mod_list_kenward), 
+            statistic = "{std.error} ({p.value}) {stars}")
+```
+
 # Rmarkdown
 
 You can use `modelsummary` to insert tables into dynamic documents with `knitr` or `Rmarkdown`. This minimal .Rmd file can produce tables in PDF, HTML, or RTF documents:
