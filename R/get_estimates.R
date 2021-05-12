@@ -39,6 +39,26 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, ...) {
         }
     }
 
+    if (!inherits(out, "data.frame")) {
+      stop(sprintf(
+        '`modelsummary could not extract the required information from a model
+of class "%s". The package tried a sequence of 2 helper functions to extract
+estimates:
+
+broom::tidy(model)
+parameters::parameters(model)
+
+To draw a table, one of these commands must return a `data.frame` with a
+column named "term". The `modelsummary` website explains how to summarize
+unsupported models or add support for new models yourself:
+
+https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html
+
+These errors messages were generated during extraction:
+%s',
+        class(model)[1], paste(warning_msg, collapse = "\n")))
+    }
+
     # tidy_custom
     out_custom <- tidy_custom(model)
     if (inherits(out_custom, "data.frame") && nrow(out_custom) > 0) {
@@ -88,24 +108,6 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, ...) {
     if (inherits(out, "data.frame")) {
         return(out)
     }
-
-    stop(sprintf(
-'`modelsummary could not extract the required information from a model
-of class "%s". The package tried a sequence of 2 helper functions to extract
-estimates:
-
-broom::tidy(model)
-parameters::parameters(model)
-
-To draw a table, one of these commands must return a `data.frame` with a
-column named "term". The `modelsummary` website explains how to summarize
-unsupported models or add support for new models yourself:
-
-https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html
-
-These errors messages were generated during extraction:
-%s',
-    class(model)[1], paste(warning_msg, collapse = "\n")))
 }
 
 
