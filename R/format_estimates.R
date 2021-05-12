@@ -66,6 +66,10 @@ format_estimates <- function(
       stop('To use the `stars` argument, the `tidy` function must produce a column called "p.value"')
     }
     est$stars <- make_stars(est$p.value, stars)
+    if (any(is.na(est$stars))) {
+      warning('p.values for some terms are missing.')
+      est$stars[is.na(est$stars)] <- ""
+    }
   }
   if (isTRUE(is_star) && isFALSE(is_glue)) {
     estimate_glue[1] <- paste0(estimate_glue[1], "{stars}")
