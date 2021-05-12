@@ -25,6 +25,14 @@ test_that("warning for non-iid hardcoded vcov", {
     mod <- feols(hp ~ mpg + drat | cyl, mtcars)
     expect_warning(modelsummary(mod, vcov = "iid", output = "data.frame"), regexp = "IID")
 
+    mod <- feols(mpg ~ cyl | am, data = mtcars)
+    tab <- expect_warning(
+        modelsummary(mod,
+            vcov = list("IID" = vcov(mod, se = "standard")),
+            output = "data.frame"
+        ), NA)
+    expect_true("IID" %in% tab[["Model 1"]])
+
     data("SchoolingReturns", package = "ivreg")
     mod <- feols(log(wage) ~ ethnicity + experience + smsa | education ~ nearcollege,
                  data = SchoolingReturns)
