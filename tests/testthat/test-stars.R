@@ -114,3 +114,14 @@ test_that("custom stars", {
   expect_equal(truth, unname(raw[[5]][1:6]))
 
 })
+
+test_that("warning when p.value NA", {
+  mod <- lme4::lmer(mpg ~ drat + (1 | am), data = mtcars)
+  expect_warning(modelsummary(mod, output = "dataframe"), NA)
+  expect_warning(modelsummary(mod, output = "dataframe", stars = TRUE),
+                 "for some terms are missing")
+  expect_warning(r <- modelsummary(mod, output = "dataframe", estimate = "{stars}"),
+                 "for some terms are missing")
+  expect_equal(any(grepl("NA", r$`Model 1`)), FALSE)
+})
+
