@@ -67,7 +67,9 @@ format_estimates <- function(
     }
     est$stars <- make_stars(est$p.value, stars)
     if (any(is.na(est$stars))) {
-      warning('p.values for some terms are missing.')
+      warning(paste0(
+        'p.values for some terms are missing and are not displayed. ',
+        'This is normal in some models, for instance lme4::lmer.'))
       est$stars[is.na(est$stars)] <- ""
     }
   }
