@@ -87,7 +87,7 @@ sections below):
 \item{stars}{to indicate statistical significance
 \itemize{
 \item FALSE (default): no significance stars.
-\item TRUE: *=.1, **=.05, ***=.01
+\item TRUE: *=.1, **=.05, ***=.01 (note that this default is different from summary.lm)
 \item Named numeric vector for custom stars such as \code{c('*' = .1, '+' = .05)}
 \item Note: a legend will not be inserted at the bottom of the table when the \code{estimate} or \code{statistic} arguments use "glue strings" with \code{{stars}}.
 }}
@@ -270,7 +270,7 @@ modelsummary(models, statistic = c("t = {statistic}",
                                    "conf.int"))
 
 # estimate
-modelsummary(models, 
+modelsummary(models,
   statistic = NULL,
   estimate = "{estimate} [{conf.low}, {conf.high}]")
 modelsummary(models,
@@ -281,9 +281,9 @@ modelsummary(models,
 modelsummary(models, vcov = "robust")
 modelsummary(models, vcov = list("classical", "stata"))
 modelsummary(models, vcov = sandwich::vcovHC)
-modelsummary(models, 
+modelsummary(models,
   vcov = list(stats::vcov, sandwich::vcovHC))
-modelsummary(models, 
+modelsummary(models,
   vcov = list(c("(Intercept)"="", "Height"="!"),
               c("(Intercept)"="", "Height"="!", "Volume"="!!")))
 
@@ -292,7 +292,7 @@ modelsummary(
   models,
   vcov = list("Stata Corp" = "stata",
               "Newey Lewis & the News" = "NeweyWest"))
-                                  
+
 # coef_rename
 modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 
