@@ -87,7 +87,7 @@ sections below):
 \item{stars}{to indicate statistical significance
 \itemize{
 \item FALSE (default): no significance stars.
-\item TRUE: *=.1, **=.05, ***=.01 (note that this default is different from summary.lm)
+\item TRUE: +=.1, *=.05, **=.01, ***=0.001
 \item Named numeric vector for custom stars such as \code{c('*' = .1, '+' = .05)}
 \item Note: a legend will not be inserted at the bottom of the table when the \code{estimate} or \code{statistic} arguments use "glue strings" with \code{{stars}}.
 }}
