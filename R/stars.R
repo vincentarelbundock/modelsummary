@@ -3,7 +3,7 @@
 #' @noRd
 clean_stars <- function(stars) {
   if (is.logical(stars) && isTRUE(stars)) {
-    out <- c('*' = .1, '**' = .05, '***' = .01)
+    out <- c('+' = .1, '*' = .05, '**' = .01, '***' = 0.001)
   } else if (is.numeric(stars)) {
     out <- sort(stars, decreasing = TRUE)
   } else {

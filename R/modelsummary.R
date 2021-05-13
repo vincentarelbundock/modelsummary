@@ -29,7 +29,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * function: returns a formatted character string.
 #' @param stars to indicate statistical significance
 #' * FALSE (default): no significance stars.
-#' * TRUE: *=.1, **=.05, ***=.01 (note that this default is different from summary.lm)
+#' * TRUE: +=.1, *=.05, **=.01, ***=0.001
 #' * Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
 #' * Note: a legend will not be inserted at the bottom of the table when the `estimate` or `statistic` arguments use "glue strings" with `{stars}`.
 #' @param statistic vector of strings or `glue` strings which select uncertainty
