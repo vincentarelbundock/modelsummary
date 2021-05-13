@@ -29,7 +29,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * function: returns a formatted character string.
 #' @param stars to indicate statistical significance
 #' * FALSE (default): no significance stars.
-#' * TRUE: *=.1, **=.05, ***=.01
+#' * TRUE: *=.1, **=.05, ***=.01 (note that this default is different from summary.lm)
 #' * Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
 #' * Note: a legend will not be inserted at the bottom of the table when the `estimate` or `statistic` arguments use "glue strings" with `{stars}`.
 #' @param statistic vector of strings or `glue` strings which select uncertainty
@@ -37,7 +37,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' uncertainty statistics.
 #' * "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high",
 #'    or any column name produced by: `get_estimates(model)`
-#' * `glue` package strings with braces, such as: 
+#' * `glue` package strings with braces, such as:
 #'   - `"{p.value} [{conf.low}, {conf.high}]"`
 #'   - `"Std.Error: {std.error}"`
 #' * Note: Parentheses are added automatically unless the string includes `glue` curly braces `{}`.
@@ -46,7 +46,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   argument accepts six types of input (see the 'Details' and 'Examples'
 #'   sections below):
 #' * NULL returns the default uncertainty estimates of the model object
-#' * string, vector, or (named) list of strings. The strings "classical", "iid" and "constant" are aliases for `NULL`, and they return the model's default uncertainty estimates. The strings "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", "weave" use variance-covariance matrices computed using functions from the `sandwich` package. The behavior of those functions can (and sometimes *must*) be altered by passing arguments to `sandwich` directly from `modelsummary` through the ellipsis (`...`), but it is safer to define your own custom functions as described in the next bullet. 
+#' * string, vector, or (named) list of strings. The strings "classical", "iid" and "constant" are aliases for `NULL`, and they return the model's default uncertainty estimates. The strings "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", "weave" use variance-covariance matrices computed using functions from the `sandwich` package. The behavior of those functions can (and sometimes *must*) be altered by passing arguments to `sandwich` directly from `modelsummary` through the ellipsis (`...`), but it is safer to define your own custom functions as described in the next bullet.
 #' * function or (named) list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`, `function(x) vcovPC(x, cluster="country")`).
 #' * formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
 #' * (named) list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
@@ -107,7 +107,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `performance::model_performance(metrics="RMSE")` to select goodness-of-fit statistics to extract using the `performance` package (must have set `options(modelsummary_get="easystats")` first).
 #' @return a regression table in a format determined by the `output` argument.
 #' @importFrom generics glance tidy
-#' @details 
+#' @details
 #'
 #' `options`
 #'
@@ -125,7 +125,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' `modelsummary` can use two sets of packages to extract information from
 #' statistical models: `broom` and the `easystats` family (`performance` and
 #' `parameters`). By default, it uses `broom` first and `easystats` as a
-#' fallback if `broom` fails. You can change the order of priorities 
+#' fallback if `broom` fails. You can change the order of priorities
 #' or include goodness-of-fit extracted by *both* packages by setting:
 #'
 #' `options(modelsummary_get = "broom")`
@@ -175,7 +175,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' uncertainty estimates are not be adjusted.
 #'
 #' Numeric vectors are formatted according to `fmt` and placed in brackets.
-#' Character vectors printed as given, without parentheses. 
+#' Character vectors printed as given, without parentheses.
 #'
 #' If your model type is supported by the `lmtest` package, the
 #' `vcov` argument will try to use that package to adjust all the
@@ -210,7 +210,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'                                    "conf.int"))
 #'
 #' # estimate
-#' modelsummary(models, 
+#' modelsummary(models,
 #'   statistic = NULL,
 #'   estimate = "{estimate} [{conf.low}, {conf.high}]")
 #' modelsummary(models,
@@ -221,9 +221,9 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' modelsummary(models, vcov = "robust")
 #' modelsummary(models, vcov = list("classical", "stata"))
 #' modelsummary(models, vcov = sandwich::vcovHC)
-#' modelsummary(models, 
+#' modelsummary(models,
 #'   vcov = list(stats::vcov, sandwich::vcovHC))
-#' modelsummary(models, 
+#' modelsummary(models,
 #'   vcov = list(c("(Intercept)"="", "Height"="!"),
 #'               c("(Intercept)"="", "Height"="!", "Volume"="!!")))
 #'
@@ -232,7 +232,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   models,
 #'   vcov = list("Stata Corp" = "stata",
 #'               "Newey Lewis & the News" = "NeweyWest"))
-#'                                   
+#'
 #' # coef_rename
 #' modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 #'
@@ -678,7 +678,7 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
          length(rhs) == 1 && rhs == "model")) {
       return(estimates)
 
-    # model ~ term 
+    # model ~ term
     } else if (length(lhs) == 1 && lhs == "model" &&
         length(rhs) == 1 && rhs == "term") {
       out <- tidyr::pivot_longer(estimates,
