@@ -19,7 +19,7 @@
 * breaking change: The default "stars" for p-values have been updated to be
   consistent with the default output from base R (e.g., in summary.lm). 
   The new significance thresholds are 
-  + p < 0.1, * p < 0.05, ** p < 0.01, *** p < 0.001
+  "+" p < 0.1, "*" p < 0.05, "**" p < 0.01, "***" p < 0.001
 * new vcov options: "bootstrap", "HAC", "NeweyWest", "Andrews",
   "panel-corrected", "weave", "outer-product"
 * A valid `get_gof` (`glance`) is now optional.
