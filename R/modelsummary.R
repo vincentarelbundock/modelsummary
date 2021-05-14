@@ -329,6 +329,7 @@ modelsummary <- function(
   } else {
     model_names <- names(models)
   }
+  model_names <- pad(model_names)
 
   #######################
   #  modelsummary_list  #
