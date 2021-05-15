@@ -16,6 +16,7 @@
 
 `modelsummary`:
 
+* themes can be set using global options (EXPERIMENTAL)
 * breaking change: The default "stars" for p-values have been updated to be
   consistent with the default output from base R (e.g., in summary.lm). 
   The new significance thresholds are 

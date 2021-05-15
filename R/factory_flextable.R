@@ -25,15 +25,6 @@ factory_flextable <- function(tab,
     out <- flextable::set_caption(out, title)
   }
 
-  # horizontal rule to separate coef/gof
-  if (!is.null(hrule)) {
-    for (pos in hrule) {
-      out <- flextable::border(out,
-        i = pos,
-        border.top = officer::fp_border())
-    }
-  }
-
   # user-supplied notes at the bottom of table
   if (!is.null(notes)) {
     for (i in seq_along(notes)) {
@@ -43,6 +34,12 @@ factory_flextable <- function(tab,
     }
   }
 
+  # theme
+  theme_ms <- getOption("modelsummary_theme_flextable",
+                        default = theme_ms_flextable)
+  out <- theme_ms(out, hrule = hrule)
+
+  # output
   if (is.null(output_file)) {
     return(out)
   } else if (output_format == 'word') {

@@ -20,16 +20,13 @@ factory_gt <- function(tab,
   idx_col <- ncol(tab)
   out <- gt::gt(tab)
 
-  # horizontal rule to separate coef/gof
-  if (!is.null(hrule)) { # check if there are >0 GOF
-    for (pos in hrule) {
-      out <- gt::tab_style(
-        out,
-        style = gt::cell_borders(sides = 'bottom', color = '#000000'),
-        locations = gt::cells_body(columns = 1:idx_col, rows = (pos - 1))
-      )
-    }
-  }
+  
+  # theme
+  theme_ms <- getOption("modelsummary_theme_gt",
+                        default = theme_ms_gt)
+  out <- theme_ms(out,
+                  output_format = output_format,
+                  hrule = hrule)
 
   # titles
   if (!is.null(title)) {

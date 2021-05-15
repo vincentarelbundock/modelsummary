@@ -23,36 +23,6 @@ factory_huxtable <- function(tab,
   # huxtable object with header
   out <- huxtable::hux(tab, add_colnames = TRUE)
 
-  # horizontal rules
-  out <- huxtable::set_bottom_border(
-    out,
-    row = 1,
-    col = 1:ncol(out),
-    value = 1
-  )
-  out <- huxtable::set_top_border(
-    out,
-    row = 1,
-    col = 1:ncol(out),
-    value = 1
-  )
-  out <- huxtable::set_bottom_border(
-    out,
-    row = nrow(out),
-    col = 1:ncol(out),
-    value = 1
-  )
-
-  if (!is.null(hrule)) {
-    for (pos in hrule) {
-      out <- huxtable::set_bottom_border(
-        out, row = pos,
-        col = 1:ncol(out),
-        value = 1
-      )
-    }
-  }
-
   # title
   if (!is.null(title)) {
     out <- huxtable::set_caption(out, title)
@@ -64,6 +34,11 @@ factory_huxtable <- function(tab,
       out <- huxtable::add_footnote(out, text = n)
     }
   }
+
+  # theme
+  theme_ms <- getOption("modelsummary_theme_huxtable",
+                        default = theme_ms_huxtable)
+  out <- theme_ms(out, hrule = hrule)
 
   # output
   if (is.null(output_file)) {

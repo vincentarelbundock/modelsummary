@@ -59,24 +59,6 @@ factory_kableExtra <- function(tab,
   arguments <- c(list(tab), arguments)
   out <- do.call(kableExtra::kbl, arguments)
 
-  # horizontal rule to separate coef/gof not supported in markdown
-  # TODO: support HTML
-  if (!is.null(hrule) && output_format %in% c("kableExtra", "html", "latex", "latex_tabular")) {
-    if (kable_format == "latex") {
-      for (pos in hrule) {
-        out <- kableExtra::row_spec(out,
-          row = pos - 1,
-          extra_latex_after = "\\midrule")
-      }
-    } else if (kable_format == "html") {
-      for (pos in hrule) {
-        out <- kableExtra::row_spec(out,
-          row = pos - 1,
-          extra_css = "box-shadow: 0px 1px")
-      }
-    }
-  }
-
   # user-supplied notes at the bottom of table
   if (!is.null(notes) && output_format %in% c("kableExtra", "html", "latex", "markdown")) {
     # threeparttable only works with 1 note. But it creates a weird bug
@@ -99,10 +81,12 @@ factory_kableExtra <- function(tab,
     }
   }
 
-  # styling can be overriden by user by calling again
-  if (!output_format %in% c("markdown", "latex_tabular")) {
-    out <- kableExtra::kable_styling(out, full_width = FALSE)
-  }
+  # theme
+  theme_ms <- getOption("modelsummary_theme_kableExtra",
+                        default = theme_ms_kableExtra)
+  out <- theme_ms(out,
+                  output_format = output_format,
+                  hrule = hrule)
 
   # html & latex get a new class to use print.modelsummary_string
   if (output_format %in% c("latex", "latex_tabular", "html")) {
