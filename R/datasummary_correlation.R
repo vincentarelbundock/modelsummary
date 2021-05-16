@@ -172,16 +172,17 @@ datasummary_correlation <- function(data,
 }
 
 correlation_pearspear <- function(x) {
-
   pea <- stats::cor(
     x,
     use = "pairwise.complete.obs",
-    method = "pearson")
+    method = "pearson"
+  )
 
   spe <- stats::cor(
     x,
     use = "pairwise.complete.obs",
-    method = "spearman")
+    method = "spearman"
+  )
 
   pea[lower.tri(pea)] <- spe[lower.tri(spe)]
 
@@ -202,6 +203,7 @@ correlation_pearspear <- function(x) {
 #' upper triangle are replaced by the same character (e.g., "" or ".").
 #' @export
 #' @examples
+#' \dontrun{
 #' library(modelsummary)
 #'
 #' dat <- mtcars[, c("mpg", "hp", "disp")]
@@ -216,6 +218,7 @@ correlation_pearspear <- function(x) {
 #' }
 #'
 #' datasummary_correlation(dat, method = cor_fun)
+#' }
 datasummary_correlation_format <- function(
   x,
   fmt,
