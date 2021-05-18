@@ -11,7 +11,6 @@ models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial
 test_that("warning for non-iid hardcoded vcov", {
     testthat::skip_if_not_installed("fixest")
     testthat::skip_if_not_installed("estimatr")
-    testthat::skip_if_not_installed("ivreg")
 
     library(fixest)
     library(estimatr)
@@ -30,9 +29,7 @@ test_that("warning for non-iid hardcoded vcov", {
     tab <- modelsummary(mod, vcov = list("IID" = vcov(mod, se = "standard")), output = "data.frame")
     expect_true("IID" %in% tab[["Model 1"]])
 
-    data("SchoolingReturns", package = "ivreg")
-    mod <- feols(log(wage) ~ ethnicity + experience + smsa | education ~ nearcollege,
-                 data = SchoolingReturns)
+    mod <- feols(hp ~ mpg | cyl ~ gear, data = mtcars)
 
     # assume sandwich works with fixest
     expect_warning(modelsummary(mod, vcov = list(NULL, "robust"), output = "data.frame"), NA)
