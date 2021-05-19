@@ -89,7 +89,7 @@ modelplot <- function(models,
   if (is.null(conf_level)) {
     estimate <- "estimate"
   } else {
-    estimate <- "{estimate}|{conf.low}|{conf.high}"
+    estimate <- "{estimate}|{std.error}|{conf.low}|{conf.high}"
   }
 
 
@@ -124,10 +124,11 @@ modelplot <- function(models,
   if (is.null(conf_level)) {
     out$estimate <- as.numeric(out$value)
   } else {
-    regex <- "(.*)\\|(.*)\\|(.*)"
+    regex <- "(.*)\\|(.*)\\|(.*)\\|(.*)"
     out$estimate <- as.numeric(gsub(regex, "\\1", out$value))
-    out$conf.low <- as.numeric(gsub(regex, "\\2", out$value))
-    out$conf.high <- as.numeric(gsub(regex, "\\3", out$value))
+    out$std.error <- as.numeric(gsub(regex, "\\2", out$value))
+    out$conf.low <- as.numeric(gsub(regex, "\\3", out$value))
+    out$conf.high <- as.numeric(gsub(regex, "\\4", out$value))
   }
 
   # clean and sort
