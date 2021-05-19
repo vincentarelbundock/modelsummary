@@ -35,6 +35,7 @@ Mostly for internal use, but can be useful when users supply a function to
 the \code{method} argument of \code{datasummary_correlation}.
 }
 \examples{
+\dontrun{
 library(modelsummary)
 
 dat <- mtcars[, c("mpg", "hp", "disp")]
@@ -49,4 +50,5 @@ cor_fun <- function(x) {
 }
 
 datasummary_correlation(dat, method = cor_fun)
+}
 }

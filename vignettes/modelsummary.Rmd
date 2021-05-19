@@ -961,23 +961,32 @@ options(modelsummary_png = 'gt')
 
 # F.A.Q.
 
-## How does `modelsummary` extract estimates and statistics?
+## How does `modelsummary` extract estimates and goodness-of-fit statistics?
 
-A `modelsummary` table is divided in two parts: "Estimates" (top of the table) and "Goodness-of-fit" (bottom of the table). To populate those two parts, `modelsummary` tries several things in sequence.
+A `modelsummary` table is divided in two parts: "Estimates" (top of the table) and "Goodness-of-fit" (bottom of the table). To populate those two parts, `modelsummary` tries using the `broom`, `parameters` and `performance` packages in sequence.
 
 Estimates:
 
 1. Try the `broom::tidy` function to see if that package supports this model type, or if the user defined a custom `tidy` function in their global environment. If this fails...
-2. Try the `parameters::model_parameters` function to see if the `parameters` package supports this model type. If this fails...
-3. Load the `broom.mixed` package (if installed) and try the `broom.mixed::glance` function.
+2. Try the `parameters::model_parameters` function to see if the `parameters` package supports this model type.
 
 Goodness-of-fit:
 
 1. Try the `broom::glance` function to see if that package supports this model type, or if the user defined a custom `glance` function in their global environment. If this fails...
-2. Try the `performance::model_performance` function to see if the `performance` package supports this model type. If this fails...
-3. Load the `broom.mixed` package (if installed) and try the `broom.mixed::glance` function.
+2. Try the `performance::model_performance` function to see if the `performance` package supports this model type.
+
+You can change the order in which those steps are executed by setting a global option:
+
+```{r, eval=FALSE}
+# tidymodels: broom 
+options(modelsummary_get = "broom")
+
+# easystats: performance + parameters
+options(modelsummary_get = "easystats")
+```
 
 If all of this fails, `modelsummary` will return an error message.
+
 
 If you have problems with a model object, you can often diagnose the problem by running the following commands from a *clean* R session:
 
@@ -1002,3 +1011,51 @@ glance(model)
 If none of these options work, you can create your own `tidy` and `glance` methods, as described in the [Adding new models section.](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html#adding-new-models-1)
 
 If one of the extractor functions does not work well or takes too long to process, you can define a new "custom" model class and choose your own extractors, as described in the [Adding new models section.](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html#adding-new-models-1)
+
+## Why is `modelsummary` so slow?
+
+The `modelsummary` function, by itself, is *not* slow: it should only take a couple seconds to produce a table in any output format. However, sometimes it can be computationally expensive (and long) to extract estimates and to compute goodness-of-fit statistics for your models.
+
+To find the bottleneck, you can try to benchmark the various extractor functions:
+
+```{r}
+library(tictoc)
+library(fixest)
+
+data(trade)
+mod <- fepois(Euros ~ log(dist_km) | Origin + Destination + Product + Year, data = trade)
+
+tic("tidy")
+x <- broom::tidy(mod)
+toc()
+
+tic("glance")
+x <- broom::glance(mod)
+toc()
+
+tic("parameters")
+x <- parameters::parameters(mod)
+toc()
+
+tic("performance")
+x <- performance::performance(mod)
+toc()
+```
+
+In my experience, the main bottleneck tends to be computing goodness-of-fit statistics. The `performance` extractor allows users to specify a `metrics` argument to select a subset of GOF to include. Using this can speedup things considerably.
+
+First, we set a global option to run the `performance` extractor first, before `broom::glance`:
+
+```{r}
+options(modelsummary_get = "easystats")
+```
+
+Then, we call `modelsummary` with the `metrics` argument:
+
+```{r}
+modelsummary(mod, metrics = "rmse")
+```
+
+```{r, include=FALSE}
+options(modelsummary_get = "broom")
+```
