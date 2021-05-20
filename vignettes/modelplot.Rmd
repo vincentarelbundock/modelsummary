@@ -140,7 +140,7 @@ modelplot(mod, background = b)
 ```
 
 
-# Raw data
+# Raw data & More customization
 
 If you would like to customize the plots even more than what `modelplot` allows, you can obtain the raw data used to draw the plots by setting `draw=FALSE`:
 
@@ -148,3 +148,31 @@ If you would like to customize the plots even more than what `modelplot` allows,
 modelplot(models, draw = FALSE)
 ```
 
+This allows users to use external tools such as [the powerful `ggdist` package](https://mjskay.github.io/ggdist/). In this example, we use the `purrr::map_dfr` function to call `modelplot` several times with different confidence levels. Then, we draw a plot where the different confidence intervals are drawn with different thicknesses:
+
+```{r}
+library(tidyverse)
+library(modelsummary)
+library(ggdist)
+
+# fit
+models <- list(
+  lm(mpg ~ am, mtcars),
+  lm(mpg ~ am + cyl, mtcars))
+
+# summarize
+dat <- map_dfr(c(.8, .9, .99), function(x) {
+  modelplot(models, conf_level = x, draw = FALSE) %>%
+  mutate(.width = x)
+})
+
+# plot
+ggplot(dat, aes(
+    y = term, x = estimate,
+    xmin = conf.low, xmax = conf.high,
+    color = model)) +
+  ggdist::geom_pointinterval(
+    position = "dodge",
+    interval_size_range = c(1, 3),
+    fatten_point = .1)
+```
