@@ -337,7 +337,7 @@ datasummary_skim_categorical <- function(
 
   pctformat <- function(x) rounding(x, fmt)
   f <- All(dat_new, numeric = FALSE, factor = TRUE, logical = TRUE, character = TRUE) ~
-       (N = 1) * Format(digits=0) + (`%` = Percent()) * Format(pctformat())
+       (N = 1) * Format() + (`%` = Percent()) * Format(pctformat())
 
   out <- datasummary(
     formula = f,

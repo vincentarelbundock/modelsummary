@@ -174,7 +174,7 @@ datasummary_balance_factor <- function(rhs, data, data_norhs, any_numeric) {
 
   # formula
   f_fac <- 'All(data_norhs, factor = TRUE, numeric = FALSE) ~
-            Factor(%s) * (Heading("N")*1 * Format(digits = 0) +
+            Factor(%s) * (Heading("N")*1 * Format() +
             Heading("%%") * Percent("col") * Format(pctformat()))'
   f_fac <- sprintf(f_fac, rhs)
 
