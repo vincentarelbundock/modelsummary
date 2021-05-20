@@ -18,3 +18,14 @@ tidy_custom <- function(x) {
 #' @noRd
 #' @export
 tidy_custom.default <- function(x) NULL
+
+#' Avoid namespace conflict when we want to customize glance internally and
+#' still allow users to do the same with their own functions
+#' @keywords internal
+tidy_custom_internal <- function(x, ...) {
+  UseMethod("tidy_custom_internal")
+}
+
+#' @inherit tidy_custom_internal
+#' @keywords internal
+tidy_custom_internal.default <- function(x) NULL

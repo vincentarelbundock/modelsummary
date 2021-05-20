@@ -15,17 +15,25 @@ glance_custom <- function(x, ...) {
   UseMethod("glance_custom")
 }
 
-
 #' @inherit glance_custom
 #' @noRd
 #' @export
 glance_custom.default <- function(x, ...) NULL
 
+#' Avoid namespace conflict when we want to customize glance internally and
+#' still allow users to do the same with their own functions
+#' @keywords internal
+glance_custom_internal <- function(x, ...) {
+  UseMethod("glance_custom_internal")
+}
 
-#' @inherit glance_custom
-#' @noRd
-#' @export
-glance_custom.fixest <- function(x, vcov_type = NULL, ...) {
+#' @inherit glance_custom_internal
+#' @keywords internal
+glance_custom_internal.default <- function(x, ...) NULL
+
+#' @inherit glance_custom_internal
+#' @keywords internal
+glance_custom_internal.fixest <- function(x, vcov_type = NULL, ...) {
   assert_dependency("fixest")
   out <- data.frame(row.names = "firstrow")
   for (n in x$fixef_vars) {

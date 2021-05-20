@@ -58,6 +58,17 @@ get_gof <- function(model, vcov_type = NULL, ...) {
         gof$vcov.type <- vcov_type
     }
 
+    # internal customization by modelsummary
+    gof_custom <- glance_custom_internal(model)
+    if (!is.null(gof_custom) && is.data.frame(gof)) {
+        for (n in colnames(gof_custom)) {
+            # modelsummary's vcov argument has precedence
+            # mainly useful to avoid collision with `fixet::glance_custom`
+            if (is.null(vcov_type) || n != "vcov.type") {
+                gof[[n]] <- gof_custom[[n]]
+            }
+        }
+    }
 
     # glance_custom (vcov_type arg is needed for glance_custom.fixest)
     gof_custom <- glance_custom(model)

@@ -56,7 +56,25 @@ https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html
 
 These errors messages were generated during extraction:
 %s',
-        class(model)[1], paste(warning_msg, collapse = "\n")))
+        class(model)[1], paste(warning_msg, collapse = "\n")
+      ))
+    }
+
+    # tidy_custom_internal (modelsummary customization avoids name conflict)
+    out_custom <- tidy_custom_internal(model)
+    if (inherits(out_custom, "data.frame") && nrow(out_custom) > 0) {
+        if (!any(out_custom$term %in% out$term)) {
+            warning('Elements of the "term" column produced by `tidy_custom` must match model terms. `tidy_custom` was ignored.')
+        } else {
+            # R 3.6 doesn't deal well with factors
+            out_custom$term <- as.character(out_custom$term)
+            out$term <- as.character(out$term)
+            out_custom <- out_custom[out_custom$term %in% out$term, , drop = FALSE]
+            idx <- match(out_custom$term, out$term)
+            for (n in colnames(out_custom)) {
+                out[[n]][idx] <- out_custom[[n]]
+            }
+        }
     }
 
     # tidy_custom

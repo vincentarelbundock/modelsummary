@@ -867,32 +867,34 @@ modelsummary(mod)
 rm("tidy_custom.lm")
 ```
 
-## Fixed effects regression
+## `fixest`: Fixed effects and instrumental variable regression
 
-One common use-case for `glance_custom` is to display the list of "fixed effects" included in a linear regression model.  
+One common use-case for `glance_custom` is to include additional goodness-of-fit statistics. For example, in an instrumental variable estimation computed by the `fixest` package, we may want to include an IV-Wald statistic:
 
-The `feols` function from the `fixest` package offers an extremely fast way to estimate fixed effects regression models. The `feols` function produces an object of class "fixest", which stores the fixed effects variables in a character vector called "fixef_vars". To display those fixed effects, we create a `glance_custom.fixest` and call `modelsummary`:
+```{r, message=FALSE}
+library(fixest)
+library(tidyverse)
 
-```{r}
+# create a toy dataset
+base <- iris
+names(base) <- c("y", "x1", "x_endo_1", "x_inst_1", "fe")
+base$x_inst_2 <- 0.2 * base$y + 0.2 * base$x_endo_1 + rnorm(150, sd = 0.5)
+base$x_endo_2 <- 0.2 * base$y - 0.2 * base$x_inst_1 + rnorm(150, sd = 0.5)
+
+# estimate an instrumental variable model
+mod <- feols(y ~ x1 | fe | x_endo_1 + x_endo_2 ~ x_inst_1 + x_inst_2, base)
+
+# custom extractor function returns a one-row data.frame (or tibble)
 glance_custom.fixest <- function(x) {
-    out <- tibble::tibble(.rows = 1)
-    for (n in x$fixef_vars) {
-        out[[paste('FE: ', n)]] <- 'X'
-    }
-    return(out)
+  tibble("IV Wald" = fitstat(x, "ivwald")[[1]]$stat)
 }
 
-library(fixest)
-library(modelsummary)
-
-url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/plm/EmplUK.csv'
-dat <- read.csv(url)
-mod <- list()
-mod[[1]] <- feols(emp ~ wage, dat)
-mod[[2]] <- feols(emp ~ wage | firm, dat)
-mod[[3]] <- feols(emp ~ wage | firm + year, dat)
-
+# draw table
 modelsummary(mod)
+```
+
+```{r, include=FALSE}
+rm("glance_custom.fixest")
 ```
 
 ## Multiple imputation
