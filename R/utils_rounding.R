@@ -20,7 +20,12 @@ rounding <- function(x, fmt = '%.3f', ...) {
     if (is.character(fmt)) {
       out <- sprintf(fmt, x, ...)
     } else if (is.numeric(fmt)) {
-      out <- trimws(format(round(x, fmt), nsmall = fmt, ...))
+      # R >4.1.0 will make 0 invalid in format()
+      if (fmt == 0) {
+        out <- sprintf("%.0f", x)
+      } else {
+        out <- trimws(format(round(x, fmt), nsmall = fmt, ...))
+      }
     } else if (is.function(fmt)) {
       out <- fmt(x)
     } else {
