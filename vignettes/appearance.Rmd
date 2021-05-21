@@ -188,6 +188,35 @@ tab %>%
     set_text_color(row = 4, col = 1:ncol(.), value = 'red')
 ```
 
+# Themes
+
+If you want to apply the same post-processing functions to your tables, you can use `modelsummary`'s theming functionality. To do so, we first create a function to post-process a table. This function must accept a table as its first argument, and include the ellipsis (`...`). Optionally, the theming function can also accept an `hrule` argument which is a vector of row positions where we insert horizontal rule, and an `output_format` which allows output format-specific customization. For inspiration, you may want to consult the default `modelsummary` themes in the [`themes.R` file of the Github repository.](https://github.com/vincentarelbundock/modelsummary)
+
+Once the theming function is created, we assign it to a global option called `modelsummary_theme_kableExtra`, `modelsummary_theme_gt`, `modelsummary_theme_flextable`, or `modelsummary_theme_huxtable`. For example, if you want to add row striping to all your `gt` tables:
+
+```{r}
+library(gt)
+
+# The ... ellipsis is required!
+custom_theme <- function(x, ...) {
+    x %>% gt::opt_row_striping(row_striping = TRUE)
+}
+options("modelsummary_theme_gt" = custom_theme)
+
+mod <- lm(mpg ~ hp + drat, mtcars)
+modelsummary(mod,
+             output = "gt")
+
+library(palmerpenguins)
+datasummary_crosstab(island ~ sex * species,
+                     output = "gt",
+                     data = penguins)
+```
+
+```{r, include=FALSE}
+options("modelsummary_theme_gt" = NULL)
+```
+
 # Warning: Saving to file
 
 When users supply a file name to the `output` argument, the table is written immediately to file. This means that users cannot post-process and customize the resulting table using functions from `gt`, `kableExtra`, `huxtable`, or `flextable`. When users specify a filename in the `output` argument, the `modelsummary()` call should be the *final* one in the chain.
@@ -231,3 +260,5 @@ tab <- modelsummary(models, output = 'latex') %>%
 
 kableExtra::save_kable(tab, file = "table.tex")
 ```
+
+
