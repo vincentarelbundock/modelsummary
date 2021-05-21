@@ -196,6 +196,7 @@ Once the theming function is created, we assign it to a global option called `mo
 
 ```{r}
 library(gt)
+library(palmerpenguins)
 
 # The ... ellipsis is required!
 custom_theme <- function(x, ...) {
@@ -204,13 +205,9 @@ custom_theme <- function(x, ...) {
 options("modelsummary_theme_gt" = custom_theme)
 
 mod <- lm(mpg ~ hp + drat, mtcars)
-modelsummary(mod,
-             output = "gt")
+modelsummary(mod, output = "gt")
 
-library(palmerpenguins)
-datasummary_crosstab(island ~ sex * species,
-                     output = "gt",
-                     data = penguins)
+datasummary_crosstab(island ~ sex * species, output = "gt", data = penguins)
 ```
 
 ```{r, include=FALSE}
@@ -253,7 +250,6 @@ The procedure is slightly different with `kableExtra`, because this package need
 
 ```{r, eval=FALSE}
 library(kableExtra)
-
 
 tab <- modelsummary(models, output = 'latex') %>%
   add_header_above(c(" " = 1, "Donations" = 2, "Crimes (person)" = 2, "Crimes (property)" = 1))
