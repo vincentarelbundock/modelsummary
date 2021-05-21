@@ -1,4 +1,4 @@
-# modelsummary 0.7.0.9000
+# modelsummary 0.8.0
 
 Breaking change:
 
@@ -23,7 +23,7 @@ Breaking change:
 
 `modelsummary`:
 
-* themes can be set using global options (EXPERIMENTAL)
+* themes can be set using global options (experimental)
 * new vcov options: "bootstrap", "HAC", "NeweyWest", "Andrews",
   "panel-corrected", "weave", "outer-product"
 * A valid `get_gof` (`glance`) is now optional.
