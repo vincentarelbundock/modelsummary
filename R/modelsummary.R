@@ -19,7 +19,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @param models a model or (optionally named) list of models
 #' @param output filename or object type (character string)
 #' * Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
-#' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable".
+#' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable", "jupyter".
 #' * To change the default output format, type `options(modelsummary_default = "latex")`, where `latex` can be any of the valid object types listed above.
 #' * Warning: users should not supply a file name to the `output` argument if they intend to customize the table with external packages.
 #' * See the 'Details' section below for more information.

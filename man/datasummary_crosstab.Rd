@@ -35,7 +35,7 @@ The right-hand side may contain: \code{1} for column totals, \code{N} for counts
 \item{output}{filename or object type (character string)
 \itemize{
 \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
-\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable".
+\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable", "jupyter".
 \item To change the default output format, type \code{options(modelsummary_default = "latex")}, where \code{latex} can be any of the valid object types listed above.
 \item Warning: users should not supply a file name to the \code{output} argument if they intend to customize the table with external packages.
 \item See the 'Details' section below for more information.
