@@ -1,3 +1,9 @@
+# modelsummary 0.8.0.9000
+
+Bug fixes:
+
+* Overaggressive tests for glue strings prevented functions inside {}
+
 # modelsummary 0.8.0
 
 Breaking change:

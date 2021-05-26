@@ -1,6 +1,15 @@
 mod <- list(
   lm(mpg ~ hp, data=mtcars),
-  glm(vs ~ hp + cyl, data=mtcars, family=binomial))
+  glm(vs ~ hp + cyl, data = mtcars, family = binomial))
+
+
+test_that("function inside glue string", {
+    st <- "{ifelse(p.value <0.001, 'Significant', 'Not significant')}"
+    tab <- modelsummary(mod, statistic = st, output = "dataframe")
+    expect_equal(tab[[4]][2], "Significant")
+    expect_equal(tab[[5]][2], "Not significant")
+})
+
 
 test_that("glue + no statistic",{
   tab <- modelsummary(
