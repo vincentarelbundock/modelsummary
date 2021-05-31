@@ -480,6 +480,7 @@ modelsummary <- function(
 
   # interaction : becomes ×
   if (is.null(coef_map) &&
+      is.null(coef_rename) &&
       "term" %in% colnames(tab) &&
       output_format != 'rtf') {
     idx <- tab$part != 'gof'
