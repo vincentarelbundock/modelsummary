@@ -59,16 +59,24 @@ factory_kableExtra <- function(tab,
   arguments <- c(list(tab), arguments)
   out <- do.call(kableExtra::kbl, arguments)
 
-  # user-supplied notes at the bottom of table
-  if (!is.null(notes) && output_format %in% c("kableExtra", "html", "latex", "markdown")) {
-    # threeparttable only works with 1 note. But it creates a weird bug
-    # when using coef_map and stars in Rmarkdown PDF output
-    for (n in notes) {
-      # otherwise stars_note breaks in PDF output under pdflatex
-      if (kable_format == "latex" && isTRUE(grepl(" < ", n))) {
-        n <- gsub(" < ", " $<$ ", n)
+  ## user-supplied notes at the bottom of table
+  if (!is.null(notes)) {
+    ## kableExtra::footnote does not support markdown
+    ## kableExtra::add_footnote does not support longtable
+    if (output_format %in% c("kableExtra", "html", "latex")) {
+      ## threeparttable only works with 1 note. But it creates a weird bug
+      ## when using coef_map and stars in Rmarkdown PDF output
+      for (n in notes) {
+        ## otherwise stars_note breaks in PDF output under pdflatex
+        if (kable_format == "latex" && isTRUE(grepl(" < ", n))) {
+          n <- gsub(" < ", " $<$ ", n)
+        }
+        out <- kableExtra::footnote(out, general = n, general_title = "", escape = FALSE)
       }
-      out <- kableExtra::add_footnote(out, label = n, notation = "none", escape = FALSE)
+    } else if (output_format == "markdown") {
+      for (n in notes) {
+        out <- kableExtra::add_footnote(out, label = n, notation = "none", escape = FALSE)
+      }
     }
   }
 
