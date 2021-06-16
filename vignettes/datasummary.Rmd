@@ -551,6 +551,48 @@ datasummary(flipper_length_mm + body_mass_g ~ species * (Mean + SD),
             add_columns = new_cols)
 ```
 
+# Histograms
+
+The `datasummary` family of functions allow users to display in-line spark-style histograms to describe the distribution of the variables. For example, the `datasummary_skim` produces such a histogram:
+
+```{r}
+tmp <- mtcars[, c("mpg", "hp")]
+datasummary_skim(tmp)
+```
+
+Each of the histograms in the table above is actually an SVG image, produced by the `kableExtra` package. For this reason, the histogram will *not* appear when users use a different output backend, such as `gt`, `flextable`, or `huxtable`.
+
+The `datasummary` function is incredibly flexible, but it does not include a histogram option by default. Here is a simple example of how one can customize the output of `datasummary`. We proceed in 4 steps:
+
+1. Normalize the variables and store them in a list 
+2. Create the table with `datasummary`, making sure to include 2 "empty" columns. In the example, we use a simple function called `emptycol` to fill those columns with empty strings.
+3. Add the histograms or boxplots using functions from the `kableExtra` package.
+
+```{r}
+library(kableExtra)
+
+tmp <- mtcars[, c("mpg", "hp")]
+
+# create a list with individual variables
+# remove missing and rescale
+tmp_list <- lapply(tmp, na.omit)
+tmp_list <- lapply(tmp_list, scale)
+
+# create a table with `datasummary`
+# add a histogram with column_spec and spec_hist
+# add a boxplot with colun_spec and spec_box
+emptycol = function(x) " "
+datasummary(mpg + hp ~ Mean + SD + Heading("Histogram") * emptycol + Heading("Boxplot") * emptycol, data = tmp) %>%
+    column_spec(column = 4, image = spec_boxplot(tmp_list)) %>%
+    column_spec(column = 5, image = spec_hist(tmp_list))
+```
+
+If you want a simpler solution, you can try the `Histogram` function which works in `datasummary` automatically and comes bundled with `modelsummary`. The downside of this function is that it uses Unicode characters to create the histogram. This kind of histogram may not display well with certain typefaces or on some operating systems (Windows!).
+
+```{r}
+datasummary(mpg + hp ~ Mean + SD + Histogram, data = tmp)
+```
+
 # Missing values
 
 At least 3 distinct issues can arise related to missing values.
