@@ -824,6 +824,57 @@ modelsummary(mod, output = orgbackend) %>%
 #+END_SRC
 ````
 
+# Global options
+
+Users can change the default behavior of `modelsummary` by setting global options.
+
+Omit the note at the bottom of the table with significance threshold:
+
+```{r, eval = FALSE}
+options("modelsummary_stars_note" = FALSE)
+```
+
+Change the default output format:
+
+```{r, eval = FALSE}
+options(modelsummary_default = "latex")
+options(modelsummary_default = "gt")
+```
+
+Change the backend packages that `modelsummary` uses to create tables in different output formats:
+
+```{r, eval = FALSE}
+options(modelsummary_html = 'kableExtra')
+options(modelsummary_latex = 'flextable')
+options(modelsummary_word = 'huxtable')
+options(modelsummary_png = 'gt')
+```
+
+Change the packages that `modelsummary` uses to extract information from models:
+
+```{r, eval = FALSE}
+# tidymodels: broom 
+options(modelsummary_get = "broom")
+
+# easystats: performance + parameters
+options(modelsummary_get = "easystats")
+```
+
+[The `appearance` vignette](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html#themes) shows how to set "themes" for your tables using the `modelsummary_theme_gt`, `modelsummary_theme_kableExtra`, `modelsummary_theme_flextable` and `modelsummary_theme_huxtable` global options. For example:
+
+```{r, eval=FALSE}
+library(gt)
+
+# The ... ellipsis is required!
+custom_theme <- function(x, ...) {
+    x %>% gt::opt_row_striping(row_striping = TRUE)
+}
+options("modelsummary_theme_gt" = custom_theme)
+
+mod <- lm(mpg ~ hp + drat, mtcars)
+modelsummary(mod, output = "gt")
+```
+
 # Case studies
 
 ## Bootstrap

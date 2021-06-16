@@ -506,7 +506,9 @@ modelsummary <- function(
       .frequency = "once",
       .frequency_id = "stars_true_consistency")
   }
-  if (!isFALSE(stars) && !any(grepl("\\{stars\\}", c(estimate, statistic)))) {
+
+  stars_note <- getOption("modelsummary_stars_note", default = TRUE)
+  if (isTRUE(stars_note) && !isFALSE(stars) && !any(grepl("\\{stars\\}", c(estimate, statistic)))) {
     stars_note <- make_stars_note(stars)
     if (is.null(notes)) {
       notes <- stars_note

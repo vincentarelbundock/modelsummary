@@ -2,11 +2,16 @@
 
 `modelsummary`:
 
+* Disable stars footnote with `options("modelsummary_stars_note" = FALSE)`
 * `longtable=TRUE` works for LaTeX output
+* Interactions with ":" are no longer converted to "x" when `coef_map` or `coef_rename` are used.
+* `group = model ~ term + group` is now supported.
 
-Bug fixes:
+Other:
 
-* Overaggressive tests for glue strings prevented functions inside {}
+* Improved warnings for bad calls: `modelsummary(model1, model2)`
+* `gt` titles use the new `caption` argument in the `gt 0.3.0` function
+* Bug fix: Overaggressive tests for glue strings prevented functions inside {}
 
 # modelsummary 0.8.0
 

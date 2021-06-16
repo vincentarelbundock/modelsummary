@@ -6,6 +6,15 @@ test_that("clean_stars unknown (we should never reach this)", {
   expect_null(modelsummary:::clean_stars(FALSE))
 })
 
+test_that("global stars_note", {
+    options(modelsummary_stars_note = FALSE)
+    tab <- modelsummary(mod, output = "markdown", stars = TRUE)
+    tab <- paste(tab, collapse = "")
+    expect_false(grepl("Note", paste(tab, collapse = "\n")))
+    options(modelsummary_stars_note = NULL)
+    tab <- modelsummary(mod, output = "markdown", stars = TRUE)
+    expect_true(grepl("Note", paste(tab, collapse = "\n")))
+})
 
 test_that("no automatic note with glue stars", {
   tab <- modelsummary(
