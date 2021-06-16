@@ -680,15 +680,14 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
     lhs[lhs == group_name] <- "group"
     rhs[rhs == group_name] <- "group"
 
-    # term ~ model (standard)
+    # term ~ model (default)
     if (is.null(lhs) ||
         (length(lhs) == 1 && lhs == "term" &&
          length(rhs) == 1 && rhs == "model")) {
       return(estimates)
 
     # model ~ term
-    } else if (length(lhs) == 1 && lhs == "model" &&
-        length(rhs) == 1 && rhs == "term") {
+    } else if (length(lhs) == 1 && lhs == "model" && length(rhs) == 1 && rhs == "term") {
       out <- tidyr::pivot_longer(estimates,
                                  cols = -c("group", "term", "statistic"),
                                  names_to = "model")
@@ -697,7 +696,7 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
       # order matters for sorting
       out <- out[, unique(c("group", "model", "statistic", colnames(out)))]
 
-    # term + group ~ model
+    ## term + group ~ model
     } else if (all(c("term", "group") %in% lhs)) {
         idx <- unique(c(lhs, colnames(estimates)))
         out <- estimates[, idx, drop = FALSE]
@@ -716,6 +715,7 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
         idx <- unique(c(lhs, colnames(out)))
         out <- out[, idx, drop = FALSE]
 
+    ## term ~ group + model
     } else if (all(c("group", "model") %in% rhs)) {
         out <- estimates
         out <- tidyr::pivot_longer(out,
@@ -727,6 +727,12 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
                                   names_from = "idx_col",
                                   values_from = "value",
                                   values_fill = "")
+    ## model ~ term + group
+    } else if (all(c("term", "group") %in% rhs)) {
+      out <- tidyr::pivot_longer(estimates,
+                                 cols = -c("group", "term", "statistic"),
+                                 names_to = "model")
+      out <- tidyr::pivot_wider(out, names_from = rhs, names_sep = " / ")
     }
 
     out[out == "NA"] <- ""

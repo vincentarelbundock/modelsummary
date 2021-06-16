@@ -48,6 +48,18 @@ test_that("group: nnet::multinom", {
                  c("part", "term", "statistic", "Model 1 / 6", "Model 2 / 6",
                    "Model 1 / 8", "Model 2 / 8"))
 
+    tab <- modelsummary(mod, "data.frame", group = model ~ term + response)
+    expect_s3_class(tab, "data.frame")
+    expect_equal(colnames(tab),
+                 c("part", "statistic", "model", "(Intercept) / 6",
+                 "(Intercept) / 8", "mpg / 6", "mpg / 8", "drat / 6",
+                 "drat / 8"))
+
+    tab <- modelsummary(mod, "data.frame", group = model ~ response + term)
+    expect_s3_class(tab, "data.frame")
+    expect_equal(colnames(tab),
+                 c("part", "statistic", "model", "6 / (Intercept)", "8 / (Intercept)", 
+                   "6 / mpg", "8 / mpg", "6 / drat", "8 / drat"))
 })
 
 
