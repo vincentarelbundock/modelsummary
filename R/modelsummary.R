@@ -315,6 +315,7 @@ modelsummary <- function(
   sanity_stars(stars)
   sanity_fmt(fmt)
 
+  sanity_output_modelsummary(output) # more informative error specific to `modelsummary`
   sanity_output(output)
   output_format <- sanitize_output(output)$output_format
 

@@ -78,6 +78,9 @@ modelplot <- function(models,
                       background  = NULL,
                       ...) {
 
+  # more informative error message specific to `modelplot`
+  sanity_conf_level_modelplot(conf_level)
+
   ellip <- list(...)
 
   if ("statistic_override" %in% names(ellip)) {

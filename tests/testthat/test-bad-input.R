@@ -1,5 +1,12 @@
 library(modelsummary)
 
+test_that("multiple models must be wrapped in a list", {
+    mod <- lm(mpg ~ hp, mtcars)
+    expect_error(modelplot(mod, mod), regexp = "is sometimes raised")
+    expect_error(modelsummary(mod, mod), regexp = "is sometimes raised")
+})
+
+
 test_that("coef_map: two variables with the same name within or between models", {
 
   skip_if_not_installed("gt")

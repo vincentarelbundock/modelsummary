@@ -163,6 +163,17 @@ sanity_fmt <- function(fmt) {
 #' sanity check
 #'
 #' @noRd
+sanity_conf_level_modelplot <- function(conf_level) {
+  flag <- checkmate::check_number(conf_level, lower = 0, upper = .999999999999, null.ok = TRUE)
+  if (!isTRUE(flag)) {
+    stop("The `conf_level` argument must be a number between 0 and 1. Type `?modelplot` for details. This error is sometimes raised when users supply multiple models to `modelplot` but forget to wrap them in a list. This works: `modelplot(list(model1, model2))`. This does *not* work: `modelplot(model1, model2)`")
+  }
+}
+
+
+#' sanity check
+#'
+#' @noRd
 sanity_conf_level <- function(conf_level) {
   checkmate::assert_number(conf_level, lower = 0, upper = .999999999999, null.ok = TRUE)
 }
@@ -229,6 +240,18 @@ sanity_notes <- function(notes) {
         checkmate::check_class(note, 'from_markdown')
       )
     }
+  }
+}
+
+
+#' sanity check
+#' more informative error for a common modelsummary user-error
+#'
+#' @noRd
+sanity_output_modelsummary <- function(output) {
+  flag <- checkmate::check_string(output)
+  if (!isTRUE(flag)) {
+    stop("The `output` argument must be a string. Type `?modelsummary` for details. This error is sometimes raised when users supply multiple models to `modelsummary` but forget to wrap them in a list. This works: `modelsummary(list(model1, model2))`. This does *not* work: `modelsummary(model1, model2)`")
   }
 }
 
