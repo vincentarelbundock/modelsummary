@@ -18,7 +18,7 @@ factory_gt <- function(tab,
 
   # create gt table object
   idx_col <- ncol(tab)
-  out <- gt::gt(tab)
+  out <- gt::gt(tab, caption = title)
 
   
   # theme
@@ -27,11 +27,6 @@ factory_gt <- function(tab,
   out <- theme_ms(out,
                   output_format = output_format,
                   hrule = hrule)
-
-  # titles
-  if (!is.null(title)) {
-    out <- gt::tab_header(out, title = title)
-  }
 
   # user-supplied notes at the bottom of table
   if (!is.null(notes)) {

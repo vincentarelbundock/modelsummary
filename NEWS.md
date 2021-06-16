@@ -1,5 +1,9 @@
 # modelsummary 0.8.0.9000
 
+`modelsummary`:
+
+* `longtable=TRUE` works for LaTeX output
+
 Bug fixes:
 
 * Overaggressive tests for glue strings prevented functions inside {}
