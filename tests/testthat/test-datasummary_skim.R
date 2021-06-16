@@ -108,7 +108,7 @@ test_that("too many factor levels", {
 
 test_that("completely missing variables are dropped", {
   tmp <- dat
-  tmp$junk <- rep(NA, nrow(dat))
+  tmp$junk <- rep(NA_character_, nrow(dat))
   tmp <- expect_warning(datasummary_skim(tmp, type="categorical", output="data.frame", histogram=FALSE))
   expect_false("junk" %in% tmp[[1]])
 })

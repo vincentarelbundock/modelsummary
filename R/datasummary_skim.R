@@ -284,6 +284,12 @@ datasummary_skim_categorical <- function(
 
   for (n in colnames(dat_new)) {
 
+    # completely missing
+    if (all(is.na(dat_new[[n]]))) {
+      dat_new[[n]] <- NULL
+      drop_entirely_na <- c(drop_entirely_na, n)
+    }
+
     if (is.logical(dat_new[[n]]) |
         is.character(dat_new[[n]]) |
         is.factor(dat_new[[n]])) {
@@ -299,20 +305,13 @@ datasummary_skim_categorical <- function(
         levels(dat_new[[n]])[idx] <- " "
       }
 
-      # completely missing
-      if (all(is.na(dat_new[[n]]))) {
-        dat_new[[n]] <- NULL
-        drop_entirely_na <- c(drop_entirely_na, n)
-      } else {
-        # factors with too many levels
-        if (is.factor(dat_new[[n]])) {
+      ## factors with too many levels
+      if (is.factor(dat_new[[n]])) {
           if (length(levels(dat_new[[n]])) > 50) {
-            dat_new[[n]] <- NULL
-            drop_too_many_levels <- c(drop_too_many_levels, n)
+              dat_new[[n]] <- NULL
+              drop_too_many_levels <- c(drop_too_many_levels, n)
           }
-        }
       }
-
 
     # discard non-factors
     } else {
