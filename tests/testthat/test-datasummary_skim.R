@@ -14,6 +14,20 @@ test_that("basic", {
 
 })
 
+test_that("display NA in categorical", {
+    tmp <- mtcars
+    tmp$vs <- as.logical(tmp$vs)
+    tmp$vs[1:3] <- NA
+    
+    tab <- datasummary_skim(tmp, "categorical", output = "data.frame")
+    expect_equal(nrow(tab), 3)
+    
+    tmp$vs <- factor(tmp$vs)
+    tab <- datasummary_skim(tmp, "categorical", output = "data.frame")
+    expect_equal(nrow(tab), 2)
+})
+
+
 test_that("simple categorical", {
   tab <- datasummary_skim(dat, type = "categorical", output = "data.frame")
   truth <- structure(list(` ` = c("vs", "", "gear", "", ""), `  ` = c("FALSE", "TRUE", "3", "4", "5"), N = c("18", "14", "15", "12", "5"), `%` = c("56.2", "43.8", "46.9", "37.5", "15.6")), row.names = c(NA, -5L), class = "data.frame", stub_width = 2L, align = "llrr", output_format = "dataframe")

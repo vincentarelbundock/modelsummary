@@ -7,6 +7,11 @@
 * Interactions with ":" are no longer converted to "x" when `coef_map` or `coef_rename` are used.
 * `group = model ~ term + group` is now supported.
 
+`datasummary_skim`:
+
+* `datasummary_skim("categorical")` keeps `NA` by default. Users can convert
+  variables to factors before calling `datasummary_skim` to exclude `NA`.
+
 Other:
 
 * Improved warnings for bad calls: `modelsummary(model1, model2)`

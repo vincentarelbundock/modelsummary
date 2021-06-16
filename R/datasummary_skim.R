@@ -281,18 +281,22 @@ datasummary_skim_categorical <- function(
   drop_too_many_levels <- NULL
   drop_entirely_na <- NULL
 
+
   for (n in colnames(dat_new)) {
 
     if (is.logical(dat_new[[n]]) |
         is.character(dat_new[[n]]) |
         is.factor(dat_new[[n]])) {
 
-      # convert to factor
-      dat_new[[n]] <- factor(dat_new[[n]])
+      # convert to factor and keep NAs as distinct level
+      if (is.logical(dat_new[[n]]) | is.character(dat_new[[n]])) {
+        dat_new[[n]] <- factor(dat_new[[n]], exclude = NULL)
+      }
 
       # tables::tabular breaks on ""
-      if (is.factor(dat_new[[n]])) {
-        levels(dat_new[[n]])[levels(dat_new[[n]]) == ""] <- " "
+      if (is.factor(dat_new[[n]]) && "" %in% levels(dat_new[[n]])) {
+        idx <- levels(dat_new[[n]]) == ""
+        levels(dat_new[[n]])[idx] <- " "
       }
 
       # completely missing
