@@ -1,3 +1,9 @@
+# modelsummary 0.8.1.9000
+
+`modelsummary`:
+
+* LaTeX output accepts the `threeparttable=TRUE` argument through `...`
+
 # modelsummary 0.8.1
 
 `modelsummary`:
