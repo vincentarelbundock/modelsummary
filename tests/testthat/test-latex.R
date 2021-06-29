@@ -2,12 +2,23 @@ models <- list(
   lm(hp ~ mpg, mtcars),
   lm(hp ~ mpg + drat, mtcars))
 
-
 test_that("latex threeparttable argument", {
     tab1 <- modelsummary(models, output = "latex", stars = TRUE)
     tab2 <- modelsummary(models, output = "latex", threeparttable = TRUE, stars = TRUE)
     expect_false(grepl("threeparttable", tab1))
     expect_true(grepl("threeparttable", tab2))
+    expect_equal(sum(grepl("threeparttable", strsplit(tab2, "\n")[[1]])), 2)
+
+    
+    ## kableExtra::footnote has a bug with multiple footnotes and threeparttable, so we combine notes.
+    ft <- "Here is a very very very very very very very very very very very very very very very very very long footnote"
+    tab3 <- modelsummary(models,
+                         output = "latex",
+                         title = "Regression output",
+                         notes = ft, 
+                         stars = TRUE,
+                         threeparttable = TRUE)
+    expect_equal(sum(grepl("threeparttable", strsplit(tab3, "\n")[[1]])), 2)
 })
 
 

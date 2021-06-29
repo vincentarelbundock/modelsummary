@@ -63,6 +63,16 @@ factory_kableExtra <- function(tab,
   valid <- c("footnote_as_chunk", "escape", "threeparttable", "fixed_small_size", "symbol_manual", "title_format")
   arguments <- list(...)
   arguments <- arguments[base::intersect(names(arguments), valid)]
+
+  ## kableExtra::footnote bug when adding multiple notes with threeparttable in LaTeX
+  ## combine notes
+  if (output_format == "latex" &&
+      !is.null(notes) &&
+      length(notes) > 1 &&
+      "threeparttable" %in% names(arguments) &&
+      isTRUE(arguments[["threeparttable"]])) {
+      notes <- paste(notes, collapse = " ")
+  }
     
   ## user-supplied notes at the bottom of table
   if (!is.null(notes)) {
