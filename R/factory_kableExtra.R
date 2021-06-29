@@ -59,6 +59,11 @@ factory_kableExtra <- function(tab,
   arguments <- c(list(tab), arguments)
   out <- do.call(kableExtra::kbl, arguments)
 
+  ## footnote arguments
+  valid <- c("footnote_as_chunk", "escape", "threeparttable", "fixed_small_size", "symbol_manual", "title_format")
+  arguments <- list(...)
+  arguments <- arguments[base::intersect(names(arguments), valid)]
+    
   ## user-supplied notes at the bottom of table
   if (!is.null(notes)) {
     ## kableExtra::footnote does not support markdown
@@ -71,7 +76,13 @@ factory_kableExtra <- function(tab,
         if (kable_format == "latex" && isTRUE(grepl(" < ", n))) {
           n <- gsub(" < ", " $<$ ", n)
         }
-        out <- kableExtra::footnote(out, general = n, general_title = "", escape = FALSE)
+        arguments[["general"]] <- n
+        arguments[["general_title"]] <- ""
+        arguments[["kable_input"]] <- out
+        if (!"escape" %in% names(arguments)) {
+            arguments[["escape"]] <- FALSE
+        }
+        out <- do.call(kableExtra::footnote, arguments)
       }
     } else if (output_format == "markdown") {
       for (n in notes) {

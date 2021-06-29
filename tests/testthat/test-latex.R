@@ -3,6 +3,14 @@ models <- list(
   lm(hp ~ mpg + drat, mtcars))
 
 
+test_that("latex threeparttable argument", {
+    tab1 <- modelsummary(models, output = "latex", stars = TRUE)
+    tab2 <- modelsummary(models, output = "latex", threeparttable = TRUE, stars = TRUE)
+    expect_false(grepl("threeparttable", tab1))
+    expect_true(grepl("threeparttable", tab2))
+})
+
+
 test_that("stars_note < are protected by $ in latex", {
   tab <- modelsummary(models, stars=TRUE, output="latex")
   expect_true(grepl("p $<$ 0.1", tab, fixed=TRUE))
