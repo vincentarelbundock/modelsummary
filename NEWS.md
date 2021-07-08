@@ -4,6 +4,10 @@
 
 * LaTeX output accepts the `threeparttable=TRUE` argument through `...`
 
+`modelsummary_wide`:
+
+* This function is being deprecated. Bugfix with statistic=NULL
+
 # modelsummary 0.8.1
 
 `modelsummary`:

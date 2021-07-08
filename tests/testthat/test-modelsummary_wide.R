@@ -8,6 +8,18 @@ make_data <- function(response = c("A", "B", "C")) {
 }
 
 
+test_that("statistic = NULL does not raise an error", {
+  testthat::skip_if_not_installed("nnet")
+  df1 <- make_data()
+  df2 <- make_data()
+  invisible(capture.output(m1 <- nnet::multinom(var1~var2, data=df1)))
+  invisible(capture.output(m2 <- nnet::multinom(var1~var2, data=df2)))
+  models <- list("a" = m1, "b" = m2)
+  tab <- modelsummary_wide(models, output = "dataframe", statistic=NULL)
+  expect_equal(c(5, 7), dim(tab))
+})
+
+
 test_that("model names", {
   testthat::skip_if_not_installed("nnet")
   df1 <- make_data()

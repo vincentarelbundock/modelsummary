@@ -53,7 +53,7 @@ modelsummary_wide <- function(
   model_names <- pad(model_names)
 
   # tidy
-  if (statistic == "conf.int") {
+  if (!is.null(statistic) && statistic == "conf.int") {
     ti <- lapply(models, function(x)
                  get_estimates(x, conf_level = conf_level, ...))
   } else {
