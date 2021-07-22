@@ -1056,7 +1056,7 @@ options(modelsummary_word = 'huxtable')
 options(modelsummary_png = 'gt')
 ```
 
-# F.A.Q.
+# FAQ.
 
 ## How does `modelsummary` extract estimates and goodness-of-fit statistics?
 
@@ -1155,4 +1155,14 @@ modelsummary(mod, metrics = "rmse")
 
 ```{r, include=FALSE}
 options(modelsummary_get = "broom")
+```
+
+## Escaped LaTeX characters
+
+Sometimes, users want to include raw LaTeX commands in their tables, such as coefficient names including math mode: `Apple $\times$ Orange`. The result of these attempts is often a weird string such as: `\$\textbackslash{}times\$` instead of proper LaTeX-rendered characters.
+
+The source of the problem is that `kableExtra`, default table-making package in `modelsummary`, automatically escapes weird characters to make sure that your tables compile properly in LaTeX. To avoid this, we need to pass the `escape=FALSE` option to `kableExtra`. The `modelsummary` can push this option forward to `kableExtra` through the `...` ellipsis. This means that users can often just call something like:
+
+```{r, eval=FALSE}
+modelsummary(mod, escape = FALSE)
 ```
