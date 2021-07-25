@@ -752,16 +752,32 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
     ## term ~ group + model
     } else if (all(c("group", "model") %in% rhs)) {
         out <- estimates
-        out <- tidyr::pivot_longer(
-          out,
-          cols = !tidyselect::any_of(c("part", "group", "term", "statistic")),
-          names_to = "model")
+        ## out <- tidyr::pivot_longer(
+        ##   out,
+        ##   cols = !tidyselect::any_of(c("part", "group", "term", "statistic")),
+        ##   names_to = "model")
+        ## out <- tidyr::pivot_wider(out,
+        ##                           names_from = "idx_col",
+        ##                           values_from = "value",
+        ##                           values_fill = "")
+        out <- reshape(
+          estimates,
+          varying = setdiff(colnames(estimates), c("part", "group", "term", "statistic")),
+          idvar = c("group", "term", "statistic"),
+          times = setdiff(colnames(estimates), c("part", "group", "term", "statistic")),
+          v.names = "value",
+          timevar = "model",
+          direction = "long")
         out$idx_col <- paste(out[[rhs[1]]], "/", out[[rhs[2]]])
         out$model <- out$group <- NULL
-        out <- tidyr::pivot_wider(out,
-                                  names_from = "idx_col",
-                                  values_from = "value",
-                                  values_fill = "")
+        out <- reshape(
+          out,
+          timevar = "idx_col",
+          idvar = setdiff(colnames(out), c("idx_col", "value")),
+          direction = "wide")
+        row.names(out) <- NULL
+        colnames(out) <- gsub("^value\\.", "", colnames(out))
+
     ## model ~ term + group
     } else if (all(c("term", "group") %in% rhs)) {
       ## out <- tidyr::pivot_longer(estimates,
