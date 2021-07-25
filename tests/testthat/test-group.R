@@ -7,7 +7,7 @@
 ##     nnet::multinom(cyl ~ mpg + drat, data = dat_multinom, trace = FALSE))
 ## pkgload::load_all()
 ## test_file("tests/testthat/test-group.R")
-## tab <- modelsummary(mod, "data.frame", group = term ~ model + response)
+## tab <- modelsummary(mod, "data.frame", group = model ~ response + term)
 
 # replicability: this gets reverted at the end of the file 
 options(modelsummary_get = "easystats")

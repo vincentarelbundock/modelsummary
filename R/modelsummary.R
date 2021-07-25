@@ -783,6 +783,7 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
       ## out <- tidyr::pivot_longer(estimates,
       ##                            cols = -c("group", "term", "statistic"),
       ##                            names_to = "model")
+      ## out <- tidyr::pivot_wider(out, names_from = rhs, names_sep = " / ")
       out <- reshape(
         estimates,
         varying = setdiff(colnames(estimates), c("group", "term", "statistic")),
@@ -791,7 +792,16 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
         v.names = "value",
         timevar = "model",
         direction = "long")
-      out <- tidyr::pivot_wider(out, names_from = rhs, names_sep = " / ")
+      out <- out
+      out$rhs <- paste(out[[rhs[1]]], out[[rhs[2]]], sep = " / ")
+      out[[rhs[1]]] <- out[[rhs[2]]] <- NULL
+      out <- reshape(
+        out,
+        timevar = "rhs",
+        idvar = setdiff(colnames(out), c("rhs", "value")),
+        direction = "wide")
+      row.names(out) <- NULL
+      colnames(out) <- gsub("^value\\.", "", colnames(out))
     }
 
     out[out == "NA"] <- ""
