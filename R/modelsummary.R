@@ -720,16 +720,32 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
         out <- estimates[, idx, drop = FALSE]
 
     } else if (all(c("term", "model") %in% lhs)) {
+        ## out <- tidyr::pivot_longer(
+        ##     estimates,
+        ##     cols = !tidyselect::any_of(c("part", "group", "term", "statistic")),
+        ##     names_to = "model")
+        ## out <- tidyr::pivot_wider(
+        ##     out,
+        ##     names_from = "group",
+        ##     values_from = "value",
+        ##     values_fill = "")
         out <- estimates
-        out <- tidyr::pivot_longer(
-            out,
-            cols = !tidyselect::any_of(c("part", "group", "term", "statistic")),
-            names_to = "model")
-        out <- tidyr::pivot_wider(
-            out,
-            names_from = "group",
-            values_from = "value",
-            values_fill = "")
+        out <- reshape(
+          out,
+          varying = setdiff(colnames(estimates), c("part", "group", "term", "statistic")),
+          idvar = c("group", "term", "statistic"),
+          times = setdiff(colnames(estimates), c("part", "group", "term", "statistic")),
+          v.names = "value",
+          timevar = "model",
+          direction = "long")
+        out <- reshape(
+          out,
+          timevar = "group",
+          idvar = setdiff(colnames(out), c("group", "value")),
+          direction = "wide")
+        row.names(out) <- NULL
+        colnames(out) <- gsub("^value\\.", "", colnames(out))
+
         idx <- unique(c(lhs, colnames(out)))
         out <- out[, idx, drop = FALSE]
 

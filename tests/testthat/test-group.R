@@ -1,3 +1,14 @@
+## options(modelsummary_get = "easystats")
+## library(nnet)
+## dat_multinom <- mtcars
+## dat_multinom$cyl <- as.factor(dat_multinom$cyl)
+## mod <- list(
+##     nnet::multinom(cyl ~ mpg, data = dat_multinom, trace = FALSE),
+##     nnet::multinom(cyl ~ mpg + drat, data = dat_multinom, trace = FALSE))
+## pkgload::load_all()
+## test_file("tests/testthat/test-group.R")
+## tab <- modelsummary(mod, "data.frame", group = model + term ~ response)
+
 # replicability: this gets reverted at the end of the file 
 options(modelsummary_get = "easystats")
 
