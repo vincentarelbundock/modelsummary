@@ -676,6 +676,7 @@ map_omit_gof <- function(gof, gof_omit, gof_map) {
 
 #' internal function to reshape grouped estimates
 #'
+#' @importFrom stats reshape
 #' @keywords internal
 #' @noRd
 group_reshape <- function(estimates, lhs, rhs, group_name) {
