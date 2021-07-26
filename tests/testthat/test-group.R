@@ -1,3 +1,14 @@
+## options(modelsummary_get = "easystats")
+## library(nnet)
+## dat_multinom <- mtcars
+## dat_multinom$cyl <- as.factor(dat_multinom$cyl)
+## mod <- list(
+##     nnet::multinom(cyl ~ mpg, data = dat_multinom, trace = FALSE),
+##     nnet::multinom(cyl ~ mpg + drat, data = dat_multinom, trace = FALSE))
+## pkgload::load_all()
+## test_file("tests/testthat/test-group.R")
+## tab <- modelsummary(mod, "data.frame", group = model ~ response + term)
+
 # replicability: this gets reverted at the end of the file 
 options(modelsummary_get = "easystats")
 
@@ -10,7 +21,6 @@ models[["GAMLSS"]] <- gamlss(y~pb(x),sigma.fo=~pb(x),family=BCT, data=abdom, met
 
 
 test_that("flipped table (no groups)", {
-
     mod = list(
     lm(hp ~ mpg, mtcars),
     lm(hp ~ mpg + drat, mtcars))
@@ -45,8 +55,8 @@ test_that("group: nnet::multinom", {
     tab <- modelsummary(mod, "data.frame", group = term ~ model + response)
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
-                 c("part", "term", "statistic", "Model 1 / 6", "Model 2 / 6",
-                   "Model 1 / 8", "Model 2 / 8"))
+                 c("part", "term", "statistic", "Model 1 / 6", "Model 1 / 8",
+                   "Model 2 / 6", "Model 2 / 8"))
 
     tab <- modelsummary(mod, "data.frame", group = model ~ term + response)
     expect_s3_class(tab, "data.frame")
