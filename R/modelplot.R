@@ -112,9 +112,9 @@ modelplot <- function(models,
   )
   out$part <- out$statistic <- NULL
 
-
   # save for sorting later
   term_order <- unique(out$term)
+  model_order <- colnames(out)[2:ncol(out)]
 
   out <- stats::reshape(
     out,
@@ -137,7 +137,8 @@ modelplot <- function(models,
   # clean and sort
   dat <- stats::na.omit(out)
   row.names(dat) <- dat$value <- dat$id <- NULL
-  dat$term <- factor(dat$term, rev(term_order))
+  dat$term <- factor(dat$term, term_order)
+  dat$model <- factor(dat$model, model_order)
   dat <- dat[order(dat$term, dat$model), ]
 
   # add_rows

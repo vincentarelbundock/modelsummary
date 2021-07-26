@@ -43,6 +43,17 @@ test_that("multiple models", {
 
 })
 
+
+test_that("preserve model order", {
+  mod <- list(
+    "C" = lm(mpg ~ hp, data = mtcars),
+    "A" = lm(mpg ~ hp + drat + vs, data = mtcars),
+    "B" = lm(mpg ~ hp + drat, data = mtcars))
+  p <- modelplot(mod, draw = TRUE)
+  expect_doppelganger("model order", p)
+})
+
+
 test_that("conf_level=NULL", {
   mod <- lm(hp ~ mpg + drat, data = mtcars)
   p <- modelplot(mod, draw = FALSE, conf_level = NULL)
