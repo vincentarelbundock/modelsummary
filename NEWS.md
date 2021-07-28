@@ -16,6 +16,10 @@
 
 * Preserves order of models in the user-supplied list
 
+`datasummary_crosstab`:
+
+* `statistic=NULL` produces a very basic crosstab
+
 # modelsummary 0.8.1
 
 `modelsummary`:
