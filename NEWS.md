@@ -2,14 +2,19 @@
 
 `modelsummary`:
 
+* Math mode alignment: `align="lSS"`. LaTeX: displays numbers in math mode and
+  aligns on the dot using the `siunitx` package. HTML: displays in math mode
+  using MathJax. Proto-support for `dcolumn` is deprecated.
 * LaTeX output accepts the `threeparttable=TRUE` argument through `...`
-* `align="lSS"`. LaTeX: displays numbers in math mode and aligns on the dot
-  using the `siunitx` package. HTML: displays in math mode using MathJax.
-  Proto-support for `dcolumn` is deprecated.
+* No more dependency on `tidyr`
 
 `modelsummary_wide` (Note: This function will eventually be deprecated):
 
 * Bugfix with statistic=NULL. 
+
+`modelplot`:
+
+* Preserves order of models in the user-supplied list
 
 # modelsummary 0.8.1
 
