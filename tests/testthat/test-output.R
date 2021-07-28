@@ -1,23 +1,20 @@
 # CRAN fails on artefacts
 skip_on_cran()
-skip_if_not_installed("estimatr") 
+skip_if_not_installed("estimatr")
 skip_if_not_installed("flextable")
 
 random_string <- function() {
-  paste(sample(letters, 30, replace=TRUE), collapse="")
+  paste(sample(letters, 30, replace = TRUE), collapse = "")
 }
 
-library(modelsummary)
-
-mod <- list()
-mod[[1]] <- lm(hp ~ mpg, mtcars)
-mod[[2]] <- lm(hp ~ mpg + drat, mtcars)
-
+mod <- list(
+  lm(hp ~ mpg, mtcars),
+  lm(hp ~ mpg + drat, mtcars))
 
 test_that("output='table.tex'", {
   fn <- paste0(random_string(), ".tex")
   modelsummary(mod, output = fn)
-  known <- readLines("known_output/msummary_latex_simple.tex")
+  known <- readLines("known_output/output_1.tex")
   unknown <- readLines(fn)
   expect_identical(known, unknown)
   unlink(fn)

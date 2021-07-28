@@ -161,6 +161,7 @@ datasummary_correlation <- function(data,
   colnames(out) <- c(' ', col_names)
 
   align <- paste0('l', strrep('r', ncol(out) - 1))
+  align <- paste(align, collapse = "")
 
   factory(out,
     align = align,

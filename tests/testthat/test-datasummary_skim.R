@@ -30,8 +30,10 @@ test_that("display NA in categorical", {
 
 test_that("simple categorical", {
   tab <- datasummary_skim(dat, type = "categorical", output = "data.frame")
-  truth <- structure(list(` ` = c("vs", "", "gear", "", ""), `  ` = c("FALSE", "TRUE", "3", "4", "5"), N = c("18", "14", "15", "12", "5"), `%` = c("56.2", "43.8", "46.9", "37.5", "15.6")), row.names = c(NA, -5L), class = "data.frame", stub_width = 2L, align = "llrr", output_format = "dataframe")
-  expect_equal(tab, truth)
+  expect_known_output(dput(tab),
+                      file = "known_output/datasummary_skim_1.R",
+                      update = FALSE,
+                      print = TRUE)
 })
 
 test_that("errors and warnings: numeric", {

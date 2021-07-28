@@ -13,13 +13,10 @@ junk,4")
     add_columns = ac,
     fmt = '%.2f',
     output = 'dataframe')
-
-  truth <- structure(list(first = c("blah", "junk"), ` ` = c("mpg", "hp"
-  ), mean = c("20.09", "146.69"), sd = c("6.03", "68.56"), last = c("2.00",
-    "4.00")), row.names = c(NA, -2L), class = "data.frame", align = "lrrrr", output_format = "dataframe")
-
-  expect_identical(tab, truth)
-
+  expect_known_output(dput(tab),
+                      file = "known_output/add_columns_1.R",
+                      update = FALSE,
+                      print = TRUE)
 })
 
 test_that("too many rows in add_columns", {

@@ -28,14 +28,15 @@ test_that("stars_note < are protected by $ in latex", {
 })
 
 
-test_that("model names protected by multicolumn with dcolumn",{
-  tab <- modelsummary(
-    models, 
-    stars = TRUE, 
-    output = "latex",
-    align = c("l", "D{.}{.}{-1}", "D{.}{.}{-1}"))
-  expect_true(grepl("multicolumn....c..Model", tab))
-})
+## dcolumn is no longer officially supported
+## test_that("model names protected by multicolumn with dcolumn",{
+##   tab <- modelsummary(
+##     models, 
+##     stars = TRUE, 
+##     output = "latex",
+##     align = c("l", "D{.}{.}{-1}", "D{.}{.}{-1}"))
+##   expect_true(grepl("multicolumn....c..Model", tab))
+## })
 
 test_that("output = latex_tabular", {
   tab <- modelsummary(

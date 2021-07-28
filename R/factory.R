@@ -150,7 +150,11 @@ factory <- function(tab,
   }
 
   ## align: sanity must be checked after add_columns
-  checkmate::assert_true(nchar(align) == ncol(tab))
+  if (!is.null(align)) {
+    checkmate::assert_true(nchar(align) == ncol(tab))
+  } else {
+    align <- strrep("l", ncol(tab))
+  }
   align <- strsplit(align, "")[[1]]
 
   ## align: math mode

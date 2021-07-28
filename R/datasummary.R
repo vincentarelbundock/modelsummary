@@ -184,6 +184,7 @@ datasummary <- function(formula,
     align <- paste0(strrep('l', stub_width),
       strrep('r', tab_width - stub_width))
   }
+  align <- paste(align, collapse = "")
 
   # convert to numeric if fmt==NULL
   if (is.null(fmt)) {

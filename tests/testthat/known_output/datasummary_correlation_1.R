@@ -1,0 +1,4 @@
+structure(list(` ` = c("(1) mpg", "(2) hp", "(3) vs"), `(1)` = c("1.00", 
+"-.78", ".66"), `(2)` = c("-.78", "1.00", "-.72"), `(3)` = c(".66", 
+"-.72", "1.00")), class = "data.frame", row.names = c(NA, -3L
+), align = c("l", "r", "r", "r"), output_format = "dataframe")

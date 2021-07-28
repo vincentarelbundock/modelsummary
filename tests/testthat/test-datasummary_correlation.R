@@ -9,8 +9,10 @@ test_that("different rows and columns", {
       return(out)
   }
   tab <- datasummary_correlation(dat, method = cor_fun, output = "data.frame")
-  truth <- structure(list(` ` = c("(1) mpg", "(2) hp", "(3) vs"), `(1)` = c("1.00", "-.78", ".66"), `(2)` = c("-.78", "1.00", "-.72"), `(3)` = c(".66", "-.72", "1.00")), class = "data.frame", row.names = c(NA, -3L ), align = "lrrr", output_format = "dataframe")
-  expect_equal(tab, truth)
+  expect_known_output(dput(tab),
+                      file = "known_output/datasummary_correlation_1.R",
+                      update = FALSE,
+                      print = TRUE)
 })
     
     
@@ -38,23 +40,33 @@ test_that("pearson, kendall, spearman, pearspear", {
   dat <- mtcars[, c("mpg", "hp")]
 
   # pearson
-  truth <- structure(list(` ` = c("mpg", "hp"), mpg = c("1", "-.78"), hp = c(".", "1")), row.names = c(NA, -2L), class = "data.frame", align = "lrr", output_format = "dataframe")
   tab <- datasummary_correlation(dat, output = "data.frame", method = "pearson")
-  expect_equal(truth, tab)
+
+  expect_known_output(dput(tab),
+                      file = "known_output/datasummary_correlation_2.R",
+                      update = FALSE,
+                      print = TRUE)
 
   # kendall
-  truth <- structure(list(` ` = c("mpg", "hp"), mpg = c("1", "-.74"), hp = c(".", "1")), row.names = c(NA, -2L), class = "data.frame", align = "lrr", output_format = "dataframe")
   tab <- datasummary_correlation(dat, output = "data.frame", method = "kendall")
-  expect_equal(truth, tab)
+
+  expect_known_output(dput(tab),
+                      file = "known_output/datasummary_correlation_3.R",
+                      update = FALSE,
+                      print = TRUE)
 
   # spearman
   tab <- datasummary_correlation(dat, output = "data.frame", method = "spearman")
-  truth <- structure(list(` ` = c("mpg", "hp"), mpg = c("1", "-.89"), hp = c(".", "1")), row.names = c(NA, -2L), class = "data.frame", align = "lrr", output_format = "dataframe")
-  expect_equal(truth, tab)
+
+  expect_known_output(dput(tab),
+                      file = "known_output/datasummary_correlation_4.R",
+                      update = FALSE,
+                      print = TRUE)
 
   # pearspear
   tab <- datasummary_correlation(dat, output = "data.frame", method = "pearspear")
-  truth <- structure(list(` ` = c("mpg", "hp"), mpg = c("1", "-.89"), hp = c("-.78", "1")), row.names = c(NA, -2L), class = "data.frame", align = "lrr", output_format = "dataframe")
-  expect_equal(truth, tab)
-
+  expect_known_output(dput(tab),
+                      file = "known_output/datasummary_correlation_5.R",
+                      update = FALSE,
+                      print = TRUE)
 })

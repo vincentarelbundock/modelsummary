@@ -4,12 +4,12 @@ mod <- list(
 
 
 test_that("known output", {
-    expect_known_output(modelsummary(mod, align = "lS", output = "latex"),
-                        file = "known_output/siunitx1.tex",
+    expect_known_output(modelsummary(mod, align = "lSS", output = "latex"),
+                        file = "known_output/mathmode_1.tex",
                         print = TRUE,
                         update = FALSE)
-    expect_known_output(modelsummary(mod, align = "lS", output = "html"),
-                        file = "known_output/mathmode_html_1.html",
+    expect_known_output(modelsummary(mod, align = "lSS", output = "html"),
+                        file = "known_output/mathmode_1.html",
                         print = TRUE,
                         update = FALSE)
 })
