@@ -36,9 +36,14 @@ datasummary_df(
 \item function: returns a formatted character string.
 }}
 
-\item{align}{A character string of length equal to the number of columns in
-the table.  "lcr" means that the first column will be left-aligned, the 2nd
-column center-aligned, and the 3rd column right-aligned.}
+\item{align}{A string with a number of characters equal to the number of columns in
+the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, S.
+\itemize{
+\item "l": left-aligned column
+\item "c": centered column
+\item "r": right-aligned column
+\item "S": math-mode column. In HTML tables, numeric values are centered and wrapped in \verb{$$} in order to be interpreted by MathJax. In LaTeX and PDF documents, numeric values are aligned on the dot and treated as math mode, using the "S" column type supplied by the \code{siunitx} LaTeX package. This code must appear in the LaTeX document preamble (it is added automatically when compiling Rmarkdown documents): \verb{\\usepackage[parse-numbers=false]\{siunitx\}} Warning: When using \code{siunitx} for math mode tables in LaTeX, characters like underscores in variable names will \emph{not} be escaped automatically, and may break compilation.
+}}
 
 \item{hrule}{position of horizontal rules (integer vector)}
 

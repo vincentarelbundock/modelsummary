@@ -61,12 +61,8 @@ sanity_model_names <- function(modelnames) {
 #' sanity check
 #'
 #' @noRd
-sanity_align <- function(align, tab) {
-  checkmate::assert(
-    checkmate::check_character(align, len = 1, null.ok = TRUE),
-    checkmate::check_character(align, len = ncol(tab), null.ok = TRUE),
-    combine = "or"
-  )
+sanity_align <- function(align) {
+  checkmate::assert_string(align, null.ok = TRUE)
 }
 
 

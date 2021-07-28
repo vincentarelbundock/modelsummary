@@ -95,9 +95,12 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `"estimate"`
 #' * `"{estimate} ({std.error}){stars}"`
 #' * `"{estimate} [{conf.low}, {conf.high}]"`
-#' @param align A character string of length equal to the number of columns in
-#' the table.  "lcr" means that the first column will be left-aligned, the 2nd
-#' column center-aligned, and the 3rd column right-aligned.
+#' @param align A string with a number of characters equal to the number of columns in
+#' the table (e.g., `align = "lcc"`).  Valid characters: l, c, r, S.
+#' * "l": left-aligned column
+#' * "c": centered column
+#' * "r": right-aligned column
+#' * "S": math-mode column. In HTML tables, numeric values are centered and wrapped in `$$` in order to be interpreted by MathJax. In LaTeX and PDF documents, numeric values are aligned on the dot and treated as math mode, using the "S" column type supplied by the `siunitx` LaTeX package. This code must appear in the LaTeX document preamble (it is added automatically when compiling Rmarkdown documents): `\usepackage[parse-numbers=false]{siunitx}` Warning: When using `siunitx` for math mode tables in LaTeX, characters like underscores in variable names will *not* be escaped automatically, and may break compilation. 
 #' @param ... all other arguments are passed through to the extractor and
 #' table-making functions. This allows users to pass arguments directly to
 #' `modelsummary` in order to affect the behavior of other functions behind
@@ -308,6 +311,7 @@ modelsummary <- function(
   group <- sanitize_group(group)
   sanity_group_map(group_map)
   sanity_statistic(statistic)
+  sanity_align(align)
   sanity_conf_level(conf_level)
   sanity_coef(coef_map, coef_rename, coef_omit)
   # no gof should be OK
@@ -548,9 +552,29 @@ modelsummary <- function(
     } else {
       align <- paste0("l", strrep("c", ncol(tab) - 1))
     }
+
+  # math mode
+  } else if (any(grepl("S", align))) {
+    if (sanitize_output(output)$output_factory != "kableExtra" || !sanitize_output(output)$output_format %in% c("kableExtra", "html", "latex", "latex_tabular")) {
+      stop('Math mode `align` is only supported for HTML or LaTeX tables produced by the `kableExtra` package.')
+    }
+                        
+    for (i in seq_along(align)) {
+      if (align[i] == "S") {
+        if (output_format %in% c("latex", "latex_tabular")) {
+          tab[[i]] <- ifelse(!grepl("[0-9]", tab[[i]]), sprintf("{%s}", tab[[i]]), tab[[i]]) # protect strings from siunitx
+        } else {
+          tab[[i]] <- ifelse(grepl("[0-9]", tab[[i]]), sprintf("$%s$", tab[[i]]), tab[[i]])
+        }
+      }
+    }
+
+    if (!output_format %in% c("latex", "latex_tabular")) { # "S" is only supported by siunitx
+      align <- gsub("S", "c", align)
+    }
   }
-
-
+        
+  
   # remove "empty" confidence intervals or standard errors (HACK)
   for (i in seq_along(tab)) {
     tab[[i]] <- gsub("\\[,\\s*\\]|\\(\\s*\\)", "", tab[[i]])

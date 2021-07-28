@@ -3,10 +3,13 @@
 `modelsummary`:
 
 * LaTeX output accepts the `threeparttable=TRUE` argument through `...`
+* `align="lSS"`. LaTeX: displays numbers in math mode and aligns on the dot
+  using the `siunitx` package. HTML: displays in math mode using MathJax.
+  Proto-support for `dcolumn` is deprecated.
 
-`modelsummary_wide`:
+`modelsummary_wide` (Note: This function will eventually be deprecated):
 
-* This function is being deprecated. Bugfix with statistic=NULL
+* Bugfix with statistic=NULL. 
 
 # modelsummary 0.8.1
 

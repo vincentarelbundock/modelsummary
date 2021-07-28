@@ -41,15 +41,16 @@ factory_kableExtra <- function(tab,
     "row.names" = NULL
   )
 
-  # align
+  ## align
   if (!is.null(align)) {
     arguments[["align"]] <- align
+  }
 
-    # if dcolumn, wrap model names in multicolumn to avoid math mode
-    if (kable_format %in% c("latex_tabular", "latex") &&
-        any(grepl("D\\{", align)) &&
-        !"escape" %in% names(arguments)) {
-      colnames(tab) <- paste0("\\multicolumn{1}{c}{", colnames(tab), "}")
+  ## siunitx math mode
+  if (kable_format %in% c("latex_tabular", "latex") && any(grepl("S", align))) {
+    if ("escape" %in% names(arguments) && isTRUE(arguments$escape)) {
+      stop('Cannot use `escape=TRUE` with "S" in the `align` argument for LaTeX/PDF output.')
+    } else {
       arguments$escape <- FALSE
     }
   }

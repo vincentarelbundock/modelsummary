@@ -149,10 +149,40 @@ factory <- function(tab,
     }
   }
 
-  # sanity align: after add_columns
-  sanity_align(align, tab)
+  ## align: sanity must be checked after add_columns
+  checkmate::assert_true(nchar(align) == ncol(tab))
+  align <- strsplit(align, "")[[1]]
 
-  # build table
+  ## align: math mode
+  if (any(grepl("S", align))) {
+    if (output_list$output_factory != "kableExtra" ||
+        !output_list$output_format %in% c("kableExtra", "html", "latex", "latex_tabular")) {
+      stop('Math mode `align` with `S` is only supported for HTML or LaTeX tables produced by the `kableExtra` package.')
+    }
+
+    for (i in seq_along(align)) {
+      if (align[i] == "S") {
+        if (output_list$output_format %in% c("latex", "latex_tabular")) {
+          ## protect characters from siunitx
+          tab[[i]] <- ifelse(!grepl("[0-9]", tab[[i]]), sprintf("{%s}", tab[[i]]), tab[[i]]) 
+          kableExtra::usepackage_latex("siunitx", "parse-numbers=false")
+        } else {
+          ## mathjax math mode
+          tab[[i]] <- ifelse(grepl("[0-9]", tab[[i]]), sprintf("$%s$", tab[[i]]), tab[[i]])
+        }
+      }
+    }
+
+    if (output_list$output_format %in% c("latex", "latex_tabular")) {
+      ## protect column labels
+      colnames(tab)[align == "S"] <- sprintf("{%s}", colnames(tab)[align == "S"])
+    } else {
+      ## "S" is only supported by siunitx
+      align <- gsub("S", "c", align)
+    }
+  }
+
+  ## build table
   out <- f(tab,
     align = align,
     hrule = hrule,
