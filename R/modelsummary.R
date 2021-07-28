@@ -568,13 +568,9 @@ modelsummary <- function(
         }
       }
     }
-
-    if (!output_format %in% c("latex", "latex_tabular")) { # "S" is only supported by siunitx
-      align <- gsub("S", "c", align)
-    }
   }
-        
-  
+
+
   # remove "empty" confidence intervals or standard errors (HACK)
   for (i in seq_along(tab)) {
     tab[[i]] <- gsub("\\[,\\s*\\]|\\(\\s*\\)", "", tab[[i]])
