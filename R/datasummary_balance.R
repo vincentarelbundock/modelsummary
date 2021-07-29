@@ -33,7 +33,7 @@ datasummary_balance <- function(formula,
                                 ...) {
 
   # sanity checks
-  sanity_output(output)
+  sanitize_output(output)
   sanity_ds_right_handed_formula(formula)
   checkmate::assert_formula(formula)
   checkmate::assert_data_frame(data, min.rows = 1, min.cols = 1)

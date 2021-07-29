@@ -101,7 +101,7 @@ datasummary_correlation <- function(data,
                                     ...) {
 
   # sanity checks
-  sanity_output(output)
+  sanitize_output(output)
 
   any_numeric <- any(sapply(data, is.numeric) == TRUE)
   if (any_numeric == FALSE) {

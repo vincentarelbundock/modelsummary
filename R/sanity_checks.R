@@ -32,6 +32,7 @@ sanity_group_map <- function(group_map) {
   }
 }
 
+
 #' sanity check
 #'
 #' @noRd
@@ -214,6 +215,13 @@ sanity_factory <- function(factory_dict) {
 #'
 #' @noRd
 sanity_stars <- function(stars) {
+  if (isTRUE(stars)) {
+    rlang::warn(
+      message = "In version 0.8.0 of the `modelsummary` package, the default significance markers produced by the `stars=TRUE` argument were changed to be consistent with R's defaults.",
+      .frequency = "once",
+      .frequency_id = "stars_true_consistency")
+  }
+
   checkmate::assert(
     checkmate::check_flag(stars),
     checkmate::check_numeric(stars, lower = 0, upper = 1, names = 'unique')
@@ -235,48 +243,6 @@ sanity_notes <- function(notes) {
         checkmate::check_character(note),
         checkmate::check_class(note, 'from_markdown')
       )
-    }
-  }
-}
-
-
-#' sanity check
-#' more informative error for a common modelsummary user-error
-#'
-#' @noRd
-sanity_output_modelsummary <- function(output) {
-  flag <- checkmate::check_string(output)
-  if (!isTRUE(flag)) {
-    stop("The `output` argument must be a string. Type `?modelsummary` for details. This error is sometimes raised when users supply multiple models to `modelsummary` but forget to wrap them in a list. This works: `modelsummary(list(model1, model2))`. This does *not* work: `modelsummary(model1, model2)`")
-  }
-}
-
-
-#' sanity check
-#'
-#' @noRd
-sanity_output <- function(output) {
-
-  object_types <- c('default', 'gt', 'kableExtra', 'flextable', 'huxtable',
-                    'html', 'jupyter', 'latex', 'latex_tabular', 'markdown',
-                    'dataframe', 'data.frame', 'modelsummary_list')
-  extension_types <- c('html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf',
-                       'jpg', 'png')
-
-  checkmate::assert_string(output)
-
-  cond1 <- output %in% object_types
-  if (isFALSE(cond1)) {
-    extension <- tools::file_ext(output)
-    cond2 <- extension %in% extension_types
-    if (isTRUE(cond2)) {
-      checkmate::assert_path_for_output(output, overwrite = TRUE)
-    } else {
-      msg <- paste0('The `output` argument must be ',
-        paste(object_types, collapse = ', '),
-        ', or a valid file path with one of these extensions: ',
-        paste(extension_types, collapse = ', '))
-      stop(msg)
     }
   }
 }

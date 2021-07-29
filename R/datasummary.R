@@ -142,7 +142,7 @@ datasummary <- function(formula,
                         sparse_header = TRUE,
                         ...) {
 
-  sanity_output(output)
+  sanitize_output(output)
 
   # convenience: transform logical and character to factor
   # are there use-cases for character variables?

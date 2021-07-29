@@ -4,6 +4,35 @@
 #' @noRd
 sanitize_output <- function(output) {
 
+  flag <- checkmate::check_string(output)
+  fun <- mssget("function_called")
+  if (!isTRUE(flag) && !is.null(fun) && fun == "modelsummary") {
+    stop("The `output` argument must be a string. Type `?modelsummary` for details. This error is sometimes raised when users supply multiple models to `modelsummary` but forget to wrap them in a list. This works: `modelsummary(list(model1, model2))`. This does *not* work: `modelsummary(model1, model2)`")
+  }
+
+  object_types <- c('default', 'gt', 'kableExtra', 'flextable', 'huxtable',
+                    'html', 'jupyter', 'latex', 'latex_tabular', 'markdown',
+                    'dataframe', 'data.frame', 'modelsummary_list')
+  extension_types <- c('html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf',
+                       'jpg', 'png')
+
+  checkmate::assert_string(output)
+
+  cond1 <- output %in% object_types
+  if (isFALSE(cond1)) {
+    extension <- tools::file_ext(output)
+    cond2 <- extension %in% extension_types
+    if (isTRUE(cond2)) {
+      checkmate::assert_path_for_output(output, overwrite = TRUE)
+    } else {
+      msg <- paste0('The `output` argument must be ',
+        paste(object_types, collapse = ', '),
+        ', or a valid file path with one of these extensions: ',
+        paste(extension_types, collapse = ', '))
+      stop(msg)
+    }
+  }
+
   extension_dict <- c(
     "md"   = "markdown",
     "Rmd"  = "markdown",
@@ -51,11 +80,10 @@ sanitize_output <- function(output) {
 
   # kableExtra is the only factory that I use for markdown
   if (output == 'markdown') {
-    out <- list(
-      "output_factory" = "kableExtra",
-      "output_file"    = NULL,
-      "output_format"  = "markdown")
-    return(out)
+    mssset("output_factory", "kableExtra")
+    mssset("output_format", "markdown")
+    mssset("output_file", NULL)
+    return(invisible(NULL))
   }
 
   # rename otherwise an extension is wrongly detected
@@ -96,12 +124,9 @@ sanitize_output <- function(output) {
     output_format <- "latex"
   }
 
-  # result
-  out <- list(
-    # unname to avoid weird issue in kableExtra::kbl do.call arguments
-    "output_factory" = unname(output_factory),
-    "output_file"    = unname(output_file),
-    "output_format"  = unname(output_format))
-  return(out)
+  # settings environment
+  mssset("output_factory", unname(output_factory))
+  mssset("output_format", unname(output_format))
+  mssset("output_file", unname(output_file))
 
 }

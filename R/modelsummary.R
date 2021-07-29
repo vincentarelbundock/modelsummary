@@ -300,7 +300,7 @@ modelsummary <- function(
   title       = NULL,
   ...) {
 
-
+  mssset("function_called", "modelsummary")
 
   # sanitation
   sanity_ellipsis(vcov, ...)        # before sanitize_vcov
@@ -314,14 +314,9 @@ modelsummary <- function(
   sanity_align(align)
   sanity_conf_level(conf_level)
   sanity_coef(coef_map, coef_rename, coef_omit)
-  # no gof should be OK
-  ## sanity_gof_map(gof_map, gof_omit)
   sanity_stars(stars)
   sanity_fmt(fmt)
-
-  sanity_output_modelsummary(output) # more informative error specific to `modelsummary`
-  sanity_output(output)
-  output_format <- sanitize_output(output)$output_format
+  sanitize_output(output)
 
   # confidence intervals are expensive
   if (!any(grepl("conf", c(estimate, statistic)))) {
@@ -336,6 +331,7 @@ modelsummary <- function(
   }
   model_names <- pad(model_names)
 
+
   #######################
   #  modelsummary_list  #
   #######################
@@ -347,7 +343,7 @@ modelsummary <- function(
 
 
 
-  if (output_format == "modelsummary_list") {
+  if (mssequal("output_format", "modelsummary_list")) {
     if (length(msl) == 1) {
       return(msl[[1]])
     } else {
@@ -487,7 +483,7 @@ modelsummary <- function(
   if (is.null(coef_map) &&
       is.null(coef_rename) &&
       "term" %in% colnames(tab) &&
-      output_format != 'rtf') {
+      !mssequal("output_format", "rtf")) {
     idx <- tab$part != 'gof'
     tab$term <- ifelse(idx, gsub(':', ' \u00d7 ', tab$term), tab$term)
   }
@@ -503,14 +499,8 @@ modelsummary <- function(
     hrule <- NULL
   }
 
-  # stars
-  if (isTRUE(stars)) {
-    rlang::warn(
-      message = "In version 0.8.0 of the `modelsummary` package, the default significance markers produced by the `stars=TRUE` argument were changed to be consistent with R's defaults.",
-      .frequency = "once",
-      .frequency_id = "stars_true_consistency")
-  }
 
+  # stars
   stars_note <- getOption("modelsummary_stars_note", default = TRUE)
   if (isTRUE(stars_note) && !isFALSE(stars) && !any(grepl("\\{stars\\}", c(estimate, statistic)))) {
     stars_note <- make_stars_note(stars)
@@ -522,7 +512,7 @@ modelsummary <- function(
   }
 
   # data.frame output keeps redundant info
-  if (output_format != "dataframe") {
+  if (!mssequal("output_format", "dataframe")) {
 
     tab <- redundant_labels(tab, "model")
     tab <- redundant_labels(tab, "group")
@@ -541,7 +531,7 @@ modelsummary <- function(
   tmp <- setdiff(group$lhs, c("model", "term"))
   if (length(tmp) == 0) {
     tab$group <- NULL
-  } else if (output_format != "dataframe") {
+  } else if (!mssequal("output_format", "dataframe")) {
     colnames(tab)[colnames(tab) == "group"] <- "        "
   }
 
@@ -555,13 +545,14 @@ modelsummary <- function(
 
   # math mode
   } else if (any(grepl("S", align))) {
-    if (sanitize_output(output)$output_factory != "kableExtra" || !sanitize_output(output)$output_format %in% c("kableExtra", "html", "latex", "latex_tabular")) {
+    if (!mssequal("output_factory", "kableExtra") ||
+        !mssequal("output_format", c("kableExtra", "html", "latex", "latex_tabular"))) {
       stop('Math mode `align` is only supported for HTML or LaTeX tables produced by the `kableExtra` package.')
     }
                         
     for (i in seq_along(align)) {
       if (align[i] == "S") {
-        if (output_format %in% c("latex", "latex_tabular")) {
+        if (mssequal("output_format", c("latex", "latex_tabular"))) {
           tab[[i]] <- ifelse(!grepl("[0-9]", tab[[i]]), sprintf("{%s}", tab[[i]]), tab[[i]]) # protect strings from siunitx
         } else {
           tab[[i]] <- ifelse(grepl("[0-9]", tab[[i]]), sprintf("$%s$", tab[[i]]), tab[[i]])

@@ -19,22 +19,20 @@ factory <- function(tab,
 
 
   # sanity check functions are hosted in R/sanity_checks.R
-  sanity_output(output)
   sanity_title(title)
   sanity_notes(notes)
+  sanitize_output(output)
 
   # parse output
-  output_list <- sanitize_output(output)
-
-  if (output_list$output_factory == 'gt') {
+  if (mssequal("output_factory", "gt")) {
     f <- factory_gt
-  } else if (output_list$output_factory == 'kableExtra') {
+  } else if (mssequal("output_factory", "kableExtra")) {
     f <- factory_kableExtra
-  } else if (output_list$output_factory == 'flextable') {
+  } else if (mssequal("output_factory", "flextable")) {
     f <- factory_flextable
-  } else if (output_list$output_factory == 'huxtable') {
+  } else if (mssequal("output_factory", "huxtable")) {
     f <- factory_huxtable
-  } else if (output_list$output_factory == 'dataframe') {
+  } else if (mssequal("output_factory", "dataframe")) {
     f <- factory_dataframe
   }
 
@@ -43,9 +41,9 @@ factory <- function(tab,
   if (!is.null(flat_header)) {
     flat_factories <- c('flextable', 'huxtable', 'dataframe')
     flat_formats <- c('markdown', 'word', 'powerpoint')
-    if ((output_list$output_factory %in% flat_factories) ||
-      output_list$output_format %in% flat_formats) {
-      attr(tab, "header_bottom") <- colnames(tab)
+    if (mssget("output_factory") %in% flat_factories ||
+        mssget("output_format") %in% flat_formats) {
+        attr(tab, "header_bottom") <- colnames(tab)
 
       # datasummary_balance with dinm produces more cols than flat_header
       for (i in seq_along(flat_header)) {
@@ -110,7 +108,7 @@ factory <- function(tab,
   if (!is.null(add_rows)) {
 
     # data.frame includes metadata columns
-    if (output_list$output_format == "dataframe") {
+    if (mssequal("output_format", "dataframe")) {
       # only for modelsummary, not for datasummary
 
       if (all(c("term", "statistic") %in% colnames(tab))) {
@@ -159,14 +157,14 @@ factory <- function(tab,
 
   ## align: math mode
   if (any(grepl("S", align))) {
-    if (output_list$output_factory != "kableExtra" ||
-        !output_list$output_format %in% c("kableExtra", "html", "latex", "latex_tabular")) {
+    if (!mssequal("output_factory", "kableExtra") ||
+        !mssequal("output_format", c("kableExtra", "html", "latex", "latex_tabular"))) {
       stop('Math mode `align` with `S` is only supported for HTML or LaTeX tables produced by the `kableExtra` package.')
     }
 
     for (i in seq_along(align)) {
       if (align[i] == "S") {
-        if (output_list$output_format %in% c("latex", "latex_tabular")) {
+        if (mssequal("output_format",  c("latex", "latex_tabular"))) {
           ## protect characters from siunitx
           tab[[i]] <- ifelse(!grepl("[0-9]", tab[[i]]), sprintf("{%s}", tab[[i]]), tab[[i]]) 
           kableExtra::usepackage_latex("siunitx", "parse-numbers=false")
@@ -177,7 +175,7 @@ factory <- function(tab,
       }
     }
 
-    if (output_list$output_format %in% c("latex", "latex_tabular")) {
+    if (mssequal("output_format", c("latex", "latex_tabular"))) {
       ## protect column labels
       colnames(tab)[align == "S"] <- sprintf("{%s}", colnames(tab)[align == "S"])
     } else {
@@ -191,13 +189,14 @@ factory <- function(tab,
     align = align,
     hrule = hrule,
     notes = notes,
-    output_file = output_list$output_file,
-    output_format = output_list$output_format,
+    output_file = mssget("output_file"),
+    output_format = mssget("output_format"),
     title = title,
     ...)
 
   if (output == "jupyter" ||
-      (output == "default" && getOption("modelsummary_default", "kableExtra") == "jupyter")) {
+      (output == "default" &&
+       getOption("modelsummary_default", "kableExtra") == "jupyter")) {
     assert_dependency("IRdisplay")
     IRdisplay::display_html(as.character(out))
   } else {

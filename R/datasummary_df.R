@@ -15,7 +15,7 @@ datasummary_df <- function(data,
                            add_columns = NULL,
                            ...) {
 
-  sanity_output(output)
+  sanitize_output(output)
 
   checkmate::assert_data_frame(data)
 

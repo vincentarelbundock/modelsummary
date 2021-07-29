@@ -45,7 +45,7 @@ datasummary_skim <- function(data,
                              align  = NULL,
                              ...) {
 
-  sanity_output(output)
+  sanitize_output(output)
 
   checkmate::assert_true(type %in% c("numeric", "categorical", "dataset"))
 
@@ -130,31 +130,30 @@ datasummary_skim_numeric <- function(
   ...) {
 
   # output format
-  output_info <- sanitize_output(output)
+  sanitize_output(output)
 
   # draw histogram?
   if (histogram) {
 
     # histogram is a kableExtra-specific option
-    if (output_info$output_factory != "kableExtra") {
+    if (!mssequal("output_factory", "kableExtra")) {
       histogram <- FALSE
     }
 
     # write to file
-    if (!is.null(output_info$output_file)) {
-      if (!output_info$output_format %in% c("html", "png", "jpg")) {
+    if (!is.null(mssget("output_file"))) {
+      if (!mssequal("output_format", c("html", "png", "jpg"))) {
         histogram <- FALSE
       }
 
     # interactive or Rmarkdown/knitr
     } else {
       if (check_dependency("knitr")) {
-        if (!output_info$output_format %in% c("default", "html", "kableExtra") &&
-            !knitr::is_latex_output()) {
+        if (!mssequal("output_format", c("default", "html", "kableExtra")) && !knitr::is_latex_output()) {
           histogram <- FALSE
         }
       } else {
-        if (!output_info$output_format %in% c("default", "html", "kableExtra")) {
+        if (!mssequal("output_format", c("default", "html", "kableExtra"))) {
           histogram <- FALSE
         }
       }
@@ -162,11 +161,7 @@ datasummary_skim_numeric <- function(
 
     # if flag was flipped
     if (!histogram) {
-      warning('The histogram argument is only supported for (a) output types
-              "default", "html", or "kableExtra"; (b) writing to file paths
-              with extensions ".html", ".jpg", or ".png"; and (c) Rmarkdown
-              or knitr documents compiled to PDF or HTML. Use
-              `histogram=FALSE` to silence this warning.')
+      warning('The histogram argument is only supported for (a) output types "default", "html", or "kableExtra"; (b) writing to file paths with extensions ".html", ".jpg", or ".png"; and (c) Rmarkdown or knitr documents compiled to PDF or HTML. Use `histogram=FALSE` to silence this warning.')
     }
 
   }
@@ -215,7 +210,7 @@ datasummary_skim_numeric <- function(
     }
 
     # don't use output=filepath.html when post-processing
-    if (!is.null(output_info$output_file)) {
+    if (!is.null(mssget("output_file"))) {
       output <- "kableExtra"
     }
 
@@ -234,8 +229,8 @@ datasummary_skim_numeric <- function(
       )
 
     # don't use output=filepath.html when post-processing
-    if (!is.null(output_info$output_file)) {
-      kableExtra::save_kable(out, file = output_info$output_file)
+    if (!is.null(mssget("output_file"))) {
+      kableExtra::save_kable(out, file = mssget("output_file"))
       return(invisible(out))
     }
 

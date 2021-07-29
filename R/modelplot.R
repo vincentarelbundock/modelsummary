@@ -78,6 +78,8 @@ modelplot <- function(models,
                       background  = NULL,
                       ...) {
 
+  mssset("function_called", "modelplot")
+
   # more informative error message specific to `modelplot`
   sanity_conf_level_modelplot(conf_level)
 
