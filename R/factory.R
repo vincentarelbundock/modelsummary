@@ -155,34 +155,6 @@ factory <- function(tab,
   }
   align <- strsplit(align, "")[[1]]
 
-  ## align: math mode
-  if (any(grepl("S", align))) {
-    if (!mssequal("output_factory", "kableExtra") ||
-        !mssequal("output_format", c("kableExtra", "html", "latex", "latex_tabular"))) {
-      stop('Math mode `align` with `S` is only supported for HTML or LaTeX tables produced by the `kableExtra` package.')
-    }
-
-    for (i in seq_along(align)) {
-      if (align[i] == "S") {
-        if (mssequal("output_format",  c("latex", "latex_tabular"))) {
-          ## protect characters from siunitx
-          tab[[i]] <- ifelse(!grepl("[0-9]", tab[[i]]), sprintf("{%s}", tab[[i]]), tab[[i]]) 
-          kableExtra::usepackage_latex("siunitx", "parse-numbers=false")
-        } else {
-          ## mathjax math mode
-          tab[[i]] <- ifelse(grepl("[0-9]", tab[[i]]), sprintf("$%s$", tab[[i]]), tab[[i]])
-        }
-      }
-    }
-
-    if (mssequal("output_format", c("latex", "latex_tabular"))) {
-      ## protect column labels
-      colnames(tab)[align == "S"] <- sprintf("{%s}", colnames(tab)[align == "S"])
-    } else {
-      ## "S" is only supported by siunitx
-      align <- gsub("S", "c", align)
-    }
-  }
 
   ## build table
   out <- f(tab,

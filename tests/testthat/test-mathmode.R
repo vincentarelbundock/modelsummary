@@ -8,17 +8,14 @@ test_that("known output", {
                         file = "known_output/mathmode_1.tex",
                         print = TRUE,
                         update = FALSE)
-    expect_known_output(modelsummary(mod, align = "lSS", output = "html"),
-                        file = "known_output/mathmode_1.html",
-                        print = TRUE,
-                        update = FALSE)
 })
 
 
 test_that("supported outputs", {
     expect_error(modelsummary(mod, output = "latex", align = "lSS"), NA)
-    expect_error(modelsummary(mod, output = "html", align = "lSS"), NA)
-    expect_error(modelsummary(mod, output = "kableExtra", align = "lSS"), NA)
+    expect_error(modelsummary(mod, output = "latex_tabular", align = "lSS"), NA)
+    expect_error(modelsummary(mod, output = "html", align = "lSS"), "only supported")
+    expect_error(modelsummary(mod, output = "kableExtra", align = "lSS"), "only supported")
     expect_error(modelsummary(mod, output = "gt", align = "lSS"), regexp = "only supported")
     expect_error(modelsummary(mod, output = "huxtable", align = "lSS"), regexp = "only supported")
     expect_error(modelsummary(mod, output = "flextable", align = "lSS"), regexp = "only supported")
@@ -29,8 +26,6 @@ test_that("supported outputs", {
 test_that("manual escape and math mode", {
     expect_error(modelsummary(mod, output = "latex", align = "lSS", escape = FALSE), NA)
     expect_error(modelsummary(mod, output = "latex", align = "lSS", escape = TRUE), regexp = "Cannot use")
-    expect_error(modelsummary(mod, output = "html", align = "lSS", escape = FALSE), NA)
-    expect_error(modelsummary(mod, output = "html", align = "lSS", escape = TRUE), NA)
-    expect_error(modelsummary(mod, output = "kableExtra", align = "lSS", escape = FALSE), NA)
-    expect_error(modelsummary(mod, output = "kableExtra", align = "lSS", escape = TRUE), NA)
+    expect_error(modelsummary(mod, output = "latex_tabular", align = "lSS", escape = FALSE), NA)
+    expect_error(modelsummary(mod, output = "latex_tabular", align = "lSS", escape = TRUE), regexp = "Cannot use")
 })

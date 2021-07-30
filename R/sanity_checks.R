@@ -64,6 +64,16 @@ sanity_model_names <- function(modelnames) {
 #' @noRd
 sanity_align <- function(align) {
   checkmate::assert_string(align, null.ok = TRUE)
+
+  if (!is.null(align) && any(grepl("[^lcrS]", align))) {
+      stop('The `align` argument must be a character string which only includes the letters l, c, r, or S. Example: "lSSS"')
+  }
+
+  if (any(grepl("S", align))) {
+    if (!mssequal("output_factory", "kableExtra") || !mssequal("output_format", c("latex", "latex_tabular"))) {
+      stop('The "S" character is only supported in the `align` argument for LaTeX tables produced by the `kableExtra` package.')
+    }
+  }
 }
 
 

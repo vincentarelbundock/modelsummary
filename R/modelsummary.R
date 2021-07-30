@@ -100,7 +100,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * "l": left-aligned column
 #' * "c": centered column
 #' * "r": right-aligned column
-#' * "S": math-mode column. In HTML tables, numeric values are centered and wrapped in `$$` in order to be interpreted by MathJax. In LaTeX and PDF documents, numeric values are aligned on the dot and treated as math mode, using the "S" column type supplied by the `siunitx` LaTeX package. This code must appear in the LaTeX document preamble (it is added automatically when compiling Rmarkdown documents): `\usepackage[parse-numbers=false]{siunitx}` Warning: When using `siunitx` for math mode tables in LaTeX, characters like underscores in variable names will *not* be escaped automatically, and may break compilation. 
+#' * "S": math mode column. In HTML tables, numeric values are centered and wrapped in `$$` in order to be interpreted by MathJax. In LaTeX and PDF documents, numeric values are aligned on the dot and treated as math mode, using the "S" column type supplied by the `siunitx` LaTeX package. This code must appear in the LaTeX document preamble (it is added automatically when compiling Rmarkdown documents): `\usepackage[parse-numbers=false]{siunitx}` Warning: When using `siunitx` for math mode tables in LaTeX, characters like underscores in variable names will *not* be escaped automatically, and may break compilation. 
 #' @param ... all other arguments are passed through to the extractor and
 #' table-making functions. This allows users to pass arguments directly to
 #' `modelsummary` in order to affect the behavior of other functions behind
@@ -300,9 +300,10 @@ modelsummary <- function(
   title       = NULL,
   ...) {
 
+  # settings & sanitation
   mssset("function_called", "modelsummary")
 
-  # sanitation
+  sanitize_output(output)           # early
   sanity_ellipsis(vcov, ...)        # before sanitize_vcov
   models <- sanitize_models(models) # before sanitize_vcov
   vcov <- sanitize_vcov(vcov, length(models), ...)
@@ -311,12 +312,12 @@ modelsummary <- function(
   group <- sanitize_group(group)
   sanity_group_map(group_map)
   sanity_statistic(statistic)
-  sanity_align(align)
   sanity_conf_level(conf_level)
   sanity_coef(coef_map, coef_rename, coef_omit)
   sanity_stars(stars)
   sanity_fmt(fmt)
-  sanitize_output(output)
+
+  sanity_align(align)
 
   # confidence intervals are expensive
   if (!any(grepl("conf", c(estimate, statistic)))) {
@@ -541,23 +542,6 @@ modelsummary <- function(
       align <- paste0("ll", strrep("c", ncol(tab) - 2))
     } else {
       align <- paste0("l", strrep("c", ncol(tab) - 1))
-    }
-
-  # math mode
-  } else if (any(grepl("S", align))) {
-    if (!mssequal("output_factory", "kableExtra") ||
-        !mssequal("output_format", c("kableExtra", "html", "latex", "latex_tabular"))) {
-      stop('Math mode `align` is only supported for HTML or LaTeX tables produced by the `kableExtra` package.')
-    }
-                        
-    for (i in seq_along(align)) {
-      if (align[i] == "S") {
-        if (mssequal("output_format", c("latex", "latex_tabular"))) {
-          tab[[i]] <- ifelse(!grepl("[0-9]", tab[[i]]), sprintf("{%s}", tab[[i]]), tab[[i]]) # protect strings from siunitx
-        } else {
-          tab[[i]] <- ifelse(grepl("[0-9]", tab[[i]]), sprintf("$%s$", tab[[i]]), tab[[i]])
-        }
-      }
     }
   }
 
