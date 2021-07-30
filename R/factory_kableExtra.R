@@ -7,8 +7,6 @@ factory_kableExtra <- function(tab,
                                align = NULL,
                                hrule = NULL,
                                notes = NULL,
-                               output_file = NULL,
-                               output_format = 'kableExtra',
                                title = NULL,
                                ...) {
 
@@ -65,7 +63,7 @@ factory_kableExtra <- function(tab,
 
     }
     if (any(grepl("S", align))) {
-      ## siunitx -> preamble
+      ## siunitx in preamble
       kableExtra::usepackage_latex("siunitx", "parse-numbers=false")
       ## protect column labels
       colnames(tab)[align == "S"] <- sprintf("{%s}", colnames(tab)[align == "S"])
@@ -85,19 +83,19 @@ factory_kableExtra <- function(tab,
 
   ## kableExtra::footnote bug when adding multiple notes with threeparttable in LaTeX
   ## combine notes
-  if (output_format == "latex" &&
+  if (mssequal("output_format", "latex") &&
       !is.null(notes) &&
       length(notes) > 1 &&
       "threeparttable" %in% names(arguments) &&
       isTRUE(arguments[["threeparttable"]])) {
       notes <- paste(notes, collapse = " ")
   }
-    
+
   ## user-supplied notes at the bottom of table
   if (!is.null(notes)) {
     ## kableExtra::footnote does not support markdown
     ## kableExtra::add_footnote does not support longtable
-    if (output_format %in% c("kableExtra", "html", "latex")) {
+    if (mssequal("output_format", c("kableExtra", "html", "latex"))) {
       ## threeparttable only works with 1 note. But it creates a weird bug
       ## when using coef_map and stars in Rmarkdown PDF output
       for (n in notes) {
@@ -113,7 +111,7 @@ factory_kableExtra <- function(tab,
         }
         out <- do.call(kableExtra::footnote, arguments)
       }
-    } else if (output_format == "markdown") {
+    } else if (mssequal("output_format", "markdown")) {
       for (n in notes) {
         out <- kableExtra::add_footnote(out, label = n, notation = "none", escape = FALSE)
       }
@@ -121,7 +119,7 @@ factory_kableExtra <- function(tab,
   }
 
   span <- attr(tab, "span_kableExtra")
-  if (!is.null(span) && output_format %in% c("kableExtra", "latex", "html")) {
+  if (!is.null(span) && mssequal("output_format", c("kableExtra", "latex", "html"))) {
     # add_header_above not supported in markdown
     span <- rev(span) # correct vertical order
     for (s in span) {
@@ -133,22 +131,22 @@ factory_kableExtra <- function(tab,
   theme_ms <- getOption("modelsummary_theme_kableExtra",
                         default = theme_ms_kableExtra)
   out <- theme_ms(out,
-                  output_format = output_format,
+                  output_format = mssget("output_format"),
                   hrule = hrule)
 
   # html & latex get a new class to use print.modelsummary_string
-  if (output_format %in% c("latex", "latex_tabular", "html")) {
+  if (mssequal("output_format", c("latex", "latex_tabular", "html"))) {
     class(out) <- c("modelsummary_string", class(out))
   }
 
   # output
-  if (is.null(output_file)) {
+  if (is.null(mssget("output_file"))) {
     return(out)
   } else {
-    if (output_format == "markdown") {
-      writeLines(paste(out, collapse = "\n"), con = output_file)
+    if (mssequal("output_format", "markdown")) {
+      writeLines(paste(out, collapse = "\n"), con = mssget("output_file"))
     } else {
-      kableExtra::save_kable(out, file = output_file)
+      kableExtra::save_kable(out, file = mssget("output_file"))
     }
   }
 }

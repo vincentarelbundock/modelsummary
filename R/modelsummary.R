@@ -316,7 +316,6 @@ modelsummary <- function(
   sanity_coef(coef_map, coef_rename, coef_omit)
   sanity_stars(stars)
   sanity_fmt(fmt)
-
   sanity_align(align)
 
   # confidence intervals are expensive
@@ -552,8 +551,8 @@ modelsummary <- function(
   }
 
 
-  # build table
-  factory(
+  ## build table
+  out <- factory(
     tab,
     align    = align,
     fmt      = fmt,
@@ -564,6 +563,10 @@ modelsummary <- function(
     add_rows = add_rows,
     ...
   )
+
+  ## over and out
+  mssrm()
+  return(out)
 
 }
 

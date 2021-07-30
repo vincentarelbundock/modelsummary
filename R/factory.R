@@ -25,15 +25,15 @@ factory <- function(tab,
 
   # parse output
   if (mssequal("output_factory", "gt")) {
-    f <- factory_gt
+    factory_fun <- factory_gt
   } else if (mssequal("output_factory", "kableExtra")) {
-    f <- factory_kableExtra
+    factory_fun <- factory_kableExtra
   } else if (mssequal("output_factory", "flextable")) {
-    f <- factory_flextable
+    factory_fun <- factory_flextable
   } else if (mssequal("output_factory", "huxtable")) {
-    f <- factory_huxtable
+    factory_fun <- factory_huxtable
   } else if (mssequal("output_factory", "dataframe")) {
-    f <- factory_dataframe
+    factory_fun <- factory_dataframe
   }
 
   # flat header if necessary
@@ -148,16 +148,16 @@ factory <- function(tab,
   }
 
   ## align: sanity must be checked after add_columns
-  if (!is.null(align)) {
-    checkmate::assert_true(nchar(align) == ncol(tab))
-  } else {
+  if (is.null(align)) {
     align <- strrep("l", ncol(tab))
+  } else {
+    checkmate::assert_true(nchar(align) == ncol(tab))
   }
   align <- strsplit(align, "")[[1]]
 
 
   ## build table
-  out <- f(tab,
+  out <- factory_fun(tab,
     align = align,
     hrule = hrule,
     notes = notes,
@@ -165,6 +165,7 @@ factory <- function(tab,
     output_format = mssget("output_format"),
     title = title,
     ...)
+
 
   if (output == "jupyter" ||
       (output == "default" &&
