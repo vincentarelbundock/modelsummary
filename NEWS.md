@@ -4,7 +4,7 @@
 
 * Math mode alignment: `align="lSS"`. LaTeX: displays numbers in math mode and
   aligns on the dot using the `siunitx` package. HTML: displays in math mode
-  using MathJax. Proto-support for `dcolumn` is deprecated.
+  using MathJax. Support for `dcolumn` is deprecated.
 * LaTeX output accepts the `threeparttable=TRUE` argument through `...`
 * No more dependency on `tidyr`
 
