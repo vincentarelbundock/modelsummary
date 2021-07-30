@@ -3,7 +3,7 @@ mod <- list(
     lm(mpg ~ hp + drat, mtcars))
 
 
-test_that("known output", {
+test_that("S-column: known output", {
     expect_known_output(modelsummary(mod, align = "lSS", output = "latex"),
                         file = "known_output/mathmode_1.tex",
                         print = TRUE,
@@ -11,7 +11,7 @@ test_that("known output", {
 })
 
 
-test_that("supported outputs", {
+test_that("S-column: supported outputs", {
     expect_error(modelsummary(mod, output = "latex", align = "lSS"), NA)
     expect_error(modelsummary(mod, output = "latex_tabular", align = "lSS"), NA)
     expect_error(modelsummary(mod, output = "html", align = "lSS"), "only supported")
@@ -23,7 +23,7 @@ test_that("supported outputs", {
 })
 
 
-test_that("manual escape and math mode", {
+test_that("S-column: manual escape", {
     expect_error(modelsummary(mod, output = "latex", align = "lSS", escape = FALSE), NA)
     expect_error(modelsummary(mod, output = "latex", align = "lSS", escape = TRUE), regexp = "Cannot use")
     expect_error(modelsummary(mod, output = "latex_tabular", align = "lSS", escape = FALSE), NA)
