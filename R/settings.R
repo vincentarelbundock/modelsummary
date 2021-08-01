@@ -1,6 +1,6 @@
 modelsummary_settings <- new.env()
 
-mssget <- function(name) {
+settings_get <- function(name) {
     if (name %in% names(modelsummary_settings)) {
         get(name, envir = modelsummary_settings)
     } else {
@@ -8,8 +8,8 @@ mssget <- function(name) {
     }
 }
 
-mssequal <- function(name, comparison) {
-    k <- mssget(name)
+settings_equal <- function(name, comparison) {
+    k <- settings_get(name)
     if (!is.null(k) && length(comparison) == 1 && k == comparison) {
         out <- TRUE
     } else if (!is.null(k) && length(comparison) > 1 && k %in% comparison) {
@@ -20,12 +20,12 @@ mssequal <- function(name, comparison) {
     return(out)
 }
 
-mssset <- function(name, value) {
+settings_set <- function(name, value) {
     assign(name, value = value, envir = modelsummary_settings)
 
 }
 
-mssrm <- function(name = NULL) {
+settings_rm <- function(name = NULL) {
     if (is.null(name)) {
         rm(list = names(modelsummary_settings), envir = modelsummary_settings)
     } else {

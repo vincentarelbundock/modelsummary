@@ -38,16 +38,16 @@ factory_flextable <- function(tab,
   out <- theme_ms(out, hrule = hrule)
 
   # output
-  if (is.null(mssget("output_file"))) {
+  if (is.null(settings_get("output_file"))) {
     return(out)
-  } else if (mssequal("output_format", "word")) {
-    flextable::save_as_docx(out, path = mssget("output_file"))
-  } else if (mssequal("output_format", "powerpoint")) {
-    flextable::save_as_pptx(out, path = mssget("output_file"))
-  } else if (mssequal("output_format", "png")) {
-    flextable::save_as_image(out, path = mssget("output_file"))
-  } else if (mssequal("output_format", "html")) {
-    flextable::save_as_html(out, path = mssget("output_file"))
+  } else if (settings_equal("output_format", "word")) {
+    flextable::save_as_docx(out, path = settings_get("output_file"))
+  } else if (settings_equal("output_format", "powerpoint")) {
+    flextable::save_as_pptx(out, path = settings_get("output_file"))
+  } else if (settings_equal("output_format", "png")) {
+    flextable::save_as_image(out, path = settings_get("output_file"))
+  } else if (settings_equal("output_format", "html")) {
+    flextable::save_as_html(out, path = settings_get("output_file"))
   }
 
 }

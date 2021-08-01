@@ -24,6 +24,7 @@ msummary(
   align = NULL,
   notes = NULL,
   title = NULL,
+  escape = TRUE,
   ...
 )
 }

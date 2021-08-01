@@ -136,24 +136,24 @@ datasummary_skim_numeric <- function(
   if (histogram) {
 
     # histogram is a kableExtra-specific option
-    if (!mssequal("output_factory", "kableExtra")) {
+    if (!settings_equal("output_factory", "kableExtra")) {
       histogram <- FALSE
     }
 
     # write to file
-    if (!is.null(mssget("output_file"))) {
-      if (!mssequal("output_format", c("html", "png", "jpg"))) {
+    if (!is.null(settings_get("output_file"))) {
+      if (!settings_equal("output_format", c("html", "png", "jpg"))) {
         histogram <- FALSE
       }
 
     # interactive or Rmarkdown/knitr
     } else {
       if (check_dependency("knitr")) {
-        if (!mssequal("output_format", c("default", "html", "kableExtra")) && !knitr::is_latex_output()) {
+        if (!settings_equal("output_format", c("default", "html", "kableExtra")) && !knitr::is_latex_output()) {
           histogram <- FALSE
         }
       } else {
-        if (!mssequal("output_format", c("default", "html", "kableExtra"))) {
+        if (!settings_equal("output_format", c("default", "html", "kableExtra"))) {
           histogram <- FALSE
         }
       }
@@ -210,7 +210,7 @@ datasummary_skim_numeric <- function(
     }
 
     # don't use output=filepath.html when post-processing
-    if (!is.null(mssget("output_file"))) {
+    if (!is.null(settings_get("output_file"))) {
       output <- "kableExtra"
     }
 
@@ -229,8 +229,8 @@ datasummary_skim_numeric <- function(
       )
 
     # don't use output=filepath.html when post-processing
-    if (!is.null(mssget("output_file"))) {
-      kableExtra::save_kable(out, file = mssget("output_file"))
+    if (!is.null(settings_get("output_file"))) {
+      kableExtra::save_kable(out, file = settings_get("output_file"))
       return(invisible(out))
     }
 

@@ -1,3 +1,4 @@
+
 #' assert if dependency is installed
 #'
 #' @noRd
@@ -16,6 +17,15 @@ assert_dependency <- function(library_name, msg = NULL) {
 #' @noRd
 check_dependency <- function(library_name) {
   requireNamespace(library_name, quietly = TRUE)
+}
+
+
+#' sanity check
+#'
+#' @noRd
+sanitize_escape <- function(escape) {
+  checkmate::assert_flag(escape, null.ok = FALSE)
+  settings_set("escape", TRUE)
 }
 
 
@@ -59,20 +69,38 @@ sanity_model_names <- function(modelnames) {
 }
 
 
+sanitize_mathmode <- function(align) {
+  if (any(grepl("S", align))) {
+    settings_set("siunitx_scolumn", TRUE)
+    settings_set("siunitx_num", FALSE)
+  } else {
+    settings_set("siunitx_scolumn", FALSE)
+    settings_set("siunitx_num", TRUE)
+  }
+  flag <- getOption("modelsummary_siunitx", default = TRUE)
+  if (isFALSE(flag)) {
+    settings_set("siunitx_scolumn", FALSE)
+    settings_set("siunitx_num", FALSE)
+  }
+}
+
+
 #' sanity check
 #'
 #' @noRd
 sanity_align <- function(align) {
   checkmate::assert_string(align, null.ok = TRUE)
-
   if (!is.null(align) && any(grepl("[^lcrS]", align))) {
       stop('The `align` argument must be a character string which only includes the letters l, c, r, or S. Example: "lSSS"')
   }
-
   if (any(grepl("S", align))) {
-    if (!mssequal("output_factory", "kableExtra") || !mssequal("output_format", c("latex", "latex_tabular"))) {
+    if (!settings_equal("output_factory", "kableExtra") || !settings_equal("output_format", c("latex", "latex_tabular"))) {
       stop('The "S" character is only supported in the `align` argument for LaTeX tables produced by the `kableExtra` package.')
     }
+  }
+  flag <- getOption("modelsummary_siunitx", default = TRUE)
+  if (any(grepl("S", align)) && isFALSE(flag)) {
+    stop("Cannot use a column of type `S` in the `align` argument unless the `modelsummary_siunitx` global option is `TRUE`.")
   }
 }
 

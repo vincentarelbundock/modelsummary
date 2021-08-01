@@ -3,15 +3,22 @@ mod <- list(
     lm(mpg ~ hp + drat, mtcars))
 
 ## pkgload::load_all("~/repos/modelsummary")
-## modelsummary(mod, escape = FALSE)
-## modelsummary(mod, "latex", escape = FALSE)
+## modelsummary(mod)
+## modelsummary(mod, "latex")
 ## devtools::install("~/repos/modelsummary")
 ## devtools::check("~/repos/modelsummary")
-
+## devtools::document("~/repos/modelsummary")
+## library(modelsummary)
 
 #############
 ## siunitx ##
 #############
+test_that("modelsummary_siunitx global option", {
+    options("modelsummary_siunitx" = FALSE)
+    expect_error(modelsummary(mod, output = "latex", align = "lSS"),
+                 regexp = "unless.*global.*option")
+    options("modelsummary_siunitx" = NULL)
+})
 
 
 ###########################

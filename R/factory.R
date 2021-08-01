@@ -24,15 +24,15 @@ factory <- function(tab,
   sanitize_output(output)
 
   # parse output
-  if (mssequal("output_factory", "gt")) {
+  if (settings_equal("output_factory", "gt")) {
     factory_fun <- factory_gt
-  } else if (mssequal("output_factory", "kableExtra")) {
+  } else if (settings_equal("output_factory", "kableExtra")) {
     factory_fun <- factory_kableExtra
-  } else if (mssequal("output_factory", "flextable")) {
+  } else if (settings_equal("output_factory", "flextable")) {
     factory_fun <- factory_flextable
-  } else if (mssequal("output_factory", "huxtable")) {
+  } else if (settings_equal("output_factory", "huxtable")) {
     factory_fun <- factory_huxtable
-  } else if (mssequal("output_factory", "dataframe")) {
+  } else if (settings_equal("output_factory", "dataframe")) {
     factory_fun <- factory_dataframe
   }
 
@@ -41,8 +41,8 @@ factory <- function(tab,
   if (!is.null(flat_header)) {
     flat_factories <- c('flextable', 'huxtable', 'dataframe')
     flat_formats <- c('markdown', 'word', 'powerpoint')
-    if (mssget("output_factory") %in% flat_factories ||
-        mssget("output_format") %in% flat_formats) {
+    if (settings_get("output_factory") %in% flat_factories ||
+        settings_get("output_format") %in% flat_formats) {
         attr(tab, "header_bottom") <- colnames(tab)
 
       # datasummary_balance with dinm produces more cols than flat_header
@@ -108,7 +108,7 @@ factory <- function(tab,
   if (!is.null(add_rows)) {
 
     # data.frame includes metadata columns
-    if (mssequal("output_format", "dataframe")) {
+    if (settings_equal("output_format", "dataframe")) {
       # only for modelsummary, not for datasummary
 
       if (all(c("term", "statistic") %in% colnames(tab))) {
@@ -161,8 +161,8 @@ factory <- function(tab,
     align = align,
     hrule = hrule,
     notes = notes,
-    output_file = mssget("output_file"),
-    output_format = mssget("output_format"),
+    output_file = settings_get("output_file"),
+    output_format = settings_get("output_format"),
     title = title,
     ...)
 

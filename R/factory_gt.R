@@ -23,7 +23,7 @@ factory_gt <- function(tab,
   theme_ms <- getOption("modelsummary_theme_gt",
                         default = theme_ms_gt)
   out <- theme_ms(out,
-                  output_format = mssget("output_format"),
+                  output_format = settings_get("output_format"),
                   hrule = hrule)
 
   # user-supplied notes at the bottom of table
@@ -54,27 +54,27 @@ factory_gt <- function(tab,
   }
 
   # output
-  if (is.null(mssget("output_file"))) {
+  if (is.null(settings_get("output_file"))) {
 
-    if (mssequal("output_format", "html")) {
+    if (settings_equal("output_format", "html")) {
       out <- gt::as_raw_html(out)
     }
 
-    if (mssequal("output_format", "latex")) {
+    if (settings_equal("output_format", "latex")) {
       out <- gt::as_latex(out)
     }
 
     if (!is.null(getOption("modelsummary_orgmode")) &&
-        mssequal("output_format", c("html", "latex"))) {
-      out <- sprintf("#+BEGIN_EXPORT %s\n%s\n#+END_EXPORT", mssget("output_format"), out)
+        settings_equal("output_format", c("html", "latex"))) {
+      out <- sprintf("#+BEGIN_EXPORT %s\n%s\n#+END_EXPORT", settings_get("output_format"), out)
       return(out)
     }
 
-    if (mssequal("output_format", c("default", "gt"))) {
+    if (settings_equal("output_format", c("default", "gt"))) {
       return(out)
     }
 
   } else {
-    gt::gtsave(out, mssget("output_file"))
+    gt::gtsave(out, settings_get("output_file"))
   }
 }

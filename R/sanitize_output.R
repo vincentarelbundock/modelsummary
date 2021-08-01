@@ -5,7 +5,7 @@
 sanitize_output <- function(output) {
 
   flag <- checkmate::check_string(output)
-  fun <- mssget("function_called")
+  fun <- settings_get("function_called")
   if (!isTRUE(flag) && !is.null(fun) && fun == "modelsummary") {
     stop("The `output` argument must be a string. Type `?modelsummary` for details. This error is sometimes raised when users supply multiple models to `modelsummary` but forget to wrap them in a list. This works: `modelsummary(list(model1, model2))`. This does *not* work: `modelsummary(model1, model2)`")
   }
@@ -80,9 +80,9 @@ sanitize_output <- function(output) {
 
   # kableExtra is the only factory that I use for markdown
   if (output == 'markdown') {
-    mssset("output_factory", "kableExtra")
-    mssset("output_format", "markdown")
-    mssset("output_file", NULL)
+    settings_set("output_factory", "kableExtra")
+    settings_set("output_format", "markdown")
+    settings_set("output_file", NULL)
     return(invisible(NULL))
   }
 
@@ -125,8 +125,8 @@ sanitize_output <- function(output) {
   }
 
   # settings environment
-  mssset("output_factory", unname(output_factory))
-  mssset("output_format", unname(output_format))
-  mssset("output_file", unname(output_file))
+  settings_set("output_factory", unname(output_factory))
+  settings_set("output_format", unname(output_format))
+  settings_set("output_file", unname(output_file))
 
 }

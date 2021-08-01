@@ -9,9 +9,19 @@
 #' @noRd
 rounding <- function(x, fmt = '%.3f', ...) {
 
-  # character, factor, logical: do not round
+  # character, factor, logical
   if (is.factor(x) || is.logical(x) || is.character(x)) {
     out <- as.character(x)
+
+    ## escape
+    if (settings_equal("escape", TRUE)) {
+        out <- escape_string(out)
+    }
+
+    ## siunitx: S-column protect strings with {}
+    if (settings_equal("siunitx_scolumn", TRUE) && settings_equal("output_format", c("latex", "latex_tabular"))) {
+      out <- sprintf("{%s}", out)
+    }
 
   # numeric
   } else {
@@ -31,10 +41,10 @@ rounding <- function(x, fmt = '%.3f', ...) {
     }
 
     ## math: LaTeX with the `siunitx` package and \num{} function
-    if (mssequal("output_format", c("latex", "latex_tabular"))) {
+    if (settings_equal("siunitx_num", TRUE) && settings_equal("output_format", c("latex", "latex_tabular"))) {
       out <- sprintf("\\num{%s}", out)
     ## math: HTML substitute minus sign
-    } else if (mssequal("output_format", c("html", "kableExtra"))) {
+    } else if (settings_equal("output_format", c("html", "kableExtra"))) {
       out <- gsub("-", "&minus;", out)
     }
   }

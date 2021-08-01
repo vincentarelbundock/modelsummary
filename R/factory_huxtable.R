@@ -39,19 +39,19 @@ factory_huxtable <- function(tab,
   out <- theme_ms(out, hrule = hrule)
 
   # output
-  output_file <- mssget("output_file")
+  output_file <- settings_get("output_file")
   if (is.null(output_file)) {
     return(out)
   } else {
-    if (mssequal("output_format", "word")) {
+    if (settings_equal("output_format", "word")) {
       huxtable::quick_docx(out, file = output_file, open = FALSE)
-    } else if (mssequal("output_format", "powerpoint")) {
+    } else if (settings_equal("output_format", "powerpoint")) {
       huxtable::quick_pptx(out, file = output_file, open = FALSE)
-    } else if (mssequal("output_format", "html")) {
+    } else if (settings_equal("output_format", "html")) {
       huxtable::quick_html(out, file = output_file, open = FALSE)
-    } else if (mssequal("output_format", "rtf")) {
+    } else if (settings_equal("output_format", "rtf")) {
       huxtable::quick_rtf(out, file = output_file, open = FALSE)
-    } else if (mssequal("output_format", "latex")) {
+    } else if (settings_equal("output_format", "latex")) {
       huxtable::quick_latex(out, file = output_file, open = FALSE)
     }
   }

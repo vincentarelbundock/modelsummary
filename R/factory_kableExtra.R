@@ -12,9 +12,9 @@ factory_kableExtra <- function(tab,
 
   # new variable "kable_format" because "kableExtra" and "html" both produce
   # html, but we need to distinguish the two.
-  if (mssequal("output_format", c("latex", "latex_tabular"))) {
+  if (settings_equal("output_format", c("latex", "latex_tabular"))) {
     kable_format <- "latex"
-  } else if (mssequal("output_format", "markdown")) {
+  } else if (settings_equal("output_format", "markdown")) {
     kable_format <- "markdown"
   } else {
     kable_format <- "html"
@@ -39,20 +39,14 @@ factory_kableExtra <- function(tab,
   )
 
 
-  ## siunitx math mode
-  if (mssequal("output_format", c("latex_tabular", "latex")) && any(grepl("S", align))) {
-    if ("escape" %in% names(arguments) && isTRUE(arguments$escape)) {
-      stop('Cannot use `escape=TRUE` with "S" in the `align` argument.')
-    } else {
-      arguments$escape <- FALSE
-    }
-  }
+  ## never use `kableExtra`'s default escape
+  arguments$escape <- FALSE
 
   ## align
   if (!is.null(align)) {
     for (i in seq_along(align)) {
       if (align[i] == "S") {
-        if (mssequal("output_format", c("latex", "latex_tabular"))) {
+        if (settings_equal("output_format", c("latex", "latex_tabular"))) {
           ## protect strings from siunitx
           tab[[i]] <- ifelse(!grepl("[0-9]", tab[[i]]), sprintf("{%s}", tab[[i]]), tab[[i]]) 
         } else {
@@ -82,7 +76,7 @@ factory_kableExtra <- function(tab,
 
   ## kableExtra::footnote bug when adding multiple notes with threeparttable in LaTeX
   ## combine notes
-  if (mssequal("output_format", "latex") &&
+  if (settings_equal("output_format", "latex") &&
       !is.null(notes) &&
       length(notes) > 1 &&
       "threeparttable" %in% names(arguments) &&
@@ -94,7 +88,7 @@ factory_kableExtra <- function(tab,
   if (!is.null(notes)) {
     ## kableExtra::footnote does not support markdown
     ## kableExtra::add_footnote does not support longtable
-    if (mssequal("output_format", c("kableExtra", "html", "latex"))) {
+    if (settings_equal("output_format", c("kableExtra", "html", "latex"))) {
       ## threeparttable only works with 1 note. But it creates a weird bug
       ## when using coef_map and stars in Rmarkdown PDF output
       for (n in notes) {
@@ -105,12 +99,10 @@ factory_kableExtra <- function(tab,
         arguments[["general"]] <- n
         arguments[["general_title"]] <- ""
         arguments[["kable_input"]] <- out
-        if (!"escape" %in% names(arguments)) {
-            arguments[["escape"]] <- FALSE
-        }
+        arguments[["escape"]] <- FALSE
         out <- do.call(kableExtra::footnote, arguments)
       }
-    } else if (mssequal("output_format", "markdown")) {
+    } else if (settings_equal("output_format", "markdown")) {
       for (n in notes) {
         out <- kableExtra::add_footnote(out, label = n, notation = "none", escape = FALSE)
       }
@@ -118,7 +110,7 @@ factory_kableExtra <- function(tab,
   }
 
   span <- attr(tab, "span_kableExtra")
-  if (!is.null(span) && mssequal("output_format", c("kableExtra", "latex", "html"))) {
+  if (!is.null(span) && settings_equal("output_format", c("kableExtra", "latex", "html"))) {
     # add_header_above not supported in markdown
     span <- rev(span) # correct vertical order
     for (s in span) {
@@ -130,22 +122,22 @@ factory_kableExtra <- function(tab,
   theme_ms <- getOption("modelsummary_theme_kableExtra",
                         default = theme_ms_kableExtra)
   out <- theme_ms(out,
-                  output_format = mssget("output_format"),
+                  output_format = settings_get("output_format"),
                   hrule = hrule)
 
   # html & latex get a new class to use print.modelsummary_string
-  if (mssequal("output_format", c("latex", "latex_tabular", "html"))) {
+  if (settings_equal("output_format", c("latex", "latex_tabular", "html"))) {
     class(out) <- c("modelsummary_string", class(out))
   }
 
   # output
-  if (is.null(mssget("output_file"))) {
+  if (is.null(settings_get("output_file"))) {
     return(out)
   } else {
-    if (mssequal("output_format", "markdown")) {
-      writeLines(paste(out, collapse = "\n"), con = mssget("output_file"))
+    if (settings_equal("output_format", "markdown")) {
+      writeLines(paste(out, collapse = "\n"), con = settings_get("output_file"))
     } else {
-      kableExtra::save_kable(out, file = mssget("output_file"))
+      kableExtra::save_kable(out, file = settings_get("output_file"))
     }
   }
 }

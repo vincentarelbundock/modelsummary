@@ -298,12 +298,17 @@ modelsummary <- function(
   align       = NULL,
   notes       = NULL,
   title       = NULL,
+  escape      = TRUE,
   ...) {
 
-  # settings & sanitation
-  mssset("function_called", "modelsummary")
+  ## settings & sanitation
+  settings_set("function_called", "modelsummary")
+
+  ## sanity functions validate variables/settings
+  ## sanitize functions validate & modify & initialize
 
   sanitize_output(output)           # early
+  sanitize_escape(escape)
   sanity_ellipsis(vcov, ...)        # before sanitize_vcov
   models <- sanitize_models(models) # before sanitize_vcov
   vcov <- sanitize_vcov(vcov, length(models), ...)
@@ -317,6 +322,7 @@ modelsummary <- function(
   sanity_stars(stars)
   sanity_fmt(fmt)
   sanity_align(align)
+  sanitize_mathmode(align) # after align
 
   # confidence intervals are expensive
   if (!any(grepl("conf", c(estimate, statistic)))) {
@@ -330,6 +336,9 @@ modelsummary <- function(
     model_names <- names(models)
   }
   model_names <- pad(model_names)
+  if (isTRUE(escape)) {
+     model_names <- escape_string(model_names)
+  }
 
 
   #######################
@@ -343,7 +352,7 @@ modelsummary <- function(
 
 
 
-  if (mssequal("output_format", "modelsummary_list")) {
+  if (settings_equal("output_format", "modelsummary_list")) {
     if (length(msl) == 1) {
       return(msl[[1]])
     } else {
@@ -483,7 +492,7 @@ modelsummary <- function(
   if (is.null(coef_map) &&
       is.null(coef_rename) &&
       "term" %in% colnames(tab) &&
-      !mssequal("output_format", "rtf")) {
+      !settings_equal("output_format", "rtf")) {
     idx <- tab$part != 'gof'
     tab$term <- ifelse(idx, gsub(':', ' \u00d7 ', tab$term), tab$term)
   }
@@ -512,7 +521,7 @@ modelsummary <- function(
   }
 
   # data.frame output keeps redundant info
-  if (!mssequal("output_format", "dataframe")) {
+  if (!settings_equal("output_format", "dataframe")) {
 
     tab <- redundant_labels(tab, "model")
     tab <- redundant_labels(tab, "group")
@@ -531,7 +540,7 @@ modelsummary <- function(
   tmp <- setdiff(group$lhs, c("model", "term"))
   if (length(tmp) == 0) {
     tab$group <- NULL
-  } else if (!mssequal("output_format", "dataframe")) {
+  } else if (!settings_equal("output_format", "dataframe")) {
     colnames(tab)[colnames(tab) == "group"] <- "        "
   }
 
@@ -565,7 +574,7 @@ modelsummary <- function(
   )
 
   ## over and out
-  mssrm()
+  settings_rm()
   return(out)
 
 }
@@ -583,7 +592,15 @@ map_omit_rename_estimates <- function(estimates,
                              group_map) {
 
 
-    # coef_omit
+    ## escape if needed
+    if (!is.null(coef_rename)) {
+        coef_rename <- setNames(rounding(coef_rename), names(coef_rename))
+    }
+    if (!is.null(coef_map) && !is.null(names(coef_map))) {
+        coef_map <- setNames(rounding(coef_map), names(coef_map))
+    }
+
+    ## coef_omit
     if (!is.null(coef_omit)) {
         idx <- !grepl(coef_omit, estimates$term, perl = TRUE)
         estimates <- estimates[idx, , drop = FALSE]
