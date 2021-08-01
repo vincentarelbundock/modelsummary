@@ -2,7 +2,21 @@ mod <- list(
     lm(mpg ~ hp, mtcars),
     lm(mpg ~ hp + drat, mtcars))
 
+## pkgload::load_all("~/repos/modelsummary")
+## modelsummary(mod, escape = FALSE)
+## modelsummary(mod, "latex", escape = FALSE)
+## devtools::install("~/repos/modelsummary")
+## devtools::check("~/repos/modelsummary")
 
+
+#############
+## siunitx ##
+#############
+
+
+###########################
+## align: S-column type  ##
+###########################
 test_that("S-column: known output", {
     expect_known_output(modelsummary(mod, align = "lSS", output = "latex"),
                         file = "known_output/mathmode_1.tex",

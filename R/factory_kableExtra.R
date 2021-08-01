@@ -58,7 +58,6 @@ factory_kableExtra <- function(tab,
         } else {
           tab[[i]] <- ifelse(grepl("[0-9]", tab[[i]]), sprintf("$%s$", tab[[i]]), tab[[i]])
         }
-
       }
 
     }

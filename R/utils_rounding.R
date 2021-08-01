@@ -9,13 +9,11 @@
 #' @noRd
 rounding <- function(x, fmt = '%.3f', ...) {
 
-  # do not round character, factor, logical
-  if (is.factor(x) || is.logical(x)) {
-    x <- as.character(x)
-  }
+  # character, factor, logical: do not round
+  if (is.factor(x) || is.logical(x) || is.character(x)) {
+    out <- as.character(x)
 
-  if (is.character(x)) {
-    out <- x
+  # numeric
   } else {
     if (is.character(fmt)) {
       out <- sprintf(fmt, x, ...)
@@ -31,7 +29,16 @@ rounding <- function(x, fmt = '%.3f', ...) {
     } else {
       out <- x
     }
+
+    ## math: LaTeX with the `siunitx` package and \num{} function
+    if (mssequal("output_format", c("latex", "latex_tabular"))) {
+      out <- sprintf("\\num{%s}", out)
+    ## math: HTML substitute minus sign
+    } else if (mssequal("output_format", c("html", "kableExtra"))) {
+      out <- gsub("-", "&minus;", out)
+    }
   }
+
 
   out <- gsub('^NA$|^NaN$|^-Inf$|^Inf$', '', out)
   return(out)
