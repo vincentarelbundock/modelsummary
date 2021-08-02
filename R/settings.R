@@ -4,9 +4,9 @@ settings_init <- function(settings = NULL) {
     settings_rm()
 
     default_settings <- list(
-        "siunitx" = getOption("modelsummary_siunitx", default = TRUE),
-        "siunitx_s" = FALSE,
-        "siunitx_num" = TRUE,
+        "math_latex" = getOption("modelsummary_math_latex", default = "siunitx"),
+        "math_html" = getOption("modelsummary_math_html", default = "minus"),
+        "siunitx_scolumns" = FALSE,
         "output_default" = getOption("modelsummary_default", default = "kableExtra"),
         "stars_note" = getOption("modelsummary_stars_note", default = TRUE))
 

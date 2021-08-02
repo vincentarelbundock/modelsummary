@@ -101,7 +101,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * "l": left-aligned column
 #' * "c": centered column
 #' * "r": right-aligned column
-#' * "S": math mode column (LaTeX/PDF only). Numeric values are aligned on the dot and formatted by the `siunitx` LaTeX package. This code must appear in the LaTeX document preamble (it is added automatically when compiling Rmarkdown documents): `\usepackage[input-symbols=()]{siunitx}`
+#' * "S": math mode column. In HTML tables, numeric values are centered and wrapped in `$$` in order to be interpreted by MathJax. In LaTeX and PDF documents, numeric values are aligned on the dot and treated as math mode, using the "S" column type supplied by the `siunitx` LaTeX package. This code must appear in the LaTeX document preamble (it is added automatically when compiling Rmarkdown documents): `\usepackage[parse-numbers=false]{siunitx}` Warning: When using `siunitx` for math mode tables in LaTeX, characters like underscores in variable names will *not* be escaped automatically, and may break compilation. 
 #' @param escape boolean TRUE escapes or substitutes LaTeX/HTML which could
 #'     prevent the file from compiling or displaying. This setting does not
 #'     affect captions or notes.
@@ -140,7 +140,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' `options(modelsummary_get = "all")`
 #'
 #' By default, LaTeX tables enclose all numeric entries in the `\num{}` command
-#' from the siunitx package. To pre-empt this behavior, or to enclose
+#' from the siunitx package. To prevent this behavior, or to enclose
 #' numbers is math mode dollar signs instead, users can call:
 #'
 #' `options(modelsummary_math_latex = "nothing")`
@@ -333,7 +333,6 @@ modelsummary <- function(
   sanity_stars(stars)
   sanity_fmt(fmt)
   sanity_align(align)
-  sanitize_mathmode(align) # after align
 
   # confidence intervals are expensive
   if (!any(grepl("conf", c(estimate, statistic)))) {
@@ -603,10 +602,10 @@ map_omit_rename_estimates <- function(estimates,
 
     ## escape if needed
     if (!is.null(coef_rename)) {
-        coef_rename <- setNames(rounding(coef_rename), names(coef_rename))
+        coef_rename <- stats::setNames(rounding(coef_rename), names(coef_rename))
     }
     if (!is.null(coef_map) && !is.null(names(coef_map))) {
-        coef_map <- setNames(rounding(coef_map), names(coef_map))
+        coef_map <- stats::setNames(rounding(coef_map), names(coef_map))
     }
 
     ## coef_omit

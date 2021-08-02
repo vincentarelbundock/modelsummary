@@ -154,6 +154,10 @@ the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, S.
 
 \item{title}{string}
 
+\item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML which could
+prevent the file from compiling or displaying. This setting does not
+affect captions or notes.}
+
 \item{...}{all other arguments are passed through to the extractor and
 table-making functions. This allows users to pass arguments directly to
 \code{modelsummary} in order to affect the behavior of other functions behind

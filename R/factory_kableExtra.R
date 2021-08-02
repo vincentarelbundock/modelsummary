@@ -42,6 +42,12 @@ factory_kableExtra <- function(tab,
   ## never use `kableExtra`'s default escape
   arguments$escape <- FALSE
 
+  ## siunitx in preamble
+  if (settings_equal("math_latex", "siunitx")) {
+    kableExtra::usepackage_latex("siunitx", "input-symbols=()")
+    kableExtra::usepackage_latex("booktabs")
+  }
+
   ## align
   if (!is.null(align)) {
     for (i in seq_along(align)) {
@@ -56,8 +62,6 @@ factory_kableExtra <- function(tab,
 
     }
     if (any(grepl("S", align))) {
-      ## siunitx in preamble
-      kableExtra::usepackage_latex("siunitx", "parse-numbers=false")
       ## protect column labels
       colnames(tab)[align == "S"] <- sprintf("{%s}", colnames(tab)[align == "S"])
     }

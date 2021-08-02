@@ -12,7 +12,7 @@
 # replicability: this gets reverted at the end of the file 
 options(modelsummary_get = "easystats")
 
-library(gamlss)
+suppressPackageStartupMessages(library(gamlss))
 data(trees)
 models <- list()
 models[['Bivariate']] <- lm(Girth ~ Height, data = trees)
@@ -42,30 +42,30 @@ test_that("group: nnet::multinom", {
         nnet::multinom(cyl ~ mpg, data = dat_multinom, trace = FALSE),
         nnet::multinom(cyl ~ mpg + drat, data = dat_multinom, trace = FALSE))
 
-    tab <- modelsummary(mod, "data.frame", group = response + term ~ model)
+    trash <- capture.output(tab <- modelsummary(mod, "data.frame", group = response + term ~ model))
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
                  c("part", "group", "term", "statistic", "Model 1", "Model 2"))
 
-    tab <- modelsummary(mod, "data.frame", group = model + term ~ response)
+    trash <- capture.output(tab <- modelsummary(mod, "data.frame", group = model + term ~ response))
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
                  c("part", "model", "term", "statistic", "6", "8"))
 
-    tab <- modelsummary(mod, "data.frame", group = term ~ model + response)
+    trash <- capture.output(tab <- modelsummary(mod, "data.frame", group = term ~ model + response))
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
                  c("part", "term", "statistic", "Model 1 / 6", "Model 1 / 8",
                    "Model 2 / 6", "Model 2 / 8"))
 
-    tab <- modelsummary(mod, "data.frame", group = model ~ term + response)
+    trash <- capture.output(tab <- modelsummary(mod, "data.frame", group = model ~ term + response))
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
                  c("part", "statistic", "model", "(Intercept) / 6",
                  "(Intercept) / 8", "mpg / 6", "mpg / 8", "drat / 6",
                  "drat / 8"))
 
-    tab <- modelsummary(mod, "data.frame", group = model ~ response + term)
+    trash <- capture.output(tab <- modelsummary(mod, "data.frame", group = model ~ response + term))
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
                  c("part", "statistic", "model", "6 / (Intercept)", "8 / (Intercept)", 

@@ -1,4 +1,5 @@
-library(modelsummary)
+# results is the same, but order of `str()` components is swapped
+skip_if(getRversion() < '4.0.0')
 
 test_that("datasummary add_columns", {
 
