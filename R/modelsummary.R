@@ -301,12 +301,13 @@ modelsummary <- function(
   escape      = TRUE,
   ...) {
 
-  ## settings & sanitation
-  settings_set("function_called", "modelsummary")
+  ## settings 
+  settings_init(settings = list(
+     "function_called" = "modelsummary"
+  ))
 
   ## sanity functions validate variables/settings
   ## sanitize functions validate & modify & initialize
-
   sanitize_output(output)           # early
   sanitize_escape(escape)
   sanity_ellipsis(vcov, ...)        # before sanitize_vcov
@@ -391,7 +392,6 @@ modelsummary <- function(
     est[[model_names[i]]] <- tmp
 
   }
-
 
   term_order <- unique(unlist(lapply(est, function(x) x$term)))
   group_order <- unique(unlist(lapply(est, function(x) x$group)))
@@ -480,7 +480,6 @@ modelsummary <- function(
   }
 
 
-
   ##################
   #  output table  #
   ##################
@@ -510,7 +509,7 @@ modelsummary <- function(
 
 
   # stars
-  stars_note <- getOption("modelsummary_stars_note", default = TRUE)
+  stars_note <- settings_get("stars_note")
   if (isTRUE(stars_note) && !isFALSE(stars) && !any(grepl("\\{stars\\}", c(estimate, statistic)))) {
     stars_note <- make_stars_note(stars)
     if (is.null(notes)) {

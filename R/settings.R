@@ -1,10 +1,43 @@
 modelsummary_settings <- new.env()
 
+settings_init <- function(settings = NULL) {
+    settings_rm()
+
+    default_settings <- list(
+        "siunitx" = getOption("modelsummary_siunitx", default = TRUE),
+        "siunitx_s" = FALSE,
+        "siunitx_num" = TRUE,
+        "output_default" = getOption("modelsummary_default", default = "kableExtra"),
+        "stars_note" = getOption("modelsummary_stars_note", default = TRUE))
+
+    checkmate::assert_list(settings, null.ok = TRUE, names = "unique")
+
+    if (!is.null(settings)) {
+        settings <- c(settings, default_settings)
+    }
+
+    for (i in seq_along(settings)) {
+        settings_set(names(settings)[i], settings[[i]])
+    }
+}
+
 settings_get <- function(name) {
     if (name %in% names(modelsummary_settings)) {
         get(name, envir = modelsummary_settings)
     } else {
         NULL
+    }
+}
+
+settings_set <- function(name, value) {
+    assign(name, value = value, envir = modelsummary_settings)
+}
+
+settings_rm <- function(name = NULL) {
+    if (is.null(name)) {
+        rm(list = names(modelsummary_settings), envir = modelsummary_settings)
+    } else {
+        rm(list = name, envir = modelsummary_settings)
     }
 }
 
@@ -18,17 +51,4 @@ settings_equal <- function(name, comparison) {
         out <- FALSE
     }
     return(out)
-}
-
-settings_set <- function(name, value) {
-    assign(name, value = value, envir = modelsummary_settings)
-
-}
-
-settings_rm <- function(name = NULL) {
-    if (is.null(name)) {
-        rm(list = names(modelsummary_settings), envir = modelsummary_settings)
-    } else {
-        rm(list = name, envir = modelsummary_settings)
-    }
 }

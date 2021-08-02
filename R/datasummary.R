@@ -142,6 +142,8 @@ datasummary <- function(formula,
                         sparse_header = TRUE,
                         ...) {
 
+  settings_init()
+
   sanitize_output(output)
 
   # convenience: transform logical and character to factor

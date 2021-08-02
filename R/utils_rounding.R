@@ -18,8 +18,9 @@ rounding <- function(x, fmt = '%.3f', ...) {
         out <- escape_string(out)
     }
 
-    ## siunitx: S-column protect strings with {}
-    if (settings_equal("siunitx_scolumn", TRUE) && settings_equal("output_format", c("latex", "latex_tabular"))) {
+    ## siunitx S-column: protect strings with {}
+    if (settings_equal("output_format", c("latex", "latex_tabular")) &&
+        settings_equal("siunitx_s", TRUE)) {
       out <- sprintf("{%s}", out)
     }
 
@@ -40,15 +41,18 @@ rounding <- function(x, fmt = '%.3f', ...) {
       out <- x
     }
 
-    ## math: LaTeX with the `siunitx` package and \num{} function
-    if (settings_equal("siunitx_num", TRUE) && settings_equal("output_format", c("latex", "latex_tabular"))) {
+    ## LaTeX siunitx \num{}
+    if (settings_equal("siunitx", TRUE) &&
+        settings_equal("siunitx_num", TRUE) &&
+        settings_equal("output_format", c("latex", "latex_tabular"))) {
       out <- sprintf("\\num{%s}", out)
-    ## math: HTML substitute minus sign
-    } else if (settings_equal("output_format", c("html", "kableExtra"))) {
-      out <- gsub("-", "&minus;", out)
+    }
+
+    ## HTML: convert hyphen-minus to minus
+    if (settings_equal("output_format", c("html", "kableExtra"))) {
+      out <- gsub("\\-", "\\−", out)
     }
   }
-
 
   out <- gsub('^NA$|^NaN$|^-Inf$|^Inf$', '', out)
   return(out)

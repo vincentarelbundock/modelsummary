@@ -4,7 +4,9 @@ mod <- list(
 
 ## pkgload::load_all("~/repos/modelsummary")
 ## modelsummary(mod)
-## modelsummary(mod, "latex")
+
+## tmp = modelsummary(mod)
+## modelsummary(mod, "dataframe")
 ## devtools::install("~/repos/modelsummary")
 ## devtools::check("~/repos/modelsummary")
 ## devtools::document("~/repos/modelsummary")
@@ -41,12 +43,4 @@ test_that("S-column: supported outputs", {
     expect_error(modelsummary(mod, output = "huxtable", align = "lSS"), regexp = "only supported")
     expect_error(modelsummary(mod, output = "flextable", align = "lSS"), regexp = "only supported")
     expect_error(modelsummary(mod, output = "markdown", align = "lSS"), regexp = "only supported")
-})
-
-
-test_that("S-column: manual escape", {
-    expect_error(modelsummary(mod, output = "latex", align = "lSS", escape = FALSE), NA)
-    expect_error(modelsummary(mod, output = "latex", align = "lSS", escape = TRUE), regexp = "Cannot use")
-    expect_error(modelsummary(mod, output = "latex_tabular", align = "lSS", escape = FALSE), NA)
-    expect_error(modelsummary(mod, output = "latex_tabular", align = "lSS", escape = TRUE), regexp = "Cannot use")
 })

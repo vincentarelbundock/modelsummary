@@ -69,6 +69,7 @@ factory_kableExtra <- function(tab,
   arguments <- c(list(tab), arguments)
   out <- do.call(kableExtra::kbl, arguments)
 
+
   ## footnote arguments
   valid <- c("footnote_as_chunk", "escape", "threeparttable", "fixed_small_size", "symbol_manual", "title_format")
   arguments <- list(...)
@@ -124,6 +125,7 @@ factory_kableExtra <- function(tab,
   out <- theme_ms(out,
                   output_format = settings_get("output_format"),
                   hrule = hrule)
+
 
   # html & latex get a new class to use print.modelsummary_string
   if (settings_equal("output_format", c("latex", "latex_tabular", "html"))) {
