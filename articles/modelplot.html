@@ -68,7 +68,7 @@
 
       
 
-      </header><script src="modelplot_files/header-attrs-2.9/header-attrs.js"></script><script src="modelplot_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="modelplot_files/kePrint-0.0.1/kePrint.js"></script><link href="modelplot_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+      </header><script src="modelplot_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="modelplot_files/kePrint-0.0.1/kePrint.js"></script><link href="modelplot_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -89,11 +89,9 @@ tbody {
   font-family: 'DejaVu Sans', 'Roboto', 'Georgia', 'Times', 'Roboto', 'DejaVu Serif', serif;
 }
 </style>
-<pre><code>## Warning in system("timedatectl", intern = TRUE): running command 'timedatectl'
-## had status 1</code></pre>
 <p><code>modelplot</code> is a function from the <code>modelsummary</code> package. It allows you to plot model estimates and confidence intervals. It makes it easy to subset, rename, reorder, and customize plots using same mechanics as in <code>modelsummary</code>.</p>
 <p>To illustrate how the function works, we fit a linear model to data about the <a href="https://github.com/allisonhorst/palmerpenguins">Palmer Penguins</a>:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv'</span>
 <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
 
@@ -103,7 +101,7 @@ tbody {
 
 <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">bill_length_cm</span> <span class="op">~</span> <span class="va">flipper_length_cm</span> <span class="op">+</span> <span class="va">species</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></code></pre></div>
 <p>Then, we load the <code>modelsummary</code> library and call <code>modelplot</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
@@ -112,11 +110,11 @@ tbody {
 <h1 class="hasAnchor">
 <a href="#rename-reorder-subset" class="anchor"></a>Rename, reorder, subset</h1>
 <p><code>modelplot</code> uses the same mechanics as <code>modelsummary</code> to rename, reorder, and subset estimates. First, you can use the <code>coef_omit</code> argument. This will omit any coefficient that matches a string or regular expression. To omit the intercept, for example, we can type:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span>, coef_omit <span class="op">=</span> <span class="st">'Interc'</span><span class="op">)</span></code></pre></div>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <p>Second, you can use the <code>coef_map</code> argument. <code>coef_map</code> is a named character vector, where names correspond to the original term names, and values correspond the names you want to assign. Any variable that is <em>not</em> included in <code>coef_map</code> will be excluded. Variables will also be drawn in the same order as in <code>coef_map</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'speciesChinstrap'</span> <span class="op">=</span> <span class="st">'Chinstrap'</span>,
         <span class="st">'speciesGentoo'</span> <span class="op">=</span> <span class="st">'Gentoo'</span>, 
         <span class="st">'flipper_length_cm'</span> <span class="op">=</span> <span class="st">'Flipper length (cm)'</span><span class="op">)</span>
@@ -128,11 +126,11 @@ tbody {
 <h1 class="hasAnchor">
 <a href="#several-models" class="anchor"></a>Several models</h1>
 <p>The main <code>modelsummary</code> functions allows you to create a table with the results of several models side-by-side, by storing them in a (potentially named) list:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">models</span><span class="op">[[</span><span class="st">'Small model'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">bill_length_cm</span> <span class="op">~</span> <span class="va">flipper_length_cm</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
-<span class="va">models</span><span class="op">[[</span><span class="st">'Medium model'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">bill_length_cm</span> <span class="op">~</span> <span class="va">flipper_length_cm</span> <span class="op">+</span> <span class="va">body_mass_g</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
-<span class="va">models</span><span class="op">[[</span><span class="st">'Large model'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">bill_length_cm</span> <span class="op">~</span> <span class="va">flipper_length_cm</span> <span class="op">+</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="st">"Small model"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">bill_length_cm</span> <span class="op">~</span> <span class="va">flipper_length_cm</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
+  <span class="st">"Medium model"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">bill_length_cm</span> <span class="op">~</span> <span class="va">flipper_length_cm</span> <span class="op">+</span> <span class="va">body_mass_g</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
+  <span class="st">"Large model"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">bill_length_cm</span> <span class="op">~</span> <span class="va">flipper_length_cm</span> <span class="op">+</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="st">'conf.int'</span><span class="op">)</span></code></pre></div>
 <table class="table table">
@@ -155,10 +153,10 @@ Large model
 (Intercept)
 </td>
 <td style="text-align:center;">
--0.726
+−0.726
 </td>
 <td style="text-align:center;">
--0.344
+−0.344
 </td>
 <td style="text-align:center;">
 0.984
@@ -168,10 +166,10 @@ Large model
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-[-1.356, -0.097]
+[−1.356, −0.097]
 </td>
 <td style="text-align:center;">
-[-1.245, 0.557]
+[−1.245, 0.557]
 </td>
 <td style="text-align:center;">
 [0.215, 1.752]
@@ -328,7 +326,7 @@ AIC
 369.6
 </td>
 <td style="text-align:center;">
--12.6
+−12.6
 </td>
 </tr>
 <tr>
@@ -350,10 +348,10 @@ BIC
 Log.Lik.
 </td>
 <td style="text-align:center;">
--181.499
+−181.499
 </td>
 <td style="text-align:center;">
--180.813
+−180.813
 </td>
 <td style="text-align:center;">
 12.313
@@ -376,18 +374,18 @@ F
 </tbody>
 </table>
 <p><code>modelplot</code> works the same way:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">'Interc'</span><span class="op">)</span></code></pre></div>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>Instead of displaying results with “dodged” side-by-side lines, you can also use <code>facet</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, facet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="customizing-your-plots" class="section level1">
+<div id="customizing-plots" class="section level1">
 <h1 class="hasAnchor">
-<a href="#customizing-your-plots" class="anchor"></a>Customizing your plots</h1>
+<a href="#customizing-plots" class="anchor"></a>Customizing plots</h1>
 <p>The graphs produced by <code>modelplot</code> are simple <code>ggplot2</code> objects. You can thus post-process them using the normal suite of functions available for all objects of this type. Here, we change the axis labels, add a title and a caption, and use a color scheme inspired by Wes Anderson’s <em>Darjeeling Limited</em>:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/karthik/wesanderson">wesanderson</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
@@ -399,28 +397,64 @@ F
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/wesanderson/man/wes_palette.html">wes_palette</a></span><span class="op">(</span><span class="st">'Darjeeling1'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>In <code>ggplot2</code>, some visual choices must be made when calling the “geom”, rather than with post-processing functions. For instance, the <code>size</code>, <code>color</code>, <code>fatten</code>, <code>linetype</code> arguments must all be specified inside the <code>geom_pointrange</code> function for them to take effect. <code>modelplot</code> will pass any unknown argument to <code>geom_pointrange</code>, so users can simply call:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span>, size <span class="op">=</span> <span class="fl">1</span>, fatten <span class="op">=</span> <span class="fl">.7</span>, color <span class="op">=</span> <span class="st">'darkgreen'</span>, linetype <span class="op">=</span> <span class="st">'dotted'</span><span class="op">)</span> <span class="op">+</span> 
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<div id="example-using-facets-to-compare-models" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-using-facets-to-compare-models" class="anchor"></a>Example: Using facets to compare models</h2>
+<p>Customizing plots with <code>ggplot2</code> makes <code>modelplot</code> very flexible. For example, imagine you want to compare the coefficients of three models with different dependent variables. First, we load the packages and estimate our models:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
+
+<span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">carb</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">carb</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">carb</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>Then, we use the <code>dvnames</code> function to rename our list with names matching the the dependent variable in each model:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dvnames.html">dvnames</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span></code></pre></div>
+<p>By calling <code>modelplot</code> with the <code>draw=FALSE</code> argument, we see the raw data used to draw the plot. Here, we see that there is a <code>model</code> column:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, draw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<pre><code>##           term   model     estimate    std.error      conf.low    conf.high
+## 1  (Intercept) Model 1   2.41742511   0.67622094    1.03224931   3.80260091
+## 5  (Intercept) Model 2 112.57276339 114.86315481 -122.71374324 347.85927003
+## 9  (Intercept) Model 3 -10.56116383  68.75946117 -151.40853516 130.28620751
+## 2         carb Model 1  -0.06945116   0.03943402   -0.15022810   0.01132577
+## 6         carb Model 2 -12.30144724   6.69827859  -26.02224894   1.41935446
+## 10        carb Model 3  17.75593287   4.00972816    9.54237706  25.96948867
+## 3          mpg Model 1  -0.01513960   0.01716410   -0.05029868   0.02001947
+## 7          mpg Model 2  -7.14964651   2.91550156  -13.12178072  -1.17751230
+## 11         mpg Model 3  -1.00486469   1.74527956   -4.57990780   2.57017842
+## 4          cyl Model 1  -0.23926135   0.05687969   -0.35577411  -0.12274859
+## 8          cyl Model 2  47.90105842   9.66160634   28.11015499  67.69196184
+## 12         cyl Model 3  20.60581208   5.78363747    8.75856779  32.45305638</code></pre>
+<p>Finally, we use the <code>model</code> column as our identifier in <code>ggplot2</code>’s <code>facet_grid</code> command to display models side by side:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="op">~</span><span class="va">model</span><span class="op">)</span></code></pre></div>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+</div>
 </div>
 <div id="confidence-intervals-change-or-omit" class="section level1">
 <h1 class="hasAnchor">
 <a href="#confidence-intervals-change-or-omit" class="anchor"></a>Confidence intervals: change or omit</h1>
 <p>You can change the <span class="math inline">\(\alpha\)</span> level of your confidence intervals by changing the <code>conf_level</code> argument:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span>, conf_level <span class="op">=</span> <span class="fl">.99</span><span class="op">)</span></code></pre></div>
-<p><img src="modelplot_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<p><img src="modelplot_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span>, conf_level <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
-<p><img src="modelplot_files/figure-html/unnamed-chunk-11-2.png" width="700"></p>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-14-2.png" width="700"></p>
 </div>
 <div id="background-annotations" class="section level1">
 <h1 class="hasAnchor">
 <a href="#background-annotations" class="anchor"></a>Background annotations</h1>
 <p>Sometimes, you want to display annotations on a plot, but you would like to draw these annotations <em>behind</em> the <code>geom_pointrange</code> which displays the estimates. Since <code>modelplot</code> draws the <code>geom_pointrange</code> automatically, any <code>ggplot2</code> annotation you add to the plot using <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> will be added on <em>top</em> of the existing ones.</p>
 <p>To add your annotations in the background, you can pass them as a list of <code>ggplot2</code> “geoms”:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
 <span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">'orange'</span><span class="op">)</span>,
@@ -431,38 +465,29 @@ F
                      size <span class="op">=</span> <span class="fl">10</span>, color <span class="op">=</span> <span class="st">'red'</span>, shape <span class="op">=</span> <span class="st">'square'</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span>, background <span class="op">=</span> <span class="va">b</span><span class="op">)</span></code></pre></div>
-<p><img src="modelplot_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 </div>
 <div id="raw-data-more-customization" class="section level1">
 <h1 class="hasAnchor">
 <a href="#raw-data-more-customization" class="anchor"></a>Raw data &amp; More customization</h1>
 <p>If you would like to customize the plots even more than what <code>modelplot</code> allows, you can obtain the raw data used to draw the plots by setting <code>draw=FALSE</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, draw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<pre><code>##                 term        model      estimate    std.error      conf.low
-## 10     speciesGentoo  Large model  2.069585e-01 6.033701e-02  8.827391e-02
-## 9   speciesChinstrap  Large model  9.389473e-01 3.682558e-02  8.665103e-01
-## 8        body_mass_g  Large model  2.950814e-04 3.405775e-05  2.280889e-04
-## 5        body_mass_g Medium model  6.622186e-05 5.672075e-05 -4.534709e-05
-## 7  flipper_length_cm  Large model  9.493830e-02 2.370542e-02  4.830906e-02
-## 4  flipper_length_cm Medium model  2.218655e-01 3.234845e-02  1.582365e-01
-## 2  flipper_length_cm  Small model  2.547682e-01 1.588914e-02  2.235148e-01
-## 6        (Intercept)  Large model  9.837549e-01 3.906848e-01  2.152668e-01
-## 3        (Intercept) Medium model -3.436694e-01 4.580553e-01 -1.244658e+00
-## 1        (Intercept)  Small model -7.264868e-01 3.200157e-01 -1.355947e+00
-##        conf.high
-## 10  0.3256431416
-## 9   1.0113842270
-## 8   0.0003620740
-## 5   0.0001777908
-## 7   0.1415675331
-## 4   0.2854944200
-## 2   0.2860215636
-## 6   1.7522429809
-## 3   0.5573192182
-## 1  -0.0970268923</code></pre>
+<pre><code>##           term   model     estimate    std.error      conf.low    conf.high
+## 1  (Intercept) Model 1   2.41742511   0.67622094    1.03224931   3.80260091
+## 5  (Intercept) Model 2 112.57276339 114.86315481 -122.71374324 347.85927003
+## 9  (Intercept) Model 3 -10.56116383  68.75946117 -151.40853516 130.28620751
+## 2         carb Model 1  -0.06945116   0.03943402   -0.15022810   0.01132577
+## 6         carb Model 2 -12.30144724   6.69827859  -26.02224894   1.41935446
+## 10        carb Model 3  17.75593287   4.00972816    9.54237706  25.96948867
+## 3          mpg Model 1  -0.01513960   0.01716410   -0.05029868   0.02001947
+## 7          mpg Model 2  -7.14964651   2.91550156  -13.12178072  -1.17751230
+## 11         mpg Model 3  -1.00486469   1.74527956   -4.57990780   2.57017842
+## 4          cyl Model 1  -0.23926135   0.05687969   -0.35577411  -0.12274859
+## 8          cyl Model 2  47.90105842   9.66160634   28.11015499  67.69196184
+## 12         cyl Model 3  20.60581208   5.78363747    8.75856779  32.45305638</code></pre>
 <p>This allows users to use external tools such as <a href="https://mjskay.github.io/ggdist/">the powerful <code>ggdist</code> package</a>. In this example, we use the <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map_dfr</a></code> function to call <code>modelplot</code> several times with different confidence levels. Then, we draw a plot where the different confidence intervals are drawn with different thicknesses:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mjskay.github.io/ggdist/">ggdist</a></span><span class="op">)</span>
@@ -487,7 +512,7 @@ F
     position <span class="op">=</span> <span class="st">"dodge"</span>,
     interval_size_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>,
     fatten_point <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></code></pre></div>
-<p><img src="modelplot_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 </div>
   </div>
 

@@ -165,9 +165,9 @@ the <code>stacking</code> arguments.</p>
       <td><p>filename or object type (character string)</p><ul>
 <li><p>Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.</p></li>
 <li><p>Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable", "jupyter".</p></li>
-<li><p>To change the default output format, type <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_default = "latex")</a></code>, where <code>latex</code> can be any of the valid object types listed above.</p></li>
-<li><p>Warning: users should not supply a file name to the <code>output</code> argument if they intend to customize the table with external packages.</p></li>
-<li><p>See the 'Details' section below for more information.</p></li>
+<li><p>Warning: Users should not supply a file name to the <code>output</code> argument if they intend to customize the table with external packages. See the 'Details' section.</p></li>
+<li><p>LaTeX compilation requires the <code>booktabs</code> and <code>siunitx</code> packages, but <code>siunitx</code> can be disabled or replaced with global options. See the 'Details' section.</p></li>
+<li><p>The default output formats and table-making packages can be modified with global options. See the 'Details' section.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -176,6 +176,7 @@ the <code>stacking</code> arguments.</p>
 <li><p>integer: the number of digits to keep after the period <code><a href='https://rdrr.io/r/base/format.html'>format(round(x, fmt), nsmall=fmt)</a></code></p></li>
 <li><p>character: passed to the <code>sprintf</code> function (e.g., '%.3f' keeps 3 digits with trailing zero). See <code><a href='https://rdrr.io/r/base/sprintf.html'>?sprintf</a></code></p></li>
 <li><p>function: returns a formatted character string.</p></li>
+<li><p>Note on LaTeX formatting: To ensure proper typography, all numeric entries are enclosed in the <code>\num{}</code> command from the <code>siunitx</code> LaTeX package by default. This behavior can be altered with global options. See the 'Details' section.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -281,9 +282,17 @@ See Examples section below.</p></td>
     </tr>
     <tr>
       <th>align</th>
-      <td><p>A character string of length equal to the number of columns in
-the table.  "lcr" means that the first column will be left-aligned, the 2nd
-column center-aligned, and the 3rd column right-aligned.</p></td>
+      <td><p>A string with a number of characters equal to the number of columns in
+the table (e.g., <code>align = "lcc"</code>).  Valid characters: l, c, r, S.</p><ul>
+<li><p>"l": left-aligned column</p></li>
+<li><p>"c": centered column</p></li>
+<li><p>"r": right-aligned column</p></li>
+<li><p>"d": dot-aligned column. Only supported for LaTeX/PDF tables produced by <code>kableExtra</code>. These commands must appear in the LaTeX preamble (they are added automatically when compiling Rmarkdown documents to PDF):</p><ul>
+<li><p><code>\usepackage{booktabs}</code></p></li>
+<li><p><code>\usepackage{siunitx}</code></p></li>
+<li><p><code>\newcolumntype{d}{S[input-open-uncertainty=,input-close-uncertainty=,table-align-text-pre=false]}</code></p></li>
+</ul></li>
+</ul></td>
     </tr>
     <tr>
       <th>notes</th>
@@ -305,7 +314,6 @@ table-making functions. This allows users to pass arguments directly to
 <code>modelsummary</code> in order to affect the behavior of other functions behind
 the scenes. Examples include:</p><ul>
 <li><p><code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy(exponentiate=TRUE)</a></code> to exponentiate logistic regression</p></li>
-<li><p><code><a href='https://rdrr.io/pkg/kableExtra/man/kbl.html'>kableExtra::kbl(escape=FALSE)</a></code> to avoid escaping math characters in <code>kableExtra</code> tables.</p></li>
 <li><p><code><a href='https://easystats.github.io/performance/reference/model_performance.html'>performance::model_performance(metrics="RMSE")</a></code> to select goodness-of-fit statistics to extract using the <code>performance</code> package (must have set <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get="easystats")</a></code> first).</p></li>
 </ul></td>
     </tr>

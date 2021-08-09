@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Format the content of a correlation table — datasummary_correlation_format • modelsummary</title>
+<title>Escape problematic characters to allow compilation in LaTeX — escape_latex • modelsummary</title>
 
 
 <!-- jquery -->
@@ -41,9 +41,9 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Format the content of a correlation table — datasummary_correlation_format" />
-<meta property="og:description" content="Mostly for internal use, but can be useful when users supply a function to
-the method argument of datasummary_correlation." />
+<meta property="og:title" content="Escape problematic characters to allow compilation in LaTeX — escape_latex" />
+<meta property="og:description" content="Copied from knitr for internal use because it is unexported and CRAN
+rejects :::" />
 
 
 
@@ -114,75 +114,36 @@ the method argument of datasummary_correlation." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Format the content of a correlation table</h1>
-    <small class="dont-index">Source: <a href='https://github.com/vincentarelbundock/modelsummary/blob/master/R/datasummary_correlation.R'><code>R/datasummary_correlation.R</code></a></small>
-    <div class="hidden name"><code>datasummary_correlation_format.Rd</code></div>
+    <h1>Escape problematic characters to allow compilation in LaTeX</h1>
+    <small class="dont-index">Source: <a href='https://github.com/vincentarelbundock/modelsummary/blob/master/R/escape.R'><code>R/escape.R</code></a></small>
+    <div class="hidden name"><code>escape_latex.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Mostly for internal use, but can be useful when users supply a function to
-the <code>method</code> argument of <code>datasummary_correlation</code>.</p>
+    <p>Copied from <code>knitr</code> for internal use because it is unexported and CRAN
+rejects :::</p>
     </div>
 
-    <pre class="usage"><span class='fu'>datasummary_correlation_format</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  <span class='va'>fmt</span>,
-  leading_zero <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  diagonal <span class='op'>=</span> <span class='cn'>NULL</span>,
-  upper_triangle <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>escape_latex</span><span class='op'>(</span><span class='va'>x</span>, newlines <span class='op'>=</span> <span class='cn'>FALSE</span>, spaces <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>square numeric matrix</p></td>
+      <td><p>a character string to escape</p></td>
     </tr>
     <tr>
-      <th>fmt</th>
-      <td><p>determines how to format numeric values</p><ul>
-<li><p>integer: the number of digits to keep after the period <code><a href='https://rdrr.io/r/base/format.html'>format(round(x, fmt), nsmall=fmt)</a></code></p></li>
-<li><p>character: passed to the <code>sprintf</code> function (e.g., '%.3f' keeps 3 digits with trailing zero). See <code><a href='https://rdrr.io/r/base/sprintf.html'>?sprintf</a></code></p></li>
-<li><p>function: returns a formatted character string.</p></li>
-<li><p>Note on LaTeX formatting: To ensure proper typography, all numeric entries are enclosed in the <code>\num{}</code> command from the <code>siunitx</code> LaTeX package by default. This behavior can be altered with global options. See the 'Details' section.</p></li>
-</ul></td>
+      <th>newlines</th>
+      <td><p>boolean</p></td>
     </tr>
     <tr>
-      <th>leading_zero</th>
-      <td><p>boolean. If FALSE, leading zeros are removed</p></td>
-    </tr>
-    <tr>
-      <th>diagonal</th>
-      <td><p>character or NULL. If character, all elements of the
-diagonal are replaced by the same character (e.g., "1").</p></td>
-    </tr>
-    <tr>
-      <th>upper_triangle</th>
-      <td><p>character or NULL. If character, all elements of the
-upper triangle are replaced by the same character (e.g., "" or ".").</p></td>
+      <th>spaces</th>
+      <td><p>boolean</p></td>
     </tr>
     </table>
 
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://vincentarelbundock.github.io/modelsummary/'>modelsummary</a></span><span class='op'>)</span>
-
-<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mpg"</span>, <span class='st'>"hp"</span>, <span class='st'>"disp"</span><span class='op'>)</span><span class='op'>]</span>
-
-<span class='va'>cor_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='st'>"kendall"</span><span class='op'>)</span>
-  <span class='fu'>datasummary_correlation_format</span><span class='op'>(</span>
-    <span class='va'>out</span>,
-    fmt <span class='op'>=</span> <span class='fl'>2</span>,
-    upper_triangle <span class='op'>=</span> <span class='st'>"x"</span>,
-    diagonal <span class='op'>=</span> <span class='st'>"."</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='fu'><a href='datasummary_correlation.html'>datasummary_correlation</a></span><span class='op'>(</span><span class='va'>dat</span>, method <span class='op'>=</span> <span class='va'>cor_fun</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

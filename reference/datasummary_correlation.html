@@ -133,6 +133,7 @@ spaces) to produce a table of human-readable variables.</p>
   title <span class='op'>=</span> <span class='cn'>NULL</span>,
   notes <span class='op'>=</span> <span class='cn'>NULL</span>,
   method <span class='op'>=</span> <span class='st'>"pearson"</span>,
+  escape <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -148,9 +149,9 @@ spaces) to produce a table of human-readable variables.</p>
       <td><p>filename or object type (character string)</p><ul>
 <li><p>Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.</p></li>
 <li><p>Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable", "jupyter".</p></li>
-<li><p>To change the default output format, type <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_default = "latex")</a></code>, where <code>latex</code> can be any of the valid object types listed above.</p></li>
-<li><p>Warning: users should not supply a file name to the <code>output</code> argument if they intend to customize the table with external packages.</p></li>
-<li><p>See the 'Details' section below for more information.</p></li>
+<li><p>Warning: Users should not supply a file name to the <code>output</code> argument if they intend to customize the table with external packages. See the 'Details' section.</p></li>
+<li><p>LaTeX compilation requires the <code>booktabs</code> and <code>siunitx</code> packages, but <code>siunitx</code> can be disabled or replaced with global options. See the 'Details' section.</p></li>
+<li><p>The default output formats and table-making packages can be modified with global options. See the 'Details' section.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -159,6 +160,7 @@ spaces) to produce a table of human-readable variables.</p>
 <li><p>integer: the number of digits to keep after the period <code><a href='https://rdrr.io/r/base/format.html'>format(round(x, fmt), nsmall=fmt)</a></code></p></li>
 <li><p>character: passed to the <code>sprintf</code> function (e.g., '%.3f' keeps 3 digits with trailing zero). See <code><a href='https://rdrr.io/r/base/sprintf.html'>?sprintf</a></code></p></li>
 <li><p>function: returns a formatted character string.</p></li>
+<li><p>Note on LaTeX formatting: To ensure proper typography, all numeric entries are enclosed in the <code>\num{}</code> command from the <code>siunitx</code> LaTeX package by default. This behavior can be altered with global options. See the 'Details' section.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -182,10 +184,14 @@ output of custom correlation functions.</p></li>
 </ul></td>
     </tr>
     <tr>
+      <th>escape</th>
+      <td><p>boolean TRUE escapes or substitutes LaTeX/HTML characters which could
+prevent the file from compiling/displaying. This setting does not affect captions or notes.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>other parameters are passed through to the table-making
-packages. This can be used, for example, to pass arguments such
-as <code>escape=FALSE</code> to <code>kableExtra</code>.</p></td>
+packages.</p></td>
     </tr>
     </table>
 
@@ -236,7 +242,7 @@ as <code>escape=FALSE</code> to <code>kableExtra</code>.</p></td>
 <span class='fu'>datasummary_correlation</span><span class='op'>(</span><span class='va'>dat</span>, method <span class='op'>=</span> <span class='va'>cor_fun</span><span class='op'>)</span>
 
 <span class='co'># use kableExtra and psych to color significant cells</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://personality-project.org/r/psych/'>psych</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>psych</span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://haozhu233.github.io/kableExtra/'>kableExtra</a></span><span class='op'>)</span>
 
 <span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"vs"</span>, <span class='st'>"hp"</span>, <span class='st'>"gear"</span><span class='op'>)</span><span class='op'>]</span>
@@ -247,7 +253,7 @@ as <code>escape=FALSE</code> to <code>kableExtra</code>.</p></td>
   <span class='va'>correlations</span> <span class='op'>&lt;-</span> <span class='fu'><a href='datasummary_correlation_format.html'>datasummary_correlation_format</a></span><span class='op'>(</span><span class='va'>correlations</span>, fmt <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 
   <span class='co'># calculate pvalues using the `psych` package</span>
-  <span class='va'>pvalues</span> <span class='op'>&lt;-</span> <span class='fu'>psych</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/psych/man/corr.test.html'>corr.test</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span><span class='op'>$</span><span class='va'>p</span>
+  <span class='va'>pvalues</span> <span class='op'>&lt;-</span> <span class='fu'>psych</span><span class='fu'>::</span><span class='fu'>corr.test</span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span><span class='op'>$</span><span class='va'>p</span>
 
   <span class='co'># use `kableExtra::cell_spec` to color significant cells</span>
   <span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>correlations</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
