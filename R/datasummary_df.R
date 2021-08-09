@@ -13,9 +13,11 @@ datasummary_df <- function(data,
                            notes = NULL,
                            add_rows = NULL,
                            add_columns = NULL,
+                           escape = TRUE,
                            ...) {
 
   sanitize_output(output)
+  sanitize_escape(escape)
 
   checkmate::assert_data_frame(data)
 

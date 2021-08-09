@@ -30,9 +30,11 @@ datasummary_balance <- function(formula,
                                 add_rows = NULL,
                                 dinm = TRUE,
                                 dinm_statistic = "std.error",
+                                escape = TRUE,
                                 ...) {
 
   # sanity checks
+  sanitize_escape(escape)
   sanitize_output(output)
   sanity_ds_right_handed_formula(formula)
   checkmate::assert_formula(formula)

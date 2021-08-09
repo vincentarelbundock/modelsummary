@@ -140,11 +140,14 @@ datasummary <- function(formula,
                         add_columns = NULL,
                         add_rows = NULL,
                         sparse_header = TRUE,
+                        escape = TRUE,
                         ...) {
 
   settings_init()
 
   sanitize_output(output)
+  sanitize_escape(escape)
+
 
   # convenience: transform logical and character to factor
   # are there use-cases for character variables?

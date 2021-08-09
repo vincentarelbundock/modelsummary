@@ -27,6 +27,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
 #' * character: passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`
 #' * function: returns a formatted character string.
+#' * LaTeX Warning: To ensure proper formatting, all numeric entries are enclosed in the `\num{}` command by default. This command is supplied by the `siunitx` LaTeX package, so the following code must appear in the LaTeX document preamble (it is added automatically when compiling Rmarkdown documents): `\usepackage[input-symbols=()]{siunitx}` This behavior can be altered using the `math_latex` global option (see Details section).
 #' @param stars to indicate statistical significance
 #' * FALSE (default): no significance stars.
 #' * TRUE: +=.1, *=.05, **=.01, ***=0.001
@@ -100,7 +101,10 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * "l": left-aligned column
 #' * "c": centered column
 #' * "r": right-aligned column
-#' * "S": math mode column. In HTML tables, numeric values are centered and wrapped in `$$` in order to be interpreted by MathJax. In LaTeX and PDF documents, numeric values are aligned on the dot and treated as math mode, using the "S" column type supplied by the `siunitx` LaTeX package. This code must appear in the LaTeX document preamble (it is added automatically when compiling Rmarkdown documents): `\usepackage[parse-numbers=false]{siunitx}` Warning: When using `siunitx` for math mode tables in LaTeX, characters like underscores in variable names will *not* be escaped automatically, and may break compilation. 
+#' * "S": math mode column (LaTeX/PDF only). Numeric values are aligned on the dot and formatted by the `siunitx` LaTeX package. This code must appear in the LaTeX document preamble (it is added automatically when compiling Rmarkdown documents): `\usepackage[input-symbols=()]{siunitx}`
+#' @param escape boolean TRUE escapes or substitutes LaTeX/HTML which could
+#'     prevent the file from compiling or displaying. This setting does not
+#'     affect captions or notes.
 #' @param ... all other arguments are passed through to the extractor and
 #' table-making functions. This allows users to pass arguments directly to
 #' `modelsummary` in order to affect the behavior of other functions behind
@@ -135,6 +139,12 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' `options(modelsummary_get = "easystats")`
 #' `options(modelsummary_get = "all")`
 #'
+#' By default, LaTeX tables enclose all numeric entries in the `\num{}` command
+#' from the siunitx package. To pre-empt this behavior, or to enclose
+#' numbers is math mode dollar signs instead, users can call:
+#'
+#' `options(modelsummary_math_latex = "nothing")`
+#' `options(modelsummary_math_latex = "dollars")`
 #'
 #' `output` argument:
 #'

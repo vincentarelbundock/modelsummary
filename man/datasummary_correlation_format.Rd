@@ -20,6 +20,7 @@ datasummary_correlation_format(
 \item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
 \item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
 \item function: returns a formatted character string.
+\item LaTeX Warning: To ensure proper formatting, all numeric entries are enclosed in the \verb{\\num\{\}} command by default. This command is supplied by the \code{siunitx} LaTeX package, so the following code must appear in the LaTeX document preamble (it is added automatically when compiling Rmarkdown documents): \verb{\\usepackage[input-symbols=()]\{siunitx\}} This behavior can be altered using the \code{math_latex} global option (see Details section).
 }}
 
 \item{leading_zero}{boolean. If FALSE, leading zeros are removed}
