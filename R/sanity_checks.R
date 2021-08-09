@@ -74,12 +74,12 @@ sanity_model_names <- function(modelnames) {
 #' @noRd
 sanity_align <- function(align) {
     checkmate::assert_string(align, null.ok = TRUE)
-    if (!is.null(align) && any(grepl("[^lcrdS]", align))) {
+    if (!is.null(align) && any(grepl("[^lcrd]", align))) {
         stop('The `align` argument must be a character string which only includes the letters l, c, r, or d. Example: "lcdd"')
     }
-    if (any(grepl("[Sd]", align))) {
+    if (any(grepl("d", align))) {
         if (!settings_equal("output_factory", "kableExtra") || !settings_equal("output_format", c("latex", "latex_tabular"))) {
-            stop('The "S" character is only supported in the `align` argument for LaTeX/PDF tables produced by the `kableExtra` package.')
+            stop('The "d" character is only supported in the `align` argument for LaTeX/PDF tables produced by the `kableExtra` package.')
         }
         settings_set("siunitx_scolumns", TRUE)
     }

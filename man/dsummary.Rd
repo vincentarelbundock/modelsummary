@@ -30,9 +30,9 @@ more resources.}
 \itemize{
 \item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
 \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable", "jupyter".
-\item To change the default output format, type \code{options(modelsummary_default = "latex")}, where \code{latex} can be any of the valid object types listed above.
-\item Warning: users should not supply a file name to the \code{output} argument if they intend to customize the table with external packages.
-\item See the 'Details' section below for more information.
+\item Warning: Users should not supply a file name to the \code{output} argument if they intend to customize the table with external packages. See the 'Details' section.
+\item LaTeX compilation requires the \code{booktabs} and \code{siunitx} packages, but \code{siunitx} can be disabled or replaced with global options. See the 'Details' section.
+\item The default output formats and table-making packages can be modified with global options. See the 'Details' section.
 }}
 
 \item{fmt}{determines how to format numeric values
@@ -40,7 +40,7 @@ more resources.}
 \item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
 \item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
 \item function: returns a formatted character string.
-\item LaTeX Warning: To ensure proper formatting, all numeric entries are enclosed in the \verb{\\num\{\}} command by default. This command is supplied by the \code{siunitx} LaTeX package, so the following code must appear in the LaTeX document preamble (it is added automatically when compiling Rmarkdown documents): \verb{\\usepackage[input-symbols=()]\{siunitx\}} This behavior can be altered using the \code{math_latex} global option (see Details section).
+\item LaTeX tables: All numeric entries are enclosed in the \code{siunitx} package's \verb{\\num\{\}} command by default. This behavior can be altered with global options. See the 'Details' section.
 }}
 
 \item{title}{string}
@@ -53,7 +53,12 @@ the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, S.
 \item "l": left-aligned column
 \item "c": centered column
 \item "r": right-aligned column
-\item "S": math mode column (LaTeX/PDF only). Numeric values are aligned on the dot and formatted by the \code{siunitx} LaTeX package. This code must appear in the LaTeX document preamble (it is added automatically when compiling Rmarkdown documents): \verb{\\usepackage[input-symbols=()]\{siunitx\}}
+\item "d": dot-aligned column. Only supported for LaTeX/PDF tables produced by \code{kableExtra}. These commands must appear in the LaTeX preamble (they are added automatically when compiling Rmarkdown documents to PDF):
+\itemize{
+\item \verb{\\usepackage\{booktabs\}}
+\item \verb{\\usepackage\{siunitx\}}
+\item \verb{\\newcolumntype\{d\}\{S[input-open-uncertainty=,input-close-uncertainty=,table-align-text-pre=false]\}}
+}
 }}
 
 \item{add_columns}{a data.frame (or tibble) with the same number of rows as

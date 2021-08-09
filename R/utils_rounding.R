@@ -44,9 +44,9 @@ rounding <- function(x, fmt = '%.3f', ...) {
     ## LaTeX siunitx \num{}
     if (settings_equal("output_format", c("latex", "latex_tabular"))) {
         if (!isTRUE(settings_get("siunitx_scolumns"))) {
-            if (settings_equal("math_latex", "siunitx")) {
+            if (settings_equal("format_numeric_latex", "siunitx")) {
                 out <- sprintf("\\num{%s}", out)
-            } else if (settings_equal("math_latex", "dollars")) {
+            } else if (settings_equal("format_numeric_latex", c("dollars", "mathmode"))) {
                 out <- sprintf("$%s$", out)
             }
         }
@@ -54,10 +54,9 @@ rounding <- function(x, fmt = '%.3f', ...) {
 
     ## HTML: convert hyphen-minus to minus
     if (settings_equal("output_format", c("html", "kableExtra"))) {
-        if (settings_equal("math_html", "minus")) {
+        if (settings_equal("format_numeric_html", "minus")) {
             out <- gsub("\\-", "\u2212", out)
-            ## out <- gsub("\\-", "\\−", out)
-        } else if (settings_equal("math_html", "dollars")) {
+        } else if (settings_equal("format_numeric_html", c("mathjax", "dollars"))) {
             out <- sprintf("$%s$", out)
         }
     }

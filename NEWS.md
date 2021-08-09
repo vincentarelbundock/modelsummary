@@ -1,11 +1,21 @@
 # modelsummary 0.8.1.9000
 
+Breaking change:
+
+* Support for `dcolumn` for dot-aligned columns is deprecated. Use "d" in the `align` argument instead.
+
+Package-wide changes:
+
+* LaTeX output: Numeric entries are wrapped in the `\num{}` function from the
+  `siunitx` package by default. This produces much nicer formatting. This can be
+  disabled with a global option. See `?modelsummary`
+* The `align` argument accepts a "d" column for dot-alignment using the
+  `siunitx` LaTeX package: `align="ldd"`.
+* HTML tables display proper minus signs.
+
 `modelsummary`:
 
-* Math mode alignment: `align="lSS"`. LaTeX: displays numbers in math mode and
-  aligns on the dot using the `siunitx` package. HTML: displays in math mode
-  using MathJax. Support for `dcolumn` is deprecated.
-* LaTeX output accepts the `threeparttable=TRUE` argument through `...`
+* * LaTeX output accepts the `threeparttable=TRUE` argument through `...`
 * No more dependency on `tidyr`
 
 `modelsummary_wide` (Note: This function will eventually be deprecated):

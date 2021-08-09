@@ -43,7 +43,7 @@ factory_kableExtra <- function(tab,
   arguments$escape <- FALSE
 
   ## siunitx in preamble
-  if (settings_equal("math_latex", "siunitx")) {
+  if (settings_equal("format_numeric_latex", "siunitx")) {
       invisible(
         knitr::knit_meta_add(list(
           rmarkdown::latex_dependency("booktabs"))))
@@ -56,7 +56,7 @@ factory_kableExtra <- function(tab,
   ## align
   if (!is.null(align)) {
     for (i in seq_along(align)) {
-      if (align[i] %in% c("d", "S")) {
+      if (align[i] == "d") {
         if (settings_equal("output_format", c("latex", "latex_tabular"))) {
           ## protect strings from siunitx
           tab[[i]] <- ifelse(!grepl("[0-9]", tab[[i]]), sprintf("{%s}", tab[[i]]), tab[[i]]) 
@@ -66,9 +66,9 @@ factory_kableExtra <- function(tab,
       }
 
     }
-    if (any(grepl("[Sd]", align))) {
+    if (any(grepl("d", align))) {
       ## protect column labels
-      colnames(tab)[align %in% c("S", "d")] <- sprintf("{%s}", colnames(tab)[align %in% c("S", "d")])
+      colnames(tab)[align == "d"] <- sprintf("{%s}", colnames(tab)[align == "d"])
     }
     arguments[["align"]] <- align
   }
