@@ -192,11 +192,20 @@ datasummary_skim_numeric <- function(
 
     histogram_col <- function(x) ""
 
-    f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
-         Heading("Unique (#)") * NUnique +
-         Heading("Missing (%)") * PercentMissing +
-         (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
-         Heading("") * histogram_col
+    if (settings_equal("output_format", c("latex", "latex_tabular"))) {
+        f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
+            Heading("Unique (\\#)") * NUnique +
+            Heading("Missing (\\%)") * PercentMissing +
+            (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
+            Heading("") * histogram_col
+    } else {
+        f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
+            Heading("Unique (#)") * NUnique +
+            Heading("Missing (%)") * PercentMissing +
+            (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
+            Heading("") * histogram_col
+    }
+
 
     # prepare list of histograms
     # TODO: inefficient because it computes the table twice. But I need to
@@ -240,10 +249,17 @@ datasummary_skim_numeric <- function(
   # without histogram
   } else {
 
-    f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
-         Heading("Unique (#)") * NUnique +
-         Heading("Missing (%)") * PercentMissing +
-         (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt)
+    if (settings_equal("output_format", c("latex", "latex_tabular"))) {
+        f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
+            Heading("Unique (#)") * NUnique +
+            Heading("Missing (%)") * PercentMissing +
+            (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt)
+    } else {
+        f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
+            Heading("Unique (\\#)") * NUnique +
+            Heading("Missing (\\%)") * PercentMissing +
+            (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt)
+    }
 
     out <- datasummary(f,
         data = dat_new,

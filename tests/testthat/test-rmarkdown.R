@@ -4,17 +4,28 @@ skip_on_ci()
 dangerous_document <- '
 ---
 title: test
-output: 
-  pdf_document:
-    citation_package: natbib
 ---
+
+Table \\ref{tab:simple}
+
+```{r}
+datasummary_skim(mtcars)
+```
+
+```{r}
+datasummary_balance(~vs, data = mtcars)
+```
+
+```{r}
+datasummary_correlation(mtcars)
+```
 
 ```{r simple}
 library(modelsummary)
 dat <- mtcars
 colnames(dat)[1] <- "under_score"
 mod <- lm(hp ~ under_score + drat, dat)
-modelsummary(mod)
+modelsummary(mod, title = "Some caption content.")
 ```
 '
 
