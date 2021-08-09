@@ -30,10 +30,8 @@ test_that("display NA in categorical", {
 
 test_that("simple categorical", {
   tab <- datasummary_skim(dat, type = "categorical", output = "data.frame")
-  expect_known_output(dput(tab),
-                      file = "known_output/datasummary_skim_1.R",
-                      update = FALSE,
-                      print = TRUE)
+  expect_s3_class(tab, "data.frame")
+  expect_equal(dim(tab), c(5, 4))
 })
 
 test_that("errors and warnings: numeric", {

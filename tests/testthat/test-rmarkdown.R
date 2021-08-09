@@ -9,6 +9,10 @@ title: test
 Table \\ref{tab:simple}
 
 ```{r}
+library(modelsummary)
+```
+
+```{r}
 datasummary_skim(mtcars)
 ```
 
@@ -21,11 +25,16 @@ datasummary_correlation(mtcars)
 ```
 
 ```{r simple}
-library(modelsummary)
 dat <- mtcars
 colnames(dat)[1] <- "under_score"
 mod <- lm(hp ~ under_score + drat, dat)
 modelsummary(mod, title = "Some caption content.")
+```
+
+```{r siunitx}
+if (knitr::is_latex_output()) {
+  modelsummary(mod, title = "Some caption content.", align = "ld")
+}
 ```
 '
 

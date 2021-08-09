@@ -44,14 +44,19 @@ factory_kableExtra <- function(tab,
 
   ## siunitx in preamble
   if (settings_equal("math_latex", "siunitx")) {
-    kableExtra::usepackage_latex("siunitx", "input-symbols=()")
-    kableExtra::usepackage_latex("booktabs")
+      invisible(
+        knitr::knit_meta_add(list(
+          rmarkdown::latex_dependency("booktabs"))))
+      invisible(
+        knitr::knit_meta_add(list(
+          rmarkdown::latex_dependency("siunitx",
+                                      extra_lines = "\\newcolumntype{d}{S[input-open-uncertainty=,input-close-uncertainty=,table-align-text-pre=false]}"))))
   }
 
   ## align
   if (!is.null(align)) {
     for (i in seq_along(align)) {
-      if (align[i] == "S") {
+      if (align[i] %in% c("d", "S")) {
         if (settings_equal("output_format", c("latex", "latex_tabular"))) {
           ## protect strings from siunitx
           tab[[i]] <- ifelse(!grepl("[0-9]", tab[[i]]), sprintf("{%s}", tab[[i]]), tab[[i]]) 
@@ -61,9 +66,9 @@ factory_kableExtra <- function(tab,
       }
 
     }
-    if (any(grepl("S", align))) {
+    if (any(grepl("[Sd]", align))) {
       ## protect column labels
-      colnames(tab)[align == "S"] <- sprintf("{%s}", colnames(tab)[align == "S"])
+      colnames(tab)[align %in% c("S", "d")] <- sprintf("{%s}", colnames(tab)[align %in% c("S", "d")])
     }
     arguments[["align"]] <- align
   }
