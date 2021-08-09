@@ -46,6 +46,10 @@ datasummary_skim <- function(data,
                              escape = TRUE,
                              ...) {
 
+  ## settings 
+  settings_init(settings = list(
+     "function_called" = "datasummary_skim"
+  ))
   sanitize_output(output)
   sanitize_escape(escape)
 
@@ -58,18 +62,20 @@ datasummary_skim <- function(data,
   if (type == "numeric") {
     out <- datasummary_skim_numeric(data, output = output, fmt = fmt,
                                     histogram = histogram, title = title,
-                                    notes = notes, align = align, ...)
+                                    notes = notes, align = align,
+                                    escape = escape, ...)
   }
 
   if (type == "categorical") {
     out <- datasummary_skim_categorical(data, output = output, fmt = fmt,
                                         title = title, notes = notes, align = align,
-                                        ...)
+                                        escape = escape, ...)
   }
 
   if (type == "dataset") {
     out <- datasummary_skim_dataset(data, output = output, title = title,
-                                    notes = notes, align = align, ...)
+                                    notes = notes, align = align,
+                                    escape = escape, ...)
   }
 
   return(out)
@@ -85,6 +91,7 @@ datasummary_skim_dataset <- function(
   title,
   notes,
   align,
+  escape,
   ...) {
 
 
@@ -130,6 +137,7 @@ datasummary_skim_numeric <- function(
   title,
   notes,
   align,
+  escape,
   ...) {
 
   # output format
@@ -191,21 +199,11 @@ datasummary_skim_numeric <- function(
   if (histogram) {
 
     histogram_col <- function(x) ""
-
-    if (settings_equal("output_format", c("latex", "latex_tabular"))) {
-        f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
-            Heading("Unique (\\#)") * NUnique +
-            Heading("Missing (\\%)") * PercentMissing +
-            (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
-            Heading("") * histogram_col
-    } else {
-        f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
-            Heading("Unique (#)") * NUnique +
-            Heading("Missing (%)") * PercentMissing +
-            (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
-            Heading("") * histogram_col
-    }
-
+    f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
+         Heading("Unique (#)") * NUnique +
+         Heading("Missing (%)") * PercentMissing +
+         (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
+         Heading("") * histogram_col
 
     # prepare list of histograms
     # TODO: inefficient because it computes the table twice. But I need to
@@ -232,13 +230,14 @@ datasummary_skim_numeric <- function(
         output = output,
         title = title,
         align = align,
-        notes = notes)
+        notes = notes,
+        escape = escape)
+
     out <- kableExtra::column_spec(out,
         column = 9,
         image = kableExtra::spec_hist(histogram_list,
                                       col = "black",
-                                      same_lim = FALSE)
-      )
+                                      same_lim = FALSE))
 
     # don't use output=filepath.html when post-processing
     if (!is.null(settings_get("output_file"))) {
@@ -248,25 +247,18 @@ datasummary_skim_numeric <- function(
 
   # without histogram
   } else {
-
-    if (settings_equal("output_format", c("latex", "latex_tabular"))) {
-        f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
-            Heading("Unique (#)") * NUnique +
-            Heading("Missing (%)") * PercentMissing +
-            (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt)
-    } else {
-        f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
-            Heading("Unique (\\#)") * NUnique +
-            Heading("Missing (\\%)") * PercentMissing +
-            (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt)
-    }
+    f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
+         Heading("Unique (#)") * NUnique +
+         Heading("Missing (%)") * PercentMissing +
+         (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt)
 
     out <- datasummary(f,
         data = dat_new,
         output = output,
         title = title,
         align = align,
-        notes = notes)
+        notes = notes,
+        escape = escape)
 
   }
 
@@ -285,6 +277,7 @@ datasummary_skim_categorical <- function(
   title,
   notes,
   align,
+  escape,
   ...) {
 
   dat_new <- data

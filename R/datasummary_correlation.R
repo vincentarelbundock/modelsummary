@@ -100,6 +100,12 @@ datasummary_correlation <- function(data,
                                     escape = TRUE,
                                     ...) {
 
+
+  ## settings
+  settings_init(settings = list(
+    "function_called" = "datasummary_correlation"
+  ))
+
   # sanity checks
   sanitize_output(output)
   sanitize_escape(escape)

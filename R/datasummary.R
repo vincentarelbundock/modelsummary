@@ -143,7 +143,10 @@ datasummary <- function(formula,
                         escape = TRUE,
                         ...) {
 
-  settings_init()
+  ## settings 
+  settings_init(settings = list(
+     "function_called" = "datasummary"
+  ))
 
   sanitize_output(output)
   sanitize_escape(escape)

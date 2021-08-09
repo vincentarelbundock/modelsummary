@@ -32,6 +32,10 @@ datasummary_balance <- function(formula,
                                 dinm_statistic = "std.error",
                                 escape = TRUE,
                                 ...) {
+  ## settings 
+  settings_init(settings = list(
+     "function_called" = "datasummary_balance"
+  ))
 
   # sanity checks
   sanitize_escape(escape)

@@ -62,6 +62,12 @@ datasummary_crosstab <- function(formula,
                                  escape = TRUE,
                                  ...) {
 
+    ## settings
+    settings_init(settings = list(
+      "function_called" = "datasummary_crosstab"
+    ))
+
+
     # argument checking
     sanitize_output(output)
     sanitize_escape(escape)

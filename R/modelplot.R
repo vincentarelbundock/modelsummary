@@ -78,7 +78,10 @@ modelplot <- function(models,
                       background  = NULL,
                       ...) {
 
-  settings_set("function_called", "modelplot")
+  ## settings
+  settings_init(settings = list(
+    "function_called" = "modelplot"
+  ))
 
   # more informative error message specific to `modelplot`
   sanity_conf_level_modelplot(conf_level)
