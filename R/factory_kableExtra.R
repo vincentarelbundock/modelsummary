@@ -50,7 +50,7 @@ factory_kableExtra <- function(tab,
       invisible(
         knitr::knit_meta_add(list(
           rmarkdown::latex_dependency("siunitx",
-                                      extra_lines = "\\newcolumntype{d}{S[input-open-uncertainty=,input-close-uncertainty=,table-align-text-pre=false]}"))))
+                                      extra_lines = "\\newcolumntype{d}{S[input-open-uncertainty=,input-close-uncertainty=,table-align-text-pre=false,table-align-text-post=false]}"))))
   }
 
   ## align
