@@ -2,6 +2,9 @@
 skip_on_cran()
 skip_if(getRversion() < '4.0.0')
 
+## gt sometimes introduces slight changes in its html output
+skip_if_not_installed("gt", minimum_version = "0.3.1")
+
 library(gt)
 
 models <- list()
@@ -18,6 +21,7 @@ test_that("gof_omit='.*' used to produce an error", {
 })
 
 test_that("complex html table", {
+
 
   cm <- c(
     'hp' = 'Horsepower',
