@@ -199,6 +199,13 @@ datasummary <- function(formula,
     }
   }
 
+  ## escape stub
+  if (settings_equal("escape", TRUE)) {
+      for (i in 1:attr(dse, "stub_width")) {
+          dse[, i] <- escape_string(dse[, i])
+      }
+  }
+
   # build
   out <- factory(dse,
     align = align,

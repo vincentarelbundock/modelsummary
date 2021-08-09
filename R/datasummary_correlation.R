@@ -16,8 +16,7 @@
 #'     output of custom correlation functions.
 #' }
 #' @param ... other parameters are passed through to the table-making
-#'     packages. This can be used, for example, to pass arguments such
-#'     as `escape=FALSE` to `kableExtra`.
+#'     packages.
 #' @export
 #' @examples
 #' \dontrun{
@@ -98,10 +97,12 @@ datasummary_correlation <- function(data,
                                     title = NULL,
                                     notes = NULL,
                                     method = "pearson",
+                                    escape = TRUE,
                                     ...) {
 
   # sanity checks
   sanitize_output(output)
+  sanitize_escape(escape)
 
   any_numeric <- any(sapply(data, is.numeric) == TRUE)
   if (any_numeric == FALSE) {
@@ -162,6 +163,11 @@ datasummary_correlation <- function(data,
 
   align <- paste0('l', strrep('r', ncol(out) - 1))
   align <- paste(align, collapse = "")
+
+  if (settings_equal("escape", TRUE)) {
+    out[, 1] <- escape_string(out[, 1])
+    colnames(out) <- escape_string(colnames(out))
+  }
 
   factory(out,
     align = align,

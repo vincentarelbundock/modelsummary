@@ -11,6 +11,7 @@ datasummary_correlation(
   title = NULL,
   notes = NULL,
   method = "pearson",
+  escape = TRUE,
   ...
 )
 }
@@ -49,9 +50,11 @@ corresponding to variable names. Note that the
 output of custom correlation functions.
 }}
 
+\item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML characters which could
+prevent the file from compiling/displaying. This setting does not affect captions or notes.}
+
 \item{...}{other parameters are passed through to the table-making
-packages. This can be used, for example, to pass arguments such
-as \code{escape=FALSE} to \code{kableExtra}.}
+packages.}
 }
 \description{
 The names of the variables displayed in the correlation table are the names

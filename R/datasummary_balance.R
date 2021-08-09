@@ -79,11 +79,11 @@ datasummary_balance <- function(formula,
   }
 
   if (any_factor) {
-    tab_fac <- datasummary_balance_factor(rhs, data, data_norhs, any_numeric)
+    tab_fac <- datasummary_balance_factor(rhs, data, data_norhs, any_numeric, output, escape)
   }
 
   if (any_numeric) {
-    tab_num <- datasummary_balance_numeric(rhs, data, data_norhs, fmt, dinm, dinm_statistic)
+    tab_num <- datasummary_balance_numeric(rhs, data, data_norhs, fmt, dinm, dinm_statistic, output, escape)
   }
 
   if (any_numeric && any_factor) {
@@ -94,7 +94,7 @@ datasummary_balance <- function(formula,
     for (i in seq_along(header)) {
       header[1, i] <- ifelse(!cols[i] %in% c("Mean", "Std. Dev."), "", header[1, i])
       header[1, i] <- ifelse(cols[i] == "Mean", "N", header[1, i])
-      header[1, i] <- ifelse(cols[i] == "Std. Dev.", "%", header[1, i])
+      header[1, i] <- ifelse(cols[i] == "Std. Dev.", "Pct.", header[1, i])
     }
     tab_fac <- bind_rows(header, tab_fac)
 
@@ -146,7 +146,7 @@ datasummary_balance <- function(formula,
 
 }
 
-datasummary_balance_factor <- function(rhs, data, data_norhs, any_numeric) {
+datasummary_balance_factor <- function(rhs, data, data_norhs, any_numeric, output, escape) {
 
   # formatting function
   pctformat = function(x) sprintf("%.1f", x)
@@ -177,19 +177,21 @@ datasummary_balance_factor <- function(rhs, data, data_norhs, any_numeric) {
   # formula
   f_fac <- 'All(data_norhs, factor = TRUE, numeric = FALSE) ~
             Factor(%s) * (Heading("N")*1 * Format() +
-            Heading("%%") * Percent("col") * Format(pctformat()))'
+            Heading("Pct.") * Percent("col") * Format(pctformat()))'
   f_fac <- sprintf(f_fac, rhs)
 
   if (any_numeric) { # before removing numerics
-    f_fac <- gsub('\\"\\%\\"', '\\"Std. Dev.\\"', f_fac)
+    f_fac <- gsub('\\"Pct.\\"', '\\"Std. Dev.\\"', f_fac)
     f_fac <- gsub('\\"N\\"', '\\"Mean\\"', f_fac)
   }
   f_fac <- stats::formula(f_fac)
 
-  # process
+  # process & reset output settings (datasummary sets "data.frame")
   tab_fac <- datasummary(f_fac,
                          data = data,
-                         output = "data.frame")
+                         output = "data.frame",
+                         escape = escape)
+  sanitize_output(output)
 
   # cleanup
   colnames(tab_fac) <- pad(attr(tab_fac, "header_bottom"))
@@ -203,14 +205,18 @@ datasummary_balance_factor <- function(rhs, data, data_norhs, any_numeric) {
 }
 
 
-datasummary_balance_numeric <- function(rhs, data, data_norhs, fmt, dinm, dinm_statistic) {
+datasummary_balance_numeric <- function(rhs, data, data_norhs, fmt, dinm, dinm_statistic, output, escape) {
 
   # create table as data.frame
   f_num <- sprintf(
     'All(data_norhs) ~ Factor(%s) * (Mean + Heading("Std. Dev.") * SD) * Arguments(fmt = fmt)',
     rhs)
   f_num <- stats::formula(f_num)
-  tab_num <- datasummary(f_num, data = data, output = "data.frame")
+
+  # process & reset output settings (datasummary sets "data.frame")
+  tab_num <- datasummary(f_num, data = data, output = "data.frame", escape = escape)
+  sanitize_output(output)
+
 
   # otherwise colnames: female (N=140) Mean
   colnames(tab_num) <- pad(attr(tab_num, "header_bottom"))

@@ -9,9 +9,12 @@ test_that("different rows and columns", {
       return(out)
   }
   tab <- datasummary_correlation(dat, method = cor_fun, output = "data.frame")
+  expect_s3_class(tab, "data.frame")
+  expect_equal(dim(tab), c(3, 4))
+
   expect_known_output(dput(tab),
                       file = "known_output/datasummary_correlation_1.R",
-                      update = FALSE,
+                      update = TRUE,
                       print = TRUE)
 })
     
@@ -44,7 +47,7 @@ test_that("pearson, kendall, spearman, pearspear", {
 
   expect_known_output(dput(tab),
                       file = "known_output/datasummary_correlation_2.R",
-                      update = FALSE,
+                      update = TRUE,
                       print = TRUE)
 
   # kendall
@@ -52,7 +55,7 @@ test_that("pearson, kendall, spearman, pearspear", {
 
   expect_known_output(dput(tab),
                       file = "known_output/datasummary_correlation_3.R",
-                      update = FALSE,
+                      update = TRUE,
                       print = TRUE)
 
   # spearman
@@ -60,13 +63,13 @@ test_that("pearson, kendall, spearman, pearspear", {
 
   expect_known_output(dput(tab),
                       file = "known_output/datasummary_correlation_4.R",
-                      update = FALSE,
+                      update = TRUE,
                       print = TRUE)
 
   # pearspear
   tab <- datasummary_correlation(dat, output = "data.frame", method = "pearspear")
   expect_known_output(dput(tab),
                       file = "known_output/datasummary_correlation_5.R",
-                      update = FALSE,
+                      update = TRUE,
                       print = TRUE)
 })

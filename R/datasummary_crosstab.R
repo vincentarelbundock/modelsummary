@@ -143,5 +143,6 @@ datasummary_crosstab <- function(formula,
                 add_columns = add_columns,
                 add_rows = add_rows,
                 sparse_header = sparse_header,
+                escape = escape,
                 ...)
 }

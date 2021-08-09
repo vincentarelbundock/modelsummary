@@ -43,6 +43,7 @@ datasummary_extract <- function(tab,
 
   colnames(main) <- as.vector(mat[idx, ])
 
+
   # remove NAs, but not in stub or header
   for (i in (stub_width + 1):ncol(main)) {
     main[, i] <- trimws(main[, i])
@@ -52,6 +53,12 @@ datasummary_extract <- function(tab,
 
   # stub_width attribute before return
   attr(main, 'stub_width') <- stub_width
+
+  # escape latex column names
+  if (settings_equal("escape", TRUE) &&
+      settings_equal("output_format", c("latex", "latex_tabular", "html"))) {
+    colnames(main) <- escape_string(colnames(main))
+  }
 
   # 1 header level means colnames are sufficient. return output immediately.
   # this needs to go before definition of header_nocolnames
@@ -103,6 +110,7 @@ datasummary_extract <- function(tab,
 
   # attributes
   attr(main, 'header_sparse_flat') <- header_sparse_flat
+
 
   # return
   return(main)

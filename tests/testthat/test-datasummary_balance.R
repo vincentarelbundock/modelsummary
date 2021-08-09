@@ -50,14 +50,14 @@ test_that("palmer penguins was once broken with kableExtra", {
   penguins <- "https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv"
   penguins <- read.csv(penguins)
   raw <- datasummary_balance(~sex, penguins, output="html")
-  expect_known_output(cat(raw), "known_output/datasummary_balance_penguins.html", update=FALSE)
+  expect_known_output(cat(raw), "known_output/datasummary_balance_penguins.html", update = TRUE)
 })
 
 
 test_that('variable name with spaces', {
   tmp <- mtcars
   colnames(tmp)[1] <- "testing spaces"
-  tab <- expect_error(datasummary_balance(~vs, data=tmp, output="dataframe"), NA)
+  tab <- expect_error(datasummary_balance(~vs, data = tmp, output = "dataframe"), NA)
   expect_equal(dim(tab), c(10, 7))
 })
 
@@ -92,7 +92,7 @@ test_that('only factors', {
   tmp$vs <- as.logical(tmp$vs)
   tmp <- tmp[, c('am', 'vs', 'cyl', 'gear')]
   tab <- datasummary_balance(~am, tmp, output = 'dataframe')
-  truth <- c(" ", "  ", "0 N", "0 %", "1 N", "1 %")
+  truth <- c(" ", "  ", "0 N", "0 Pct.", "1 N", "1 Pct.")
   expect_s3_class(tab, 'data.frame')
   expect_equal(dim(tab), c(8, 6))
   expect_equal(colnames(tab), truth)

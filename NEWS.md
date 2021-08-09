@@ -12,6 +12,7 @@ Package-wide changes:
 * The `align` argument accepts a "d" column for dot-alignment using the
   `siunitx` LaTeX package: `align="ldd"`.
 * HTML tables display proper minus signs.
+* New `escape` argument in most table-building functions.
 
 `modelsummary`:
 
