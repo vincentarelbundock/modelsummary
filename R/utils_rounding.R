@@ -9,7 +9,7 @@
 #' @noRd
 rounding <- function(x, fmt = '%.3f', ...) {
 
-                                        # character, factor, logical
+    ## character, factor, logical
     if (is.factor(x) || is.logical(x) || is.character(x)) {
         out <- as.character(x)
 

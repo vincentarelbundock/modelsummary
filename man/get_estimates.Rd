@@ -30,7 +30,6 @@ table-making functions. This allows users to pass arguments directly to
 the scenes. Examples include:
 \itemize{
 \item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression
-\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in \code{kableExtra} tables.
 \item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit statistics to extract using the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first).
 }}
 }

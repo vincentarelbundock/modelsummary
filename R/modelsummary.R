@@ -27,7 +27,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
 #' * character: passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`
 #' * function: returns a formatted character string.
-#' * LaTeX tables: All numeric entries are enclosed in the `siunitx` package's `\num{}` command by default. This behavior can be altered with global options. See the 'Details' section.
+#' * Note on LaTeX formatting: To ensure proper typography, all numeric entries are enclosed in the `\num{}` command from the `siunitx` LaTeX package by default. This behavior can be altered with global options. See the 'Details' section.
 #' @param stars to indicate statistical significance
 #' * FALSE (default): no significance stars.
 #' * TRUE: +=.1, *=.05, **=.01, ***=0.001
@@ -105,15 +105,13 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   - `\usepackage{booktabs}`
 #'   - `\usepackage{siunitx}`
 #'   - `\newcolumntype{d}{S[input-open-uncertainty=,input-close-uncertainty=,table-align-text-pre=false]}`
-#' @param escape boolean TRUE escapes or substitutes LaTeX/HTML which could
-#'     prevent the file from compiling or displaying. This setting does not
-#'     affect captions or notes.
+#' @param escape boolean TRUE escapes or substitutes LaTeX/HTML characters which could
+#' prevent the file from compiling/displaying. This setting does not affect captions or notes.
 #' @param ... all other arguments are passed through to the extractor and
 #' table-making functions. This allows users to pass arguments directly to
 #' `modelsummary` in order to affect the behavior of other functions behind
 #' the scenes. Examples include:
 #' * `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
-#' * `kableExtra::kbl(escape=FALSE)` to avoid escaping math characters in `kableExtra` tables.
 #' * `performance::model_performance(metrics="RMSE")` to select goodness-of-fit statistics to extract using the `performance` package (must have set `options(modelsummary_get="easystats")` first).
 #' @return a regression table in a format determined by the `output` argument.
 #' @importFrom generics glance tidy
@@ -602,18 +600,20 @@ modelsummary <- function(
 #'
 #' @keywords internal
 map_omit_rename_estimates <- function(estimates,
-                             coef_rename,
-                             coef_map,
-                             coef_omit,
-                             group_map) {
+                                      coef_rename,
+                                      coef_map,
+                                      coef_omit,
+                                      group_map) {
 
 
     ## escape if needed
-    if (!is.null(coef_rename)) {
-        coef_rename <- stats::setNames(rounding(coef_rename), names(coef_rename))
-    }
-    if (!is.null(coef_map) && !is.null(names(coef_map))) {
-        coef_map <- stats::setNames(rounding(coef_map), names(coef_map))
+    if (settings_equal("escape", TRUE)) {
+        if (!is.null(coef_rename)) {
+            coef_rename <- stats::setNames(escape_string(coef_rename), names(coef_rename))
+        }
+        if (!is.null(coef_map) && !is.null(names(coef_map))) {
+            coef_map <- stats::setNames(escape_string(coef_map), names(coef_map))
+        }
     }
 
     ## coef_omit

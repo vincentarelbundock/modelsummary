@@ -36,7 +36,7 @@ datasummary_skim(
 \item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
 \item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
 \item function: returns a formatted character string.
-\item LaTeX tables: All numeric entries are enclosed in the \code{siunitx} package's \verb{\\num\{\}} command by default. This behavior can be altered with global options. See the 'Details' section.
+\item Note on LaTeX formatting: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command from the \code{siunitx} LaTeX package by default. This behavior can be altered with global options. See the 'Details' section.
 }}
 
 \item{histogram}{include a histogram (TRUE/FALSE). Supported for:
@@ -66,9 +66,8 @@ the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, S.
 }
 }}
 
-\item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML which could
-prevent the file from compiling or displaying. This setting does not
-affect captions or notes.}
+\item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML characters which could
+prevent the file from compiling/displaying. This setting does not affect captions or notes.}
 
 \item{...}{all other arguments are passed through to the
 table-making functions. This allows users to pass arguments directly to

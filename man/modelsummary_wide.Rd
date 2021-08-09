@@ -44,7 +44,7 @@ modelsummary_wide(
 \item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
 \item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
 \item function: returns a formatted character string.
-\item LaTeX tables: All numeric entries are enclosed in the \code{siunitx} package's \verb{\\num\{\}} command by default. This behavior can be altered with global options. See the 'Details' section.
+\item Note on LaTeX formatting: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command from the \code{siunitx} LaTeX package by default. This behavior can be altered with global options. See the 'Details' section.
 }}
 
 \item{estimate}{string or \code{glue} string of the estimate to display (or a
@@ -157,7 +157,6 @@ table-making functions. This allows users to pass arguments directly to
 the scenes. Examples include:
 \itemize{
 \item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression
-\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in \code{kableExtra} tables.
 \item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit statistics to extract using the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first).
 }}
 }

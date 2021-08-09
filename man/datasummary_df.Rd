@@ -35,7 +35,7 @@ datasummary_df(
 \item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
 \item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
 \item function: returns a formatted character string.
-\item LaTeX tables: All numeric entries are enclosed in the \code{siunitx} package's \verb{\\num\{\}} command by default. This behavior can be altered with global options. See the 'Details' section.
+\item Note on LaTeX formatting: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command from the \code{siunitx} LaTeX package by default. This behavior can be altered with global options. See the 'Details' section.
 }}
 
 \item{align}{A string with a number of characters equal to the number of columns in
@@ -66,9 +66,8 @@ See Examples section below.}
 \item{add_columns}{a data.frame (or tibble) with the same number of rows as
 your main table.}
 
-\item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML which could
-prevent the file from compiling or displaying. This setting does not
-affect captions or notes.}
+\item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML characters which could
+prevent the file from compiling/displaying. This setting does not affect captions or notes.}
 
 \item{...}{all other arguments are passed through to the extractor and
 table-making functions. This allows users to pass arguments directly to
@@ -76,7 +75,6 @@ table-making functions. This allows users to pass arguments directly to
 the scenes. Examples include:
 \itemize{
 \item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression
-\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in \code{kableExtra} tables.
 \item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit statistics to extract using the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first).
 }}
 }
