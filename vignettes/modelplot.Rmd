@@ -65,10 +65,10 @@ modelplot(mod, coef_map = cm)
 The main `modelsummary` functions allows you to create a table with the results of several models side-by-side, by storing them in a (potentially named) list:
 
 ```{r, fig.height=3}
-models <- list()
-models[['Small model']] <- lm(bill_length_cm ~ flipper_length_cm, data = dat)
-models[['Medium model']] <- lm(bill_length_cm ~ flipper_length_cm + body_mass_g, data = dat)
-models[['Large model']] <- lm(bill_length_cm ~ flipper_length_cm + body_mass_g + species, data = dat)
+models <- list(
+  "Small model" = lm(bill_length_cm ~ flipper_length_cm, data = dat),
+  "Medium model" = lm(bill_length_cm ~ flipper_length_cm + body_mass_g, data = dat),
+  "Large model" = lm(bill_length_cm ~ flipper_length_cm + body_mass_g + species, data = dat))
 
 modelsummary(models, statistic = 'conf.int')
 ```
@@ -85,8 +85,7 @@ Instead of displaying results with "dodged" side-by-side lines, you can also use
 modelplot(models, facet = TRUE)
 ```
 
-
-# Customizing your plots
+# Customizing plots
 
 The graphs produced by `modelplot` are simple `ggplot2` objects. You can thus post-process them using the normal suite of functions available for all objects of this type. Here, we change the axis labels, add a title and a caption, and use a color scheme inspired by Wes Anderson's *Darjeeling Limited*:
 
@@ -109,6 +108,38 @@ In `ggplot2`, some visual choices must be made when calling the "geom", rather t
 ```{r, fig.height=2}
 modelplot(mod, size = 1, fatten = .7, color = 'darkgreen', linetype = 'dotted') + 
     theme_classic()
+```
+
+## Example: Using facets to compare models
+
+Customizing plots with `ggplot2` makes `modelplot` very flexible. For example, imagine you want to compare the coefficients of three models with different dependent variables. First, we load the packages and estimate our models:
+
+```{r}
+library(ggplot2)
+library(modelsummary)
+
+models <- list(
+  lm(vs ~ carb + mpg + cyl, data = mtcars),
+  lm(disp ~ carb + mpg + cyl, data = mtcars),
+  lm(hp ~ carb + mpg + cyl, data = mtcars))
+```
+
+Then, we use the `dvnames` function to rename our list with names matching the the dependent variable in each model:
+
+```{r}
+models <- dvnames(models)
+```
+
+By calling `modelplot` with the `draw=FALSE` argument, we see the raw data used to draw the plot. Here, we see that there is a `model` column:
+
+```{r}
+modelplot(models, draw = FALSE)
+```
+
+Finally, we use the `model` column as our identifier in `ggplot2`’s `facet_grid` command to display models side by side:
+
+```{r}
+modelplot(models, color = "black") + facet_grid(~model)
 ```
 
 # Confidence intervals: change or omit

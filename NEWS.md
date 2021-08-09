@@ -4,7 +4,7 @@ Breaking change:
 
 * Support for `dcolumn` for dot-aligned columns is deprecated. Use "d" in the `align` argument instead.
 
-Package-wide changes:
+Other changes:
 
 * LaTeX output: Numeric entries are wrapped in the `\num{}` function from the
   `siunitx` package by default. This produces much nicer formatting. This can be
@@ -13,14 +13,12 @@ Package-wide changes:
   `siunitx` LaTeX package: `align="ldd"`.
 * HTML tables display proper minus signs.
 * New `escape` argument in most table-building functions.
-
-`modelsummary`:
-
 * * LaTeX output accepts the `threeparttable=TRUE` argument through `...`
 * No more dependency on `tidyr`
 
-`modelsummary_wide` (Note: This function will eventually be deprecated):
+`modelsummary_wide`: 
 
+* Note: This function will eventually be deprecated
 * Bugfix with statistic=NULL. 
 
 `modelplot`:

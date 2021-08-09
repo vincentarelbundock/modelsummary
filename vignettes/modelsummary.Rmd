@@ -1117,10 +1117,9 @@ To find the bottleneck, you can try to benchmark the various extractor functions
 
 ```{r}
 library(tictoc)
-library(fixest)
 
 data(trade)
-mod <- fepois(Euros ~ log(dist_km) | Origin + Destination + Product + Year, data = trade)
+mod <- lm(mpg ~ hp + drat, mtcars)
 
 tic("tidy")
 x <- broom::tidy(mod)
@@ -1153,7 +1152,9 @@ Then, we call `modelsummary` with the `metrics` argument:
 modelsummary(mod, metrics = "rmse")
 ```
 
-```{r, include=FALSE}
+Going back to the original setting:
+
+```{r}
 options(modelsummary_get = "broom")
 ```
 
