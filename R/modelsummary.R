@@ -568,10 +568,16 @@ modelsummary <- function(
   }
 
 
-  # remove "empty" confidence intervals or standard errors (HACK)
+  # HACK: remove "empty" confidence intervals or standard errors and omit empty rows
   for (i in seq_along(tab)) {
-    tab[[i]] <- gsub("\\[,\\s*\\]|\\(\\s*\\)", "", tab[[i]])
+    tab[[i]] <- gsub("\\(\\s*\\)", "", tab[[i]])
+    tab[[i]] <- gsub("\\(\\\\num\\{NA\\}\\)", "", tab[[i]])
+    tab[[i]] <- gsub("\\[,\\s*\\]", "", tab[[i]])
+    tab[[i]] <- gsub("\\[\\\\num\\{NA\\}, \\\\num\\{NA\\}\\]", "", tab[[i]])
+    tab[[i]] <- gsub("\\{\\}", "", tab[[i]])
   }
+  idx <- apply(tab, 1, function(x) any(x != ""))
+  tab <- tab[idx, ]
 
 
   ## build table
