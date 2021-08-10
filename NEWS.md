@@ -16,6 +16,10 @@ Other changes:
 * * LaTeX output accepts the `threeparttable=TRUE` argument through `...`
 * No more dependency on `tidyr`
 
+`modelsummary`:
+
+* `group`: The order of terms in the formula determines the order of rows/columns
+
 `modelsummary_wide`: 
 
 * Note: This function will eventually be deprecated

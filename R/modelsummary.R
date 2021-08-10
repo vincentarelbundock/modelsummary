@@ -789,7 +789,9 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
 
     ## term ~ group + model
     } else if (all(c("group", "model") %in% rhs)) {
+
         out <- estimates
+
         ## out <- tidyr::pivot_longer(
         ##   out,
         ##   cols = !tidyselect::any_of(c("part", "group", "term", "statistic")),
@@ -799,13 +801,20 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
         ##                           values_from = "value",
         ##                           values_fill = "")
         out <- reshape(
-          estimates,
+          out,
           varying = setdiff(colnames(estimates), c("part", "group", "term", "statistic")),
           idvar = c("group", "term", "statistic"),
           times = setdiff(colnames(estimates), c("part", "group", "term", "statistic")),
           v.names = "value",
           timevar = "model",
           direction = "long")
+
+        ## preserve order of columns (rhs variables are ordered factors)
+        row.names(out) <- NULL
+        out[[rhs[1]]] <- factor(out[[rhs[1]]], unique(out[[rhs[1]]]))
+        out[[rhs[2]]] <- factor(out[[rhs[2]]], unique(out[[rhs[2]]]))
+        out <- out[order(out[[rhs[1]]], out[[rhs[2]]]),]
+
         out$idx_col <- paste(out[[rhs[1]]], "/", out[[rhs[2]]])
         out$model <- out$group <- NULL
         out <- reshape(
@@ -822,17 +831,27 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
       ##                            cols = -c("group", "term", "statistic"),
       ##                            names_to = "model")
       ## out <- tidyr::pivot_wider(out, names_from = rhs, names_sep = " / ")
+      out <- estimates
+      out[[rhs[1]]] <- factor(out[[rhs[1]]], unique(out[[rhs[1]]]))
+      out[[rhs[2]]] <- factor(out[[rhs[2]]], unique(out[[rhs[2]]]))
+
       out <- reshape(
-        estimates,
-        varying = setdiff(colnames(estimates), c("group", "term", "statistic")),
-        idvar = c("group", "term", "statistic"),
-        times = setdiff(colnames(estimates), c("group", "term", "statistic")),
+        out,
+        varying = setdiff(colnames(estimates), c(rhs, "statistic")),
+        idvar = c(rhs, "statistic"),
+        times = setdiff(colnames(estimates), c(rhs, "statistic")),
         v.names = "value",
         timevar = "model",
         direction = "long")
-      out <- out
+
+      row.names(out) <- NULL
+
+      ## preserve order of columns (rhs variables are ordered factors)
+      out <- out[order(out[[rhs[1]]], out[[rhs[2]]]),]
+
       out$rhs <- paste(out[[rhs[1]]], out[[rhs[2]]], sep = " / ")
       out[[rhs[1]]] <- out[[rhs[2]]] <- NULL
+
       out <- reshape(
         out,
         timevar = "rhs",
@@ -840,6 +859,10 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
         direction = "wide")
       row.names(out) <- NULL
       colnames(out) <- gsub("^value\\.", "", colnames(out))
+
+    ## group ~ model + term
+    } else if (length(lhs) == 1 && "group" %in% lhs) {
+      stop("`group` formulas of the form group~model+term are not currently supported. To follow progress and put pressure on the `modelsummary` developers, visit: https://github.com/vincentarelbundock/modelsummary/issues/349")
     }
 
     out[out == "NA"] <- ""
