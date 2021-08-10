@@ -13,7 +13,7 @@ Other changes:
   `siunitx` LaTeX package: `align="ldd"`.
 * HTML tables display proper minus signs.
 * New `escape` argument in most table-building functions.
-* * LaTeX output accepts the `threeparttable=TRUE` argument through `...`
+* LaTeX output accepts the `threeparttable=TRUE` argument through `...`
 * No more dependency on `tidyr`
 
 `modelsummary`:
