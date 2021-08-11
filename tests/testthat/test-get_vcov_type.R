@@ -3,7 +3,7 @@ test_that("automatic standard errors labelling", {
 
     vcov <- list("iid", "robust", "stata", ~cyl, ~vs:am)
     tab <- modelsummary(mod, vcov = vcov, output = "dataframe")
-    expect_true("Std. Errors" %in% tab[[2]])
+    expect_true("Std.Errors" %in% tab[[2]])
     expect_true("IID" %in% tab[[4]])
     expect_true("Robust" %in% tab[[5]])
     expect_true("Stata" %in% tab[[6]])
@@ -12,7 +12,7 @@ test_that("automatic standard errors labelling", {
 
     vcov <- list("iid", "robust")
     tab <- modelsummary(mod, vcov = vcov, output = "dataframe")
-    expect_true("Std. Errors" %in% tab[[2]])
+    expect_true("Std.Errors" %in% tab[[2]])
     expect_true("IID" %in% tab[[4]])
     expect_true("Robust" %in% tab[[5]])
 })

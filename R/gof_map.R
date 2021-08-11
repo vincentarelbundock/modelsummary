@@ -33,7 +33,7 @@ gof_map_build <- function() {
   waic,                      WAIC,               1, FALSE
   rmse,                      RMSE,               2, FALSE,
   deviance,                  Deviance,           2, TRUE,
-  vcov.type,                 Std. Errors,        0, FALSE,
+  vcov.type,                 Std.Errors,         0, FALSE,
   df.residual,               DF Resid,           0, TRUE,
   df.null,                   DF Null,            0, TRUE,
   sigma,                     Sigma,              3, TRUE,
