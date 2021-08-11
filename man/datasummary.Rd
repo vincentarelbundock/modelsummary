@@ -58,7 +58,7 @@ the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, S.
 \itemize{
 \item \verb{\\usepackage\{booktabs\}}
 \item \verb{\\usepackage\{siunitx\}}
-\item \verb{\\newcolumntype\{d\}\{S[input-open-uncertainty=,input-close-uncertainty=,table-align-text-pre=false,table-align-text-post=false]\}}
+\item \verb{\\newcolumntype\{d\}\{S[input-symbols = ()]\}}
 }
 }}
 

@@ -161,8 +161,6 @@ factory <- function(tab,
     align = align,
     hrule = hrule,
     notes = notes,
-    output_file = settings_get("output_file"),
-    output_format = settings_get("output_format"),
     title = title,
     ...)
 

@@ -78,8 +78,11 @@ datasummary_skim <- function(data,
                                     escape = escape, ...)
   }
 
-  return(out)
-
+  if (!is.null(settings_get("output_file"))) {
+    return(invisible(out))
+  } else {
+    return(out)
+  }
 }
 
 #' Internal function to skim whole datasets

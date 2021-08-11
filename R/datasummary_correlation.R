@@ -175,13 +175,20 @@ datasummary_correlation <- function(data,
     colnames(out) <- escape_string(colnames(out))
   }
 
-  factory(out,
+  out <- factory(out,
     align = align,
     hrule = NULL,
     notes = notes,
     output = output,
     title = title,
     ...)
+
+  if (!is.null(settings_get("output_file"))) {
+    return(invisible(out))
+  } else {
+    return(out)
+  }
+
 }
 
 correlation_pearspear <- function(x) {

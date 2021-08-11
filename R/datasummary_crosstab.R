@@ -139,7 +139,7 @@ datasummary_crosstab <- function(formula,
             paste(rhs_formula, collapse = " * "), total_col)
     }
 
-    datasummary(formula = stats::as.formula(d_formula),
+    out <- datasummary(formula = stats::as.formula(d_formula),
                 data = data,
                 output = output,
                 fmt = fmt,
@@ -151,4 +151,11 @@ datasummary_crosstab <- function(formula,
                 sparse_header = sparse_header,
                 escape = escape,
                 ...)
+
+    if (!is.null(settings_get("output_file"))) {
+        return(invisible(out))
+    } else {
+        return(out)
+    }
+
 }

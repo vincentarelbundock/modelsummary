@@ -580,6 +580,7 @@ modelsummary <- function(
   tab <- tab[idx, ]
 
 
+
   ## build table
   out <- factory(
     tab,
@@ -593,9 +594,11 @@ modelsummary <- function(
     ...
   )
 
-  ## over and out
-  settings_rm()
-  return(out)
+  if (!is.null(settings_get("output_file"))) {
+    return(invisible(out))
+  } else {
+    return(out)
+  }
 
 }
 

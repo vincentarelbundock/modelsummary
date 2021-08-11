@@ -221,7 +221,11 @@ datasummary <- function(formula,
     add_rows = add_rows,
     ...)
 
-  return(out)
+  if (!is.null(settings_get("output_file"))) {
+    return(invisible(out))
+  } else {
+    return(out)
+  }
 
 }
 

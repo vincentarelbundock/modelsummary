@@ -136,7 +136,7 @@ datasummary_balance <- function(formula,
   }
 
   # make table
-  factory(
+  out <- factory(
     tab,
     align = align,
     hrule = hrule,
@@ -147,6 +147,12 @@ datasummary_balance <- function(formula,
     add_columns = add_columns,
     title = title,
     ...)
+
+  if (!is.null(settings_get("output_file"))) {
+    return(invisible(out))
+  } else {
+    return(out)
+  }
 
 }
 
