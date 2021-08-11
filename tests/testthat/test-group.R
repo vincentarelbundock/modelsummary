@@ -9,6 +9,24 @@ models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
 models[["GAMLSS"]] <- gamlss(y~pb(x),sigma.fo=~pb(x),family=BCT, data=abdom, method=mixed(1,20), trace=FALSE)
 
 
+test_that("Michael E Flynn ultra-niche bug check", {
+    library(nnet)
+    library(modelsummary)
+    dat_multinom <- mtcars
+    dat_multinom$cyl <- as.factor(dat_multinom$cyl)
+    dat_multinom$under_score <- dat_multinom$mpg
+    mod <- list(
+        "a" = nnet::multinom(cyl ~ under_score, data = dat_multinom, trace = FALSE),
+        "b" = nnet::multinom(cyl ~ under_score + drat, data = dat_multinom, trace = FALSE))
+    coef_list = c("under_score" = "Under Score")
+    expect_error(modelsummary(mod,
+                              output = "latex",
+                              coef_map = coef_list,
+                              group = term ~ model + response),
+                 NA)
+})
+
+
 test_that("flipped table (no groups)", {
     mod = list(
     lm(hp ~ mpg, mtcars),

@@ -617,15 +617,6 @@ map_omit_rename_estimates <- function(estimates,
                                       group_map) {
 
 
-    ## escape if needed
-    if (settings_equal("escape", TRUE)) {
-        if (!is.null(coef_rename)) {
-            coef_rename <- stats::setNames(escape_string(coef_rename), names(coef_rename))
-        }
-        if (!is.null(coef_map) && !is.null(names(coef_map))) {
-            coef_map <- stats::setNames(escape_string(coef_map), names(coef_map))
-        }
-    }
 
     ## coef_omit
     if (!is.null(coef_omit)) {
@@ -663,6 +654,16 @@ map_omit_rename_estimates <- function(estimates,
         estimates$group <- replace_dict(estimates$group, group_map)
     }
 
+
+    ## escape if needed
+    ## (must be done after rename/map, otherwise all rows are dropped)
+    if (settings_equal("escape", TRUE)) {
+        for (i in c("group", "term", "model")) {
+            if (i %in% colnames(estimates)) {
+                estimates[[i]] <- escape_string(estimates[[i]])
+            }
+        }
+    }
 
     return(estimates)
 }

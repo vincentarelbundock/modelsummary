@@ -90,9 +90,14 @@ format_estimates <- function(
   ## }
 
 
-  # round everything: ensures that the reshape doesn't produce incompatible types
+  ## round all 
+  ## ensures that the reshape doesn't produce incompatible types
+  ## exclude factors and characters, otherwise `rounding` will escape them
+  ## which is premature since we then call coef_map
   for (n in colnames(est)) {
-    est[[n]] <- rounding(est[[n]], fmt)
+    if (!is.character(est[[n]]) && !is.factor(est[[n]])) {
+      est[[n]] <- rounding(est[[n]], fmt)
+    }
   }
 
 
