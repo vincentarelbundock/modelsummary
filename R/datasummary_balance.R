@@ -135,6 +135,12 @@ datasummary_balance <- function(formula,
     hrule <- NULL
   }
 
+  # align: default (TODO: `add_columns` support)
+  if (is.null(align) && !is.null(attr(tab, "stub_width")) && is.null(add_columns)) {
+    align <- paste0(strrep("l", attr(tab, "stub_width")),
+                    strrep("r", ncol(tab) - attr(tab, "stub_width")))
+  }
+
   # make table
   factory(
     tab,
