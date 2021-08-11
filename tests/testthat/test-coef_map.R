@@ -1,5 +1,13 @@
 library(modelsummary)
 
+
+test_that("coef_map must include at least one term per model", {
+    mod <- lm(hp ~ mpg + cyl, mtcars)
+    expect_error(modelsummary(mod, coef_map = c("Blah" = "blah")),
+                 regexp = "At least one of the term names")
+})
+
+
 test_that("combine different regressors and collapse rows", {
   mod = lm(hp ~ mpg + factor(cyl), mtcars)
   tab1 <- modelsummary(mod, output = "data.frame", 

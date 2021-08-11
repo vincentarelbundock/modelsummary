@@ -634,16 +634,18 @@ map_omit_rename_estimates <- function(estimates,
         estimates$term <- replace_dict(estimates$term, dict)
     }
 
-
     # coef_map
     if (!is.null(coef_map)) {
         if (is.null(names(coef_map))) {
             coef_map <- stats::setNames(coef_map, coef_map)
         }
-        estimates <- estimates[estimates$term %in% names(coef_map), , drop = FALSE]
+        idx <- estimates$term %in% names(coef_map)
+        if (!any(idx)) {
+            stop("At least one of the term names in each model must appear in `coef_map`.")
+        }
+        estimates <- estimates[idx, , drop = FALSE]
         estimates$term <- replace_dict(estimates$term, coef_map)
     }
-
 
     # group_map
     if (!is.null(group_map)) {
