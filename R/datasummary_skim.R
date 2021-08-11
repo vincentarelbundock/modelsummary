@@ -79,8 +79,10 @@ datasummary_skim <- function(data,
   }
 
   if (!is.null(settings_get("output_file"))) {
+    settings_rm()
     return(invisible(out))
   } else {
+    settings_rm()
     return(out)
   }
 }
