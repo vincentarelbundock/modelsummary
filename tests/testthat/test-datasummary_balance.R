@@ -67,10 +67,9 @@ test_that('add column', {
   tmp$gear <- as.factor(tmp$gear)
   tmp$vs <- as.logical(tmp$vs)
   tab <- datasummary_balance(~vs, 
-    data=tmp, 
-    output='dataframe',
-    add_columns=data.frame(k=letters[1:13]),
-                           z=1:13)
+    data = tmp, 
+    output = 'dataframe',
+    add_columns = data.frame(k=letters[1:13]), z=1:13)
   expect_equal(dim(tab), c(13, 9))
 })
 

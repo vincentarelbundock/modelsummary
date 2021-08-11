@@ -33,6 +33,10 @@ Other changes:
 
 * `statistic=NULL` produces a very basic crosstab
 
+`datasummary_crosstab`:
+
+* Default alignment "lrrrrr" consistent with other datasummary_* functions
+
 # modelsummary 0.8.1
 
 `modelsummary`:

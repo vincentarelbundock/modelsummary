@@ -2,18 +2,6 @@ mod <- list(
     lm(mpg ~ hp, mtcars),
     lm(mpg ~ hp + drat, mtcars))
 
-## pkgload::load_all("~/repos/modelsummary")
-## modelsummary(mod)
-
-## tmp = modelsummary(mod)
-## modelsummary(mod, "dataframe")
-## modelsummary(mod, "html")
-
-## devtools::install("~/repos/modelsummary")
-## devtools::check("~/repos/modelsummary")
-## devtools::document("~/repos/modelsummary")
-## library(modelsummary)
-
 
 test_that("d-column: supported outputs", {
     expect_error(modelsummary(mod, output = "latex", align = "ldd"), NA)
@@ -27,8 +15,19 @@ test_that("d-column: supported outputs", {
 })
 
 
+test_that("d-column: unsupported arguments", {
+    expect_error(modelsummary(mod, align = "ldd", output = "latex", statistic = "conf.int"),
+                 regexp = "align.*supported")
+    expect_error(modelsummary(mod, align = "ldd", output = "latex", estimate = "conf.int"),
+                 regexp = "align.*supported")
+    expect_error(modelsummary(mod, align = "ldd", output = "latex", statistic = "p = {p.value}"),
+                 regexp = "align.*supported")
+    expect_error(modelsummary(mod, align = "ldd", output = "latex", estimate = "p = {p.value}"),
+                 regexp = "align.*supported")
+})
 
-test_that("S-column: known output", {
+
+test_that("d-column: known output", {
     expect_known_output(modelsummary(mod, align = "ldd", output = "latex"),
                         file = "known_output/mathmode_1.tex",
                         print = TRUE,

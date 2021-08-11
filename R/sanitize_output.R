@@ -4,6 +4,7 @@
 #' @noRd
 sanitize_output <- function(output) {
 
+
   flag <- checkmate::check_string(output)
   fun <- settings_get("function_called")
   if (!isTRUE(flag) && !is.null(fun) && fun == "modelsummary") {
@@ -32,6 +33,8 @@ sanitize_output <- function(output) {
       stop(msg)
     }
   }
+
+
 
   extension_dict <- c(
     "md"   = "markdown",
@@ -122,6 +125,23 @@ sanitize_output <- function(output) {
       output_format %in% c('default', 'kableExtra') &&
       knitr::is_latex_output()) {
     output_format <- "latex"
+  }
+
+  ## warning siunitx & booktabs in preamble
+  if (settings_equal("format_numeric_latex", "siunitx") && (output %in% c("latex", "latex_tabular") || tools::file_ext(output) == "tex")) {
+      rlang::warn( message = 
+'To compile a LaTeX document with this table, the following commands must be placed in the document preamble:
+
+\\usepackage{booktabs}
+\\usepackage{siunitx}
+\\newcolumntype{d}{S[input-symbols = ()]}
+
+To disable `siunitx` and prevent `modelsummary` from wrapping numeric entries in `\\num{}`, call:
+
+options("modelsummary_format_numeric_latex" = "plain")
+',
+      .frequency = "once",
+      .frequency_id = "siunitx_preamble")
   }
 
   # settings environment

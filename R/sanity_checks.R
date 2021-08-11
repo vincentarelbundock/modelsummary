@@ -72,16 +72,25 @@ sanity_model_names <- function(modelnames) {
 #' sanity check
 #'
 #' @noRd
-sanity_align <- function(align) {
+sanity_align <- function(align, estimate = NULL, statistic = NULL) {
     checkmate::assert_string(align, null.ok = TRUE)
     if (!is.null(align) && any(grepl("[^lcrd]", align))) {
         stop('The `align` argument must be a character string which only includes the letters l, c, r, or d. Example: "lcdd"')
     }
+
     if (any(grepl("d", align))) {
+        flag <- FALSE
         if (!settings_equal("output_factory", "kableExtra") || !settings_equal("output_format", c("latex", "latex_tabular"))) {
-            stop('The "d" character is only supported in the `align` argument for LaTeX/PDF tables produced by the `kableExtra` package.')
+            flag <- TRUE
+        } else if (!is.null(estimate) && (any(grepl("\\{", estimate)) || "conf.int" %in% estimate)) {
+            flag <- TRUE
+        } else if (!is.null(statistic) && (any(grepl("\\{", statistic)) || "conf.int" %in% statistic)) {
+            flag <- TRUE
         }
-        settings_set("siunitx_scolumns", TRUE)
+        if (isTRUE(flag)) {
+            stop('The "d" character is only supported in the `align` argument for LaTeX/PDF tables produced by the `kableExtra` package. It is not supported when the `estimate` or `statistic` arguments include glue strings or confidence intervals.')
+        }
+    settings_set("siunitx_scolumns", TRUE)
     }
 }
 
