@@ -32,7 +32,7 @@ in the table, and its names identify the original term names stored in the
 model object: \code{c("hp:mpg"="HPxM/G")}.}
 
 \item{coef_omit}{string regular expression. Omits all matching coefficients
-from the table using \code{grepl(perl=TRUE)}.}
+from the table using \code{grepl(perl=TRUE)}. This argument uses perl-compatible regular expressions, which allows expressions such as \verb{"Int|ABC" which omits coefficients matching either "Int" or "ABC", and }"^(?!.*Intercept)"` which omits every term except the intercept.}
 
 \item{coef_rename}{named character vector or function which returns a named
 vector. Values of the vector refer to the variable names that will appear

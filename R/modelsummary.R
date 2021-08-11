@@ -61,7 +61,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' in the table, and its names identify the original term names stored in the
 #' model object: `c("hp:mpg"="HPxM/G")`.
 #' @param coef_omit string regular expression. Omits all matching coefficients
-#' from the table using `grepl(perl=TRUE)`.
+#' from the table using `grepl(perl=TRUE)`. This argument uses perl-compatible regular expressions, which allows expressions such as `"Int|ABC" which omits coefficients matching either "Int" or "ABC", and `"^(?!.*Intercept)"` which omits every term except the intercept.
 #' @param coef_rename named character vector or function which returns a named
 #' vector. Values of the vector refer to the variable names that will appear
 #' in the table. Names refer to the original term names stored in the model
@@ -72,7 +72,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
 #' * list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
 #' @param gof_omit string regular expression. Omits all matching gof statistics from
-#' the table (using `grepl(perl=TRUE)`).
+#' the table. This argument uses perl-compatible regular expressions (`grepl(perl=TRUE)`), which allows expressions such as `".*"` which omits everything, and `"^(?!R2|Num)"` which omits every term except those that start with "R2" or "Num".
 #' @param group a two-sided formula with two or three components which describes
 #' how groups of parameters should be displayed. The formula must include both
 #' a "term" and a "model" component. In addition, a component can be used to

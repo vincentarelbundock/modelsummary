@@ -103,7 +103,7 @@ in the table, and its names identify the original term names stored in the
 model object: \code{c("hp:mpg"="HPxM/G")}.}
 
 \item{coef_omit}{string regular expression. Omits all matching coefficients
-from the table using \code{grepl(perl=TRUE)}.}
+from the table using \code{grepl(perl=TRUE)}. This argument uses perl-compatible regular expressions, which allows expressions such as \verb{"Int|ABC" which omits coefficients matching either "Int" or "ABC", and }"^(?!.*Intercept)"` which omits every term except the intercept.}
 
 \item{coef_rename}{named character vector or function which returns a named
 vector. Values of the vector refer to the variable names that will appear
@@ -119,7 +119,7 @@ model information. This argument accepts 3 types of values:
 }}
 
 \item{gof_omit}{string regular expression. Omits all matching gof statistics from
-the table (using \code{grepl(perl=TRUE)}).}
+the table. This argument uses perl-compatible regular expressions (\code{grepl(perl=TRUE)}), which allows expressions such as \code{".*"} which omits everything, and \code{"^(?!R2|Num)"} which omits every term except those that start with "R2" or "Num".}
 
 \item{group}{a two-sided formula with two or three components which describes
 how groups of parameters should be displayed. The formula must include both
