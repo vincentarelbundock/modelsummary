@@ -1,6 +1,10 @@
 # Not sure why this doesn't pass on Github Actions
 skip_on_ci()
 
+# solaris failure and complaints about pandoc in "Writing R Extensions" ("annoyingly so")
+skip_on_cran() 
+
+
 dangerous_document <- '
 ---
 title: test
