@@ -338,7 +338,7 @@ modelsummary <- function(
   sanity_coef(coef_map, coef_rename, coef_omit)
   sanity_stars(stars)
   sanity_fmt(fmt)
-  sanity_align(align, estimate = estimate, statistic = statistic)
+  sanity_align(align, estimate = estimate, statistic = statistic, stars = stars)
 
   # confidence intervals are expensive
   if (!any(grepl("conf", c(estimate, statistic)))) {

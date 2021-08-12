@@ -72,25 +72,23 @@ sanity_model_names <- function(modelnames) {
 #' sanity check
 #'
 #' @noRd
-sanity_align <- function(align, estimate = NULL, statistic = NULL) {
+sanity_align <- function(align, estimate = NULL, statistic = NULL, stars = FALSE) {
     checkmate::assert_string(align, null.ok = TRUE)
     if (!is.null(align) && any(grepl("[^lcrd]", align))) {
         stop('The `align` argument must be a character string which only includes the letters l, c, r, or d. Example: "lcdd"')
     }
 
     if (any(grepl("d", align))) {
-        flag <- FALSE
-        if (!settings_equal("output_factory", "kableExtra") || !settings_equal("output_format", c("latex", "latex_tabular"))) {
-            flag <- TRUE
-        } else if (!is.null(estimate) && (any(grepl("\\{", estimate)) || "conf.int" %in% estimate)) {
-            flag <- TRUE
-        } else if (!is.null(statistic) && (any(grepl("\\{", statistic)) || "conf.int" %in% statistic)) {
-            flag <- TRUE
+        if (!settings_equal("output_factory", "kableExtra") ||
+            !settings_equal("output_format", c("latex", "latex_tabular")) ||
+            (!is.null(estimate) && any(grepl("\\{", estimate))) ||
+            (!is.null(estimate) && "conf.int" %in% estimate) ||
+            (!is.null(statistic) && any(grepl("\\{", statistic))) ||
+            (!is.null(statistic) && "conf.int" %in% statistic) ||
+            !isFALSE(stars)) {
+            stop('The "d" character is only supported in the `align` argument for LaTeX/PDF tables produced by the `kableExtra` package. It is not supported when the `estimate` or `statistic` arguments include glue strings or confidence intervals. It is only supported when the `stars` argument is `FALSE`. These constraints should be relaxed in the near future. See here to follow progress: https://github.com/vincentarelbundock/modelsummary/issues/354')
         }
-        if (isTRUE(flag)) {
-            stop('The "d" character is only supported in the `align` argument for LaTeX/PDF tables produced by the `kableExtra` package. It is not supported when the `estimate` or `statistic` arguments include glue strings or confidence intervals.')
-        }
-    settings_set("siunitx_scolumns", TRUE)
+        settings_set("siunitx_scolumns", TRUE)
     }
 }
 
