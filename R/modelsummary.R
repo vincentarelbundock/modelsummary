@@ -317,7 +317,7 @@ modelsummary <- function(
   escape      = TRUE,
   ...) {
 
-  ## settings 
+  ## settings
   settings_init(settings = list(
      "function_called" = "modelsummary"
   ))
@@ -905,7 +905,7 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, ...) {
 
 
     # warning for models with hard-coded non-IID vcov
-    hardcoded <- c("fixest", "lm_robust")
+    hardcoded <- c("lm_robust")
     flag_vcov <- NULL
 
     for (i in 1:number_of_models) {

@@ -15,6 +15,42 @@ get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
     "The `vcov` argument accepts a variance-covariance matrix, a vector of standard errors, or a ",
     "function that returns one of these, such as `stats::vcov`.")
 
+  ## fixest models
+  if (class(model) %in% c("fixest", "fixest_multi")) {
+
+    # known fixest vcovs
+    fixest_vcovs = c("iid",
+                     "hetero", "HC1", "White",
+                     "cluster", "twoway",
+                     "NW", "newey_west",
+                     "DK", "driscoll_kraay", "conley")
+
+    ## Equivalent aliases used by modelsummary
+    fixest_vcov_aliases = c("iid" = "classical",
+                            "iid" = "constant",
+                            "HC1" = "stata",
+                            "NW" = "NeweyWest")
+
+    is_func = class(vcov)=="function"
+    is_form = class(vcov)=="formula"
+
+    if (!is_func && !is_form && vcov %in% fixest_vcov_aliases) {
+      vcov = names(fixest_vcov_aliases)[which(fixest_vcov_aliases %in% vcov)]
+    }
+
+    ## if a known or compatible fixest vcov argument, use the dedicated
+    ## fixest.vcov method
+    if (!is_func) {
+      if (is.null(vcov) || is_form || vcov %in% fixest_vcovs) {
+        mat = vcov(model, vcov)
+        out = get_coeftest(model, mat, conf_level)
+        stop(return(out))
+      }
+    } else {  ## else coerce to iid error for sandwich adjustment below
+      model = summary(model, vcov = 'iid')
+    }
+  }
+
   if (is.null(vcov)) {
     return(NULL)
   }
