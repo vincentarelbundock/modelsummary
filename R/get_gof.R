@@ -63,7 +63,7 @@ get_gof <- function(model, vcov_type = NULL, ...) {
     if (!is.null(gof_custom) && is.data.frame(gof)) {
         for (n in colnames(gof_custom)) {
             # modelsummary's vcov argument has precedence
-            # mainly useful to avoid collision with `fixet::glance_custom`
+            # mainly useful to avoid collision with `fixest::glance_custom`
             if (is.null(vcov_type) || n != "vcov.type") {
                 gof[[n]] <- gof_custom[[n]]
             }
@@ -75,7 +75,7 @@ get_gof <- function(model, vcov_type = NULL, ...) {
     if (!is.null(gof_custom) && is.data.frame(gof)) {
         for (n in colnames(gof_custom)) {
             # modelsummary's vcov argument has precedence
-            # mainly useful to avoid collision with `fixet::glance_custom`
+            # mainly useful to avoid collision with `fixest::glance_custom`
             if (is.null(vcov_type) || n != "vcov.type") {
                 gof[[n]] <- gof_custom[[n]]
             }
