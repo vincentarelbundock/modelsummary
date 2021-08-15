@@ -42,7 +42,7 @@ test_that("MASS", {
   testthat::skip_if_not_installed("MASS")
   suppressMessages(library(MASS))
 
-  # broom::tidy requires p.values=TRUE 
+  # broom::tidy requires p.values=TRUE
   fit <- polr(Sat ~ Freq, weights = Freq, data = housing)
   expect_error(suppressMessages(modelsummary(fit, statistic="p.value")))
   expect_error(suppressMessages(modelsummary(fit, p.values=TRUE,
@@ -59,7 +59,7 @@ test_that("survival", {
   lung$sex <- factor(lung$sex, labels = c("male", "female"))
   lung$ph.ecog <- factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
   mod <- survival::coxph(Surv(time, status) ~ sex + age + ph.ecog, data = lung)
-  tab <- modelsummary(mod, output="data.frame") 
+  tab <- modelsummary(mod, output="data.frame")
   expect_is(tab, "data.frame")
   expect_true(nrow(tab) > 11)
 })
@@ -71,7 +71,7 @@ test_that("mgcv::gam", {
     formula = mpg ~ s(hp) + s(wt) + factor(cyl) + am + qsec,
     family = stats::quasi(),
     data = mtcars)
-  tab <- modelsummary(mod, estimate = "edf", output="data.frame", statistic="p.value") 
+  tab <- modelsummary(mod, estimate = "edf", output="data.frame", statistic="p.value")
   expect_is(tab, "data.frame")
   expect_true(nrow(tab) > 5)
 })
@@ -87,7 +87,7 @@ test_that("betareg::betareg", {
   expect_is(tab, "data.frame")
   expect_true(nrow(tab) > 30)
 })
- 
+
 
 test_that("ivreg::ivreg", {
   testthat::skip_if_not_installed("ivreg")
@@ -135,7 +135,7 @@ test_that("fixest", {
 test_that("fixest std.error labels", {
   testthat::skip_if_not_installed("fixest")
   library(fixest)
-  
+
   mod <- feols(hp ~ mpg + drat, mtcars, cluster = "vs")
 
   tab <- modelsummary(mod, output = "data.frame")
@@ -170,7 +170,7 @@ test_that("fixest std.error labels", {
 test_that("mice", {
   testthat::skip_if_not_installed("mice")
   testthat::skip_if(getRversion() < '4.0.0') # change in .Rng
-  
+
   library(mice)
 
   # impute
@@ -259,7 +259,7 @@ test_that("lme4 with parameter's effects argument", {
   tab <- tab[tab$part == "estimates",]
   expect_equal(nrow(tab), 4)
 })
- 
+
 
 test_that("sandwich vignette", {
   testthat::skip_if_not_installed("sandwich")
@@ -277,12 +277,29 @@ test_that("sandwich vignette", {
     "Bootstrap"             = sandwich::vcovBS(m),
     "Bootstrap (clustered)" = sandwich::vcovBS(m, cluster = ~ firm))
   tab <- modelsummary(
-    m, 
+    m,
     output = "data.frame",
-    statistic_override = vc["Clustered"], 
+    statistic_override = vc["Clustered"],
     stars = TRUE)
   expect_s3_class(tab, "data.frame")
   expect_equal(dim(tab), c(11, 4))
+})
+
+test_that("consistent gof std error display fixest/lfe/estimatr", {
+  skip_if_not_installed(c("fixest", "lfe", "estimatr"))
+  if (packageVersion("fixest") >= "0.10.0") {
+    fixest_mod <- fixest::feols(hp ~ mpg + drat, mtcars, vcov = ~vs)
+  } else {
+    fixest_mod <- fixest::feols(hp ~ mpg + drat, mtcars, cluster = ~vs)
+  }
+  mod <- list(
+    "feols" = fixest_mod,
+    "felm" = lfe::felm(hp ~ mpg + drat |0 | 0 | vs, mtcars),
+    "estimatr" = estimatr::lm_robust(hp ~ mpg + drat, mtcars, se_type = 'stata', clusters = vs))
+  tab <- msummary(mod, gof_omit = 'Obs|R2|IC|Lik|se_type', output = 'data.frame')
+  expect_equal(tab$feols[nrow(tab)], "Clustered (vs)")
+  expect_equal(tab$felm[nrow(tab)], "Clustered (vs)")
+  expect_equal(tab$estimatr[nrow(tab)], "Clustered (vs)")
 })
 
 
