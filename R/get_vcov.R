@@ -153,7 +153,7 @@ get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
 
 get_coeftest <- function(model, vcov, conf_level) {
 
-  if (!check_dependency("lmtest")) return(NULL)
+  if (!isTRUE(check_dependency("lmtest"))) return(NULL)
 
   gof <- try(
     lmtest::coeftest(model, vcov. = vcov), silent = TRUE)

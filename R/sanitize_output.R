@@ -106,7 +106,7 @@ sanitize_output <- function(output) {
   }
 
   # knit to word
-  if (check_dependency("knitr") && check_dependency("rmarkdown")) {
+  if (isTRUE(check_dependency("knitr")) && isTRUE(check_dependency("rmarkdown"))) {
     fmt <- try(rmarkdown::default_output_format(
       knitr::current_input())$name, silent = TRUE)
     if (!inherits(fmt, "try-error")) {

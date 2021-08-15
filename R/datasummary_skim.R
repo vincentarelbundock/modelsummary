@@ -164,7 +164,7 @@ datasummary_skim_numeric <- function(
 
     # interactive or Rmarkdown/knitr
     } else {
-      if (check_dependency("knitr")) {
+      if (isTRUE(check_dependency("knitr"))) {
         if (!settings_equal("output_format", c("default", "html", "kableExtra")) && !knitr::is_latex_output()) {
           histogram <- FALSE
         }

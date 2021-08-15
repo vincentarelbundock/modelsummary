@@ -69,7 +69,7 @@ datasummary_balance <- function(formula,
     dinm <- FALSE
   }
 
-  if (dinm && isFALSE(check_dependency("estimatr"))) {
+  if (dinm && !isTRUE(check_dependency("estimatr"))) {
     dinm <- FALSE
     warning("Please install the `estimatr` package or set `dinm=FALSE` to
              suppress this warning.")
