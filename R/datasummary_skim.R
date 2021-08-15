@@ -14,6 +14,7 @@
 #' }
 #' @param type of variables to summarize: "numeric" or "categorical" (character)
 #'
+#' @template options
 #' @examples
 #'
 #' \dontrun{

@@ -26,6 +26,7 @@
 #' `datasummary` in order to affect the behavior of other functions behind
 #' the scenes, for instance:
 #' * `kableExtra::kbl(escape=FALSE)` to avoid escaping math characters in `kableExtra` tables.
+#' @template options
 #' @examples
 #'
 #' \dontrun{

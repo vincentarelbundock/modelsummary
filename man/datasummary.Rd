@@ -107,6 +107,62 @@ Hierarchical or "nested" column labels are only available for these output
 formats: kableExtra, gt, html, rtf, and LaTeX. When saving tables to other
 formats, nested labels will be combined to a "flat" header.
 }
+\section{Global Options}{
+
+
+The behavior of \code{modelsummary} can be affected by setting global options:
+\itemize{
+\item \code{modelsummary_default}
+\item \code{modelsummary_latex}
+\item \code{modelsummary_html}
+\item \code{modelsummary_png}
+\item \code{modelsummary_get}
+\item \code{modelsummary_format_numeric_latex}
+\item \code{modelsummary_format_numeric_html}
+}
+\subsection{Table-making packages}{
+
+\code{modelsummary} supports 4 table-making packages: \code{kableExtra}, \code{gt},
+\code{flextable}, and \code{huxtable}. Some of these packages have overlapping
+functionalities. For example, 3 of those packages can export to LaTeX. To
+change the default backend used for a specific file format, you can use
+the \code{options} function:
+
+\code{options(modelsummary_html = 'kableExtra')}
+\code{options(modelsummary_latex = 'gt')}
+\code{options(modelsummary_word = 'huxtable')}
+\code{options(modelsummary_png = 'gt')}
+}
+
+\subsection{Model extraction functions}{
+
+\code{modelsummary} can use two sets of packages to extract information from
+statistical models: \code{broom} and the \code{easystats} family (\code{performance} and
+\code{parameters}). By default, it uses \code{broom} first and \code{easystats} as a
+fallback if \code{broom} fails. You can change the order of priorities
+or include goodness-of-fit extracted by \emph{both} packages by setting:
+
+\code{options(modelsummary_get = "broom")}
+\code{options(modelsummary_get = "easystats")}
+\code{options(modelsummary_get = "all")}
+}
+
+\subsection{Formatting numeric entries}{
+
+By default, LaTeX tables enclose all numeric entries in the \verb{\\num\{\}} command
+from the siunitx package. To prevent this behavior, or to enclose numbers
+in dollar signs (for LaTeX math mode), users can call:
+
+\code{options(modelsummary_format_numeric_latex = "plain")}
+\code{options(modelsummary_format_numeric_latex = "mathmode")}
+
+A similar option can be used to display numerical entries using MathJax in
+HTML tables:
+
+\code{options(modelsummary_format_numeric_html = "mathjax")}
+}
+}
+
 \examples{
 
 \dontrun{

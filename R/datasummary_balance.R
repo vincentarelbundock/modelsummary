@@ -14,6 +14,7 @@
 #' @param dinm_statistic string: "std.error" or "p.value"
 #' @inheritParams modelsummary
 #' @inheritParams datasummary
+#' @template options
 #' @export
 #' @examples
 #' \dontrun{

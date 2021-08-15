@@ -15,6 +15,7 @@
 #'     `datasummary_correlation_format` can often be useful for formatting the
 #'     output of custom correlation functions.
 #' }
+#' @template options
 #' @param ... other parameters are passed through to the table-making
 #'     packages.
 #' @export

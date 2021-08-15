@@ -24,7 +24,6 @@ gof_map_build <- function() {
   bic,                       BIC,                1, FALSE,
   icc,                       ICC,                1, FALSE,
   logLik,                    Log.Lik.,           3, FALSE,
-  std.error.type,            Std.Error Type,     3, FALSE,
   F,                         F,                  3, FALSE,
   elpd,                      ELPD,               1, FALSE,
   elpd.se,                   ELPD s.e.,          1, FALSE,
@@ -33,7 +32,6 @@ gof_map_build <- function() {
   waic,                      WAIC,               1, FALSE
   rmse,                      RMSE,               2, FALSE,
   deviance,                  Deviance,           2, TRUE,
-  vcov.type,                 Std.Errors,         0, FALSE,
   df.residual,               DF Resid,           0, TRUE,
   df.null,                   DF Null,            0, TRUE,
   sigma,                     Sigma,              3, TRUE,
@@ -53,7 +51,10 @@ gof_map_build <- function() {
   statistic.Sargan,          Sargan J-stat,      1, FALSE,
   p.value.Weak.instrument,   Weak IV p,          3, TRUE,
   p.value.Wu.Hausman,        Wu-Hausman p,       3, TRUE,
-  p.value.Sargan,            Sargan p,           3, TRUE'
+  p.value.Sargan,            Sargan p,           3, TRUE,
+  std.error.type,            Std.Errors,         3, FALSE,
+  se_type,                   Std.Errors,         3, FALSE,
+  vcov.type,                 Std.Errors,         0, FALSE'
   out <- utils::read.csv(
     text = text,
     colClasses = c("character", "character", "numeric", "logical", "NULL"))

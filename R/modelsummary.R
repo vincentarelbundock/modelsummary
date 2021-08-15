@@ -47,7 +47,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   argument accepts six types of input (see the 'Details' and 'Examples'
 #'   sections below):
 #' * NULL returns the default uncertainty estimates of the model object
-#' * string, vector, or (named) list of strings. The strings "classical", "iid" and "constant" are aliases for `NULL`, and they return the model's default uncertainty estimates. The strings "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", "weave" use variance-covariance matrices computed using functions from the `sandwich` package. The behavior of those functions can (and sometimes *must*) be altered by passing arguments to `sandwich` directly from `modelsummary` through the ellipsis (`...`), but it is safer to define your own custom functions as described in the next bullet.
+#' * string, vector, or (named) list of strings. Omitting or specifying `vcov = NULL` will return the model's default uncertainty estimates, e.g. IID errors for standard models. Alternatively, use the string "iid" (aliases: "classical" or "constant") to present IID errors explicitly. The strings "HC", "HC0", "HC1" (alias: "stata"), "HC2", "HC3" (alias: "robust"), "HC4", "HC4m", "HC5", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", and "weave" use variance-covariance matrices computed using functions from the `sandwich` package, or equivalent dedicated method. The behavior of those functions can (and sometimes *must*) be altered by passing arguments to `sandwich` directly from `modelsummary` through the ellipsis (`...`), but it is safer to define your own custom functions as described in the next bullet.
 #' * function or (named) list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`, `function(x) vcovPC(x, cluster="country")`).
 #' * formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
 #' * (named) list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
@@ -117,181 +117,9 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @importFrom generics glance tidy
 #' @details
 #'
-#' `options`
-#'
-#' `modelsummary` supports 4 table-making packages: `kableExtra`, `gt`,
-#' `flextable`, and `huxtable`. Some of these packages have overlapping
-#' functionalities. For example, 3 of those packages can export to LaTeX. To
-#' change the default backend used for a specific file format, you can use
-#' the `options` function:
-#'
-#' `options(modelsummary_html = 'kableExtra')`
-#' `options(modelsummary_latex = 'gt')`
-#' `options(modelsummary_word = 'huxtable')`
-#' `options(modelsummary_png = 'gt')`
-#'
-#' `modelsummary` can use two sets of packages to extract information from
-#' statistical models: `broom` and the `easystats` family (`performance` and
-#' `parameters`). By default, it uses `broom` first and `easystats` as a
-#' fallback if `broom` fails. You can change the order of priorities
-#' or include goodness-of-fit extracted by *both* packages by setting:
-#'
-#' `options(modelsummary_get = "broom")`
-#' `options(modelsummary_get = "easystats")`
-#' `options(modelsummary_get = "all")`
-#'
-#' By default, LaTeX tables enclose all numeric entries in the `\num{}` command
-#' from the siunitx package. To prevent this behavior, or to enclose numbers
-#' in dollar signs (for LaTeX math mode), users can call:
-#'
-#' `options(modelsummary_format_numeric_latex = "plain")`
-#' `options(modelsummary_format_numeric_latex = "mathmode")`
-#'
-#' A similar option can be used to display numerical entries using MathJax in
-#' HTML tables:
-#'
-#' `options(modelsummary_format_numeric_html = "mathjax")`
-#'
-#' `output` argument:
-#'
-#' The `modelsummary_list` output type is a lightweight representation of the
-#' model results. The `modelsummary` function can export to this format by
-#' setting the `output` argument, and it can accept objects of this format
-#' as input models to create a table. This can be useful to save raw
-#' results, in order to print a table later, without having to save and
-#' extract from the entire model object. Note that the confidence intervals
-#' are only stored in a `modelsummary_list` if explicitly requested:
-#'
-#' `backup <- modelsummary(models, output = "modelsummary_list"`
-#' `                       statistic = "conf.int")`
-#' `modelsummary(backup)`
-#'
-#' When a file name with a valid extension is supplied to the `output` argument,
-#' the table is written immediately to file. If you want to customize your table
-#' by post-processing it with an external package, you need to choose a
-#' different output format and saving mechanism. Unfortunately, the approach
-#' differs from package to package:
-#' * `gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave` function.
-#' * `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.
-#'
-#'
-#' `vcov` argument:
-#'
-#' To use a string such as "robust" or "HC0", your model must be supported
-#' by the `sandwich` package. This includes objects such as: lm, glm,
-#' survreg, coxph, mlogit, polr, hurdle, zeroinfl, and more.
-#'
-#' NULL, "classical", "iid", and "constant" are aliases which do not modify
-#' uncertainty estimates and simply report the default standard errors stored
-#' in the model object.
-#'
-#' One-sided formulas such as `~clusterid` are passed to the `sandwich::vcovCL`
-#' function.
-#'
-#' Matrices and functions producing variance-covariance matrices are first
-#' passed to `lmtest`. If this does not work, `modelsummary` attempts to take
-#' the square root of the diagonal to adjust "std.error", but the other
-#' uncertainty estimates are not be adjusted.
-#'
-#' Numeric vectors are formatted according to `fmt` and placed in brackets.
-#' Character vectors printed as given, without parentheses.
-#'
-#' If your model type is supported by the `lmtest` package, the
-#' `vcov` argument will try to use that package to adjust all the
-#' uncertainty estimates, including "std.error", "statistic", "p.value", and
-#' "conf.int". If your model is not supported by `lmtest`, only the "std.error"
-#' will be adjusted by, for example, taking the square root of the matrix's
-#' diagonal.
-#' @examples
-#' \dontrun{
-#'
-#' # The `modelsummary` website includes \emph{many} examples and tutorials:
-#' # https://vincentarelbundock.github.io/modelsummary
-#'
-#' library(modelsummary)
-#'
-#' # load data and estimate models
-#' data(trees)
-#' models <- list()
-#' models[['Bivariate']] <- lm(Girth ~ Height, data = trees)
-#' models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
-#'
-#' # simple table
-#' modelsummary(models)
-#'
-#' # statistic
-#' modelsummary(models, statistic = NULL)
-#' modelsummary(models, statistic = 'p.value')
-#' modelsummary(models, statistic = 'statistic')
-#' modelsummary(models, statistic = 'conf.int', conf_level = 0.99)
-#' modelsummary(models, statistic = c("t = {statistic}",
-#'                                    "se = {std.error}",
-#'                                    "conf.int"))
-#'
-#' # estimate
-#' modelsummary(models,
-#'   statistic = NULL,
-#'   estimate = "{estimate} [{conf.low}, {conf.high}]")
-#' modelsummary(models,
-#'   estimate = c("{estimate}{stars}",
-#'                "{estimate} ({std.error})"))
-#'
-#' # vcov
-#' modelsummary(models, vcov = "robust")
-#' modelsummary(models, vcov = list("classical", "stata"))
-#' modelsummary(models, vcov = sandwich::vcovHC)
-#' modelsummary(models,
-#'   vcov = list(stats::vcov, sandwich::vcovHC))
-#' modelsummary(models,
-#'   vcov = list(c("(Intercept)"="", "Height"="!"),
-#'               c("(Intercept)"="", "Height"="!", "Volume"="!!")))
-#'
-#' # vcov with custom names
-#' modelsummary(
-#'   models,
-#'   vcov = list("Stata Corp" = "stata",
-#'               "Newey Lewis & the News" = "NeweyWest"))
-#'
-#' # coef_rename
-#' modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
-#'
-#' # coef_map
-#' modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
-#' modelsummary(models, coef_map = c('Volume', 'Height'))
-#'
-#' # title
-#' modelsummary(models, title = 'This is the title')
-#'
-#' # title with LaTeX label (for numbering and referencing)
-#' modelsummary(models, title = 'This is the title \\label{tab:description}')
-#'
-#' # add_rows
-#' rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,
-#'   'Empty row', '-', '-',
-#'   'Another empty row', '?', '?')
-#' attr(rows, 'position') <- c(1, 3)
-#' modelsummary(models, add_rows = rows)
-#'
-#' # notes
-#' modelsummary(models, notes = list('A first note', 'A second note'))
-#'
-#' # gof_map: data.frame
-#' gm <- modelsummary::gof_map
-#' gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE
-#' gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "%.5f"
-#' modelsummary(models, gof_map = gof_custom)
-#'
-#' # gof_map: list of lists
-#' f1 <- function(x) format(round(x, 3), big.mark=",")
-#' f2 <- function(x) format(round(x, 0), big.mark=",")
-#' gm <- list(
-#'   list("raw" = "nobs", "clean" = "N", "fmt" = f2),
-#'   list("raw" = "AIC", "clean" = "aic", "fmt" = f1))
-#' modelsummary(models,
-#'   fmt = f1,
-#'   gof_map = gm)
-#'
-#' }
+#' @template modelsummary_details
+#' @template options
+#' @template modelsummary_examples
 #'
 #' @export
 modelsummary <- function(
@@ -317,7 +145,7 @@ modelsummary <- function(
   escape      = TRUE,
   ...) {
 
-  ## settings 
+  ## settings
   settings_init(settings = list(
      "function_called" = "modelsummary"
   ))
@@ -905,7 +733,7 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, ...) {
 
 
     # warning for models with hard-coded non-IID vcov
-    hardcoded <- c("fixest", "lm_robust")
+    hardcoded <- c("lm_robust", "iv_robust", "felm")
     flag_vcov <- NULL
 
     for (i in 1:number_of_models) {

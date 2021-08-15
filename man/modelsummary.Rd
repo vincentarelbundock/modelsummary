@@ -77,7 +77,7 @@ argument accepts six types of input (see the 'Details' and 'Examples'
 sections below):
 \itemize{
 \item NULL returns the default uncertainty estimates of the model object
-\item string, vector, or (named) list of strings. The strings "classical", "iid" and "constant" are aliases for \code{NULL}, and they return the model's default uncertainty estimates. The strings "robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5", "stata", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", "weave" use variance-covariance matrices computed using functions from the \code{sandwich} package. The behavior of those functions can (and sometimes \emph{must}) be altered by passing arguments to \code{sandwich} directly from \code{modelsummary} through the ellipsis (\code{...}), but it is safer to define your own custom functions as described in the next bullet.
+\item string, vector, or (named) list of strings. Omitting or specifying \code{vcov = NULL} will return the model's default uncertainty estimates, e.g. IID errors for standard models. Alternatively, use the string "iid" (aliases: "classical" or "constant") to present IID errors explicitly. The strings "HC", "HC0", "HC1" (alias: "stata"), "HC2", "HC3" (alias: "robust"), "HC4", "HC4m", "HC5", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", and "weave" use variance-covariance matrices computed using functions from the \code{sandwich} package, or equivalent dedicated method. The behavior of those functions can (and sometimes \emph{must}) be altered by passing arguments to \code{sandwich} directly from \code{modelsummary} through the ellipsis (\code{...}), but it is safer to define your own custom functions as described in the next bullet.
 \item function or (named) list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., \code{stats::vcov}, \code{sandwich::vcovHC}, \code{function(x) vcovPC(x, cluster="country")}).
 \item formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
 \item (named) list of \code{length(models)} variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
@@ -180,44 +180,6 @@ calling \code{options}, as described in the \emph{Details} section below. The lo
 the tables can be customized by specifying the \code{output} argument, and by
 using functions from one of the supported table customization packages:
 \code{kableExtra}, \code{gt}, \code{flextable}, \code{huxtable}.
-}
-\details{
-\code{options}
-
-\code{modelsummary} supports 4 table-making packages: \code{kableExtra}, \code{gt},
-\code{flextable}, and \code{huxtable}. Some of these packages have overlapping
-functionalities. For example, 3 of those packages can export to LaTeX. To
-change the default backend used for a specific file format, you can use
-the \code{options} function:
-
-\code{options(modelsummary_html = 'kableExtra')}
-\code{options(modelsummary_latex = 'gt')}
-\code{options(modelsummary_word = 'huxtable')}
-\code{options(modelsummary_png = 'gt')}
-
-\code{modelsummary} can use two sets of packages to extract information from
-statistical models: \code{broom} and the \code{easystats} family (\code{performance} and
-\code{parameters}). By default, it uses \code{broom} first and \code{easystats} as a
-fallback if \code{broom} fails. You can change the order of priorities
-or include goodness-of-fit extracted by \emph{both} packages by setting:
-
-\code{options(modelsummary_get = "broom")}
-\code{options(modelsummary_get = "easystats")}
-\code{options(modelsummary_get = "all")}
-
-By default, LaTeX tables enclose all numeric entries in the \verb{\\num\{\}} command
-from the siunitx package. To prevent this behavior, or to enclose numbers
-in dollar signs (for LaTeX math mode), users can call:
-
-\code{options(modelsummary_format_numeric_latex = "plain")}
-\code{options(modelsummary_format_numeric_latex = "mathmode")}
-
-A similar option can be used to display numerical entries using MathJax in
-HTML tables:
-
-\code{options(modelsummary_format_numeric_html = "mathjax")}
-
-\code{output} argument:
 
 The \code{modelsummary_list} output type is a lightweight representation of the
 model results. The \code{modelsummary} function can export to this format by
@@ -226,6 +188,9 @@ as input models to create a table. This can be useful to save raw
 results, in order to print a table later, without having to save and
 extract from the entire model object. Note that the confidence intervals
 are only stored in a \code{modelsummary_list} if explicitly requested:
+}
+\details{
+
 
 \verb{backup <- modelsummary(models, output = "modelsummary_list"}
 \verb{                       statistic = "conf.int")}
@@ -240,8 +205,7 @@ differs from package to package:
 \item \code{gt}: set \code{output="gt"}, post-process your table, and use the \code{gt::gtsave} function.
 \item \code{kableExtra}: set \code{output} to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use \code{kableExtra::save_kable} function.
 }
-
-\code{vcov} argument:
+\subsection{\code{vcov}}{
 
 To use a string such as "robust" or "HC0", your model must be supported
 by the \code{sandwich} package. This includes objects such as: lm, glm,
@@ -269,6 +233,63 @@ uncertainty estimates, including "std.error", "statistic", "p.value", and
 will be adjusted by, for example, taking the square root of the matrix's
 diagonal.
 }
+}
+\section{Global Options}{
+
+
+The behavior of \code{modelsummary} can be affected by setting global options:
+\itemize{
+\item \code{modelsummary_default}
+\item \code{modelsummary_latex}
+\item \code{modelsummary_html}
+\item \code{modelsummary_png}
+\item \code{modelsummary_get}
+\item \code{modelsummary_format_numeric_latex}
+\item \code{modelsummary_format_numeric_html}
+}
+\subsection{Table-making packages}{
+
+\code{modelsummary} supports 4 table-making packages: \code{kableExtra}, \code{gt},
+\code{flextable}, and \code{huxtable}. Some of these packages have overlapping
+functionalities. For example, 3 of those packages can export to LaTeX. To
+change the default backend used for a specific file format, you can use
+the \code{options} function:
+
+\code{options(modelsummary_html = 'kableExtra')}
+\code{options(modelsummary_latex = 'gt')}
+\code{options(modelsummary_word = 'huxtable')}
+\code{options(modelsummary_png = 'gt')}
+}
+
+\subsection{Model extraction functions}{
+
+\code{modelsummary} can use two sets of packages to extract information from
+statistical models: \code{broom} and the \code{easystats} family (\code{performance} and
+\code{parameters}). By default, it uses \code{broom} first and \code{easystats} as a
+fallback if \code{broom} fails. You can change the order of priorities
+or include goodness-of-fit extracted by \emph{both} packages by setting:
+
+\code{options(modelsummary_get = "broom")}
+\code{options(modelsummary_get = "easystats")}
+\code{options(modelsummary_get = "all")}
+}
+
+\subsection{Formatting numeric entries}{
+
+By default, LaTeX tables enclose all numeric entries in the \verb{\\num\{\}} command
+from the siunitx package. To prevent this behavior, or to enclose numbers
+in dollar signs (for LaTeX math mode), users can call:
+
+\code{options(modelsummary_format_numeric_latex = "plain")}
+\code{options(modelsummary_format_numeric_latex = "mathmode")}
+
+A similar option can be used to display numerical entries using MathJax in
+HTML tables:
+
+\code{options(modelsummary_format_numeric_html = "mathjax")}
+}
+}
+
 \examples{
 \dontrun{
 

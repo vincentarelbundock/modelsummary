@@ -94,11 +94,15 @@ These errors messages were generated during extraction:
         }
     }
 
+    # fixest mods
+    fixest_mod = class(model) %in% c('fixest', 'fixest_multi')
+
     # vcov override
     flag1 <- !is.null(vcov)
     flag2 <- isFALSE(all.equal(vcov, stats::vcov))
     flag3 <- !is.character(vcov)
-    flag4 <- is.character(vcov) && length(vcov) == 1 && !vcov %in% c("classical", "iid", "constant")
+    flag4 <- is.character(vcov) && length(vcov) == 1 &&
+      (!vcov %in% c("classical", "iid", "constant") || fixest_mod)
     flag5 <- is.character(vcov) && length(vcov) > 1
 
     if (flag1 && (flag2 || flag3 || flag4 || flag5)) {

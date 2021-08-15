@@ -30,6 +30,7 @@
 #'   Finally, the `formula` and `statistic` formulas are combined into a single
 #'   formula which is fed directly to the `datasummary` function to produce the
 #'   table.
+#' @template options
 #' @examples
 #' \dontrun{
 #'   # crosstab of two variables, showing counts, row percentages, and row/column totals
