@@ -14,12 +14,3 @@
 |            | (8.201)  |
 |Month = 9   |  8.912   |
 |            | (7.763)  |
-|Num.Obs.    |   111    |
-|R2          |  0.320   |
-|R2 Adj.     |  0.287   |
-|R2 Within   |          |
-|R2 Pseudo   |          |
-|AIC         |  1061.3  |
-|BIC         |  1077.6  |
-|Log.Lik.    | -524.654 |
-|Std.Errors  |   IID    |
