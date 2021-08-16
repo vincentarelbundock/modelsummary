@@ -15,41 +15,76 @@ get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
     "The `vcov` argument accepts a variance-covariance matrix, a vector of standard errors, or a ",
     "function that returns one of these, such as `stats::vcov`.")
 
-  ## fixest models
-  if (class(model) %in% c("fixest", "fixest_multi")) {
+  ## BEGIN fixest catch
+  if (inherits(model, "fixest") || inherits(model, "fixest_multi")) {
 
-    # known fixest vcovs
-    fixest_vcovs = c("iid",
-                     "hetero", "HC1", "White",
-                     "cluster", "twoway",
-                     "NW", "newey_west",
-                     "DK", "driscoll_kraay", "conley")
+    ## Versions older than 0.10.0 require a different approach, since they don't
+    ## support the flexible vcov argument
+    fixest_0_10 = utils::packageVersion("fixest") >= "0.10.0"
 
-    ## Equivalent aliases used by modelsummary
-    fixest_vcov_aliases = c("iid" = "classical",
-                            "iid" = "constant",
-                            "HC1" = "stata",
-                            "NW" = "NeweyWest")
+    ## Match supported character args based on version
+    if (fixest_0_10) {
+      ## known fixest vcovs
+      fixest_vcovs = c("iid", "standard",
+                       "hetero", "HC1", "White",
+                       "cluster", "twoway",
+                       "NW", "newey_west",
+                       "DK", "driscoll_kraay",
+                       "conley")
+      ## Equivalent aliases used by modelsummary (excl. those common to both)
+      fixest_vcov_aliases = c("iid" = "classical",
+                              "iid" = "constant",
+                              "HC1" = "stata",
+                              "NW" = "NeweyWest")
+    } else {
+      ## known fixest vcovs
+      fixest_vcovs = c('standard', 'hetero',
+                       'cluster', 'twoway', 'threeway', 'fourway')
+      ## Equivalent aliases used by modelsummary  (excl. those common to both)
+      fixest_vcov_aliases = c("standard" = "iid",
+                              "standard" = "classical",
+                              "standard" = "constant",
+                              "hetero" = "stata")
+    }
 
     is_func = class(vcov)=="function"
     is_form = class(vcov)=="formula"
+    is_mat = is.matrix(vcov)
 
-    if (!is_func && !is_form && vcov %in% fixest_vcov_aliases) {
+    if (!is_func && !is_form && !is_mat && vcov %in% fixest_vcov_aliases) {
       vcov = names(fixest_vcov_aliases)[which(fixest_vcov_aliases %in% vcov)]
     }
 
     ## if a known or compatible fixest vcov argument, use the dedicated
     ## fixest.vcov method
-    if (!is_func) {
-      if (is.null(vcov) || is_form || vcov %in% fixest_vcovs) {
-        mat = vcov(model, vcov)
+    if (fixest_0_10) {
+      ## if a known or compatible fixest vcov argument, use the dedicated
+      ## fixest.vcov method
+      if (is.null(vcov) || is_func || is_form || is_mat || vcov %in% fixest_vcovs) {
+        mat = vcov(model, vcov = vcov)
         out = get_coeftest(model, mat, conf_level)
         stop(return(out))
+        ## else coerce to iid error for sandwich adjustment below
+      } else {
+        model = summary(model, vcov = "iid")
       }
-    } else {  ## else coerce to iid error for sandwich adjustment below
-      model = summary(model, vcov = 'iid')
+      ## fixest versions older than 0.10.0 are less flexible
+    } else {
+      if (is_form) {
+        mat = vcov(summary(model, cluster = vcov))
+        out = get_coeftest(model, mat, conf_level)
+        stop(return(out))
+      } else if (vcov %in% fixest_vcovs) {
+        mat = vcov(summary(model, se = vcov))
+        out = get_coeftest(model, mat, conf_level)
+        stop(return(out))
+      } else {
+        model = summary(model, se = "standard")
+      }
     }
+
   }
+  ## END fixest catch
 
   if (is.null(vcov)) {
     return(NULL)

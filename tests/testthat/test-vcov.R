@@ -9,39 +9,35 @@ models[['Poisson 2']] <- glm(Desertion ~ Crime_prop + Donations, dat, family = p
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 
 test_that("warning for non-iid hardcoded vcov", {
-    testthat::skip_if_not_installed("fixest")
+    # testthat::skip_if_not_installed("fixest")
+    testthat::skip_if_not_installed("lfe")
     testthat::skip_if_not_installed("estimatr")
 
-    library(fixest)
+    library(lfe)
     library(estimatr)
 
-    mod <- feols(hp ~ mpg + drat, mtcars, cluster = "vs")
+    mod <- felm(hp ~ mpg + drat | 0 | 0 | vs, mtcars)
     expect_warning(modelsummary(mod, vcov = "iid", output = "data.frame"), regexp = "IID")
 
     mod <- lm_robust(hp ~ mpg + drat, mtcars)
     expect_warning(modelsummary(mod, vcov = "iid", output = "data.frame"), regexp = "IID")
 
-    mod <- feols(hp ~ mpg + drat | cyl, mtcars)
+    mod <- felm(hp ~ mpg + drat | cyl, mtcars)
     expect_warning(modelsummary(mod, vcov = "iid", output = "data.frame"), regexp = "IID")
 
-    # assume user knows that they are doing
-    mod <- feols(mpg ~ cyl | am, data = mtcars)
-    tab <- modelsummary(mod, vcov = list("IID" = vcov(mod, se = "standard")), output = "data.frame")
-    expect_true("IID" %in% tab[["Model 1"]])
+    mod <- felm(hp ~ mpg | cyl ~ gear, data = mtcars)
 
-    mod <- feols(hp ~ mpg | cyl ~ gear, data = mtcars)
+    # sandwich does not work with lfe::felm
+    expect_error(modelsummary(mod, vcov = list(NULL, "robust"), output = "data.frame"))
 
-    # assume sandwich works with fixest
-    expect_warning(modelsummary(mod, vcov = list(NULL, "robust"), output = "data.frame"), NA)
-
-    # assume user knows that they are doing
-    expect_warning(modelsummary(mod, vcov = list(NULL, "robust", "iid" = vcov(mod, se = "hetero")), output = "data.frame"), NA)
-
-    # no explicit vcov names, so we raise the warning
-    expect_warning(modelsummary(mod, vcov = list(NULL, "classical", vcov(mod, se = "hetero")), output = "data.frame"),
-                   regexp = "IID")
+    # # assume user knows that they are doing
+    # modelsummary(mod, vcov = list('Robust' = mod$robustvcv), output = "data.frame")
+    #
+    # # no explicit vcov names, so we raise the warning
+    # expect_warning(modelsummary(mod, vcov = list(NULL, "classical", vcov(mod, se = "hetero")), output = "data.frame"),
+    #                regexp = "IID")
 })
-    
+
 
 test_that("user-supplied vcov_type in gof section", {
     mod <- lm(hp ~ mpg, data = mtcars)
@@ -70,7 +66,7 @@ test_that("sandwich arguments in ellipsis", {
   v <- modelsummary:::rounding(sqrt(diag(v)), 7)
   expect_equal(unname(v), tab[["Model 1"]])
 })
-  
+
 
 test_that("multi vcov with model recycling", {
     mod <- lm(hp ~ 1, mtcars)
@@ -99,17 +95,37 @@ test_that("character vector", {
 
 test_that("clustered standard errors", {
   # checked manually against fixest clusters
-  # testthat::skip_if_not_installed("fixest") 
-  # se = fixest::feols(f, mtcars) %>% 
+  # testthat::skip_if_not_installed("fixest")
+  # se = fixest::feols(f, mtcars) %>%
   #      fixest::se(cluster=~cyl)
   f = hp ~ mpg + drat + vs
   mod = lm(f, mtcars)
-  tmp = modelsummary(mod, 
-    gof_omit=".*",, 
+  tmp = modelsummary(mod,
+    gof_omit=".*",
     vcov=~cyl,
     output="dataframe")
   truth = c("247.053", "(73.564)", "-7.138", "(3.162)", "18.064", "(40.237)", "-50.124", "(13.268)")
   expect_equal(truth, tmp[[4]])
+})
+
+test_that("fixest", {
+  skip_if_not_installed("fixest")
+  library(fixest)
+  mod_lm =         lm(hp ~ mpg + drat, mtcars)
+  mod_feols =   feols(hp ~ mpg + drat, mtcars, vcov = ~vs)
+  models = list('lm' = mod_lm, 'feols' = mod_feols)
+
+  tab = msummary(models, vcov = 'iid', gof_omit = 'R2|IC|Log|F', output = "data.frame")
+  expect_equal(tab$lm, tab$feols)
+
+  tab = msummary(models, vcov = 'HC1', gof_omit = 'R2|IC|Log|F', output = 'data.frame')
+  expect_equal(tab$lm, tab$feols)
+
+  tab = msummary(models, vcov = ~ vs, gof_omit = 'R2|IC|Log|F', output = "data.frame")
+  expect_equal(tab$lm, tab$feols)
+
+  tab = msummary(models, vcov = ~ cyl, gof_omit = 'R2|IC|Log|F', output = 'data.frame')
+  expect_equal(tab$lm, tab$feols)
 })
 
 test_that("lme4 and various warnings", {

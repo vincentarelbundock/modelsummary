@@ -19,6 +19,7 @@ Other changes:
 `modelsummary`:
 
 * `group`: The order of terms in the formula determines the order of rows/columns
+* Improved `vcov` argument handling for `fixest` models (#357 @grantmcdermott)
 
 `modelsummary_wide`: 
 
