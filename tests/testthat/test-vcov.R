@@ -112,7 +112,11 @@ test_that("fixest", {
   skip_if_not_installed("fixest")
   library(fixest)
   mod_lm =         lm(hp ~ mpg + drat, mtcars)
-  mod_feols =   feols(hp ~ mpg + drat, mtcars, vcov = ~vs)
+  if (utils::packageVersion("fixest") >= "0.10.0") {
+    mod_feols =   feols(hp ~ mpg + drat, mtcars, vcov = ~vs)
+  } else {
+    mod_feols =   feols(hp ~ mpg + drat, mtcars, cluster = ~vs)
+  }
   models = list('lm' = mod_lm, 'feols' = mod_feols)
 
   tab = msummary(models, vcov = 'iid', gof_omit = 'R2|IC|Log|F', output = "data.frame")
