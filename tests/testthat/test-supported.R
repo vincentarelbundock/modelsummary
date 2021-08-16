@@ -286,7 +286,10 @@ test_that("sandwich vignette", {
 })
 
 test_that("consistent gof std error display fixest/lfe/estimatr", {
-  skip_if_not_installed(c("fixest", "lfe", "estimatr"))
+  testthat::skip_if_not_installed(c("fixest", "lfe", "estimatr"))
+  library(lfe)
+  library(fixest)
+  library(estimatr)
   if (packageVersion("fixest") >= "0.10.0") {
     fixest_mod <- fixest::feols(hp ~ mpg + drat, mtcars, vcov = ~vs)
   } else {
@@ -294,13 +297,10 @@ test_that("consistent gof std error display fixest/lfe/estimatr", {
   }
   mod <- list(
     "feols" = fixest_mod,
-    "felm" = lfe::felm(hp ~ mpg + drat |0 | 0 | vs, mtcars),
-    "estimatr" = estimatr::lm_robust(hp ~ mpg + drat, mtcars, se_type = 'stata', clusters = vs))
+    "felm" = felm(hp ~ mpg + drat |0 | 0 | vs, mtcars),
+    "estimatr" = lm_robust(hp ~ mpg + drat, mtcars, se_type = 'stata', clusters = vs))
   tab <- msummary(mod, gof_omit = 'Obs|R2|IC|Lik|se_type', output = 'data.frame')
   expect_equal(tab$feols[nrow(tab)], "Clustered (vs)")
   expect_equal(tab$felm[nrow(tab)], "Clustered (vs)")
   expect_equal(tab$estimatr[nrow(tab)], "Clustered (vs)")
 })
-
-
-
