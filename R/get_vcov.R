@@ -20,7 +20,7 @@ get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
 
     ## Versions older than 0.10.0 require a different approach, since they don't
     ## support the flexible vcov argument
-    fixest_0_10 = packageVersion("fixest") >= "0.10.0"
+    fixest_0_10 = utils::packageVersion("fixest") >= "0.10.0"
 
     ## Match supported character args based on version
     if (fixest_0_10) {
