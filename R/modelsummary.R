@@ -336,6 +336,9 @@ modelsummary <- function(
       "term" %in% colnames(tab) &&
       !settings_equal("output_format", "rtf")) {
     idx <- tab$part != 'gof'
+    # catch for fixest `i()` operator
+    tab$term <- ifelse(idx, gsub('::', ' = ', tab$term), tab$term)
+    # conventional interaction
     tab$term <- ifelse(idx, gsub(':', ' \u00d7 ', tab$term), tab$term)
   }
 
