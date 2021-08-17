@@ -1,6 +1,10 @@
 # modelsummary 0.9.1.9000
 
-* Improved `vcov` argument handling for `fixest` models (#357 @grantmcdermott)
+`modelsummary`:
+
+* Improved `vcov` argument handling for `fixest` models (#357 by @grantmcdermott)
+* Fix display of `fixest::i()` variables and interactions (#361 by @grantmcdermott)
+* Consistent display of clustered SEs (#356 and #363 by @grantmcdermott)
 
 # modelsummary 0.9.1
 

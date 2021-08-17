@@ -304,3 +304,19 @@ test_that("consistent gof std error display fixest/lfe/estimatr", {
   expect_equal(tab$felm[nrow(tab)], "Clustered (vs)")
   expect_equal(tab$estimatr[nrow(tab)], "Clustered (vs)")
 })
+
+test_that("consistent gof std error display did", {
+  testthat::skip_if_not_installed("did")
+  library(did)
+  data(mpdta, package = 'did')
+  mpdta$newvar <- substr(mpdta$countyreal, 1, 2)
+  mod1 <- att_gt(yname = "lemp", gname = "first.treat", idname = "countyreal",
+                 tname = "year", xformla = ~1, data = mpdta)
+  mod2 <- att_gt(yname = "lemp", gname = "first.treat", idname = "countyreal",
+                 tname = "year", xformla = ~1, data = mpdta,
+                 clustervars = c('countyreal', 'newvar'))
+  mods <- list('mod1' = mod1, 'mod2' = mod2)
+  tab <- msummary(mods, gof_omit = 'Num|ngroup|ntime|control|method', output = 'data.frame')
+  expect_equal(tab$mod1[nrow(tab)], "Clustered (countyreal)")
+  expect_equal(tab$mod2[nrow(tab)], "Clustered (countyreal & newvar)")
+})
