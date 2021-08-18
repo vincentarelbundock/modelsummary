@@ -95,7 +95,7 @@ These errors messages were generated during extraction:
     }
 
     # fixest mods
-    fixest_mod = class(model) %in% c('fixest', 'fixest_multi')
+    fixest_mod = inherits(model, "fixest") || inherits(model, "fixest_multi")
 
     # vcov override
     flag1 <- !is.null(vcov)
@@ -107,7 +107,7 @@ These errors messages were generated during extraction:
 
     if (flag1 && (flag2 || flag3 || flag4 || flag5)) {
 
-      # extract overriden estimates
+      # extract overridden estimates
       so <- get_vcov(
         model,
         vcov = vcov,
