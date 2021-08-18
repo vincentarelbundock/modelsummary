@@ -40,7 +40,9 @@ glance_custom_internal.fixest <- function(x, vcov_type = NULL, ...) {
     out[[paste('FE:', n)]] <- 'X'
   }
   if (is.null(vcov_type) || !vcov_type %in% c("vector", "matrix", "function")) {
-    out[['vcov.type']] <- attr(fixest::coeftable(x), "type")
+    fcov_type <- attr(fixest::coeftable(x), "type")
+    fcov_type <- gsub("Clustered \\(", "by: ", gsub("\\)$", "", fcov_type))
+    out[['vcov.type']] <- fcov_type
   }
   row.names(out) <- NULL
   return(out)
@@ -53,7 +55,7 @@ glance_custom_internal.lm_robust <- function(x, vcov_type = NULL, ...) {
     out <- data.frame(row.names = "firstrow")
     if (is.null(vcov_type) || !vcov_type %in% c("vector", "matrix", "function")) {
         if (x$clustered) {
-            out[['vcov.type']] <- paste0("Clustered (", x$call$clusters, ")")
+            out[['vcov.type']] <- paste("by:", x$call$clusters)
         }
     }
     row.names(out) <- NULL
@@ -71,7 +73,7 @@ glance_custom_internal.felm <- function(x, vcov_type = NULL, ...) {
     if (is.null(vcov_type) || !vcov_type %in% c("vector", "matrix", "function")) {
         if (!is.null(x$clustervar)) {
             cluster_vars = paste(names(x$clustervar), collapse = " & ")
-            out[['vcov.type']] <- paste0("Clustered (", cluster_vars, ")")
+            out[['vcov.type']] <- paste("by:", cluster_vars)
         }
     }
     row.names(out) <- NULL
@@ -90,7 +92,7 @@ glance_custom_internal.MP <- function(x, vcov_type = NULL, ...) {
       } else {
         cluster_vars = x$DIDparams$idname
       }
-      out[['vcov.type']] <- paste0("Clustered (", cluster_vars, ")")
+      out[['vcov.type']] <- paste("by:", cluster_vars)
     }
   }
   row.names(out) <- NULL

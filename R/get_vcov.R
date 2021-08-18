@@ -276,7 +276,7 @@ get_vcov_type <- function(vcov) {
          out <- toupper(v)
        }
     } else if (inherits(v, "formula")) {
-      out <- paste("C:", as.character(v)[2])
+      out <- paste("by:", gsub("\\+", "\\&", gsub(":", "\\ & ", as.character(v)[2])))
     } else if (is.null(v)) {
       out <- NULL
     } else if (is.function(v)) {
