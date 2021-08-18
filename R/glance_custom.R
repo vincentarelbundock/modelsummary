@@ -60,7 +60,8 @@ glance_custom_internal.lm_robust <- function(x, vcov_type = NULL, ...) {
     out <- data.frame(row.names = "firstrow")
     if (is.null(vcov_type) || !vcov_type %in% c("vector", "matrix", "function")) {
         if (x$clustered) {
-            out[['vcov.type']] <- paste("by:", x$call$clusters)
+            # out[['vcov.type']] <- paste("by:", x$call$clusters)
+            out[['se_type']] <- paste("by:", x$call$clusters)
         }
     }
     row.names(out) <- NULL
