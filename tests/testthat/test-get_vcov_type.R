@@ -23,7 +23,11 @@ test_that("consistent display of clustered SEs", {
     skip_if_not_installed("lfe")
     library(fixest)
     library(lfe)
-    mod_feols <- feols(mpg ~ wt, mtcars, vcov = ~ am + cyl)
+    if (utils::packageVersion("fixest") >= "0.10.0") {
+        mod_feols <- feols(mpg ~ wt, mtcars, vcov = ~ am + cyl)
+    } else {
+        mod_feols <- feols(mpg ~ wt, mtcars, cluster = ~ am + cyl)
+    }
     mod_felm <- felm(mpg ~ wt | 0 | 0 | am + cyl, mtcars, cmethod = "cgm2")
     gm <- modelsummary::gof_map
     gm <- gm[gm$clean=="Std.Errors", ]
