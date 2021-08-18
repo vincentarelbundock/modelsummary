@@ -40,9 +40,14 @@ glance_custom_internal.fixest <- function(x, vcov_type = NULL, ...) {
     out[[paste('FE:', n)]] <- 'X'
   }
   if (is.null(vcov_type) || !vcov_type %in% c("vector", "matrix", "function")) {
-    fcov_type <- attr(fixest::coeftable(x), "type")
-    fcov_type <- gsub("Clustered \\(", "by: ", gsub("\\)$", "", fcov_type))
-    out[['vcov.type']] <- fcov_type
+    fvcov_type <- attr(fixest::coeftable(x), "type")
+    if (utils::packageVersion("fixest") >= "0.10.0") {
+      fvcov_type <- gsub("^Clustered \\(", "by: ", gsub("\\)$", "", fvcov_type))
+    } else {
+      fvcov_type <- gsub("^Two-way|^Three-way|^Four-way", "", fvcov_type)
+      fvcov_type <- gsub("^ \\(", "by: ", gsub("\\)$", "", fvcov_type))
+    }
+    out[['vcov.type']] <- fvcov_type
   }
   row.names(out) <- NULL
   return(out)
