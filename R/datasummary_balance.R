@@ -142,6 +142,15 @@ datasummary_balance <- function(formula,
                     strrep("r", ncol(tab) - attr(tab, "stub_width")))
   }
 
+  # stub escape
+  if (!is.null(attr(tab, "stub_width")) &&
+      settings_equal("output_format", c("latex", "latex_tabular")) &&
+      isTRUE(escape)) {
+    for (i in 1:attr(tab, "stub_width")) {
+      tab[[i]] <- escape_string(tab[[i]])
+    }
+  }
+  
   # make table
   out <- factory(
     tab,

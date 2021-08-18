@@ -6,6 +6,10 @@
 * Fix display of `fixest::i()` variables and interactions (#361 by @grantmcdermott)
 * Consistent display of clustered SEs (#356 and #363 by @grantmcdermott)
 
+`datasummary_balance`:
+
+* Bugfix: escape variable names when `escape=TRUE`
+
 # modelsummary 0.9.1
 
 Breaking change:

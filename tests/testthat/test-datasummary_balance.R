@@ -4,6 +4,16 @@ random_string <- function() {
   paste(sample(letters, 30, replace=TRUE), collapse="")
 }
 
+
+test_that("stub is escaped in latex", {
+  tmp <- data.frame(
+    under_score = rnorm(100),
+    X = sample(0:1, 100, replace = TRUE))
+  tab <- datasummary_balance(~X, data = tmp, output = "latex")
+  expect_true(grepl("under\\\\_score", tab))
+})
+
+
 test_that("errors and warnings", {
 
   # missing RHS variable
