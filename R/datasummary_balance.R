@@ -33,265 +33,201 @@ datasummary_balance <- function(formula,
                                 dinm_statistic = "std.error",
                                 escape = TRUE,
                                 ...) {
-  ## settings 
-  settings_init(settings = list(
-     "function_called" = "datasummary_balance"
-  ))
 
-  # sanity checks
-  sanitize_escape(escape)
-  sanitize_output(output)
-  sanity_ds_right_handed_formula(formula)
-  checkmate::assert_formula(formula)
-  checkmate::assert_data_frame(data, min.rows = 1, min.cols = 1)
-  checkmate::assert_flag(dinm)
-  checkmate::assert_string(dinm_statistic, pattern = "^std.error$|^p.value$")
-  data <- sanitize_datasummary_balance_data(formula, data)
 
-  # rhs condition variable
-  rhs <- labels(stats::terms(formula))
+    ## settings 
+    settings_init(settings = list(
+                      "function_called" = "datasummary_balance"
+                  ))
 
-  # nobs in column spans via factor levels
-  lev <- table(data[[rhs]])
-  lev <- paste0(names(lev), " (N=", lev, ")")
-  levels(data[[rhs]]) <- lev
 
-  # exclude otherwise All() makes them appear as rows
-  idx <- setdiff(colnames(data),
-                 c(rhs, "clusters", "blocks", "weights"))
-  data_norhs <- data[, idx, drop = FALSE]
+    ## sanity checks
+    sanitize_escape(escape)
+    sanitize_output(output)
+    sanity_ds_right_handed_formula(formula)
+    checkmate::assert_formula(formula)
+    checkmate::assert_data_frame(data, min.rows = 1, min.cols = 1)
+    checkmate::assert_flag(dinm)
+    checkmate::assert_choice(dinm_statistic, choices = c("std.error", "p.value"))
+    data <- sanitize_datasummary_balance_data(formula, data)
 
-  # 3-parts table: numeric + dinm / factor
-  any_numeric <- any(sapply(data_norhs, is.numeric))
-  any_factor <- any(sapply(data_norhs, is.factor))
+    ## rhs condition variable
+    rhs <- labels(stats::terms(formula))
 
-  # difference in means
-  if (!any_numeric) {
-    dinm <- FALSE
-  }
+    ## nobs in column spans via factor levels
+    lev <- table(data[[rhs]])
+    lev <- paste0(names(lev), " (N=", lev, ")")
+    levels(data[[rhs]]) <- lev
 
-  if (dinm && !isTRUE(check_dependency("estimatr"))) {
-    dinm <- FALSE
-    warning("Please install the `estimatr` package or set `dinm=FALSE` to
-             suppress this warning.")
-  }
 
-  if (dinm && (length(unique(data[[rhs]])) > 2)) {
-    dinm <- FALSE
-    warning("The difference in means can only be calculate with two groups in
-            the right-hand side variable. Set `dinm=FALSE` to suppress this
-            warning.")
-  }
 
-  if (any_factor) {
-    tab_fac <- datasummary_balance_factor(rhs, data, data_norhs, any_numeric, output, escape)
-  }
+    ## exclude otherwise All() makes them appear as rows
+    idx <- setdiff(colnames(data),
+                   c(rhs, "clusters", "blocks", "weights"))
+    data_norhs <- data[, idx, drop = FALSE]
 
-  if (any_numeric) {
-    tab_num <- datasummary_balance_numeric(rhs, data, data_norhs, fmt, dinm, dinm_statistic, output, escape)
-  }
 
-  if (any_numeric && any_factor) {
+    ## 3-parts table: numeric + dinm / factor
+    any_numeric <- any(sapply(data_norhs, is.numeric))
+    any_factor <- any(sapply(data_norhs, is.factor))
+    n_factor <- sum(sapply(data_norhs, is.factor))
 
-    # header compatibility + new header
-    header <- tab_fac[1, , drop = FALSE]
-    cols <- trimws(colnames(header)) # we padded colnames above
-    for (i in seq_along(header)) {
-      header[1, i] <- ifelse(!cols[i] %in% c("Mean", "Std. Dev."), "", header[1, i])
-      header[1, i] <- ifelse(cols[i] == "Mean", "N", header[1, i])
-      header[1, i] <- ifelse(cols[i] == "Std. Dev.", "Pct.", header[1, i])
+    ## difference in means
+    if (!any_numeric) {
+        dinm <- FALSE
     }
-    tab_fac <- bind_rows(header, tab_fac)
 
-    # bind tables and reorder columns
-    tab <- bind_rows(tab_num, tab_fac)
-    tab <- tab[, unique(c(" ", "  ", colnames(tab)))]
+    if (dinm && !isTRUE(check_dependency("estimatr"))) {
+        dinm <- FALSE
+        warning("Please install the `estimatr` package or set `dinm=FALSE` to suppress this warning.")
+    }
 
-    # column spans
-    if (dinm) {
-      skE <- attr(tab_fac, "span_kableExtra")
-      skE[[1]] <- c(skE[[1]], " " = 2)
-      attr(tab, "span_kableExtra") <- skE
+    if (dinm && (length(unique(data[[rhs]])) > 2)) {
+        dinm <- FALSE
+        warning("The difference in means can only be calculate with two groups in the right-hand side variable. Set `dinm=FALSE` to suppress this warning.")
+    }
+
+    ## factors
+    if (any_factor) {
+
+        ## enforce 2-column stub, even when there is only one factor
+        tmp1 <- data
+        tmp2 <- data_norhs
+        tmp1$bad_factor_for_stub <- as.factor(sample(c("A", "B"), nrow(tmp1), replace = TRUE))
+        tmp2$bad_factor_for_stub <- as.factor(sample(c("A", "B"), nrow(tmp2), replace = TRUE))
+
+        pctformat = function(x) sprintf("%.1f", x)
+        f_fac <- stats::as.formula(sprintf(
+            "All(tmp2, factor = TRUE, numeric = FALSE) ~
+             Factor(%s) * (N + Heading('Pct.')*Percent('col')*Format(pctformat()))", rhs))
+        tab_fac <- datasummary(formula = f_fac,
+                               data = tmp1,
+                               fmt = fmt,
+                               output = "data.frame")
+        ## datasummary(output="dataframe") changes the output format
+        sanitize_output(output)
+
+        ## enforce 2-column stub, even when there is only one factor
+        idx <- grep("bad_factor_for_stub", tab_fac[[1]])
+        tab_fac <- tab_fac[1:(idx - 1), , drop = FALSE]
+    }
+
+
+
+    ## numerics
+    if (any_numeric) {
+        ## tab_fac has 2 stub columns when there is more than one factor, but only 1 otherwise
+        emptyfun <- function(x) return(" ")
+        empty <- ifelse(any_factor, "Heading(' ') * emptyfun + ", "") 
+        f_num <- stats::as.formula(sprintf("All(data_norhs) ~ %s Factor(%s) * (Mean + Heading('Std. Dev.')*SD)", empty, rhs))
+        tab_num <- datasummary(formula = f_num,
+                               fmt = fmt,
+                               data = data,
+                               output = "data.frame")
+        ## datasummary(output="dataframe") changes the output format
+        sanitize_output(output)
+    }
+
+    ## combine
+    if (any_numeric && any_factor) {
+        top <- tab_num
+        mid <- stats::setNames(as.data.frame(as.list(attr(tab_fac, "header_bottom"))), colnames(top))
+        bot <- stats::setNames(tab_fac, colnames(top))
+        tab <- bind_rows(top, mid, bot)
+
+        ## restore attributes detroyed by bind_rows
+        idx <- grep("header|span|stub|align", names(attributes(tab_num)), value = TRUE)
+        for (i in idx) {
+            attr(tab, i) <- attr(tab_num, i)
+        }
+        ## empty numeric column looks real but is actually a stub
+        attr(tab, "stub_width") <- attr(tab_fac, "stub_width")
+    } else if (any_numeric) {
+        tab <- tab_num
+    } else if (any_factor) {
+        tab <- tab_fac
     } else {
-      attr(tab, "span_kableExtra") <- attr(tab_fac, "span_kableExtra")
+        stop("The `datasummary_balance` function was unable to extract summary statistics.")
     }
-    attr(tab, "header_sparse_flat") <- attr(tab_fac, "header_sparse_flat")
-    attr(tab, "stub_width") <- attr(tab_fac, "stub_width")
-    attr(tab, "span_gt") <- attr(tab_fac, "span_gt")
-    colnames(tab) <- gsub(".*\\) ", "", colnames(tab))
 
-  } else if (any_numeric) {
-    tab <- tab_num
+    ## differences in means for numeric variables
+    if (any_numeric && isTRUE(dinm)) {
+        ## save attributes which will be destroyed by `merge`
+        idx <- grep("header|span|stub|align", names(attributes(tab_num)), value = TRUE)
+        attributes_cache <- list()
+        for (i in idx) {
+            attributes_cache[[i]] <- attr(tab, i)
+        }
 
-  } else if (any_factor) {
-    tab <- tab_fac
+        ## dinm
+        numeric_variables <- colnames(data_norhs)[sapply(data_norhs, is.numeric)]
+        tmp <- lapply(numeric_variables,
+                      function(lhs) DinM(lhs = lhs,
+                                         rhs = rhs,
+                                         data = data,
+                                         fmt = fmt,
+                                         statistic = dinm_statistic))
+        tmp <- do.call("rbind", tmp)
 
-  }
+        ## use poorman's left_join because merge breaks the order, even with sort=FALSE
+        tab <- left_join(tab, tmp, by = " ")
 
-  tab[is.na(tab)] <- ""
+        tab[is.na(tab)] <- ""
 
-  if (any_numeric && any_factor) {
-    hrule <- nrow(tab_num) + 1
-  } else {
-    hrule <- NULL
-  }
+        ## restore attributes detroyed by `merge`
+        for (i in names(attributes_cache)) {
+            attr(tab, i) <- attributes_cache[[i]]
+        }
 
-  # align: default (TODO: `add_columns` support)
-  if (is.null(align) && !is.null(attr(tab, "stub_width")) && is.null(add_columns)) {
-    align <- paste0(strrep("l", attr(tab, "stub_width")),
-                    strrep("r", ncol(tab) - attr(tab, "stub_width")))
-  }
+        ## adjust headers for dinm
+        for (i in seq_along(attr(tab, "span_kableExtra"))) {
+            attr(tab, "span_kableExtra")[[i]] <- c(attr(tab, "span_kableExtra")[[i]], c(" " = 2))
+        }
+        attr(tab, "header_bottom") <- c(attr(tab, "header_bottom"), colnames(tmp)[1:2])
+        attr(tab, "header_sparse_flat") <- c(attr(tab, "header_sparse_flat"), colnames(tmp)[1:2])
 
-  # stub escape
-  if (!is.null(attr(tab, "stub_width")) &&
-      settings_equal("output_format", c("latex", "latex_tabular")) &&
-      isTRUE(escape)) {
-    for (i in 1:attr(tab, "stub_width")) {
-      tab[[i]] <- escape_string(tab[[i]])
     }
-  }
-  
-  # make table
-  out <- factory(
-    tab,
-    align = align,
-    hrule = hrule,
-    notes = notes,
-    fmt = fmt,
-    output = output,
-    add_rows = add_rows,
-    add_columns = add_columns,
-    title = title,
-    ...)
 
-  if (!is.null(settings_get("output_file"))) {
-    settings_rm()
-    return(invisible(out))
-  } else {
-    settings_rm()
-    return(out)
-  }
 
-}
-
-datasummary_balance_factor <- function(rhs, data, data_norhs, any_numeric, output, escape) {
-
-  # formatting function
-  pctformat = function(x) sprintf("%.1f", x)
-
-  # hack: `tables::tabular` produces different # of cols with a single or
-  # multiple factors. Make sure there are multiple.
-  data$badfactordropthis <- factor(
-    c("badfactordropthis1",
-    rep("badfactordropthis2", nrow(data) - 1)))
-
-  data_norhs$badfactordropthis <- factor(
-    c("badfactordropthis1",
-      rep("badfactordropthis2", nrow(data_norhs) - 1)))
-
-  # convert to factor; drop non categorical
-  for (v in colnames(data_norhs)) {
-    if (is.factor(data_norhs[[v]])) {
-      # do nothing
-    } else if (is.character(data_norhs[[v]]) || is.logical(data_norhs[[v]])) {
-      data[[v]] <- factor(data[[v]], exclude = NULL)
-      data_norhs[[v]] <- factor(data_norhs[[v]], exclude = NULL)
+    ## horizontal rule
+    if (any_factor && any_numeric) {
+        hrule <- nrow(tab_num) + 1
     } else {
-      data[[v]] <- NULL
-      data_norhs[[v]] <- NULL
+        hrule <- NULL
     }
-  }
 
-  # formula
-  f_fac <- 'All(data_norhs, factor = TRUE, numeric = FALSE) ~
-            Factor(%s) * (Heading("N")*1 * Format() +
-            Heading("Pct.") * Percent("col") * Format(pctformat()))'
-  f_fac <- sprintf(f_fac, rhs)
-
-  if (any_numeric) { # before removing numerics
-    f_fac <- gsub('\\"Pct.\\"', '\\"Std. Dev.\\"', f_fac)
-    f_fac <- gsub('\\"N\\"', '\\"Mean\\"', f_fac)
-  }
-  f_fac <- stats::formula(f_fac)
-
-  # process & reset output settings (datasummary sets "data.frame")
-  tab_fac <- datasummary(f_fac,
-                         data = data,
-                         output = "data.frame",
-                         escape = escape)
-  sanitize_output(output)
-
-  # cleanup
-  colnames(tab_fac) <- pad(attr(tab_fac, "header_bottom"))
-  idx <- !grepl("^badfactordropthis\\d$", tab_fac[[2]])
-  tab_fac <- tab_fac[idx, , drop = FALSE]
-
-  # hack
-  data_norhs$badfactordropthis <- data$badfactordropthis <- NULL
-
-  return(tab_fac)
-}
-
-
-datasummary_balance_numeric <- function(rhs, data, data_norhs, fmt, dinm, dinm_statistic, output, escape) {
-
-  # create table as data.frame
-  f_num <- sprintf(
-    'All(data_norhs) ~ Factor(%s) * (Mean + Heading("Std. Dev.") * SD) * Arguments(fmt = fmt)',
-    rhs)
-  f_num <- stats::formula(f_num)
-
-  # process & reset output settings (datasummary sets "data.frame")
-  tab_num <- datasummary(f_num, data = data, output = "data.frame", escape = escape)
-  sanitize_output(output)
-
-
-  # otherwise colnames: female (N=140) Mean
-  colnames(tab_num) <- pad(attr(tab_num, "header_bottom"))
-
-  # difference in means
-  if (dinm) {
-    numeric_variables <- colnames(data_norhs)[sapply(data_norhs, is.numeric)]
-    tmp <- lapply(numeric_variables,
-                  function(lhs) DinM(lhs = lhs,
-                                     rhs = rhs,
-                                     data = data,
-                                     fmt = fmt,
-                                     statistic = dinm_statistic))
-    tmp <- do.call("rbind", tmp)
-
-    # save attributes because merge wipes them out
-    header_sparse_flat <- attr(tab_num, "header_sparse_flat")
-    stub_width <- attr(tab_num, "stub_width")
-    span_gt <- attr(tab_num, "span_gt")
-    span_kableExtra <- attr(tab_num, "span_kableExtra")
-
-    # merge
-    tab_num <- merge(tab_num, tmp, all.x = TRUE, by = " ", sort = FALSE)
-
-    # restore attributes
-    attr(tab_num, "header_sparse_flat") <- header_sparse_flat
-    attr(tab_num, "stub_width") <- stub_width
-    attr(tab_num, "span_gt") <- span_gt
-
-    # after DinM, pad the spanning columns if tab_num has new columns
-    for (i in seq_along(span_kableExtra)) {
-      span_kableExtra[[i]] <- c(span_kableExtra[[i]],
-                                rep("    ", ncol(tab_num) - sum(span_kableExtra[[i]])))
+    ## align: default (TODO: `add_columns` support)
+    if (is.null(align) && !is.null(attr(tab, "stub_width")) && is.null(add_columns)) {
+        align <- paste0(strrep("l", attr(tab, "stub_width")),
+                        strrep("r", ncol(tab) - attr(tab, "stub_width")))
     }
-    attr(tab_num, "span_kableExtra") <- span_kableExtra
 
-    if (ncol(tab_num) > length(header_sparse_flat)) {
-      attr(tab_num, "header_sparse_flat") <- c(header_sparse_flat,
-                                               colnames(tab_num)[-c(1:length(header_sparse_flat))])
+    ## colnames should not include factor values if spanning headers are available
+    if (settings_equal("output_format", c("latex", "latex_tabular", "html", "gt", "kableExtra")) &&
+        settings_equal("output_factory", c("kableExtra", "gt"))) {
+        colnames(tab) <- attr(tab, "header_bottom")
     }
-    attr(tab_num, "header_sparse_flat") <- gsub(
-        " \\(N = \\d+\\)", "", attr(tab_num, "header_sparse_flat"))
-    attr(tab_num, "header_sparse_flat") <- pad(attr(tab_num, "header_sparse_flat"))
 
-  }
+    ## make table
+    out <- factory(
+        tab,
+        align = align,
+        hrule = hrule,
+        notes = notes,
+        fmt = fmt,
+        output = output,
+        add_rows = add_rows,
+        add_columns = add_columns,
+        title = title,
+        ...)
 
-  return(tab_num)
+    if (!is.null(settings_get("output_file"))) {
+        settings_rm()
+        return(invisible(out))
+    } else {
+        settings_rm()
+        return(out)
+    }
 
 }
 

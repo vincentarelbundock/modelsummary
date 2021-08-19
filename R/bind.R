@@ -107,15 +107,96 @@ is_df_or_vector <- function(x) {
 #' @noRd
 is_nested <- function(lst) vapply(lst, function(x) inherits(x[1L], "list"), FALSE)
 
-#' Remove all levels of a list
-#' @noRd
 squash <- function(lst) {
   do.call(c, lapply(lst, function(x) if (is.list(x) && !is.data.frame(x)) squash(x) else list(x)))
 }
 
 
-#' poorman check
 #' @noRd
 names_are_invalid <- function(x) {
   x == "" | is.na(x)
 }
+
+#' @noRd
+inner_join <- function(x, y, by = NULL, suffix = c(".x", ".y"), ..., na_matches = c("na", "never")) {
+  join_worker(x = x, y = y, by = by, suffix = suffix, sort = FALSE, ..., keep = FALSE, na_matches = na_matches)
+}
+
+#' @noRd
+left_join <- function(x, y, by = NULL, suffix = c(".x", ".y"), ..., keep = FALSE, na_matches = c("na", "never")) {
+  join_worker(x = x, y = y, by = by, suffix = suffix, all.x = TRUE, ..., keep = keep, na_matches = na_matches)
+}
+
+#' @noRd
+right_join <- function(x, y, by = NULL, suffix = c(".x", ".y"), ..., keep = FALSE, na_matches = c("na", "never")) {
+  join_worker(x = x, y = y, by = by, suffix = suffix, all.y = TRUE, ..., keep = keep, na_matches = na_matches)
+}
+
+#' @noRd
+full_join <- function(x, y, by = NULL, suffix = c(".x", ".y"), ..., keep = FALSE, na_matches = c("na", "never")) {
+  join_worker(x = x, y = y, by = by, suffix = suffix, all = TRUE, ..., keep = keep, na_matches = na_matches)
+}
+
+join_worker <- function(x, y, by = NULL, suffix = c(".x", ".y"), keep = FALSE, na_matches = c("na", "never"), ...) {
+  na_matches <- match.arg(arg = na_matches, choices = c("na", "never"), several.ok = FALSE)
+  incomparables <- if (na_matches == "never") NA else NULL
+  x[, ".join_id"] <- seq_len(nrow(x))
+  merged <- if (is.null(by)) {
+    by <- intersect(names(x), names(y))
+    join_message(by)
+    merge(
+      x = x, y = y, by = by, suffixes = suffix, incomparables = incomparables, ...
+    )[, union(names(x), names(y)), drop = FALSE]
+  } else if (is.null(names(by))) {
+    merge(x = x, y = y, by = by, suffixes = suffix, incomparables = incomparables, ...)
+  } else {
+    merge(x = x, y = y, by.x = names(by), by.y = by, suffixes = suffix, incomparables = incomparables, ...)
+  }
+  merged <- merged[order(merged[, ".join_id"]), colnames(merged) != ".join_id", drop = FALSE]
+  if (isTRUE(keep)) {
+    keep_pos <- match(by, names(merged))
+    x_by <- paste0(by, suffix[1L])
+    colnames(merged)[keep_pos] <- x_by
+    merged[, paste0(by, suffix[2L])] <- merged[, x_by]
+  }
+  rownames(merged) <- NULL
+  reconstruct_attrs(merged, x)
+}
+
+join_message <- function(by) {
+  if (length(by) > 1L) {
+    message("Joining, by = c(\"", paste0(by, collapse = "\", \""), "\")\n", sep = "")
+  } else {
+    message("Joining, by = \"", by, "\"\n", sep = "")
+  }
+}
+
+reconstruct_attrs <- function(data, template) {
+  data <- remove_attributes(data)
+  return(reconstruct_attrs_dispatch(data, template))
+  UseMethod(generic = "reconstruct_attrs", object = template)
+}
+
+reconstruct_attrs_dispatch <- function(data, template) {
+  UseMethod("reconstruct_attrs", template)
+}
+
+reconstruct_attrs.data.frame <- function(data, template) {
+  attrs <- attributes(template)
+  attrs$names <- names(data)
+  attrs$row.names <- .row_names_info(data, type = 0L)
+  attributes(data) <- attrs
+  data
+}
+
+remove_attributes <- function(data) {
+  attrs <- attributes(data)
+  foreign <- which(!names(attrs) %in% c("names", "row.names", "class"))
+  if (length(foreign) > 0L) {
+    for (i in foreign) {
+      attr(data, names(attrs)[i]) <- NULL
+    }
+  }
+  as.data.frame(data)
+}
+
