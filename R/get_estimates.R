@@ -95,7 +95,7 @@ These errors messages were generated during extraction:
     }
 
     # fixest mods
-    fixest_mod = class(model) %in% c('fixest', 'fixest_multi')
+    fixest_mod = inherits(model, "fixest") || inherits(model, "fixest_multi")
 
     # vcov override
     flag1 <- !is.null(vcov)
