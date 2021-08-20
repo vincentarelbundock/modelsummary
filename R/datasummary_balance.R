@@ -208,6 +208,13 @@ datasummary_balance <- function(formula,
         colnames(tab) <- attr(tab, "header_bottom")
     }
 
+    ## escape stub
+    if (isTRUE(escape)) {
+        for (i in 1:attr(tab, "stub_width")) {
+            tab[[i]] <- escape_string(tab[[i]])
+        }
+    }
+
     ## make table
     out <- factory(
         tab,
