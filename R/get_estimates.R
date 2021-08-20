@@ -107,7 +107,7 @@ These errors messages were generated during extraction:
 
     if (flag1 && (flag2 || flag3 || flag4 || flag5)) {
 
-      # extract overriden estimates
+      # extract overridden estimates
       so <- get_vcov(
         model,
         vcov = vcov,
