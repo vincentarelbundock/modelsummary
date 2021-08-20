@@ -1,6 +1,3 @@
-# Not sure why this doesn't pass on Github Actions
-skip_on_ci()
-
 # solaris failure and complaints about pandoc in "Writing R Extensions" ("annoyingly so")
 skip_on_cran() 
 
@@ -44,6 +41,8 @@ if (knitr::is_latex_output()) {
 rmd_file <- tempfile(fileext = ".Rmd")
 
 test_that("Rmarkdown to pdf_document", {
+    ## not sure why PDF compilation doesn't work on Github actions
+    skip_on_ci()
     cat(sprintf(dangerous_document, "pdf_document"), file = rmd_file)
     pdf_file <- gsub("\\.Rmd$", ".pdf", rmd_file )
     expect_error(rmarkdown::render(rmd_file,
