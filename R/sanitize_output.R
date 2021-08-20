@@ -71,8 +71,11 @@ sanitize_output <- function(output) {
     "word"           = getOption("modelsummary_word", default       = "flextable"),
     "powerpoint"     = getOption("modelsummary_powerpoint", default = "flextable"))
 
-  # sanity check: are user-supplied global options ok?
+  ## sanity check: are user-supplied global options ok?
   sanity_factory(factory_dict)
+
+  ## save user input to check later
+  output_user <- output
 
   # defaults
   if (output == "default") {
@@ -105,13 +108,16 @@ sanitize_output <- function(output) {
     output_file <- output
   }
 
-  # knit to word
+  # knit to word using flextable
   if (isTRUE(check_dependency("knitr")) && isTRUE(check_dependency("rmarkdown"))) {
-    fmt <- try(rmarkdown::default_output_format(
-      knitr::current_input())$name, silent = TRUE)
+    ## try to guess the knitr output format
+    fmt <- try(rmarkdown::default_output_format(knitr::current_input())$name, silent = TRUE)
     if (!inherits(fmt, "try-error")) {
-      word_fmt <- c("word_document", "rdocx_document", "officedown::rdocx_document")
-      if (any(word_fmt %in% fmt)) {
+      word_fmt <- c("word_document",
+                    "rdocx_document", "officedown::rdocx_document",
+                    "word_document2", "bookdown::word_document2")
+      ## change to word output format only if `output` is "default" or "flextable"
+      if (any(word_fmt %in% fmt) && output_user %in% c("flextable", "default")) {
         output_format <- "word"
       }
     }

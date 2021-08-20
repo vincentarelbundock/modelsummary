@@ -4,10 +4,10 @@ skip_on_ci()
 # solaris failure and complaints about pandoc in "Writing R Extensions" ("annoyingly so")
 skip_on_cran() 
 
-
 dangerous_document <- '
 ---
 title: test
+output: %s
 ---
 
 Table \\ref{tab:simple}
@@ -41,20 +41,40 @@ if (knitr::is_latex_output()) {
 }
 ```
 '
+rmd_file <- tempfile(fileext = ".Rmd")
 
-test_that("Compile dangerous Rmarkdown to PDF and HTML", {
-    rmd_file <- tempfile(fileext = ".Rmd")
+test_that("Rmarkdown to pdf_document", {
+    cat(sprintf(dangerous_document, "pdf_document"), file = rmd_file)
     pdf_file <- gsub("\\.Rmd$", ".pdf", rmd_file )
-    html_file <- gsub("\\.Rmd$", ".html", rmd_file )
-    cat(dangerous_document, file = rmd_file)
     expect_error(rmarkdown::render(rmd_file,
-                                   output_format = "pdf_document",
                                    output_file = pdf_file,
                                    quiet = TRUE),
                  NA)
+})
+
+test_that("Rmarkdown to html_document", {
+    cat(sprintf(dangerous_document, "html_document"), file = rmd_file)
+    html_file <- gsub("\\.Rmd$", ".html", rmd_file )
     expect_error(rmarkdown::render(rmd_file,
-                                   output_format = "html_document",
                                    output_file = html_file,
+                                   quiet = TRUE),
+                 NA)
+})
+
+test_that("Rmarkdown to word_document", {
+    cat(sprintf(dangerous_document, "word_document"), file = rmd_file)
+    docx_file <- gsub("\\.Rmd$", ".docx", rmd_file )
+    expect_error(rmarkdown::render(rmd_file,
+                                   output_file = docx_file,
+                                   quiet = TRUE),
+                 NA)
+})
+
+test_that("Rmarkdown to bookdown::word_document2", {
+    cat(sprintf(dangerous_document, "bookdown::word_document2"), file = rmd_file)
+    docx_file <- gsub("\\.Rmd$", ".docx", rmd_file )
+    expect_error(rmarkdown::render(rmd_file,
+                                   output_file = docx_file,
                                    quiet = TRUE),
                  NA)
 })

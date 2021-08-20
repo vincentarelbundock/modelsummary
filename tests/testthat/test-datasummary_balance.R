@@ -56,11 +56,20 @@ test_that("column percentages sum to 100 within factors", {
 })
 
 
+test_that("factor formatting", {
+  dat <- mtcars[, c("vs", "cyl", "gear")]
+  dat$cyl <- factor(dat$cyl)
+  dat$gear <- factor(dat$gear)
+  tab <- datasummary_balance(~vs, dat, output="dataframe")
+  expect_equal(tab[[4]][1:2], c("5.6", "16.7"))
+})
+
+
 test_that("palmer penguins was once broken with kableExtra", {
   penguins <- "https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv"
   penguins <- read.csv(penguins)
   raw <- datasummary_balance(~sex, penguins, output="html")
-  expect_known_output(cat(raw), "known_output/datasummary_balance_penguins.html", update = TRUE)
+  expect_known_output(cat(raw), "known_output/datasummary_balance_penguins.html", update = FALSE)
 })
 
 
@@ -114,11 +123,14 @@ test_that('both factors and numerics', {
   tmp$gear <- factor(tmp$gear)
   tmp$vs <- as.logical(tmp$vs)
   tab <- datasummary_balance(~am, tmp, output = 'dataframe')
-  truth <- c(" ", "  ", "0 Mean", "0 Std. Dev.", "1 Mean",
-    "1 Std. Dev.", "Diff. in Means", "Std. Error")
   expect_s3_class(tab, 'data.frame')
   expect_equal(dim(tab), c(16, 8))
+  ## col order 
+  truth <- c(" ", "  ", "0 Mean", "0 Std. Dev.", "1 Mean", "1 Std. Dev.", "Diff. in Means", "Std. Error")
   expect_equal(colnames(tab), truth)
+  ## row order with mid header
+  expect_equal(tab[[1]], c("mpg", "disp", "hp", "drat", "wt", "qsec", "carb", "", "cyl", "", "", "vs", "", "gear", "", ""))
+  expect_equal(tab[[2]], c("", "", "", "", "", "", "", "", "4", "6", "8", "FALSE", "TRUE", "3", "4", "5"))
 })
 
 
@@ -143,7 +155,7 @@ test_that('single numeric', {
 })
 
 
-test_that('single factor', {
+test_that('single factor has two stub columns', {
   tmp <- mtcars[, c('am', 'gear')]
   tmp$gear <- factor(tmp$gear)
   tab <- datasummary_balance(~am, data = tmp, output = 'dataframe')
@@ -182,8 +194,6 @@ test_that('fmt', {
   tab <- datasummary_balance(~am, tmp, fmt = "%.2f", output = 'dataframe')
   expect_equal(tab[[3]], truth)
 })
-
-
 
 
 test_that('too many levels in row variable', {
