@@ -142,6 +142,7 @@ datasummary_balance <- function(formula,
         }
         ## empty numeric column looks real but is actually a stub
         attr(tab, "stub_width") <- attr(tab_fac, "stub_width")
+
     } else if (any_numeric) {
         tab <- tab_num
     } else if (any_factor) {
@@ -152,13 +153,6 @@ datasummary_balance <- function(formula,
 
     ## differences in means for numeric variables
     if (any_numeric && isTRUE(dinm)) {
-        ## save attributes which will be destroyed by `merge`
-        idx <- grep("header|span|stub|align", names(attributes(tab_num)), value = TRUE)
-        attributes_cache <- list()
-        for (i in idx) {
-            attributes_cache[[i]] <- attr(tab, i)
-        }
-
         ## dinm
         numeric_variables <- colnames(data_norhs)[sapply(data_norhs, is.numeric)]
         tmp <- lapply(numeric_variables,
@@ -170,14 +164,10 @@ datasummary_balance <- function(formula,
         tmp <- do.call("rbind", tmp)
 
         ## use poorman's left_join because merge breaks the order, even with sort=FALSE
+        ## this also protects attributes
         tab <- left_join(tab, tmp, by = " ")
 
         tab[is.na(tab)] <- ""
-
-        ## restore attributes detroyed by `merge`
-        for (i in names(attributes_cache)) {
-            attr(tab, i) <- attributes_cache[[i]]
-        }
 
         ## adjust headers for dinm
         for (i in seq_along(attr(tab, "span_kableExtra"))) {
