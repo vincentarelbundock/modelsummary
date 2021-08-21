@@ -790,7 +790,7 @@ You can use `modelsummary` to insert tables into Emacs Org-Mode documents, which
 {{{Rtable}}}
 #+BEGIN_SRC R :exports both
 library(modelsummary)
-options(modelsummary_default = orgbackend)
+options(modelsummary_factory_default = orgbackend)
 
 mod = lm(hp ~ mpg, data = mtcars)
 
@@ -806,7 +806,7 @@ The `{{{Rtable}}}` call expands the macro to add information to the header of th
 
 `#+BEGIN_SRC R :exports both` says that we want to print both the original code and the output (`:exports results` would omit the code, for example).
 
-Finally, `options(modelsummary_default=orgbackend` uses the variable we defined to set the default output format. That way, we don't have to use the `output` argument every time.
+Finally, `options(modelsummary_factory_default=orgbackend` uses the variable we defined to set the default output format. That way, we don't have to use the `output` argument every time.
 
 One potentially issue to keep in mind is that the code above extracts the printout from the `R` console. However, when we customize tables with `kableExtra` or `gt` functions, those functions do not always return printed raw HTML or LaTeX code. Sometimes, it can be necessary to add a call to `cat` at the end of a table customization pipeline. For example:
 
@@ -837,17 +837,17 @@ options("modelsummary_stars_note" = FALSE)
 Change the default output format:
 
 ```{r, eval = FALSE}
-options(modelsummary_default = "latex")
-options(modelsummary_default = "gt")
+options(modelsummary_factory_default = "latex")
+options(modelsummary_factory_default = "gt")
 ```
 
 Change the backend packages that `modelsummary` uses to create tables in different output formats:
 
 ```{r, eval = FALSE}
-options(modelsummary_html = 'kableExtra')
-options(modelsummary_latex = 'flextable')
-options(modelsummary_word = 'huxtable')
-options(modelsummary_png = 'gt')
+options(modelsummary_factory_html = 'kableExtra')
+options(modelsummary_factory_latex = 'flextable')
+options(modelsummary_factory_word = 'huxtable')
+options(modelsummary_factory_png = 'gt')
 ```
 
 Change the packages that `modelsummary` uses to extract information from models:
@@ -1050,10 +1050,10 @@ The table-making backends supported by `modelsummary` have overlapping capabilit
 You can modify these defaults by setting global options such as:
 
 ```r
-options(modelsummary_html = 'kableExtra')
-options(modelsummary_latex = 'gt')
-options(modelsummary_word = 'huxtable')
-options(modelsummary_png = 'gt')
+options(modelsummary_factory_html = "kableExtra")
+options(modelsummary_factory_latex = "gt")
+options(modelsummary_factory_word = "huxtable")
+options(modelsummary_factory_png = "gt")
 ```
 
 # FAQ.

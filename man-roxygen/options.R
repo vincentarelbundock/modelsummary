@@ -3,10 +3,10 @@
 #'
 #' The behavior of `modelsummary` can be affected by setting global options:
 #'
-#' + `modelsummary_default`
-#' + `modelsummary_latex`
-#' + `modelsummary_html`
-#' + `modelsummary_png`
+#' + `modelsummary_factory_default`
+#' + `modelsummary_factory_latex`
+#' + `modelsummary_factory_html`
+#' + `modelsummary_factory_png`
 #' + `modelsummary_get`
 #' + `modelsummary_format_numeric_latex`
 #' + `modelsummary_format_numeric_html`
@@ -19,10 +19,10 @@
 #' change the default backend used for a specific file format, you can use
 #' the `options` function:
 #'
-#' `options(modelsummary_html = 'kableExtra')`
-#' `options(modelsummary_latex = 'gt')`
-#' `options(modelsummary_word = 'huxtable')`
-#' `options(modelsummary_png = 'gt')`
+#' `options(modelsummary_factory_html = 'kableExtra')`
+#' `options(modelsummary_factory_latex = 'gt')`
+#' `options(modelsummary_factory_word = 'huxtable')`
+#' `options(modelsummary_factory_png = 'gt')`
 #'
 #' ### Model extraction functions
 #' 

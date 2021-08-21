@@ -133,7 +133,7 @@ Other:
   Bayesian models.
 * users can omit the stars legend note by using glue strings:
   `estimate="{estimate}{stars}"`
-* output="html" can use `gt` by setting `options(modelsummary_html="gt")` 
+* output="html" can use `gt` by setting `options(modelsummary_factory_html="gt")` 
 
 `datasummary_correlation`:
 

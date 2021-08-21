@@ -7,7 +7,7 @@ settings_init <- function(settings = NULL) {
         "format_numeric_latex" = getOption("modelsummary_format_numeric_latex", default = "siunitx"),
         "format_numeric_html" = getOption("modelsummary_format_numeric_html", default = "minus"),
         "siunitx_scolumns" = FALSE,
-        "output_default" = getOption("modelsummary_default", default = "kableExtra"),
+        "output_default" = getOption("modelsummary_factory_default", default = "kableExtra"),
         "stars_note" = getOption("modelsummary_stars_note", default = TRUE))
 
     checkmate::assert_list(settings, null.ok = TRUE, names = "unique")

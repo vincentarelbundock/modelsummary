@@ -47,56 +47,56 @@ test_that("supported global options", {
 
   # RTF
   filename <- paste0(random, '.rtf')
-  options(modelsummary_rtf = 'gt')
+  options(modelsummary_factory_rtf = 'gt')
   expect_error(modelsummary(mod, filename), NA)
   unlink(filename)
 
   # HTML
   filename <- paste0(random, '.html')
-  options(modelsummary_html = 'gt')
+  options(modelsummary_factory_html = 'gt')
   expect_error(modelsummary(mod, filename), NA)
   unlink(filename)
-  options(modelsummary_html = 'kableExtra')
+  options(modelsummary_factory_html = 'kableExtra')
   expect_error(modelsummary(mod, filename), NA)
   unlink(filename)
-  options(modelsummary_html = 'flextable')
+  options(modelsummary_factory_html = 'flextable')
   expect_error(modelsummary(mod, filename), NA)
   unlink(filename)
-  options(modelsummary_html = 'huxtable')
+  options(modelsummary_factory_html = 'huxtable')
   expect_error(modelsummary(mod, filename), NA)
   unlink(filename)
-  options(modelsummary_html = 'kableExtra')
+  options(modelsummary_factory_html = 'kableExtra')
 
 })
 
 test_that("unsupported global options", {
 
-  options(modelsummary_rtf = 'kableExtra')
+  options(modelsummary_factory_rtf = 'kableExtra')
   expect_error(modelsummary(mod, 'test.rtf'))
-  options(modelsummary_rtf = 'gt')
+  options(modelsummary_factory_rtf = 'gt')
 
-  options(modelsummary_word = 'kableExtra')
+  options(modelsummary_factory_word = 'kableExtra')
   expect_error(modelsummary(mod, 'test.docx'))
-  options(modelsummary_word = 'gt')
+  options(modelsummary_factory_word = 'gt')
   expect_error(modelsummary(mod, 'test.docx'))
-  options(modelsummary_word = 'flextable')
+  options(modelsummary_factory_word = 'flextable')
 
-  options(modelsummary_powerpoint = 'kableExtra')
+  options(modelsummary_factory_powerpoint = 'kableExtra')
   expect_error(modelsummary(mod, 'test.pptx'))
-  options(modelsummary_powerpoint = 'gt')
+  options(modelsummary_factory_powerpoint = 'gt')
   expect_error(modelsummary(mod, 'test.pptx'))
-  options(modelsummary_powerpoint = 'flextable')
+  options(modelsummary_factory_powerpoint = 'flextable')
 
-  options(modelsummary_png = 'huxtable')
+  options(modelsummary_factory_png = 'huxtable')
   expect_error(modelsummary(mod, 'test.png'))
   unlink("test.png")
-  options(modelsummary_png = 'kableExtra')
+  options(modelsummary_factory_png = 'kableExtra')
 
-  options(modelsummary_jpg = 'huxtable')
+  options(modelsummary_factory_jpg = 'huxtable')
   expect_error(modelsummary(mod, 'test.jpg'))
-  options(modelsummary_jpg = 'gt')
+  options(modelsummary_factory_jpg = 'gt')
   expect_error(modelsummary(mod, 'test.jpg'))
-  options(modelsummary_jpg = 'kableExtra')
+  options(modelsummary_factory_jpg = 'kableExtra')
 
 })
 

@@ -220,7 +220,7 @@ sanity_factory <- function(factory_dict) {
   check_option('jpg', c('flextable', 'kableExtra'))
 
   # check default
-  modelsummary_default <- getOption("modelsummary_default", default = "kableExtra")
+  modelsummary_default <- getOption("modelsummary_factory_default", default = "kableExtra")
   checkmate::assert_true(modelsummary_default %in% c("gt", "kableExtra",
                                                      "flextable", "huxtable",
                                                      "jupyter", "markdown",

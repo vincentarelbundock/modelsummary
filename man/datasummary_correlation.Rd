@@ -91,10 +91,10 @@ spaces) to produce a table of human-readable variables.
 
 The behavior of \code{modelsummary} can be affected by setting global options:
 \itemize{
-\item \code{modelsummary_default}
-\item \code{modelsummary_latex}
-\item \code{modelsummary_html}
-\item \code{modelsummary_png}
+\item \code{modelsummary_factory_default}
+\item \code{modelsummary_factory_latex}
+\item \code{modelsummary_factory_html}
+\item \code{modelsummary_factory_png}
 \item \code{modelsummary_get}
 \item \code{modelsummary_format_numeric_latex}
 \item \code{modelsummary_format_numeric_html}
@@ -107,10 +107,10 @@ functionalities. For example, 3 of those packages can export to LaTeX. To
 change the default backend used for a specific file format, you can use
 the \code{options} function:
 
-\code{options(modelsummary_html = 'kableExtra')}
-\code{options(modelsummary_latex = 'gt')}
-\code{options(modelsummary_word = 'huxtable')}
-\code{options(modelsummary_png = 'gt')}
+\code{options(modelsummary_factory_html = 'kableExtra')}
+\code{options(modelsummary_factory_latex = 'gt')}
+\code{options(modelsummary_factory_word = 'huxtable')}
+\code{options(modelsummary_factory_png = 'gt')}
 }
 
 \subsection{Model extraction functions}{
