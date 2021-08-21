@@ -10,6 +10,10 @@
 
 * Bugfix: escape variable names when `escape=TRUE`
 
+`datasummary_correlation`:
+
+* `add_rows` and `add_columns` arguments are now available here as well.
+
 # modelsummary 0.9.1
 
 Breaking change:

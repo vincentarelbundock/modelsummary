@@ -282,6 +282,10 @@ sanity_add_rows <- function(add_rows, models) {
   }
 }
 
+sanity_add_columns <- function(add_columns) {
+    checkmate::assert_data_frame(add_columns, min.cols = 1, null.ok = TRUE)
+}
+
 
 #' sanity check
 #'

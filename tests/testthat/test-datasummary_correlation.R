@@ -1,5 +1,23 @@
 skip_if(getRversion() < '4.0.0')
 
+test_that("correlation add_column", {
+    dat <- mtcars[, c("mpg", "hp", "drat")]
+    ac <- datasummary(All(dat) ~ Mean + SD, data = dat, output = "data.frame")
+    ac <- ac[, 2:3]
+    tab <- datasummary_correlation(dat, output = "data.frame", add_columns = ac)
+    expect_s3_class(tab, "data.frame")
+    expect_equal(dim(tab), c(3, 6))
+    expect_equal(colnames(tab), c(" ", "mpg", "hp", "drat", "Mean", "SD"))
+})
+
+test_that("correlation add_rows", {
+    dat <- mtcars[, c("mpg", "hp", "drat")]
+    ar <- data.frame("a", "b", "c", "d")
+    tab <- datasummary_correlation(dat, add_rows = ar, output = "data.frame")
+    expect_s3_class(tab, "data.frame")
+    expect_equal(dim(tab), c(4, 4))
+})
+
 test_that("different rows and columns", {
   dat <- mtcars[, c("mpg", "hp", "vs")]
   cor_fun <- function(x) {
