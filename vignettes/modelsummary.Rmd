@@ -39,7 +39,9 @@ models <- list(
 modelsummary(models)
 ```
 
-# output
+# `modelsummary` function arguments
+
+## output
 
 The `output` argument determines the type of object returned by `modelsummary` and/or the file where this table should be written.
 
@@ -76,7 +78,7 @@ Warning: When a file name is supplied to the `output` argument, the table is wri
 * `gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave` function.
 * `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.
 
-# fmt
+## fmt
 
 The `fmt` argument defines how numeric values are rounded and presented in the table. This argument accepts three types of input:
 
@@ -105,7 +107,7 @@ In many languages the comma is used as a decimal mark instead of the period.  `m
 options(OutDec=",")
 ```
 
-# estimate
+## estimate
 
 By default, `modelsummary` prints each coefficient estimate on its own row. You can customize this by changing the `estimate` argument. For example, this would produce a table of p values instead of coefficient estimates:
 
@@ -140,7 +142,7 @@ modelsummary(
 ```
 
 
-# statistic
+## statistic
 
 By default, `modelsummary` prints the coefficient's standard error in parentheses below the corresponding estimate. The value of this uncertainty statistic is determined by the `statistic` argument. The `statistic` argument accepts any of the column names produced by `get_estimates(model)`. For example:
 
@@ -184,7 +186,7 @@ modelsummary(models, gof_omit = ".*",
              statistic = NULL)
 ```
 
-# vcov
+## vcov
 
 You can use clustered or robust uncertainty estimates by modifying the `vcov` parameter. This function accepts 5 different types of input.  You can use a string or a vector of strings:
 
@@ -238,7 +240,7 @@ vc <- list(
 modelsummary(models, vcov = vc)
 ```
 
-# stars
+## stars
 
 Some people like to add "stars" to their model summary tables to mark statistical significance. The `stars` argument can take three types of input:
 
@@ -262,11 +264,11 @@ modelsummary(models,
 
 If you want to create your own stars description, you can add custom notes with the [`notes`](https://github.com/vincentarelbundock/modelsummary#notes) argument.
 
-# coef: rename/omit/map
+## coef: rename/omit/map
 
 `modelsummary` offers powerful and innovative mechanisms to rename, reorder, and subset coefficients and goodness-of-fit statistics.
 
-## coef_rename
+### coef_rename
 
 You can rename coefficients using the `coef_rename` argument. For example, if you have two models with different explanatory variables, but you want both variables to have the same name and appear ont he same row, you can do:
 
@@ -277,7 +279,7 @@ x <- list(
 modelsummary(x, coef_rename=c("drat"="Explanator", "vs"="Explanator"))
 ```
 
-## coef_map
+### coef_map
 
 The `coef_map` argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the "clean" variable name. Names of this vector correspond to the "raw" variable name. The table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.
 
@@ -288,7 +290,7 @@ cm <- c('Literacy'    = 'Literacy (%)',
 modelsummary(models, coef_map = cm)
 ```
 
-## coef_omit
+### coef_omit
 
 An alternative mechanism to subset coefficients is to use the `coef_omit` argument. This string is a regular expression which will be fed to `stringr::str_detect` to detect the variable names which should be excluded from the table.
 
@@ -315,7 +317,7 @@ modelsummary(models, coef_omit = "^(?!.*Commerce)(?!.*\\(Int)", gof_omit=".*")
 ```
 
 
-# gof_omit
+## gof_omit
 
 `gof_omit` is a regular expression which will be fed to `stringr::str_detect` to detect the names of the statistics which should be excluded from the table.
 
@@ -323,7 +325,7 @@ modelsummary(models, coef_omit = "^(?!.*Commerce)(?!.*\\(Int)", gof_omit=".*")
 modelsummary(models, gof_omit = 'DF|Deviance|R2|AIC|BIC')
 ```
 
-# gof_map
+## gof_map
 
 A more powerful mechanism is to supply a `data.frame` (or `tibble`) through the `gof_map` argument. This data.frame must include 3 columns:
 
@@ -366,7 +368,7 @@ modelsummary(
   escape = FALSE)
 ```
 
-# group
+## group
 
 Some models produce "grouped" parameter estimates. For example, multinomial logit models produce estimates for each level of the outcome variable, and GAMLSS models produce estimates for different "components." To display the results of such models, we can specify the kind of table we want by feeding a two sided formula to the `group` argument.
 
@@ -431,24 +433,29 @@ modelsummary(list(mod_ga, mod_glm),
              group = parameter + term ~ model)
 ```
 
-# align
+## align
 
-By default, `modelsummary` will align the first column (with coefficient names) to the left, and will center the results columns. To change this default, you can use the align argument, which accepts a string or vector of strings:
+By default, `modelsummary` will align the first column (with coefficient names) to the left, and will center the results columns. To change this default, you can use the align argument, which accepts a string of the same length as the number of columns:
 
 ```{r, eval=FALSE}
 modelsummary(models, align="lrrrrr")
-modelsummary(models, align=c("l", "r", "r", "r", "r", "r"))
 ```
 
-Many users want to align values on the decimal dot. Unfortunately, I am not aware of a single way to achieve this outcome for all output formats (pdf/latex, markdown, html). However, it is possible to do decimal alignment in LaTeX or Rmarkdown PDF documents, by using the `dcolumn` LaTeX package. Consider this Rmarkdown document:
+Users who produce PDF documents using Rmarkdown or LaTeX can also align values on the decimal dot by using the character "d" in the `align` argument:
 
-<img src="https://user-images.githubusercontent.com/987057/95660928-14617d80-0af9-11eb-9e48-504231a0484f.png" width="70%">
+```{r, eval=FALSE}
+modelsummary(models, align="lddddd")
+```
 
-Compiling the code above produces this table:
+For the table produced by this code to compile, users must include the following code in their LaTeX preamble:
 
-<img src="https://user-images.githubusercontent.com/987057/95660797-53430380-0af8-11eb-97d9-9ec2ad2608fb.png" width="40%">
+```{latex, eval=FALSE}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\newcolumntype{d}{S[input-symbols = ()]}
+```
 
-# notes
+## notes
 
 Add notes to the bottom of your table:
 
@@ -458,7 +465,7 @@ modelsummary(models,
                 'Text of the second note.'))
 ```
 
-# title
+## title
 
 You can add a title to your table as follows:
 
@@ -466,7 +473,7 @@ You can add a title to your table as follows:
 modelsummary(models, title = 'This is a title for my table.')
 ```
 
-# `add_rows`
+## `add_rows`
 
 Use the `add_rows` argument to add rows manually to a table. For example, let's say you estimate two models with a factor variables and you want to insert (a) an empty line to identify the category of reference, and (b) customized information at the bottom of the table:
 
@@ -876,6 +883,20 @@ modelsummary(mod, output = "gt")
 ```
 
 # Case studies
+
+## Subgroup estimation with `nest_by`
+
+Sometimes, it is useful to estimate multiple regression models on subsets of the data. To do this efficiently, we can use the `nest_by` function from the `dplyr` package. Then, estimate the models with `lm`, extract them and name them with `pull`, and finally summarize them with `modelsummary`:
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+mtcars %>%
+    nest_by(cyl) %>%
+    mutate(models = list(lm(mpg ~ hp, data))) %>%
+    pull(models, name = cyl) %>%
+    modelsummary
+```
 
 ## Statistics in separate columns instead of one over the other
 
