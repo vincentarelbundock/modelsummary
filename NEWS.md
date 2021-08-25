@@ -6,13 +6,14 @@
 * Fix display of `fixest::i()` variables and interactions (#361 by @grantmcdermott)
 * Consistent display of clustered SEs (#356 and #363 by @grantmcdermott)
 
-`datasummary_balance`:
-
-* Bugfix: escape variable names when `escape=TRUE`
-
 `datasummary_correlation`:
 
-* `add_rows` and `add_columns` arguments are now available here as well.
+* `add_rows` and `add_columns` arguments are now available here.
+
+Bug fixes:
+
+* `datasummary_balance`: escape variable names when `escape=TRUE`
+* Blogdown LaTeX dependency bug when output is HTML
 
 # modelsummary 0.9.1
 
