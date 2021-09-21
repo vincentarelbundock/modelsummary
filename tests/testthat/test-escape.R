@@ -2,6 +2,7 @@ dat <- mtcars
 colnames(dat)[1] <- "under_score"
 colnames(dat)[2] <- "oh&yeah<sup>2</sup>"
 
+
 test_that("escaped tables", {
     mod <- list(
         "First&Second" = lm(hp ~ under_score + `oh&yeah<sup>2</sup>` + drat, dat),
@@ -92,4 +93,16 @@ test_that("Bugfix: escape & latex & coef_map", {
     reg_prob2[[3]] <- lm(data = mtcars2, mpg ~  disp_x + wt_x + am)
     expect_snapshot(
         msummary(reg_prob2, coef_map = c("disp_x", "wt_x"), output = "latex"))
+})
+
+
+test_that("bugs stay dead: escape=FALSE w/ coef_map", {
+    url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
+    dat <- read.csv(url)
+    cm <- c('Literacy'    = 'Literacy (\\%)',
+            'Commerce'    = 'Patents per capita',
+            '(Intercept)' = 'Constant')
+    dat <- read.csv(url)
+    models <- list("OLS 1" = lm(Donations ~ Literacy + Commerce, data = dat))
+    expect_snapshot(modelsummary(models, coef_map = cm, output = "latex_tabular", escape = FALSE))
 })

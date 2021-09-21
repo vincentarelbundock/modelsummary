@@ -806,3 +806,30 @@
       \end{tabular}
       \end{table}
 
+# bugs stay dead: escape=FALSE w/ coef_map
+
+    Code
+      modelsummary(models, coef_map = cm, output = "latex_tabular", escape = FALSE)
+    Output
+      
+      \begin{tabular}[t]{lc}
+      \toprule
+        & OLS 1\\
+      \midrule
+      Literacy (\%) & \num{22.472}\\
+       & (\num{43.212})\\
+      Patents per capita & \num{78.055}\\
+       & (\num{29.979})\\
+      Constant & \num{2852.466}\\
+       & (\num{2724.293})\\
+      \midrule
+      Num.Obs. & \num{86}\\
+      R2 & \num{0.091}\\
+      R2 Adj. & \num{0.069}\\
+      AIC & \num{1734.4}\\
+      BIC & \num{1744.2}\\
+      Log.Lik. & \num{-863.198}\\
+      F & \num{4.133}\\
+      \bottomrule
+      \end{tabular}
+

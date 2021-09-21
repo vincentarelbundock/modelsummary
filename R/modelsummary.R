@@ -256,7 +256,9 @@ modelsummary <- function(
   if ("term" %in% colnames(est)) {
     if (!is.null(coef_map)) {
         term_order <- coef_map
-        term_order <- escape_string(term_order)
+        if (isTRUE(escape)) {
+            term_order <- escape_string(term_order)
+        }
         est$term <- factor(est$term, unique(term_order))
     } else {
         est$term <- factor(est$term, unique(term_order))
