@@ -22,8 +22,7 @@ test_that("markdown caption and notes", {
     modelsummary(models, "huxtable", title = "test title", notes = "test note",
       stars = TRUE) %>%
       huxtable::to_md())
-  expect_known_output(cat(unknown),
-                      "known_output/huxtable-title-notes.md", update = FALSE)
+  expect_snapshot(cat(unknown))
 })
 
 

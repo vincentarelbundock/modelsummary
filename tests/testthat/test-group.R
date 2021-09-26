@@ -19,11 +19,13 @@ test_that("Michael E Flynn ultra-niche bug check", {
         "a" = nnet::multinom(cyl ~ under_score, data = dat_multinom, trace = FALSE),
         "b" = nnet::multinom(cyl ~ under_score + drat, data = dat_multinom, trace = FALSE))
     coef_list = c("under_score" = "Under Score")
-    expect_error(modelsummary(mod,
-                              output = "latex",
-                              coef_map = coef_list,
-                              group = term ~ model + response),
-                 NA)
+    void <- capture.output(
+    tab <- modelsummary(mod,
+                        output = "latex",
+                        coef_map = coef_list,
+                        group = term ~ model + response)
+    )
+    expect_snapshot(cat(tab))
 })
 
 

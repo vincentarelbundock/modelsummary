@@ -92,10 +92,10 @@ test_that("tidy.custom", {
     data.frame("custom" = "model")
   }
   # beware of testthat scoping issues
-  assign("tidy.custom", tidy.custom, envir=.GlobalEnv)
-  assign("glance.custom", glance.custom, envir=.GlobalEnv)
+  assign("tidy.custom", tidy.custom, envir = .GlobalEnv)
+  assign("glance.custom", glance.custom, envir = .GlobalEnv)
   tab <- modelsummary(mod_custom, output = "dataframe")
   expect_equal(dim(tab), c(5, 4))
-  rm("tidy.custom", envir=.GlobalEnv)
-  rm("glance.custom", envir=.GlobalEnv)
+  rm("tidy.custom", envir = .GlobalEnv)
+  rm("glance.custom", envir = .GlobalEnv)
 })

@@ -14,14 +14,10 @@ junk,4")
     add_columns = ac,
     fmt = '%.2f',
     output = 'dataframe')
-  expect_known_output(dput(tab),
-                      file = "known_output/add_columns_1.R",
-                      update = TRUE,
-                      print = TRUE)
+  expect_snapshot(dput(tab))
 })
 
 test_that("too many rows in add_columns", {
-
 
   ac <- read.csv(text =
     "first,last

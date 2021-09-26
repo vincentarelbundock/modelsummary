@@ -47,10 +47,10 @@ test_that("nnet::multinom one model (factor DV)", {
   df <- make_data()
   invisible(capture.output(mod <- nnet::multinom(var1~var2, data=df)))
   tmp <- modelsummary_wide(mod, output="data.frame")
-  expect_is(tmp, "data.frame")
+  expect_s3_class(tmp, "data.frame")
   expect_equal(dim(tmp), c(7, 5))
   tmp <- modelsummary_wide(mod, output="data.frame", stacking="vertical")
-  expect_is(tmp, "data.frame")
+  expect_s3_class(tmp, "data.frame")
   expect_equal(dim(tmp), c(7, 5))
   # no model label in gof for single model
   truth <- c("Model 1 (Intercept)", "Model 1 (Intercept)", "Model 1 var2", "Model 1 var2", "Num.Obs.", "AIC", "edf")
@@ -65,10 +65,10 @@ test_that("2 models: horizontal and vertical", {
   invisible(capture.output(m1 <- nnet::multinom(var1~var2, data=df1)))
   invisible(capture.output(m2 <- nnet::multinom(var1~var2, data=df2)))
   tmp <- modelsummary_wide(list(m1, m2), output="data.frame", stacking="horizontal")
-  expect_is(tmp, "data.frame")
+  expect_s3_class(tmp, "data.frame")
   expect_equal(dim(tmp), c(7, 7))
   tmp <- modelsummary_wide(list(m1, m2), output="data.frame", stacking="vertical")
-  expect_is(tmp, "data.frame")
+  expect_s3_class(tmp, "data.frame")
   expect_equal(dim(tmp), c(16, 5))
 })
 
@@ -81,11 +81,11 @@ test_that("2 models with different response levels", {
   invisible(capture.output(m2 <- nnet::multinom(var1~var2, data=df2)))
 
   tmp <- modelsummary_wide(list(m1, m2), output="data.frame", stacking="horizontal")
-  expect_is(tmp, "data.frame")
+  expect_s3_class(tmp, "data.frame")
   expect_equal(dim(tmp), c(7, 7))
 
   tmp <- modelsummary_wide(list(m1, m2), output="data.frame", stacking="vertical")
-  expect_is(tmp, "data.frame")
+  expect_s3_class(tmp, "data.frame")
   expect_equal(dim(tmp), c(16, 6))
 })
 
@@ -117,7 +117,7 @@ test_that("2 models w/ horizontal stack", {
   invisible(capture.output(m2 <- nnet::multinom(var1~var2, data=df2)))
 
   tmp <- modelsummary_wide(list(m1, m2), output="data.frame", stacking="horizontal")
-  expect_is(tmp, "data.frame")
+  expect_s3_class(tmp, "data.frame")
   # expect_equal(dim(tmp), c(20, 5))
   # expect_equal(dim(tmp), c(16, 5))
 })

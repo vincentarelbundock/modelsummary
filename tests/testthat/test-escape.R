@@ -1,3 +1,5 @@
+skip_on_os("windows")
+
 dat <- mtcars
 colnames(dat)[1] <- "under_score"
 colnames(dat)[2] <- "oh&yeah<sup>2</sup>"

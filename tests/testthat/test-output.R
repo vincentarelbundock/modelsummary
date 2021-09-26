@@ -12,9 +12,9 @@ mod <- list(
   lm(hp ~ mpg + drat, mtcars))
 
 test_that("output='table.tex'", {
-  fn <- paste0(random_string(), ".tex")
+  fn <- test_path(paste0(random_string(), ".tex"))
   modelsummary(mod, output = fn)
-  known <- readLines("known_output/output_1.tex")
+  known <- readLines(test_path("known_output/output_1.tex"))
   unknown <- readLines(fn)
   expect_identical(known, unknown)
   unlink(fn)
@@ -139,20 +139,17 @@ test_that("save to file", {
 
 
 test_that("overwrite file", {
-
   random <- random_string()
-
   filename <- paste0(random, '.html')
   expect_error(modelsummary(mod, filename), NA)
   expect_error(modelsummary(mod, filename), NA)
   unlink(filename)
-
 })
 
 
 
 ######################################
-context("output: datasummary_balance")
+# datasummary_balance #
 ######################################
 
 test_that('output formats do not produce errors', {
@@ -203,7 +200,7 @@ for (ext in c('.html', '.tex', '.rtf', '.docx', '.pptx', '.jpg', '.png')) {
 
 
 ###################################
-context("output: datasummary_skim")
+# "output: datasummary_skim"
 ###################################
 
 dat <- mtcars
@@ -211,41 +208,33 @@ dat$vs <- as.logical(dat$vs)
 dat$gear <- as.factor(dat$gear)
 
 test_that("write to file", {
-
-  expect_error(datasummary_skim(dat, output="test.jpg"), NA)
-  expect_error(datasummary_skim(dat, type="categorical", output="test.jpg"), NA)
-  expect_error(datasummary_skim(dat, output="test.png"), NA)
-  expect_error(datasummary_skim(dat, type="categorical", output="test.png"), NA)
-  expect_error(datasummary_skim(dat, output="test.html"), NA)
-  expect_error(datasummary_skim(dat, type="categorical", output="test.html"), NA)
-  expect_warning(datasummary_skim(dat, output="test.tex"))
-
+  expect_error(datasummary_skim(dat, output = "test.jpg"), NA)
+  expect_error(datasummary_skim(dat, type = "categorical", output = "test.jpg"), NA)
+  expect_error(datasummary_skim(dat, output = "test.png"), NA)
+  expect_error(datasummary_skim(dat, type = "categorical", output = "test.png"), NA)
+  expect_error(datasummary_skim(dat, output = "test.html"), NA)
+  expect_error(datasummary_skim(dat, type = "categorical", output = "test.html"), NA)
+  expect_warning(datasummary_skim(dat, output = "test.tex"))
   unlink("test.png")
   unlink("test.jpg")
   unlink("test.html")
   unlink("test.tex")
-
 })
 
 test_that("unsupported formats", {
-
   expect_warning(datasummary_skim(dat, output="flextable"))
   expect_warning(datasummary_skim(dat, output="flextable", histogram=FALSE), NA)
-
   expect_warning(datasummary_skim(dat, output="gt"))
   expect_warning(datasummary_skim(dat, output="gt", histogram=FALSE), NA)
-
   expect_warning(datasummary_skim(dat, output="huxtable"))
   expect_warning(datasummary_skim(dat, output="huxtable", histogram=FALSE), NA)
-
   expect_warning(datasummary_skim(dat, output="latex"))
   expect_warning(datasummary_skim(dat, output="latex", histogram=FALSE), NA)
-
 })
 
 
 ##########################################
-context("output: datasummary_correlation")
+# "output: datasummary_correlation"
 ##########################################
 
 test_that('output format do not produce errors', {

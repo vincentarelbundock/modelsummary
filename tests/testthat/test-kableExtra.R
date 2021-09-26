@@ -25,7 +25,7 @@ test_that("kable markdown: complex table", {
     'disp' = 'Displacement',
     '(Intercept)' = 'Constant')
 
-  expect_known_output(
+  expect_snapshot(
     modelsummary(
       models,
       coef_map = cm,
@@ -34,23 +34,15 @@ test_that("kable markdown: complex table", {
       title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
       notes = c('First custom note to contain text.',
         'Second custom note with different content.'),
-      output = 'markdown'),
-    print = TRUE,
-    file = "known_output/kableExtra_markdown_complex.md",
-    update = FALSE)
+      output = 'markdown'))
 
 })
 
 test_that("kable markdown: rouding + custom stars", {
-
-  expect_known_output(
+  expect_snapshot(
     modelsummary(
       models,
       stars = c('+' = .1, '*' = .01),
       fmt = '%.8f',
-      output = 'markdown'),
-    print = TRUE,
-    file = "known_output/kableExtra_markdown_rounding_stars.md",
-    update = FALSE)
-
+      output = 'markdown'))
 })

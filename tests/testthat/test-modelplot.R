@@ -1,20 +1,14 @@
 skip_on_cran()
 
-expect_doppelganger <- function(title, fig, path = NULL, ...) {
-  testthat::skip_if(getRversion() > '4.0.3') # new graphics device
-  testthat::skip_if_not_installed("vdiffr")
-  vdiffr::expect_doppelganger(title, fig, path = path, ...)
-}
-
 test_that("single model", {
 
   mod <- lm(hp ~ mpg + drat, data = mtcars)
   p <- modelplot(mod)
-  expect_doppelganger("vanilla", p)
+  vdiffr::expect_doppelganger("vanilla", p)
 
   mod <- lm(hp ~ mpg + drat, data = mtcars)
   p <- modelplot(mod, coef_omit = 'Interc')
-  expect_doppelganger("coef_omit", p)
+  vdiffr::expect_doppelganger("coef_omit", p)
 
   params <- list(
     ggplot2::geom_vline(xintercept = 0, color = 'orange'),
@@ -25,7 +19,7 @@ test_that("single model", {
   p <- modelplot(mod,
     coef_map = c("drat" = "Rear axle ratio", "mpg" = "Miles / gallon"),
     color = "green", shape = "square", background = params)
-  expect_doppelganger("coef_map + color + shape + background", p)
+  vdiffr::expect_doppelganger("coef_map + color + shape + background", p)
 
 })
 
@@ -34,12 +28,12 @@ test_that("multiple models", {
   mod <- list(lm(hp ~ mpg + drat, data = mtcars),
     lm(hp ~ mpg, data = mtcars))
   p <- modelplot(mod)
-  expect_doppelganger("multiple plots vanilla", p)
+  vdiffr::expect_doppelganger("multiple plots vanilla", p)
 
   mod <- list(lm(hp ~ mpg + drat, data = mtcars),
     lm(hp ~ mpg, data = mtcars))
   p <- modelplot(mod, facet = TRUE)
-  expect_doppelganger("multiple plots facet", p)
+  vdiffr::expect_doppelganger("multiple plots facet", p)
 
 })
 
@@ -50,14 +44,14 @@ test_that("preserve model order", {
     "A" = lm(mpg ~ hp + drat + vs, data = mtcars),
     "B" = lm(mpg ~ hp + drat, data = mtcars))
   p <- modelplot(mod, draw = TRUE)
-  expect_doppelganger("model order", p)
+  vdiffr::expect_doppelganger("model order", p)
 })
 
 
 test_that("conf_level=NULL", {
   mod <- lm(hp ~ mpg + drat, data = mtcars)
   p <- modelplot(mod, draw = FALSE, conf_level = NULL)
-  expect_is(p, "data.frame")
+  expect_s3_class(p, "data.frame")
   expect_equal(nrow(p), 3)
 })
 

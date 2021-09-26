@@ -43,10 +43,13 @@ format_gof <- function(gof, fmt, gof_map, ...) {
     gof <- gof[, colnames(gof) %in% gm_raw, drop = FALSE]
   }
 
-  # reorder
+  # reorder columns
   idx1 <- intersect(gm_raw, colnames(gof))
   idx2 <- setdiff(colnames(gof), gm_raw)
-  gof <- gof[c(idx1, idx2)]
+  # avoid errors on some CI platforms
+  idx <- unlist(c(idx1, idx2), recursive = TRUE) 
+  gof <- as.data.frame(gof)
+  gof <- gof[, idx, drop = FALSE]
 
   # some gof were kept
   if (ncol(gof) > 0) {

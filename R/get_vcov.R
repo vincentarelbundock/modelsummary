@@ -1,9 +1,16 @@
 #' Allow users to override uncertainty estimates
 #' @param model object type with an available `tidy` method.
 #' @inheritParams modelsummary
-#' @noRd
+#' @keywords internal
 #' @return a numeric vector of test statistics
 get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
+    UseMethod("get_vcov", model)
+}
+
+
+
+#' @keywords internal
+get_vcov.default <- function(model, vcov = NULL, conf_level = NULL, ...) {
 
   if (all(sapply(vcov, is.null))) return(NULL)
 
@@ -14,77 +21,6 @@ get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
     "The variance-covariance matrix is required to adjust the standard errors. ",
     "The `vcov` argument accepts a variance-covariance matrix, a vector of standard errors, or a ",
     "function that returns one of these, such as `stats::vcov`.")
-
-  ## BEGIN fixest catch
-  if (inherits(model, "fixest") || inherits(model, "fixest_multi")) {
-
-    ## Versions older than 0.10.0 require a different approach, since they don't
-    ## support the flexible vcov argument
-    fixest_0_10 = utils::packageVersion("fixest") >= "0.10.0"
-
-    ## Match supported character args based on version
-    if (fixest_0_10) {
-      ## known fixest vcovs
-      fixest_vcovs = c("iid", "standard",
-                       "hetero", "HC1", "White",
-                       "cluster", "twoway",
-                       "NW", "newey_west",
-                       "DK", "driscoll_kraay",
-                       "conley")
-      ## Equivalent aliases used by modelsummary (excl. those common to both)
-      fixest_vcov_aliases = c("iid" = "classical",
-                              "iid" = "constant",
-                              "HC1" = "stata",
-                              "NW" = "NeweyWest")
-    } else {
-      ## known fixest vcovs
-      fixest_vcovs = c('standard', 'hetero',
-                       'cluster', 'twoway', 'threeway', 'fourway')
-      ## Equivalent aliases used by modelsummary  (excl. those common to both)
-      fixest_vcov_aliases = c("standard" = "iid",
-                              "standard" = "classical",
-                              "standard" = "constant",
-                              "hetero" = "stata")
-    }
-
-    is_func = class(vcov)=="function"
-    is_form = class(vcov)=="formula"
-    is_mat = is.matrix(vcov)
-
-    if (!is_func && !is_form && !is_mat && vcov %in% fixest_vcov_aliases) {
-      vcov = names(fixest_vcov_aliases)[which(fixest_vcov_aliases %in% vcov)]
-    }
-
-    ## if a known or compatible fixest vcov argument, use the dedicated
-    ## fixest.vcov method
-    if (fixest_0_10) {
-      ## if a known or compatible fixest vcov argument, use the dedicated
-      ## fixest.vcov method
-      if (is.null(vcov) || is_func || is_form || is_mat || vcov %in% fixest_vcovs) {
-        mat = vcov(model, vcov = vcov)
-        out = get_coeftest(model, mat, conf_level)
-        stop(return(out))
-        ## else coerce to iid error for sandwich adjustment below
-      } else {
-        model = summary(model, vcov = "iid")
-      }
-      ## fixest versions older than 0.10.0 are less flexible
-    } else {
-      if (is_form) {
-        mat = vcov(summary(model, cluster = vcov))
-        out = get_coeftest(model, mat, conf_level)
-        stop(return(out))
-      } else if (vcov %in% fixest_vcovs) {
-        mat = vcov(summary(model, se = vcov))
-        out = get_coeftest(model, mat, conf_level)
-        stop(return(out))
-      } else {
-        model = summary(model, se = "standard")
-      }
-    }
-
-  }
-  ## END fixest catch
 
   if (is.null(vcov)) {
     return(NULL)
@@ -255,7 +191,6 @@ get_coeftest <- function(model, vcov, conf_level) {
 }
 
 
-
 #' internal function
 #'
 #' @param v a string or formula describing the standard error type
@@ -267,8 +202,7 @@ get_vcov_type <- function(vcov) {
 
   get_vcov_type_inner <- function(v) {
     if (is.character(v)) {
-      if (v %in% c("robust", "classical", "stata", "classical", "constant",
-                   "panel-corrected", "Andrews", "outer-product")) {
+      if (v %in% c("robust", "classical", "stata", "classical", "constant", "panel-corrected", "Andrews", "outer-product")) {
          out <- tools::toTitleCase(v)
        } else if (v == "NeweyWest") {
          out <- "Newey-West"

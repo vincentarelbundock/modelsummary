@@ -1,22 +1,17 @@
 # CRAN win-devel does not play well with fancy unicode x
 skip_on_cran()
+skip_if_not_installed("fixest")
+requiet("fixest")
 
 test_that(": in interactions become x", {
   mod <- lm(am ~ drat * mpg * vs, mtcars)
-  expect_known_output(modelsummary(mod, "markdown"),
-                      file="known_output/msummary_interaction.md",
-                      print=TRUE,
-                      update=FALSE)
+  expect_snapshot_output(modelsummary(mod, "markdown"))
 })
 
 test_that("fixest i() becomes =", {
   testthat::skip_if_not_installed("fixest")
-  library(fixest)
-  mod <- feols(Ozone ~ Solar.R + i(Month), airquality)
-  expect_known_output(modelsummary(mod, "markdown", gof_map = list()),
-                      file="known_output/msummary_fixest_i.md",
-                      print=TRUE,
-                      update=FALSE)
+  mod <- suppressMessages(feols(Ozone ~ Solar.R + i(Month), airquality))
+  expect_snapshot_output(modelsummary(mod, "markdown", gof_map = list()))
 })
 
 test_that("conditional conversion of : to x", {

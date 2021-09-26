@@ -1,5 +1,5 @@
 # several tests adapted from `parameters` package under GPL3
-skip_on_cran()
+# skip_on_cran()
 
 test_that("supported_models() returns a long character vector", {
   x <- supported_models()
@@ -31,17 +31,17 @@ test_that("nnet::multinom with `y.level` column", {
     df1
   }
   dat <- make_data()
-  invisible(capture.output(mod <- nnet::multinom(var1~var2, data=dat)))
-  tab <- modelsummary(mod, output="dataframe")
+  invisible(capture.output(mod <- nnet::multinom(var1 ~ var2, data = dat)))
+  tab <- expect_warning(modelsummary(mod, output = "dataframe"), regexp = "duplicate")
+  tab <- expect_warning(modelsummary(mod, group = y.level + term ~ model, output = "dataframe"), NA)
   expect_s3_class(tab, "data.frame")
-  expect_equal(dim(tab), c(11, 4))
+  expect_equal(dim(tab), c(11, 5))
 })
 
 
 test_that("MASS", {
   testthat::skip_if_not_installed("MASS")
   suppressMessages(library(MASS))
-
   # broom::tidy requires p.values=TRUE
   fit <- polr(Sat ~ Freq, weights = Freq, data = housing)
   expect_error(suppressMessages(modelsummary(fit, statistic="p.value")))
@@ -54,13 +54,13 @@ test_that("MASS", {
 test_that("survival", {
   testthat::skip_if_not_installed("survival")
   library(survival)
-  data("lung")
+  lung <- survival::lung
   lung <- subset(lung, subset = ph.ecog %in% 0:2)
   lung$sex <- factor(lung$sex, labels = c("male", "female"))
   lung$ph.ecog <- factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
   mod <- survival::coxph(Surv(time, status) ~ sex + age + ph.ecog, data = lung)
   tab <- modelsummary(mod, output="data.frame")
-  expect_is(tab, "data.frame")
+  expect_s3_class(tab, "data.frame")
   expect_true(nrow(tab) > 11)
 })
 
@@ -72,19 +72,20 @@ test_that("mgcv::gam", {
     family = stats::quasi(),
     data = mtcars)
   tab <- modelsummary(mod, estimate = "edf", output="data.frame", statistic="p.value")
-  expect_is(tab, "data.frame")
+  expect_s3_class(tab, "data.frame")
   expect_true(nrow(tab) > 5)
 })
 
 
 test_that("betareg::betareg", {
   testthat::skip_if_not_installed("betareg")
-  data("GasolineYield", package="betareg")
-  data("FoodExpenditure", package="betareg")
+  requiet("betareg")
+  data("GasolineYield", package = "betareg")
+  data("FoodExpenditure", package = "betareg")
   m1 <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
   m2 <- betareg::betareg(I(food / income) ~ income + persons, data = FoodExpenditure)
   tab <- modelsummary(list(m1, m2), output="data.frame")
-  expect_is(tab, "data.frame")
+  expect_s3_class(tab, "data.frame")
   expect_true(nrow(tab) > 30)
 })
 
@@ -92,24 +93,27 @@ test_that("betareg::betareg", {
 test_that("ivreg::ivreg", {
   testthat::skip_if_not_installed("ivreg")
   testthat::skip_if_not_installed("AER")
-  data(CigarettesSW, package="AER")
+  requiet("AER")
+  requiet("ivreg")
+  data(CigarettesSW, package = "AER")
   mod <- ivreg::ivreg(
     log(packs) ~ log(price) + log(income) | log(income) + I(tax / cpi),
     data = CigarettesSW)
   tab <- modelsummary(mod, output="data.frame", diagnostic=TRUE)
-  expect_is(tab, "data.frame")
+  expect_s3_class(tab, "data.frame")
   expect_true(nrow(tab) > 5)
 })
 
 
 test_that("pscl::hurdle", {
   testthat::skip_if_not_installed("pscl")
+  requiet("pscl")
   set.seed(123)
   data("bioChemists", package = "pscl")
   mod<- pscl::hurdle(formula = art ~ .,
                data = bioChemists, zero = "geometric")
   tab <- modelsummary(mod, output="data.frame")
-  expect_is(tab, "data.frame")
+  expect_s3_class(tab, "data.frame")
   expect_true(nrow(tab) > 25)
 })
 
@@ -117,52 +121,33 @@ test_that("pscl::hurdle", {
 test_that("fixest", {
   testthat::skip_if_not_installed("fixest")
   testthat::skip_if(getRversion() < '3.6.6') # change in .Rng
-  library(fixest)
-
+  requiet("fixest")
   # simple model
   mod <- feols(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris)
   raw <- modelsummary(mod, "data.frame")
   expect_s3_class(raw, "data.frame")
   expect_equal(dim(raw), c(14, 4))
-
-  # glance custom
-  mod <- feols(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris)
-  raw <- glance_custom(mod)
-  expect_is(raw, "data.frame")
-  expect_equal(dim(raw), c(1, 2))
 })
+
 
 test_that("fixest std.error labels", {
   testthat::skip_if_not_installed("fixest")
-  library(fixest)
-
+  requiet("fixest")
   mod <- feols(hp ~ mpg + drat, mtcars, cluster = "vs")
-
   tab <- modelsummary(mod, output = "data.frame")
-  expect_equal(tab[tab$term == "Std. Errors", "Model 1"],
-               "Clustered (vs)")
-
+  expect_equal(tab[tab$term == "Std.Errors", "Model 1"], "by: vs")
   tab <- modelsummary(mod, vcov = list(NULL), output = "data.frame")
-  expect_equal(tab[tab$term == "Std. Errors", "Model 1"],
-               "Clustered (vs)")
-
+  expect_equal(tab[tab$term == "Std.Errors", "Model 1"], "by: vs")
   tab <- modelsummary(mod, vcov = list(NULL, "iid"), output = "data.frame")
-  expect_equal(tab[tab$term == "Std. Errors", "Model 1"],
-               "Clustered (vs)")
-  expect_equal(tab[tab$term == "Std. Errors", "Model 2"],
-               "IID")
-
+  expect_equal(tab[tab$term == "Std.Errors", "Model 1"], "by: vs")
+  expect_equal(tab[tab$term == "Std.Errors", "Model 2"], "IID")
   # unnamed function includes no label
-  tab1 <- modelsummary(mod, vcov = vcov(mod, se = "standard"),
-                       output = "data.frame")
-  tab2 <- modelsummary(mod, vcov = list(vcov(mod, se = "standard")),
-                       output = "data.frame")
-  tab3 <- modelsummary(mod, vcov = list("test " = vcov(mod, se = "standard")),
-                       output = "data.frame")
-  expect_false("Std. Errors" %in% tab1$term)
-  expect_false("Std. Errors" %in% tab2$term)
-  expect_true("Std. Errors" %in% tab3$term)
-
+  tab1 <- modelsummary(mod, vcov = vcov(mod, se = "standard"), output = "data.frame")
+  tab2 <- modelsummary(mod, vcov = list(vcov(mod, se = "standard")), output = "data.frame")
+  tab3 <- modelsummary(mod, vcov = list("test " = vcov(mod, se = "standard")), output = "data.frame")
+  expect_false("Std.Errors" %in% tab1$term)
+  expect_false("Std.Errors" %in% tab2$term)
+  expect_true("Std.Errors" %in% tab3$term)
 })
 
 
@@ -171,7 +156,7 @@ test_that("mice", {
   testthat::skip_if_not_installed("mice")
   testthat::skip_if(getRversion() < '4.0.0') # change in .Rng
 
-  library(mice)
+  requiet("mice")
 
   # impute
   set.seed(10393983)
@@ -202,7 +187,7 @@ test_that("mice", {
 
 test_that("lme4", {
   testthat::skip_if_not_installed("lme4")
-  library(lme4)
+  requiet("lme4")
   d <- as.data.frame(ChickWeight)
   colnames(d) <- c("y", "x", "subj", "tx")
   mod <- lmer(y ~ tx * x + (x | subj), data = d)
@@ -282,31 +267,14 @@ test_that("sandwich vignette", {
     statistic_override = vc["Clustered"],
     stars = TRUE)
   expect_s3_class(tab, "data.frame")
-  expect_equal(dim(tab), c(11, 4))
+  expect_equal(dim(tab), c(12, 4))
 })
 
-test_that("consistent gof std error display fixest/lfe/estimatr", {
-  testthat::skip_if_not_installed(c("fixest", "lfe", "estimatr"))
-  library(lfe)
-  library(fixest)
-  library(estimatr)
-  if (packageVersion("fixest") >= "0.10.0") {
-    fixest_mod <- fixest::feols(hp ~ mpg + drat, mtcars, vcov = ~vs)
-  } else {
-    fixest_mod <- fixest::feols(hp ~ mpg + drat, mtcars, cluster = ~vs)
-  }
-  mod <- list(
-    "feols" = fixest_mod,
-    "felm" = felm(hp ~ mpg + drat |0 | 0 | vs, mtcars),
-    "estimatr" = lm_robust(hp ~ mpg + drat, mtcars, se_type = 'stata', clusters = vs))
-  tab <- msummary(mod, gof_omit = 'Obs|R2|IC|Lik|se_type', output = 'data.frame')
-  expect_equal(tab$feols[nrow(tab)], "Clustered (vs)")
-  expect_equal(tab$felm[nrow(tab)], "Clustered (vs)")
-  expect_equal(tab$estimatr[nrow(tab)], "Clustered (vs)")
-})
+
+
 
 test_that("consistent gof std error display did", {
-  testthat::skip_if_not_installed("did")
+  testthat::skip("`did` does nto have tidy and glance methods")
   library(did)
   data(mpdta, package = 'did')
   mpdta$newvar <- substr(mpdta$countyreal, 1, 2)

@@ -69,7 +69,7 @@ test_that("palmer penguins was once broken with kableExtra", {
   penguins <- "https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv"
   penguins <- read.csv(penguins)
   raw <- datasummary_balance(~sex, penguins, output="html")
-  expect_known_output(cat(raw), "known_output/datasummary_balance_penguins.html", update = FALSE)
+  expect_output(cat(raw))
 })
 
 

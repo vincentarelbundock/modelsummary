@@ -17,22 +17,22 @@ mod <- list()
 mod[[1]] <- lm(hp ~ mpg, mtcars)
 mod[[2]] <- lm(hp ~ mpg + drat, mtcars)
 
-## save known files
-# modelsummary(mod, output = "known_output/output-file.md")
-# modelsummary(mod, output = "known_output/output-file.tex")
-# modelsummary(mod, output = "known_output/output-file.txt")
-# modelsummary(mod, output = "known_output/output-file.rtf")
-# modelsummary(mod, output = "known_output/output-file.docx")
-# modelsummary(mod, output = "known_output/output-file.pptx")
-# modelsummary(mod, output = "known_output/output-file.jpg")
-# modelsummary(mod, output = "known_output/output-file.png")
+# # save known files
+# modelsummary(mod, output = test_path("known_output/output-file.md"))
+# modelsummary(mod, output = test_path("known_output/output-file.tex"))
+# modelsummary(mod, output = test_path("known_output/output-file.txt"))
+# modelsummary(mod, output = test_path("known_output/output-file.rtf"))
+# modelsummary(mod, output = test_path("known_output/output-file.docx"))
+# modelsummary(mod, output = test_path("known_output/output-file.pptx"))
+# modelsummary(mod, output = test_path("known_output/output-file.jpg"))
+# modelsummary(mod, output = test_path("known_output/output-file.png"))
 
 extensions <- c(".md", ".tex", ".txt", ".rtf", ".jpg")
 for (x in extensions) {
   testname <- paste0("output='table", x, "'")
   test_that(testname, {
     fn1 <- paste0(random_string(), x)
-    fn2 <- paste0("known_output/output-file", x)
+    fn2 <- test_path(paste0("known_output/output-file", x))
     modelsummary(mod, output = fn1)
     compare_files(fn1, fn2)
     unlink(fn1)

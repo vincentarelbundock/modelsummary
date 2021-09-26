@@ -8,7 +8,7 @@ test_that('output="modelsummary_list" and back to data.frame', {
     expect_true(class(tab) == "list")
     tab <- modelsummary(tab, "data.frame")
     expect_s3_class(tab, "data.frame")
-    expect_equivalent(dim(tab), c(13, 5))
+    expect_equal(dim(tab), c(13, 5))
 })
 
 
@@ -17,7 +17,7 @@ test_that("tidiers empty", {
   ml <- list(tidy = modelsummary:::get_estimates(mod))
   class(ml) <- "modelsummary_list"
   gl <- generics::glance(ml)
-  expect_is(gl, "data.frame")
+  expect_s3_class(gl, "data.frame")
   expect_equal(dim(gl), c(1, 0))
   ml <- list(glance = modelsummary:::get_gof(mod))
   class(ml) <- "modelsummary_list"
@@ -34,8 +34,8 @@ test_that("tidiers empty", {
 #   class(ml) <- "modelsummary_list"
 #   gl <- generics::glance(ml)
 #   ti <- generics::tidy(ml)
-#   expect_is(gl, "data.frame")
-#   expect_is(ti, "data.frame")
+#   expect_s3_class(gl, "data.frame")
+#   expect_s3_class(ti, "data.frame")
 #   # # broom
 #   # expect_equal(dim(ti), c(4, 5))
 #   # expect_equal(dim(gl), c(1, 12))

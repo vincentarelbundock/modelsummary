@@ -4,8 +4,7 @@ skip_if(getRversion() < '4.0.0')
 
 ## gt sometimes introduces slight changes in its html output
 skip_if_not_installed("gt", minimum_version = "0.3.1")
-
-library(gt)
+requiet("gt")
 
 models <- list()
 models[['OLS 1']] <- lm(hp ~ mpg + wt, mtcars)
@@ -49,18 +48,19 @@ test_that("complex html table", {
         subtitle = 'Models estimated using the mtcars dataset.') %>%
         gt::as_raw_html()
 
-  expect_known_output(cat(raw), "known_output/complex_table.html", update = TRUE)
+  expect_snapshot(cat(raw))
 
 })
+
 
 test_that("title", {
-  raw <- modelsummary(models, output = "gt", title = 'This is a title for my table.') %>%
-    gt::as_raw_html()
-  expect_known_output(cat(raw), "known_output/title.html", update = TRUE)
+  raw <- modelsummary(models, output = "gt", title = 'This is a title for my table.')
+  raw <- gt::as_raw_html(raw)
+  expect_snapshot(cat(raw))
 })
 
-test_that("background color", {
 
+test_that("background color", {
   raw <- modelsummary(models, output = "gt", title = 'colors') %>%
     tab_style(style = cell_text(weight = "bold"),
       locations = cells_body(columns = c("OLS 1"))) %>%
@@ -71,7 +71,5 @@ test_that("background color", {
     tab_style(style = cell_fill(color = "#F9E3D6"),
       locations = cells_body(columns = c("Logit 2"), rows = 2:6)) %>%
     as_raw_html()
-
-  expect_known_output(cat(raw), "known_output/background_color.html", update = TRUE)
-
+  expect_snapshot(cat(raw))
 })

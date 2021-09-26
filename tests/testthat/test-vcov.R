@@ -13,8 +13,8 @@ test_that("warning for non-iid hardcoded vcov", {
     testthat::skip_if_not_installed("lfe")
     testthat::skip_if_not_installed("estimatr")
 
-    library(lfe)
-    library(estimatr)
+    requiet("lfe")
+    requiet("estimatr")
 
     mod <- felm(hp ~ mpg + drat | 0 | 0 | vs, mtcars)
     expect_warning(modelsummary(mod, vcov = "iid", output = "data.frame"), regexp = "IID")
@@ -262,11 +262,11 @@ test_that("vector must be named", {
 })
 
 test_that("vcov content", {
-  expect_equivalent(results[["one sandwich"]], reference[["one sandwich"]])
-  expect_equivalent(results[["many sandwiches"]], reference[["many sandwiches"]])
-  expect_equivalent(results[["list of matrices"]], reference[["list of matrices"]])
-  expect_equivalent(results[["hardcoded numerical"]], reference[["hardcoded numerical"]])
-  expect_equivalent(results[["hardcoded arbitrary"]], reference[["hardcoded arbitrary"]])
+  expect_equal(results[["one sandwich"]], reference[["one sandwich"]], ignore_attr = TRUE)
+  expect_equal(results[["many sandwiches"]], reference[["many sandwiches"]], ignore_attr = TRUE)
+  expect_equal(results[["list of matrices"]], reference[["list of matrices"]], ignore_attr = TRUE)
+  expect_equal(results[["hardcoded numerical"]], reference[["hardcoded numerical"]], ignore_attr = TRUE)
+  expect_equal(results[["hardcoded arbitrary"]], reference[["hardcoded arbitrary"]], ignore_attr = TRUE)
 })
 
 test_that("useless: function but no ci needed", {

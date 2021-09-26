@@ -9,7 +9,7 @@ test_that("latex threeparttable argument", {
     expect_true(grepl("threeparttable", tab2))
     expect_equal(sum(grepl("threeparttable", strsplit(tab2, "\n")[[1]])), 2)
 
-    
+
     ## kableExtra::footnote has a bug with multiple footnotes and threeparttable, so we combine notes.
     ft <- "Here is a very very very very very very very very very very very very very very very very very long footnote"
     tab3 <- modelsummary(models,
@@ -39,9 +39,5 @@ test_that("stars_note < are protected by $ in latex", {
 ## })
 
 test_that("output = latex_tabular", {
-    expect_known_output(modelsummary(models,
-                                     output = "latex_tabular"),
-                        file = "known_output/latex_1.tex",
-                        print = TRUE,
-                        update = FALSE)
+    expect_snapshot(modelsummary(models, output = "latex_tabular"))
 })

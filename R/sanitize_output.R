@@ -68,7 +68,7 @@ sanitize_output <- function(output) {
                       .frequency_id = a)
       }
   }
-      
+
 
   factory_dict <- c(
     "dataframe"      = "dataframe",

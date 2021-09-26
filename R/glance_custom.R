@@ -20,6 +20,7 @@ glance_custom <- function(x, ...) {
 #' @export
 glance_custom.default <- function(x, ...) NULL
 
+
 #' Avoid namespace conflict when we want to customize glance internally and
 #' still allow users to do the same with their own functions
 #' @keywords internal
@@ -27,101 +28,7 @@ glance_custom_internal <- function(x, ...) {
   UseMethod("glance_custom_internal")
 }
 
+
 #' @inherit glance_custom_internal
 #' @keywords internal
 glance_custom_internal.default <- function(x, ...) NULL
-
-#' @inherit glance_custom_internal
-#' @keywords internal
-glance_custom_internal.fixest <- function(x, vcov_type = NULL, ...) {
-  assert_dependency("fixest")
-  out <- data.frame(row.names = "firstrow")
-  for (n in x$fixef_vars) {
-    out[[paste('FE:', n)]] <- 'X'
-  }
-  # if (vcov=="robust") {
-  #   vcov = NULL
-  # }
-  if (is.null(vcov_type) || !vcov_type %in% c("vector", "matrix", "function")) {
-    fvcov_type <- attr(fixest::coeftable(x), "type")
-    if (utils::packageVersion("fixest") >= "0.10.0") {
-      if (grepl("^Clustered", fvcov_type)) fvcov_type = gsub("\\)$", "", fvcov_type)
-      fvcov_type <- gsub("^Clustered \\(", "by: ", fvcov_type)
-    } else {
-      fvcov_type <- gsub("^Two-way|^Three-way|^Four-way", "", fvcov_type)
-      fvcov_type <- gsub("^ \\(", "by: ", gsub("\\)$", "", fvcov_type))
-    }
-    out[['vcov.type']] <- fvcov_type
-  }
-  row.names(out) <- NULL
-  return(out)
-}
-
-#' @inherit glance_custom_internal
-#' @keywords internal
-glance_custom_internal.lm_robust <- function(x, vcov_type = NULL, ...) {
-    assert_dependency("estimatr")
-    out <- data.frame(row.names = "firstrow")
-    if (is.null(vcov_type) || !vcov_type %in% c("vector", "matrix", "function")) {
-        if (x$clustered) {
-            # out[['vcov.type']] <- paste("by:", x$call$clusters)
-            out[['se_type']] <- paste("by:", x$call$clusters)
-        }
-    }
-    row.names(out) <- NULL
-    return(out)
-}
-#' @inherit glance_custom_internal
-#' @keywords internal
-glance_custom_internal.iv_robust <- glance_custom_internal.lm_robust
-
-#' @inherit glance_custom_internal
-#' @keywords internal
-glance_custom_internal.felm <- function(x, vcov_type = NULL, ...) {
-    assert_dependency("lfe")
-    out <- data.frame(row.names = "firstrow")
-    if (is.null(vcov_type) || !vcov_type %in% c("vector", "matrix", "function")) {
-        if (!is.null(x$clustervar)) {
-            cluster_vars = paste(names(x$clustervar), collapse = " & ")
-            out[['vcov.type']] <- paste("by:", cluster_vars)
-        }
-    }
-    row.names(out) <- NULL
-    return(out)
-}
-
-#' @inherit glance_custom_internal
-#' @keywords internal
-glance_custom_internal.MP <- function(x, vcov_type = NULL, ...) {
-  assert_dependency("did")
-  out <- data.frame(row.names = "firstrow")
-  if (is.null(vcov_type) || !vcov_type %in% c("vector", "matrix", "function")) {
-    if (x$DIDparams$bstrap) {
-      if (!is.null(x$DIDparams$clustervars)) {
-        cluster_vars = paste(x$DIDparams$clustervars, collapse = " & ")
-      } else {
-        cluster_vars = x$DIDparams$idname
-      }
-      out[['vcov.type']] <- paste("by:", cluster_vars)
-    }
-  }
-  row.names(out) <- NULL
-  return(out)
-}
-#' @inherit glance_custom_internal
-#' @keywords internal
-glance_custom_internal.AGGTEobj <- glance_custom_internal.MP
-
-##' @inherit glance_custom
-##' @noRd
-##' @export
-#glance_custom.felm <- function(x) {
-#	out <- tibble::tibble(.rows = 1)
-#	for (n in names(x$fe)) {
-#		out[[paste('FE: ', n)]] <- 'X'
-#	}
-#	if (!is.null(names(x$clustervar))) {
-#		out[['Cluster vars']] <- paste(names(x$clustervar), collapse = ' + ')
-#	}
-#	return(out)
-#}

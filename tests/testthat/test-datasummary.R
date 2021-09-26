@@ -2,23 +2,19 @@ library(modelsummary)
 penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
 
 
-## This doesn't work in the test_that suite, but it works manually. But be random seed related.
-
-## test_that("big.mark formatting", {
-##     set.seed(10)
-##     rock <- data.frame(
-##         area = runif(100, 1000, 10000),
-##         shape = runif(100, 0, 1))
-##     f <- area * Arguments(fmt = 1, big.mark = ",") +
-##         shape * Arguments(fmt = 3) ~
-##         Min + Mean + Max
-##     tab <- datasummary(f, data = rock, output = "data.frame")
-##     truth <- structure(list(` ` = c("area", "shape"), Min = c("1129.9", "0.047"), Mean = c("5,007.9", "0.502"), Max = c("9,651.7", "0.987")), class = "data.frame", row.names = c(NA, -2L), stub_width = 1L, align = "lrrr", output_format = "dataframe")
-##     expect_equal(tab, truth)
-## })
+test_that("big.mark formatting", {
+            set.seed(10)
+            rock <- data.frame(
+                               area = runif(100, 1000, 10000),
+                               shape = runif(100, 0, 1))
+            f <- area * Arguments(fmt = 1, big.mark = ",") +
+              shape * Arguments(fmt = 3) ~
+              Min + Mean + Max
+            expect_snapshot(datasummary(f, data = rock, output = "data.frame"))
+})
 
 test_that("cannot nest two continuous variables", {
-  expect_error(datasummary(mpg * hp ~ Mean + SD, mtcars))
+  expect_error(suppressMessages(datasummary(mpg * hp ~ Mean + SD, mtcars)))
 })
 
 test_that('numeric content of simple tables', {
@@ -70,18 +66,15 @@ test_that('numeric content of simple tables', {
 })
 
 test_that('Header carry-forward', {
-
   coln <- c(" ", "4 mean", "4 sd", "6 mean", "6 sd", "8 mean", "8 sd",
     "median")
   tab <- datasummary(mpg + hp ~ Factor(cyl) * (mean + sd) + median,
     data = mtcars,
     output = 'dataframe')
   expect_equal(coln, colnames(tab))
-
 })
 
 test_that('Factor() is equivalent to assign', {
-
   tab1 <- datasummary(Factor(am) * (mpg + hp) ~ mean + sd,
     output = 'dataframe',
     data = mtcars)
@@ -91,12 +84,10 @@ test_that('Factor() is equivalent to assign', {
     output = 'dataframe',
     data = tmp)
   expect_identical(tab1, tab2)
-
 })
 
 
 test_that('logical and characters converted to factors automatically', {
-
   tmp <- mtcars
   tmp$am <- ifelse(tmp$am == 0, FALSE, TRUE)
   tmp$cyl <- as.character(tmp$cyl)
@@ -104,7 +95,6 @@ test_that('logical and characters converted to factors automatically', {
     output = 'dataframe',
     data = tmp)
   expect_equal(dim(tab), c(12, 5))
-
 })
 
 test_that('datasummary: output format do not produce errors', {
@@ -138,6 +128,6 @@ test_that('datasummary: return numeric values', {
     output = "data.frame",
     fmt = NULL,
     data = penguins)
-  expect_is(tmp$female, "numeric")
-  expect_is(tmp$male, "numeric")
+  expect_true(is.numeric(tmp$female))
+  expect_true(is.numeric(tmp$male))
 })
