@@ -106,3 +106,14 @@ test_that("bugs stay dead: escape=FALSE w/ coef_map", {
     models <- list("OLS 1" = lm(Donations ~ Literacy + Commerce, data = dat))
     expect_snapshot(modelsummary(models, coef_map = cm, output = "latex_tabular", escape = FALSE))
 })
+
+
+test_that("column headers are not escaped with `escape=FALSE`", {
+    mod <- list(
+        "<code>lm()</code>" = lm(mpg ~ hp + drat, mtcars),
+        "<code>lm_robust()</code>" = lm(mpg ~ hp + drat, mtcars))
+    expect_snapshot(modelsummary(mod, 
+                                 vcov = c("classical", "HC1"), 
+                                 escape = FALSE, 
+                                 output = "html"))
+})
