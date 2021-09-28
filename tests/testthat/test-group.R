@@ -1,17 +1,11 @@
 # replicability: this gets reverted at the end of the file 
 options(modelsummary_get = "easystats")
-
-suppressPackageStartupMessages(library(gamlss))
-data(trees)
-models <- list()
-models[['Bivariate']] <- lm(Girth ~ Height, data = trees)
-models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
-models[["GAMLSS"]] <- gamlss(y~pb(x),sigma.fo=~pb(x),family=BCT, data=abdom, method=mixed(1,20), trace=FALSE)
-
+skip_if_not_installed("gamlss")
+requiet("gamlss")
 
 test_that("Michael E Flynn ultra-niche bug check", {
-    library(nnet)
-    library(modelsummary)
+    skip_if_not_installed("nnet")
+    requiet("nnet")
     dat_multinom <- mtcars
     dat_multinom$cyl <- as.factor(dat_multinom$cyl)
     dat_multinom$under_score <- dat_multinom$mpg
@@ -30,12 +24,12 @@ test_that("Michael E Flynn ultra-niche bug check", {
 
 
 test_that("flipped table (no groups)", {
-    mod = list(
+    mod <- list(
     lm(hp ~ mpg, mtcars),
     lm(hp ~ mpg + drat, mtcars))
-    tab = modelsummary(mod,
-                    output = "data.frame",
-                    group = model ~ term)
+    tab <- modelsummary(mod,
+                        output = "data.frame",
+                        group = model ~ term)
     expect_true("model" %in% colnames(tab))
 })
 
@@ -43,8 +37,7 @@ test_that("flipped table (no groups)", {
 test_that("TODO: not implemented yet", {
     ## Issue #349
     skip_if_not_installed("nnet")
-
-    library(nnet)
+    requiet("nnet")
     dat_multinom <- mtcars
     dat_multinom$cyl <- as.factor(dat_multinom$cyl)
 
@@ -59,8 +52,7 @@ test_that("TODO: not implemented yet", {
 
 test_that("nnet::multinom: order of rows determined by formula terms", {
     skip_if_not_installed("nnet")
-
-    library(nnet)
+    requiet("nnet")
     dat_multinom <- mtcars
     dat_multinom$cyl <- as.factor(dat_multinom$cyl)
 
@@ -143,16 +135,15 @@ test_that("nnet::multinom: order of columns determined by formula terms", {
 
 test_that("grouped coefficients: gamlss", {
     skip_if_not_installed("gamlss")
-    library(gamlss)
+    requiet("gamlss")
 
     data(abdom)
-    mod <- list(
-        gamlss(y ~ pb(x),
-            sigma.fo = ~ pb(x), trace = FALSE,
-            family = BCT, data = abdom, method = mixed(1, 20)),
-        gamlss(y ~ x,
-            sigma.fo = ~ pb(x), trace = FALSE,
-            family = BCT, data = abdom, method = mixed(1, 20)))
+    mod <- list(gamlss(y ~ pb(x),
+                       sigma.fo = ~ pb(x), trace = FALSE,
+                       family = BCT, data = abdom, method = mixed(1, 20)),
+                gamlss(y ~ x,
+                       sigma.fo = ~ pb(x), trace = FALSE,
+                       family = BCT, data = abdom, method = mixed(1, 20)))
 
     tab <- modelsummary(mod, "data.frame", group = term + component ~ model)
     expect_s3_class(tab, "data.frame")
@@ -181,13 +172,12 @@ test_that("grouped coefficients: gamlss", {
 
 test_that("model names are preserved", {
     skip_if_not_installed("gamlss")
-    library(gamlss)
+    requiet("gamlss")
     dat <- rgamma(100, shape=1, scale=10)
     models <- list()
     models[["GA"]] <- gamlss(dat ~ 1, family = GA, trace = FALSE)
     models[["GA 2"]] <- gamlss(dat ~ 1, family = GA, trace = FALSE)
-    tab <- modelsummary(models, output = "data.frame",
-                 group = component + term ~ model)
+    tab <- modelsummary(models, output = "data.frame", group = component + term ~ model)
     expect_true(all(c("GA", "GA 2") %in% colnames(tab)))
 })
 
