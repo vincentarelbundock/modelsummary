@@ -6,6 +6,9 @@ penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerp
 
 test_that("basic", {
 
+  # fails on devtools::check_win_devel()
+  skip_on_cran()
+
   tmp <- expect_warning(datasummary_skim(dat, output="data.frame"))
   expect_equal(dim(tmp), c(9, 8))
 
@@ -98,6 +101,8 @@ test_that("empty string factor level (tricky for tables::tabular)", {
 
 
 test_that("too many factor levels", {
+  # fails on devtools::check_win_devel()
+  skip_on_cran()
   N <- 20000
   tmp <- data.frame(a = sample(letters, N, replace = TRUE),
                     b = as.character(sample(1:100, N, replace = TRUE)))

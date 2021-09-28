@@ -135,6 +135,8 @@ test_that('both factors and numerics', {
 
 
 test_that('more than two conditions', {
+  # fails on devtools::check_win_devel
+  skip_on_cran()
   tmp <- mtcars
   tmp$cyl <- factor(tmp$cyl)
   tmp$vs <- as.logical(tmp$vs)
