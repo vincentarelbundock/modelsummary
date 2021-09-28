@@ -1,4 +1,4 @@
-# modelsummary 0.9.1.9000
+# modelsummary 0.9.2
 
 `modelsummary`:
 
@@ -9,6 +9,11 @@
 `datasummary_correlation`:
 
 * `add_rows` and `add_columns` arguments are now available here.
+
+Misc:
+
+* Global options for output factories are renamed: `modelsummary_factory_default`, `modelsummary_factory_html`, etc.
+* Hot fix for change in R-devel behavior or `intersect`
 
 Bug fixes:
 

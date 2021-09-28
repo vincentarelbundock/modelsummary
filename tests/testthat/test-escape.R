@@ -1,11 +1,11 @@
-skip_on_os("windows")
-
 dat <- mtcars
 colnames(dat)[1] <- "under_score"
 colnames(dat)[2] <- "oh&yeah<sup>2</sup>"
 
 
 test_that("escaped tables", {
+    # unicode minus signs break on windows
+    skip_on_os("windows")
     mod <- list(
         "First&Second" = lm(hp ~ under_score + `oh&yeah<sup>2</sup>` + drat, dat),
         "Third_Fourth" = lm(hp ~ under_score + `oh&yeah<sup>2</sup>` + drat, dat))
@@ -59,6 +59,8 @@ test_that("datasummary_crosstab escape colnames and stub", {
 
 
 test_that("datasummary_correlation escape rownames and colnames", {
+    # unicode minus signs break on windows
+    skip_on_os("windows")
     ## TRUE
     expect_snapshot(datasummary_correlation(dat, output = "latex"))
     ## FALSE
@@ -111,6 +113,8 @@ test_that("bugs stay dead: escape=FALSE w/ coef_map", {
 
 
 test_that("column headers are not escaped with `escape=FALSE`", {
+    # unicode minus signs break on windows
+    skip_on_os("windows")
     mod <- list(
         "<code>lm()</code>" = lm(mpg ~ hp + drat, mtcars),
         "<code>lm_robust()</code>" = lm(mpg ~ hp + drat, mtcars))

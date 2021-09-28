@@ -1,9 +1,4 @@
-#install.packages("pak", repos = "https://r-lib.github.io/p/pak/dev/") CRAN issues warning because `gt` uses `group_by` with a deprecated argument
-skip_on_cran()
-skip_if(getRversion() < '4.0.0')
-
-## gt sometimes introduces slight changes in its html output
-skip_if_not_installed("gt", minimum_version = "0.3.1")
+skip_if_not_installed("gt")
 requiet("gt")
 
 models <- list()
