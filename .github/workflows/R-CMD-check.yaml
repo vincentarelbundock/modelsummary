@@ -32,14 +32,14 @@ jobs:
           - {os: ubuntu-18.04,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-18.04,   r: 'release'}
           - {os: ubuntu-18.04,   r: 'oldrel-1'}
-          - {os: ubuntu-18.04,   r: 'oldrel-2'}
-          - {os: ubuntu-18.04,   r: 'oldrel-3'}
-          - {os: ubuntu-18.04,   r: 'oldrel-4'}
+          # - {os: ubuntu-18.04,   r: 'oldrel-2'}
+          # - {os: ubuntu-18.04,   r: 'oldrel-3'}
+          # - {os: ubuntu-18.04,   r: 'oldrel-4'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
-      _R_CHECK_FORCE_SUGGESTS_: false
+      R_CHECK_FORCE_SUGGESTS: false
 
     steps:
       - uses: actions/checkout@v2
@@ -55,6 +55,11 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
           extra-packages: rcmdcheck
+
+      - uses: r-lib/actions/setup-tinytex@v1
+
+      - name: texpackages
+        run: Rscript -e "tinytex::tlmgr_install(c('inconsolata', 'makeindex'))"
 
       - uses: r-lib/actions/check-r-package@v1
 
