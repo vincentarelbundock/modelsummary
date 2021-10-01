@@ -605,7 +605,7 @@ If you create new `tidy` and `glance` methods, please consider contributing them
 
 # Adding new information to existing models
 
-Users may want to include more information than is made available by the default extractor function. For example, models produced by the `MASS::polr` do not produce p values by default, which means that we cannot use the `stars=TRUE` argument in `modelsummary`. However, it is possible to extract this information by using the `AER::coeftest` function. To include such custom information, we will define new `glance_custom` and `tidy_custom` methods. 
+Users may want to include more information than is made available by the default extractor function. For example, models produced by the `MASS::polr` do not produce p values by default, which means that we cannot use the `stars=TRUE` argument in `modelsummary`. However, it is possible to extract this information by using the `lmtest::coeftest` function. To include such custom information, we will define new `glance_custom` and `tidy_custom` methods. 
 
 We begin by estimating a model with the `MASS::polr`:
 
@@ -628,12 +628,11 @@ class(mod_ordinal)
 To extract more (custom) information from a model of this class, we thus define a method called `tidy_custom.polr` which returns a data.frame with two columns: `term` and `p.value`:
 
 ```{r}
-library(AER)
 tidy_custom.polr <- function(x, ...) {
-  s <- coeftest(x)
+  s <- lmtest::coeftest(x)
   out <- data.frame(
     term = row.names(s),
-    p.value = s[, "Pr(>|z|)"])
+    p.value = s[, "Pr(>|t|)"])
   out
 }
 ```

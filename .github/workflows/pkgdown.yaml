@@ -26,6 +26,29 @@ jobs:
           extra-packages: pkgdown
           needs: website
 
+      # `Amelia` is not available on R<4.0.0 because of `foreign` import.
+      # It is only only used on the website; and not on a CRAN vignette.
+      - name: Amelia
+        run: Rscript -e "try(install.packages('Amelia'))"
+
+      - name: MCMCglmm
+        run: Rscript -e "try(install.packages('MCMCglmmm'))"
+
+      - name: wesanderson
+        run: Rscript -e "try(install.packages('wesanderson'))"
+
+      - name: modelr
+        run: Rscript -e "try(install.packages('modelr'))"
+
+      - name: tidyverse
+        run: Rscript -e "try(install.packages('tidyverse'))"
+
+      - name: ggdist
+        run: Rscript -e "try(install.packages('ggdist'))"
+
+      - name: tictoc
+        run: Rscript -e "try(install.packages('tictoc'))"
+
       - name: Deploy package
         run: |
           git config --local user.name "$GITHUB_ACTOR"

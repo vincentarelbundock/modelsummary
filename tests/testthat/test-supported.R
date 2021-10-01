@@ -91,6 +91,8 @@ test_that("betareg::betareg", {
 
 
 test_that("ivreg::ivreg", {
+  # these two packages depend on `car`, which depends on `rio`, which depends
+  # on `foreign`, which cannot be installed on R<4.0.0
   testthat::skip_if_not_installed("ivreg")
   testthat::skip_if_not_installed("AER")
   requiet("AER")
@@ -274,8 +276,8 @@ test_that("sandwich vignette", {
 
 
 test_that("consistent gof std error display did", {
-  testthat::skip("`did` does nto have tidy and glance methods")
-  library(did)
+  skip("`did` does nto have tidy and glance methods and cannot be installed on R<4.0.0")
+  requiet("did")
   data(mpdta, package = 'did')
   mpdta$newvar <- substr(mpdta$countyreal, 1, 2)
   mod1 <- att_gt(yname = "lemp", gname = "first.treat", idname = "countyreal",
