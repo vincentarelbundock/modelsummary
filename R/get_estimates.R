@@ -89,6 +89,9 @@ These errors messages were generated during extraction:
             out_custom <- out_custom[out_custom$term %in% out$term, , drop = FALSE]
             idx <- match(out_custom$term, out$term)
             for (n in colnames(out_custom)) {
+                if (!n %in% colnames(out)) {
+                    out[[n]] <- NA
+                }
                 out[[n]][idx] <- out_custom[[n]]
             }
         }

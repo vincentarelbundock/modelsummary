@@ -22,6 +22,32 @@ test_that("tidy.custom", {
 })
 
 
+test_that("bugfix: tidy_custom w/ new column and insufficient rows", {
+  skip_if_not_installed("MASS")
+  requiet("MASS")
+  mod <- MASS::polr(as.ordered(gear) ~ mpg + drat, data = mtcars)
+  # default has 4 rows
+  tmp <- suppressMessages(get_estimates(mod))
+  expect_equal(nrow(tmp), 4)
+  # custom has 2 rows
+  tidy_custom.polr <- function(x, ...) {
+    s <- lmtest::coeftest(x)
+    out <- data.frame(
+      term = row.names(s),
+      p.value = s[, "Pr(>|t|)"])
+    out
+  }
+  tmp <- tidy_custom(mod)
+  expect_equal(nrow(tmp), 2)
+  # combined has 4 rows
+  tmp <- get_estimates(mod)
+    expect_equal(nrow(tmp), 4)
+  # modelsummary works
+  expect_error(modelsummary(mod), NA)
+  # clean
+  rm("tidy_custom.polr")
+})
+
 
 test_that("tidy.custom p values in polr models", {
     skip_if_not_installed("AER")
