@@ -28,7 +28,6 @@ glance_custom_internal <- function(x, ...) {
   UseMethod("glance_custom_internal")
 }
 
-
 #' @inherit glance_custom_internal
 #' @keywords internal
 glance_custom_internal.default <- function(x, ...) NULL

@@ -42,8 +42,8 @@ test_that("warning for non-iid hardcoded vcov", {
 test_that("user-supplied vcov_type in gof section", {
     mod <- lm(hp ~ mpg, data = mtcars)
     vc <- list("Rob" = "robust",
-            "Stata Corp" = "stata",
-            "Newey Lewis & the News" = "NeweyWest")
+               "Stata Corp" = "stata",
+               "Newey Lewis & the News" = "NeweyWest")
     tab <- modelsummary(mod, output = "data.frame", vcov = vc)
     row <- unname(unlist(tab[nrow(tab), 4:6]))
     expect_equal(row, c("Rob", "Stata Corp", "Newey Lewis & the News"))
@@ -188,7 +188,7 @@ test_that("sublist (sandwich vignette)", {
     output="data.frame",
     vcov = list(vcov))
   expect_s3_class(tab, "data.frame")
-  expect_equal(dim(tab), c(13, 4))
+  expect_equal(dim(tab), c(12, 4))
 })
 
 # reference tables

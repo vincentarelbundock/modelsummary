@@ -1,3 +1,9 @@
+# modelsummary 0.9.3
+
+`modelsummary`:
+
+* F statistic takes into account `vcov` argument
+
 # modelsummary 0.9.2
 
 `modelsummary`:

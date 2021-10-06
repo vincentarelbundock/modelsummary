@@ -910,7 +910,7 @@
         <tr>
          <td style="text-align:left;"> F </td>
          <td style="text-align:center;"> 41.522 </td>
-         <td style="text-align:center;"> 41.522 </td>
+         <td style="text-align:center;"> 41.153 </td>
         </tr>
         <tr>
          <td style="text-align:left;"> Std.Errors </td>

@@ -45,21 +45,13 @@ get_gof <- function(model, vcov_type = NULL, ...) {
         }
     }
 
-    # lm model: include F-stat by default
-    # glm also inherits from lm
-    if (isTRUE(class(model)[1] == "lm") &&
-        inherits(gof, "data.frame") &&
-        "statistic" %in% colnames(gof)) {
-        gof$F <- gof$statistic
-    }
-
     # vcov_type: nothing if unnamed matrix, vector, or function
     if (is.character(vcov_type) && !vcov_type %in% c("matrix", "vector", "function")) {
         gof$vcov.type <- vcov_type
     }
 
     # internal customization by modelsummary
-    gof_custom <- glance_custom_internal(model)
+    gof_custom <- glance_custom_internal(model, vcov_type = vcov_type, gof = gof)
     if (!is.null(gof_custom) && is.data.frame(gof)) {
         for (n in colnames(gof_custom)) {
             # modelsummary's vcov argument has precedence

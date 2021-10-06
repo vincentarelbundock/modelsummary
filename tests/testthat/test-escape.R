@@ -118,8 +118,8 @@ test_that("column headers are not escaped with `escape=FALSE`", {
     mod <- list(
         "<code>lm()</code>" = lm(mpg ~ hp + drat, mtcars),
         "<code>lm_robust()</code>" = lm(mpg ~ hp + drat, mtcars))
-    expect_snapshot(modelsummary(mod, 
-                                 vcov = c("classical", "HC1"), 
-                                 escape = FALSE, 
+    expect_snapshot(modelsummary(mod,
+                                 vcov = c("classical", "HC1"),
+                                 escape = FALSE,
                                  output = "html"))
 })
