@@ -506,8 +506,33 @@ modelsummary(mod_logit, exponentiate = TRUE)
 
 Any argument supported by `tidy` is thus supported by `modelsummary`.
 
-Warning: at the moment (2020-05-05), `broom::tidy` still reports `std.error` on the original scale. See this [discussion on the `broom` GitHub page.](https://github.com/tidymodels/broom/issues/422)
+An important technical point is that `broom::tidy` still reports standard errors on the original scale, and not on the scale of the exponentiated coefficients. This is because, as [discussed on the `broom` issue tracker,](https://github.com/tidymodels/broom/issues/422) "quantiles (and thereby confidence intervals) are invariant under monotonic transformation (exp()) but variances are not."
 
+The first alternative strategy is thus to report confidence intervals instead of standard errors. When `exponentiate=TRUE`, estimates and intervals will be displayed on the same scale:
+
+```{r, eval = FALSE}
+modelsummary(mod, statistic = "conf.int", exponentiate = TRUE)
+```
+
+The second alternative strategy si to use a different "backend" to extract information from model objects. By setting the `modelsummary_get` global option, we tell `modelsummary` to use the `easystats`/`parameters` packages instead of `broom`. With these packages, the standard errors will automatically be transformed using a linear approximation of the transformation (e.g., $e^\beta * SE$ for logit models):
+
+```{r, eval = FALSE}
+options("modelsummary_get" = "easystats")
+modelsummary(mod, exponentiate = TRUE)
+```
+
+Finally, we can define a `glance_custom.glm` function to transform the results of all GLM models automatically, using the same linear approximation. This strategy is described in detail in the section on "Customizing existing models", so we just show working code here without further explanation:
+
+```{r, eval = FALSE}
+tidy_custom.glm <- function(x) {
+    out <- broom::tidy(x)
+    out$std.error <- exp(out$estimate) * out$std.error
+    out$estimate <- exp(out$estimate)
+    return(out)
+}
+
+modelsummary(mod)
+```
 
 # Custom appearance
 

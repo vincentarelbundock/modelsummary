@@ -111,7 +111,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' table-making functions. This allows users to pass arguments directly to
 #' `modelsummary` in order to affect the behavior of other functions behind
 #' the scenes. Examples include:
-#' * `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression
+#' * `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression. Please see the `modelsummary` vignette on the package website for important technical notes on this topic.
 #' * `performance::model_performance(metrics="RMSE")` to select goodness-of-fit statistics to extract using the `performance` package (must have set `options(modelsummary_get="easystats")` first).
 #' @return a regression table in a format determined by the `output` argument.
 #' @importFrom generics glance tidy
