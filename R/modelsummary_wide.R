@@ -1,10 +1,6 @@
-#' Summary Tables for Models with Grouped Coefficients
+#' Superseded function
 #'
-#' `modelsummary_wide` summarizes models with grouped coefficients. For
-#' example, these groups could correspond to levels of a multinomial logit
-#' outcome variable, or to parameters of a GAMLSS model. This function's
-#' arguments are the same as in `modelsummary`, except for the `coef_group` and
-#' the `stacking` arguments.
+#' This function is superseded by the `group` argumen tof the `modelsummary` function. 
 #'
 #' @param coef_group the name of the coefficient groups to use as columns (NULL
 #' or character). If `coef_group` is NULL, `modelsummary` tries to guess the
@@ -36,6 +32,8 @@ modelsummary_wide <- function(
   title       = NULL,
   stacking    = "horizontal",
   ...) {
+
+  warning("The `modelsummary_wide` is superseded by the `group` argument of the `modelsummary` function.")
 
   checkmate::assert_character(stacking, pattern = "^horizontal$|^vertical$")
 

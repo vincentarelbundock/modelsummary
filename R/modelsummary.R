@@ -152,6 +152,7 @@ modelsummary <- function(
 
   ## sanity functions validate variables/settings
   ## sanitize functions validate & modify & initialize
+  checkmate::assert_string(gof_omit, null.ok = TRUE)
   sanitize_output(output)           # early
   sanitize_escape(escape)
   sanity_ellipsis(vcov, ...)        # before sanitize_vcov
@@ -160,6 +161,7 @@ modelsummary <- function(
   number_of_models <- max(length(models), length(vcov))
   estimate <- sanitize_estimate(estimate, number_of_models)
   group <- sanitize_group(group)
+  gof_map <- sanitize_gof_map(gof_map)
   sanity_group_map(group_map)
   sanity_statistic(statistic)
   sanity_conf_level(conf_level)
@@ -309,8 +311,6 @@ modelsummary <- function(
       gof[[i]] <- NULL
     }
   }
-
-
   f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE, by = "term")
   gof <- Reduce(f, gof)
 
@@ -515,38 +515,40 @@ map_omit_gof <- function(gof, gof_omit, gof_map) {
     return(gof)
   }
 
-  # row identifier
+  # row identifier as first column
   gof$part <- "gof"
-
   gof <- gof[, unique(c("part", "term", names(gof)))]
 
-  # omit
+  # gof_omit
   if (!is.null(gof_omit)) {
     idx <- !grepl(gof_omit, gof$term, perl = TRUE)
     gof <- gof[idx, , drop = FALSE]
   }
 
   # map
-  if (is.null(gof_map)) {
-    # assign here and not in the function definition because we use NULL to
-    # figure out if F-stat should be included by default for lm models.
-    gm_list <- get("gof_map", envir = loadNamespace("modelsummary"))
-    gm_list <- lapply(seq_len(nrow(gm_list)), function(i) gm_list[i, ])
-  } else if (inherits(gof_map, "data.frame")) {
-    gm_list <- lapply(seq_len(nrow(gof_map)), function(i) gof_map[i, ])
+  gm_raw <- sapply(gof_map, function(x) x$raw)
+  gm_clean <- sapply(gof_map, function(x) x$clean)
+  gm_omit <- try(sapply(gof_map, function(x) x$omit), silent = TRUE)
+
+  if (is.logical(gm_omit)) {
+    if (isTRUE(attr(gof_map, "whitelist"))) {
+      gof <- gof[gof$term %in% gm_clean[gm_omit == FALSE], , drop = FALSE]
+    } else {
+      gof <- gof[!gof$term %in% gm_clean[gm_omit == TRUE], , drop = FALSE]
+    }
   } else {
-    gm_list <- gof_map
+    if (isTRUE(attr(gof_map, "whitelist"))) {
+      gof <- gof[gof$term %in% gm_clean, , drop = FALSE]
+    }
   }
 
-  gm_raw <- sapply(gm_list, function(x) x$raw)
-  gm_clean <- sapply(gm_list, function(x) x$clean)
-  gof_names <- gm_clean[match(gof$term, gm_raw)]
-  gof_names[is.na(gof_names)] <- gof$term[is.na(gof_names)]
-  gof$term <- gof_names
+  tmp <- gm_clean[match(gof$term, gm_raw)]
+  tmp[is.na(tmp)] <- gof$term[is.na(tmp)]
+  gof$term <- tmp
   idx <- match(gof$term, gm_clean)
   gof <- gof[order(idx, gof$term), ]
 
-  # important for modelsummary_get="all"
+  # important for modelsummary_get = "all"
   gof <- unique(gof)
 
   return(gof)

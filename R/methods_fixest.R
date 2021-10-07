@@ -94,7 +94,7 @@ glance_custom_internal.fixest <- function(x, vcov_type = NULL, ...) {
         fvcov_type <- gsub("\\(|\\)", "", fvcov_type)
       }
     }
-    out[['vcov.type']] <- fvcov_type
+    out[["vcov.type"]] <- fvcov_type
   }
   row.names(out) <- NULL
   return(out)

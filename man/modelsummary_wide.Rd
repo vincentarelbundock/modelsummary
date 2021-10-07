@@ -2,7 +2,7 @@
 % Please edit documentation in R/modelsummary_wide.R
 \name{modelsummary_wide}
 \alias{modelsummary_wide}
-\title{Summary Tables for Models with Grouped Coefficients}
+\title{Superseded function}
 \usage{
 modelsummary_wide(
   models,
@@ -164,9 +164,5 @@ the scenes. Examples include:
 a regression table in a format determined by the \code{output} argument.
 }
 \description{
-\code{modelsummary_wide} summarizes models with grouped coefficients. For
-example, these groups could correspond to levels of a multinomial logit
-outcome variable, or to parameters of a GAMLSS model. This function's
-arguments are the same as in \code{modelsummary}, except for the \code{coef_group} and
-the \code{stacking} arguments.
+This function is superseded by the \code{group} argumen tof the \code{modelsummary} function.
 }

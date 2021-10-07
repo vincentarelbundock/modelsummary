@@ -5,11 +5,10 @@ mod <- glm(am ~ mpg, mtcars, family = binomial)
 ###################
 test_that("glance_custom.glm", {
   glance_custom.glm <- function(x) {
-    data.frame("test"=1.54, "test2"="lkkd", "test3"=as.integer(2),
-               "test4"=TRUE)
+    data.frame("test" = 1.54, "test2" = "lkkd", "test3" = as.integer(2), "test4" = TRUE)
   }
   # beware of testthat scoping issue
-  assign("glance_custom.glm", glance_custom.glm, envir=.GlobalEnv)
+  assign("glance_custom.glm", glance_custom.glm, envir = .GlobalEnv)
   out <- modelsummary(mod, "data.frame")
   expect_equal(dim(out), c(13, 4))
   rm("glance_custom.glm", envir=.GlobalEnv)
