@@ -76,7 +76,8 @@ test_that("palmer penguins was once broken with kableExtra", {
 test_that('variable name with spaces', {
   tmp <- mtcars
   colnames(tmp)[1] <- "testing spaces"
-  tab <- expect_error(datasummary_balance(~vs, data = tmp, output = "dataframe"), NA)
+  expect_error(datasummary_balance(~vs, data = tmp, output = "dataframe"), NA)
+  tab <- datasummary_balance(~vs, data = tmp, output = "dataframe")
   expect_equal(dim(tab), c(10, 7))
 })
 
@@ -143,7 +144,8 @@ test_that('more than two conditions', {
   tab <- datasummary_balance(~gear, tmp, output = 'dataframe', dinm = FALSE)
   expect_s3_class(tab, 'data.frame')
   expect_equal(dim(tab), c(14, 8))
-  tab <- expect_warning(datasummary_balance(~gear, tmp, output = 'dataframe', dinm = TRUE))
+  expect_warning(datasummary_balance(~gear, tmp, output = 'dataframe', dinm = TRUE))
+  tab <- suppressWarnings(datasummary_balance(~gear, tmp, output = 'dataframe', dinm = TRUE))
   expect_equal(dim(tab), c(14, 8))
 })
 

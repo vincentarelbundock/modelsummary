@@ -24,7 +24,7 @@ glance_custom_internal.lm <- function(x, vcov_type = NULL, gof = NULL, ...) {
   if (!is.null(vcov_type) &&
       isTRUE(check_dependency("lmtest")) &&
       isTRUE(check_dependency("sandwich")) &&
-      vcov_type %in% c("HC", "HC0", "HC1", "HC2", "HC4", "HC4m", "HC5")) {
+      vcov_type %in% c("HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5")) {
       fun <- function(k) sandwich::vcovHC(k, type = vcov_type)
       fstat <- try(lmtest::waldtest(x, vcov = fun)$F[2], silent = TRUE)
       if (inherits(fstat, "numeric")) {

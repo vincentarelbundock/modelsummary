@@ -1,7 +1,7 @@
 # random effects variance components do not have standard errors and produce "empty"
 
     Code
-      cat(modelsummary(mod, output = "latex"))
+      cat(mod)
     Output
       \begin{table}
       \centering

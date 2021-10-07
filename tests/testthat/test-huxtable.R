@@ -18,9 +18,15 @@ test_that("markdown caption and notes", {
   # minor UTF8 encoding issue on CRAN and Windows
   skip_on_os("windows")
   skip_on_cran()
-  unknown <- expect_warning(
+  expect_warning(
     modelsummary(models, "huxtable", title = "test title", notes = "test note",
-      stars = TRUE) %>%
+                 stars = TRUE) %>%
+      huxtable::to_md())
+  unknown <- suppressWarnings(modelsummary(models,
+                                           output = "huxtable",
+                                           title = "test title",
+                                           notes = "test note",
+                                           stars = TRUE) %>%
       huxtable::to_md())
   expect_snapshot(cat(unknown))
 })

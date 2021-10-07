@@ -9,7 +9,8 @@ test_that("basic", {
   # fails on devtools::check_win_devel()
   skip_on_cran()
 
-  tmp <- expect_warning(datasummary_skim(dat, output="data.frame"))
+  expect_warning(datasummary_skim(dat, output="data.frame"))
+  tmp <- suppressWarnings(datasummary_skim(dat, output="data.frame"))
   expect_equal(dim(tmp), c(9, 8))
 
   tmp <- datasummary_skim(dat, type="categorical", output="data.frame")
@@ -101,12 +102,11 @@ test_that("empty string factor level (tricky for tables::tabular)", {
 
 
 test_that("too many factor levels", {
-  # fails on devtools::check_win_devel()
-  skip_on_cran()
   N <- 20000
   tmp <- data.frame(a = sample(letters, N, replace = TRUE),
                     b = as.character(sample(1:100, N, replace = TRUE)))
-  tmp <- expect_warning(datasummary_skim(tmp, type="categorical", output="data.frame"))
+  expect_warning(datasummary_skim(tmp, type = "categorical", output = "data.frame"))
+  tmp <- suppressWarnings(datasummary_skim(tmp, type = "categorical", output = "data.frame"))
   expect_equal(ncol(tmp), 3)
 })
 

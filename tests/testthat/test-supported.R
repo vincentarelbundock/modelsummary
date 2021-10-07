@@ -32,8 +32,9 @@ test_that("nnet::multinom with `y.level` column", {
   }
   dat <- make_data()
   invisible(capture.output(mod <- nnet::multinom(var1 ~ var2, data = dat)))
-  tab <- expect_warning(modelsummary(mod, output = "dataframe"), regexp = "duplicate")
-  tab <- expect_warning(modelsummary(mod, group = y.level + term ~ model, output = "dataframe"), NA)
+  expect_warning(modelsummary(mod, output = "dataframe"), regexp = "duplicate")
+  expect_warning(modelsummary(mod, group = y.level + term ~ model, output = "dataframe"), NA)
+  tab <- suppressWarnings(modelsummary(mod, group = y.level + term ~ model, output = "dataframe"), NA)
   expect_s3_class(tab, "data.frame")
   expect_equal(dim(tab), c(11, 5))
 })
@@ -208,8 +209,10 @@ test_that("lme4 with 2 random effects", {
   testthat::skip_if_not_installed("lme4")
   library(lme4)
   mod <- lmer(mpg ~ hp + (1|am) + (1|cyl), data = mtcars)
-  tab <- expect_warning(modelsummary(mod, output = "data.frame", gof_omit = ".*"),
-                        regexp = "duplicate")
+  expect_warning(modelsummary(mod, output = "data.frame", gof_omit = ".*"),
+                 regexp = "duplicate")
+  tab <- suppressWarnings(modelsummary(mod, output = "data.frame", gof_omit = ".*"),
+                         regexp = "duplicate")
   expect_s3_class(tab, "data.frame")
 
   tab <- modelsummary(mod, output = "data.frame", gof_omit = ".*",
