@@ -4,8 +4,9 @@
 #' @param formula a one-sided formula with the "condition" or "column" variable
 #'   on the right-hand side.
 #' @param data A data.frame (or tibble). If this data includes columns called
-#'   "blocks", "clusters", and/or "weights", the "estimatr" package will
-#'   consider them when calculating the difference in means.
+#'   "blocks", "clusters", and/or "weights", the "estimatr" package will consider
+#'   them when calculating the difference in means. If there is a `weights`
+#'   column, the reported mean and standard errors will also be weighted.
 #' @param dinm TRUE calculates a difference in means with uncertainty
 #'   estimates. This option is only available if the `estimatr` package is
 #'   installed. If `data` includes columns named "blocks", "clusters", or
@@ -59,13 +60,9 @@ datasummary_balance <- function(formula,
     lev <- paste0(names(lev), " (N=", lev, ")")
     levels(data[[rhs]]) <- lev
 
-
-
     ## exclude otherwise All() makes them appear as rows
-    idx <- setdiff(colnames(data),
-                   c(rhs, "clusters", "blocks", "weights"))
+    idx <- setdiff(colnames(data), c(rhs, "clusters", "blocks", "weights"))
     data_norhs <- data[, idx, drop = FALSE]
-
 
     ## 3-parts table: numeric + dinm / factor
     any_numeric <- any(sapply(data_norhs, is.numeric))
@@ -112,18 +109,29 @@ datasummary_balance <- function(formula,
         tab_fac <- tab_fac[1:(idx - 1), , drop = FALSE]
     }
 
-
-
     ## numerics
     if (any_numeric) {
         ## tab_fac has 2 stub columns when there is more than one factor, but only 1 otherwise
         emptyfun <- function(x) return(" ")
-        empty <- ifelse(any_factor, "Heading(' ') * emptyfun + ", "") 
-        f_num <- stats::as.formula(sprintf("All(data_norhs) ~ %s Factor(%s) * (Mean + Heading('Std. Dev.')*SD)", empty, rhs))
+        empty <- ifelse(any_factor, "Heading(' ') * emptyfun + ", "")
+
+        # weights
+        if ("weights" %in% colnames(data)) {
+          f_num <- "All(data_norhs) ~ %s Factor(%s) * (
+                    Heading('Mean') * weighted.mean * Arguments(w = weights, na.rm = TRUE) +
+                    Heading('Std. Dev.') * weighted.sd * Arguments(w = weights))"
+          f_num <- stats::as.formula(sprintf(f_num, empty, rhs))
+
+        # no weights
+        } else {
+          f_num <- "All(data_norhs) ~ %s Factor(%s) * (Mean + Heading('Std. Dev.') * SD)"
+          f_num <- stats::as.formula(sprintf(f_num, empty, rhs))
+        }
         tab_num <- datasummary(formula = f_num,
                                fmt = fmt,
                                data = data,
                                output = "data.frame")
+
         ## datasummary(output="dataframe") changes the output format
         sanitize_output(output)
     }
@@ -175,9 +183,7 @@ datasummary_balance <- function(formula,
         }
         attr(tab, "header_bottom") <- c(attr(tab, "header_bottom"), colnames(tmp)[1:2])
         attr(tab, "header_sparse_flat") <- c(attr(tab, "header_sparse_flat"), colnames(tmp)[1:2])
-
     }
-
 
     ## horizontal rule
     if (any_factor && any_numeric) {
@@ -289,6 +295,12 @@ sanitize_datasummary_balance_data <- function(formula, data) {
   if (length(unique(data[[rhs]])) > 10) {
     stop(sprintf("Each value of the `%s` variable will create two separate columns. This variable has more than 10 unique values, so the table would be too wide to be readable.",
         rhs))
+  }
+
+  if ("weights" %in% colnames(data)) {
+    if (anyNA(data[["weights"]])) {
+      stop("The `weights` column cannot include missing data.")
+    }
   }
 
   # sanity checks on other variables

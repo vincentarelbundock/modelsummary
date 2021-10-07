@@ -26,8 +26,9 @@ datasummary_balance(
 on the right-hand side.}
 
 \item{data}{A data.frame (or tibble). If this data includes columns called
-"blocks", "clusters", and/or "weights", the "estimatr" package will
-consider them when calculating the difference in means.}
+"blocks", "clusters", and/or "weights", the "estimatr" package will consider
+them when calculating the difference in means. If there is a \code{weights}
+column, the reported mean and standard errors will also be weighted.}
 
 \item{output}{filename or object type (character string)
 \itemize{

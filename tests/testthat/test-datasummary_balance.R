@@ -244,6 +244,50 @@ test_that('estimatr: clusters, blocks, weights', {
 })
 
 
+#############
+#  weights  #
+#############
+
+test_that("error on missing data in weights", {
+  set.seed(1024)
+  dat <- datw <- mtcars
+  datw$weights <- runif(nrow(datw))
+  datw$weights[2] <- NA
+  expect_error(datasummary_balance(~ am, data = datw), regexp = "include missing data")
+})
+
+test_that("numeric weights", {
+  set.seed(1024)
+  dat <- datw <- mtcars
+  datw$weights <- runif(nrow(datw))
+  tab <- datasummary_balance(~ am, data = datw, output = "data.frame", fmt = NULL)
+  tab_noweights <- datasummary_balance(~ am, data = dat, output = "data.frame", fmt = NULL)
+
+  # weights and no weights give different results
+  for (i in 2:ncol(tab)) {
+    expect_true(all(tab[[i]] != tab_noweights[[i]]))
+  }
+
+  # mean: manual
+  for (am in 0:1) {
+    idx <- datw$am == am
+    for (v in tab[[1]]) {
+      unknown <- weighted.mean(datw[[v]][idx], datw$weights[idx])
+      expect_equal(unknown, tab[tab[[1]] == v, sprintf("%s Mean", am)])
+    }
+  }
+
+  # sd: manual
+  for (am in 0:1) {
+    idx <- datw$am == am
+    for (v in tab[[1]]) {
+      unknown <- weighted.sd(datw[[v]][idx], datw$weights[idx])
+      expect_equal(unknown, tab[tab[[1]] == v, sprintf("%s Std. Dev.", am)])
+    }
+  }
+})
+
+
 ######################
 #  various datasets  #
 ######################
@@ -257,3 +301,6 @@ test_that('datasummary_balance: various datasets', {
   expect_equal(tab[1, 6], '5.5')
   expect_equal(tab[1, 7], '0.4')
 })
+
+
+
