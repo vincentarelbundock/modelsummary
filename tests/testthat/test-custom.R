@@ -11,7 +11,7 @@ test_that("glance_custom.glm", {
   # beware of testthat scoping issue
   assign("glance_custom.glm", glance_custom.glm, envir=.GlobalEnv)
   out <- modelsummary(mod, "data.frame")
-  expect_equal(dim(out), c(12, 4))
+  expect_equal(dim(out), c(13, 4))
   rm("glance_custom.glm", envir=.GlobalEnv)
 })
 

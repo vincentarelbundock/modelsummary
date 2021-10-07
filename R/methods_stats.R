@@ -15,9 +15,15 @@ glance_custom_internal.lm <- function(x, vcov_type = NULL, gof = NULL, ...) {
   }
 
   # default glance
-  if ((is.null(vcov_type) || vcov_type %in% c("Classical", "Constant", "IID", "Standard", "Default")) &&
-      inherits(gof, "data.frame") && "statistic" %in% colnames(gof)) {
+  if ((is.null(vcov_type) || vcov_type %in% c("Classical", "Constant", "IID", "Standard", "Default"))) {
+    if (inherits(gof, "data.frame") && "statistic" %in% colnames(gof)) {
       out[["F"]] <- gof$statistic
+    } else {
+      fstat <- try(lmtest::waldtest(x, vcov = stats::vcov)$F[2], silent = TRUE)
+      if (inherits(fstat, "numeric")) {
+        out[["F"]] <- fstat
+      }
+    }
   }
 
   # sandwich HC

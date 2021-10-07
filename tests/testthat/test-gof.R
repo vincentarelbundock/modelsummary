@@ -57,12 +57,12 @@ test_that('omit all gof from only a few models', {
 })
 
 
-test_that("F statistic omitted by default except for lm objects", {
+test_that("F statistic included for both `lm` and `glm` objects", {
   mod <- list(
     "OLS"   = lm(am ~ drat, data = mtcars),
     "Logit" = glm(am ~ qsec, data = mtcars, family = binomial())
   )
-  tab = modelsummary(mod, output="data.frame")  
-  expect_false(tab$OLS[nrow(tab)] == "")
-  expect_true(tab$Logit[nrow(tab)] == "")
+  tab <- modelsummary(mod, output = "data.frame")
+  expect_true(tab$OLS[tab$term == "F"] != "")
+  expect_true(tab$Logit[tab$term == "F"] != "")
 })
