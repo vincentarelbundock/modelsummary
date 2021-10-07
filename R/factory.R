@@ -15,6 +15,7 @@ factory <- function(tab,
                     title = NULL,
                     add_rows = NULL,
                     add_columns = NULL,
+                    escape = TRUE,
                     ...) {
 
 
@@ -162,6 +163,7 @@ factory <- function(tab,
     hrule = hrule,
     notes = notes,
     title = title,
+    escape = escape,
     ...)
 
 

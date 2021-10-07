@@ -4,6 +4,12 @@ random_string <- function() {
   paste(sample(letters, 30, replace=TRUE), collapse="")
 }
 
+test_that("escape group names", {
+  dat <- mtcars
+  dat$vs <- ifelse(dat$vs == 1, "yes_yes", "no_no")
+  expect_snapshot(datasummary_balance(~vs, data = dat, output = "latex", escape = TRUE))
+  expect_snapshot(datasummary_balance(~vs, data = dat, output = "latex", escape = FALSE))
+})
 
 test_that("stub is escaped in latex", {
   tmp <- data.frame(

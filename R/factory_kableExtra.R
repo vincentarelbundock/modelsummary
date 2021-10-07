@@ -8,6 +8,7 @@ factory_kableExtra <- function(tab,
                                hrule = NULL,
                                notes = NULL,
                                title = NULL,
+                               escape = TRUE,
                                ...) {
 
   # new variable "kable_format" because "kableExtra" and "html" both produce
@@ -122,7 +123,7 @@ factory_kableExtra <- function(tab,
     # add_header_above not supported in markdown
     span <- rev(span) # correct vertical order
     for (s in span) {
-      out <- kableExtra::add_header_above(out, s)
+      out <- kableExtra::add_header_above(out, s, escape = escape)
     }
   }
 

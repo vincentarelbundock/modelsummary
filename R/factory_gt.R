@@ -10,6 +10,7 @@ factory_gt <- function(tab,
                        hrule = NULL,
                        notes = NULL,
                        title = NULL,
+                       escape = TRUE,
                        ...) {
 
   assert_dependency("gt")

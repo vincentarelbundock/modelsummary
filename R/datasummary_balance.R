@@ -230,6 +230,7 @@ datasummary_balance <- function(formula,
         add_rows = add_rows,
         add_columns = add_columns,
         title = title,
+        escape = escape,
         ...)
 
     if (!is.null(settings_get("output_file"))) {
