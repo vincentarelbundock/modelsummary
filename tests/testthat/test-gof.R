@@ -4,7 +4,7 @@ mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 
 
 test_that('gof_omit omits everything', {
-  tab = modelsummary(mod, gof_omit=".*", output="data.frame")
+  tab <- modelsummary(mod, gof_omit = ".*", output = "data.frame")
   expect_equal(dim(tab), c(6, 5))
 })
 
@@ -12,12 +12,11 @@ test_that('gof_omit omits everything', {
 test_that('custom gof_map omits everything by default', {
   # error about factor levels, not clear why
   skip_if(getRversion() < '4.0.0')
-
-  gm = read.csv(text = 
+  gm <- read.csv(text =
 "raw,clean,fmt
 nobs,Num.Obs,0
 r.squared,R2,2")
-  tab = modelsummary(mod, gof_map=gm, output = "dataframe")
+  tab <- modelsummary(mod, gof_map = gm, output = "dataframe")
   expect_equal(dim(tab), c(8, 5))
 })
 

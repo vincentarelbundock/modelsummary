@@ -1,12 +1,10 @@
 library(modelsummary)
 
-
 test_that("coef_map must include at least one term per model", {
     mod <- lm(hp ~ mpg + cyl, mtcars)
     expect_error(modelsummary(mod, coef_map = c("Blah" = "blah")),
                  regexp = "At least one of the term names")
 })
-
 
 test_that("combine different regressors and collapse rows", {
   mod = lm(hp ~ mpg + factor(cyl), mtcars)
@@ -18,7 +16,6 @@ test_that("combine different regressors and collapse rows", {
   tab1[[2]][1:4] = c("(Intercept)", "(Intercept)", "factory(cyl)6", "factory(cyl)6")
   tab2[[2]][1:4] = c("blah", "blah", "blah blah", "blah blah")
 })
-
 
 test_that("combine different regressors and collapse rows", {
   cmap <- c('(Intercept)' = 'Constant', 'drat' = 'Combined', 'qsec' = 'Combined')
@@ -35,8 +32,8 @@ test_that("reorder and omit", {
   mod <- list()
   mod$OLS <- lm(am ~ drat, data = mtcars)
   mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
-  raw <- modelsummary(mod, coef_map = cmap, output="dataframe")
-  truth <- c('qsec', 'qsec', 'drat', 'drat' , 'Num.Obs.')
+  raw <- modelsummary(mod, coef_map = cmap, output = "dataframe")
+  truth <- c('qsec', 'qsec', 'drat', 'drat', 'Num.Obs.')
   expect_equal(unname(raw[[2]][1:5]), truth)
 })
 
@@ -49,13 +46,13 @@ test_that("coef_map with multiple vertical statistics", {
   models[['OLS']] <- lm(mpg ~ factor(cyl), mtcars)
   models[['Logit']] <- glm(am ~ factor(cyl), mtcars, family = binomial)
 
-  mat <- modelsummary(models, coef_map=cm, output="dataframe")
+  mat <- modelsummary(models, coef_map = cm, output = "dataframe")
   expect_s3_class(mat, 'data.frame')
   expect_equal(dim(mat), c(13, 5))
 
   mat <- modelsummary(
     models,
-    output="dataframe",
+    output = "dataframe",
     statistic = c('std.error', 'conf.int'),
     coef_map = cm
   )

@@ -10,47 +10,20 @@ format_gof <- function(gof, fmt, gof_map, ...) {
     return(NULL)
   }
 
-  # convert gof_map to list and vectors
-  if (is.null(gof_map)) {
-    gm_list <- lapply(1:nrow(modelsummary::gof_map), function(i)
-                  as.list(modelsummary::gof_map[i, ]))
-    gm_omit <- sapply(gm_list, function(x) x$omit)
-  } else if (inherits(gof_map, "data.frame")) {
-    gm_list <- lapply(1:nrow(gof_map), function(i)
-                  as.list(gof_map[i, ]))
-  } else {
-    gm_list <- gof_map
-  }
   # `as.character` is needed for R-devel changes to `intersect` with empty sets
-  gm_raw <- as.character(sapply(gm_list, function(x) x$raw))
-  gm_clean <- as.character(sapply(gm_list, function(x) x$clean))
+  gm_raw <- as.character(sapply(gof_map, function(x) x$raw))
+  gm_clean <- as.character(sapply(gof_map, function(x) x$clean))
 
-  # round
+  # apply `fmt`
   unknown <- setdiff(colnames(gof), gm_raw)
   for (u in unknown) {
     gof[[u]] <- rounding(gof[[u]], fmt)
   }
-  for (gm in gm_list) {
+  for (gm in gof_map) {
     if (gm$raw %in% colnames(gof)) {
       gof[[gm$raw]] <- rounding(gof[[gm$raw]], gm$fmt)
     }
   }
-
-  # gof_map = NULL: drop explicit omit
-  if (is.null(gof_map)) {
-    gof <- gof[, !colnames(gof) %in% gm_raw[gm_omit], drop = FALSE]
-  # gof_map != NULL: drop unknown
-  } else {
-    gof <- gof[, colnames(gof) %in% gm_raw, drop = FALSE]
-  }
-
-  # reorder columns
-  idx1 <- intersect(gm_raw, colnames(gof))
-  idx2 <- setdiff(colnames(gof), gm_raw)
-  # avoid errors on some CI platforms
-  idx <- unlist(c(idx1, idx2), recursive = TRUE)
-  gof <- as.data.frame(gof)
-  gof <- gof[, idx, drop = FALSE]
 
   # some gof were kept
   if (ncol(gof) > 0) {
@@ -75,5 +48,6 @@ format_gof <- function(gof, fmt, gof_map, ...) {
   }
 
   # output
+  row.names(out) <- NULL
   return(out)
 }
