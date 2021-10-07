@@ -4,6 +4,10 @@
 
 * F statistic takes into account `vcov` argument
 
+`datasummary_balance`:
+
+* Weighted means and standard deviations are now supported. Counts and percentages are not, but raise a warning.
+
 # modelsummary 0.9.2
 
 `modelsummary`:

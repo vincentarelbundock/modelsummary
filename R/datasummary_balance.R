@@ -96,7 +96,7 @@ datasummary_balance <- function(formula,
         pctformat = function(x) sprintf("%.1f", x)
         f_fac <- stats::as.formula(sprintf(
             "All(tmp2, factor = TRUE, numeric = FALSE) ~
-             Factor(%s) * (N + Heading('Pct.')*Percent('col')*Format(pctformat()))", rhs))
+             Factor(%s) * (N + Heading('Pct.') * Percent('col') * Format(pctformat()))", rhs))
         tab_fac <- datasummary(formula = f_fac,
                                data = tmp1,
                                fmt = fmt,
@@ -211,6 +211,14 @@ datasummary_balance <- function(formula,
         }
     }
 
+    ## weights warning
+    if (isTRUE(any_factor) && "weights" %in% colnames(data)) {
+      msg <- 'When the `data` used in `datasummary_balance` contains a "weights" column, the means, standard deviations, difference in means, and standard errors of numeric variables are adjusted to account for weights. However, the counts and percentages for categorical variables are not adjusted.' 
+      rlang::warn( message = msg,
+                  .frequency = "once",
+                  .frequency_id = "factor_weights_not_supported")
+    }
+
     ## make table
     out <- factory(
         tab,
@@ -242,12 +250,15 @@ DinM <- function(lhs, rhs, data, fmt, statistic) {
 
   assert_dependency("estimatr")
 
-  if (!"clusters" %in% colnames(data))
+  if (!"clusters" %in% colnames(data)) {
       clusters <- NULL
-  if (!"weights" %in% colnames(data))
+  }
+  if (!"weights" %in% colnames(data)) {
       weights <- NULL
-  if (!"blocks" %in% colnames(data))
+  }
+  if (!"blocks" %in% colnames(data)) {
       blocks <- NULL
+  }
 
   # needed for names with spaces
   data[["condition_variable_placeholder"]] <- data[[rhs]]

@@ -256,6 +256,15 @@ test_that("error on missing data in weights", {
   expect_error(datasummary_balance(~ am, data = datw), regexp = "include missing data")
 })
 
+test_that("warning: weights not supported for categorical", {
+  set.seed(1024)
+  datw <- mtcars
+  datw$weights <- runif(nrow(datw))
+  datw$am <- factor(datw$am)
+  datw$cyl <- factor(datw$cyl)
+  expect_warning(datasummary_balance(~ am, data = datw), regexp = "However")
+})
+
 test_that("numeric weights", {
   set.seed(1024)
   dat <- datw <- mtcars
