@@ -3,6 +3,7 @@
 `modelsummary`:
 
 * F statistic takes into account `vcov` argument
+* Support group = group ~ model + term
 
 `datasummary_balance`:
 

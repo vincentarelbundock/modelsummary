@@ -34,22 +34,6 @@ test_that("flipped table (no groups)", {
 })
 
 
-test_that("TODO: not implemented yet", {
-    ## Issue #349
-    skip_if_not_installed("nnet")
-    requiet("nnet")
-    dat_multinom <- mtcars
-    dat_multinom$cyl <- as.factor(dat_multinom$cyl)
-
-    mod <- list(
-        nnet::multinom(cyl ~ mpg, data = dat_multinom, trace = FALSE),
-        nnet::multinom(cyl ~ mpg + drat, data = dat_multinom, trace = FALSE))
-
-    expect_error(trash <- capture.output(tab <- modelsummary(mod, "data.frame", group = response ~ term + model)),
-                 regexp = "pressure")
-})
-
-
 test_that("nnet::multinom: order of rows determined by formula terms", {
     skip_if_not_installed("nnet")
     requiet("nnet")
@@ -90,6 +74,24 @@ test_that("nnet::multinom: order of rows determined by formula terms", {
                  c("part", "term", "model", "statistic", "6", "8"))
     expect_equal(tab$model[1:3], c("Model 1", "Model 1", "Model 2"))
 
+})
+
+test_that("group ~ model + term", {
+    dat_multinom <- mtcars
+    dat_multinom$cyl <- as.factor(dat_multinom$cyl)
+    mod <- list(
+        nnet::multinom(cyl ~ mpg, data = dat_multinom, trace = FALSE),
+        nnet::multinom(cyl ~ mpg + drat, data = dat_multinom, trace = FALSE))
+
+    tab <- modelsummary(mod, output = "data.frame", group = response ~ model + term)
+    known <- c("part", "group", "statistic", "Model 1 / (Intercept)", "Model 1 / mpg", "Model 2 / (Intercept)", "Model 2 / drat", "Model 2 / mpg")
+    expect_equal(colnames(tab), known)
+    expect_equal(dim(tab), c(4, 8))
+
+    tab <- modelsummary(mod, output = "data.frame", group = response ~ term + model)
+    known <- c("part", "group", "statistic", "(Intercept) / Model 1", "(Intercept) / Model 2", "drat / Model 2", "mpg / Model 1", "mpg / Model 2")
+    expect_equal(colnames(tab), known)
+    expect_equal(dim(tab), c(4, 8))
 })
 
 test_that("nnet::multinom: order of columns determined by formula terms", {

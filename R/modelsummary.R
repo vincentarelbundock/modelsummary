@@ -706,7 +706,35 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
 
     ## group ~ model + term
     } else if (length(lhs) == 1 && "group" %in% lhs) {
-      stop("`group` formulas of the form group~model+term are not currently supported. To follow progress and put pressure on the `modelsummary` developers, visit: https://github.com/vincentarelbundock/modelsummary/issues/349")
+
+      out <- estimates
+      out <- reshape(
+         out,
+         varying = setdiff(colnames(estimates), c("part", "group", "term", "statistic")),
+         idvar = c("group", "term", "statistic"),
+         times = setdiff(colnames(estimates), c("part", "group", "term", "statistic")),
+         v.names = "value",
+         timevar = "model",
+         direction = "long")
+
+      # avoid duplicate row error
+      row.names(out) <- NULL 
+
+      ## preserve order of columns (rhs variables are ordered factors)
+      out[[lhs]] <- factor(out[[lhs]], levels = unique(out[[lhs]]))
+
+      out <- out[order(out[[rhs[1]]], out[[rhs[2]]]),]
+      out$idx_col <- paste(out[[rhs[1]]], "/", out[[rhs[2]]])
+      out[[rhs[1]]] <- out[[rhs[2]]] <- NULL
+      out <- reshape(out,
+                     timevar = "idx_col",
+                     idvar = setdiff(colnames(out), c("idx_col", "value")),
+                     direction = "wide")
+      row.names(out) <- NULL
+      colnames(out) <- gsub("^value\\.", "", colnames(out))
+
+      out <- out[order(out[[lhs]]), ]
+
     }
 
     out[out == "NA"] <- ""
