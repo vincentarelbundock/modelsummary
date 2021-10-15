@@ -546,6 +546,9 @@ map_omit_gof <- function(gof, gof_omit, gof_map) {
   tmp[is.na(tmp)] <- gof$term[is.na(tmp)]
   gof$term <- tmp
   idx <- match(gof$term, gm_clean)
+  # hack to keep unmatched gof at the end of the table
+  # important for unknown glance_custom entries
+  idx[is.na(idx)] <- 1e6 + 1:sum(is.na(idx))
   gof <- gof[order(idx, gof$term), ]
 
   # important for modelsummary_get = "all"
