@@ -32,6 +32,10 @@ factory_dataframe <- function(tab,
 
   row.names(out) <- NULL
 
+  # theme
+  theme_ms <- getOption("modelsummary_theme_dataframe", default = identity)
+  out <- theme_ms(out)
+
   return(out)
 
 }

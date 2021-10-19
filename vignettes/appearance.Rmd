@@ -214,8 +214,44 @@ penguins <- read.csv(url)
 datasummary_crosstab(island ~ sex * species, output = "gt", data = penguins)
 ```
 
-```{r, include=FALSE}
+Restore default theme:
+
+```{r}
 options("modelsummary_theme_gt" = NULL)
+```
+
+## Themes: Data Frame
+
+A particularly flexible strategy is to apply a theme to the `dataframe` output format. To illustrate, recall that setting `output="dataframe"` produces a data frame with a lot of extraneous meta information. To produce a nice table, we have to process that output a bit:
+
+```{r}
+mod <- lm(mpg ~ hp + drat, mtcars)
+
+modelsummary(mod, output = "dataframe")
+```
+
+Imagine we want to create a table using the `DT` package, a table-drawing backend which is not currently supported by `modelsummary`. To do this, we can create a theming function:
+
+```{r}
+library(DT)
+
+theme_df <- function(tab) {
+    out <- tab
+    out$term[out$statistic == "modelsummary_tmp2"] <- " "
+    out$part <- out$statistic <- NULL
+    colnames(out)[1] <- " "
+    datatable(out, rownames = FALSE,
+              options = list(pageLength = 30))
+}
+
+options("modelsummary_theme_dataframe" = theme_df)
+modelsummary(mod, output = "dataframe")
+```
+
+Restore default theme:
+
+```{r}
+options("modelsummary_theme_dataframe" = NULL)
 ```
 
 # Warning: Saving to file
