@@ -9,6 +9,10 @@
 
 * Weighted means and standard deviations are now supported. Counts and percentages are not, but raise a warning.
 
+Misc:
+
+* Bugfix: rounding in LaTeX w/ siunitx and NaN entries.
+
 # modelsummary 0.9.2
 
 `modelsummary`:

@@ -41,6 +41,10 @@ rounding <- function(x, fmt = '%.3f', ...) {
             out <- x
         }
 
+
+    # Remove weird numbers before wrapping in siunitx
+    out <- gsub('^NA$|^NaN$|^-Inf$|^Inf$', '', out)
+
     ## LaTeX siunitx \num{}
     if (settings_equal("output_format", c("latex", "latex_tabular"))) {
         if (!isTRUE(settings_get("siunitx_scolumns"))) {
@@ -62,6 +66,5 @@ rounding <- function(x, fmt = '%.3f', ...) {
     }
   }
 
-  out <- gsub('^NA$|^NaN$|^-Inf$|^Inf$', '', out)
   return(out)
 }
