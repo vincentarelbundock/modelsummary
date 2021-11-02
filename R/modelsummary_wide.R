@@ -1,6 +1,6 @@
 #' Superseded function
 #'
-#' This function is superseded by the `group` argumen tof the `modelsummary` function. 
+#' This function is superseded by the `group` argument of the `modelsummary` function. 
 #'
 #' @param coef_group the name of the coefficient groups to use as columns (NULL
 #' or character). If `coef_group` is NULL, `modelsummary` tries to guess the

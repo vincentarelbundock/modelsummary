@@ -164,5 +164,5 @@ the scenes. Examples include:
 a regression table in a format determined by the \code{output} argument.
 }
 \description{
-This function is superseded by the \code{group} argumen tof the \code{modelsummary} function.
+This function is superseded by the \code{group} argument of the \code{modelsummary} function.
 }
