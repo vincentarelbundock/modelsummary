@@ -233,12 +233,16 @@ datasummary_balance <- function(formula,
         escape = escape,
         ...)
 
-    if (!is.null(settings_get("output_file"))) {
-        settings_rm()
-        return(invisible(out))
+    # invisible return
+    if (!is.null(settings_get("output_file")) ||
+        output == "jupyter" ||
+        (output == "default" && settings_equal("output_default", "jupyter"))) {
+      settings_rm()
+      return(invisible(out))
+    # visible return
     } else {
-        settings_rm()
-        return(out)
+      settings_rm()
+      return(out)
     }
 
 }

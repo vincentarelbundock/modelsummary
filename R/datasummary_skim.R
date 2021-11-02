@@ -355,14 +355,12 @@ datasummary_skim_categorical <- function(
   f <- All(dat_new, numeric = FALSE, factor = TRUE, logical = TRUE, character = TRUE) ~
        (N = 1) * Format() + (`%` = Percent()) * Format(pctformat())
 
-  out <- datasummary(
+  datasummary(
     formula = f,
     data = dat_new,
     output = output,
     title = title,
     align = align,
     notes = notes)
-
-  return(out)
 
 }

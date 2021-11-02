@@ -222,9 +222,15 @@ datasummary <- function(formula,
     add_rows = add_rows,
     ...)
 
-  if (!is.null(settings_get("output_file"))) {
+  # invisible return
+  if (!is.null(settings_get("output_file")) ||
+      output == "jupyter" ||
+      (output == "default" && settings_equal("output_default", "jupyter"))) {
+    settings_rm()
     return(invisible(out))
+  # visible return
   } else {
+    settings_rm()
     return(out)
   }
 

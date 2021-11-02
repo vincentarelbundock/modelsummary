@@ -12,6 +12,7 @@
 Misc:
 
 * Bugfix: rounding in LaTeX w/ siunitx and NaN entries.
+* output='jupyter' no longer prints an extraneousnTRUE to the notebook
 
 # modelsummary 0.9.2
 
