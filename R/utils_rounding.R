@@ -9,6 +9,9 @@
 #' @noRd
 rounding <- function(x, fmt = '%.3f', ...) {
 
+    ## NA should return empty
+    idx_na <- is.na(x)
+
     ## character, factor, logical
     if (is.factor(x) || is.logical(x) || is.character(x)) {
         out <- as.character(x)
@@ -65,6 +68,9 @@ rounding <- function(x, fmt = '%.3f', ...) {
         }
     }
   }
+
+  ## NA should return empty
+  out[idx_na] <- ""
 
   return(out)
 }
