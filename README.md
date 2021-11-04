@@ -182,3 +182,4 @@ There are several excellent alternatives to draw model summary tables in `R`:
   - [stargazer](https://cran.r-project.org/package=stargazer)
   - [apsrtable](https://cran.r-project.org/package=apsrtable)
   - [huxtable](https://hughjonesd.github.io/huxtable/)
+  - [janitor](https://sfirke.github.io/janitor/)
