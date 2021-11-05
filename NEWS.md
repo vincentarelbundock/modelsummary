@@ -1,3 +1,7 @@
+# modelsummary 0.9.4
+
+* Bug fix: siunitx and rounding NA
+
 # modelsummary 0.9.3
 
 `modelsummary`:
