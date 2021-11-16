@@ -159,7 +159,7 @@
     <tr>
       <th>fmt</th>
       <td><p>determines how to format numeric values</p><ul>
-<li><p>integer: the number of digits to keep after the period <code><a href='https://rdrr.io/r/base/format.html'>format(round(x, fmt), nsmall=fmt)</a></code></p></li>
+<li><p>integer: the number of digits to keep after the period <code>format(round(x, fmt), nsmall=fmt)</code></p></li>
 <li><p>character: passed to the <code>sprintf</code> function (e.g., '%.3f' keeps 3 digits with trailing zero). See <code><a href='https://rdrr.io/r/base/sprintf.html'>?sprintf</a></code></p></li>
 <li><p>function: returns a formatted character string.</p></li>
 <li><p>Note on LaTeX formatting: To ensure proper typography, all numeric entries are enclosed in the <code>\num{}</code> command from the <code>siunitx</code> LaTeX package by default. This behavior can be altered with global options. See the 'Details' section.</p></li>
@@ -208,7 +208,7 @@ prevent the file from compiling/displaying. This setting does not affect caption
 table-making functions. This allows users to pass arguments directly to
 <code>datasummary</code> in order to affect the behavior of other functions behind
 the scenes, for instance:</p><ul>
-<li><p><code><a href='https://rdrr.io/pkg/kableExtra/man/kbl.html'>kableExtra::kbl(escape=FALSE)</a></code> to avoid escaping math characters in <code>kableExtra</code> tables.</p></li>
+<li><p><code>kableExtra::kbl(escape=FALSE)</code> to avoid escaping math characters in <code>kableExtra</code> tables.</p></li>
 </ul></td>
     </tr>
     </table>
@@ -235,10 +235,10 @@ the scenes, for instance:</p><ul>
 functionalities. For example, 3 of those packages can export to LaTeX. To
 change the default backend used for a specific file format, you can use
 the <code>options</code> function:</p>
-<p><code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_factory_html = 'kableExtra')</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_factory_latex = 'gt')</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_factory_word = 'huxtable')</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_factory_png = 'gt')</a></code></p>
+<p><code>options(modelsummary_factory_html = 'kableExtra')</code>
+<code>options(modelsummary_factory_latex = 'gt')</code>
+<code>options(modelsummary_factory_word = 'huxtable')</code>
+<code>options(modelsummary_factory_png = 'gt')</code></p>
 
 <h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Model extraction functions</h3>
 
@@ -248,9 +248,9 @@ statistical models: <code>broom</code> and the <code>easystats</code> family (<c
 <code>parameters</code>). By default, it uses <code>broom</code> first and <code>easystats</code> as a
 fallback if <code>broom</code> fails. You can change the order of priorities
 or include goodness-of-fit extracted by <em>both</em> packages by setting:</p>
-<p><code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get = "broom")</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get = "easystats")</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get = "all")</a></code></p>
+<p><code>options(modelsummary_get = "broom")</code>
+<code>options(modelsummary_get = "easystats")</code>
+<code>options(modelsummary_get = "all")</code></p>
 
 <h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Formatting numeric entries</h3>
 
@@ -258,34 +258,34 @@ or include goodness-of-fit extracted by <em>both</em> packages by setting:</p>
 <p>By default, LaTeX tables enclose all numeric entries in the <code>\num{}</code> command
 from the siunitx package. To prevent this behavior, or to enclose numbers
 in dollar signs (for LaTeX math mode), users can call:</p>
-<p><code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_format_numeric_latex = "plain")</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_format_numeric_latex = "mathmode")</a></code></p>
+<p><code>options(modelsummary_format_numeric_latex = "plain")</code>
+<code>options(modelsummary_format_numeric_latex = "mathmode")</code></p>
 <p>A similar option can be used to display numerical entries using MathJax in
 HTML tables:</p>
-<p><code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_format_numeric_html = "mathjax")</a></code></p>
+<p><code>options(modelsummary_format_numeric_html = "mathjax")</code></p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span>
-<span class='va'>dat</span><span class='op'>$</span><span class='va'>vs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/logical.html'>as.logical</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>vs</span><span class='op'>)</span>
-<span class='va'>dat</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span>
-<span class='fu'>datasummary_skim</span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span>
-<span class='fu'>datasummary_skim</span><span class='op'>(</span><span class='va'>dat</span>, <span class='st'>"categorical"</span><span class='op'>)</span>
-
-<span class='co'># You can use `datasummary` to produce a similar table in different formats.</span>
-<span class='co'># Note that the `Histogram` function relies on unicode characters. These</span>
-<span class='co'># characters will only display correctly in some operating systems, under some</span>
-<span class='co'># locales, using some fonts. Displaying such histograms on Windows computers</span>
-<span class='co'># is notoriously tricky. The `modelsummary` authors cannot provide support to</span>
-<span class='co'># display these unicode histograms.</span>
-
-<span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='All.html'>All</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>Mean</span> <span class='op'>+</span> <span class='va'>SD</span> <span class='op'>+</span> <span class='va'>Min</span> <span class='op'>+</span> <span class='va'>Median</span> <span class='op'>+</span> <span class='va'>Max</span> <span class='op'>+</span> <span class='va'>Histogram</span>
-<span class='fu'><a href='datasummary.html'>datasummary</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='va'>mtcars</span>, output<span class='op'>=</span><span class='st'>"markdown"</span><span class='op'>)</span>
-
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span></span>
+<span class='r-in'><span class='va'>dat</span><span class='op'>$</span><span class='va'>vs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/logical.html'>as.logical</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>vs</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dat</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>datasummary_skim</span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>datasummary_skim</span><span class='op'>(</span><span class='va'>dat</span>, <span class='st'>"categorical"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># You can use `datasummary` to produce a similar table in different formats.</span></span>
+<span class='r-in'><span class='co'># Note that the `Histogram` function relies on unicode characters. These</span></span>
+<span class='r-in'><span class='co'># characters will only display correctly in some operating systems, under some</span></span>
+<span class='r-in'><span class='co'># locales, using some fonts. Displaying such histograms on Windows computers</span></span>
+<span class='r-in'><span class='co'># is notoriously tricky. The `modelsummary` authors cannot provide support to</span></span>
+<span class='r-in'><span class='co'># display these unicode histograms.</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='All.html'>All</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>Mean</span> <span class='op'>+</span> <span class='va'>SD</span> <span class='op'>+</span> <span class='va'>Min</span> <span class='op'>+</span> <span class='va'>Median</span> <span class='op'>+</span> <span class='va'>Max</span> <span class='op'>+</span> <span class='va'>Histogram</span></span>
+<span class='r-in'><span class='fu'><a href='datasummary.html'>datasummary</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='va'>mtcars</span>, output<span class='op'>=</span><span class='st'>"markdown"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

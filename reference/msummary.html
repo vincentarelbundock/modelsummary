@@ -188,7 +188,7 @@ are only stored in a <code>modelsummary_list</code> if explicitly requested:</p>
     <tr>
       <th>fmt</th>
       <td><p>determines how to format numeric values</p><ul>
-<li><p>integer: the number of digits to keep after the period <code><a href='https://rdrr.io/r/base/format.html'>format(round(x, fmt), nsmall=fmt)</a></code></p></li>
+<li><p>integer: the number of digits to keep after the period <code>format(round(x, fmt), nsmall=fmt)</code></p></li>
 <li><p>character: passed to the <code>sprintf</code> function (e.g., '%.3f' keeps 3 digits with trailing zero). See <code><a href='https://rdrr.io/r/base/sprintf.html'>?sprintf</a></code></p></li>
 <li><p>function: returns a formatted character string.</p></li>
 <li><p>Note on LaTeX formatting: To ensure proper typography, all numeric entries are enclosed in the <code>\num{}</code> command from the <code>siunitx</code> LaTeX package by default. This behavior can be altered with global options. See the 'Details' section.</p></li>
@@ -198,7 +198,7 @@ are only stored in a <code>modelsummary_list</code> if explicitly requested:</p>
       <th>estimate</th>
       <td><p>string or <code>glue</code> string of the estimate to display (or a
 vector with one string per model). Valid entries include any column name of
-the data.frame produced by <code><a href='get_estimates.html'>get_estimates(model)</a></code>. Examples:</p><ul>
+the data.frame produced by <code>get_estimates(model)</code>. Examples:</p><ul>
 <li><p><code>"estimate"</code></p></li>
 <li><p><code>"{estimate} ({std.error}){stars}"</code></p></li>
 <li><p><code>"{estimate} [{conf.low}, {conf.high}]"</code></p></li>
@@ -210,12 +210,12 @@ the data.frame produced by <code><a href='get_estimates.html'>get_estimates(mode
 statistics to report vertically below the estimate. NULL omits all
 uncertainty statistics.</p><ul>
 <li><p>"conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high",
-or any column name produced by: <code><a href='get_estimates.html'>get_estimates(model)</a></code></p></li>
+or any column name produced by: <code>get_estimates(model)</code></p></li>
 <li><p><code>glue</code> package strings with braces, such as:</p><ul>
 <li><p><code>"{p.value} [{conf.low}, {conf.high}]"</code></p></li>
 <li><p><code>"Std.Error: {std.error}"</code></p></li>
 </ul></li>
-<li><p>Note: Parentheses are added automatically unless the string includes <code>glue</code> curly braces <code>{}</code>.</p></li>
+<li><p>Note: Parentheses are added automatically unless the string includes <code>glue</code> curly braces <code><a href='https://rdrr.io/r/base/Paren.html'>{}</a></code>.</p></li>
 <li><p>Note: To report uncertainty statistics <em>next</em> to coefficients, you can #'   supply a <code>glue</code> string to the <code>estimate</code> argument.</p></li>
 </ul></td>
     </tr>
@@ -228,7 +228,7 @@ sections below):</p><ul>
 <li><p>string, vector, or (named) list of strings. Omitting or specifying <code>vcov = NULL</code> will return the model's default uncertainty estimates, e.g. IID errors for standard models. Alternatively, use the string "iid" (aliases: "classical" or "constant") to present IID errors explicitly. The strings "HC", "HC0", "HC1" (alias: "stata"), "HC2", "HC3" (alias: "robust"), "HC4", "HC4m", "HC5", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", and "weave" use variance-covariance matrices computed using functions from the <code>sandwich</code> package, or equivalent method. The behavior of those functions can (and sometimes <em>must</em>) be altered by passing arguments to <code>sandwich</code> directly from <code>modelsummary</code> through the ellipsis (<code>...</code>), but it is safer to define your own custom functions as described in the next bullet.</p></li>
 <li><p>function or (named) list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., <code><a href='https://rdrr.io/r/stats/vcov.html'>stats::vcov</a></code>, <code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>sandwich::vcovHC</a></code>, <code>function(x) vcovPC(x, cluster="country")</code>).</p></li>
 <li><p>formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).</p></li>
-<li><p>(named) list of <code><a href='https://rdrr.io/r/base/length.html'>length(models)</a></code> variance-covariance matrices with row and column names equal to the names of your coefficient estimates.</p></li>
+<li><p>(named) list of <code>length(models)</code> variance-covariance matrices with row and column names equal to the names of your coefficient estimates.</p></li>
 <li><p>a (named) list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, <code>modelsummary</code> cannot automatically calculate p values. The <code>stars</code> argument may thus use incorrect significance thresholds when <code>vcov</code> is a list of vectors.</p></li>
 </ul></td>
     </tr>
@@ -241,7 +241,7 @@ sections below):</p><ul>
       <td><p>to indicate statistical significance</p><ul>
 <li><p>FALSE (default): no significance stars.</p></li>
 <li><p>TRUE: +=.1, *=.05, **=.01, ***=0.001</p></li>
-<li><p>Named numeric vector for custom stars such as <code><a href='https://rdrr.io/r/base/c.html'>c('*' = .1, '+' = .05)</a></code></p></li>
+<li><p>Named numeric vector for custom stars such as <code>c('*' = .1, '+' = .05)</code></p></li>
 <li><p>Note: a legend will not be inserted at the bottom of the table when the <code>estimate</code> or <code>statistic</code> arguments use "glue strings" with <code>{stars}</code>.</p></li>
 </ul></td>
     </tr>
@@ -253,12 +253,12 @@ of the vector determines the order of the table.  <code>coef_map</code> can be a
 or an unnamed character vector (see the Examples section below). If
 <code>coef_map</code> is a named vector, its values define the labels that must appear
 in the table, and its names identify the original term names stored in the
-model object: <code><a href='https://rdrr.io/r/base/c.html'>c("hp:mpg"="HPxM/G")</a></code>.</p></td>
+model object: <code>c("hp:mpg"="HPxM/G")</code>.</p></td>
     </tr>
     <tr>
       <th>coef_omit</th>
       <td><p>string regular expression. Omits all matching coefficients
-from the table using <code><a href='https://rdrr.io/r/base/grep.html'>grepl(perl=TRUE)</a></code>. This argument uses perl-compatible regular expressions, which allows expressions such as <code>"Int|ABC" which omits coefficients matching either "Int" or "ABC", and </code>"^(?!.*Intercept)"` which omits every term except the intercept.</p></td>
+from the table using <code>grepl(perl=TRUE)</code>. This argument uses perl-compatible regular expressions, which allows expressions such as <code>"Int|ABC" which omits coefficients matching either "Int" or "ABC", and </code>"^(?!.*Intercept)"` which omits every term except the intercept.</p></td>
     </tr>
     <tr>
       <th>coef_rename</th>
@@ -279,7 +279,7 @@ model information. This argument accepts 3 types of values:</p><ul>
     <tr>
       <th>gof_omit</th>
       <td><p>string regular expression. Omits all matching gof statistics from
-the table. This argument uses perl-compatible regular expressions (<code><a href='https://rdrr.io/r/base/grep.html'>grepl(perl=TRUE)</a></code>), which allows expressions such as <code>".*"</code> which omits everything, and <code>"^(?!R2|Num)"</code> which omits every term except those that start with "R2" or "Num".</p></td>
+the table. This argument uses perl-compatible regular expressions (<code>grepl(perl=TRUE)</code>), which allows expressions such as <code>".*"</code> which omits everything, and <code>"^(?!R2|Num)"</code> which omits every term except those that start with "R2" or "Num".</p></td>
     </tr>
     <tr>
       <th>group</th>
@@ -288,7 +288,7 @@ how groups of parameters should be displayed. The formula must include both
 a "term" and a "model" component. In addition, a component can be used to
 identify groups of parameters (e.g., outcome levels of a multinomial logit
 model). This group identifier must be the name of a column in the
-data.frame produced by <code><a href='get_estimates.html'>get_estimates(model)</a></code>.</p><ul>
+data.frame produced by <code>get_estimates(model)</code>.</p><ul>
 <li><p><code>term ~ model</code> displays coefficients as rows and models as columns</p></li>
 <li><p><code>model ~ term</code> displays models as rows and coefficients as columns</p></li>
 <li><p><code>response + term ~ model</code> displays response levels and coefficients as rows and models as columns.</p></li>
@@ -339,8 +339,8 @@ prevent the file from compiling/displaying. This setting does not affect caption
 table-making functions. This allows users to pass arguments directly to
 <code>modelsummary</code> in order to affect the behavior of other functions behind
 the scenes. Examples include:</p><ul>
-<li><p><code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy(exponentiate=TRUE)</a></code> to exponentiate logistic regression. Please see the <code>modelsummary</code> vignette on the package website for important technical notes on this topic.</p></li>
-<li><p><code><a href='https://easystats.github.io/performance/reference/model_performance.html'>performance::model_performance(metrics="RMSE")</a></code> to select goodness-of-fit statistics to extract using the <code>performance</code> package (must have set <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get="easystats")</a></code> first).</p></li>
+<li><p><code>broom::tidy(exponentiate=TRUE)</code> to exponentiate logistic regression. Please see the <code>modelsummary</code> vignette on the package website for important technical notes on this topic.</p></li>
+<li><p><code>performance::model_performance(metrics="RMSE")</code> to select goodness-of-fit statistics to extract using the <code>performance</code> package (must have set <code>options(modelsummary_get="easystats")</code> first).</p></li>
 </ul></td>
     </tr>
     </table>
@@ -355,7 +355,7 @@ the scenes. Examples include:</p><ul>
 
 <p><code>backup &lt;- modelsummary(models, output = "modelsummary_list"</code>
 <code>                       statistic = "conf.int")</code>
-<code><a href='modelsummary.html'>modelsummary(backup)</a></code></p>
+<code>modelsummary(backup)</code></p>
 <p>When a file name with a valid extension is supplied to the <code>output</code> argument,
 the table is written immediately to file. If you want to customize your table
 by post-processing it with an external package, you need to choose a
@@ -410,10 +410,10 @@ diagonal.</p>
 functionalities. For example, 3 of those packages can export to LaTeX. To
 change the default backend used for a specific file format, you can use
 the <code>options</code> function:</p>
-<p><code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_factory_html = 'kableExtra')</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_factory_latex = 'gt')</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_factory_word = 'huxtable')</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_factory_png = 'gt')</a></code></p>
+<p><code>options(modelsummary_factory_html = 'kableExtra')</code>
+<code>options(modelsummary_factory_latex = 'gt')</code>
+<code>options(modelsummary_factory_word = 'huxtable')</code>
+<code>options(modelsummary_factory_png = 'gt')</code></p>
 
 <h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Model extraction functions</h3>
 
@@ -423,9 +423,9 @@ statistical models: <code>broom</code> and the <code>easystats</code> family (<c
 <code>parameters</code>). By default, it uses <code>broom</code> first and <code>easystats</code> as a
 fallback if <code>broom</code> fails. You can change the order of priorities
 or include goodness-of-fit extracted by <em>both</em> packages by setting:</p>
-<p><code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get = "broom")</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get = "easystats")</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get = "all")</a></code></p>
+<p><code>options(modelsummary_get = "broom")</code>
+<code>options(modelsummary_get = "easystats")</code>
+<code>options(modelsummary_get = "all")</code></p>
 
 <h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Formatting numeric entries</h3>
 
@@ -433,105 +433,105 @@ or include goodness-of-fit extracted by <em>both</em> packages by setting:</p>
 <p>By default, LaTeX tables enclose all numeric entries in the <code>\num{}</code> command
 from the siunitx package. To prevent this behavior, or to enclose numbers
 in dollar signs (for LaTeX math mode), users can call:</p>
-<p><code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_format_numeric_latex = "plain")</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_format_numeric_latex = "mathmode")</a></code></p>
+<p><code>options(modelsummary_format_numeric_latex = "plain")</code>
+<code>options(modelsummary_format_numeric_latex = "mathmode")</code></p>
 <p>A similar option can be used to display numerical entries using MathJax in
 HTML tables:</p>
-<p><code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_format_numeric_html = "mathjax")</a></code></p>
+<p><code>options(modelsummary_format_numeric_html = "mathjax")</code></p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-
-<span class='co'># The `modelsummary` website includes \emph{many} examples and tutorials:</span>
-<span class='co'># https://vincentarelbundock.github.io/modelsummary</span>
-
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://vincentarelbundock.github.io/modelsummary/'>modelsummary</a></span><span class='op'>)</span>
-
-<span class='co'># load data and estimate models</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>trees</span><span class='op'>)</span>
-<span class='va'>models</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>models</span><span class='op'>[[</span><span class='st'>'Bivariate'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Girth</span> <span class='op'>~</span> <span class='va'>Height</span>, data <span class='op'>=</span> <span class='va'>trees</span><span class='op'>)</span>
-<span class='va'>models</span><span class='op'>[[</span><span class='st'>'Multivariate'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Girth</span> <span class='op'>~</span> <span class='va'>Height</span> <span class='op'>+</span> <span class='va'>Volume</span>, data <span class='op'>=</span> <span class='va'>trees</span><span class='op'>)</span>
-
-<span class='co'># simple table</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span><span class='op'>)</span>
-
-<span class='co'># statistic</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='st'>'p.value'</span><span class='op'>)</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='st'>'statistic'</span><span class='op'>)</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='st'>'conf.int'</span>, conf_level <span class='op'>=</span> <span class='fl'>0.99</span><span class='op'>)</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"t = {statistic}"</span>,
-                                   <span class='st'>"se = {std.error}"</span>,
-                                   <span class='st'>"conf.int"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># estimate</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>,
-  statistic <span class='op'>=</span> <span class='cn'>NULL</span>,
-  estimate <span class='op'>=</span> <span class='st'>"{estimate} [{conf.low}, {conf.high}]"</span><span class='op'>)</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>,
-  estimate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"{estimate}{stars}"</span>,
-               <span class='st'>"{estimate} ({std.error})"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># vcov</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, vcov <span class='op'>=</span> <span class='st'>"robust"</span><span class='op'>)</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"classical"</span>, <span class='st'>"stata"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, vcov <span class='op'>=</span> <span class='fu'>sandwich</span><span class='fu'>::</span><span class='va'><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>vcovHC</a></span><span class='op'>)</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>,
-  vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'>stats</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/r/stats/vcov.html'>vcov</a></span>, <span class='fu'>sandwich</span><span class='fu'>::</span><span class='va'><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>vcovHC</a></span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>,
-  vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"(Intercept)"</span><span class='op'>=</span><span class='st'>""</span>, <span class='st'>"Height"</span><span class='op'>=</span><span class='st'>"!"</span><span class='op'>)</span>,
-              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"(Intercept)"</span><span class='op'>=</span><span class='st'>""</span>, <span class='st'>"Height"</span><span class='op'>=</span><span class='st'>"!"</span>, <span class='st'>"Volume"</span><span class='op'>=</span><span class='st'>"!!"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># vcov with custom names</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span>
-  <span class='va'>models</span>,
-  vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Stata Corp"</span> <span class='op'>=</span> <span class='st'>"stata"</span>,
-              <span class='st'>"Newey Lewis &amp; the News"</span> <span class='op'>=</span> <span class='st'>"NeweyWest"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># coef_rename</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, coef_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Volume'</span> <span class='op'>=</span> <span class='st'>'Large'</span>, <span class='st'>'Height'</span> <span class='op'>=</span> <span class='st'>'Tall'</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># coef_map</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, coef_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Volume'</span> <span class='op'>=</span> <span class='st'>'Large'</span>, <span class='st'>'Height'</span> <span class='op'>=</span> <span class='st'>'Tall'</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, coef_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Volume'</span>, <span class='st'>'Height'</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># title</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, title <span class='op'>=</span> <span class='st'>'This is the title'</span><span class='op'>)</span>
-
-<span class='co'># title with LaTeX label (for numbering and referencing)</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, title <span class='op'>=</span> <span class='st'>'This is the title \\label{tab:description}'</span><span class='op'>)</span>
-
-<span class='co'># add_rows</span>
-<span class='va'>rows</span> <span class='op'>&lt;-</span> <span class='fu'>tibble</span><span class='fu'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>term</span>, <span class='op'>~</span><span class='va'>Bivariate</span>, <span class='op'>~</span><span class='va'>Multivariate</span>,
-  <span class='st'>'Empty row'</span>, <span class='st'>'-'</span>, <span class='st'>'-'</span>,
-  <span class='st'>'Another empty row'</span>, <span class='st'>'?'</span>, <span class='st'>'?'</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>rows</span>, <span class='st'>'position'</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, add_rows <span class='op'>=</span> <span class='va'>rows</span><span class='op'>)</span>
-
-<span class='co'># notes</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, notes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>'A first note'</span>, <span class='st'>'A second note'</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># gof_map: data.frame</span>
-<span class='va'>gm</span> <span class='op'>&lt;-</span> <span class='fu'>modelsummary</span><span class='fu'>::</span><span class='va'><a href='gof_map.html'>gof_map</a></span>
-<span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>omit</span><span class='op'>[</span><span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>raw</span> <span class='op'>==</span> <span class='st'>'deviance'</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>FALSE</span>
-<span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>fmt</span><span class='op'>[</span><span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>raw</span> <span class='op'>==</span> <span class='st'>'r.squared'</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='st'>"%.5f"</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, gof_map <span class='op'>=</span> <span class='va'>gof_custom</span><span class='op'>)</span>
-
-<span class='co'># gof_map: list of lists</span>
-<span class='va'>f1</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fl'>3</span><span class='op'>)</span>, big.mark<span class='op'>=</span><span class='st'>","</span><span class='op'>)</span>
-<span class='va'>f2</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fl'>0</span><span class='op'>)</span>, big.mark<span class='op'>=</span><span class='st'>","</span><span class='op'>)</span>
-<span class='va'>gm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"raw"</span> <span class='op'>=</span> <span class='st'>"nobs"</span>, <span class='st'>"clean"</span> <span class='op'>=</span> <span class='st'>"N"</span>, <span class='st'>"fmt"</span> <span class='op'>=</span> <span class='va'>f2</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"raw"</span> <span class='op'>=</span> <span class='st'>"AIC"</span>, <span class='st'>"clean"</span> <span class='op'>=</span> <span class='st'>"aic"</span>, <span class='st'>"fmt"</span> <span class='op'>=</span> <span class='va'>f1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>,
-  fmt <span class='op'>=</span> <span class='va'>f1</span>,
-  gof_map <span class='op'>=</span> <span class='va'>gm</span><span class='op'>)</span>
-
-<span class='op'>}</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># The `modelsummary` website includes \emph{many} examples and tutorials:</span></span>
+<span class='r-in'><span class='co'># https://vincentarelbundock.github.io/modelsummary</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://vincentarelbundock.github.io/modelsummary/'>modelsummary</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># load data and estimate models</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>trees</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>models</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>models</span><span class='op'>[[</span><span class='st'>'Bivariate'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Girth</span> <span class='op'>~</span> <span class='va'>Height</span>, data <span class='op'>=</span> <span class='va'>trees</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>models</span><span class='op'>[[</span><span class='st'>'Multivariate'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Girth</span> <span class='op'>~</span> <span class='va'>Height</span> <span class='op'>+</span> <span class='va'>Volume</span>, data <span class='op'>=</span> <span class='va'>trees</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># simple table</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># statistic</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='st'>'p.value'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='st'>'statistic'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='st'>'conf.int'</span>, conf_level <span class='op'>=</span> <span class='fl'>0.99</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, statistic <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"t = {statistic}"</span>,</span>
+<span class='r-in'>                                   <span class='st'>"se = {std.error}"</span>,</span>
+<span class='r-in'>                                   <span class='st'>"conf.int"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># estimate</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>,</span>
+<span class='r-in'>  statistic <span class='op'>=</span> <span class='cn'>NULL</span>,</span>
+<span class='r-in'>  estimate <span class='op'>=</span> <span class='st'>"{estimate} [{conf.low}, {conf.high}]"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>,</span>
+<span class='r-in'>  estimate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"{estimate}{stars}"</span>,</span>
+<span class='r-in'>               <span class='st'>"{estimate} ({std.error})"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># vcov</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, vcov <span class='op'>=</span> <span class='st'>"robust"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"classical"</span>, <span class='st'>"stata"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, vcov <span class='op'>=</span> <span class='fu'>sandwich</span><span class='fu'>::</span><span class='va'><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>vcovHC</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>,</span>
+<span class='r-in'>  vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'>stats</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/r/stats/vcov.html'>vcov</a></span>, <span class='fu'>sandwich</span><span class='fu'>::</span><span class='va'><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>vcovHC</a></span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>,</span>
+<span class='r-in'>  vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"(Intercept)"</span><span class='op'>=</span><span class='st'>""</span>, <span class='st'>"Height"</span><span class='op'>=</span><span class='st'>"!"</span><span class='op'>)</span>,</span>
+<span class='r-in'>              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"(Intercept)"</span><span class='op'>=</span><span class='st'>""</span>, <span class='st'>"Height"</span><span class='op'>=</span><span class='st'>"!"</span>, <span class='st'>"Volume"</span><span class='op'>=</span><span class='st'>"!!"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># vcov with custom names</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='va'>models</span>,</span>
+<span class='r-in'>  vcov <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Stata Corp"</span> <span class='op'>=</span> <span class='st'>"stata"</span>,</span>
+<span class='r-in'>              <span class='st'>"Newey Lewis &amp; the News"</span> <span class='op'>=</span> <span class='st'>"NeweyWest"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># coef_rename</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, coef_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Volume'</span> <span class='op'>=</span> <span class='st'>'Large'</span>, <span class='st'>'Height'</span> <span class='op'>=</span> <span class='st'>'Tall'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># coef_map</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, coef_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Volume'</span> <span class='op'>=</span> <span class='st'>'Large'</span>, <span class='st'>'Height'</span> <span class='op'>=</span> <span class='st'>'Tall'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, coef_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'Volume'</span>, <span class='st'>'Height'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># title</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, title <span class='op'>=</span> <span class='st'>'This is the title'</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># title with LaTeX label (for numbering and referencing)</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, title <span class='op'>=</span> <span class='st'>'This is the title \\label{tab:description}'</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># add_rows</span></span>
+<span class='r-in'><span class='va'>rows</span> <span class='op'>&lt;-</span> <span class='fu'>tibble</span><span class='fu'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tribble.html'>tribble</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>term</span>, <span class='op'>~</span><span class='va'>Bivariate</span>, <span class='op'>~</span><span class='va'>Multivariate</span>,</span>
+<span class='r-in'>  <span class='st'>'Empty row'</span>, <span class='st'>'-'</span>, <span class='st'>'-'</span>,</span>
+<span class='r-in'>  <span class='st'>'Another empty row'</span>, <span class='st'>'?'</span>, <span class='st'>'?'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>rows</span>, <span class='st'>'position'</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, add_rows <span class='op'>=</span> <span class='va'>rows</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># notes</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, notes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>'A first note'</span>, <span class='st'>'A second note'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># gof_map: data.frame</span></span>
+<span class='r-in'><span class='va'>gm</span> <span class='op'>&lt;-</span> <span class='fu'>modelsummary</span><span class='fu'>::</span><span class='va'><a href='gof_map.html'>gof_map</a></span></span>
+<span class='r-in'><span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>omit</span><span class='op'>[</span><span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>raw</span> <span class='op'>==</span> <span class='st'>'deviance'</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>FALSE</span></span>
+<span class='r-in'><span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>fmt</span><span class='op'>[</span><span class='va'>gof_custom</span><span class='op'>$</span><span class='va'>raw</span> <span class='op'>==</span> <span class='st'>'r.squared'</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='st'>"%.5f"</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>, gof_map <span class='op'>=</span> <span class='va'>gof_custom</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># gof_map: list of lists</span></span>
+<span class='r-in'><span class='va'>f1</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fl'>3</span><span class='op'>)</span>, big.mark<span class='op'>=</span><span class='st'>","</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>f2</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fl'>0</span><span class='op'>)</span>, big.mark<span class='op'>=</span><span class='st'>","</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>gm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"raw"</span> <span class='op'>=</span> <span class='st'>"nobs"</span>, <span class='st'>"clean"</span> <span class='op'>=</span> <span class='st'>"N"</span>, <span class='st'>"fmt"</span> <span class='op'>=</span> <span class='va'>f2</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"raw"</span> <span class='op'>=</span> <span class='st'>"AIC"</span>, <span class='st'>"clean"</span> <span class='op'>=</span> <span class='st'>"aic"</span>, <span class='st'>"fmt"</span> <span class='op'>=</span> <span class='va'>f1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>models</span>,</span>
+<span class='r-in'>  fmt <span class='op'>=</span> <span class='va'>f1</span>,</span>
+<span class='r-in'>  gof_map <span class='op'>=</span> <span class='va'>gm</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -171,7 +171,7 @@ column, the reported mean and standard errors will also be weighted.</p></td>
     <tr>
       <th>fmt</th>
       <td><p>determines how to format numeric values</p><ul>
-<li><p>integer: the number of digits to keep after the period <code><a href='https://rdrr.io/r/base/format.html'>format(round(x, fmt), nsmall=fmt)</a></code></p></li>
+<li><p>integer: the number of digits to keep after the period <code>format(round(x, fmt), nsmall=fmt)</code></p></li>
 <li><p>character: passed to the <code>sprintf</code> function (e.g., '%.3f' keeps 3 digits with trailing zero). See <code><a href='https://rdrr.io/r/base/sprintf.html'>?sprintf</a></code></p></li>
 <li><p>function: returns a formatted character string.</p></li>
 <li><p>Note on LaTeX formatting: To ensure proper typography, all numeric entries are enclosed in the <code>\num{}</code> command from the <code>siunitx</code> LaTeX package by default. This behavior can be altered with global options. See the 'Details' section.</p></li>
@@ -234,8 +234,8 @@ prevent the file from compiling/displaying. This setting does not affect caption
 table-making functions. This allows users to pass arguments directly to
 <code>modelsummary</code> in order to affect the behavior of other functions behind
 the scenes. Examples include:</p><ul>
-<li><p><code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy(exponentiate=TRUE)</a></code> to exponentiate logistic regression. Please see the <code>modelsummary</code> vignette on the package website for important technical notes on this topic.</p></li>
-<li><p><code><a href='https://easystats.github.io/performance/reference/model_performance.html'>performance::model_performance(metrics="RMSE")</a></code> to select goodness-of-fit statistics to extract using the <code>performance</code> package (must have set <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get="easystats")</a></code> first).</p></li>
+<li><p><code>broom::tidy(exponentiate=TRUE)</code> to exponentiate logistic regression. Please see the <code>modelsummary</code> vignette on the package website for important technical notes on this topic.</p></li>
+<li><p><code>performance::model_performance(metrics="RMSE")</code> to select goodness-of-fit statistics to extract using the <code>performance</code> package (must have set <code>options(modelsummary_get="easystats")</code> first).</p></li>
 </ul></td>
     </tr>
     </table>
@@ -262,10 +262,10 @@ the scenes. Examples include:</p><ul>
 functionalities. For example, 3 of those packages can export to LaTeX. To
 change the default backend used for a specific file format, you can use
 the <code>options</code> function:</p>
-<p><code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_factory_html = 'kableExtra')</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_factory_latex = 'gt')</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_factory_word = 'huxtable')</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_factory_png = 'gt')</a></code></p>
+<p><code>options(modelsummary_factory_html = 'kableExtra')</code>
+<code>options(modelsummary_factory_latex = 'gt')</code>
+<code>options(modelsummary_factory_word = 'huxtable')</code>
+<code>options(modelsummary_factory_png = 'gt')</code></p>
 
 <h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Model extraction functions</h3>
 
@@ -275,9 +275,9 @@ statistical models: <code>broom</code> and the <code>easystats</code> family (<c
 <code>parameters</code>). By default, it uses <code>broom</code> first and <code>easystats</code> as a
 fallback if <code>broom</code> fails. You can change the order of priorities
 or include goodness-of-fit extracted by <em>both</em> packages by setting:</p>
-<p><code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get = "broom")</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get = "easystats")</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get = "all")</a></code></p>
+<p><code>options(modelsummary_get = "broom")</code>
+<code>options(modelsummary_get = "easystats")</code>
+<code>options(modelsummary_get = "all")</code></p>
 
 <h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Formatting numeric entries</h3>
 
@@ -285,18 +285,18 @@ or include goodness-of-fit extracted by <em>both</em> packages by setting:</p>
 <p>By default, LaTeX tables enclose all numeric entries in the <code>\num{}</code> command
 from the siunitx package. To prevent this behavior, or to enclose numbers
 in dollar signs (for LaTeX math mode), users can call:</p>
-<p><code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_format_numeric_latex = "plain")</a></code>
-<code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_format_numeric_latex = "mathmode")</a></code></p>
+<p><code>options(modelsummary_format_numeric_latex = "plain")</code>
+<code>options(modelsummary_format_numeric_latex = "mathmode")</code></p>
 <p>A similar option can be used to display numerical entries using MathJax in
 HTML tables:</p>
-<p><code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_format_numeric_html = "mathjax")</a></code></p>
+<p><code>options(modelsummary_format_numeric_html = "mathjax")</code></p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>datasummary_balance</span><span class='op'>(</span><span class='op'>~</span><span class='va'>am</span>, <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'>datasummary_balance</span><span class='op'>(</span><span class='op'>~</span><span class='va'>am</span>, <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

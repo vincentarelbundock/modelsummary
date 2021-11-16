@@ -155,12 +155,12 @@ of the vector determines the order of the table.  <code>coef_map</code> can be a
 or an unnamed character vector (see the Examples section below). If
 <code>coef_map</code> is a named vector, its values define the labels that must appear
 in the table, and its names identify the original term names stored in the
-model object: <code><a href='https://rdrr.io/r/base/c.html'>c("hp:mpg"="HPxM/G")</a></code>.</p></td>
+model object: <code>c("hp:mpg"="HPxM/G")</code>.</p></td>
     </tr>
     <tr>
       <th>coef_omit</th>
       <td><p>string regular expression. Omits all matching coefficients
-from the table using <code><a href='https://rdrr.io/r/base/grep.html'>grepl(perl=TRUE)</a></code>. This argument uses perl-compatible regular expressions, which allows expressions such as <code>"Int|ABC" which omits coefficients matching either "Int" or "ABC", and </code>"^(?!.*Intercept)"` which omits every term except the intercept.</p></td>
+from the table using <code>grepl(perl=TRUE)</code>. This argument uses perl-compatible regular expressions, which allows expressions such as <code>"Int|ABC" which omits coefficients matching either "Int" or "ABC", and </code>"^(?!.*Intercept)"` which omits every term except the intercept.</p></td>
     </tr>
     <tr>
       <th>coef_rename</th>
@@ -178,7 +178,7 @@ sections below):</p><ul>
 <li><p>string, vector, or (named) list of strings. Omitting or specifying <code>vcov = NULL</code> will return the model's default uncertainty estimates, e.g. IID errors for standard models. Alternatively, use the string "iid" (aliases: "classical" or "constant") to present IID errors explicitly. The strings "HC", "HC0", "HC1" (alias: "stata"), "HC2", "HC3" (alias: "robust"), "HC4", "HC4m", "HC5", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", and "weave" use variance-covariance matrices computed using functions from the <code>sandwich</code> package, or equivalent method. The behavior of those functions can (and sometimes <em>must</em>) be altered by passing arguments to <code>sandwich</code> directly from <code>modelsummary</code> through the ellipsis (<code>...</code>), but it is safer to define your own custom functions as described in the next bullet.</p></li>
 <li><p>function or (named) list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., <code><a href='https://rdrr.io/r/stats/vcov.html'>stats::vcov</a></code>, <code><a href='https://sandwich.R-Forge.R-project.org//reference/vcovHC.html'>sandwich::vcovHC</a></code>, <code>function(x) vcovPC(x, cluster="country")</code>).</p></li>
 <li><p>formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).</p></li>
-<li><p>(named) list of <code><a href='https://rdrr.io/r/base/length.html'>length(models)</a></code> variance-covariance matrices with row and column names equal to the names of your coefficient estimates.</p></li>
+<li><p>(named) list of <code>length(models)</code> variance-covariance matrices with row and column names equal to the names of your coefficient estimates.</p></li>
 <li><p>a (named) list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, <code>modelsummary</code> cannot automatically calculate p values. The <code>stars</code> argument may thus use incorrect significance thresholds when <code>vcov</code> is a list of vectors.</p></li>
 </ul></td>
     </tr>
@@ -212,70 +212,70 @@ plot.  This is especially useful to display annotations "behind" the
 table-making functions. This allows users to pass arguments directly to
 <code>modelsummary</code> in order to affect the behavior of other functions behind
 the scenes. Examples include:</p><ul>
-<li><p><code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy(exponentiate=TRUE)</a></code> to exponentiate logistic regression. Please see the <code>modelsummary</code> vignette on the package website for important technical notes on this topic.</p></li>
-<li><p><code><a href='https://easystats.github.io/performance/reference/model_performance.html'>performance::model_performance(metrics="RMSE")</a></code> to select goodness-of-fit statistics to extract using the <code>performance</code> package (must have set <code><a href='https://rdrr.io/r/base/options.html'>options(modelsummary_get="easystats")</a></code> first).</p></li>
+<li><p><code>broom::tidy(exponentiate=TRUE)</code> to exponentiate logistic regression. Please see the <code>modelsummary</code> vignette on the package website for important technical notes on this topic.</p></li>
+<li><p><code>performance::model_performance(metrics="RMSE")</code> to select goodness-of-fit statistics to extract using the <code>performance</code> package (must have set <code>options(modelsummary_get="easystats")</code> first).</p></li>
 </ul></td>
     </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://vincentarelbundock.github.io/modelsummary/'>modelsummary</a></span><span class='op'>)</span>
-
-<span class='co'># single model</span>
-<span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>hp</span> <span class='op'>~</span> <span class='va'>vs</span> <span class='op'>+</span> <span class='va'>drat</span>, <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span>
-
-<span class='co'># omit terms with string matches or regexes</span>
-<span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>mod</span>, coef_omit <span class='op'>=</span> <span class='st'>'Interc'</span><span class='op'>)</span>
-
-<span class='co'># rename, reorder and subset with 'coef_map'</span>
-<span class='va'>cm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'vs'</span> <span class='op'>=</span> <span class='st'>'V-shape engine'</span>,
-  <span class='st'>'drat'</span> <span class='op'>=</span> <span class='st'>'Rear axle ratio'</span><span class='op'>)</span>
-<span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>mod</span>, coef_map <span class='op'>=</span> <span class='va'>cm</span><span class='op'>)</span>
-
-<span class='co'># several models</span>
-<span class='va'>models</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>models</span><span class='op'>[[</span><span class='st'>'Small model'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>hp</span> <span class='op'>~</span> <span class='va'>vs</span>, <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='va'>models</span><span class='op'>[[</span><span class='st'>'Medium model'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>hp</span> <span class='op'>~</span> <span class='va'>vs</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>, <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='va'>models</span><span class='op'>[[</span><span class='st'>'Large model'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>hp</span> <span class='op'>~</span> <span class='va'>vs</span> <span class='op'>+</span> <span class='va'>drat</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>, <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>models</span><span class='op'>)</span>
-
-<span class='co'># add_rows: add an empty reference category</span>
-
-<span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>hp</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>, <span class='va'>mtcars</span><span class='op'>)</span>
-
-<span class='va'>add_rows</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
-  term <span class='op'>=</span> <span class='st'>"factory(cyl)4"</span>,
-  model <span class='op'>=</span> <span class='st'>"Model 1"</span>,
-  estimate <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>add_rows</span>, <span class='st'>"position"</span><span class='op'>)</span> <span class='op'>=</span> <span class='fl'>3</span>
-<span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>mod</span>, add_rows <span class='op'>=</span> <span class='va'>add_rows</span><span class='op'>)</span>
-
-
-<span class='co'># customize your plots with 'ggplot2' functions</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
-
-<span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>models</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_brewer.html'>scale_color_brewer</a></span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>'qual'</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_classic</a></span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='co'># pass arguments to 'geom_pointrange' through the ... ellipsis</span>
-<span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>mod</span>, color <span class='op'>=</span> <span class='st'>'red'</span>, size <span class='op'>=</span> <span class='fl'>1</span>, fatten <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span>
-
-<span class='co'># add geoms to the background, behind geom_pointrange</span>
-<span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept <span class='op'>=</span> <span class='fl'>0</span>, color <span class='op'>=</span> <span class='st'>'orange'</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/annotate.html'>annotate</a></span><span class='op'>(</span><span class='st'>"rect"</span>, alpha <span class='op'>=</span> <span class='fl'>.1</span>,
-    xmin <span class='op'>=</span> <span class='op'>-</span><span class='fl'>.5</span>, xmax <span class='op'>=</span> <span class='fl'>.5</span>,
-    ymin <span class='op'>=</span> <span class='op'>-</span><span class='cn'>Inf</span>, ymax <span class='op'>=</span> <span class='cn'>Inf</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>term</span>, x <span class='op'>=</span> <span class='va'>estimate</span><span class='op'>)</span>, alpha <span class='op'>=</span> <span class='fl'>.3</span>,
-    size <span class='op'>=</span> <span class='fl'>10</span>, color <span class='op'>=</span> <span class='st'>'red'</span>, shape <span class='op'>=</span> <span class='st'>'square'</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>mod</span>, background <span class='op'>=</span> <span class='va'>b</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://vincentarelbundock.github.io/modelsummary/'>modelsummary</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># single model</span></span>
+<span class='r-in'><span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>hp</span> <span class='op'>~</span> <span class='va'>vs</span> <span class='op'>+</span> <span class='va'>drat</span>, <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># omit terms with string matches or regexes</span></span>
+<span class='r-in'><span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>mod</span>, coef_omit <span class='op'>=</span> <span class='st'>'Interc'</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># rename, reorder and subset with 'coef_map'</span></span>
+<span class='r-in'><span class='va'>cm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'vs'</span> <span class='op'>=</span> <span class='st'>'V-shape engine'</span>,</span>
+<span class='r-in'>  <span class='st'>'drat'</span> <span class='op'>=</span> <span class='st'>'Rear axle ratio'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>mod</span>, coef_map <span class='op'>=</span> <span class='va'>cm</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># several models</span></span>
+<span class='r-in'><span class='va'>models</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>models</span><span class='op'>[[</span><span class='st'>'Small model'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>hp</span> <span class='op'>~</span> <span class='va'>vs</span>, <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>models</span><span class='op'>[[</span><span class='st'>'Medium model'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>hp</span> <span class='op'>~</span> <span class='va'>vs</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>, <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>models</span><span class='op'>[[</span><span class='st'>'Large model'</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>hp</span> <span class='op'>~</span> <span class='va'>vs</span> <span class='op'>+</span> <span class='va'>drat</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>, <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>models</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># add_rows: add an empty reference category</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>hp</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span>, <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>add_rows</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span></span>
+<span class='r-in'>  term <span class='op'>=</span> <span class='st'>"factory(cyl)4"</span>,</span>
+<span class='r-in'>  model <span class='op'>=</span> <span class='st'>"Model 1"</span>,</span>
+<span class='r-in'>  estimate <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>add_rows</span>, <span class='st'>"position"</span><span class='op'>)</span> <span class='op'>=</span> <span class='fl'>3</span></span>
+<span class='r-in'><span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>mod</span>, add_rows <span class='op'>=</span> <span class='va'>add_rows</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># customize your plots with 'ggplot2' functions</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>models</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_brewer.html'>scale_color_brewer</a></span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>'qual'</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_classic</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># pass arguments to 'geom_pointrange' through the ... ellipsis</span></span>
+<span class='r-in'><span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>mod</span>, color <span class='op'>=</span> <span class='st'>'red'</span>, size <span class='op'>=</span> <span class='fl'>1</span>, fatten <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># add geoms to the background, behind geom_pointrange</span></span>
+<span class='r-in'><span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept <span class='op'>=</span> <span class='fl'>0</span>, color <span class='op'>=</span> <span class='st'>'orange'</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/annotate.html'>annotate</a></span><span class='op'>(</span><span class='st'>"rect"</span>, alpha <span class='op'>=</span> <span class='fl'>.1</span>,</span>
+<span class='r-in'>    xmin <span class='op'>=</span> <span class='op'>-</span><span class='fl'>.5</span>, xmax <span class='op'>=</span> <span class='fl'>.5</span>,</span>
+<span class='r-in'>    ymin <span class='op'>=</span> <span class='op'>-</span><span class='cn'>Inf</span>, ymax <span class='op'>=</span> <span class='cn'>Inf</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>term</span>, x <span class='op'>=</span> <span class='va'>estimate</span><span class='op'>)</span>, alpha <span class='op'>=</span> <span class='fl'>.3</span>,</span>
+<span class='r-in'>    size <span class='op'>=</span> <span class='fl'>10</span>, color <span class='op'>=</span> <span class='st'>'red'</span>, shape <span class='op'>=</span> <span class='st'>'square'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>modelplot</span><span class='op'>(</span><span class='va'>mod</span>, background <span class='op'>=</span> <span class='va'>b</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

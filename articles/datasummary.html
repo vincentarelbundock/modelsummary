@@ -106,7 +106,7 @@ tbody {
 <h1 class="hasAnchor">
 <a href="#background" class="anchor"></a>Background</h1>
 <p><code>datasummary</code> is built around the <em>fantastic</em> <a href="https://cran.r-project.org/web/packages/tables/index.html"><code>tables</code> package for <code>R</code>.</a> It is a thin “wrapper” which adds convenience functions and arguments; a user-interface consistent with <code>modelsummary</code>; cleaner html output; and the ability to export tables to more formats, including <a href="https://gt.rstudio.com"><code>gt</code> tables</a>, <a href="https://davidgohel.github.io/flextable/"><code>flextable</code> objects</a>, and Microsoft Word documents.</p>
-<p><code>datasummary</code> is a general-purpose table-making tool. It allows us to build (nearly) any summary table we want by using <a href="#datasummary">simple 2-sided formulae.</a> For example, in the expression <code>x + y ~ mean + sd</code>, the left-hand side of the formula identifies the variables or statistics to display as rows, and the right-hand side defines the columns. Below, we will see how variables and statistics can be “nested” with the <code><a href="https://rdrr.io/r/base/Arithmetic.html">*</a></code> operator to produce tables like the ones above.</p>
+<p><code>datasummary</code> is a general-purpose table-making tool. It allows us to build (nearly) any summary table we want by using <a href="#datasummary">simple 2-sided formulae.</a> For example, in the expression <code>x + y ~ mean + sd</code>, the left-hand side of the formula identifies the variables or statistics to display as rows, and the right-hand side defines the columns. Below, we will see how variables and statistics can be “nested” with the <code>*</code> operator to produce tables like the ones above.</p>
 <p>In addition to <code>datasummary</code>, the <code>modelsummary</code> package includes a “family” of companion functions named <code>datasummary_*</code>. These functions facilitate the production of standard, commonly used tables. This family currently includes:</p>
 <ul>
 <li>
@@ -758,7 +758,7 @@ carb
 </tr>
 </tbody>
 </table>
-<p>The values displayed in this table are equivalent to those obtained by calling: <code><a href="https://rdrr.io/r/stats/cor.html">cor(x, use='pairwise.complete.obs')</a></code>.</p>
+<p>The values displayed in this table are equivalent to those obtained by calling: <code>cor(x, use='pairwise.complete.obs')</code>.</p>
 </div>
 <div id="datasummary_balance" class="section level1">
 <h1 class="hasAnchor">
@@ -772,12 +772,12 @@ carb
 <span class="va">training</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">training</span><span class="op">)</span>
 
 <span class="co"># Rename and recode variables</span>
-<span class="va">training</span> <span class="op">&lt;-</span> <span class="va">training</span> <span class="op">%&gt;%</span>
-            <span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/dplyr-verbs.html">mutate</a></span><span class="op">(</span>`Earnings Before` <span class="op">=</span> <span class="va">re75</span> <span class="op">/</span> <span class="fl">1000</span>,
+<span class="va">training</span> <span class="op">&lt;-</span> <span class="va">training</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>`Earnings Before` <span class="op">=</span> <span class="va">re75</span> <span class="op">/</span> <span class="fl">1000</span>,
                    `Earnings After` <span class="op">=</span> <span class="va">re78</span> <span class="op">/</span> <span class="fl">1000</span>,
                    Treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">treat</span> <span class="op">==</span> <span class="cn">TRUE</span>, <span class="st">'Treatment'</span>, <span class="st">'Control'</span><span class="op">)</span>,
-                   Married <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">married</span> <span class="op">==</span> <span class="cn">TRUE</span>, <span class="st">'Yes'</span>, <span class="st">'No'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-            <span class="fu">select</span><span class="op">(</span><span class="va">`Earnings Before`</span>,
+                   Married <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">married</span> <span class="op">==</span> <span class="cn">TRUE</span>, <span class="st">'Yes'</span>, <span class="st">'No'</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">`Earnings Before`</span>,
                    <span class="va">`Earnings After`</span>,
                    <span class="va">Treatment</span>,
                    Ethnicity <span class="op">=</span> <span class="va">ethn</span>,
@@ -1279,7 +1279,7 @@ N
 </tr>
 </tbody>
 </table>
-<p>You can create multi-level crosstabs by specifying interactions using the <code><a href="https://rdrr.io/r/base/Arithmetic.html">*</a></code> operator:</p>
+<p>You can create multi-level crosstabs by specifying interactions using the <code>*</code> operator:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary_crosstab.html">datasummary_crosstab</a></span><span class="op">(</span><span class="va">species</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">island</span>, data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table">
@@ -1745,7 +1745,7 @@ All
 <h1 class="hasAnchor">
 <a href="#datasummary" class="anchor"></a><code>datasummary</code>
 </h1>
-<p><code>datasummary</code> tables are specified using a 2-sided formula, divided by a tilde <code><a href="https://rdrr.io/r/base/tilde.html">~</a></code>. The left-hand side describes the rows; the right-hand side describes the columns. To illustrate how this works, we will again be using the <a href="https://allisonhorst.github.io/palmerpenguins/"><code>palmerpenguins dataset</code></a>:</p>
+<p><code>datasummary</code> tables are specified using a 2-sided formula, divided by a tilde <code>~</code>. The left-hand side describes the rows; the right-hand side describes the columns. To illustrate how this works, we will again be using the <a href="https://allisonhorst.github.io/palmerpenguins/"><code>palmerpenguins dataset</code></a>:</p>
 <p>To display the <code>flipper_length_mm</code> variable as a row and the <code>mean</code> as a column, we type:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">~</span> <span class="va">Mean</span>,
@@ -1791,7 +1791,7 @@ Mean
 <div id="custom-summary-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#custom-summary-functions" class="anchor"></a>Custom summary functions</h2>
-<p>The <code>Mean</code> function is a shortcut supplied by <code>modelsummary</code>, and it is equivalent to <code><a href="https://rdrr.io/r/base/mean.html">mean(x,na.rm=TRUE)</a></code>. Since the <code>flipper_length_mm</code> variable includes missing observation, using the <code>mean</code> formula (with default <code>na.rm=FALSE</code>) would produce a missing/empty cell:</p>
+<p>The <code>Mean</code> function is a shortcut supplied by <code>modelsummary</code>, and it is equivalent to <code>mean(x,na.rm=TRUE)</code>. Since the <code>flipper_length_mm</code> variable includes missing observation, using the <code>mean</code> formula (with default <code>na.rm=FALSE</code>) would produce a missing/empty cell:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">~</span> <span class="va">mean</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
@@ -1862,7 +1862,7 @@ flipper_length_mm
 <h2 class="hasAnchor">
 <a href="#concatenating-with" class="anchor"></a>Concatenating with <code>+</code>
 </h2>
-<p>To include more rows and columns, we use the <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> sign:</p>
+<p>To include more rows and columns, we use the <code>+</code> sign:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">+</span> <span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
@@ -1902,7 +1902,7 @@ body_mass_g
 </tr>
 </tbody>
 </table>
-<p>Sometimes, it can be cumbersome to list all variables separated by <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> signs. The <code><a href="../reference/All.html">All()</a></code> function is a useful shortcut:</p>
+<p>Sometimes, it can be cumbersome to list all variables separated by <code>+</code> signs. The <code><a href="../reference/All.html">All()</a></code> function is a useful shortcut:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="fu"><a href="../reference/All.html">All</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
@@ -1992,7 +1992,7 @@ year
 <h2 class="hasAnchor">
 <a href="#nesting-with" class="anchor"></a>Nesting with <code>*</code>
 </h2>
-<p><code>datasummary</code> can nest variables and statistics inside categorical variables using the <code><a href="https://rdrr.io/r/base/Arithmetic.html">*</a></code> symbol. When applying the the <code><a href="https://rdrr.io/r/base/Arithmetic.html">*</a></code> operator to factor, character, or logical variables, columns or rows will automatically be nested. For instance, if we want to display separate means for each value of the variable <code>sex</code>, we use <code>mean * sex</code>:</p>
+<p><code>datasummary</code> can nest variables and statistics inside categorical variables using the <code>*</code> symbol. When applying the the <code>*</code> operator to factor, character, or logical variables, columns or rows will automatically be nested. For instance, if we want to display separate means for each value of the variable <code>sex</code>, we use <code>mean * sex</code>:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">+</span> <span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">mean</span> <span class="op">*</span> <span class="va">sex</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
@@ -2479,8 +2479,8 @@ body_mass_g
 </h2>
 <p>Personally, I prefer to rename variables and values <em>before</em> drawing my tables, using backticks when variable names include whitespace. For example,</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="va">penguins</span> <span class="op">%&gt;%</span>
-       <span class="fu">select</span><span class="op">(</span>`Flipper length (mm)` <span class="op">=</span> <span class="va">flipper_length_mm</span>,
+<code class="sourceCode R"><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="va">penguins</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+       <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span>`Flipper length (mm)` <span class="op">=</span> <span class="va">flipper_length_mm</span>,
               `Body mass (g)` <span class="op">=</span> <span class="va">body_mass_g</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">`Flipper length (mm)`</span> <span class="op">+</span> <span class="va">`Body mass (g)`</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span>,
@@ -2521,7 +2521,7 @@ Body mass (g)
 </tr>
 </tbody>
 </table>
-<p>However, thanks to the <code>tables</code> package, <code>datasummary</code> offers two additional mechanisms to rename. First, we can wrap a term in parentheses and use the equal <code><a href="https://rdrr.io/r/base/assignOps.html">=</a></code> sign: <code>(NewName=OldName)</code>:</p>
+<p>However, thanks to the <code>tables</code> package, <code>datasummary</code> offers two additional mechanisms to rename. First, we can wrap a term in parentheses and use the equal <code>=</code> sign: <code>(NewName=OldName)</code>:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="op">(</span><span class="va">`Flipper length (mm)`</span> <span class="op">=</span> <span class="va">flipper_length_mm</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">`Body mass (g)`</span> <span class="op">=</span> <span class="va">body_mass_g</span><span class="op">)</span> <span class="op">~</span>
             <span class="va">island</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="va">Avg.</span> <span class="op">=</span> <span class="va">Mean</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">Std.Dev.</span> <span class="op">=</span> <span class="va">SD</span><span class="op">)</span><span class="op">)</span>,
@@ -3022,7 +3022,7 @@ All
 <h2 class="hasAnchor">
 <a href="#factor" class="anchor"></a><code>Factor</code>
 </h2>
-<p>The <code><a href="https://rdrr.io/r/base/Arithmetic.html">*</a></code> nesting operator that we used above works automatically for factor, character, and logical variables. Sometimes, it is convenient to use it with other types of variables, such as binary numeric variables. In that case, we can wrap the variable name inside a call to <code><a href="../reference/Factor.html">Factor()</a></code>. This allows us to treat a variable as factor, without having to modify it in the original data. For example, in the <code>mtcars</code> data, there is a binary numeric variable call <code>am</code>. We nest statistics within categories of <code>am</code> by typing:</p>
+<p>The <code>*</code> nesting operator that we used above works automatically for factor, character, and logical variables. Sometimes, it is convenient to use it with other types of variables, such as binary numeric variables. In that case, we can wrap the variable name inside a call to <code><a href="../reference/Factor.html">Factor()</a></code>. This allows us to treat a variable as factor, without having to modify it in the original data. For example, in the <code>mtcars</code> data, there is a binary numeric variable call <code>am</code>. We nest statistics within categories of <code>am</code> by typing:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">~</span> <span class="fu"><a href="../reference/Factor.html">Factor</a></span><span class="op">(</span><span class="va">am</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span><span class="op">)</span>,
             data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></code></pre></div>
@@ -3127,7 +3127,7 @@ flipper_length_mm
 </td>
 </tr></tbody>
 </table>
-<p>Notice that there is an empty cell (<code>NA</code>) under the normal <code>mean</code> function, but that the <code>mean</code> call with <code><a href="../reference/Arguments.html">Arguments(na.rm=TRUE)</a></code> produced a numeric result.</p>
+<p>Notice that there is an empty cell (<code>NA</code>) under the normal <code>mean</code> function, but that the <code>mean</code> call with <code>Arguments(na.rm=TRUE)</code> produced a numeric result.</p>
 <p>We can pass the same arguments to multiple functions using the parentheses:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">~</span> <span class="op">(</span><span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="../reference/Arguments.html">Arguments</a></span><span class="op">(</span>na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>,
@@ -3718,15 +3718,15 @@ flipper_length_mm
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="fu"><a href="../reference/All.html">All</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span>,
             data <span class="op">=</span> <span class="va">mtcars</span>,
             fmt <span class="op">=</span> <span class="cn">NULL</span>,
-            output <span class="op">=</span> <span class="st">'gt'</span><span class="op">)</span> <span class="op">%&gt;%</span>
+            output <span class="op">=</span> <span class="st">'gt'</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html">%&gt;%</a></span>
     <span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cell_fill.html">cell_fill</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"pink"</span><span class="op">)</span>,
               locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="va">Mean</span> <span class="op">&gt;</span> <span class="fl">10</span>, columns <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div id="safhuxbkfh" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="ufbxtelkhq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#safhuxbkfh .gt_table {
+#ufbxtelkhq .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -3751,7 +3751,7 @@ flipper_length_mm
   border-left-color: #D3D3D3;
 }
 
-#safhuxbkfh .gt_heading {
+#ufbxtelkhq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3763,7 +3763,7 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#safhuxbkfh .gt_title {
+#ufbxtelkhq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3773,7 +3773,7 @@ flipper_length_mm
   border-bottom-width: 0;
 }
 
-#safhuxbkfh .gt_subtitle {
+#ufbxtelkhq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3783,13 +3783,13 @@ flipper_length_mm
   border-top-width: 0;
 }
 
-#safhuxbkfh .gt_bottom_border {
+#ufbxtelkhq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#safhuxbkfh .gt_col_headings {
+#ufbxtelkhq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3804,7 +3804,7 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#safhuxbkfh .gt_col_heading {
+#ufbxtelkhq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3824,7 +3824,7 @@ flipper_length_mm
   overflow-x: hidden;
 }
 
-#safhuxbkfh .gt_column_spanner_outer {
+#ufbxtelkhq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3836,15 +3836,15 @@ flipper_length_mm
   padding-right: 4px;
 }
 
-#safhuxbkfh .gt_column_spanner_outer:first-child {
+#ufbxtelkhq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#safhuxbkfh .gt_column_spanner_outer:last-child {
+#ufbxtelkhq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#safhuxbkfh .gt_column_spanner {
+#ufbxtelkhq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3856,7 +3856,7 @@ flipper_length_mm
   width: 100%;
 }
 
-#safhuxbkfh .gt_group_heading {
+#ufbxtelkhq .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3878,7 +3878,7 @@ flipper_length_mm
   vertical-align: middle;
 }
 
-#safhuxbkfh .gt_empty_group_heading {
+#ufbxtelkhq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3893,15 +3893,15 @@ flipper_length_mm
   vertical-align: middle;
 }
 
-#safhuxbkfh .gt_from_md > :first-child {
+#ufbxtelkhq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#safhuxbkfh .gt_from_md > :last-child {
+#ufbxtelkhq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#safhuxbkfh .gt_row {
+#ufbxtelkhq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3920,7 +3920,7 @@ flipper_length_mm
   overflow-x: hidden;
 }
 
-#safhuxbkfh .gt_stub {
+#ufbxtelkhq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3932,7 +3932,7 @@ flipper_length_mm
   padding-left: 12px;
 }
 
-#safhuxbkfh .gt_summary_row {
+#ufbxtelkhq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3942,7 +3942,7 @@ flipper_length_mm
   padding-right: 5px;
 }
 
-#safhuxbkfh .gt_first_summary_row {
+#ufbxtelkhq .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3952,7 +3952,7 @@ flipper_length_mm
   border-top-color: #D3D3D3;
 }
 
-#safhuxbkfh .gt_grand_summary_row {
+#ufbxtelkhq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3962,7 +3962,7 @@ flipper_length_mm
   padding-right: 5px;
 }
 
-#safhuxbkfh .gt_first_grand_summary_row {
+#ufbxtelkhq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3972,11 +3972,11 @@ flipper_length_mm
   border-top-color: #D3D3D3;
 }
 
-#safhuxbkfh .gt_striped {
+#ufbxtelkhq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#safhuxbkfh .gt_table_body {
+#ufbxtelkhq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3985,7 +3985,7 @@ flipper_length_mm
   border-bottom-color: #D3D3D3;
 }
 
-#safhuxbkfh .gt_footnotes {
+#ufbxtelkhq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3999,13 +3999,13 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#safhuxbkfh .gt_footnote {
+#ufbxtelkhq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#safhuxbkfh .gt_sourcenotes {
+#ufbxtelkhq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4019,41 +4019,41 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#safhuxbkfh .gt_sourcenote {
+#ufbxtelkhq .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#safhuxbkfh .gt_left {
+#ufbxtelkhq .gt_left {
   text-align: left;
 }
 
-#safhuxbkfh .gt_center {
+#ufbxtelkhq .gt_center {
   text-align: center;
 }
 
-#safhuxbkfh .gt_right {
+#ufbxtelkhq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#safhuxbkfh .gt_font_normal {
+#ufbxtelkhq .gt_font_normal {
   font-weight: normal;
 }
 
-#safhuxbkfh .gt_font_bold {
+#ufbxtelkhq .gt_font_bold {
   font-weight: bold;
 }
 
-#safhuxbkfh .gt_font_italic {
+#ufbxtelkhq .gt_font_italic {
   font-style: italic;
 }
 
-#safhuxbkfh .gt_super {
+#ufbxtelkhq .gt_super {
   font-size: 65%;
 }
 
-#safhuxbkfh .gt_footnote_marks {
+#ufbxtelkhq .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -4466,7 +4466,7 @@ flipper_length_mm
 6.48
 </td>
 <td style="text-align:right;">
-0.31
+0.93
 </td>
 </tr>
 <tr>
@@ -4492,7 +4492,7 @@ body_mass_g
 504.12
 </td>
 <td style="text-align:right;">
-0.70
+0.14
 </td>
 </tr>
 </tbody>
@@ -4631,8 +4631,8 @@ hp
 <span class="co"># add a histogram with column_spec and spec_hist</span>
 <span class="co"># add a boxplot with colun_spec and spec_box</span>
 <span class="va">emptycol</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="st">" "</span>
-<span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span> <span class="op">+</span> <span class="fu"><a href="../reference/Heading.html">Heading</a></span><span class="op">(</span><span class="st">"Boxplot"</span><span class="op">)</span> <span class="op">*</span> <span class="va">emptycol</span> <span class="op">+</span> <span class="fu"><a href="../reference/Heading.html">Heading</a></span><span class="op">(</span><span class="st">"Histogram"</span><span class="op">)</span> <span class="op">*</span> <span class="va">emptycol</span>, data <span class="op">=</span> <span class="va">tmp</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/column_spec.html">column_spec</a></span><span class="op">(</span>column <span class="op">=</span> <span class="fl">4</span>, image <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/spec_boxplot.html">spec_boxplot</a></span><span class="op">(</span><span class="va">tmp_list</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span> <span class="op">+</span> <span class="fu"><a href="../reference/Heading.html">Heading</a></span><span class="op">(</span><span class="st">"Boxplot"</span><span class="op">)</span> <span class="op">*</span> <span class="va">emptycol</span> <span class="op">+</span> <span class="fu"><a href="../reference/Heading.html">Heading</a></span><span class="op">(</span><span class="st">"Histogram"</span><span class="op">)</span> <span class="op">*</span> <span class="va">emptycol</span>, data <span class="op">=</span> <span class="va">tmp</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/column_spec.html">column_spec</a></span><span class="op">(</span>column <span class="op">=</span> <span class="fl">4</span>, image <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/spec_boxplot.html">spec_boxplot</a></span><span class="op">(</span><span class="va">tmp_list</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
     <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/column_spec.html">column_spec</a></span><span class="op">(</span>column <span class="op">=</span> <span class="fl">5</span>, image <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/spec_hist.html">spec_hist</a></span><span class="op">(</span><span class="va">tmp_list</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table table">
 <thead><tr>
@@ -5151,7 +5151,7 @@ N
 
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="fu"><a href="../reference/All.html">All</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">*</span> <span class="op">(</span><span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span><span class="op">)</span>,
             data <span class="op">=</span> <span class="va">penguins</span>,
-            output <span class="op">=</span> <span class="st">'kableExtra'</span><span class="op">)</span> <span class="op">%&gt;%</span>
+            output <span class="op">=</span> <span class="st">'kableExtra'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/row_spec.html">row_spec</a></span><span class="op">(</span><span class="fl">3</span>, background <span class="op">=</span> <span class="st">'cyan'</span>, color <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span></code></pre></div>
 <table class="table table">
 <thead>
@@ -5306,21 +5306,21 @@ year
             output <span class="op">=</span> <span class="st">'gt'</span>,
             title <span class="op">=</span> <span class="va">cap</span>,
             notes <span class="op">=</span> <span class="st">'Artwork by @allison_horst'</span>,
-            sparse_header <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="https://gt.rstudio.com/reference/text_transform.html">text_transform</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">1</span>, rows <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, fn <span class="op">=</span> <span class="va">adelie</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="https://gt.rstudio.com/reference/text_transform.html">text_transform</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">1</span>, rows <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, fn <span class="op">=</span> <span class="va">chinstrap</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="https://gt.rstudio.com/reference/text_transform.html">text_transform</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">1</span>, rows <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, fn <span class="op">=</span> <span class="va">gentoo</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://gt.rstudio.com/reference/cell_text.html">cell_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#FF6700"</span>, size <span class="op">=</span> <span class="st">'x-large'</span><span class="op">)</span><span class="op">)</span>, locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://gt.rstudio.com/reference/cell_text.html">cell_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#CD51D1"</span>, size <span class="op">=</span> <span class="st">'x-large'</span><span class="op">)</span><span class="op">)</span>, locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://gt.rstudio.com/reference/cell_text.html">cell_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#007377"</span>, size <span class="op">=</span> <span class="st">'x-large'</span><span class="op">)</span><span class="op">)</span>, locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="https://gt.rstudio.com/reference/tab_options.html">tab_options</a></span><span class="op">(</span>table_body.hlines.width <span class="op">=</span> <span class="fl">0</span>, table.border.top.width <span class="op">=</span> <span class="fl">0</span>, table.border.bottom.width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">%&gt;%</span>
+            sparse_header <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="https://gt.rstudio.com/reference/text_transform.html">text_transform</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">1</span>, rows <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, fn <span class="op">=</span> <span class="va">adelie</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="https://gt.rstudio.com/reference/text_transform.html">text_transform</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">1</span>, rows <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, fn <span class="op">=</span> <span class="va">chinstrap</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="https://gt.rstudio.com/reference/text_transform.html">text_transform</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">1</span>, rows <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, fn <span class="op">=</span> <span class="va">gentoo</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://gt.rstudio.com/reference/cell_text.html">cell_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#FF6700"</span>, size <span class="op">=</span> <span class="st">'x-large'</span><span class="op">)</span><span class="op">)</span>, locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://gt.rstudio.com/reference/cell_text.html">cell_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#CD51D1"</span>, size <span class="op">=</span> <span class="st">'x-large'</span><span class="op">)</span><span class="op">)</span>, locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://gt.rstudio.com/reference/cell_text.html">cell_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#007377"</span>, size <span class="op">=</span> <span class="st">'x-large'</span><span class="op">)</span><span class="op">)</span>, locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="https://gt.rstudio.com/reference/tab_options.html">tab_options</a></span><span class="op">(</span>table_body.hlines.width <span class="op">=</span> <span class="fl">0</span>, table.border.top.width <span class="op">=</span> <span class="fl">0</span>, table.border.bottom.width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html">%&gt;%</a></span>
     <span class="fu"><a href="https://gt.rstudio.com/reference/cols_align.html">cols_align</a></span><span class="op">(</span><span class="st">'center'</span>, columns <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span></code></pre></div>
-<div id="mgrgleqsrm" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="etmkqddzpn" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#mgrgleqsrm .gt_table {
+#etmkqddzpn .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -5345,7 +5345,7 @@ year
   border-left-color: #D3D3D3;
 }
 
-#mgrgleqsrm .gt_heading {
+#etmkqddzpn .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -5357,7 +5357,7 @@ year
   border-right-color: #D3D3D3;
 }
 
-#mgrgleqsrm .gt_title {
+#etmkqddzpn .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -5367,7 +5367,7 @@ year
   border-bottom-width: 0;
 }
 
-#mgrgleqsrm .gt_subtitle {
+#etmkqddzpn .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -5377,13 +5377,13 @@ year
   border-top-width: 0;
 }
 
-#mgrgleqsrm .gt_bottom_border {
+#etmkqddzpn .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mgrgleqsrm .gt_col_headings {
+#etmkqddzpn .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -5398,7 +5398,7 @@ year
   border-right-color: #D3D3D3;
 }
 
-#mgrgleqsrm .gt_col_heading {
+#etmkqddzpn .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5418,7 +5418,7 @@ year
   overflow-x: hidden;
 }
 
-#mgrgleqsrm .gt_column_spanner_outer {
+#etmkqddzpn .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5430,15 +5430,15 @@ year
   padding-right: 4px;
 }
 
-#mgrgleqsrm .gt_column_spanner_outer:first-child {
+#etmkqddzpn .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mgrgleqsrm .gt_column_spanner_outer:last-child {
+#etmkqddzpn .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mgrgleqsrm .gt_column_spanner {
+#etmkqddzpn .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -5450,7 +5450,7 @@ year
   width: 100%;
 }
 
-#mgrgleqsrm .gt_group_heading {
+#etmkqddzpn .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -5472,7 +5472,7 @@ year
   vertical-align: middle;
 }
 
-#mgrgleqsrm .gt_empty_group_heading {
+#etmkqddzpn .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -5487,15 +5487,15 @@ year
   vertical-align: middle;
 }
 
-#mgrgleqsrm .gt_from_md > :first-child {
+#etmkqddzpn .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#mgrgleqsrm .gt_from_md > :last-child {
+#etmkqddzpn .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#mgrgleqsrm .gt_row {
+#etmkqddzpn .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5514,7 +5514,7 @@ year
   overflow-x: hidden;
 }
 
-#mgrgleqsrm .gt_stub {
+#etmkqddzpn .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5526,7 +5526,7 @@ year
   padding-left: 12px;
 }
 
-#mgrgleqsrm .gt_summary_row {
+#etmkqddzpn .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5536,7 +5536,7 @@ year
   padding-right: 5px;
 }
 
-#mgrgleqsrm .gt_first_summary_row {
+#etmkqddzpn .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5546,7 +5546,7 @@ year
   border-top-color: #D3D3D3;
 }
 
-#mgrgleqsrm .gt_grand_summary_row {
+#etmkqddzpn .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5556,7 +5556,7 @@ year
   padding-right: 5px;
 }
 
-#mgrgleqsrm .gt_first_grand_summary_row {
+#etmkqddzpn .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5566,11 +5566,11 @@ year
   border-top-color: #D3D3D3;
 }
 
-#mgrgleqsrm .gt_striped {
+#etmkqddzpn .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#mgrgleqsrm .gt_table_body {
+#etmkqddzpn .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -5579,7 +5579,7 @@ year
   border-bottom-color: #D3D3D3;
 }
 
-#mgrgleqsrm .gt_footnotes {
+#etmkqddzpn .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5593,13 +5593,13 @@ year
   border-right-color: #D3D3D3;
 }
 
-#mgrgleqsrm .gt_footnote {
+#etmkqddzpn .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#mgrgleqsrm .gt_sourcenotes {
+#etmkqddzpn .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5613,41 +5613,41 @@ year
   border-right-color: #D3D3D3;
 }
 
-#mgrgleqsrm .gt_sourcenote {
+#etmkqddzpn .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#mgrgleqsrm .gt_left {
+#etmkqddzpn .gt_left {
   text-align: left;
 }
 
-#mgrgleqsrm .gt_center {
+#etmkqddzpn .gt_center {
   text-align: center;
 }
 
-#mgrgleqsrm .gt_right {
+#etmkqddzpn .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mgrgleqsrm .gt_font_normal {
+#etmkqddzpn .gt_font_normal {
   font-weight: normal;
 }
 
-#mgrgleqsrm .gt_font_bold {
+#etmkqddzpn .gt_font_bold {
   font-weight: bold;
 }
 
-#mgrgleqsrm .gt_font_italic {
+#etmkqddzpn .gt_font_italic {
   font-style: italic;
 }
 
-#mgrgleqsrm .gt_super {
+#etmkqddzpn .gt_super {
   font-size: 65%;
 }
 
-#mgrgleqsrm .gt_footnote_marks {
+#etmkqddzpn .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
