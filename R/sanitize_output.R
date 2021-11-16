@@ -134,6 +134,8 @@ sanitize_output <- function(output) {
       word_fmt <- c("word_document",
                     "rdocx_document", "officedown::rdocx_document",
                     "word_document2", "bookdown::word_document2")
+      # unfortunately, `rmarkdown::default_output_format` only detects
+      # `html_document` on reprex, so this will only work in `github_document`
       markdown_fmt <- c("github_document",
                         "reprex_render",
                         "reprex::reprex_render")
