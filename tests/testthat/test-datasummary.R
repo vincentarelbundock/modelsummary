@@ -2,6 +2,15 @@ library(modelsummary)
 penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
 
 
+test_that("tables::All() warning does not accept tibbles yet", {
+  # https://github.com/vincentarelbundock/modelsummary/issues/395
+  skip_if_not_installed("tibble")
+  dat <- tibble::as_tibble(mtcars)
+  expect_warning(datasummary(All(dat) ~ Mean + SD, data = dat), regexp = "does not accept tibbles")
+  expect_warning(datasummary(All(mtcars) ~ Mean + SD, data = mtcars), NA)
+})
+
+
 test_that("big.mark formatting", {
             set.seed(10)
             rock <- data.frame(
