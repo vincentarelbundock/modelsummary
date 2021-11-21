@@ -37,7 +37,10 @@ from the table using \code{grepl(perl=TRUE)}. This argument uses perl-compatible
 \item{coef_rename}{named character vector or function which returns a named
 vector. Values of the vector refer to the variable names that will appear
 in the table. Names refer to the original term names stored in the model
-object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.}
+object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
+If you provide a function to \code{coef_rename}, \code{modelsummary} will create a named
+vector for you by deriving the new variable names from the vector of original
+term names with your function.}
 
 \item{vcov}{robust standard errors and other manual statistics. The \code{vcov}
 argument accepts six types of input (see the 'Details' and 'Examples'
