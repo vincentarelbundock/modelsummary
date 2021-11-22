@@ -293,6 +293,8 @@ rename_explanator <- function(old_names) {
 modelsummary(y, coef_rename = rename_explanator)
 ```
 
+Beware of inadvertently replacing parts of other variable names! Making your regex pattern as specific as possible (e.g., by adding word boundaries) is likely a good idea. The custom rename function is also a good place to re-introduce the replacement of ":" with "×" if you are dealing with interaction terms -- `modelsummary` makes this replacement for you only when the `coef_rename` argument is not specified.
+
 ### coef_map
 
 The `coef_map` argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the "clean" variable name. Names of this vector correspond to the "raw" variable name. The table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.
