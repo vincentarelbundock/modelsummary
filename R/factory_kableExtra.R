@@ -28,7 +28,7 @@ factory_kableExtra <- function(tab,
   valid <- c("x", "align", "caption", "format", "booktabs", "linesep",
              "format.args", "escape", "table.attr", "longtable", "valign",
              "position", "centering", "vline", "toprule", "bottomrule",
-             "midrule", "caption.short", "table.envir")
+             "midrule", "caption.short", "table.envir", "col.names")
 
   arguments <- c(
     list(...),
