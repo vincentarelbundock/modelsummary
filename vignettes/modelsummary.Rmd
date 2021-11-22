@@ -276,14 +276,29 @@ You can rename coefficients using the `coef_rename` argument. For example, if yo
 x <- list(lm(hp ~ drat, mtcars),
           lm(hp ~ vs, mtcars))
 
-modelsummary(x, coef_rename=c("drat"="Explanator", "vs"="Explanator"))
+modelsummary(x, coef_rename = c("drat" = "Explanator", "vs" = "Explanator"))
 ```
 
-If you provide a named character vector to `coef_rename`, only exact matches of the *complete* original term name will be replaced. If "drat" and "vs" appear as parts of the term name (e.g., "drat:mpg"), you need to pass a custom rename function to `coef_rename`:
+If you provide a named character vector to `coef_rename`, only exact matches of the *complete* original term name will be replaced.  
+
+For complex modifications, you can feed a function which returns a named vector to the `coef_rename` argument. For example, `modelsummary` ships with a function called `coef_rename`, which executes some common renaming tasks automatically. This example also uses the `dvnames` function to extract the name of the dependent variable in each model:
 
 ```{r}
-y <- list(lm(hp ~ drat / mpg, mtcars),
-          lm(hp ~ vs / mpg, mtcars))
+x <- list(
+  lm(mpg ~ factor(cyl) + drat + disp, data = mtcars),
+  lm(hp ~ factor(cyl) + drat + disp, data = mtcars)
+)
+
+modelsummary(dvnames(x), coef_rename = coef_rename)
+```
+
+Of course, you can also define your own custom functions. For instance, to rename a model with interacted variables (e.g., "drat:mpg"), you could define a custom `rename_explanator` function:
+
+```{r}
+y <- list(
+  lm(hp ~ drat / mpg, mtcars),
+  lm(hp ~ vs / mpg, mtcars)
+)
 
 rename_explanator <- function(old_names) {
   new_names <- gsub("drat|vs", "Explanator", old_names)
