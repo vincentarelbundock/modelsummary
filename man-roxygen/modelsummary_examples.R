@@ -51,6 +51,7 @@
 #'
 #' # coef_rename
 #' modelsummary(models, coef_rename = c('Volume' = 'Large', 'Height' = 'Tall'))
+#' modelsummary(models, coef_rename = toupper)
 #'
 #' # coef_map
 #' modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
