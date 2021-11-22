@@ -66,6 +66,9 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' vector. Values of the vector refer to the variable names that will appear
 #' in the table. Names refer to the original term names stored in the model
 #' object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
+#' If you provide a function to `coef_rename`, `modelsummary` will create a named
+#' vector for you by deriving the new variable names from the vector of original
+#' term names with your function.
 #' @param gof_map rename, reorder, and omit goodness-of-fit statistics and other
 #'   model information. This argument accepts 3 types of values:
 #' * NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.
@@ -725,7 +728,7 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
          direction = "long")
 
       # avoid duplicate row error
-      row.names(out) <- NULL 
+      row.names(out) <- NULL
 
       ## preserve order of columns (rhs variables are ordered factors)
       out[[lhs]] <- factor(out[[lhs]], levels = unique(out[[lhs]]))

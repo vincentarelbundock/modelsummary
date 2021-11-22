@@ -270,14 +270,30 @@ If you want to create your own stars description, you can add custom notes with 
 
 ### coef_rename
 
-You can rename coefficients using the `coef_rename` argument. For example, if you have two models with different explanatory variables, but you want both variables to have the same name and appear ont he same row, you can do:
+You can rename coefficients using the `coef_rename` argument. For example, if you have two models with different explanatory variables, but you want both variables to have the same name and appear on the same row, you can do:
 
 ```{r}
-x <- list(
-  lm(hp ~ drat, mtcars),
-  lm(hp ~ vs, mtcars))
+x <- list(lm(hp ~ drat, mtcars),
+          lm(hp ~ vs, mtcars))
+
 modelsummary(x, coef_rename=c("drat"="Explanator", "vs"="Explanator"))
 ```
+
+If you provide a named character vector to `coef_rename`, only exact matches of the *complete* original term name will be replaced. If "drat" and "vs" appear as parts of the term name (e.g., "drat:mpg"), you need to pass a custom rename function to `coef_rename`:
+
+```{r}
+y <- list(lm(hp ~ drat / mpg, mtcars),
+          lm(hp ~ vs / mpg, mtcars))
+
+rename_explanator <- function(old_names) {
+  new_names <- gsub("drat|vs", "Explanator", old_names)
+  setNames(new_names, old_names)
+}
+
+modelsummary(y, coef_rename = rename_explanator)
+```
+
+Beware of inadvertently replacing parts of other variable names! Making your regex pattern as specific as possible (e.g., by adding word boundaries) is likely a good idea. The custom rename function is also a good place to re-introduce the replacement of ":" with "×" if you are dealing with interaction terms -- `modelsummary` makes this replacement for you only when the `coef_rename` argument is not specified.
 
 ### coef_map
 
