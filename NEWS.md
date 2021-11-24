@@ -1,3 +1,13 @@
+# modelsummary 0.9.4.9000
+
+`modelsummary`:
+
+* `vcov` strings like `HC1` and `Robust` are now case-insensitive
+
+`kableExtra`:
+
+* The `col.names` argument can now be passed to `kableExtra::kbl` through the ... ellipsis.
+
 # modelsummary 0.9.4
 
 * Bug fix: siunitx and rounding NA

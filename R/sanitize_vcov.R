@@ -10,67 +10,47 @@ sanitize_vcov <- function(vcov, number_of_models, ...) {
     vcov <- ellip[["statistic_override"]]
   }
 
-  if (is.null(vcov)) {
-    # lengths must match to allow model recycling with multiple vcov
-    out <- rep(list(NULL), number_of_models)
-    return(out)
-  }
-
-  # default output
-  out <- NULL
-
-  # list of formulas, functions, matrices, or vectors
-  # first class because some models inherit from "list"
-  if (class(vcov)[1] == "list") {
-    checkmate::assert(
-      checkmate::check_true(length(vcov) == number_of_models),
-      checkmate::check_true(number_of_models == 1))
-    for (vcov_element in vcov) {
-      checkmate::assert(
-        checkmate::check_null(vcov_element),
-        checkmate::check_formula(vcov_element),
-        checkmate::check_function(vcov_element),
-        checkmate::check_matrix(vcov_element),
-        checkmate::check_numeric(vcov_element),
-        checkmate::check_choice(vcov_element,
-          choices = c("robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m",
-                      "HC5", "stata", "classical", "constant", "iid", "HAC",
-                      "NeweyWest", "bootstrap", "Andrews", "panel-corrected",
-                      "outer-product", "weave")),
-        checkmate::check_character(vcov_element, min.len = 2),
-        combine = "or"
-      )
-    }
-    out <- vcov
-  }
-
-  # single formulas/matrices/functions: apply to every model
-  if (isTRUE(checkmate::check_formula(vcov)) ||
+  # recycling vcov for multiple models
+  # single string/formulas/matrices/functions: apply to every model
+  if (is.null(vcov) ||
+      isTRUE(checkmate::check_formula(vcov)) ||
       isTRUE(checkmate::check_matrix(vcov))  ||
-      isTRUE(checkmate::check_function(vcov))) {
-    out <- rep(list(vcov), number_of_models)
+      isTRUE(checkmate::check_function(vcov)) ||
+      isTRUE(checkmate::check_numeric(vcov)) ||
+      isTRUE(checkmate::check_character(vcov, len = 1))) {
+    vcov <- rep(list(vcov), number_of_models)
+  # character vector to list (can be any length for single model many vcov)
+  } else if (isTRUE(checkmate::check_character(vcov))) {
+    vcov <- as.list(vcov)
+  # check first class because some models inherit from "list"
+  } else if (class(vcov)[1] != "list") {
+    stop("The value of the `vcov` argument is invalid. Please refer to the documentation.")
   }
 
-  if (is.character(vcov)) {
+  checkmate::check_true(length(vcov) == number_of_models)
+
+  sandwich_types <- c("robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4",
+                      "HC4m", "HC5", "stata", "classical", "constant", "iid",
+                      "HAC", "NeweyWest", "bootstrap", "Andrews",
+                      "panel-corrected", "outer-product", "weave")
+
+  for (i in seq_along(vcov)) {
     checkmate::assert(
-      checkmate::check_character(vcov, len = 1),
-      checkmate::check_character(vcov, len = number_of_models),
-      checkmate::check_true(number_of_models == 1))
-    checkmate::assert_true(all(
-      vcov %in% c("robust", "HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m",
-                  "HC5", "stata", "classical", "constant", "iid", "HAC",
-                  "NeweyWest", "bootstrap", "Andrews", "panel-corrected",
-                  "outer-product", "weave")))
-    if (length(vcov) == 1) {
-      out <- as.list(rep(vcov, number_of_models))
-    } else {
-      out <- as.list(vcov)
+      checkmate::check_null(vcov[[i]]),
+      checkmate::check_formula(vcov[[i]]),
+      checkmate::check_function(vcov[[i]]),
+      checkmate::check_matrix(vcov[[i]]),
+      checkmate::check_numeric(vcov[[i]]),
+      checkmate::check_choice(tolower(vcov[[i]]), choices = tolower(sandwich_types)),
+      checkmate::check_character(vcov[[i]], min.len = 2),
+      combine = "or"
+    )
+
+    # case-insensitive sandwich types
+    if (isTRUE(checkmate::check_character(vcov[[i]], len = 1))) {
+      vcov[[i]] <- sandwich_types[match(tolower(vcov[[i]]), tolower(sandwich_types))]
     }
   }
 
-  if (is.null(out)) {
-    stop("Please supply a valid input for the `vcov` argument. Read `?modelsummary`.")
-  }
-
-  return(out)
+  return(vcov)
 }
