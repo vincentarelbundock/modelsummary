@@ -9,8 +9,7 @@
 #' extract from the entire model object. Note that the confidence intervals
 #' are only stored in a `modelsummary_list` if explicitly requested:
 #'
-#' `backup <- modelsummary(models, output = "modelsummary_list"`
-#' `                       statistic = "conf.int")`
+#' `backup <- modelsummary(models, output = "modelsummary_list", statistic = "conf.int")`
 #' `modelsummary(backup)`
 #'
 #' When a file name with a valid extension is supplied to the `output` argument,
