@@ -2,8 +2,7 @@
 % Please edit documentation in R/get_estimates.R
 \name{get_estimates}
 \alias{get_estimates}
-\title{Extract model estimates. A mostly internal function with some potential uses
-outside.}
+\title{Extract model estimates in a tidy format.}
 \usage{
 get_estimates(model, conf_level = 0.95, vcov = NULL, ...)
 }
@@ -34,6 +33,9 @@ the scenes. Examples include:
 }}
 }
 \description{
-Extract model estimates. A mostly internal function with some potential uses
-outside.
+This is a mostly internal function which could be useful to users who want
+a unified approach to extract results from a wide variety of models. For
+some models \code{get_estimates} attaches useful attributes to the output. You
+can access this information by calling the \code{attributes} function:
+\code{attributes(get_estimates(model))}
 }

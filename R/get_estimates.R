@@ -1,8 +1,14 @@
-#' Extract model estimates. A mostly internal function with some potential uses
-#' outside.
+#' Extract model estimates in a tidy format. 
+#'
+#' This is a mostly internal function which could be useful to users who want
+#' a unified approach to extract results from a wide variety of models. For
+#' some models `get_estimates` attaches useful attributes to the output. You
+#' can access this information by calling the `attributes` function:
+#' `attributes(get_estimates(model))`
 #'
 #' @inheritParams modelsummary
 #' @param model a single model object
+#' 
 #' @export
 get_estimates <- function(model, conf_level = .95, vcov = NULL, ...) {
 
