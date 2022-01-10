@@ -129,11 +129,17 @@ get_gof_parameters <- function(model, ...) {
     # stan models: r2_adjusted is veeeery slow
     if (inherits(model, "stanreg") ||
         inherits(model, "brmsfit") ||
-        inherits(model, "stanmvreg")) {
+        inherits(model, "stanmvreg") ||
+        inherits(model, "merMod")) {
       # this is the list of "common" metrics in `performance`
       # documentation, but their code includes R2_adj, which produces
       # a two-row glance and gives us issues.
-      metrics <- c("LOOIC", "WAIC", "R2", "RMSE")
+      msg <- '`modelsummary` uses the `performance` package to extract goodness-of-fit statistics from models of this class. You can specify the statistics you wish to compute by supplying a `metrics` argument to `modelsummary`, which will then push it forward to `performance`: `modelsummary(mod,metrics=c("RMSE","R2")` See `?performance::performance` for more information. Please note that some statistics are expensive to compute.'
+      rlang::warn( message = msg,
+                  .frequency = "once",
+                  .frequency_id = "performance_gof_expensive")
+
+      metrics <- c("RMSE", "LOOIC", "WAIC")
     } else {
       metrics <- "all"
     }
