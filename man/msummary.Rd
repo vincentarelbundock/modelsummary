@@ -195,8 +195,7 @@ are only stored in a \code{modelsummary_list} if explicitly requested:
 \details{
 
 
-\verb{backup <- modelsummary(models, output = "modelsummary_list"}
-\verb{                       statistic = "conf.int")}
+\code{backup <- modelsummary(models, output = "modelsummary_list", statistic = "conf.int")}
 \code{modelsummary(backup)}
 
 When a file name with a valid extension is supplied to the \code{output} argument,
@@ -367,6 +366,13 @@ modelsummary(models, add_rows = rows)
 
 # notes
 modelsummary(models, notes = list('A first note', 'A second note'))
+
+# gof_map: tribble
+library(tibble)
+gm <- tribble(
+  ~raw,        ~clean,      ~fmt,
+  "r.squared", "R Squared", 5)
+modelsummary(models, gof_map = gm)
 
 # gof_map: data.frame
 gm <- modelsummary::gof_map

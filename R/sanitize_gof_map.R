@@ -29,7 +29,12 @@ sanitize_gof_map <- function(gof_map) {
   if (class(gof_map)[1] == "list") {
     out <- gof_map
   } else if (inherits(gof_map, "data.frame")) {
-    out <- lapply(1:nrow(gof_map), function(i) as.list(gof_map[i, , drop = FALSE]))
+    # list column can include functions
+    if (class(gof_map$fmt)[1] == "list") {
+        out <- lapply(1:nrow(gof_map), function(i) unlist(gof_map[i, , drop = FALSE]))
+    } else {
+        out <- lapply(1:nrow(gof_map), function(i) as.list(gof_map[i, , drop = FALSE]))
+    }
   }
 
   attr(out, "whitelist") <- whitelist

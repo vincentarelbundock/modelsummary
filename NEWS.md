@@ -3,6 +3,7 @@
 `modelsummary`:
 
 * `vcov` strings like `HC1` and `Robust` are now case-insensitive
+* `gof_map` now accepts a data.frame or tibble with a list-column which includes functions (see Examples in docs)
 
 `kableExtra`:
 

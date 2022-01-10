@@ -74,6 +74,13 @@
 #' # notes
 #' modelsummary(models, notes = list('A first note', 'A second note'))
 #'
+#' # gof_map: tribble
+#' library(tibble)
+#' gm <- tribble(
+#'   ~raw,        ~clean,      ~fmt,
+#'   "r.squared", "R Squared", 5)
+#' modelsummary(models, gof_map = gm)
+#' 
 #' # gof_map: data.frame
 #' gm <- modelsummary::gof_map
 #' gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE
