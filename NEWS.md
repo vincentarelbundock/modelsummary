@@ -1,13 +1,24 @@
-# modelsummary 0.9.4.9000
+# modelsummary 0.9.5
 
 `modelsummary`:
 
 * `vcov` strings like `HC1` and `Robust` are now case-insensitive
-* `gof_map` now accepts a data.frame or tibble with a list-column which includes functions (see Examples in docs)
+* `gof_map` now accepts a data.frame or tibble with a `fmt` list-column which includes functions (see Examples in docs)
+* `R2` is no longer computed by default for bayesian and mixed effects models. An informative one-time warning is printed about the `metrics` argument.
 
-`kableExtra`:
+`datasummary_skim`:
+
+* Histograms now work in Jupyter
+* Bugfix: harmless error message is no longer printed
+
+`kableExtra` factory:
 
 * The `col.names` argument can now be passed to `kableExtra::kbl` through the ... ellipsis.
+
+Misc:
+
+* Many small improvements to the vignettes and docs
+* `output = "github_document"` is now supported
 
 # modelsummary 0.9.4
 
