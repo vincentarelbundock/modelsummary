@@ -83,9 +83,14 @@ datasummary_skim <- function(data,
     settings_rm()
     return(invisible(out))
   } else {
+    if (output == "jupyter" || (output == "default" && settings_equal("output_default", "jupyter"))) {
+      assert_dependency("IRdisplay")
+      return(invisible(IRdisplay::display_html(as.character(out))))
+    }
     settings_rm()
     return(out)
   }
+
 }
 
 #' Internal function to skim whole datasets
@@ -166,11 +171,12 @@ datasummary_skim_numeric <- function(
     # interactive or Rmarkdown/knitr
     } else {
       if (isTRUE(check_dependency("knitr"))) {
-        if (!settings_equal("output_format", c("default", "html", "kableExtra")) && !knitr::is_latex_output()) {
+        if (!settings_equal("output_format", c("default", "jupyter", "html", "kableExtra")) &&
+            !knitr::is_latex_output()) {
           histogram <- FALSE
         }
       } else {
-        if (!settings_equal("output_format", c("default", "html", "kableExtra"))) {
+        if (!settings_equal("output_format", c("default", "jupyter", "html", "kableExtra"))) {
           histogram <- FALSE
         }
       }
@@ -230,10 +236,17 @@ datasummary_skim_numeric <- function(
       output <- "kableExtra"
     }
 
+    # need this otherwise kableExtra error with `column_spec`
+    if (output == "jupyter") {
+        output_fmt <- "html"
+    } else {
+        output_fmt <- output
+    }
+
     # draw table
     out <- datasummary(formula = f,
         data = dat_new,
-        output = output,
+        output = output_fmt,
         title = title,
         align = align,
         notes = notes,
