@@ -416,6 +416,34 @@ datasummary(flipper_length_mm ~ Mean + Var + P75 + Range,
             data = penguins)
 ```
 
+## `Arguments`: Weighted Mean
+
+You can use the `Arguments` mechanism to do various things, such as calculating weighted means:
+
+```{r}
+newdata <- data.frame(
+  x = rnorm(20),
+  w = rnorm(20),
+  y = rnorm(20))
+
+datasummary(x + y ~ weighted.mean * Arguments(w = w),
+            data = newdata, output = "markdown")
+```
+
+Which produces the same results as:
+
+```{r}
+weighted.mean(newdata$x, newdata$w)
+weighted.mean(newdata$y, newdata$w)
+```
+
+But different results from:
+
+```{r}
+mean(newdata$x)
+mean(newdata$y)
+```
+
 ## Empty cells
 
 Sometimes, if we nest too much and the dataset is not large/diverse enough, we end up with empty cells. In that case, we add `*DropEmpty()` to the formula:
