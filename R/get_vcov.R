@@ -201,6 +201,7 @@ get_vcov_type <- function(vcov) {
   if (!is.null(names(vcov))) return(names(vcov))
 
   get_vcov_type_inner <- function(v) {
+
     if (is.character(v)) {
       if (v %in% c("robust", "classical", "stata", "classical", "constant", "panel-corrected", "Andrews", "outer-product")) {
          out <- tools::toTitleCase(v)

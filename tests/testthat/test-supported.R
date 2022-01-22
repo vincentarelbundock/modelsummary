@@ -41,8 +41,7 @@ test_that("nnet::multinom with `y.level` column", {
 
 
 test_that("MASS", {
-  testthat::skip_if_not_installed("MASS")
-  suppressMessages(library(MASS))
+  requiet("MASS")
   # broom::tidy requires p.values=TRUE
   fit <- polr(Sat ~ Freq, weights = Freq, data = housing)
   expect_error(suppressMessages(modelsummary(fit, statistic="p.value")))
@@ -53,8 +52,7 @@ test_that("MASS", {
 
 
 test_that("survival", {
-  testthat::skip_if_not_installed("survival")
-  library(survival)
+  requiet("survival")
   lung <- survival::lung
   lung <- subset(lung, subset = ph.ecog %in% 0:2)
   lung$sex <- factor(lung$sex, labels = c("male", "female"))
@@ -67,7 +65,7 @@ test_that("survival", {
 
 
 test_that("mgcv::gam", {
-  testthat::skip_if_not_installed("mgcv")
+  requiet("mgcv")
   mod <- mgcv::gam(
     formula = mpg ~ s(hp) + s(wt) + factor(cyl) + am + qsec,
     family = stats::quasi(),
@@ -94,8 +92,6 @@ test_that("betareg::betareg", {
 test_that("ivreg::ivreg", {
   # these two packages depend on `car`, which depends on `rio`, which depends
   # on `foreign`, which cannot be installed on R<4.0.0
-  testthat::skip_if_not_installed("ivreg")
-  testthat::skip_if_not_installed("AER")
   requiet("AER")
   requiet("ivreg")
   data(CigarettesSW, package = "AER")
@@ -109,7 +105,6 @@ test_that("ivreg::ivreg", {
 
 
 test_that("pscl::hurdle", {
-  testthat::skip_if_not_installed("pscl")
   requiet("pscl")
   set.seed(123)
   data("bioChemists", package = "pscl")
@@ -121,44 +116,8 @@ test_that("pscl::hurdle", {
 })
 
 
-test_that("fixest", {
-  testthat::skip_if_not_installed("fixest")
-  testthat::skip_if(getRversion() < '3.6.6') # change in .Rng
-  requiet("fixest")
-  # simple model
-  mod <- feols(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris)
-  raw <- modelsummary(mod, "data.frame")
-  expect_s3_class(raw, "data.frame")
-  expect_equal(dim(raw), c(14, 4))
-})
-
-
-test_that("fixest std.error labels", {
-  testthat::skip_if_not_installed("fixest")
-  requiet("fixest")
-  mod <- feols(hp ~ mpg + drat, mtcars, cluster = "vs")
-  tab <- modelsummary(mod, output = "data.frame")
-  expect_equal(tab[tab$term == "Std.Errors", "Model 1"], "by: vs")
-  tab <- modelsummary(mod, vcov = list(NULL), output = "data.frame")
-  expect_equal(tab[tab$term == "Std.Errors", "Model 1"], "by: vs")
-  tab <- modelsummary(mod, vcov = list(NULL, "iid"), output = "data.frame")
-  expect_equal(tab[tab$term == "Std.Errors", "Model 1"], "by: vs")
-  expect_equal(tab[tab$term == "Std.Errors", "Model 2"], "IID")
-  # unnamed function includes no label
-  tab1 <- modelsummary(mod, vcov = vcov(mod, se = "standard"), output = "data.frame")
-  tab2 <- modelsummary(mod, vcov = list(vcov(mod, se = "standard")), output = "data.frame")
-  tab3 <- modelsummary(mod, vcov = list("test " = vcov(mod, se = "standard")), output = "data.frame")
-  expect_false("Std.Errors" %in% tab1$term)
-  expect_false("Std.Errors" %in% tab2$term)
-  expect_true("Std.Errors" %in% tab3$term)
-})
-
-
-
 test_that("mice", {
-  testthat::skip_if_not_installed("mice")
   testthat::skip_if(getRversion() < '4.0.0') # change in .Rng
-
   requiet("mice")
 
   # impute
@@ -188,69 +147,6 @@ test_that("mice", {
 })
 
 
-test_that("lme4", {
-  testthat::skip_if_not_installed("lme4")
-  requiet("lme4")
-  d <- as.data.frame(ChickWeight)
-  colnames(d) <- c("y", "x", "subj", "tx")
-  mod <- lmer(y ~ tx * x + (x | subj), data = d)
-  tab <- modelsummary(mod, output="dataframe")
-  expect_s3_class(tab, "data.frame")
-  expect_true(nrow(tab) > 22)
-
-  # sandwich does not support lmer
-  expect_error(modelsummary(mod, vcov="robust"),
-               regexp = "Unable to extract")
-  expect_error(modelsummary(mod, vcov=~subj),
-               regexp = "Unable to extract")
-})
-
-test_that("lme4 with 2 random effects", {
-  testthat::skip_if_not_installed("lme4")
-  library(lme4)
-  mod <- lmer(mpg ~ hp + (1|am) + (1|cyl), data = mtcars)
-  expect_warning(modelsummary(mod, output = "data.frame", gof_omit = ".*"),
-                 regexp = "duplicate")
-  tab <- suppressWarnings(modelsummary(mod, output = "data.frame", gof_omit = ".*"),
-                         regexp = "duplicate")
-  expect_s3_class(tab, "data.frame")
-
-  tab <- modelsummary(mod, output = "data.frame", gof_omit = ".*",
-                      group = group + term ~ model)
-  expect_s3_class(tab, "data.frame")
-  expect_equal(dim(tab), c(7, 5))
-})
-
-
-test_that("lme4 with parameter's effects argument", {
-  testthat::skip_if_not_installed("lme4")
-  library(lme4)
-  d <- as.data.frame(ChickWeight)
-  colnames(d) <- c("y", "x", "subj", "tx")
-  mod <- lmer(y ~ tx * x + (x | subj), data = d)
-
-  # all effects implicit
-  tab <- modelsummary(mod, output="dataframe")
-  tab <- tab[tab$part == "estimates",]
-  expect_equal(nrow(tab), 20)
-
-  # all effects explicit
-  tab <- modelsummary(mod, output="dataframe", effects = "all")
-  tab <- tab[tab$part == "estimates",]
-  expect_equal(nrow(tab), 20)
-
-  # fixed effects explicit
-  tab <- modelsummary(mod, output="dataframe", effects = "fixed")
-  tab <- tab[tab$part == "estimates",]
-  expect_equal(nrow(tab), 16)
-
-  # random effects explicit
-  tab <- modelsummary(mod, output="dataframe", effects = "random")
-  tab <- tab[tab$part == "estimates",]
-  expect_equal(nrow(tab), 4)
-})
-
-
 test_that("sandwich vignette", {
   testthat::skip_if_not_installed("sandwich")
   testthat::skip_if_not_installed("lmtest")
@@ -272,10 +168,8 @@ test_that("sandwich vignette", {
     statistic_override = vc["Clustered"],
     stars = TRUE)
   expect_s3_class(tab, "data.frame")
-  expect_equal(dim(tab), c(12, 4))
+  expect_true("Clustered" %in% tab[["Model 1"]])
 })
-
-
 
 
 test_that("consistent gof std error display did", {

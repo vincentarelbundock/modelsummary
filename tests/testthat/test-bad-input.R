@@ -8,7 +8,6 @@ test_that("multiple models must be wrapped in a list", {
 
 
 test_that("coef_map: two variables with the same name within or between models", {
-  skip_if_not_installed("gt")
   set.seed(1)
   # within one model produces an error
   x <- rnorm(100)
@@ -20,6 +19,6 @@ test_that("coef_map: two variables with the same name within or between models",
   mod <- list()
   mod[[1]] <- lm(y ~ x)
   mod[[2]] <- lm(y ~ z)
-  tab <- modelsummary(mod, output = "gt", coef_map = c('x' = 'X', 'z' = 'X'))
-  expect_s3_class(tab, 'gt_tbl')
+  tab <- modelsummary(mod, output = "data.frame", coef_map = c('x' = 'X', 'z' = 'X'))
+  expect_s3_class(tab, 'data.frame')
 })

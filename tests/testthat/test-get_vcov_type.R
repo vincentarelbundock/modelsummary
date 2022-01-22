@@ -1,6 +1,3 @@
-skip_if_not_installed("lfe")
-skip_if_not_installed("fixest")
-skip_if_not_installed("estimatr")
 requiet("lfe")
 requiet("fixest")
 requiet("estimatr")

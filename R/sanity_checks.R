@@ -218,12 +218,12 @@ sanity_factory <- function(factory_dict) {
 #'
 #' @noRd
 sanity_stars <- function(stars) {
-  if (isTRUE(stars)) {
-    rlang::warn(
-      message = "In version 0.8.0 of the `modelsummary` package, the default significance markers produced by the `stars=TRUE` argument were changed to be consistent with R's defaults.",
-      .frequency = "once",
-      .frequency_id = "stars_true_consistency")
-  }
+  # if (isTRUE(stars)) {
+    # rlang::warn(
+    #   message = "In version 0.8.0 of the `modelsummary` package, the default significance markers produced by the `stars=TRUE` argument were changed to be consistent with R's defaults.",
+    #   .frequency = "once",
+    #   .frequency_id = "stars_true_consistency")
+  # }
 
   checkmate::assert(
     checkmate::check_flag(stars),

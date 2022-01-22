@@ -17,8 +17,7 @@ test_that("Michael E Flynn ultra-niche bug check", {
     tab <- modelsummary(mod,
                         output = "latex",
                         coef_map = coef_list,
-                        group = term ~ model + response)
-    )
+                        group = term ~ model + response))
     expect_snapshot(cat(tab))
 })
 
@@ -83,12 +82,18 @@ test_that("group ~ model + term", {
         nnet::multinom(cyl ~ mpg, data = dat_multinom, trace = FALSE),
         nnet::multinom(cyl ~ mpg + drat, data = dat_multinom, trace = FALSE))
 
-    tab <- modelsummary(mod, output = "data.frame", group = response ~ model + term)
+    tab <- modelsummary(mod,
+                        output = "data.frame",
+                        group = response ~ model + term,
+                        metrics = "RMSE")
     known <- c("part", "group", "statistic", "Model 1 / (Intercept)", "Model 1 / mpg", "Model 2 / (Intercept)", "Model 2 / drat", "Model 2 / mpg")
     expect_equal(colnames(tab), known)
     expect_equal(dim(tab), c(4, 8))
 
-    tab <- modelsummary(mod, output = "data.frame", group = response ~ term + model)
+    tab <- modelsummary(mod, 
+                        output = "data.frame",
+                        group = response ~ term + model,
+                        metrics = "RMSE")
     known <- c("part", "group", "statistic", "(Intercept) / Model 1", "(Intercept) / Model 2", "drat / Model 2", "mpg / Model 1", "mpg / Model 2")
     expect_equal(colnames(tab), known)
     expect_equal(dim(tab), c(4, 8))
@@ -106,7 +111,8 @@ test_that("nnet::multinom: order of columns determined by formula terms", {
         nnet::multinom(cyl ~ mpg + drat, data = dat_multinom, trace = FALSE))
 
     ## term ~ model + response
-    trash <- capture.output(tab <- modelsummary(mod, "data.frame", group = term ~ model + response))
+    trash <- capture.output(
+        tab <- modelsummary(mod, "data.frame", group = term ~ model + response))
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
                  c("part", "term", "statistic", "Model 1 / 6", "Model 1 / 8", "Model 2 / 6", "Model 2 / 8"))
