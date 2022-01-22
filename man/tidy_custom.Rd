@@ -20,3 +20,4 @@ called \code{tidy_custom.lm} which returns a data.frame with a column called
 in your \code{modelsummary()} call. The output of this method must be similar to
 the result of \code{tidy(model)}.
 }
+\keyword{internal}

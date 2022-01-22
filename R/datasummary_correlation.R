@@ -235,14 +235,13 @@ correlation_pearspear <- function(x) {
 #' the `method` argument of `datasummary_correlation`.
 #' @inheritParams datasummary_correlation
 #' @param x square numeric matrix
-#' @param leading_zero boolean. If FALSE, leading zeros are removed
+#' @param leading_zero boolean. If `FALSE`, leading zeros are removed
 #' @param diagonal character or NULL. If character, all elements of the
 #' diagonal are replaced by the same character (e.g., "1").
 #' @param upper_triangle character or NULL. If character, all elements of the
 #' upper triangle are replaced by the same character (e.g., "" or ".").
 #' @export
 #' @examples
-#' \dontrun{
 #' library(modelsummary)
 #'
 #' dat <- mtcars[, c("mpg", "hp", "disp")]
@@ -257,7 +256,6 @@ correlation_pearspear <- function(x) {
 #' }
 #'
 #' datasummary_correlation(dat, method = cor_fun)
-#' }
 datasummary_correlation_format <- function(
   x,
   fmt,

@@ -32,8 +32,8 @@ modelsummary_wide(
 
 \item{output}{filename or object type (character string)
 \itemize{
-\item Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
-\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable", "jupyter".
+\item Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg.
+\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
 \item Warning: Users should not supply a file name to the \code{output} argument if they intend to customize the table with external packages. See the 'Details' section.
 \item LaTeX compilation requires the \code{booktabs} and \code{siunitx} packages, but \code{siunitx} can be disabled or replaced with global options. See the 'Details' section.
 \item The default output formats and table-making packages can be modified with global options. See the 'Details' section.
@@ -44,7 +44,7 @@ modelsummary_wide(
 \item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
 \item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
 \item function: returns a formatted character string.
-\item Note on LaTeX formatting: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command from the \code{siunitx} LaTeX package by default. This behavior can be altered with global options. See the 'Details' section.
+\item LaTeX output: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command, which requires the \code{siunitx} package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 }}
 
 \item{estimate}{string or \code{glue} string of the estimate to display (or a
@@ -67,8 +67,7 @@ or any column name produced by: \code{get_estimates(model)}
 \item \code{"{p.value} [{conf.low}, {conf.high}]"}
 \item \code{"Std.Error: {std.error}"}
 }
-\item Note: Parentheses are added automatically unless the string includes \code{glue} curly braces \code{{}}.
-\item Note: To report uncertainty statistics \emph{next} to coefficients, you can #'   supply a \code{glue} string to the \code{estimate} argument.
+\item Parentheses are added automatically unless the string includes \code{glue} curly braces \code{{}}.
 }}
 
 \item{vcov}{robust standard errors and other manual statistics. The \code{vcov}
@@ -76,11 +75,11 @@ argument accepts six types of input (see the 'Details' and 'Examples'
 sections below):
 \itemize{
 \item NULL returns the default uncertainty estimates of the model object
-\item string, vector, or (named) list of strings. Omitting or specifying \code{vcov = NULL} will return the model's default uncertainty estimates, e.g. IID errors for standard models. Alternatively, use the string "iid" (aliases: "classical" or "constant") to present IID errors explicitly. The strings "HC", "HC0", "HC1" (alias: "stata"), "HC2", "HC3" (alias: "robust"), "HC4", "HC4m", "HC5", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", and "weave" use variance-covariance matrices computed using functions from the \code{sandwich} package, or equivalent method. The behavior of those functions can (and sometimes \emph{must}) be altered by passing arguments to \code{sandwich} directly from \code{modelsummary} through the ellipsis (\code{...}), but it is safer to define your own custom functions as described in the next bullet.
+\item string, vector, or (named) list of strings. "iid", "classical", and "constant" are aliases for \code{NULL}, which returns the model's default uncertainty estimates. The strings "HC", "HC0", "HC1" (alias: "stata"), "HC2", "HC3" (alias: "robust"), "HC4", "HC4m", "HC5", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", and "weave" use variance-covariance matrices computed using functions from the \code{sandwich} package, or equivalent method. The behavior of those functions can (and sometimes \emph{must}) be altered by passing arguments to \code{sandwich} directly from \code{modelsummary} through the ellipsis (\code{...}), but it is safer to define your own custom functions as described in the next bullet.
 \item function or (named) list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., \code{stats::vcov}, \code{sandwich::vcovHC}, \code{function(x) vcovPC(x, cluster="country")}).
 \item formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
-\item (named) list of \code{length(models)} variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
-\item a (named) list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, \code{modelsummary} cannot automatically calculate p values. The \code{stars} argument may thus use incorrect significance thresholds when \code{vcov} is a list of vectors.
+\item named list of \code{length(models)} variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+\item a named list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, \code{modelsummary} cannot automatically calculate p values. The \code{stars} argument may thus use incorrect significance thresholds when \code{vcov} is a list of vectors.
 }}
 
 \item{conf_level}{confidence level to use for confidence intervals}

@@ -20,10 +20,10 @@ datasummary_correlation_format(
 \item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
 \item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
 \item function: returns a formatted character string.
-\item Note on LaTeX formatting: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command from the \code{siunitx} LaTeX package by default. This behavior can be altered with global options. See the 'Details' section.
+\item LaTeX output: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command, which requires the \code{siunitx} package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 }}
 
-\item{leading_zero}{boolean. If FALSE, leading zeros are removed}
+\item{leading_zero}{boolean. If \code{FALSE}, leading zeros are removed}
 
 \item{diagonal}{character or NULL. If character, all elements of the
 diagonal are replaced by the same character (e.g., "1").}
@@ -36,7 +36,6 @@ Mostly for internal use, but can be useful when users supply a function to
 the \code{method} argument of \code{datasummary_correlation}.
 }
 \examples{
-\dontrun{
 library(modelsummary)
 
 dat <- mtcars[, c("mpg", "hp", "disp")]
@@ -51,5 +50,4 @@ cor_fun <- function(x) {
 }
 
 datasummary_correlation(dat, method = cor_fun)
-}
 }

@@ -10,16 +10,25 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 
 #' Model Summary Tables
 #'
-#' The content of the tables can be altered with the function's arguments, or by
-#' calling `options`, as described in the _Details_ section below. The look of
-#' the tables can be customized by specifying the `output` argument, and by
-#' using functions from one of the supported table customization packages:
-#' `kableExtra`, `gt`, `flextable`, `huxtable`.
+#' Create beautiful and customizable tables to summarize several statistical
+#' models side-by-side. This function supports dozens of statistical models,
+#' and it can produce tables in HTML, LaTeX, Word, Markdown, PDF, PowerPoint,
+#' Excel, RTF, JPG, or PNG. The appearance of the tables can be customized
+#' extensively by specifying the `output` argument, and by using functions from
+#' one of the supported table customization packages: `kableExtra`, `gt`,
+#' `flextable`, `huxtable`. This function's behavior can be altered using
+#' global options (See the _Details_ section below.)
+#'
+#' @template modelsummary_details
+#'
+#' @template options
+#'
+#' @template modelsummary_examples
 #'
 #' @param models a model or (optionally named) list of models
 #' @param output filename or object type (character string)
-#' * Supported filename extensions: .html, .tex, .md, .txt, .png, .jpg.
-#' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "modelsummary_list", "gt", "kableExtra", "huxtable", "flextable", "jupyter".
+#' * Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg.
+#' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the `modelsummary` function.
 #' * Warning: Users should not supply a file name to the `output` argument if they intend to customize the table with external packages. See the 'Details' section.
 #' * LaTeX compilation requires the `booktabs` and `siunitx` packages, but `siunitx` can be disabled or replaced with global options. See the 'Details' section.
 #' * The default output formats and table-making packages can be modified with global options. See the 'Details' section.
@@ -27,7 +36,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
 #' * character: passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`
 #' * function: returns a formatted character string.
-#' * Note on LaTeX formatting: To ensure proper typography, all numeric entries are enclosed in the `\num{}` command from the `siunitx` LaTeX package by default. This behavior can be altered with global options. See the 'Details' section.
+#' * LaTeX output: To ensure proper typography, all numeric entries are enclosed in the `\num{}` command, which requires the `siunitx` package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 #' @param stars to indicate statistical significance
 #' * FALSE (default): no significance stars.
 #' * TRUE: +=.1, *=.05, **=.01, ***=0.001
@@ -41,17 +50,16 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `glue` package strings with braces, such as:
 #'   - `"{p.value} [{conf.low}, {conf.high}]"`
 #'   - `"Std.Error: {std.error}"`
-#' * Note: Parentheses are added automatically unless the string includes `glue` curly braces `{}`.
-#' * Note: To report uncertainty statistics \emph{next} to coefficients, you can #'   supply a `glue` string to the `estimate` argument.
+#' * Parentheses are added automatically unless the string includes `glue` curly braces `{}`.
 #' @param vcov robust standard errors and other manual statistics. The `vcov`
 #'   argument accepts six types of input (see the 'Details' and 'Examples'
 #'   sections below):
 #' * NULL returns the default uncertainty estimates of the model object
-#' * string, vector, or (named) list of strings. Omitting or specifying `vcov = NULL` will return the model's default uncertainty estimates, e.g. IID errors for standard models. Alternatively, use the string "iid" (aliases: "classical" or "constant") to present IID errors explicitly. The strings "HC", "HC0", "HC1" (alias: "stata"), "HC2", "HC3" (alias: "robust"), "HC4", "HC4m", "HC5", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", and "weave" use variance-covariance matrices computed using functions from the `sandwich` package, or equivalent method. The behavior of those functions can (and sometimes *must*) be altered by passing arguments to `sandwich` directly from `modelsummary` through the ellipsis (`...`), but it is safer to define your own custom functions as described in the next bullet.
+#' * string, vector, or (named) list of strings. "iid", "classical", and "constant" are aliases for `NULL`, which returns the model's default uncertainty estimates. The strings "HC", "HC0", "HC1" (alias: "stata"), "HC2", "HC3" (alias: "robust"), "HC4", "HC4m", "HC5", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", and "weave" use variance-covariance matrices computed using functions from the `sandwich` package, or equivalent method. The behavior of those functions can (and sometimes *must*) be altered by passing arguments to `sandwich` directly from `modelsummary` through the ellipsis (`...`), but it is safer to define your own custom functions as described in the next bullet.
 #' * function or (named) list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`, `function(x) vcovPC(x, cluster="country")`).
 #' * formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
-#' * (named) list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
-#' * a (named) list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, `modelsummary` cannot automatically calculate p values. The `stars` argument may thus use incorrect significance thresholds when `vcov` is a list of vectors.
+#' * named list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
+#' * a named list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, `modelsummary` cannot automatically calculate p values. The `stars` argument may thus use incorrect significance thresholds when `vcov` is a list of vectors.
 #' @param conf_level confidence level to use for confidence intervals
 #' @param coef_map character vector. Subset, rename, and reorder coefficients.
 #' Coefficients omitted from this vector are omitted from the table. The order
@@ -76,15 +84,14 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
 #' @param gof_omit string regular expression. Omits all matching gof statistics from
 #' the table. This argument uses perl-compatible regular expressions (`grepl(perl=TRUE)`), which allows expressions such as `".*"` which omits everything, and `"^(?!R2|Num)"` which omits every term except those that start with "R2" or "Num".
-#' @param group a two-sided formula with two or three components which describes
-#' how groups of parameters should be displayed. The formula must include both
-#' a "term" and a "model" component. In addition, a component can be used to
-#' identify groups of parameters (e.g., outcome levels of a multinomial logit
-#' model). This group identifier must be the name of a column in the
-#' data.frame produced by `get_estimates(model)`.
-#' * `term ~ model` displays coefficients as rows and models as columns
-#' * `model ~ term` displays models as rows and coefficients as columns
-#' * `response + term ~ model` displays response levels and coefficients as rows and models as columns.
+#' @param group transpose or group models and estimates (formula). The left
+#' side of the formula represents rows and the right side columns.
+#' * Formula with two components called `term` and `model`.
+#'   - `term ~ model`
+#'   - `model ~ term`
+#' * Formula with three components, including one of the column names in the data frame produced by `get_estimates(model)`. Examples:
+#'   - `response + term ~ model`
+#'   - `term ~ model + y.level`
 #' @param group_map named or unnamed character vector. Subset, rename, and
 #' reorder coefficient groups specified in the `group` argument. See `coef_map`.
 #' @param add_rows a data.frame (or tibble) with the same number of columns as
@@ -118,12 +125,6 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `performance::model_performance(metrics="RMSE")` to select goodness-of-fit statistics to extract using the `performance` package (must have set `options(modelsummary_get="easystats")` first).
 #' @return a regression table in a format determined by the `output` argument.
 #' @importFrom generics glance tidy
-#' @details
-#'
-#' @template modelsummary_details
-#' @template options
-#' @template modelsummary_examples
-#'
 #' @export
 modelsummary <- function(
   models,

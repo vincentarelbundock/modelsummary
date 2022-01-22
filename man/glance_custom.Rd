@@ -21,3 +21,4 @@ method called \code{glance_custom.lm} which returns a one-row data.frame.
 \Sexpr[stage=render,results=rd]{generics:::methods_rd("glance")}
 }
 
+\keyword{internal}

@@ -34,3 +34,12 @@ variable}
 A convenience function which can be passed to the \code{coef_rename} argument of
 the \code{modelsummary} function.
 }
+\examples{
+\dontrun{
+library(modelsummary)
+dat <- mtcars
+dat$horse_power <- dat$hp
+mod <- lm(mpg ~ horse_power + factor(cyl), dat)
+modelsummary(mod, coef_rename = coef_rename)
+}
+}

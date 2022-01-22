@@ -13,3 +13,4 @@ escape_html(x)
 Copied from \code{knitr} for internal use because it is unexported and CRAN
 rejects :::
 }
+\keyword{internal}

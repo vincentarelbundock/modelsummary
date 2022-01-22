@@ -1,6 +1,7 @@
 #' Make sure LaTeX and HTML are safe to compile
 #' 
 #' @keywords internal
+#' @internal
 escape_string <- function(x) {
     if (settings_equal("output_format", c("html", "kableExtra"))) {
         out <- escape_html(x)
@@ -20,6 +21,7 @@ escape_string <- function(x) {
 #' @param x a character string to escape
 #' @param newlines boolean
 #' @param spaces boolean
+#' @keywords internal
 #' @export
 escape_latex <- function (x, newlines = FALSE, spaces = FALSE) {
     x <- gsub("\\\\", "\\\\textbackslash", x)
@@ -39,6 +41,7 @@ escape_latex <- function (x, newlines = FALSE, spaces = FALSE) {
 #' Copied from `knitr` for internal use because it is unexported and CRAN
 #' rejects :::
 #' @param x a character string to escape
+#' @keywords internal
 #' @export
 escape_html <- function (x) {
     x <- gsub("&", "&amp;", x)

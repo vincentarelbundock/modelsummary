@@ -1,3 +1,7 @@
+# modelsummary 0.9.5.9000
+
+* documentaiton improvements
+
 # modelsummary 0.9.5
 
 `modelsummary`:

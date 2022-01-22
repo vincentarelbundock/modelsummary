@@ -13,6 +13,14 @@
 #' @param asis boolean remove the `I` from as-is formula calls
 #'
 #' @export
+#' @examples
+#' \dontrun{
+#' library(modelsummary)
+#' dat <- mtcars
+#' dat$horse_power <- dat$hp
+#' mod <- lm(mpg ~ horse_power + factor(cyl), dat)
+#' modelsummary(mod, coef_rename = coef_rename)
+#' }
 coef_rename <- function(x,
                        factor = TRUE,
                        factor_name = TRUE,

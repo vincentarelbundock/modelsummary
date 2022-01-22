@@ -10,6 +10,7 @@
 #' @section Methods:
 #' \Sexpr[stage=render,results=rd]{generics:::methods_rd("glance")}
 #'
+#' @keywords internal
 #' @export
 glance_custom <- function(x, ...) {
   UseMethod("glance_custom")

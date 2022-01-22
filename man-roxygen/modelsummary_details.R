@@ -1,16 +1,8 @@
+#' @details
 #' 
 #' ## `output`
 #'
-#' The `modelsummary_list` output type is a lightweight representation of the
-#' model results. The `modelsummary` function can export to this format by
-#' setting the `output` argument, and it can accept objects of this format
-#' as input models to create a table. This can be useful to save raw
-#' results, in order to print a table later, without having to save and
-#' extract from the entire model object. Note that the confidence intervals
-#' are only stored in a `modelsummary_list` if explicitly requested:
-#'
-#' `backup <- modelsummary(models, output = "modelsummary_list", statistic = "conf.int")`
-#' `modelsummary(backup)`
+#' The `modelsummary_list` output is a lightweight format which can be used to save model results, so they can be fed back to `modelsummary` later to avoid extracting results again.
 #'
 #' When a file name with a valid extension is supplied to the `output` argument,
 #' the table is written immediately to file. If you want to customize your table

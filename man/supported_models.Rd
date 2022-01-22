@@ -11,3 +11,4 @@ supported_models()
 List of model objects from which \code{modelsummary} can extract estimates and
 statistics
 }
+\keyword{internal}
