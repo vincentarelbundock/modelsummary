@@ -10,7 +10,7 @@
 #' "vertical"
 #' @inheritParams modelsummary
 #' @return a regression table in a format determined by the `output` argument.
-#' @internal
+#' @keywords internal
 #' @export
 modelsummary_wide <- function(
   models,

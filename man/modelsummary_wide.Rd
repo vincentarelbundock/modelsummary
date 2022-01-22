@@ -168,3 +168,4 @@ a regression table in a format determined by the \code{output} argument.
 \description{
 This function is superseded by the \code{group} argument of the \code{modelsummary} function.
 }
+\keyword{internal}
