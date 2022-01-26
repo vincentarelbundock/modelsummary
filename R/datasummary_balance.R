@@ -1,8 +1,13 @@
 #' Balance table: Summary statistics for different subsets of the data (e.g.,
 #' control and treatment groups)
 #'
+#' Creates balance tables with summary statistics for different subsets of the
+#' data (e.g., control and treatment groups). It can also be used to create
+#' summary tables for full data sets.
+#'
 #' @param formula a one-sided formula with the "condition" or "column" variable
-#'   on the right-hand side.
+#'   on the right-hand side. ~1 can be used to show summary statistics for the
+#'   full data set
 #' @param data A data.frame (or tibble). If this data includes columns called
 #'   "blocks", "clusters", and/or "weights", the "estimatr" package will consider
 #'   them when calculating the difference in means. If there is a `weights`
@@ -36,7 +41,7 @@ datasummary_balance <- function(formula,
                                 ...) {
 
 
-    ## settings 
+    ## settings
     settings_init(settings = list(
                       "function_called" = "datasummary_balance"
                   ))
@@ -55,10 +60,16 @@ datasummary_balance <- function(formula,
     ## rhs condition variable
     rhs <- labels(stats::terms(formula))
 
-    ## nobs in column spans via factor levels
-    lev <- table(data[[rhs]])
-    lev <- paste0(names(lev), " (N=", lev, ")")
-    levels(data[[rhs]]) <- lev
+    if (formula == ~1) {
+        #No groups to calculate mean differences
+        dinm <- FALSE
+        rhs <- NULL
+    } else {
+        ## nobs in column spans via factor levels
+        lev <- table(data[[rhs]])
+        lev <- paste0(names(lev), " (N=", lev, ")")
+        levels(data[[rhs]]) <- lev
+    }
 
     ## exclude otherwise All() makes them appear as rows
     idx <- setdiff(colnames(data), c(rhs, "clusters", "blocks", "weights"))
@@ -94,13 +105,20 @@ datasummary_balance <- function(formula,
         tmp2$bad_factor_for_stub <- as.factor(sample(c("A", "B"), nrow(tmp2), replace = TRUE))
 
         pctformat = function(x) sprintf("%.1f", x)
-        f_fac <- stats::as.formula(sprintf(
-            "All(tmp2, factor = TRUE, numeric = FALSE) ~
-             Factor(%s) * (N + Heading('Pct.') * Percent('col') * Format(pctformat()))", rhs))
+        if (!is.null(rhs)) {
+            f_fac <- stats::as.formula(sprintf(
+                "All(tmp2, factor = TRUE, numeric = FALSE) ~
+                 Factor(%s) * (N + Heading('Pct.') * Percent('col') * Format(pctformat()))", rhs))
+        } else {
+            f_fac <- stats::as.formula(
+                "All(tmp2, factor = TRUE, numeric = FALSE) ~
+                 (N + Heading('Pct.') * Percent('col') * Format(pctformat()))")
+        }
         tab_fac <- datasummary(formula = f_fac,
                                data = tmp1,
                                fmt = fmt,
                                output = "data.frame")
+
         ## datasummary(output="dataframe") changes the output format
         sanitize_output(output)
 
@@ -114,18 +132,32 @@ datasummary_balance <- function(formula,
         ## tab_fac has 2 stub columns when there is more than one factor, but only 1 otherwise
         emptyfun <- function(x) return(" ")
         empty <- ifelse(any_factor, "Heading(' ') * emptyfun + ", "")
-
         # weights
         if ("weights" %in% colnames(data)) {
-          f_num <- "All(data_norhs) ~ %s Factor(%s) * (
+            #Grouped
+            if(!is.null(rhs)) {
+              f_num <- "All(data_norhs) ~ %s Factor(%s) * (
+                        Heading('Mean') * weighted.mean * Arguments(w = weights, na.rm = TRUE) +
+                        Heading('Std. Dev.') * weighted.sd * Arguments(w = weights))"
+              f_num <- stats::as.formula(sprintf(f_num, empty, rhs))
+          #No groups
+          } else {
+              f_num <- "All(data_norhs) ~ %s (
                     Heading('Mean') * weighted.mean * Arguments(w = weights, na.rm = TRUE) +
                     Heading('Std. Dev.') * weighted.sd * Arguments(w = weights))"
-          f_num <- stats::as.formula(sprintf(f_num, empty, rhs))
-
+              f_num <- stats::as.formula(sprintf(f_num, empty))
+            }
         # no weights
         } else {
-          f_num <- "All(data_norhs) ~ %s Factor(%s) * (Mean + Heading('Std. Dev.') * SD)"
-          f_num <- stats::as.formula(sprintf(f_num, empty, rhs))
+            #Grouped
+            if(!is.null(rhs)) {
+              f_num <- "All(data_norhs) ~ %s Factor(%s) * (Mean + Heading('Std. Dev.') * SD)"
+              f_num <- stats::as.formula(sprintf(f_num, empty, rhs))
+            #No groups
+            } else {
+              f_num <- "All(data_norhs) ~ %s (Mean + Heading('Std. Dev.') * SD)"
+              f_num <- stats::as.formula(sprintf(f_num, empty))
+            }
         }
         tab_num <- datasummary(formula = f_num,
                                fmt = fmt,
@@ -139,11 +171,14 @@ datasummary_balance <- function(formula,
     ## combine
     if (any_numeric && any_factor) {
         top <- tab_num
+        if (is.null(rhs)) {
+            attr(tab_fac, "header_bottom") <- colnames(tab_fac)
+        }
         mid <- stats::setNames(as.data.frame(as.list(attr(tab_fac, "header_bottom"))), colnames(top))
         bot <- stats::setNames(tab_fac, colnames(top))
         tab <- bind_rows(top, mid, bot)
 
-        ## restore attributes detroyed by bind_rows
+        ## restore attributes destroyed by bind_rows
         idx <- grep("header|span|stub|align", names(attributes(tab_num)), value = TRUE)
         for (i in idx) {
             attr(tab, i) <- attr(tab_num, i)
@@ -197,9 +232,10 @@ datasummary_balance <- function(formula,
         align <- paste0(strrep("l", attr(tab, "stub_width")),
                         strrep("r", ncol(tab) - attr(tab, "stub_width")))
     }
-
+    ## If groups are used,
     ## colnames should not include factor values if spanning headers are available
-    if (settings_equal("output_format", c("latex", "latex_tabular", "html", "gt", "kableExtra")) &&
+    if (!is.null(rhs) &&
+        settings_equal("output_format", c("latex", "latex_tabular", "html", "gt", "kableExtra")) &&
         settings_equal("output_factory", c("kableExtra", "gt"))) {
         colnames(tab) <- attr(tab, "header_bottom")
     }
@@ -213,7 +249,7 @@ datasummary_balance <- function(formula,
 
     ## weights warning
     if (isTRUE(any_factor) && "weights" %in% colnames(data)) {
-      msg <- 'When the `data` used in `datasummary_balance` contains a "weights" column, the means, standard deviations, difference in means, and standard errors of numeric variables are adjusted to account for weights. However, the counts and percentages for categorical variables are not adjusted.' 
+      msg <- 'When the `data` used in `datasummary_balance` contains a "weights" column, the means, standard deviations, difference in means, and standard errors of numeric variables are adjusted to account for weights. However, the counts and percentages for categorical variables are not adjusted.'
       rlang::warn( message = msg,
                   .frequency = "once",
                   .frequency_id = "factor_weights_not_supported")
@@ -301,16 +337,23 @@ sanitize_datasummary_balance_data <- function(formula, data) {
   # tables::tabular does not play well with tibbles
   data <- as.data.frame(data)
 
-  # rhs condition variable
-  rhs <- labels(stats::terms(formula))
+  if (formula != ~1) {
 
-  if (!rhs %in% colnames(data)) {
-    stop("Variable ", rhs, " must be in data.")
-  }
+      # rhs condition variable
+      rhs <- labels(stats::terms(formula))
 
-  if (length(unique(data[[rhs]])) > 10) {
-    stop(sprintf("Each value of the `%s` variable will create two separate columns. This variable has more than 10 unique values, so the table would be too wide to be readable.",
-        rhs))
+      if (!rhs %in% colnames(data)) {
+        stop("Variable ", rhs, " must be in data.")
+      }
+
+      if (length(unique(data[[rhs]])) > 10) {
+        stop(sprintf("Each value of the `%s` variable will create two separate columns. This variable has more than 10 unique values, so the table would be too wide to be readable.",
+            rhs))
+      }
+      data <- data[!is.na(data[[rhs]]), , drop = FALSE]
+  } else {
+      #No grouping variable - summarise full dataset
+      rhs = NULL
   }
 
   if ("weights" %in% colnames(data)) {
@@ -320,8 +363,6 @@ sanitize_datasummary_balance_data <- function(formula, data) {
   }
 
   # sanity checks on other variables
-  data <- data[!is.na(data[[rhs]]), , drop = FALSE]
-
   drop_too_many_levels <- NULL
   drop_entirely_na <- NULL
 
@@ -331,7 +372,7 @@ sanitize_datasummary_balance_data <- function(formula, data) {
       data[[n]] <- factor(data[[n]], exclude = NULL)
     }
 
-    if (n != rhs) {
+    if (is.null(rhs) || n != rhs) {
       # completely missing
       if (all(is.na(data[[n]]))) {
         data[[n]] <- NULL
