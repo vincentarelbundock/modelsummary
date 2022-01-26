@@ -293,13 +293,520 @@ NA
 |flipper_length_mm |  200.92|  14.06|  ▂▅▇▄▁▄▄▂▁|
 |body_mass_g       | 4201.75| 801.95| ▁▄▇▅▄▄▃▃▂▁|</code></pre>
 <p>Note that the <code>histogram</code> argument of the <code>datasummary_skim</code> function is <code>FALSE</code> by default, because printing histograms will not work on all computers. If you have issues with this option, try changing your computer’s locale, or try using a different display font.</p>
+<p>The <code>datasummary_skim</code> function does not currently allow users to summarize continuous and categorical variables together in a single table, but the <code>datasummary_balance</code> function described in the next section can do so.</p>
+</div>
+<div class="section level2">
+<h2 id="datasummary_balance">
+<code>datasummary_balance</code><a class="anchor" aria-label="anchor" href="#datasummary_balance"></a>
+</h2>
+<p>The expressions “balance table” or “Table 1” refer to a type of table which is often printed in the opening pages of a scientific peer-reviewed article. Typically, this table includes basic descriptive statistics about different subsets of the study population. For instance, analysts may want to compare the socio-demographic characteristics of members of the “control” and “treatment” groups in a randomized control trial, or the flipper lengths of male and female penguins. In addition, balance tables often include difference in means tests.</p>
+<p>To illustrate how to build a balance table using the <code>datasummary_balance</code> function, we download data about a job training experiment studies in Lalonde (1986). Then, we clean up the data by renaming and recoding a few variables.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Download and read data</span>
+<span class="va">training</span> <span class="op">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv'</span>
+<span class="va">training</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">training</span><span class="op">)</span>
+
+<span class="co"># Rename and recode variables</span>
+<span class="va">training</span> <span class="op">&lt;-</span> <span class="va">training</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>`Earnings Before` <span class="op">=</span> <span class="va">re75</span> <span class="op">/</span> <span class="fl">1000</span>,
+                   `Earnings After` <span class="op">=</span> <span class="va">re78</span> <span class="op">/</span> <span class="fl">1000</span>,
+                   Treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">treat</span> <span class="op">==</span> <span class="cn">TRUE</span>, <span class="st">'Treatment'</span>, <span class="st">'Control'</span><span class="op">)</span>,
+                   Married <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">married</span> <span class="op">==</span> <span class="cn">TRUE</span>, <span class="st">'Yes'</span>, <span class="st">'No'</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">`Earnings Before`</span>,
+                   <span class="va">`Earnings After`</span>,
+                   <span class="va">Treatment</span>,
+                   Ethnicity <span class="op">=</span> <span class="va">ethn</span>,
+                   Age <span class="op">=</span> <span class="va">age</span>,
+                   Education <span class="op">=</span> <span class="va">educ</span>,
+                   <span class="va">Married</span><span class="op">)</span></code></pre></div>
+<p>Now, we execute the <code>datasummary_balance</code> function. If the <code>estimatr</code> package is installed, <code>datasummary_balance</code> will calculate the difference in means and test statistics.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">caption</span> <span class="op">&lt;-</span> <span class="st">'Descriptive statistics about participants in a job training experiment. The earnings are displayed in 1000s of USD. This table was created using the "datasummary" function from the "modelsummary" package for R.'</span>
+<span class="va">reference</span> <span class="op">&lt;-</span> <span class="st">'Source: Lalonde (1986) American Economic Review.'</span>
+
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/" class="external-link">modelsummary</a></span><span class="op">)</span>
+<span class="fu"><a href="../reference/datasummary_balance.html">datasummary_balance</a></span><span class="op">(</span><span class="op">~</span><span class="va">Treatment</span>,
+                    data <span class="op">=</span> <span class="va">training</span>,
+                    title <span class="op">=</span> <span class="va">caption</span>,
+                    notes <span class="op">=</span> <span class="va">reference</span><span class="op">)</span></code></pre></div>
+<table style="NAborder-bottom: 0; width: auto !important; margin-left: auto; margin-right: auto;" class="table table">
+<caption>
+Descriptive statistics about participants in a job training experiment. Earnings are displayed in 1000s of USD. This table was created using the datasummary function from the modelsummary package for R.
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="2">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Control (N=2490)
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Treatment (N=185)
+</div>
+</th>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="2">
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+Std. Dev.
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+Std. Dev.
+</th>
+<th style="text-align:right;">
+Diff. in Means
+</th>
+<th style="text-align:right;">
+Std. Error
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;color: green !important;">
+Earnings Before
+</td>
+<td style="text-align:left;color: green !important;">
+</td>
+<td style="text-align:right;color: green !important;">
+19.1
+</td>
+<td style="text-align:right;color: green !important;">
+13.6
+</td>
+<td style="text-align:right;color: green !important;">
+1.5
+</td>
+<td style="text-align:right;color: green !important;">
+3.2
+</td>
+<td style="text-align:right;color: green !important;">
+-17.5
+</td>
+<td style="text-align:right;color: green !important;">
+0.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;color: red !important;">
+Earnings After
+</td>
+<td style="text-align:left;color: red !important;">
+</td>
+<td style="text-align:right;color: red !important;">
+21.6
+</td>
+<td style="text-align:right;color: red !important;">
+15.6
+</td>
+<td style="text-align:right;color: red !important;">
+6.3
+</td>
+<td style="text-align:right;color: red !important;">
+7.9
+</td>
+<td style="text-align:right;color: red !important;">
+-15.2
+</td>
+<td style="text-align:right;color: red !important;">
+0.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Age
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+34.9
+</td>
+<td style="text-align:right;">
+10.4
+</td>
+<td style="text-align:right;">
+25.8
+</td>
+<td style="text-align:right;">
+7.2
+</td>
+<td style="text-align:right;">
+-9.0
+</td>
+<td style="text-align:right;">
+0.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;box-shadow: 0px 1px">
+Education
+</td>
+<td style="text-align:left;box-shadow: 0px 1px">
+</td>
+<td style="text-align:right;box-shadow: 0px 1px">
+12.1
+</td>
+<td style="text-align:right;box-shadow: 0px 1px">
+3.1
+</td>
+<td style="text-align:right;box-shadow: 0px 1px">
+10.3
+</td>
+<td style="text-align:right;box-shadow: 0px 1px">
+2.0
+</td>
+<td style="text-align:right;box-shadow: 0px 1px">
+-1.8
+</td>
+<td style="text-align:right;box-shadow: 0px 1px">
+0.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:left;font-weight: bold;">
+</td>
+<td style="text-align:right;font-weight: bold;">
+N
+</td>
+<td style="text-align:right;font-weight: bold;">
+Pct.
+</td>
+<td style="text-align:right;font-weight: bold;">
+N
+</td>
+<td style="text-align:right;font-weight: bold;">
+Pct.
+</td>
+<td style="text-align:right;font-weight: bold;">
+</td>
+<td style="text-align:right;font-weight: bold;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ethnicity
+</td>
+<td style="text-align:left;">
+black
+</td>
+<td style="text-align:right;">
+624
+</td>
+<td style="text-align:right;">
+25.1
+</td>
+<td style="text-align:right;">
+156
+</td>
+<td style="text-align:right;">
+84.3
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hispanic
+</td>
+<td style="text-align:right;">
+81
+</td>
+<td style="text-align:right;">
+3.3
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+5.9
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+other
+</td>
+<td style="text-align:right;">
+1785
+</td>
+<td style="text-align:right;">
+71.7
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+9.7
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Married
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:right;">
+333
+</td>
+<td style="text-align:right;">
+13.4
+</td>
+<td style="text-align:right;">
+150
+</td>
+<td style="text-align:right;">
+81.1
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+2157
+</td>
+<td style="text-align:right;">
+86.6
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+18.9
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+</tbody>
+<tfoot><tr>
+<td style="padding: 0; " colspan="100%">
+<sup></sup> Source: Lalonde (1986) American Economic Review.
+</td>
+</tr></tfoot>
+</table>
+<p>Note that if the dataset includes columns called “blocks”, “clusters”, or “weights”, this information will automatically be taken into consideration by <code>estimatr</code> when calculating the difference in means and the associated statistics.</p>
+<p>Users can also use the <code>~ 1</code> formula to indicate that they want to summarize all the data instead of splitting the analysis across subgroups:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/datasummary_balance.html">datasummary_balance</a></span><span class="op">(</span><span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">training</span><span class="op">)</span></code></pre></div>
+<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+Std. Dev.
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Earnings Before
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+17.9
+</td>
+<td style="text-align:right;">
+13.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Earnings After
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+20.5
+</td>
+<td style="text-align:right;">
+15.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Age
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+34.2
+</td>
+<td style="text-align:right;">
+10.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;box-shadow: 0px 1px">
+Education
+</td>
+<td style="text-align:left;box-shadow: 0px 1px">
+</td>
+<td style="text-align:right;box-shadow: 0px 1px">
+12.0
+</td>
+<td style="text-align:right;box-shadow: 0px 1px">
+3.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+N
+</td>
+<td style="text-align:right;">
+Pct.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Treatment
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:right;">
+2490
+</td>
+<td style="text-align:right;">
+93.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Treatment
+</td>
+<td style="text-align:right;">
+185
+</td>
+<td style="text-align:right;">
+6.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ethnicity
+</td>
+<td style="text-align:left;">
+black
+</td>
+<td style="text-align:right;">
+780
+</td>
+<td style="text-align:right;">
+29.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hispanic
+</td>
+<td style="text-align:right;">
+92
+</td>
+<td style="text-align:right;">
+3.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+other
+</td>
+<td style="text-align:right;">
+1803
+</td>
+<td style="text-align:right;">
+67.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Married
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:right;">
+483
+</td>
+<td style="text-align:right;">
+18.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+2192
+</td>
+<td style="text-align:right;">
+81.9
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level2">
 <h2 id="datasummary_correlation">
 <code>datasummary_correlation</code><a class="anchor" aria-label="anchor" href="#datasummary_correlation"></a>
 </h2>
 <p>The <code>datasummary_correlation</code> accepts a dataframe or tibble, it identifies all the numeric variables, and calculates the correlation between each of those variables:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary_correlation.html">datasummary_correlation</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -763,340 +1270,11 @@ carb
 <p>The values displayed in this table are equivalent to those obtained by calling: <code>cor(x, use='pairwise.complete.obs')</code>.</p>
 </div>
 <div class="section level2">
-<h2 id="datasummary_balance">
-<code>datasummary_balance</code><a class="anchor" aria-label="anchor" href="#datasummary_balance"></a>
-</h2>
-<p>The expressions “balance table” or “Table 1” refer to a type of table which is often printed in the opening pages of a scientific peer-reviewed article. Typically, this table includes basic descriptive statistics about different subsets of the study population. For instance, analysts may want to compare the socio-demographic characteristics of members of the “control” and “treatment” groups in a randomized control trial, or the flipper lengths of male and female penguins. In addition, balance tables often include difference in means tests.</p>
-<p>To illustrate how to build a balance table using the <code>datasummary_balance</code> function, we download data about a job training experiment studies in Lalonde (1986). Then, we clean up the data by renaming and recoding a few variables.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Download and read data</span>
-<span class="va">training</span> <span class="op">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv'</span>
-<span class="va">training</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">training</span><span class="op">)</span>
-
-<span class="co"># Rename and recode variables</span>
-<span class="va">training</span> <span class="op">&lt;-</span> <span class="va">training</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>`Earnings Before` <span class="op">=</span> <span class="va">re75</span> <span class="op">/</span> <span class="fl">1000</span>,
-                   `Earnings After` <span class="op">=</span> <span class="va">re78</span> <span class="op">/</span> <span class="fl">1000</span>,
-                   Treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">treat</span> <span class="op">==</span> <span class="cn">TRUE</span>, <span class="st">'Treatment'</span>, <span class="st">'Control'</span><span class="op">)</span>,
-                   Married <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">married</span> <span class="op">==</span> <span class="cn">TRUE</span>, <span class="st">'Yes'</span>, <span class="st">'No'</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-            <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">`Earnings Before`</span>,
-                   <span class="va">`Earnings After`</span>,
-                   <span class="va">Treatment</span>,
-                   Ethnicity <span class="op">=</span> <span class="va">ethn</span>,
-                   Age <span class="op">=</span> <span class="va">age</span>,
-                   Education <span class="op">=</span> <span class="va">educ</span>,
-                   <span class="va">Married</span><span class="op">)</span></code></pre></div>
-<p>Now, we execute the <code>datasummary_balance</code> function. If the <code>estimatr</code> package is installed, <code>datasummary_balance</code> will calculate the difference in means and test statistics.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">caption</span> <span class="op">&lt;-</span> <span class="st">'Descriptive statistics about participants in a job training experiment. The earnings are displayed in 1000s of USD. This table was created using the "datasummary" function from the "modelsummary" package for R.'</span>
-<span class="va">reference</span> <span class="op">&lt;-</span> <span class="st">'Source: Lalonde (1986) American Economic Review.'</span>
-
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/" class="external-link">modelsummary</a></span><span class="op">)</span>
-<span class="fu"><a href="../reference/datasummary_balance.html">datasummary_balance</a></span><span class="op">(</span><span class="op">~</span><span class="va">Treatment</span>,
-                    data <span class="op">=</span> <span class="va">training</span>,
-                    title <span class="op">=</span> <span class="va">caption</span>,
-                    notes <span class="op">=</span> <span class="va">reference</span><span class="op">)</span></code></pre></div>
-<table style="NAborder-bottom: 0; width: auto !important; margin-left: auto; margin-right: auto;" class="table table">
-<caption>
-Descriptive statistics about participants in a job training experiment. Earnings are displayed in 1000s of USD. This table was created using the datasummary function from the modelsummary package for R.
-</caption>
-<thead>
-<tr>
-<th style="empty-cells: hide;border-bottom:hidden;" colspan="2">
-</th>
-<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
-<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-Control (N=2490)
-</div>
-</th>
-<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
-<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-Treatment (N=185)
-</div>
-</th>
-<th style="empty-cells: hide;border-bottom:hidden;" colspan="2">
-</th>
-</tr>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
-Mean
-</th>
-<th style="text-align:right;">
-Std. Dev.
-</th>
-<th style="text-align:right;">
-Mean
-</th>
-<th style="text-align:right;">
-Std. Dev.
-</th>
-<th style="text-align:right;">
-Diff. in Means
-</th>
-<th style="text-align:right;">
-Std. Error
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;color: green !important;">
-Earnings Before
-</td>
-<td style="text-align:left;color: green !important;">
-</td>
-<td style="text-align:right;color: green !important;">
-19.1
-</td>
-<td style="text-align:right;color: green !important;">
-13.6
-</td>
-<td style="text-align:right;color: green !important;">
-1.5
-</td>
-<td style="text-align:right;color: green !important;">
-3.2
-</td>
-<td style="text-align:right;color: green !important;">
--17.5
-</td>
-<td style="text-align:right;color: green !important;">
-0.4
-</td>
-</tr>
-<tr>
-<td style="text-align:left;color: red !important;">
-Earnings After
-</td>
-<td style="text-align:left;color: red !important;">
-</td>
-<td style="text-align:right;color: red !important;">
-21.6
-</td>
-<td style="text-align:right;color: red !important;">
-15.6
-</td>
-<td style="text-align:right;color: red !important;">
-6.3
-</td>
-<td style="text-align:right;color: red !important;">
-7.9
-</td>
-<td style="text-align:right;color: red !important;">
--15.2
-</td>
-<td style="text-align:right;color: red !important;">
-0.7
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Age
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:right;">
-34.9
-</td>
-<td style="text-align:right;">
-10.4
-</td>
-<td style="text-align:right;">
-25.8
-</td>
-<td style="text-align:right;">
-7.2
-</td>
-<td style="text-align:right;">
--9.0
-</td>
-<td style="text-align:right;">
-0.6
-</td>
-</tr>
-<tr>
-<td style="text-align:left;box-shadow: 0px 1px">
-Education
-</td>
-<td style="text-align:left;box-shadow: 0px 1px">
-</td>
-<td style="text-align:right;box-shadow: 0px 1px">
-12.1
-</td>
-<td style="text-align:right;box-shadow: 0px 1px">
-3.1
-</td>
-<td style="text-align:right;box-shadow: 0px 1px">
-10.3
-</td>
-<td style="text-align:right;box-shadow: 0px 1px">
-2.0
-</td>
-<td style="text-align:right;box-shadow: 0px 1px">
--1.8
-</td>
-<td style="text-align:right;box-shadow: 0px 1px">
-0.2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;">
-</td>
-<td style="text-align:left;font-weight: bold;">
-</td>
-<td style="text-align:right;font-weight: bold;">
-N
-</td>
-<td style="text-align:right;font-weight: bold;">
-Pct.
-</td>
-<td style="text-align:right;font-weight: bold;">
-N
-</td>
-<td style="text-align:right;font-weight: bold;">
-Pct.
-</td>
-<td style="text-align:right;font-weight: bold;">
-</td>
-<td style="text-align:right;font-weight: bold;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Ethnicity
-</td>
-<td style="text-align:left;">
-black
-</td>
-<td style="text-align:right;">
-624
-</td>
-<td style="text-align:right;">
-25.1
-</td>
-<td style="text-align:right;">
-156
-</td>
-<td style="text-align:right;">
-84.3
-</td>
-<td style="text-align:right;">
-</td>
-<td style="text-align:right;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-hispanic
-</td>
-<td style="text-align:right;">
-81
-</td>
-<td style="text-align:right;">
-3.3
-</td>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
-5.9
-</td>
-<td style="text-align:right;">
-</td>
-<td style="text-align:right;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-other
-</td>
-<td style="text-align:right;">
-1785
-</td>
-<td style="text-align:right;">
-71.7
-</td>
-<td style="text-align:right;">
-18
-</td>
-<td style="text-align:right;">
-9.7
-</td>
-<td style="text-align:right;">
-</td>
-<td style="text-align:right;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Married
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:right;">
-333
-</td>
-<td style="text-align:right;">
-13.4
-</td>
-<td style="text-align:right;">
-150
-</td>
-<td style="text-align:right;">
-81.1
-</td>
-<td style="text-align:right;">
-</td>
-<td style="text-align:right;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:right;">
-2157
-</td>
-<td style="text-align:right;">
-86.6
-</td>
-<td style="text-align:right;">
-35
-</td>
-<td style="text-align:right;">
-18.9
-</td>
-<td style="text-align:right;">
-</td>
-<td style="text-align:right;">
-</td>
-</tr>
-</tbody>
-<tfoot><tr>
-<td style="padding: 0; " colspan="100%">
-<sup></sup> Source: Lalonde (1986) American Economic Review.
-</td>
-</tr></tfoot>
-</table>
-<p>Note that if the dataset includes columns called “blocks”, “clusters”, or “weights”, this information will automatically be taken into consideration by <code>estimatr</code> when calculating the difference in means and the associated statistics.</p>
-</div>
-<div class="section level2">
 <h2 id="datasummary_crosstab">
 <code>datasummary_crosstab</code><a class="anchor" aria-label="anchor" href="#datasummary_crosstab"></a>
 </h2>
 <p>A cross tabulation is often useful to explore the association between two categorical variables.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/" class="external-link">modelsummary</a></span><span class="op">)</span>
 <span class="va">url</span> <span class="op">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv'</span>
 <span class="va">penguins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
@@ -1282,7 +1460,7 @@ N
 </tbody>
 </table>
 <p>You can create multi-level crosstabs by specifying interactions using the <code>*</code> operator:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary_crosstab.html">datasummary_crosstab</a></span><span class="op">(</span><span class="va">species</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">island</span>, data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -1649,7 +1827,7 @@ N
 </tbody>
 </table>
 <p>By default, the cell counts and row percentages are shown for each cell, and both row and column totals are calculated. To show cell percentages or column percentages, or to drop row and column totals, adjust the <code>statistic</code> argument. This argument accepts a formula that follows the <code>datasummary</code> “language”. To understand exactly how it works, you may find it useful to skip to the <code>datasummary</code> tutorial in the next section. Example:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary_crosstab.html">datasummary_crosstab</a></span><span class="op">(</span><span class="va">species</span> <span class="op">~</span> <span class="va">sex</span>,
                      statistic <span class="op">=</span> <span class="fl">1</span> <span class="op">~</span> <span class="fu"><a href="../reference/Percent.html">Percent</a></span><span class="op">(</span><span class="st">"col"</span><span class="op">)</span>,
                      data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
@@ -1749,7 +1927,7 @@ All
 </h2>
 <p><code>datasummary</code> tables are specified using a 2-sided formula, divided by a tilde <code>~</code>. The left-hand side describes the rows; the right-hand side describes the columns. To illustrate how this works, we will again be using the <a href="https://allisonhorst.github.io/palmerpenguins/" class="external-link"><code>palmerpenguins dataset</code></a>:</p>
 <p>To display the <code>flipper_length_mm</code> variable as a row and the <code>mean</code> as a column, we type:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">~</span> <span class="va">Mean</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -1770,7 +1948,7 @@ flipper_length_mm
 </tr></tbody>
 </table>
 <p>To flip rows and columns, we flip the left and right-hand sides of the formula:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">Mean</span> <span class="op">~</span> <span class="va">flipper_length_mm</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -1794,7 +1972,7 @@ Mean
 <h3 id="custom-summary-functions">Custom summary functions<a class="anchor" aria-label="anchor" href="#custom-summary-functions"></a>
 </h3>
 <p>The <code>Mean</code> function is a shortcut supplied by <code>modelsummary</code>, and it is equivalent to <code>mean(x,na.rm=TRUE)</code>. Since the <code>flipper_length_mm</code> variable includes missing observation, using the <code>mean</code> formula (with default <code>na.rm=FALSE</code>) would produce a missing/empty cell:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">~</span> <span class="va">mean</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -1815,7 +1993,7 @@ flipper_length_mm
 </table>
 <p><code>modelsummary</code> supplies these functions: <code>Mean</code>, <code>SD</code>, <code>Min</code>, <code>Max</code>, <code>Median</code>, <code>P0</code>, <code>P25</code>, <code>P50</code>, <code>P75</code>, <code>P100</code>, <code>Histogram</code>, and a few more (see the package documentation).</p>
 <p>Users are also free to create and use their own custom summaries. Any <code>R</code> function which takes a vector and produces a single value is acceptable. For example, the <code>Range</code> functions return a numerical value, and the <code>MinMax</code> returns a string:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Range</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">~</span> <span class="va">Range</span>,
@@ -1837,7 +2015,7 @@ flipper_length_mm
 </td>
 </tr></tbody>
 </table>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">MinMax</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'['</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="st">', '</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="st">']'</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">~</span> <span class="va">MinMax</span>,
@@ -1864,7 +2042,7 @@ flipper_length_mm
 <h3 id="concatenating-with">Concatenating with <code>+</code><a class="anchor" aria-label="anchor" href="#concatenating-with"></a>
 </h3>
 <p>To include more rows and columns, we use the <code>+</code> sign:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">+</span> <span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -1904,7 +2082,7 @@ body_mass_g
 </tbody>
 </table>
 <p>Sometimes, it can be cumbersome to list all variables separated by <code>+</code> signs. The <code><a href="../reference/All.html">All()</a></code> function is a useful shortcut:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="fu"><a href="../reference/All.html">All</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -1993,7 +2171,7 @@ year
 <h3 id="nesting-with">Nesting with <code>*</code><a class="anchor" aria-label="anchor" href="#nesting-with"></a>
 </h3>
 <p><code>datasummary</code> can nest variables and statistics inside categorical variables using the <code>*</code> symbol. When applying the the <code>*</code> operator to factor, character, or logical variables, columns or rows will automatically be nested. For instance, if we want to display separate means for each value of the variable <code>sex</code>, we use <code>mean * sex</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">+</span> <span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">mean</span> <span class="op">*</span> <span class="va">sex</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -2033,7 +2211,7 @@ body_mass_g
 </tbody>
 </table>
 <p>We can use parentheses to nest several terms inside one another, using a call of this form: <code>x * (y + z)</code>. Here is an example with nested columns:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">*</span> <span class="op">(</span><span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span><span class="op">)</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -2088,7 +2266,7 @@ body_mass_g
 </tr></tbody>
 </table>
 <p>Here is an example with nested rows:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">*</span> <span class="op">(</span><span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">flipper_length_mm</span><span class="op">)</span> <span class="op">~</span> <span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -2163,7 +2341,7 @@ flipper_length_mm
 </tbody>
 </table>
 <p>The order in which terms enter the formula determines the order in which labels are displayed. For example, this shows <code>island</code> above <code>sex</code>:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">+</span> <span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">mean</span> <span class="op">*</span> <span class="va">island</span> <span class="op">*</span> <span class="va">sex</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -2260,7 +2438,7 @@ body_mass_g
 </tbody>
 </table>
 <p>This shows <code>sex</code> above <code>island</code> values:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">+</span> <span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">mean</span> <span class="op">*</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">island</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -2352,7 +2530,7 @@ body_mass_g
 </tbody>
 </table>
 <p>By default, <code>datasummary</code> omits column headers with a single value/label across all columns, except for the header that sits just above the data. If the header we want to see is not displayed, we may want to reorder the terms of the formula. To show all headers, set <code>sparse_header=FALSE</code>:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">+</span> <span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">mean</span> <span class="op">*</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">island</span>,
             data <span class="op">=</span> <span class="va">penguins</span>,
             sparse_header <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
@@ -2477,7 +2655,7 @@ body_mass_g
 <h3 id="renaming-with">Renaming with <code>=</code><a class="anchor" aria-label="anchor" href="#renaming-with"></a>
 </h3>
 <p>Personally, I prefer to rename variables and values <em>before</em> drawing my tables, using backticks when variable names include whitespace. For example,</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="va">penguins</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span>`Flipper length (mm)` <span class="op">=</span> <span class="va">flipper_length_mm</span>,
               `Body mass (g)` <span class="op">=</span> <span class="va">body_mass_g</span><span class="op">)</span>
@@ -2521,7 +2699,7 @@ Body mass (g)
 </tbody>
 </table>
 <p>However, thanks to the <code>tables</code> package, <code>datasummary</code> offers two additional mechanisms to rename. First, we can wrap a term in parentheses and use the equal <code>=</code> sign: <code>(NewName=OldName)</code>:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="op">(</span><span class="va">`Flipper length (mm)`</span> <span class="op">=</span> <span class="va">flipper_length_mm</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">`Body mass (g)`</span> <span class="op">=</span> <span class="va">body_mass_g</span><span class="op">)</span> <span class="op">~</span>
             <span class="va">island</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="va">Avg.</span> <span class="op">=</span> <span class="va">Mean</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">Std.Dev.</span> <span class="op">=</span> <span class="va">SD</span><span class="op">)</span><span class="op">)</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
@@ -2619,7 +2797,7 @@ Body mass (g)
 </tbody>
 </table>
 <p>Second, we can use the <code><a href="../reference/Heading.html">Heading()</a></code> function:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="fu"><a href="../reference/Heading.html">Heading</a></span><span class="op">(</span><span class="st">"Flipper length (mm)"</span><span class="op">)</span> <span class="op">*</span> <span class="va">flipper_length_mm</span> <span class="op">+</span> <span class="fu"><a href="../reference/Heading.html">Heading</a></span><span class="op">(</span><span class="st">"Body mass (g)"</span><span class="op">)</span> <span class="op">*</span> <span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">island</span> <span class="op">*</span> <span class="op">(</span><span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span><span class="op">)</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -2716,7 +2894,7 @@ Body mass (g)
 </tbody>
 </table>
 <p>The <code>Heading</code> function also has a <code>nearData</code> argument which can be useful in cases where some rows are nested but others are not. Compare the last row of these two tables:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">*</span> <span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">+</span> <span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/Heading.html">Heading</a></span><span class="op">(</span><span class="st">"Body mass (g)"</span><span class="op">)</span> <span class="op">*</span> <span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -2803,7 +2981,7 @@ Body mass (g)
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">*</span> <span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">+</span> <span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/Heading.html">Heading</a></span><span class="op">(</span><span class="st">"Body mass (g)"</span>, nearData<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">*</span> <span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -2900,7 +3078,7 @@ Body mass (g)
 <li>Add <code><a href="../reference/Percent.html">Percent()</a></code> to the right-hand side to calculate the percentage of observations in each cell.</li>
 <li>Add <code>1</code> to the left-hand side to include a row with the total number of observations:</li>
 </ol>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">species</span> <span class="op">*</span> <span class="va">sex</span> <span class="op">+</span> <span class="fl">1</span> <span class="op">~</span> <span class="va">N</span> <span class="op">+</span> <span class="fu"><a href="../reference/Percent.html">Percent</a></span><span class="op">(</span><span class="op">)</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -3022,7 +3200,7 @@ All
 <code>Factor</code><a class="anchor" aria-label="anchor" href="#factor"></a>
 </h3>
 <p>The <code>*</code> nesting operator that we used above works automatically for factor, character, and logical variables. Sometimes, it is convenient to use it with other types of variables, such as binary numeric variables. In that case, we can wrap the variable name inside a call to <code><a href="../reference/Factor.html">Factor()</a></code>. This allows us to treat a variable as factor, without having to modify it in the original data. For example, in the <code>mtcars</code> data, there is a binary numeric variable call <code>am</code>. We nest statistics within categories of <code>am</code> by typing:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">~</span> <span class="fu"><a href="../reference/Factor.html">Factor</a></span><span class="op">(</span><span class="va">am</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span><span class="op">)</span>,
             data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -3101,7 +3279,7 @@ hp
 <code>Arguments</code>: <code>na.rm=TRUE</code><a class="anchor" aria-label="anchor" href="#arguments-na-rmtrue"></a>
 </h3>
 <p>We can pass any argument to the summary function by including a call to <code><a href="../reference/Arguments.html">Arguments()</a></code>. For instance, there are missing values in the <code>flipper_length_mm</code> variable of the <code>penguins</code> dataset. Therefore, the standard <code>mean</code> function will produce no result, because its default argument is <code>na.rm=FALSE</code>. We can change that by calling:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">~</span> <span class="va">mean</span> <span class="op">+</span> <span class="va">mean</span><span class="op">*</span><span class="fu"><a href="../reference/Arguments.html">Arguments</a></span><span class="op">(</span>na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -3128,7 +3306,7 @@ flipper_length_mm
 </table>
 <p>Notice that there is an empty cell (<code>NA</code>) under the normal <code>mean</code> function, but that the <code>mean</code> call with <code>Arguments(na.rm=TRUE)</code> produced a numeric result.</p>
 <p>We can pass the same arguments to multiple functions using the parentheses:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">~</span> <span class="op">(</span><span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="../reference/Arguments.html">Arguments</a></span><span class="op">(</span>na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -3155,7 +3333,7 @@ flipper_length_mm
 </tr></tbody>
 </table>
 <p>Note that the shortcut functions that <code>modelsummary</code> supplies use <code>na.rm=TRUE</code> by default, so we can use them directly without arguments, even when there are missing values:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">Var</span> <span class="op">+</span> <span class="va">P75</span> <span class="op">+</span> <span class="va">Range</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -3199,7 +3377,7 @@ flipper_length_mm
 <code>Arguments</code>: Weighted Mean<a class="anchor" aria-label="anchor" href="#arguments-weighted-mean"></a>
 </h3>
 <p>You can use the <code>Arguments</code> mechanism to do various things, such as calculating weighted means:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">newdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
   x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>,
   w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>,
@@ -3215,34 +3393,34 @@ flipper_length_mm
 <tbody>
 <tr class="odd">
 <td align="left">x</td>
-<td align="right">1.61</td>
+<td align="right">-0.24</td>
 </tr>
 <tr class="even">
 <td align="left">y</td>
-<td align="right">-6.92</td>
+<td align="right">-1.79</td>
 </tr>
 </tbody>
 </table>
 <p>Which produces the same results as:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/weighted.mean.html" class="external-link">weighted.mean</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">$</span><span class="va">x</span>, <span class="va">newdata</span><span class="op">$</span><span class="va">w</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] 1.605051</span></code></pre>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<pre><code><span class="co">## [1] -0.2449205</span></code></pre>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/weighted.mean.html" class="external-link">weighted.mean</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">$</span><span class="va">y</span>, <span class="va">newdata</span><span class="op">$</span><span class="va">w</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] -6.918505</span></code></pre>
+<pre><code><span class="co">## [1] -1.790814</span></code></pre>
 <p>But different results from:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">$</span><span class="va">x</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] -0.2573541</span></code></pre>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<pre><code><span class="co">## [1] 0.03735218</span></code></pre>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">$</span><span class="va">y</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] 0.1880665</span></code></pre>
+<pre><code><span class="co">## [1] 0.2583848</span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="empty-cells">Empty cells<a class="anchor" aria-label="anchor" href="#empty-cells"></a>
 </h3>
 <p>Sometimes, if we nest too much and the dataset is not large/diverse enough, we end up with empty cells. In that case, we add <code>*DropEmpty()</code> to the formula:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">island</span> <span class="op">*</span> <span class="va">species</span> <span class="op">*</span> <span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">*</span> <span class="op">(</span><span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span><span class="op">)</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -3472,7 +3650,7 @@ body_mass_g
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">island</span> <span class="op">*</span> <span class="va">species</span> <span class="op">*</span> <span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">*</span> <span class="op">(</span><span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="../reference/DropEmpty.html">DropEmpty</a></span><span class="op">(</span><span class="op">)</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -3635,7 +3813,7 @@ body_mass_g
 <h3 id="logical-subsets">Logical subsets<a class="anchor" aria-label="anchor" href="#logical-subsets"></a>
 </h3>
 <p>Cool stuff is possible with logical subsets:</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">&gt;</span> <span class="fl">44.5</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">bill_length_mm</span> <span class="op">&lt;=</span> <span class="fl">44.5</span><span class="op">)</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">*</span> <span class="va">flipper_length_mm</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -3672,7 +3850,7 @@ bill_length_mm &lt;= 44.5
 <h2 id="output">output<a class="anchor" aria-label="anchor" href="#output"></a>
 </h2>
 <p>All functions in the <code>datasummary_*</code> family accept the same <code>output</code> argument. Tables can be saved to several file formats:</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">f</span> <span class="op">&lt;-</span> <span class="va">flipper_length_mm</span> <span class="op">~</span> <span class="va">island</span> <span class="op">*</span> <span class="op">(</span><span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span><span class="op">)</span>
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">penguins</span>, output <span class="op">=</span> <span class="st">'table.html'</span><span class="op">)</span>
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">penguins</span>, output <span class="op">=</span> <span class="st">'table.tex'</span><span class="op">)</span>
@@ -3683,13 +3861,13 @@ bill_length_mm &lt;= 44.5
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">penguins</span>, output <span class="op">=</span> <span class="st">'table.jpg'</span><span class="op">)</span>
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">penguins</span>, output <span class="op">=</span> <span class="st">'table.png'</span><span class="op">)</span></code></pre></div>
 <p>They can be returned in human-readable data.frames, markdown, html, or LaTeX code to the console:</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">penguins</span>, output <span class="op">=</span> <span class="st">'data.frame'</span><span class="op">)</span>
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">penguins</span>, output <span class="op">=</span> <span class="st">'markdown'</span><span class="op">)</span>
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">penguins</span>, output <span class="op">=</span> <span class="st">'html'</span><span class="op">)</span>
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">penguins</span>, output <span class="op">=</span> <span class="st">'latex'</span><span class="op">)</span></code></pre></div>
 <p><code>datasummary</code> can return objects compatible with the <code>gt</code>, <code>kableExtra</code>, <code>flextable</code>, and <code>huxtable</code> table creation and customization packages:</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">penguins</span>, output <span class="op">=</span> <span class="st">'gt'</span><span class="op">)</span>
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">penguins</span>, output <span class="op">=</span> <span class="st">'kableExtra'</span><span class="op">)</span>
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">penguins</span>, output <span class="op">=</span> <span class="st">'flextable'</span><span class="op">)</span>
@@ -3700,7 +3878,7 @@ bill_length_mm &lt;= 44.5
 <h2 id="fmt">fmt<a class="anchor" aria-label="anchor" href="#fmt"></a>
 </h2>
 <p>The <code>fmt</code> argument allows us to set the printing format of numeric values. It accepts a single number representing the number of digits after the period, or a string to be passed to the <code>sprintf</code> function. For instance, setting <code>fmt="%.4f"</code> will keep 4 digits after the dot (see <code><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">?sprintf</a></code> for more options):</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span>,
             fmt <span class="op">=</span> <span class="fl">4</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
@@ -3728,7 +3906,7 @@ flipper_length_mm
 </tr></tbody>
 </table>
 <p>We can set the formatting on a term-by-term basis by using the same <code>Arguments</code> function that we used to handle missing values in the previous section. The shortcut functions that ship with <code>modelsummary</code> (e.g., <code>Mean</code>, <code>SD</code>, <code>Median</code>, <code>P25</code>) all include a <code>fmt</code> argument:</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">*</span> <span class="fu"><a href="../reference/Arguments.html">Arguments</a></span><span class="op">(</span>fmt <span class="op">=</span> <span class="st">"%.4f"</span><span class="op">)</span> <span class="op">+</span> <span class="va">SD</span> <span class="op">*</span> <span class="fu"><a href="../reference/Arguments.html">Arguments</a></span><span class="op">(</span>fmt <span class="op">=</span> <span class="st">"%.1f"</span><span class="op">)</span>,
             data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -3755,7 +3933,7 @@ flipper_length_mm
 </tr></tbody>
 </table>
 <p>If we do <em>not</em> want <code>datasummary</code> to format numbers, and we want to keep the numerical values instead of formatted strings, set <code>fmt=NULL</code>. This can be useful when post-processing tables with packages like <code>gt</code>, which allow us to transform cells based on their numerical content (this <code>gt</code> table will be omitted from PDF output):</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com/" class="external-link">gt</a></span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="fu"><a href="../reference/All.html">All</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span>,
@@ -3764,12 +3942,12 @@ flipper_length_mm
             output <span class="op">=</span> <span class="st">'gt'</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html" class="external-link">%&gt;%</a></span>
     <span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html" class="external-link">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cell_fill.html" class="external-link">cell_fill</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"pink"</span><span class="op">)</span>,
               locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html" class="external-link">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="va">Mean</span> <span class="op">&gt;</span> <span class="fl">10</span>, columns <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div id="wgvrenqjbc" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="afsnbatedj" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#wgvrenqjbc .gt_table {
+#afsnbatedj .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -3794,7 +3972,7 @@ flipper_length_mm
   border-left-color: #D3D3D3;
 }
 
-#wgvrenqjbc .gt_heading {
+#afsnbatedj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3806,7 +3984,7 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#wgvrenqjbc .gt_title {
+#afsnbatedj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3816,7 +3994,7 @@ flipper_length_mm
   border-bottom-width: 0;
 }
 
-#wgvrenqjbc .gt_subtitle {
+#afsnbatedj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3826,13 +4004,13 @@ flipper_length_mm
   border-top-width: 0;
 }
 
-#wgvrenqjbc .gt_bottom_border {
+#afsnbatedj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#wgvrenqjbc .gt_col_headings {
+#afsnbatedj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3847,7 +4025,7 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#wgvrenqjbc .gt_col_heading {
+#afsnbatedj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3867,7 +4045,7 @@ flipper_length_mm
   overflow-x: hidden;
 }
 
-#wgvrenqjbc .gt_column_spanner_outer {
+#afsnbatedj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3879,15 +4057,15 @@ flipper_length_mm
   padding-right: 4px;
 }
 
-#wgvrenqjbc .gt_column_spanner_outer:first-child {
+#afsnbatedj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#wgvrenqjbc .gt_column_spanner_outer:last-child {
+#afsnbatedj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#wgvrenqjbc .gt_column_spanner {
+#afsnbatedj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3899,7 +4077,7 @@ flipper_length_mm
   width: 100%;
 }
 
-#wgvrenqjbc .gt_group_heading {
+#afsnbatedj .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3921,7 +4099,7 @@ flipper_length_mm
   vertical-align: middle;
 }
 
-#wgvrenqjbc .gt_empty_group_heading {
+#afsnbatedj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3936,15 +4114,15 @@ flipper_length_mm
   vertical-align: middle;
 }
 
-#wgvrenqjbc .gt_from_md > :first-child {
+#afsnbatedj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#wgvrenqjbc .gt_from_md > :last-child {
+#afsnbatedj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#wgvrenqjbc .gt_row {
+#afsnbatedj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3963,7 +4141,7 @@ flipper_length_mm
   overflow-x: hidden;
 }
 
-#wgvrenqjbc .gt_stub {
+#afsnbatedj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3975,7 +4153,7 @@ flipper_length_mm
   padding-left: 12px;
 }
 
-#wgvrenqjbc .gt_summary_row {
+#afsnbatedj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3985,7 +4163,7 @@ flipper_length_mm
   padding-right: 5px;
 }
 
-#wgvrenqjbc .gt_first_summary_row {
+#afsnbatedj .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3995,7 +4173,7 @@ flipper_length_mm
   border-top-color: #D3D3D3;
 }
 
-#wgvrenqjbc .gt_grand_summary_row {
+#afsnbatedj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4005,7 +4183,7 @@ flipper_length_mm
   padding-right: 5px;
 }
 
-#wgvrenqjbc .gt_first_grand_summary_row {
+#afsnbatedj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4015,11 +4193,11 @@ flipper_length_mm
   border-top-color: #D3D3D3;
 }
 
-#wgvrenqjbc .gt_striped {
+#afsnbatedj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#wgvrenqjbc .gt_table_body {
+#afsnbatedj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4028,7 +4206,7 @@ flipper_length_mm
   border-bottom-color: #D3D3D3;
 }
 
-#wgvrenqjbc .gt_footnotes {
+#afsnbatedj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4042,13 +4220,13 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#wgvrenqjbc .gt_footnote {
+#afsnbatedj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#wgvrenqjbc .gt_sourcenotes {
+#afsnbatedj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4062,41 +4240,41 @@ flipper_length_mm
   border-right-color: #D3D3D3;
 }
 
-#wgvrenqjbc .gt_sourcenote {
+#afsnbatedj .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#wgvrenqjbc .gt_left {
+#afsnbatedj .gt_left {
   text-align: left;
 }
 
-#wgvrenqjbc .gt_center {
+#afsnbatedj .gt_center {
   text-align: center;
 }
 
-#wgvrenqjbc .gt_right {
+#afsnbatedj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#wgvrenqjbc .gt_font_normal {
+#afsnbatedj .gt_font_normal {
   font-weight: normal;
 }
 
-#wgvrenqjbc .gt_font_bold {
+#afsnbatedj .gt_font_bold {
   font-weight: bold;
 }
 
-#wgvrenqjbc .gt_font_italic {
+#afsnbatedj .gt_font_italic {
   font-style: italic;
 }
 
-#wgvrenqjbc .gt_super {
+#afsnbatedj .gt_super {
   font-size: 65%;
 }
 
-#wgvrenqjbc .gt_footnote_marks {
+#afsnbatedj .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -4172,7 +4350,7 @@ flipper_length_mm
 <h2 id="title-notes">title, notes<a class="anchor" aria-label="anchor" href="#title-notes"></a>
 </h2>
 <p><code>datasummary</code> includes the same <code>title</code> and <code>notes</code> arguments as in <code>modelsummary</code>:</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="fu"><a href="../reference/All.html">All</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span>,
             data <span class="op">=</span> <span class="va">penguins</span>,
             title <span class="op">=</span> <span class="st">'Statistics about the famous Palmer Penguins.'</span>,
@@ -4270,7 +4448,7 @@ year
 <h2 id="align">align<a class="anchor" aria-label="anchor" href="#align"></a>
 </h2>
 <p>We can align columns using the <code>align</code> argument. <code>align</code> should be a string of length equal to the number of columns, and which includes only the letters “l”, “c”, or “r”:</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">+</span> <span class="va">bill_length_mm</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span> <span class="op">+</span> <span class="va">Range</span>,
             data <span class="op">=</span> <span class="va">penguins</span>,
             align <span class="op">=</span> <span class="st">'lrcl'</span><span class="op">)</span></code></pre></div>
@@ -4323,7 +4501,7 @@ bill_length_mm
 <div class="section level2">
 <h2 id="add_rows">add_rows<a class="anchor" aria-label="anchor" href="#add_rows"></a>
 </h2>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">new_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="st">'Does'</span>,
                        <span class="fl">2</span>,
                        <span class="st">'plus'</span>,
@@ -4454,7 +4632,7 @@ equals
 <div class="section level2">
 <h2 id="add_columns">add_columns<a class="anchor" aria-label="anchor" href="#add_columns"></a>
 </h2>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">new_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="st">'New Stat'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">flipper_length_mm</span> <span class="op">+</span> <span class="va">body_mass_g</span> <span class="op">~</span> <span class="va">species</span> <span class="op">*</span> <span class="op">(</span><span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span><span class="op">)</span>,
             data <span class="op">=</span> <span class="va">penguins</span>,
@@ -4509,7 +4687,7 @@ flipper_length_mm
 6.48
 </td>
 <td style="text-align:right;">
-0.24
+0.25
 </td>
 </tr>
 <tr>
@@ -4535,7 +4713,7 @@ body_mass_g
 504.12
 </td>
 <td style="text-align:right;">
-0.19
+0.90
 </td>
 </tr>
 </tbody>
@@ -4545,7 +4723,7 @@ body_mass_g
 <h2 id="histograms">Histograms<a class="anchor" aria-label="anchor" href="#histograms"></a>
 </h2>
 <p>The <code>datasummary</code> family of functions allow users to display in-line spark-style histograms to describe the distribution of the variables. For example, the <code>datasummary_skim</code> produces such a histogram:</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span><span class="op">)</span><span class="op">]</span>
 <span class="fu"><a href="../reference/datasummary_skim.html">datasummary_skim</a></span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -4660,7 +4838,7 @@ hp
 <li>Create the table with <code>datasummary</code>, making sure to include 2 “empty” columns. In the example, we use a simple function called <code>emptycol</code> to fill those columns with empty strings.</li>
 <li>Add the histograms or boxplots using functions from the <code>kableExtra</code> package.</li>
 </ol>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/" class="external-link">kableExtra</a></span><span class="op">)</span>
 
 <span class="va">tmp</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span><span class="op">)</span><span class="op">]</span>
@@ -4764,7 +4942,7 @@ hp
 </tbody>
 </table>
 <p>If you want a simpler solution, you can try the <code>Histogram</code> function which works in <code>datasummary</code> automatically and comes bundled with <code>modelsummary</code>. The downside of this function is that it uses Unicode characters to create the histogram. This kind of histogram may not display well with certain typefaces or on some operating systems (Windows!).</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span> <span class="op">+</span> <span class="va">Histogram</span>, data <span class="op">=</span> <span class="va">tmp</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -4836,7 +5014,7 @@ hp
 </h3>
 <p>By default, the <code>factor</code> function in <code>R</code> does <em>not</em> assign a distinct factor level to missing values: the <code>factor</code> function’s <code>exclude</code> argument is set to <code>NA</code> by default. To ensure that <code>NA</code>s appear in your table, make sure you set <code>exclude=NULL</code> when you create the factor.</p>
 <p>Internally, the <code>datasummary_balance</code> and <code>datasummary_crosstab</code> functions convert logical and character variables to factor with the <code>exclude=NULL</code> argument. This means that <code>NA</code>s will appear in the table as distinct rows/columns. If you do <em>not</em> want <code>NA</code>s to appear in your table, convert them to factors yourself ahead of time. For example:</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mycars</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cyl"</span>, <span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"vs"</span><span class="op">)</span><span class="op">]</span>
 <span class="va">mycars</span><span class="op">$</span><span class="va">cyl</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">8</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
 <span class="va">mycars</span><span class="op">$</span><span class="va">cyl_nona</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">mycars</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span>
@@ -4995,7 +5173,7 @@ N
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datasummary_crosstab.html">datasummary_crosstab</a></span><span class="op">(</span><span class="va">cyl_na</span> <span class="op">~</span> <span class="va">vs</span>, data <span class="op">=</span> <span class="va">mycars</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -5188,7 +5366,7 @@ N
 <h2 id="appearance">Appearance<a class="anchor" aria-label="anchor" href="#appearance"></a>
 </h2>
 <p>In the <a href="https://vincentarelbundock.github.io/modelsummary/articles/appearance.html" class="external-link">Appearance Vignette</a> we saw how to customize the tables produced by the <code>modelsummary</code> function. The same customization possibilities are also available for all functions in the <code>datasummary_*</code> family of functions. Indeed, we can customize the tables produced by <code>datasummary</code> using the functions provided by <code>gt</code>, <code>kableExtra</code>, <code>flextable</code>, and <code>huxtable</code>. For instance, to customize tables using <code>kableExtra</code>, we can do:</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/" class="external-link">kableExtra</a></span><span class="op">)</span>
 
 <span class="co"># Convert to `data.frame` to circumvent a `tibbles`-related bug in `All()`</span>
@@ -5338,7 +5516,7 @@ year
 </tbody>
 </table>
 <p>To customize a table using the <code>gt</code> package, we can:</p>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com/" class="external-link">gt</a></span><span class="op">)</span>
 
 <span class="va">adelie</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://gt.rstudio.com/reference/web_image.html" class="external-link">web_image</a></span><span class="op">(</span><span class="st">'https://user-images.githubusercontent.com/987057/85402702-20b1d280-b52a-11ea-9950-f3a03133fd45.png'</span>, height <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
@@ -5361,12 +5539,12 @@ year
     <span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html" class="external-link">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://gt.rstudio.com/reference/cell_text.html" class="external-link">cell_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#007377"</span>, size <span class="op">=</span> <span class="st">'x-large'</span><span class="op">)</span><span class="op">)</span>, locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html" class="external-link">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html" class="external-link">%&gt;%</a></span>
     <span class="fu"><a href="https://gt.rstudio.com/reference/tab_options.html" class="external-link">tab_options</a></span><span class="op">(</span>table_body.hlines.width <span class="op">=</span> <span class="fl">0</span>, table.border.top.width <span class="op">=</span> <span class="fl">0</span>, table.border.bottom.width <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html" class="external-link">%&gt;%</a></span>
     <span class="fu"><a href="https://gt.rstudio.com/reference/cols_align.html" class="external-link">cols_align</a></span><span class="op">(</span><span class="st">'center'</span>, columns <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span></code></pre></div>
-<div id="aeowzqgsis" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="mwnxgwammu" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#aeowzqgsis .gt_table {
+#mwnxgwammu .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -5391,7 +5569,7 @@ year
   border-left-color: #D3D3D3;
 }
 
-#aeowzqgsis .gt_heading {
+#mwnxgwammu .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -5403,7 +5581,7 @@ year
   border-right-color: #D3D3D3;
 }
 
-#aeowzqgsis .gt_title {
+#mwnxgwammu .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -5413,7 +5591,7 @@ year
   border-bottom-width: 0;
 }
 
-#aeowzqgsis .gt_subtitle {
+#mwnxgwammu .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -5423,13 +5601,13 @@ year
   border-top-width: 0;
 }
 
-#aeowzqgsis .gt_bottom_border {
+#mwnxgwammu .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#aeowzqgsis .gt_col_headings {
+#mwnxgwammu .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -5444,7 +5622,7 @@ year
   border-right-color: #D3D3D3;
 }
 
-#aeowzqgsis .gt_col_heading {
+#mwnxgwammu .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5464,7 +5642,7 @@ year
   overflow-x: hidden;
 }
 
-#aeowzqgsis .gt_column_spanner_outer {
+#mwnxgwammu .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5476,15 +5654,15 @@ year
   padding-right: 4px;
 }
 
-#aeowzqgsis .gt_column_spanner_outer:first-child {
+#mwnxgwammu .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#aeowzqgsis .gt_column_spanner_outer:last-child {
+#mwnxgwammu .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#aeowzqgsis .gt_column_spanner {
+#mwnxgwammu .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -5496,7 +5674,7 @@ year
   width: 100%;
 }
 
-#aeowzqgsis .gt_group_heading {
+#mwnxgwammu .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -5518,7 +5696,7 @@ year
   vertical-align: middle;
 }
 
-#aeowzqgsis .gt_empty_group_heading {
+#mwnxgwammu .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -5533,15 +5711,15 @@ year
   vertical-align: middle;
 }
 
-#aeowzqgsis .gt_from_md > :first-child {
+#mwnxgwammu .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#aeowzqgsis .gt_from_md > :last-child {
+#mwnxgwammu .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#aeowzqgsis .gt_row {
+#mwnxgwammu .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5560,7 +5738,7 @@ year
   overflow-x: hidden;
 }
 
-#aeowzqgsis .gt_stub {
+#mwnxgwammu .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5572,7 +5750,7 @@ year
   padding-left: 12px;
 }
 
-#aeowzqgsis .gt_summary_row {
+#mwnxgwammu .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5582,7 +5760,7 @@ year
   padding-right: 5px;
 }
 
-#aeowzqgsis .gt_first_summary_row {
+#mwnxgwammu .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5592,7 +5770,7 @@ year
   border-top-color: #D3D3D3;
 }
 
-#aeowzqgsis .gt_grand_summary_row {
+#mwnxgwammu .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5602,7 +5780,7 @@ year
   padding-right: 5px;
 }
 
-#aeowzqgsis .gt_first_grand_summary_row {
+#mwnxgwammu .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5612,11 +5790,11 @@ year
   border-top-color: #D3D3D3;
 }
 
-#aeowzqgsis .gt_striped {
+#mwnxgwammu .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#aeowzqgsis .gt_table_body {
+#mwnxgwammu .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -5625,7 +5803,7 @@ year
   border-bottom-color: #D3D3D3;
 }
 
-#aeowzqgsis .gt_footnotes {
+#mwnxgwammu .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5639,13 +5817,13 @@ year
   border-right-color: #D3D3D3;
 }
 
-#aeowzqgsis .gt_footnote {
+#mwnxgwammu .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#aeowzqgsis .gt_sourcenotes {
+#mwnxgwammu .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5659,41 +5837,41 @@ year
   border-right-color: #D3D3D3;
 }
 
-#aeowzqgsis .gt_sourcenote {
+#mwnxgwammu .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#aeowzqgsis .gt_left {
+#mwnxgwammu .gt_left {
   text-align: left;
 }
 
-#aeowzqgsis .gt_center {
+#mwnxgwammu .gt_center {
   text-align: center;
 }
 
-#aeowzqgsis .gt_right {
+#mwnxgwammu .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#aeowzqgsis .gt_font_normal {
+#mwnxgwammu .gt_font_normal {
   font-weight: normal;
 }
 
-#aeowzqgsis .gt_font_bold {
+#mwnxgwammu .gt_font_bold {
   font-weight: bold;
 }
 
-#aeowzqgsis .gt_font_italic {
+#mwnxgwammu .gt_font_italic {
   font-style: italic;
 }
 
-#aeowzqgsis .gt_super {
+#mwnxgwammu .gt_super {
   font-size: 65%;
 }
 
-#aeowzqgsis .gt_footnote_marks {
+#mwnxgwammu .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
