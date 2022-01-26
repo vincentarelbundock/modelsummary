@@ -23,7 +23,8 @@ datasummary_balance(
 }
 \arguments{
 \item{formula}{a one-sided formula with the "condition" or "column" variable
-on the right-hand side.}
+on the right-hand side. ~1 can be used to show summary statistics for the
+full data set}
 
 \item{data}{A data.frame (or tibble). If this data includes columns called
 "blocks", "clusters", and/or "weights", the "estimatr" package will consider
@@ -94,8 +95,9 @@ the scenes. Examples include:
 }}
 }
 \description{
-Balance table: Summary statistics for different subsets of the data (e.g.,
-control and treatment groups)
+Creates balance tables with summary statistics for different subsets of the
+data (e.g., control and treatment groups). It can also be used to create
+summary tables for full data sets.
 }
 \section{Global Options}{
 
