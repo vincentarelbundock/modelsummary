@@ -1,5 +1,11 @@
 # modelsummary 0.9.5.9000
 
+`datasummary_balance`:
+
+* Accepts `~ 1` as a formula to summarize all data.
+
+Misc:
+
 * documentation improvements
 
 # modelsummary 0.9.5

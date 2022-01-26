@@ -124,15 +124,7 @@ datasummary(All(penguins) ~ Mean + SD + Histogram,
 
 Note that the `histogram` argument of the `datasummary_skim` function is `FALSE` by default, because printing histograms will not work on all computers. If you have issues with this option, try changing your computer's locale, or try using a different display font.
 
-# `datasummary_correlation`
-
-The `datasummary_correlation` accepts a dataframe or tibble, it identifies all the numeric variables, and calculates the correlation between each of those variables:
-
-```{r}
-datasummary_correlation(mtcars)
-```
-
-The values displayed in this table are equivalent to those obtained by calling: `cor(x, use='pairwise.complete.obs')`.
+The `datasummary_skim` function does not currently allow users to summarize continuous and categorical variables together in a single table, but the `datasummary_balance` function described in the next section can do so.
 
 # `datasummary_balance`
 
@@ -191,6 +183,22 @@ datasummary_balance(~Treatment,
 ```
 
 Note that if the dataset includes columns called "blocks", "clusters", or "weights", this information will automatically be taken into consideration by `estimatr` when calculating the difference in means and the associated statistics.
+
+Users can also use the `~ 1` formula to indicate that they want to summarize all the data instead of splitting the analysis across subgroups:
+
+```{r}
+datasummary_balance(~ 1, data = training)
+```
+
+# `datasummary_correlation`
+
+The `datasummary_correlation` accepts a dataframe or tibble, it identifies all the numeric variables, and calculates the correlation between each of those variables:
+
+```{r}
+datasummary_correlation(mtcars)
+```
+
+The values displayed in this table are equivalent to those obtained by calling: `cor(x, use='pairwise.complete.obs')`.
 
 # `datasummary_crosstab`
 
