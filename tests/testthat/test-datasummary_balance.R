@@ -155,6 +155,18 @@ test_that('more than two conditions', {
   expect_equal(dim(tab), c(14, 8))
 })
 
+test_that('no conditions - grand summary', {
+    # fails on devtools::check_win_devel
+    skip_on_cran()
+    tmp <- mtcars
+    tmp$cyl <- factor(tmp$cyl)
+    tmp$vs <- as.logical(tmp$vs)
+    tab <- datasummary_balance(~1, tmp, output = 'dataframe', dinm = FALSE)
+    expect_s3_class(tab, 'data.frame')
+    expect_equal(dim(tab), c(15, 4))
+    tab <- suppressWarnings(datasummary_balance(~1, tmp, output = 'dataframe', dinm = TRUE))
+    expect_equal(dim(tab), c(15, 4))
+})
 
 test_that('single numeric', {
   tmp <- mtcars[, c('am', 'mpg')]
