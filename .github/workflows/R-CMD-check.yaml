@@ -33,7 +33,7 @@ jobs:
           - {os: ubuntu-18.04,   r: 'release'}
           - {os: ubuntu-18.04,   r: 'oldrel-1'}
           - {os: ubuntu-18.04,   r: 'oldrel-2'}
-          - {os: ubuntu-18.04,   r: 'oldrel-3'}
+          # - {os: ubuntu-18.04,   r: 'oldrel-3'}
           # - {os: ubuntu-18.04,   r: 'oldrel-4'}
 
     env:
@@ -55,7 +55,10 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: rcmdcheck
+          # problem with nloptr install on oldrel
+          extra-packages: |
+            rcmdcheck
+            lme4=?ignore-before-r=4.1.2
 
       - uses: r-lib/actions/setup-tinytex@v2
 
