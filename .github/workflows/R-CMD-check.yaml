@@ -32,8 +32,8 @@ jobs:
           - {os: ubuntu-18.04,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-18.04,   r: 'release'}
           - {os: ubuntu-18.04,   r: 'oldrel-1'}
-          # - {os: ubuntu-18.04,   r: 'oldrel-2'}
-          # - {os: ubuntu-18.04,   r: 'oldrel-3'}
+          - {os: ubuntu-18.04,   r: 'oldrel-2'}
+          - {os: ubuntu-18.04,   r: 'oldrel-3'}
           # - {os: ubuntu-18.04,   r: 'oldrel-4'}
 
     env:
@@ -44,25 +44,25 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-pandoc@v2
 
-      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
 
-      - uses: r-lib/actions/setup-r-dependencies@v1
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: rcmdcheck
 
-      - uses: r-lib/actions/setup-tinytex@v1
+      - uses: r-lib/actions/setup-tinytex@v2
 
       - name: texpackages
         run: Rscript -e "tinytex::tlmgr_install(c('inconsolata', 'makeindex'))"
 
-      - uses: r-lib/actions/check-r-package@v1
+      - uses: r-lib/actions/check-r-package@v2
 
       - name: Show testthat output
         if: always()
