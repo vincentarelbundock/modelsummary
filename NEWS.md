@@ -1,4 +1,4 @@
-# modelsummary 0.9.5.9000
+# modelsummary 0.9.6
 
 `datasummary_balance`:
 
