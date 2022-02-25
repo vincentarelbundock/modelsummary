@@ -48,7 +48,7 @@ test_that("coef_map with multiple vertical statistics", {
 
   mat <- modelsummary(models, coef_map = cm, output = "dataframe")
   expect_s3_class(mat, 'data.frame')
-  expect_equal(dim(mat), c(13, 5))
+  expect_equal(dim(mat), c(14, 5))
 
   mat <- modelsummary(
     models,
@@ -57,7 +57,7 @@ test_that("coef_map with multiple vertical statistics", {
     coef_map = cm
   )
   expect_s3_class(mat, 'data.frame')
-  expect_equal(dim(mat), c(16, 5))
+  expect_equal(dim(mat), c(17, 5))
 
   rows <- read.csv(text =
     "term        , OLS , Logit
@@ -71,6 +71,6 @@ test_that("coef_map with multiple vertical statistics", {
     coef_map = cm)
 
   expect_s3_class(mat, 'data.frame')
-  expect_equal(dim(mat), c(18, 5))
+  expect_equal(dim(mat), c(19, 5))
 
 })

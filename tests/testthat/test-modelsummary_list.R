@@ -8,7 +8,7 @@ test_that('output="modelsummary_list" and back to data.frame', {
     expect_true(class(tab) == "list")
     tab <- modelsummary(tab, "data.frame")
     expect_s3_class(tab, "data.frame")
-    expect_equal(dim(tab), c(13, 5))
+    expect_equal(dim(tab), c(14, 5))
 })
 
 

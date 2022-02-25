@@ -22,6 +22,7 @@
       BIC & \num{341.3} & \num{343.7}\\
       Log.Lik. & \num{-165.428} & \num{-164.940}\\
       F & \num{45.460} & \num{23.100}\\
+      RMSE & \num{43.95} & \num{44.02}\\
       \bottomrule
       \end{tabular}
 

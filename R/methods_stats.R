@@ -16,6 +16,7 @@ glance_custom_internal.lm <- function(x, vcov_type = NULL, gof = NULL, ...) {
 
   # default glance
   if ((is.null(vcov_type) || vcov_type %in% c("Classical", "Constant", "IID", "Standard", "Default"))) {
+    # F-statistic
     if (inherits(gof, "data.frame") && "statistic" %in% colnames(gof)) {
       out[["F"]] <- gof$statistic
     } else {
@@ -23,6 +24,10 @@ glance_custom_internal.lm <- function(x, vcov_type = NULL, gof = NULL, ...) {
       if (inherits(fstat, "numeric")) {
         out[["F"]] <- fstat
       }
+    }
+    # RMSE is not extracted by {broom} but we want it
+    if (!"rmse" %in% colnames(gof)) {
+        out[["rmse"]] <- stats::sigma(x)
     }
   }
 

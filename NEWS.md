@@ -7,6 +7,7 @@
 Misc:
 
 * documentation improvements
+* RMSE included by default in models of class `lm`
 
 # modelsummary 0.9.5
 

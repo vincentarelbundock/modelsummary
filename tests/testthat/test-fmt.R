@@ -24,7 +24,7 @@ test_that("rounding internal function", {
 test_that("fmt integer respects options(OutDec)", {
   options(OutDec=",")
   known <- c("353,6525", "(76,0487)", "-57,5452", "(20,9221)", "", "", "32",
-             "0,201", "0,175", "359,2", "363,6", "-176,588", "7,565")
+             "0,201", "0,175", "359,2", "363,6", "-176,588", "7,565", "62,28")
   x <- modelsummary(mod, fmt=4, output="data.frame")
   expect_equal(x$OLS, known)
   options(OutDec=".")
@@ -32,14 +32,14 @@ test_that("fmt integer respects options(OutDec)", {
 
 test_that("fmt character", {
   known <- c("353.6525", "(76.0487)", "-57.5452", "(20.9221)", "", "", "32",
-             "0.201", "0.175", "359.2", "363.6", "-176.588", "7.565")
+             "0.201", "0.175", "359.2", "363.6", "-176.588", "7.565", "62.28")
   x <- modelsummary(mod, fmt="%.4f", output="data.frame")
   expect_equal(x$OLS, known)
 })
 
 test_that("fmt function", {
  known <- c("353.6525", "(76.0487)", "-57.5452", "(20.9221)", "", "", "32",
-            "0.201", "0.175", "359.2", "363.6", "-176.588", "7.565")
+            "0.201", "0.175", "359.2", "363.6", "-176.588", "7.565", "62.28")
   z <- modelsummary(mod, fmt=function(x) sprintf("%.4f", x), output="data.frame")
   expect_equal(known, z$OLS)
 })

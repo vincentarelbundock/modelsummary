@@ -25,6 +25,7 @@
       BIC & \num{332.2} & \num{332.2}\\
       Log.Lik. & \num{-157.443} & \num{-157.443}\\
       F & \num{29.335} & \num{29.335}\\
+      RMSE & \num{35.44} & \num{35.44}\\
       \bottomrule
       \end{tabular}
       \end{table}
@@ -56,6 +57,7 @@
       BIC & \num{332.2} & \num{332.2}\\
       Log.Lik. & \num{-157.443} & \num{-157.443}\\
       F & \num{29.335} & \num{29.335}\\
+      RMSE & \num{35.44} & \num{35.44}\\
       \bottomrule
       \end{tabular}
       \end{table}
@@ -149,6 +151,11 @@
          <td style="text-align:center;"> 29.335 </td>
          <td style="text-align:center;"> 29.335 </td>
         </tr>
+        <tr>
+         <td style="text-align:left;"> RMSE </td>
+         <td style="text-align:center;"> 35.44 </td>
+         <td style="text-align:center;"> 35.44 </td>
+        </tr>
       </tbody>
       </table>
 
@@ -240,6 +247,11 @@
          <td style="text-align:left;"> F </td>
          <td style="text-align:center;"> 29.335 </td>
          <td style="text-align:center;"> 29.335 </td>
+        </tr>
+        <tr>
+         <td style="text-align:left;"> RMSE </td>
+         <td style="text-align:center;"> 35.44 </td>
+         <td style="text-align:center;"> 35.44 </td>
         </tr>
       </tbody>
       </table>
@@ -775,6 +787,7 @@
       BIC & \num{174.6} & \num{170.0} & \num{173.5}\\
       Log.Lik. & \num{-82.105} & \num{-78.084} & \num{-78.076}\\
       F & \num{76.513} & \num{51.689} & \num{33.293}\\
+      RMSE & \num{3.25} & \num{2.92} & \num{2.97}\\
       \bottomrule
       \end{tabular}
       \end{table}
@@ -802,6 +815,7 @@
       BIC & \num{174.6} & \num{170.0} & \num{173.5}\\
       Log.Lik. & \num{-82.105} & \num{-78.084} & \num{-78.076}\\
       F & \num{76.513} & \num{51.689} & \num{33.293}\\
+      RMSE & \num{3.25} & \num{2.92} & \num{2.97}\\
       \bottomrule
       \end{tabular}
       \end{table}
@@ -830,6 +844,7 @@
       BIC & \num{1744.2}\\
       Log.Lik. & \num{-863.198}\\
       F & \num{4.133}\\
+      RMSE & \num{5630.76}\\
       \bottomrule
       \end{tabular}
 
@@ -911,6 +926,11 @@
          <td style="text-align:left;"> F </td>
          <td style="text-align:center;"> 41.522 </td>
          <td style="text-align:center;"> 41.153 </td>
+        </tr>
+        <tr>
+         <td style="text-align:left;"> RMSE </td>
+         <td style="text-align:center;"> 3.17 </td>
+         <td style="text-align:center;">  </td>
         </tr>
         <tr>
          <td style="text-align:left;"> Std.Errors </td>

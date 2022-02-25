@@ -10,7 +10,7 @@ test_that("glance_custom.glm", {
   # beware of testthat scoping issue
   assign("glance_custom.glm", glance_custom.glm, envir = .GlobalEnv)
   out <- modelsummary(mod, "data.frame")
-  expect_equal(dim(out), c(13, 4))
+  expect_equal(dim(out), c(14, 4))
   rm("glance_custom.glm", envir = .GlobalEnv)
 })
 
@@ -21,7 +21,7 @@ test_that("glance_custom.glm preserve order", {
   # beware of testthat scoping issue
   assign("glance_custom.glm", glance_custom.glm, envir = .GlobalEnv)
   out <- modelsummary(mod, "data.frame")
-  expect_true(all(out$term[10:13] == c("test5", "test6", "test3", "test4")))
+  expect_true(all(out$term[11:14] == c("test5", "test6", "test3", "test4")))
   rm("glance_custom.glm", envir = .GlobalEnv)
 })
 
@@ -104,7 +104,7 @@ test_that("tidy.custom", {
   assign("tidy.custom", tidy.custom, envir = .GlobalEnv)
   assign("glance.custom", glance.custom, envir = .GlobalEnv)
   tab <- modelsummary(mod_custom, output = "dataframe")
-  expect_equal(dim(tab), c(5, 4))
+  expect_equal(dim(tab), c(6, 4))
   rm("tidy.custom", envir = .GlobalEnv)
   rm("glance.custom", envir = .GlobalEnv)
 })

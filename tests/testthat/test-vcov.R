@@ -119,8 +119,9 @@ test_that("fixest", {
   }
   models = list('lm' = mod_lm, 'feols' = mod_feols)
 
-  tab = msummary(models, vcov = 'iid', gof_omit = 'R2|IC|Log|F', output = "data.frame")
-  expect_equal(tab$lm, tab$feols)
+  # no longer true since lm produces RMSE but not fixest
+  # tab = msummary(models, vcov = 'iid', gof_omit = 'R2|IC|Log|F', output = "data.frame")
+  # expect_equal(tab$lm, tab$feols)
 
   tab = msummary(models, vcov = 'HC1', gof_omit = 'R2|IC|Log|F', output = 'data.frame')
   expect_equal(tab$lm, tab$feols)
