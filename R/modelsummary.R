@@ -61,6 +61,9 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * named list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
 #' * a named list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, `modelsummary` cannot automatically calculate p values. The `stars` argument may thus use incorrect significance thresholds when `vcov` is a list of vectors.
 #' @param conf_level confidence level to use for confidence intervals
+#' @param exponentiate TRUE or FALSE. If TRUE, the `estimate`, `conf.low`, and
+#' `conf.high` statistics are exponentiated, and the `std.error` is transformed
+#' to `exp(estimate)*std.error`.
 #' @param coef_map character vector. Subset, rename, and reorder coefficients.
 #' Coefficients omitted from this vector are omitted from the table. The order
 #' of the vector determines the order of the table.  `coef_map` can be a named
@@ -120,9 +123,8 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @param ... all other arguments are passed through to the extractor and
 #' table-making functions. This allows users to pass arguments directly to
 #' `modelsummary` in order to affect the behavior of other functions behind
-#' the scenes. Examples include:
-#' * `broom::tidy(exponentiate=TRUE)` to exponentiate logistic regression. Please see the `modelsummary` vignette on the package website for important technical notes on this topic.
-#' * `performance::model_performance(metrics="RMSE")` to select goodness-of-fit statistics to extract using the `performance` package (must have set `options(modelsummary_get="easystats")` first).
+#' the scenes. For example,
+#' * `performance::model_performance(metrics="RMSE")` to select goodness-of-fit statistics to extract using the `performance` package (must have set `options(modelsummary_get="easystats")` first). This can be useful for some models when statistics take a long time to compute.
 #' @return a regression table in a format determined by the `output` argument.
 #' @importFrom generics glance tidy
 #' @export
@@ -134,6 +136,7 @@ modelsummary <- function(
   statistic   = "std.error",
   vcov        = NULL,
   conf_level  = 0.95,
+  exponentiate = FALSE,
   stars       = FALSE,
   coef_map    = NULL,
   coef_omit   = NULL,
@@ -173,6 +176,7 @@ modelsummary <- function(
   sanity_stars(stars)
   sanity_fmt(fmt)
   sanity_align(align, estimate = estimate, statistic = statistic, stars = stars)
+  checkmate::assert_flag(exponentiate)
 
   # confidence intervals are expensive
   if (!any(grepl("conf", c(estimate, statistic)))) {
@@ -226,6 +230,7 @@ modelsummary <- function(
       conf_level = conf_level,
       stars      = stars,
       group_name = group$group_name,
+      exponentiate = exponentiate,
       ...)
 
     # before merging to collapse

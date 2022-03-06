@@ -1,5 +1,6 @@
 # modelsummary 0.9.6.9000
 
+* New `exponentiate` argument for `modelsummary()` and `modelplot()`
 
 # modelsummary 0.9.6
 

@@ -72,6 +72,7 @@ modelplot <- function(models,
                       coef_omit   = NULL,
                       coef_rename = NULL,
                       vcov        = NULL,
+                      exponentiate = FALSE,
                       add_rows    = NULL,
                       facet       = FALSE,
                       draw        = TRUE,
@@ -113,6 +114,7 @@ modelplot <- function(models,
     coef_rename = coef_rename,
     gof_omit    = ".*",
     vcov        = vcov,
+    exponentiate = exponentiate,
     ...
   )
   out$part <- out$statistic <- NULL

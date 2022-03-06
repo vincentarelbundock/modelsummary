@@ -12,6 +12,7 @@ modelsummary(
   statistic = "std.error",
   vcov = NULL,
   conf_level = 0.95,
+  exponentiate = FALSE,
   stars = FALSE,
   coef_map = NULL,
   coef_omit = NULL,
@@ -84,6 +85,10 @@ sections below):
 }}
 
 \item{conf_level}{confidence level to use for confidence intervals}
+
+\item{exponentiate}{TRUE or FALSE. If TRUE, the \code{estimate}, \code{conf.low}, and
+\code{conf.high} statistics are exponentiated, and the \code{std.error} is transformed
+to \code{exp(estimate)*std.error}.}
 
 \item{stars}{to indicate statistical significance
 \itemize{
@@ -170,10 +175,9 @@ prevent the file from compiling/displaying. This setting does not affect caption
 \item{...}{all other arguments are passed through to the extractor and
 table-making functions. This allows users to pass arguments directly to
 \code{modelsummary} in order to affect the behavior of other functions behind
-the scenes. Examples include:
+the scenes. For example,
 \itemize{
-\item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression. Please see the \code{modelsummary} vignette on the package website for important technical notes on this topic.
-\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit statistics to extract using the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first).
+\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit statistics to extract using the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first). This can be useful for some models when statistics take a long time to compute.
 }}
 }
 \value{

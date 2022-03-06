@@ -72,10 +72,9 @@ prevent the file from compiling/displaying. This setting does not affect caption
 \item{...}{all other arguments are passed through to the extractor and
 table-making functions. This allows users to pass arguments directly to
 \code{modelsummary} in order to affect the behavior of other functions behind
-the scenes. Examples include:
+the scenes. For example,
 \itemize{
-\item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression. Please see the \code{modelsummary} vignette on the package website for important technical notes on this topic.
-\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit statistics to extract using the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first).
+\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit statistics to extract using the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first). This can be useful for some models when statistics take a long time to compute.
 }}
 }
 \description{

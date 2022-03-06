@@ -11,6 +11,7 @@ modelplot(
   coef_omit = NULL,
   coef_rename = NULL,
   vcov = NULL,
+  exponentiate = FALSE,
   add_rows = NULL,
   facet = FALSE,
   draw = TRUE,
@@ -54,6 +55,10 @@ sections below):
 \item a named list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, \code{modelsummary} cannot automatically calculate p values. The \code{stars} argument may thus use incorrect significance thresholds when \code{vcov} is a list of vectors.
 }}
 
+\item{exponentiate}{TRUE or FALSE. If TRUE, the \code{estimate}, \code{conf.low}, and
+\code{conf.high} statistics are exponentiated, and the \code{std.error} is transformed
+to \code{exp(estimate)*std.error}.}
+
 \item{add_rows}{a data.frame (or tibble) with the same number of columns as
 your main table. By default, rows are appended to the bottom of the table.
 You can define a "position" attribute of integers to set the row positions.
@@ -73,10 +78,9 @@ plot.  This is especially useful to display annotations "behind" the
 \item{...}{all other arguments are passed through to the extractor and
 table-making functions. This allows users to pass arguments directly to
 \code{modelsummary} in order to affect the behavior of other functions behind
-the scenes. Examples include:
+the scenes. For example,
 \itemize{
-\item \code{broom::tidy(exponentiate=TRUE)} to exponentiate logistic regression. Please see the \code{modelsummary} vignette on the package website for important technical notes on this topic.
-\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit statistics to extract using the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first).
+\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit statistics to extract using the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first). This can be useful for some models when statistics take a long time to compute.
 }}
 }
 \description{

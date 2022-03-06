@@ -12,6 +12,7 @@ format_estimates <- function(
   fmt        = "%.3f",
   stars      = FALSE,
   group_name = NULL,
+  exponentiate = FALSE,
   ...) {
 
   # conf.int to glue
@@ -81,6 +82,22 @@ format_estimates <- function(
       stop(sprintf("`%s` is not available. The `estimate` and `statistic` arguments must correspond to column names in the output of this command: `get_estimates(model)`", s))
     }
   }
+
+  # exponentiate
+  if (isTRUE(exponentiate)) {
+
+    # standard error before transforming estimate
+    cols <- c("std.error", "estimate", "conf.low", "conf.high")
+    cols <- intersect(cols, colnames(est))
+    for (col in cols) {
+      if (col == "std.error") {
+        est[["std.error"]] <- exp(est[["estimate"]]) * est[["std.error"]]
+      } else if (col %in% c("estimate", "conf.low", "conf.high")) {
+        est[[col]] <- exp(est[[col]])
+      }
+    }
+  }
+
 
   ## round all 
   ## ensures that the reshape doesn't produce incompatible types
