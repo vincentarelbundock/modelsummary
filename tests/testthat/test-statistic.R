@@ -3,14 +3,11 @@ mod$OLS <- lm(am ~ drat, data = mtcars)
 mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 
 
-### This test was de-activated because it prevented using functions inside glue strings
-## test_that("informative errors", {
-##   bad_esti <- "bad_estimate"
-##   bad_stat <- c("bad1", "{bad2}", "another {bad3}", "another {bad3}", "{stars}")
-##   expect_error(modelsummary(mod, estimate = bad_esti, statistic = bad_stat),
-##                regexp = "do not seem to be available")
-## })
-
+test_that("unavailable estimate or statistic", {
+  expect_error(modelsummary(mod, statistic = "bad"), regexp = "not available")
+  expect_error(modelsummary(mod, estimate = "bad"), regexp = "not available")
+})
+  
 
 test_that("std.error", {
   raw <- modelsummary(mod, statistic = 'std.error', output="dataframe")

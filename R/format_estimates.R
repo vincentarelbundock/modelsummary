@@ -72,23 +72,15 @@ format_estimates <- function(
       estimate_glue[1] <- paste0(estimate_glue[1], "{stars}")
   }
 
-
-  ## I would like to check if the statistics are available and return an
-  ## informative message, but this does not seem possible for complicated glue
-  ## strings with functions:
-  ## 'p{ifelse(p.value <0.001, "Significant", "Not significant")'
-
-  ## # are statistics available? if not, display an informative error message
-  ## # check this after all custom statistics and stars are added
-  ## estimate_glue_strip <- regmatches(estimate_glue, gregexpr("\\{[^\\}]*\\}", estimate_glue))
-  ## estimate_glue_strip <- sort(unique(unlist(estimate_glue_strip)))
-  ## estimate_glue_strip <- gsub("\\{|\\}", "", estimate_glue_strip)
-  ## estimate_glue_strip <- setdiff(estimate_glue_strip, colnames(est))
-  ## if (length(estimate_glue_strip) > 0) {
-  ##   stop(sprintf("These estimates or statistics do not seem to be available: %s. You can use the `get_estimates` function to see which statistics are available.",
-  ##                paste(estimate_glue_strip, collapse = ", ")))
-  ## }
-
+  # check if statistics are available -- too complicated for glue strings
+  statistic_nonglue <- c(estimate, statistic)
+  statistic_nonglue <- statistic_nonglue[!grepl("\\{", statistic_nonglue)]
+  statistic_nonglue[statistic_nonglue == "conf.int"] <- "conf.low"
+  for (s in statistic_nonglue) {
+    if (!s %in% colnames(est)) {
+      stop(sprintf("`%s` is not available. The `estimate` and `statistic` arguments must correspond to column names in the output of this command: `get_estimates(model)`", s))
+    }
+  }
 
   ## round all 
   ## ensures that the reshape doesn't produce incompatible types
