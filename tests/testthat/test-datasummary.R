@@ -140,3 +140,9 @@ test_that('datasummary: return numeric values', {
   expect_true(is.numeric(tmp$female))
   expect_true(is.numeric(tmp$male))
 })
+
+
+test_that("labelled and All warning: Issue #433", {
+    x <- structure(list(working_hours = structure(c( 28, 40, 11, NA, 40, 38, 10, 40, 43, 0), label = "Total hours normally worked per week in main job overtime included", format.stata = "%14.0g", labels = c( `Not applicable` = NA_real_, Refusal = NA_real_, `Don't know` = NA_real_, `No answer` = NA_real_), class = c("haven_labelled", "vctrs_vctr", "double")), age = structure(c( 53, 49, 16, 75, 41, 49, 64, 80, 62, 50), label = "Age of respondent, calculated", format.stata = "%13.0g", labels = c(`Not available` = NA_real_), class = c( "haven_labelled", "vctrs_vctr", "double")), group = structure(c( 1L, 2L, 1L, 2L, 2L, 1L, 1L, 2L, 2L, 2L), .Label = c("1", "2"), class = "factor")), class = "data.frame", row.names = c( NA, -10L))
+    expect_warning(expect_error(datasummary_balance(~group, x)), regexp = "not safe")
+})

@@ -157,6 +157,7 @@ datasummary <- function(formula,
      "function_called" = "datasummary"
   ))
 
+  sanity_ds_data(formula = formula, data = data)
   sanitize_output(output)
   sanitize_escape(escape)
 
