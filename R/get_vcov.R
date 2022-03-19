@@ -35,46 +35,30 @@ get_vcov.default <- function(model, vcov = NULL, conf_level = NULL, ...) {
 
     assert_dependency("sandwich")
 
-    if (vcov == "stata") {
-      vcovtype <- "HC1"
-    } else if (vcov == "robust") {
-      vcovtype <- "HC3"
-    } else {
-      vcovtype <- vcov
-    }
+    vcovtype <- switch(
+      vcov,
+      "stata" = "HC1",
+      "robust" = "HC3",
+      vcov)
 
-    HC <- c("HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5")
-    if (vcovtype %in% HC) {
-      mat <- try(sandwich::vcovHC(model, type = vcovtype, ...), silent = TRUE)
-    }
-
-    if (vcovtype == "HAC") {
-      mat <- try(sandwich::vcovHAC(model, ...), silent = TRUE)
-    }
-
-    if (vcovtype == "NeweyWest") {
-      mat <- try(sandwich::NeweyWest(model, ...), silent = TRUE)
-    }
-
-    if (vcovtype == "bootstrap") {
-      mat <- try(sandwich::vcovBS(model, ...), silent = TRUE)
-    }
-
-    if (vcovtype == "Andrews") {
-      mat <- try(sandwich::kernHAC(model, ...), silent = TRUE)
-    }
-
-    if (vcovtype == "panel-corrected") {
-      mat <- try(sandwich::vcovPC(model, ...), silent = TRUE)
-    }
-
-    if (vcovtype == "outer-product") {
-      mat <- try(sandwich::vcovOPG(model, ...), silent = TRUE)
-    }
-
-    if (vcovtype == "weave") {
-      mat <- try(sandwich::weave(model, ...), silent = TRUE)
-    }
+    mat <- switch(vcovtype,
+        "HC" = ,
+        "HC0" = ,
+        "HC1" = ,
+        "HC2" = ,
+        "HC3" = ,
+        "HC4" = ,
+        "HC4m" = ,
+        "HC5" = ,
+        "HC" = try(sandwich::vcovHC(model, type = vcovtype, ...), silent = TRUE),
+        "HAC" = try(sandwich::vcovHAC(model, ...), silent = TRUE),
+        "NeweyWest" = try(sandwich::NeweyWest(model, ...), silent = TRUE),
+        "bootstrap" = try(sandwich::vcovBS(model, ...), silent = TRUE),
+        "Andrews" = try(sandwich::kernHAC(model, ...), silent = TRUE),
+        "panel-corrected" = try(sandwich::vcovPC(model, ...), silent = TRUE),
+        "outer-product" = try(sandwich::vcovOPG(model, ...), silent = TRUE),
+        "weave" = try(sandwich::weave(model, ...), silent = TRUE)
+    )
 
     if (!inherits(mat, "matrix")) {
       msg <- paste0(c("Unable to extract a variance-covariance matrix of type %s from model of class %s. ",

@@ -13,6 +13,6 @@ test_that("options(modelsummary_get)", {
 
     options(modelsummary_get = "all")
     tab3 <- get_gof(mod)
-    expect_equal(ncol(tab3), 16)
+    expect_equal(ncol(tab3), 14)
     options(modelsummary_get = "broom")
 })
