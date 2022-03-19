@@ -63,9 +63,7 @@ sanitize_output <- function(output) {
       if (!is.null(tmp)) {
           options(b = tmp)
           msg <- sprintf('The "%s" global option is deprecated. Please use "%s" instead.', a, b)
-          rlang::warn( message = msg,
-                      .frequency = "once",
-                      .frequency_id = a)
+          warn_once(msg, id = "deprecated_global_option")
       }
   }
 
@@ -161,8 +159,7 @@ sanitize_output <- function(output) {
 
   ## warning siunitx & booktabs in preamble
   if (settings_equal("format_numeric_latex", "siunitx") && (output %in% c("latex", "latex_tabular") || tools::file_ext(output) == "tex")) {
-      rlang::warn( message = 
-'To compile a LaTeX document with this table, the following commands must be placed in the document preamble:
+      msg <- 'To compile a LaTeX document with this table, the following commands must be placed in the document preamble:
 
 \\usepackage{booktabs}
 \\usepackage{siunitx}
@@ -171,9 +168,8 @@ sanitize_output <- function(output) {
 To disable `siunitx` and prevent `modelsummary` from wrapping numeric entries in `\\num{}`, call:
 
 options("modelsummary_format_numeric_latex" = "plain")
-',
-      .frequency = "once",
-      .frequency_id = "siunitx_preamble")
+'
+      warn_once(msg, "latex_siunitx_preamble")
   }
 
   # settings environment

@@ -250,9 +250,7 @@ datasummary_balance <- function(formula,
     ## weights warning
     if (isTRUE(any_factor) && "weights" %in% colnames(data)) {
       msg <- 'When the `data` used in `datasummary_balance` contains a "weights" column, the means, standard deviations, difference in means, and standard errors of numeric variables are adjusted to account for weights. However, the counts and percentages for categorical variables are not adjusted.'
-      rlang::warn( message = msg,
-                  .frequency = "once",
-                  .frequency_id = "factor_weights_not_supported")
+      warn_once(msg, "factor_weights_not_supported")
     }
 
     ## make table

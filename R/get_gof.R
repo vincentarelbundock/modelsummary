@@ -135,9 +135,7 @@ get_gof_parameters <- function(model, ...) {
       # documentation, but their code includes R2_adj, which produces
       # a two-row glance and gives us issues.
       msg <- '`modelsummary` uses the `performance` package to extract goodness-of-fit statistics from models of this class. You can specify the statistics you wish to compute by supplying a `metrics` argument to `modelsummary`, which will then push it forward to `performance`: `modelsummary(mod,metrics=c("RMSE","R2")` See `?performance::performance` for more information. Please note that some statistics are expensive to compute.'
-      rlang::warn( message = msg,
-                  .frequency = "once",
-                  .frequency_id = "performance_gof_expensive")
+      warn_once(msg, "performance_gof_expensive")
 
       metrics <- c("RMSE", "LOOIC", "WAIC")
     } else {
