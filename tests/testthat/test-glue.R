@@ -40,15 +40,3 @@ test_that("glue + multi statistics",{
   expect_equal(tab[[4]], truth4)
   expect_equal(tab[[5]], truth5)
 })
-
-test_that("glue with no statistic", {
-    requiet("lme4")
-    mod <- lmer(mpg ~ hp + (1 | cyl), data = mtcars)
-    tab <- modelsummary(mod,
-        output = "data.frame",
-        statistic = c(
-            "t = {statistic}",
-            "p = {p.value}"))
-    expect_equal(nrow(tab), 10)
-})
-
