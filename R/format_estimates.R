@@ -113,7 +113,15 @@ format_estimates <- function(
   # extract estimates (there can be several)
   for (i in seq_along(estimate_glue)) {
     s <- estimate_glue[i]
-    est[[paste0("modelsummary_tmp", i)]] <- as.character(glue::glue_data(est, s))
+    # At this point, NAs are "". `glue_data(.na=NULL)` works with NAs
+    tmp <- est
+    tmp[tmp == ""] <- NA
+    if ("stars" %in% colnames(tmp)) {
+      tmp$stars[is.na(tmp$stars)] <- "" # otherwise NAs propagate when stars = FALSE in user-level call
+    }
+    tmp <- glue::glue_data(tmp, s, .na = NULL)
+    tmp[is.na(tmp)] <- ""
+    est[[paste0("modelsummary_tmp", i)]] <- as.character(tmp)
     # avoid empty parentheses for NAs
     est[[paste0("modelsummary_tmp", i)]][est[[s]] == ""] <- ""
   }

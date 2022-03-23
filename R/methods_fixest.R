@@ -40,23 +40,33 @@ get_vcov.fixest <- function(model, vcov = NULL, conf_level = NULL, ...) {
     ## if a known or compatible fixest vcov argument, use the dedicated
     ## fixest.vcov method
     if (is.null(vcov) || is_func || is_form || is_mat || vcov %in% fixest_vcovs) {
+
       mat <- vcov(model, vcov = vcov)
+
+      # otherwise get_coeftest returns NULL and std.errors are not adjusted
+      if (is.matrix(mat)) assert_dependency("lmtest")
+
       out <- get_coeftest(model, mat, conf_level)
       return(out)
+
       ## else coerce to iid error for sandwich adjustment below
     } else {
       model <- summary(model, vcov = "iid")
     }
+
     ## fixest versions older than 0.10.0 are less flexible
   } else {
     if (is_form) {
       mat <- vcov(summary(model, cluster = vcov))
+      assert_dependency("lmtest")
       out <- get_coeftest(model, mat, conf_level)
       return(out)
     } else if (is_mat) {
+      assert_dependency("lmtest")
       out <- get_coeftest(model, mat, conf_level)
       return(out)
     } else if (vcov %in% fixest_vcovs) {
+      assert_dependency("lmtest")
       mat <- vcov(summary(model, se = vcov))
       out <- get_coeftest(model, mat, conf_level)
       return(out)

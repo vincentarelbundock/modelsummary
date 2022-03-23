@@ -154,6 +154,9 @@ datasummary_skim_numeric <- function(
   # output format
   sanitize_output(output)
 
+  # fake formula to indicate that we definitely use All() eventually
+  sanity_ds_data(All(data) ~ x + y, data)
+
   # draw histogram?
   if (histogram) {
 

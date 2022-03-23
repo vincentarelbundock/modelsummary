@@ -1,6 +1,7 @@
 # CRAN win-devel does not play well with fancy unicode x
+# Windows tests neither, but it works interactively
 skip_on_cran()
-skip_if_not_installed("fixest")
+skip_on_os("window")
 requiet("fixest")
 
 test_that(": in interactions become x", {
