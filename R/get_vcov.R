@@ -131,7 +131,8 @@ get_vcov.default <- function(model, vcov = NULL, conf_level = NULL, ...) {
         "The `lmtest::coeftest` function does not seem to produce a valid result ",
         "when applied to a model of class %s. Only the standard errors have been adjusted, ",
         "but p-values and confidence intervals might not be correct.", collapse = "")
-      warning(sprintf(msg, class(model)[1]))
+      warning(sprintf(msg, class(model)[1]),
+              call. = FALSE)
       return(out)
     }
   }

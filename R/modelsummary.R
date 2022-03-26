@@ -300,7 +300,8 @@ modelsummary <- function(
   if (is.null(group$group_name) && "term" %in% group$lhs) {
     idx <- paste(est$term, est$statistic)
     if (anyDuplicated(idx) > 1) {
-      warning('The table includes duplicate term names. This can happen when `coef_map` or `coef_rename` are misused. This can also happen when a model produces "grouped" terms, such as in multinomial logit or gamlss models. You may want to call `get_estimates(model)` to see how estimates are labelled internally, and use the `group` argument of the `modelsummary` function.')
+      warning('The table includes duplicate term names. This can happen when `coef_map` or `coef_rename` are misused. This can also happen when a model produces "grouped" terms, such as in multinomial logit or gamlss models. You may want to call `get_estimates(model)` to see how estimates are labelled internally, and use the `group` argument of the `modelsummary` function.',
+              call. = FALSE)
     }
   }
 
@@ -802,7 +803,8 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, ...) {
 
     if (!is.null(flag_vcov)) {
         j <- ifelse(length(models) == 1, 1, flag_vcov)
-        warning(sprintf('When the `vcov` argument is set to "iid", "classical", or "constant", `modelsummary` extracts the default variance-covariance matrix from the model object. For objects of class `%s`, the default vcov is not always IID. Please make sure that the standard error label matches the numeric results in the table. Note that the `vcov` argument accepts a named list for users who want to customize the standard error labels in their regression tables.', class(models[[j]])[1]))
+        warning(sprintf('When the `vcov` argument is set to "iid", "classical", or "constant", `modelsummary` extracts the default variance-covariance matrix from the model object. For objects of class `%s`, the default vcov is not always IID. Please make sure that the standard error label matches the numeric results in the table. Note that the `vcov` argument accepts a named list for users who want to customize the standard error labels in their regression tables.', class(models[[j]])[1]),
+                call. = FALSE)
     }
 
     # extract

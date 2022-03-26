@@ -360,11 +360,13 @@ datasummary_skim_categorical <- function(
   }
 
   if (!is.null(drop_too_many_levels)) {
-    warning(sprintf("These variables were omitted because they include more than 50 levels: %s.", paste(drop_too_many_levels, collapse=", ")))
+    warning(sprintf("These variables were omitted because they include more than 50 levels: %s.", paste(drop_too_many_levels, collapse=", ")),
+            call. = FALSE)
   }
 
   if (!is.null(drop_entirely_na)) {
-    warning(sprintf("These variables were omitted because they are entirely missing: %s.", paste(drop_entirely_na, collapse=", ")))
+    warning(sprintf("These variables were omitted because they are entirely missing: %s.", paste(drop_entirely_na, collapse=", ")),
+            call. = FALSE)
   }
 
   pctformat <- function(x) rounding(x, fmt)

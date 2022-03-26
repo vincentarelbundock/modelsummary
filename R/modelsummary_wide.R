@@ -34,7 +34,8 @@ modelsummary_wide <- function(
   stacking    = "horizontal",
   ...) {
 
-  warning("The `modelsummary_wide` is superseded by the `group` argument of the `modelsummary` function.")
+  warning("The `modelsummary_wide` is superseded by the `group` argument of the `modelsummary` function.",
+          call. = FALSE)
 
   checkmate::assert_character(stacking, pattern = "^horizontal$|^vertical$")
 

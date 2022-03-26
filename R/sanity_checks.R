@@ -43,7 +43,8 @@ sanity_ellipsis <- function(vcov, ...) {
   ellip <- list(...)
 
   if ("statistic_vertical" %in% names(ellip)) {
-    warning("The `statistic_vertical` argument is deprecated and will be ignored. To display uncertainty estimates next to your coefficients, use a `glue` string in the `estimate` argument. See `?modelsummary`")
+    warning("The `statistic_vertical` argument is deprecated and will be ignored. To display uncertainty estimates next to your coefficients, use a `glue` string in the `estimate` argument. See `?modelsummary`",
+            call. = FALSE)
   }
 
   if (!is.null(vcov) && ("statistic_override" %in% names(ellip))) {
@@ -312,7 +313,8 @@ sanity_ds_nesting_factor <- function(formula, data) {
   termlabs <- labels(stats::terms(formula))
   warn <- any(sapply(idx, function(x) any(grepl(x, termlabs))))
   if (warn) {
-    warning('You are trying to create a nested table by applying the * operator to a character or a logical variable. It is usually a good idea to convert such variables to a factor before calling datasummary: dat$y<-as.factor(dat$y). Alternatively, you could wrap your categorical variable inside Factor() in the datasummary call itself: datasummary(x ~ Factor(y) * z, data)\n')
+    warning('You are trying to create a nested table by applying the * operator to a character or a logical variable. It is usually a good idea to convert such variables to a factor before calling datasummary: dat$y<-as.factor(dat$y). Alternatively, you could wrap your categorical variable inside Factor() in the datasummary call itself: datasummary(x ~ Factor(y) * z, data)\n',
+            call. = FALSE)
   }
 }
 

@@ -70,7 +70,8 @@ These errors messages were generated during extraction:
     out_custom <- tidy_custom_internal(model)
     if (inherits(out_custom, "data.frame") && nrow(out_custom) > 0) {
         if (!any(out_custom$term %in% out$term)) {
-            warning('Elements of the "term" column produced by `tidy_custom` must match model terms. `tidy_custom` was ignored.')
+            warning('Elements of the "term" column produced by `tidy_custom` must match model terms. `tidy_custom` was ignored.',
+                    call. = FALSE)
         } else {
             # R 3.6 doesn't deal well with factors
             out_custom$term <- as.character(out_custom$term)
@@ -87,7 +88,8 @@ These errors messages were generated during extraction:
     out_custom <- tidy_custom(model)
     if (inherits(out_custom, "data.frame") && nrow(out_custom) > 0) {
         if (!any(out_custom$term %in% out$term)) {
-            warning('Elements of the "term" column produced by `tidy_custom` must match model terms. `tidy_custom` was ignored.')
+            warning('Elements of the "term" column produced by `tidy_custom` must match model terms. `tidy_custom` was ignored.',
+                    call. = FALSE)
         } else {
             # R 3.6 doesn't deal well with factors
             out_custom$term <- as.character(out_custom$term)
