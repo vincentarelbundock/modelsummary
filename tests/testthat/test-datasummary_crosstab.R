@@ -84,3 +84,11 @@ test_that("interactions", {
   tab3 <- datasummary_crosstab(vs * cyl ~ am * gear, statistic = 1 ~ 1 + N + Percent(), data = mtcars, output = "dataframe")
   expect_equal(dim(tab3), c(14, 10))
 })
+
+test_that("issue #455: variable rename", {
+    dat <- mtcars
+    dat$`# of Cylinders` <- dat$cyl
+    expect_error(datasummary_crosstab(`# of Cylinders` ~ am * gear, data = dat), NA)
+    expect_error(datasummary_crosstab((`# of Cylinders` = cyl) ~ am * gear, data = dat))
+    expect_error(datasummary_crosstab(Heading("# of Cylinders") * cyl ~ am * gear, data = dat))
+})

@@ -79,13 +79,27 @@ datasummary_crosstab <- function(formula,
 
     # `formula` may not contain +
     formula_str <- deparse(formula, width.cutoff = 500)
+
     if (grepl("+", formula_str, fixed = TRUE)) {
-        stop("`formula` may not contain variables connected by +, only interactions with * are allowed. To produce more complex tables, consider using the datasummary() function.")
+        stop("The `formula` argument of the `datasummary_crosstab` function may not contain variables connected by +, only interactions with * are allowed. To produce more complex tables, consider using the datasummary() function.", call. = FALSE)
+    }
+
+    if (isTRUE(grepl("=|Heading", formula_str))) {
+        msg <- 
+"The `formula` argument of the `datasummary_crosstab` function does not support the `=` sign or the `Heading()` function. You can rename variables in the data frame before calling `datasummary_crosstab` and use backticks to enclose variable names with spaces. For example:
+
+dat <- mtcars
+dat$`# of Cylinders` <- dat$cyl
+datasummary_crosstab(`# of Cylinders` ~ am * gear, data = dat)
+
+Note that the `datasummary()` function supports the `=` sign and the `Heading()` function to rename variables. If you would like to contribute code to support those in `datasummary_crosstab`, please visit the `modelsummary` development website: https://github.com/vincentarelbundock/modelsummary
+"
+        stop(msg, call. = FALSE)
     }
 
     # `formula` must be length 3
     if (length(formula) != 3) {
-        stop("`formula` needs to be a two-sided formula, e.g. var1 ~ var2. To produce more complex tables, consider using the datasummary() function.")
+        stop("`formula` needs to be a two-sided formula, e.g. var1 ~ var2. To produce more complex tables, consider using the datasummary() function.", call. = FALSE)
     }
 
     # check statistic formula
@@ -116,7 +130,6 @@ datasummary_crosstab <- function(formula,
         labels[labels == 'Percent("col")'] <- 'Heading("% col")*Percent("col")'
     }
 
-
     # treat all variables as Factors
     ## lhs_formula <- paste0("Factor(", all.vars(formula[[2]]), ")")
     ## rhs_formula <- paste0("Factor(", all.vars(formula[[3]]), ")")
@@ -128,6 +141,12 @@ datasummary_crosstab <- function(formula,
         data[[v]] <- factor(data[[v]], exclude = NULL)
       }
     }
+
+    # wrap variable names in backticks if they include spaces
+    idx <- grepl("\\s", lhs_formula)
+    lhs_formula[idx] <- sprintf("`%s`", lhs_formula[idx])
+    idx <- grepl("\\s", rhs_formula)
+    rhs_formula[idx] <- sprintf("`%s`", rhs_formula[idx])
 
     if (is.null(statistic)) {
         d_formula <- sprintf("%s ~ %s",
