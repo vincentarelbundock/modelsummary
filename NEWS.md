@@ -1,6 +1,8 @@
 # modelsummary 0.9.6.9000
 
 * New `exponentiate` argument for `modelsummary()` and `modelplot()`
+* Drop `rlang` dependency
+* Bug fixes
 
 # modelsummary 0.9.6
 
