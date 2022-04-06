@@ -3,6 +3,7 @@ requiet("fixest")
 skip_if_not_installed("fixest", minimum_version = "0.10.4")
 
 test_that("simple model", {
+  skip_if_not_installed("fixest", minimum_version = "0.10.5")# Issue #291 on fixest repo
   mod <- feols(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris)
   raw <- modelsummary(mod, "data.frame")
   expect_s3_class(raw, "data.frame")
