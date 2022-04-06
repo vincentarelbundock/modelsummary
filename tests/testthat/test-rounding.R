@@ -16,7 +16,8 @@ test_that("siunitx works with empty cells", {
   dat <- mtcars
   dat$cyl <- factor(dat$cyl)
   mod <- lme4::lmer(mpg ~ hp + (1 | cyl), data = dat)
-  expect_snapshot(modelsummary(mod, 
-                              output = "latex", 
-                              estimate = "{estimate} [{conf.low}, {conf.high}]"))
+  expect_snapshot(modelsummary(
+      mod,
+      output = "latex",
+      estimate = "{estimate} [{conf.low}, {conf.high}]"))
 })
