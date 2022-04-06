@@ -119,7 +119,7 @@ vector for you by deriving the new variable names from the vector of original
 term names with your function.}
 
 \item{gof_map}{rename, reorder, and omit goodness-of-fit statistics and other
-model information. This argument accepts 3 types of values:
+model information. This argument accepts 4 types of values:
 \itemize{
 \item NULL (default): the \code{modelsummary::gof_map} dictionary is used for formatting, and all unknown statistic are included.
 \item character vector such as \code{c("rmse", "nobs", "r.squared")}. Elements correspond to colnames in the data.frame produced by \code{get_gof(model)}. The default dictionary is used to format and rename statistics.
