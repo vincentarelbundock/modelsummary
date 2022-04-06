@@ -55,7 +55,7 @@ sections below):
 \item a named list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, \code{modelsummary} cannot automatically calculate p values. The \code{stars} argument may thus use incorrect significance thresholds when \code{vcov} is a list of vectors.
 }}
 
-\item{exponentiate}{TRUE, FALSE, or logical vector of lenght equal to the
+\item{exponentiate}{TRUE, FALSE, or logical vector of length equal to the
 number of models. If TRUE, the \code{estimate}, \code{conf.low}, and \code{conf.high}
 statistics are exponentiated, and the \code{std.error} is transformed to
 \code{exp(estimate)*std.error}.}
