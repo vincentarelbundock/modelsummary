@@ -1,5 +1,6 @@
 skip_if(getRversion() < '3.6.6') # change in .Rng
 requiet("fixest")
+skip_if_not_installed("fixest", minimum_version = "0.10.4")
 
 test_that("simple model", {
   mod <- feols(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris)
