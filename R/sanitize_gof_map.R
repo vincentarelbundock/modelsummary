@@ -26,7 +26,11 @@ sanitize_gof_map <- function(gof_map) {
       unknown <- NULL
     }
     gof_map <- bind_rows(known, unknown)
-    gof_map[["omit"]] <- FALSE
+
+    # continuous integration weird issue
+    if (inherits(gof_map, "data.frame") && nrow(gof_map) > 0) {
+      gof_map[["omit"]] <- FALSE
+    }
   }
 
 
