@@ -86,9 +86,10 @@ sections below):
 
 \item{conf_level}{confidence level to use for confidence intervals}
 
-\item{exponentiate}{TRUE or FALSE. If TRUE, the \code{estimate}, \code{conf.low}, and
-\code{conf.high} statistics are exponentiated, and the \code{std.error} is transformed
-to \code{exp(estimate)*std.error}.}
+\item{exponentiate}{TRUE, FALSE, or logical vector of lenght equal to the
+number of models. If TRUE, the \code{estimate}, \code{conf.low}, and \code{conf.high}
+statistics are exponentiated, and the \code{std.error} is transformed to
+\code{exp(estimate)*std.error}.}
 
 \item{stars}{to indicate statistical significance
 \itemize{

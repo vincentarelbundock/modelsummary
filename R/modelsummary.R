@@ -61,9 +61,10 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * named list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
 #' * a named list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, `modelsummary` cannot automatically calculate p values. The `stars` argument may thus use incorrect significance thresholds when `vcov` is a list of vectors.
 #' @param conf_level confidence level to use for confidence intervals
-#' @param exponentiate TRUE or FALSE. If TRUE, the `estimate`, `conf.low`, and
-#' `conf.high` statistics are exponentiated, and the `std.error` is transformed
-#' to `exp(estimate)*std.error`.
+#' @param exponentiate TRUE, FALSE, or logical vector of lenght equal to the
+#' number of models. If TRUE, the `estimate`, `conf.low`, and `conf.high`
+#' statistics are exponentiated, and the `std.error` is transformed to
+#' `exp(estimate)*std.error`.
 #' @param coef_map character vector. Subset, rename, and reorder coefficients.
 #' Coefficients omitted from this vector are omitted from the table. The order
 #' of the vector determines the order of the table.  `coef_map` can be a named
@@ -167,6 +168,7 @@ modelsummary <- function(
   vcov <- sanitize_vcov(vcov, length(models), ...)
   number_of_models <- max(length(models), length(vcov))
   estimate <- sanitize_estimate(estimate, number_of_models)
+  exponentiate <- sanitize_exponentiate(exponentiate, number_of_models)
   group <- sanitize_group(group)
   gof_map <- sanitize_gof_map(gof_map)
   sanity_group_map(group_map)
@@ -176,7 +178,6 @@ modelsummary <- function(
   sanity_stars(stars)
   sanity_fmt(fmt)
   sanity_align(align, estimate = estimate, statistic = statistic, stars = stars)
-  checkmate::assert_flag(exponentiate)
 
   # confidence intervals are expensive
   if (!any(grepl("conf", c(estimate, statistic)))) {
@@ -230,7 +231,7 @@ modelsummary <- function(
       conf_level = conf_level,
       stars      = stars,
       group_name = group$group_name,
-      exponentiate = exponentiate,
+      exponentiate = exponentiate[[i]],
       ...)
 
     # before merging to collapse

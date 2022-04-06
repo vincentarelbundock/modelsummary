@@ -1,7 +1,6 @@
 #' Make sure LaTeX and HTML are safe to compile
 #' 
 #' @keywords internal
-#' @internal
 escape_string <- function(x) {
     if (settings_equal("output_format", c("html", "kableExtra"))) {
         out <- escape_html(x)

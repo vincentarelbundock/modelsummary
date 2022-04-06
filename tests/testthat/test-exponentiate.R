@@ -37,3 +37,34 @@ test_that("vcov", {
                         exponentiate = TRUE)
     expect_equal(tab[[4]], sprintf("%.3f", exp(b) * se))
 })
+
+
+test_that("exponentiate vector", {
+    mod <- glm(am ~ mpg, family = binomial, data = mtcars)
+    mod <- list(mod, mod)
+    b <- coef(mod[[1]])
+    se <- sqrt(diag(stats::vcov(mod[[1]])))
+
+    # coefficients
+    tab <- modelsummary(mod, exponentiate = FALSE,
+                        output = "data.frame", statistic = NULL, fmt = identity)
+    expect_equal(b, as.numeric(tab[["Model 1"]][1:2]), ignore_attr = TRUE)
+    expect_equal(b, as.numeric(tab[["Model 2"]][1:2]), ignore_attr = TRUE)
+
+    tab <- modelsummary(mod, exponentiate = TRUE,
+                        output = "data.frame", statistic = NULL, fmt = identity)
+    expect_equal(exp(b), as.numeric(tab[["Model 1"]][1:2]), ignore_attr = TRUE)
+    expect_equal(exp(b), as.numeric(tab[["Model 2"]][1:2]), ignore_attr = TRUE)
+
+    # standard error
+    tab <- modelsummary(mod, exponentiate = TRUE, output = "data.frame",
+                        estimate = "std.error", statistic = NULL, fmt = identity)
+    expect_equal(exp(b) * se, as.numeric(tab[["Model 1"]][1:2]), ignore_attr = TRUE)
+    expect_equal(exp(b) * se, as.numeric(tab[["Model 2"]][1:2]), ignore_attr = TRUE)
+
+    # vector
+    tab <- modelsummary(mod, exponentiate = c(TRUE, FALSE),
+                        output = "data.frame", statistic = NULL, fmt = identity)
+    expect_equal(exp(b), as.numeric(tab[["Model 1"]][1:2]), ignore_attr = TRUE)
+    expect_equal(b, as.numeric(tab[["Model 2"]][1:2]), ignore_attr = TRUE)
+})

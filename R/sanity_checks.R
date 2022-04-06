@@ -90,6 +90,22 @@ sanity_align <- function(align, estimate = NULL, statistic = NULL, stars = FALSE
 #' sanity check
 #'
 #' @noRd
+sanitize_exponentiate <- function(exponentiate, number_of_models) {
+  checkmate::assert(
+    checkmate::check_logical(exponentiate, len = 1),
+    checkmate::check_logical(exponentiate, len = number_of_models))
+  if (length(exponentiate) == 1) {
+    out <- rep(exponentiate, number_of_models)
+  } else {
+    out <- exponentiate
+  }
+  return(out)
+}
+
+
+#' sanity check
+#'
+#' @noRd
 sanitize_estimate <- function(estimate, number_of_models) {
   checkmate::assert(
     checkmate::check_character(estimate, len = 1),
