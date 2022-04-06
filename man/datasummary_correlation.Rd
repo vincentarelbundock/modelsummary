@@ -50,7 +50,7 @@ output of custom correlation functions.
 }}
 
 \item{align}{A string with a number of characters equal to the number of columns in
-the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, S.
+the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, d.
 \itemize{
 \item "l": left-aligned column
 \item "c": centered column

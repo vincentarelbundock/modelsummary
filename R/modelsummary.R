@@ -112,7 +112,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `"{estimate} ({std.error}){stars}"`
 #' * `"{estimate} [{conf.low}, {conf.high}]"`
 #' @param align A string with a number of characters equal to the number of columns in
-#' the table (e.g., `align = "lcc"`).  Valid characters: l, c, r, S.
+#' the table (e.g., `align = "lcc"`).  Valid characters: l, c, r, d.
 #' * "l": left-aligned column
 #' * "c": centered column
 #' * "r": right-aligned column
