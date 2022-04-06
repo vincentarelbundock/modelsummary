@@ -11,7 +11,8 @@ sanitize_gof_map <- function(gof_map) {
     combine = "or")
 
   # character vector
-  if (isTRUE(checkmate::check_character(gof_map))) {
+  # min.len = 1, otherwise list() triggers, and we want list() to omit all
+  if (isTRUE(checkmate::check_character(gof_map, min.len = 1))) {
     known <- intersect(gof_map, modelsummary::gof_map$raw)
     unknown <- setdiff(gof_map, modelsummary::gof_map$raw)
     if (length(known) > 0) {
