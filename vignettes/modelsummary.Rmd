@@ -392,7 +392,7 @@ modelsummary(models, gof_map = gm)
 
 Notice the subtle difference between `coef_map` and `gof_map`. On the one hand, `coef_map` works as a "white list": any coefficient not explicitly entered will be omitted from the table. On the other, `gof_map` works as a "black list": statistics need to be explicitly marked for omission.
 
-Another convenient way to build a `gof_map` argument is to use the `tribble` function from the `tibble` package. In this example, we insert special HTML code to display a superscript, so we use the `escape=FALSE` argument, which is passed through the ellipsis (`...`) to the `kableExtra` table-making package:
+Another convenient way to build a `gof_map` argument is to use the `tribble` function from the `tibble` package. In this example, we insert special HTML code to display a superscript, so we use the `escape=FALSE` argument:
 
 ```{r}
 gm <- tibble::tribble(
@@ -534,44 +534,33 @@ attr(rows, 'position') <- c(3, 9)
 modelsummary(models, add_rows = rows)
 ```
 
-# Exponentiated coefficients (and other extras)
+## `exponentiate`
 
-Users can pass any additional argument they want to the `tidy` method which is used to extract estimates from a model. For example, in logistic or Cox proportional hazard models, many users want to exponentiate coefficients to facilitate interpretation. The `tidy` functions supplied by the `broom` package allow users to set `exponentiate=TRUE` to achieve this. In `modelsummary`, users can use the same argument:
+We can exponentiate their estimates using the `exponentiate` argument:
 
-```r
+```{r}
 mod_logit <- glm(am ~ mpg, data = mtcars, family = binomial)
 modelsummary(mod_logit, exponentiate = TRUE)
 ```
 
-Any argument supported by `tidy` is thus supported by `modelsummary`.
+We can also present exponentiated and standard models side by side by using a logical vector:
 
-An important technical point is that `broom::tidy` still reports standard errors on the original scale, and not on the scale of the exponentiated coefficients. This is because, as [discussed on the `broom` issue tracker,](https://github.com/tidymodels/broom/issues/422) "quantiles (and thereby confidence intervals) are invariant under monotonic transformation (exp()) but variances are not."
-
-The first alternative strategy is thus to report confidence intervals instead of standard errors. When `exponentiate=TRUE`, estimates and intervals will be displayed on the same scale:
-
-```{r, eval = FALSE}
-modelsummary(mod, statistic = "conf.int", exponentiate = TRUE)
+```{r}
+mod_logit <- list(mod_logit, mod_logit)
+modelsummary(mod_logit, exponentiate = c(TRUE, FALSE))
 ```
 
-The second alternative strategy si to use a different "backend" to extract information from model objects. By setting the `modelsummary_get` global option, we tell `modelsummary` to use the `easystats`/`parameters` packages instead of `broom`. With these packages, the standard errors will automatically be transformed using a linear approximation of the transformation (e.g., $e^\beta * SE$ for logit models):
+# `...` ellipsis: Additional arguments
 
-```{r, eval = FALSE}
-options("modelsummary_get" = "easystats")
-modelsummary(mod, exponentiate = TRUE)
-```
+All arguments passed by the user to a `modelsummary` function are pushed forward in two other functions:
 
-Finally, we can define a `glance_custom.glm` function to transform the results of all GLM models automatically, using the same linear approximation. This strategy is described in detail in the section on "Customizing existing models", so we just show working code here without further explanation:
+1. The function which extracts model estimates.
+   - By default, additional arguments are pushed forward to `broom::tidy` and `broom::glance`. Users can also can also use a different "backend" to extract information from model objects: the `parameters` and `performance` packages. By setting the `modelsummary_get` global option, we tell `modelsummary` to use the `easystats`/`parameters` packages instead of `broom`. With these packages, other arguments are available, such as the `metrics` argument. Please refer to these package's documentation to details.
+2. The table-making functions.
+   - By default, additional arguments are pushed forward to `kableExtra::kbl`, but users can use a different table-making function by setting the `output` argument to a different value such as `"gt"`, `"flextable"`, or `"huxtable"`.
+   - See [the Appearance vignette](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html) for examples.
 
-```{r, eval = FALSE}
-tidy_custom.glm <- function(x) {
-    out <- broom::tidy(x)
-    out$std.error <- exp(out$estimate) * out$std.error
-    out$estimate <- exp(out$estimate)
-    return(out)
-}
-
-modelsummary(mod)
-```
+All arguments passed supported by these functions are thus automatically available directly in `modelsummary`, `modelplot`, and the `datasummary` family of functions.
 
 # Custom appearance
 
@@ -1268,7 +1257,7 @@ options(modelsummary_get = "broom")
 
 Sometimes, users want to include raw LaTeX commands in their tables, such as coefficient names including math mode: `Apple $\times$ Orange`. The result of these attempts is often a weird string such as: `\$\textbackslash{}times\$` instead of proper LaTeX-rendered characters.
 
-The source of the problem is that `kableExtra`, default table-making package in `modelsummary`, automatically escapes weird characters to make sure that your tables compile properly in LaTeX. To avoid this, we need to pass the `escape=FALSE` option to `kableExtra`. The `modelsummary` can push this option forward to `kableExtra` through the `...` ellipsis. This means that users can often just call something like:
+The source of the problem is that `kableExtra`, default table-making package in `modelsummary`, automatically escapes weird characters to make sure that your tables compile properly in LaTeX. To avoid this, we need to pass the `escape=FALSE` to `modelsummary`:
 
 ```{r, eval=FALSE}
 modelsummary(mod, escape = FALSE)

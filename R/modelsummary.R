@@ -123,9 +123,10 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @param escape boolean TRUE escapes or substitutes LaTeX/HTML characters which could
 #' prevent the file from compiling/displaying. This setting does not affect captions or notes.
 #' @param ... all other arguments are passed through to the extractor and
-#' table-making functions. This allows users to pass arguments directly to
-#' `modelsummary` in order to affect the behavior of other functions behind
-#' the scenes. For example,
+#' table-making functions (by default `broom::tidy` and `kableExtra::kbl`, but
+#' this can be customized). This allows users to pass arguments directly to
+#' `modelsummary` in order to affect the behavior of other functions behind the
+#' scenes. For example,
 #' * `performance::model_performance(metrics="RMSE")` to select goodness-of-fit statistics to extract using the `performance` package (must have set `options(modelsummary_get="easystats")` first). This can be useful for some models when statistics take a long time to compute.
 #' @return a regression table in a format determined by the `output` argument.
 #' @importFrom generics glance tidy
