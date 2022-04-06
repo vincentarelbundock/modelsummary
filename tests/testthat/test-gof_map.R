@@ -20,3 +20,14 @@ test_that("gof_map inputs are equivalent", {
     expect_equal(w, y)
     expect_equal(w, z)
 })
+
+
+test_that("character vector", {
+    mod <- lm(mpg ~ hp + drat, mtcars)
+    tab <- modelsummary(mod,
+                        gof_map = c("r.squared", "rmse", "nobs"),
+                        output = "data.frame")
+    expect_equal(tab$term[7:9], c("R2", "RMSE", "Num.Obs."))
+    expect_error(modelsummary(mod, gof_map = c("junk", "rmse", "nobs"), output = "data.frame"), NA)
+})
+

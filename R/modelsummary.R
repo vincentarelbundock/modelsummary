@@ -84,6 +84,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @param gof_map rename, reorder, and omit goodness-of-fit statistics and other
 #'   model information. This argument accepts 3 types of values:
 #' * NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.
+#' * character vector such as `c("rmse", "nobs", "r.squared")`. Elements correspond to colnames in the data.frame produced by `get_gof(model)`. The default dictionary is used to format and rename statistics.
 #' * data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
 #' * list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
 #' @param gof_omit string regular expression. Omits all matching gof statistics from

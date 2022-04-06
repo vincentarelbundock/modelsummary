@@ -1,6 +1,7 @@
 # modelsummary 0.9.6.9000
 
 * New `exponentiate` argument for `modelsummary()` and `modelplot()`
+* `gof_map` accepts a vector like: `c("rmse", "nobs", "r.squared")`
 * Drop `rlang` dependency
 * Bug fixes
 
