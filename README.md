@@ -177,6 +177,7 @@ modelsummary(models, output = "table.docx")
 
 There are several excellent alternatives to draw model summary tables in `R`:
 
+  - [sjPlot](https://strengejacke.github.io/sjPlot/)
   - [gtsummary](https://www.danieldsjoberg.com/gtsummary/)
   - [texreg](https://cran.r-project.org/package=texreg)
   - [stargazer](https://cran.r-project.org/package=stargazer)
