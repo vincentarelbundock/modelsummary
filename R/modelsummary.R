@@ -273,14 +273,11 @@ modelsummary <- function(
         if (isTRUE(escape)) {
             term_order <- escape_string(term_order)
         }
-        est$term <- factor(est$term, unique(term_order))
-    } else {
-        est$term <- factor(est$term, unique(term_order))
     }
+    est$term <- factor(est$term, unique(term_order))
 
     if (!is.null(group_map)) {
-        group_order <- group_map
-        est$group <- factor(est$term, group_order)
+        est$group <- factor(est$group, group_map)
     } else {
         est$group <- factor(est$group, unique(est$group))
     }
@@ -506,7 +503,6 @@ map_omit_rename_estimates <- function(estimates,
         estimates <- estimates[estimates$group %in% names(group_map), , drop = FALSE]
         estimates$group <- replace_dict(estimates$group, group_map)
     }
-
 
     ## escape if needed
     ## (must be done after rename/map, otherwise all rows are dropped)

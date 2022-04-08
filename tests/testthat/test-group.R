@@ -190,4 +190,16 @@ test_that("model names are preserved", {
 })
 
 
+test_that("group_map reorder rename", {
+    requiet("pscl")
+    data("bioChemists", package = "pscl")
+    mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
+    tab <- modelsummary(mod,
+                        group = component + term ~ model,
+                        group_map = c("zero_inflated" = "Zero", "conditional" = "Count"),
+                        output = "data.frame")
+    expect_equal(tab$group[1], "Zero")
+})
+
+
 options(modelsummary_get = NULL)

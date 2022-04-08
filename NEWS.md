@@ -1,3 +1,9 @@
+# modelsummary 0.10.0.9000
+
+Bug fixes:
+
+* `group_map` rename issue
+
 # modelsummary 0.10.0
 
 * New `exponentiate` argument for `modelsummary()` and `modelplot()`
