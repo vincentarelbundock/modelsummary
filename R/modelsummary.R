@@ -105,9 +105,9 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' See Examples section below.
 #' @param title string
 #' @param notes list or vector of notes to append to the bottom of the table.
-#' @param estimate string or `glue` string of the estimate to display (or a
-#' vector with one string per model). Valid entries include any column name of
-#' the data.frame produced by `get_estimates(model)`. Examples:
+#' @param estimate a single string or a character vector of length equal to the
+#' number of models. Valid entries include any column name of
+#' the data.frame produced by `get_estimates(model)`, and strings with curly braces compatible with the `glue` package format. Examples:
 #' * `"estimate"`
 #' * `"{estimate} ({std.error}){stars}"`
 #' * `"{estimate} [{conf.low}, {conf.high}]"`

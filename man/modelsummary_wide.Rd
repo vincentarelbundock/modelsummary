@@ -47,9 +47,9 @@ modelsummary_wide(
 \item LaTeX output: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command, which requires the \code{siunitx} package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 }}
 
-\item{estimate}{string or \code{glue} string of the estimate to display (or a
-vector with one string per model). Valid entries include any column name of
-the data.frame produced by \code{get_estimates(model)}. Examples:
+\item{estimate}{a single string or a character vector of length equal to the
+number of models. Valid entries include any column name of
+the data.frame produced by \code{get_estimates(model)}, and strings with curly braces compatible with the \code{glue} package format. Examples:
 \itemize{
 \item \code{"estimate"}
 \item \code{"{estimate} ({std.error}){stars}"}
