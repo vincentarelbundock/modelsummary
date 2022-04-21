@@ -5,7 +5,7 @@
 \title{Extract model gof A mostly internal function with some potential uses
 outside.}
 \usage{
-get_gof(model, vcov_type = NULL, gof_map = NULL, ...)
+get_gof(model, vcov_type = NULL, ...)
 }
 \arguments{
 \item{model}{a single model object}

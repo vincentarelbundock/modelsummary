@@ -4,11 +4,13 @@
 #' @inheritParams get_estimates
 #' @param vcov_type string vcov type to add at the bottom of the table
 #' @export
-get_gof <- function(model, vcov_type = NULL, gof_map = NULL, ...) {
+get_gof <- function(model, vcov_type = NULL, ...) {
 
+    # secret argument passed internally
     # gof_map = NULL: no value supplied by the user
     # gof_map = NA: the user explicitly wants to exclude everything
-    if (!is.null(gof_map) && isTRUE(is.na(gof_map))) return(NULL)
+    dots <- list(...)
+    if (isTRUE(is.na(dots$gof_map))) return(NULL)
 
     # priority
     get_priority <- getOption("modelsummary_get", default = "broom")
