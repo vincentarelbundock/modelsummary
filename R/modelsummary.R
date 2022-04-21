@@ -252,6 +252,7 @@ modelsummary <- function(
 
   term_order <- unique(unlist(lapply(est, function(x) x$term)))
   group_order <- unique(unlist(lapply(est, function(x) x$group)))
+  statistic_order <- unique(unlist(lapply(est, function(x) x$statistic)))
 
   f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE,
                             by = c("group", "term", "statistic"))
@@ -286,10 +287,12 @@ modelsummary <- function(
     est$model <- factor(est$model, model_names)
   }
 
+  est$statistic <- factor(est$statistic, statistic_order)
+
   est <- est[do.call(order, as.list(est)), ]
 
   # character for binding
-  for (col in c("term", "group", "model")) {
+  for (col in c("term", "group", "model", "statistic")) {
     if (col %in% colnames(est)) {
       est[[col]] <- as.character(est[[col]])
     }

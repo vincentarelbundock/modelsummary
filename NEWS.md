@@ -1,5 +1,9 @@
 # modelsummary 0.10.0.9000
 
+Misc:
+
+* `fmt = NULL` leaves variables as numeric long enough to apply glue functions on them. 
+
 Bug fixes:
 
 * `group_map` rename issue

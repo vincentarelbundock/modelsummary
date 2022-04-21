@@ -164,6 +164,13 @@ https://vincentarelbundock.github.io/modelsummary', group_name),
   est <- est[order(est$term, est$statistic), ]
   est$term <- as.character(est$term)
 
+  # statistics need informative names
+  idx <- as.numeric(factor(est$statistic))
+  # estimates are one per model, but all displayed on the same row, so we give
+  # the same identifier. statistics have different names because they need to
+  # be merged.
+  est$statistic <- c("estimate", statistic)[idx]
+
   # drop empty rows (important for broom.mixed which produces group
   # estimates without standard errors)
   est <- est[!est$value %in% c("", "()", "(NA)"), ]
