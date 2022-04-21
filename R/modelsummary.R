@@ -206,6 +206,7 @@ modelsummary <- function(
   msl <- get_list_of_modelsummary_lists(models = models,
                                         conf_level = conf_level,
                                         vcov = vcov,
+                                        gof_map = gof_map, # check if we can skip all gof computation
                                         ...)
   names(msl) <- model_names
 
@@ -780,7 +781,7 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
 }
 
 
-get_list_of_modelsummary_lists <- function(models, conf_level, vcov, ...) {
+get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, ...) {
 
     number_of_models <- max(length(models), length(vcov))
 
@@ -818,7 +819,9 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, ...) {
         # recycling when 1 model and many vcov
         j <- ifelse(length(models) == 1, 1, i)
 
-        gla <- get_gof(models[[j]], vcov_type[[i]], ...)
+        # don't waste time if we are going to exclude all gof anyway
+        gla <- get_gof(models[[j]], vcov_type[[i]], gof_map = gof_map, ...)
+
         tid <- get_estimates(models[[j]], conf_level = conf_level, vcov = vcov[[i]], ...)
 
         out[[i]] <- list("tidy" = tid, "glance" = gla)

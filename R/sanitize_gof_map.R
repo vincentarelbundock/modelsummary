@@ -10,6 +10,9 @@ sanitize_gof_map <- function(gof_map) {
     checkmate::check_list(gof_map, null.ok = TRUE),
     combine = "or")
 
+  # omit everything
+  if (isTRUE(is.na(gof_map))) return(gof_map)
+
   # character vector
   # min.len = 1, otherwise list() triggers, and we want list() to omit all
   if (isTRUE(checkmate::check_character(gof_map, min.len = 1))) {

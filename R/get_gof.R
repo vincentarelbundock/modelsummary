@@ -4,7 +4,11 @@
 #' @inheritParams get_estimates
 #' @param vcov_type string vcov type to add at the bottom of the table
 #' @export
-get_gof <- function(model, vcov_type = NULL, ...) {
+get_gof <- function(model, vcov_type = NULL, gof_map = NULL, ...) {
+
+    # gof_map = NULL: no value supplied by the user
+    # gof_map = NA: the user explicitly wants to exclude everything
+    if (!is.null(gof_map) && isTRUE(is.na(gof_map))) return(NULL)
 
     # priority
     get_priority <- getOption("modelsummary_get", default = "broom")
@@ -156,26 +160,23 @@ get_gof_parameters <- function(model, ...) {
   }
 
   # sanity
-  if(!isTRUE(dots$metrics == "none")) {
-    if (!inherits(out, "data.frame") && isTRUE(dots$metrics == "none")) {
-      return("`performance::model_performance(model)` did not return a data.frame.")
-    }
-
-    if (nrow(out) > 1) {
-      return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")
-    }
-
-    # cleanup
-    out <- insight::standardize_names(out, style = "broom")
+  if (!inherits(out, "data.frame") && isTRUE(dots$metrics == "none")) {
+    return("`performance::model_performance(model)` did not return a data.frame.")
   }
 
+  if (is.null(out)) return(out)
+
+  if (inherits(out, "data.frame") && nrow(out) > 1) {
+    return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")
+  }
+
+  # cleanup
+  out <- insight::standardize_names(out, style = "broom")
+
   # nobs
-  mi <- insight::model_info(model)
-  if ("n_obs" %in% names(mi)) {
-    # metrics = "none"
-    if (is.null(out)) {
-      out <- data.frame("nobs" = mi$n_obs)
-    } else { 
+  if (inherits(out, "data.frame")) {
+    mi <- insight::model_info(model)
+    if ("n_obs" %in% names(mi)) {
       out$nobs <- mi$n_obs
     }
   }

@@ -8,7 +8,7 @@ test_that('Characters raise error', {
   mod <- list()
   mod[[1]] <- lm(hp ~ mpg, mtcars)
   mod[[2]] <- 'ljaksdf'
-  expect_warning(expect_error(modelsummary(mod)))
+  expect_error(expect_warning(modelsummary(mod)))
   expect_warning(expect_error(modelsummary(mod[[2]])))
 })
 
