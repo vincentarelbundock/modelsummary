@@ -47,9 +47,11 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' uncertainty statistics.
 #' * "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high",
 #'    or any column name produced by: `get_estimates(model)`
-#' * `glue` package strings with braces, such as:
+#' * `glue` package strings with braces, with or without R functions, such as:
 #'   - `"{p.value} [{conf.low}, {conf.high}]"`
 #'   - `"Std.Error: {std.error}"`
+#'   - `"{exp(estimate) * std.error}"
+#' * Numbers are automatically rounded and converted to strings. To apply functions to their numeric values, as in the last `glue` example, users must set `fmt=NULL`.
 #' * Parentheses are added automatically unless the string includes `glue` curly braces `{}`.
 #' @param vcov robust standard errors and other manual statistics. The `vcov`
 #'   argument accepts six types of input (see the 'Details' and 'Examples'

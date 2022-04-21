@@ -103,9 +103,11 @@ format_estimates <- function(
   ## ensures that the reshape doesn't produce incompatible types
   ## exclude factors and characters, otherwise `rounding` will escape them
   ## which is premature since we then call coef_map
-  for (n in colnames(est)) {
-    if (!is.character(est[[n]]) && !is.factor(est[[n]])) {
-      est[[n]] <- rounding(est[[n]], fmt)
+  if (!is.null(fmt)) {
+    for (n in colnames(est)) {
+      if (!is.character(est[[n]]) && !is.factor(est[[n]])) {
+        est[[n]] <- rounding(est[[n]], fmt)
+      }
     }
   }
 
