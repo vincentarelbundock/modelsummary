@@ -813,10 +813,7 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, ..
                 call. = FALSE)
     }
 
-    # extract
-    out <- list()
-
-    for (i in 1:number_of_models) {
+    inner_loop <- function(i) {
         # recycling when 1 model and many vcov
         j <- ifelse(length(models) == 1, 1, i)
 
@@ -825,11 +822,25 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, ..
 
         tid <- get_estimates(models[[j]], conf_level = conf_level, vcov = vcov[[i]], ...)
 
-        out[[i]] <- list("tidy" = tid, "glance" = gla)
-        class(out[[i]]) <- "modelsummary_list"
+        out <- list("tidy" = tid, "glance" = gla)
+        class(out) <- "modelsummary_list"
+        return(out)
     }
 
-    return(out)
+    # parallel
+    if (isTRUE(check_dependency("future.apply"))) {
+        parallel_flag <- !"sequential" %in% attr(future::plan(), "class") && number_of_models > 1
+    } else {
+        parallel_flag <- FALSE
+    }
+
+    if (isTRUE(parallel_flag)) {
+        out <- future.apply::future_lapply(seq_len(number_of_models), inner_loop)
+    } else {
+        out <- lapply(seq_len(number_of_models), inner_loop)
+    }
+
+   return(out)
 }
 
 
