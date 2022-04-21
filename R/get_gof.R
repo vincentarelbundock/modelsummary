@@ -122,12 +122,21 @@ get_gof_broom <- function(model, ...) {
 #' @keywords internal
 get_gof_parameters <- function(model, ...) {
 
-  # select appropriate metrics to compute
+  dots <- list(...)
+
+  # user explicitly supplies a "metrics" argument
   if ("metrics" %in% names(list(...))) {
-    out <- suppressWarnings(try(
-      performance::model_performance(model, ...)))
+    # "none" is a custom option here
+    if (isTRUE(dots$metrics == "none")) {
+      out <- NULL
+
+    } else {
+      out <- suppressWarnings(try(
+        performance::model_performance(model, ...)))
+    }
+
+  # defaults for stan models: exclude r2_adjusted because veeeery slow
   } else {
-    # stan models: r2_adjusted is veeeery slow
     if (inherits(model, "stanreg") ||
         inherits(model, "brmsfit") ||
         inherits(model, "stanmvreg") ||
@@ -135,33 +144,40 @@ get_gof_parameters <- function(model, ...) {
       # this is the list of "common" metrics in `performance`
       # documentation, but their code includes R2_adj, which produces
       # a two-row glance and gives us issues.
-      msg <- '`modelsummary` uses the `performance` package to extract goodness-of-fit statistics from models of this class. You can specify the statistics you wish to compute by supplying a `metrics` argument to `modelsummary`, which will then push it forward to `performance`: `modelsummary(mod,metrics=c("RMSE","R2")` Alternatively, you can use `metrics="all"`, but note that some statistics are expensive to compute. See `?performance::performance` for details.'
+      msg <- '`modelsummary` uses the `performance` package to extract goodness-of-fit statistics from models of this class. You can specify the statistics you wish to compute by supplying a `metrics` argument to `modelsummary`, which will then push it forward to `performance`. Acceptable values are: "all", "common", "none", or a character vector of metrics names. For example: `modelsummary(mod, metrics = c("RMSE", "R2")` Note that some metrics are computationally expensive. See `?performance::performance` for details.'
       warn_once(msg, "performance_gof_expensive")
 
       metrics <- c("RMSE", "LOOIC", "WAIC")
     } else {
-      metrics <- "all"
+      metrics <- "common"
     }
     out <- suppressWarnings(try(
       performance::model_performance(model, metrics = metrics, ...)))
   }
 
   # sanity
-  if (!inherits(out, "data.frame")) {
-    return("`performance::model_performance(model)` did not return a data.frame.")
-  }
+  if(!isTRUE(dots$metrics == "none")) {
+    if (!inherits(out, "data.frame") && isTRUE(dots$metrics == "none")) {
+      return("`performance::model_performance(model)` did not return a data.frame.")
+    }
 
-  if (nrow(out) > 1) {
-    return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")
-  }
+    if (nrow(out) > 1) {
+      return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")
+    }
 
-  # cleanup
-  out <- insight::standardize_names(out, style = "broom")
+    # cleanup
+    out <- insight::standardize_names(out, style = "broom")
+  }
 
   # nobs
   mi <- insight::model_info(model)
   if ("n_obs" %in% names(mi)) {
-    out$nobs <- mi$n_obs
+    # metrics = "none"
+    if (is.null(out)) {
+      out <- data.frame("nobs" = mi$n_obs)
+    } else { 
+      out$nobs <- mi$n_obs
+    }
   }
 
   return(out)
