@@ -124,6 +124,7 @@ term names with your function.}
 model information. This argument accepts 4 types of values:
 \itemize{
 \item NULL (default): the \code{modelsummary::gof_map} dictionary is used for formatting, and all unknown statistic are included.
+\item NA: excludes all statistics from the bottom part of hte table.
 \item character vector such as \code{c("rmse", "nobs", "r.squared")}. Elements correspond to colnames in the data.frame produced by \code{get_gof(model)}. The default dictionary is used to format and rename statistics.
 \item data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
 \item list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
@@ -182,7 +183,7 @@ this can be customized). This allows users to pass arguments directly to
 \code{modelsummary} in order to affect the behavior of other functions behind the
 scenes. For example,
 \itemize{
-\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit statistics to extract using the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first). This can be useful for some models when statistics take a long time to compute.
+\item \code{metrics="none"}, \code{metrics="all"}, or \code{metrics=c("R2", "RMSE")} to select the goodness-of-fit extracted by the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first). This can be useful for some models when statistics take a long time to compute. See \code{?performance::performance}
 }}
 }
 \value{

@@ -18,7 +18,7 @@ this can be customized). This allows users to pass arguments directly to
 \code{modelsummary} in order to affect the behavior of other functions behind the
 scenes. For example,
 \itemize{
-\item \code{performance::model_performance(metrics="RMSE")} to select goodness-of-fit statistics to extract using the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first). This can be useful for some models when statistics take a long time to compute.
+\item \code{metrics="none"}, \code{metrics="all"}, or \code{metrics=c("R2", "RMSE")} to select the goodness-of-fit extracted by the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first). This can be useful for some models when statistics take a long time to compute. See \code{?performance::performance}
 }}
 }
 \description{
