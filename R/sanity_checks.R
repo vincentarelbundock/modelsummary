@@ -170,7 +170,7 @@ sanity_coef <- function(coef_map, coef_rename, coef_omit) {
 #' @noRd
 sanity_fmt <- function(fmt) {
   checkmate::assert(
-    checkmate::check_character(fmt, len = 1),
+    checkmate::check_character(fmt, len = 1, null.ok = TRUE),
     checkmate::check_numeric(fmt, len = 1, lower = 0),
     checkmate::check_function(fmt)
   )
