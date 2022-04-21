@@ -126,6 +126,20 @@ modelsummary(
   coef_omit = "Intercept")
 ```
 
+Glue strings can also apply R functions to estimates. However, since `modelsummary` rounds numbers and transforms them to character by default, we must set `fmt = NULL`:
+
+```{r}
+m <- glm(am ~ mpg, data = mtcars, family = binomial)
+modelsummary(
+    m,
+    fmt = NULL,
+    estimate = "{round(exp(estimate), 5)}",
+    statistic = "{round(exp(estimate) * std.error, 3)}")
+```
+
+
+
+
 You can also use different estimates for different models by using a vector of strings:
 
 ```{r}
