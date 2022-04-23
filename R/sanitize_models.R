@@ -5,24 +5,23 @@ sanitize_models <- function(models) {
   # do this before wrapping into a list
   # vincent personally uses this type of model a lot, but he might not want to
   # hard-code a ton of exceptions like this.
+
   fixest_multi_names <- function(x) {
-    att <- attributes(x)$meta
-    out <- rep("", nrow(att$tree))
-    if ("lhs" %in% names(att$tree)) {
-      out <- paste0(out, att$all_names$lhs[att$tree$lhs], " ")
-    }
-    if ("sample" %in% names(att$tree)) {
-      out <- paste0(out, att$all_names$sample[att$tree$sample])
-    }
-    if (all(out == "")) {
-      out <- NULL
-    }
-    return(out)
+      insight::check_if_installed("fixest", minimum_version = "0.10.5")
+      tree <- fixest::models(x)
+      if ("lhs" %in% names(tree)) {
+          out <- tree$lhs
+      } else if ("sample" %in% names(tree)) {
+          out <- sprintf("%s: %s", tree$sample.var, tree$sample)
+      } else {
+          out <- paste("Model", seq_along(x))
+      }
+      return(out)
   }
 
   if (class(models)[1] == "fixest_multi") {
-    if (is.null(names(models)) ||
-        length(names(models)) != nrow(attributes(models)$meta$tree)) {
+    # no names or default names
+    if (is.null(names(models)) || all(grepl("^lhs|^sample.var", names(models)))) {
       nam <- fixest_multi_names(models)
     } else {
       nam <- names(models)

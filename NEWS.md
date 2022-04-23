@@ -3,6 +3,7 @@
 Misc:
 
 * `fmt = NULL` leaves variables as numeric long enough to apply glue functions on them. 
+* Update for breaking changes after fixest 0.10.4
 
 Bug fixes:
 
