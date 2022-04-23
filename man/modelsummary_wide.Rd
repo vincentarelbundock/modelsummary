@@ -101,14 +101,22 @@ be a column in the data.frame produced by \code{get_estimates(model)}.}
 
 \item{coef_map}{character vector. Subset, rename, and reorder coefficients.
 Coefficients omitted from this vector are omitted from the table. The order
-of the vector determines the order of the table.  \code{coef_map} can be a named
-or an unnamed character vector (see the Examples section below). If
-\code{coef_map} is a named vector, its values define the labels that must appear
-in the table, and its names identify the original term names stored in the
-model object: \code{c("hp:mpg"="HPxM/G")}.}
+of the vector determines the order of the table. \code{coef_map} can be a named
+or an unnamed character vector. If \code{coef_map} is a named vector, its values
+define the labels that must appear in the table, and its names identify the
+original term names stored in the model object: \code{c("hp:mpg"="HPxM/G")}. See
+Examples section below.}
 
-\item{coef_omit}{string regular expression. Omits all matching coefficients
-from the table using \code{grepl(perl=TRUE)}. This argument uses perl-compatible regular expressions, which allows expressions such as \verb{"Int|ABC" which omits coefficients matching either "Int" or "ABC", and }"^(?!.*Intercept)"` which omits every term except the intercept.}
+\item{coef_omit}{string regular expression (perl-compatible) used to determine which coefficients to omit from the table. A "negative lookahead" can be used to specify which coefficients to \emph{keep} in the table. Examples:
+\itemize{
+\item \code{"ei"}: omit coefficients matching the "ei" substring.
+\item \code{"^Volume$"}: omit the "Volume" coefficient.
+\item \code{"ei|rc"}: omit coefficients matching either the "ei" or the "rc" substrings.
+\item \code{"^(?!Vol)"}: keep coefficients starting with "Vol" (inverse match using a negative lookahead).
+\item \code{"^(?!.*ei)"}: keep coefficients matching the "ei" substring.
+\item \code{"^(?!.*ei|.*pt)"}: keep coefficients matching either the "ei" or the "pt" substrings.
+\item See the Examples section below for complete code.
+}}
 
 \item{coef_rename}{named character vector or function which returns a named
 vector. Values of the vector refer to the variable names that will appear
@@ -128,8 +136,12 @@ model information. This argument accepts 4 types of values:
 \item list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
 }}
 
-\item{gof_omit}{string regular expression. Omits all matching gof statistics from
-the table. This argument uses perl-compatible regular expressions (\code{grepl(perl=TRUE)}), which allows expressions such as \code{".*"} which omits everything, and \code{"^(?!R2|Num)"} which omits every term except those that start with "R2" or "Num".}
+\item{gof_omit}{string regular expression (perl-compatible) used to determine which statistics to omit from the bottom section of the table. A "negative lookahead" can be used to specify which statistics to \emph{keep} in the table. Examples:
+\itemize{
+\item \code{"IC"}: omit statistics matching the "IC" substring.
+\item \code{"BIC|AIC"}: omit statistics matching the "AIC" or "BIC" substrings.
+\item \code{"^(?!.*IC)"}: keep statistics matching the "IC" substring.
+}}
 
 \item{add_rows}{a data.frame (or tibble) with the same number of columns as
 your main table. By default, rows are appended to the bottom of the table.

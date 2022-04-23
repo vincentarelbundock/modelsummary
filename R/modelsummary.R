@@ -69,13 +69,19 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' `exp(estimate)*std.error`.
 #' @param coef_map character vector. Subset, rename, and reorder coefficients.
 #' Coefficients omitted from this vector are omitted from the table. The order
-#' of the vector determines the order of the table.  `coef_map` can be a named
-#' or an unnamed character vector (see the Examples section below). If
-#' `coef_map` is a named vector, its values define the labels that must appear
-#' in the table, and its names identify the original term names stored in the
-#' model object: `c("hp:mpg"="HPxM/G")`.
-#' @param coef_omit string regular expression. Omits all matching coefficients
-#' from the table using `grepl(perl=TRUE)`. This argument uses perl-compatible regular expressions, which allows expressions such as `"Int|ABC" which omits coefficients matching either "Int" or "ABC", and `"^(?!.*Intercept)"` which omits every term except the intercept.
+#' of the vector determines the order of the table. `coef_map` can be a named
+#' or an unnamed character vector. If `coef_map` is a named vector, its values
+#' define the labels that must appear in the table, and its names identify the
+#' original term names stored in the model object: `c("hp:mpg"="HPxM/G")`. See
+#' Examples section below.
+#' @param coef_omit string regular expression (perl-compatible) used to determine which coefficients to omit from the table. A "negative lookahead" can be used to specify which coefficients to *keep* in the table. Examples:
+#' * `"ei"`: omit coefficients matching the "ei" substring.
+#' * `"^Volume$"`: omit the "Volume" coefficient.
+#' * `"ei|rc"`: omit coefficients matching either the "ei" or the "rc" substrings.
+#' * `"^(?!Vol)"`: keep coefficients starting with "Vol" (inverse match using a negative lookahead).
+#' * `"^(?!.*ei)"`: keep coefficients matching the "ei" substring.
+#' * `"^(?!.*ei|.*pt)"`: keep coefficients matching either the "ei" or the "pt" substrings.
+#' * See the Examples section below for complete code.
 #' @param coef_rename named character vector or function which returns a named
 #' vector. Values of the vector refer to the variable names that will appear
 #' in the table. Names refer to the original term names stored in the model
@@ -90,8 +96,10 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * character vector such as `c("rmse", "nobs", "r.squared")`. Elements correspond to colnames in the data.frame produced by `get_gof(model)`. The default dictionary is used to format and rename statistics.
 #' * data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
 #' * list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
-#' @param gof_omit string regular expression. Omits all matching gof statistics from
-#' the table. This argument uses perl-compatible regular expressions (`grepl(perl=TRUE)`), which allows expressions such as `".*"` which omits everything, and `"^(?!R2|Num)"` which omits every term except those that start with "R2" or "Num".
+#' @param gof_omit string regular expression (perl-compatible) used to determine which statistics to omit from the bottom section of the table. A "negative lookahead" can be used to specify which statistics to *keep* in the table. Examples:
+#' * `"IC"`: omit statistics matching the "IC" substring.
+#' * `"BIC|AIC"`: omit statistics matching the "AIC" or "BIC" substrings.
+#' * `"^(?!.*IC)"`: keep statistics matching the "IC" substring. 
 #' @param group transpose or group models and estimates (formula). The left
 #' side of the formula represents rows and the right side columns.
 #' * Formula with two components called `term` and `model`.
@@ -476,7 +484,32 @@ map_omit_rename_estimates <- function(estimates,
     ## coef_omit
     if (!is.null(coef_omit)) {
         idx <- !grepl(coef_omit, estimates$term, perl = TRUE)
-        estimates <- estimates[idx, , drop = FALSE]
+        if (sum(idx) > 0) {
+            estimates <- estimates[idx, , drop = FALSE]
+        } else {
+            msg <- 'The regular expression supplied to `coef_omit` matched and omitted all the coefficients, but `modelsummary` requires at least one coefficient to produce a table. Here are some examples of valid regular expressions for different use-cases:
+
+library(modelsummary)
+data(trees)
+mod <- lm(Girth ~ Height + Volume, data = trees)
+
+# coef_omit: omit coefficients matching one substring
+modelsummary(mod, coef_omit = "ei")
+
+# coef_omit: omit a specific coefficient
+modelsummary(mod, coef_omit = "^Volume$")
+
+# coef_omit: omit coefficients matching either one of two substring
+modelsummary(mod, coef_omit = "ei|rc")
+
+# coef_omit: keep coefficients starting with a substring (using a negative lookahead)
+modelsummary(mod, coef_omit = "^(?!Vol)")
+
+# coef_omit: keep coefficients matching either one of two substring
+modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
+'
+            stop(msg, call. = FALSE)
+        }
     }
 
     # coef_rename

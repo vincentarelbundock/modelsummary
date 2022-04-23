@@ -58,6 +58,22 @@
 #' modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 #' modelsummary(models, coef_map = c('Volume', 'Height'))
 #'
+#' # coef_omit: omit coefficients matching one substring
+#' modelsummary(models, coef_omit = "ei", omit = ".*")
+#'
+#' # coef_omit: omit a specific coefficient
+#' modelsummary(models, coef_omit = "^Volume$", gof_omit = ".*", output = "markdown")
+#' 
+#' # coef_omit: omit coefficients matching either one of two substring
+#' modelsummary(models, coef_omit = "ei|rc", omit = ".*")
+#' 
+#' # coef_omit: keep coefficients starting with a substring (using a negative lookahead)
+#' modelsummary(models, coef_omit = "^(?!Vol)", omit = ".*")
+#' 
+#' # coef_omit: keep coefficients matching a substring
+#' modelsummary(models, coef_omit = "^(?!.*ei|.*pt)", omit = ".*")
+#' 
+#'
 #' # title
 #' modelsummary(models, title = 'This is the title')
 #'
