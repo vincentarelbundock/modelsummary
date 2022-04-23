@@ -3,50 +3,34 @@
 #' @noRd
 sanitize_group <- function(group) {
 
-  flag_error <- FALSE
-
-  checkmate::assert_formula(group)
+  checkmate::assert_class(group, "formula")
 
   rhs <- all.vars(stats::update(group, "0 ~ ."))
   lhs <- all.vars(stats::update(group, ". ~ 0"))
   variables <- c(rhs, lhs)
 
-  if (length(intersect(rhs, lhs) > 0)) {
-    stop("The `group` formula cannot include the same variable on both sides.")
-  }
-
   if (!all(c("model", "term") %in% c(lhs, rhs))) {
     flag_error <- TRUE
   }
 
-  if (length(variables) != length(unique(variables))) {
-    flag_error <- TRUE
+  group_name <- setdiff(variables, c("term", "model", "statistic"))
+  if (length(group_name) > 1) {
+    stop('The `group` formula can only include one group name. The other terms must be: "term", "model", or "statistic".')
   }
 
-  if (length(variables) > 3) {
-    flag_error <- TRUE
-  } else if (length(variables) == 2) {
+  if (length(group_name) == 0) {
     group_name <- NULL
-  } else {
-    group_name <- setdiff(c(lhs, rhs), c("term", "model", "statistic"))
-    if (length(group_name) == 0) group_name <- NULL
   }
 
-  if (flag_error == TRUE) {
-    stop('The `group` argument must be a two-sided formula with two or three components. The formula must include a component named "term", which represents the parameters of the model. The formula must include a component named "model", which represents the different models being summarized. For example,
-
-model ~ term
-
-displays models as rows and parameter estimates as columns. Inverting the formula would display models as columns and terms as rows.
-
-The formula can also include a third, optional, component: a group identifier. In contrast to the "term" and "model" components, the name of the group identifier is not fixed. It must correspond to the name of a column in the data.frame produced by `get_estimates(model)`. For example, applying the `get_estimates` function to a multinomial logit model returns a column called "response", which identifies the parameters that correspond to each value of the response variable:
-
-model + response ~ term')
+  group_formula <- group
+  if (!"statistic" %in% variables) {
+    group_formula <- update(group_formula, ". + statistic ~ .")
   }
 
   out <- list("lhs" = lhs,
               "rhs" = rhs,
-              "group_name" = group_name)
+              "group_name" = group_name,
+              "group_formula" = group_formula)
 
   return(out)
 }

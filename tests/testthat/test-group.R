@@ -3,15 +3,26 @@ options(modelsummary_get = "easystats")
 skip_if_not_installed("gamlss")
 requiet("gamlss")
 
-test_that("horizontal statistics: one model", {
-
-    mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
-    modelsummary(mod, group = term ~ model + statistic, output = "markdown")
-
-
-
-})
-
+# test_that("horizontal statistics: one model", {
+#
+#     options(modelsummary_factory_default = "markdown")
+#     mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
+#     modelsummary(mod, group = term ~ model + statistic)
+#
+#     modelsummary(list(mod, mod), group = term ~ statistic + model)
+#     modelsummary(list(mod, mod), group = term ~ model + statistic)
+#
+#     modm <- nnet::multinom(factor(cyl) ~ mpg, data = mtcars, trace = FALSE)
+#
+#     modelsummary(list(modm, modm), group = term + y.level + statistic ~ model)
+#
+#     modelsummary(list(modm, modm), group = term + response + statistic ~ model)
+#     modelsummary(list(modm, modm), group = term + statistic + y.level ~ model)
+#
+#     modelsummary(list(modm, modm), group = y.level + model ~ statistic + term)
+#     modelsummary(list(modm, modm), group = model + term + y.level ~ statistic)
+# })
+#
 
 
 test_that("Michael E Flynn ultra-niche bug check", {
@@ -97,15 +108,17 @@ test_that("group ~ model + term", {
                         output = "data.frame",
                         group = response ~ model + term,
                         metrics = "RMSE")
-    known <- c("part", "group", "statistic", "Model 1 / (Intercept)", "Model 1 / mpg", "Model 2 / (Intercept)", "Model 2 / drat", "Model 2 / mpg")
+    known <- c("part", "group", "statistic", "Model 1 / (Intercept)", "Model 1 / mpg",
+"Model 2 / (Intercept)", "Model 2 / mpg", "Model 2 / drat")
     expect_equal(colnames(tab), known)
     expect_equal(dim(tab), c(4, 8))
 
-    tab <- modelsummary(mod, 
+    tab <- modelsummary(mod,
                         output = "data.frame",
                         group = response ~ term + model,
                         metrics = "RMSE")
-    known <- c("part", "group", "statistic", "(Intercept) / Model 1", "(Intercept) / Model 2", "drat / Model 2", "mpg / Model 1", "mpg / Model 2")
+    known <- c("part", "group", "statistic", "(Intercept) / Model 1", "(Intercept) / Model 2",
+"mpg / Model 1", "mpg / Model 2", "drat / Model 2")
     expect_equal(colnames(tab), known)
     expect_equal(dim(tab), c(4, 8))
 })
@@ -138,7 +151,7 @@ test_that("nnet::multinom: order of columns determined by formula terms", {
     trash <- capture.output(tab <- modelsummary(mod, "data.frame", group = model ~ term + response))
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
-                 c("part", "statistic", "model", "(Intercept) / 6",
+                 c("part", "model", "statistic", "(Intercept) / 6",
                  "(Intercept) / 8", "mpg / 6", "mpg / 8", "drat / 6",
                  "drat / 8"))
 
@@ -146,9 +159,8 @@ test_that("nnet::multinom: order of columns determined by formula terms", {
     trash <- capture.output(tab <- modelsummary(mod, "data.frame", group = model ~ response + term))
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
-                 c("part", "statistic", "model", "6 / (Intercept)", "6 / mpg",
-                   "6 / drat", "8 / (Intercept)", "8 / mpg", "8 / drat"))
-
+        c("part", "model", "statistic", "6 / (Intercept)", "6 / mpg", "6 / drat",
+          "8 / (Intercept)", "8 / mpg", "8 / drat"))
 })
 
 

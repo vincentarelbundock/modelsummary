@@ -270,7 +270,7 @@ modelsummary <- function(
                             by = c("group", "term", "statistic"))
   est <- Reduce(f, est)
 
-  est <- group_reshape(est, group$lhs, group$rhs, group$group_name)
+  est <- group_reshape(est, group$group_formula)
 
   # distinguish between estimates and gof (first column for tests)
   est$part <- "estimates"
@@ -625,194 +625,42 @@ map_omit_gof <- function(gof, gof_omit, gof_map) {
 #' @importFrom stats reshape
 #' @keywords internal
 #' @noRd
-group_reshape <- function(estimates, lhs, rhs, group_name) {
+group_reshape <- function(estimates, group_formula) {
 
-    lhs[lhs == group_name] <- "group"
-    rhs[rhs == group_name] <- "group"
+    insight::check_if_installed("data.table")
 
-    # term ~ model (default)
-    if (is.null(lhs) ||
-        (length(lhs) == 1 && lhs == "term" &&
-         length(rhs) == 1 && rhs == "model")) {
-      return(estimates)
-
-    # term ~ model + statistic
-    } else if (length(lhs) == 1 && lhs == "term" && length(rhs) == 2 && all(c("model", "statistic") %in% rhs)) {
-        insight::check_if_installed("data.table")
-        if (all(estimates$group == "")) {
-            estimates$group <- NULL
-        }
-        idx <- intersect(colnames(estimates), c("term", "statistic"))
-        tmp <- data.table::data.table(estimates)
-        tmp <- data.table::melt(tmp, id.vars = idx, variable.name = "model")
-        out <- data.table::dcast(term ~ model + statistic, data = tmp)
-        data.table::setDF(out)
-
-    # model ~ term
-    } else if (length(lhs) == 1 && lhs == "model" && length(rhs) == 1 && rhs == "term") {
-      ## out <- tidyr::pivot_longer(estimates,
-      ##                            cols = -c("group", "term", "statistic"),
-      ##                            names_to = "model")
-      ## out <- tidyr::pivot_wider(out, names_from = "term")
-      out <- reshape(
-        estimates,
-        varying = setdiff(colnames(estimates), c("group", "term", "statistic")),
-        idvar = c("group", "term", "statistic"),
-        times = setdiff(colnames(estimates), c("group", "term", "statistic")),
-        v.names = "value",
-        timevar = "model",
-        direction = "long")
-      out <- reshape(
-        out,
-        timevar = "term",
-        idvar = c("group", "statistic", "model"),
-        direction = "wide")
-      colnames(out) <- gsub("^value\\.", "", colnames(out))
-      row.names(out) <- NULL
-
-      # order matters for sorting
-      out <- out[, unique(c("group", "model", "statistic", colnames(out)))]
-
-    ## term + group ~ model
-    } else if (all(c("term", "group") %in% lhs)) {
-        idx <- unique(c(lhs, colnames(estimates)))
-        out <- estimates[, idx, drop = FALSE]
-
-    } else if (all(c("term", "model") %in% lhs)) {
-        ## out <- tidyr::pivot_longer(
-        ##     estimates,
-        ##     cols = !tidyselect::any_of(c("part", "group", "term", "statistic")),
-        ##     names_to = "model")
-        ## out <- tidyr::pivot_wider(
-        ##     out,
-        ##     names_from = "group",
-        ##     values_from = "value",
-        ##     values_fill = "")
-        out <- estimates
-        out <- reshape(
-          out,
-          varying = setdiff(colnames(estimates), c("part", "group", "term", "statistic")),
-          idvar = c("group", "term", "statistic"),
-          times = setdiff(colnames(estimates), c("part", "group", "term", "statistic")),
-          v.names = "value",
-          timevar = "model",
-          direction = "long")
-        out <- reshape(
-          out,
-          timevar = "group",
-          idvar = setdiff(colnames(out), c("group", "value")),
-          direction = "wide")
-        row.names(out) <- NULL
-        colnames(out) <- gsub("^value\\.", "", colnames(out))
-
-        idx <- unique(c(lhs, colnames(out)))
-        out <- out[, idx, drop = FALSE]
-
-    ## term ~ group + model
-    } else if (all(c("group", "model") %in% rhs)) {
-
-        out <- estimates
-
-        ## out <- tidyr::pivot_longer(
-        ##   out,
-        ##   cols = !tidyselect::any_of(c("part", "group", "term", "statistic")),
-        ##   names_to = "model")
-        ## out <- tidyr::pivot_wider(out,
-        ##                           names_from = "idx_col",
-        ##                           values_from = "value",
-        ##                           values_fill = "")
-        out <- reshape(
-          out,
-          varying = setdiff(colnames(estimates), c("part", "group", "term", "statistic")),
-          idvar = c("group", "term", "statistic"),
-          times = setdiff(colnames(estimates), c("part", "group", "term", "statistic")),
-          v.names = "value",
-          timevar = "model",
-          direction = "long")
-
-        ## preserve order of columns (rhs variables are ordered factors)
-        row.names(out) <- NULL
-        out[[rhs[1]]] <- factor(out[[rhs[1]]], unique(out[[rhs[1]]]))
-        out[[rhs[2]]] <- factor(out[[rhs[2]]], unique(out[[rhs[2]]]))
-        out <- out[order(out[[rhs[1]]], out[[rhs[2]]]),]
-
-        out$idx_col <- paste(out[[rhs[1]]], "/", out[[rhs[2]]])
-        out$model <- out$group <- NULL
-        out <- reshape(
-          out,
-          timevar = "idx_col",
-          idvar = setdiff(colnames(out), c("idx_col", "value")),
-          direction = "wide")
-        row.names(out) <- NULL
-        colnames(out) <- gsub("^value\\.", "", colnames(out))
-
-    ## model ~ term + group
-    } else if (all(c("term", "group") %in% rhs)) {
-      ## out <- tidyr::pivot_longer(estimates,
-      ##                            cols = -c("group", "term", "statistic"),
-      ##                            names_to = "model")
-      ## out <- tidyr::pivot_wider(out, names_from = rhs, names_sep = " / ")
-      out <- estimates
-      out[[rhs[1]]] <- factor(out[[rhs[1]]], unique(out[[rhs[1]]]))
-      out[[rhs[2]]] <- factor(out[[rhs[2]]], unique(out[[rhs[2]]]))
-
-      out <- reshape(
-        out,
-        varying = setdiff(colnames(estimates), c(rhs, "statistic")),
-        idvar = c(rhs, "statistic"),
-        times = setdiff(colnames(estimates), c(rhs, "statistic")),
-        v.names = "value",
-        timevar = "model",
-        direction = "long")
-
-      row.names(out) <- NULL
-
-      ## preserve order of columns (rhs variables are ordered factors)
-      out <- out[order(out[[rhs[1]]], out[[rhs[2]]]),]
-
-      out$rhs <- paste(out[[rhs[1]]], out[[rhs[2]]], sep = " / ")
-      out[[rhs[1]]] <- out[[rhs[2]]] <- NULL
-
-      out <- reshape(
-        out,
-        timevar = "rhs",
-        idvar = setdiff(colnames(out), c("rhs", "value")),
-        direction = "wide")
-      row.names(out) <- NULL
-      colnames(out) <- gsub("^value\\.", "", colnames(out))
-
-    ## group ~ model + term
-    } else if (length(lhs) == 1 && "group" %in% lhs) {
-
-      out <- estimates
-      out <- reshape(
-         out,
-         varying = setdiff(colnames(estimates), c("part", "group", "term", "statistic")),
-         idvar = c("group", "term", "statistic"),
-         times = setdiff(colnames(estimates), c("part", "group", "term", "statistic")),
-         v.names = "value",
-         timevar = "model",
-         direction = "long")
-
-      # avoid duplicate row error
-      row.names(out) <- NULL
-
-      ## preserve order of columns (rhs variables are ordered factors)
-      out[[lhs]] <- factor(out[[lhs]], levels = unique(out[[lhs]]))
-
-      out <- out[order(out[[rhs[1]]], out[[rhs[2]]]),]
-      out$idx_col <- paste(out[[rhs[1]]], "/", out[[rhs[2]]])
-      out[[rhs[1]]] <- out[[rhs[2]]] <- NULL
-      out <- reshape(out,
-                     timevar = "idx_col",
-                     idvar = setdiff(colnames(out), c("idx_col", "value")),
-                     direction = "wide")
-      row.names(out) <- NULL
-      colnames(out) <- gsub("^value\\.", "", colnames(out))
-
-      out <- out[order(out[[lhs]]), ]
-
+    vars <- all.vars(group_formula)
+    group_id <- setdiff(vars, c("term", "statistic", "model"))
+    if (length(group_id) == 0 || all(estimates$group == "")) {
+        group_id <- NULL
+        estimates$group <- NULL
+    } else {
+        args <- list()
+        args[[group_id]] <- quote(group)
+        group_formula <- do.call(substitute, list(expr = group_formula, args))
     }
+    idx <- intersect(colnames(estimates), c("term", "statistic", "group"))
+
+    # long
+    out <- data.table::melt(data.table::data.table(estimates),
+                            id.vars = idx,
+                            variable.name = "model",
+                            value.name = "estimate")
+
+    # use factors to preserve order in `dcast`
+    for (col in c("part", "model", "term", "group", "statistic")) {
+      if (col %in% colnames(out)) {
+        out[[col]] <- factor(out[[col]], unique(out[[col]]))
+      }
+    }
+
+    # wide
+    out <- data.table::dcast(eval(group_formula),
+                             data = out,
+                             value.var = "estimate",
+                             sep = " / ")
+
+    data.table::setDF(out)
 
     out[out == "NA"] <- ""
     out[is.na(out)] <- ""
