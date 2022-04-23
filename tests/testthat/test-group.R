@@ -3,6 +3,17 @@ options(modelsummary_get = "easystats")
 skip_if_not_installed("gamlss")
 requiet("gamlss")
 
+test_that("horizontal statistics: one model", {
+
+    mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
+    modelsummary(mod, group = term ~ model + statistic, output = "markdown")
+
+
+
+})
+
+
+
 test_that("Michael E Flynn ultra-niche bug check", {
     skip_if_not_installed("nnet")
     requiet("nnet")

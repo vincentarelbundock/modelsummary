@@ -28,7 +28,8 @@ sanitize_group <- function(group) {
   } else if (length(variables) == 2) {
     group_name <- NULL
   } else {
-    group_name <- setdiff(c(lhs, rhs), c("term", "model"))
+    group_name <- setdiff(c(lhs, rhs), c("term", "model", "statistic"))
+    if (length(group_name) == 0) group_name <- NULL
   }
 
   if (flag_error == TRUE) {

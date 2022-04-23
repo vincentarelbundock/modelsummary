@@ -299,9 +299,18 @@ modelsummary <- function(
     est$model <- factor(est$model, model_names)
   }
 
-  est$statistic <- factor(est$statistic, statistic_order)
+  # not statistic column when group=term~model+statistic
+  if ("statistic" %in% colnames(est)) {
+    est$statistic <- factor(est$statistic, statistic_order)
+  }
 
   est <- est[do.call(order, as.list(est)), ]
+
+    var = "x"
+    f = y ~ x + z
+    args <- list()
+    args[[var]] <- quote(group)
+    do.call(substitute, list(expr = f, args))
 
   # character for binding
   for (col in c("term", "group", "model", "statistic")) {
@@ -626,6 +635,18 @@ group_reshape <- function(estimates, lhs, rhs, group_name) {
         (length(lhs) == 1 && lhs == "term" &&
          length(rhs) == 1 && rhs == "model")) {
       return(estimates)
+
+    # term ~ model + statistic
+    } else if (length(lhs) == 1 && lhs == "term" && length(rhs) == 2 && all(c("model", "statistic") %in% rhs)) {
+        insight::check_if_installed("data.table")
+        if (all(estimates$group == "")) {
+            estimates$group <- NULL
+        }
+        idx <- intersect(colnames(estimates), c("term", "statistic"))
+        tmp <- data.table::data.table(estimates)
+        tmp <- data.table::melt(tmp, id.vars = idx, variable.name = "model")
+        out <- data.table::dcast(term ~ model + statistic, data = tmp)
+        data.table::setDF(out)
 
     # model ~ term
     } else if (length(lhs) == 1 && lhs == "model" && length(rhs) == 1 && rhs == "term") {
