@@ -250,7 +250,7 @@ modelsummary <- function(
       ...)
 
     # before merging to collapse
-    tmp <- map_omit_rename_estimates(
+    tmp <- map_estimates(
         tmp,
         coef_rename = coef_rename,
         coef_map = coef_map,
@@ -271,7 +271,7 @@ modelsummary <- function(
                             by = c("group", "term", "statistic"))
   est <- Reduce(f, est)
 
-  est <- group_reshape(est, group, conf_level = conf_level)
+  est <- shape_estimates(est, group, conf_level = conf_level)
 
   # distinguish between estimates and gof (first column for tests)
   est$part <- "estimates"
@@ -345,7 +345,7 @@ modelsummary <- function(
   f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE, by = "term")
   gof <- Reduce(f, gof)
 
-  gof <- map_omit_gof(gof, gof_omit, gof_map)
+  gof <- map_gof(gof, gof_omit, gof_map)
 
   # combine estimates and gof
   tab <- bind_est_gof(est, gof)
@@ -438,7 +438,6 @@ modelsummary <- function(
   tab <- tab[idx, ]
 
 
-
   ## build table
   out <- factory(
     tab,
@@ -464,204 +463,6 @@ modelsummary <- function(
     return(out)
   }
 
-}
-
-
-
-#' rename and reorder estimates from a *single* model
-#' (before merging to collapse)
-#'
-#' @keywords internal
-map_omit_rename_estimates <- function(estimates,
-                                      coef_rename,
-                                      coef_map,
-                                      coef_omit,
-                                      group_map) {
-
-
-
-    ## coef_omit
-    if (!is.null(coef_omit)) {
-        idx <- !grepl(coef_omit, estimates$term, perl = TRUE)
-        if (sum(idx) > 0) {
-            estimates <- estimates[idx, , drop = FALSE]
-        } else {
-            msg <- 'The regular expression supplied to `coef_omit` matched and omitted all the coefficients, but `modelsummary` requires at least one coefficient to produce a table. Here are some examples of valid regular expressions for different use-cases:
-
-library(modelsummary)
-data(trees)
-mod <- lm(Girth ~ Height + Volume, data = trees)
-
-# coef_omit: omit coefficients matching one substring
-modelsummary(mod, coef_omit = "ei")
-
-# coef_omit: omit a specific coefficient
-modelsummary(mod, coef_omit = "^Volume$")
-
-# coef_omit: omit coefficients matching either one of two substring
-modelsummary(mod, coef_omit = "ei|rc")
-
-# coef_omit: keep coefficients starting with a substring (using a negative lookahead)
-modelsummary(mod, coef_omit = "^(?!Vol)")
-
-# coef_omit: keep coefficients matching either one of two substring
-modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
-'
-            stop(msg, call. = FALSE)
-        }
-    }
-
-    # coef_rename
-    if (!is.null(coef_rename)) {
-        if (is.character(coef_rename)) {
-            dict <- coef_rename
-        } else if (is.function(coef_rename)) {
-            dict <- stats::setNames(coef_rename(estimates$term), estimates$term)
-        }
-        estimates$term <- replace_dict(estimates$term, dict)
-    }
-
-    # coef_map
-    if (!is.null(coef_map)) {
-        if (is.null(names(coef_map))) {
-            coef_map <- stats::setNames(coef_map, coef_map)
-        }
-        idx <- estimates$term %in% names(coef_map)
-        if (!any(idx)) {
-            stop("At least one of the term names in each model must appear in `coef_map`.")
-        }
-        estimates <- estimates[idx, , drop = FALSE]
-        estimates$term <- replace_dict(estimates$term, coef_map)
-    }
-
-    # group_map
-    if (!is.null(group_map)) {
-        if (is.null(names(group_map))) {
-            group_map <- stats::setNames(group_map, group_map)
-        }
-        estimates <- estimates[estimates$group %in% names(group_map), , drop = FALSE]
-        estimates$group <- replace_dict(estimates$group, group_map)
-    }
-
-    ## escape if needed
-    ## (must be done after rename/map, otherwise all rows are dropped)
-    if (settings_equal("escape", TRUE)) {
-        for (i in c("group", "term", "model")) {
-            if (i %in% colnames(estimates)) {
-                estimates[[i]] <- escape_string(estimates[[i]])
-            }
-        }
-    }
-
-    return(estimates)
-}
-
-
-#' Internal function to subset, rename and re-order gof statistics
-#'
-#' @keywords internal
-map_omit_gof <- function(gof, gof_omit, gof_map) {
-
-  if (is.null(gof) ||
-      is.data.frame(gof) && nrow(gof) == 0) {
-    return(gof)
-  }
-
-  # row identifier as first column
-  gof$part <- "gof"
-  gof <- gof[, unique(c("part", "term", names(gof)))]
-
-  # gof_omit
-  if (!is.null(gof_omit)) {
-    idx <- !grepl(gof_omit, gof$term, perl = TRUE)
-    gof <- gof[idx, , drop = FALSE]
-  }
-
-  # map
-  gm_raw <- sapply(gof_map, function(x) x$raw)
-  gm_clean <- sapply(gof_map, function(x) x$clean)
-  gm_omit <- try(sapply(gof_map, function(x) x$omit), silent = TRUE)
-
-  if (is.logical(gm_omit)) {
-    if (isTRUE(attr(gof_map, "whitelist"))) {
-      gof <- gof[gof$term %in% gm_clean[gm_omit == FALSE], , drop = FALSE]
-    } else {
-      gof <- gof[!gof$term %in% gm_clean[gm_omit == TRUE], , drop = FALSE]
-    }
-  } else {
-    if (isTRUE(attr(gof_map, "whitelist"))) {
-      gof <- gof[gof$term %in% gm_clean, , drop = FALSE]
-    }
-  }
-
-  tmp <- gm_clean[match(gof$term, gm_raw)]
-  tmp[is.na(tmp)] <- gof$term[is.na(tmp)]
-  gof$term <- tmp
-  idx <- match(gof$term, gm_clean)
-  # hack to keep unmatched gof at the end of the table
-  # important for unknown glance_custom entries
-  idx[is.na(idx)] <- 1e6 + 1:sum(is.na(idx))
-  gof <- gof[order(idx, gof$term), ]
-
-  # important for modelsummary_get = "all"
-  gof <- unique(gof)
-
-  return(gof)
-}
-
-
-#' internal function to reshape grouped estimates
-#'
-#' @importFrom stats reshape
-#' @keywords internal
-#' @noRd
-group_reshape <- function(estimates, group, conf_level) {
-
-    group_formula <- group$group_formula
-
-    insight::check_if_installed("data.table")
-
-    idx <- intersect(colnames(estimates), c("term", "statistic", "group"))
-
-    # long
-    out <- data.table::melt(data.table::data.table(estimates),
-                            id.vars = idx,
-                            variable.name = "model",
-                            value.name = "estimate")
-
-    if ("statistic" %in% group$rhs) {
-        out$statistic <- rename_statistics(out$statistic, conf_level = conf_level)
-    }
-
-    # use factors to preserve order in `dcast`
-    for (col in c("part", "model", "term", "group", "statistic")) {
-      if (col %in% colnames(out)) {
-        out[[col]] <- factor(out[[col]], unique(out[[col]]))
-      }
-    }
-
-    # wide
-    out <- data.table::dcast(eval(group_formula),
-                             data = out,
-                             value.var = "estimate",
-                             sep = " / ")
-
-    data.table::setDF(out)
-
-    out[out == "NA"] <- ""
-    out[is.na(out)] <- ""
-
-    # empty columns
-    idx <- sapply(out, function(x) !all(x == ""))
-    out <- out[, idx, drop = FALSE]
-
-    # empty rows
-    idx <- setdiff(colnames(out), c("part", "term", "statistic", "model"))
-    tmp <- out[, idx, drop = FALSE]
-    idx <- apply(tmp, 1, function(x) !all(x == ""))
-    out <- out[idx, ]
-
-    return(out)
 }
 
 

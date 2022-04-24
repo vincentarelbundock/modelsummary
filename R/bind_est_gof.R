@@ -3,19 +3,33 @@ bind_est_gof <- function(est, gof) {
     return(est)
   }
 
+  if ("model" %in% colnames(est)) {
+    return(est)
+  }
+
+  if (!"term" %in% colnames(est) && "group" %in% colnames(est)) {
+    data.table::setnames(gof, old = "term", new = "group")
+  }
+
   if (all(colnames(gof) %in% colnames(est))) {
     out <- bind_rows(est, gof)
     return(out)
   }
 
-  # partial matches on model names
-  idx <- sapply(colnames(gof), function(x) grep(x, colnames(est))[1]) # first matches
-  if (any(is.na(idx))) {
-    return(est)
+  # partial matches on model names, but not on known columns
+  bad <- c("part", "term", "model", "group", "statistic")
+  bad <- stats::na.omit(match(bad, colnames(est)))
+
+  idx <- sapply(colnames(gof), function(x) # first matches
+                setdiff(grep(x, colnames(est)), bad)[1])
+  idx <- stats::na.omit(idx)
+  if (length(idx) > 0) {
+    data.table::setnames(gof, old = names(idx), new = names(est)[idx])
+    out <- bind_rows(est, gof)
+  } else {
+    out <- est
   }
 
-  colnames(gof) <- colnames(est)[idx]
-  out <- bind_rows(est, gof)
   return(out)
 }
 

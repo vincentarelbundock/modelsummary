@@ -82,7 +82,7 @@ test_that("Michael E Flynn ultra-niche bug check", {
     void <- capture.output(
     tab <- modelsummary(mod,
                         output = "latex",
-                        coef_map = coef_list,
+                        ccoef_map = coef_list,
                         group = term ~ model + response))
     expect_snapshot(cat(tab))
 })
@@ -155,7 +155,7 @@ test_that("group ~ model + term", {
     known <- c("part", "group", "statistic", "Model 1 / (Intercept)", "Model 1 / mpg",
 "Model 2 / (Intercept)", "Model 2 / mpg", "Model 2 / drat")
     expect_equal(colnames(tab), known)
-    expect_equal(dim(tab), c(4, 8))
+    expect_equal(dim(tab), c(6, 8))
 
     tab <- modelsummary(mod,
                         output = "data.frame",
@@ -164,7 +164,7 @@ test_that("group ~ model + term", {
     known <- c("part", "group", "statistic", "(Intercept) / Model 1", "(Intercept) / Model 2",
 "mpg / Model 1", "mpg / Model 2", "drat / Model 2")
     expect_equal(colnames(tab), known)
-    expect_equal(dim(tab), c(4, 8))
+    expect_equal(dim(tab), c(6, 8))
 })
 
 test_that("nnet::multinom: order of columns determined by formula terms", {
