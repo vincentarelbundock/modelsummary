@@ -31,7 +31,7 @@ shape_estimates <- function(estimates, group, conf_level) {
     out <- data.table::dcast(eval(group_formula),
                              data = out,
                              value.var = "estimate",
-                             sep = " / ")
+                             sep = "||||")
 
     data.table::setDF(out)
 

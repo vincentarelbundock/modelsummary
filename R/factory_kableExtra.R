@@ -72,11 +72,25 @@ factory_kableExtra <- function(tab,
     arguments[["align"]] <- align
   }
 
+  # compute spans
+  span_list <- list()
+  if (any(grepl("\\|{4}", colnames(tab)))) {
+    span <- strsplit(colnames(tab), "\\|\\|\\|\\|")
+    span <- lapply(span, rev)
+    span_max <- max(sapply(span, length))
+    span <- lapply(span, function(x) c(x, rep(" ", span_max - length(x))))
+    colnames(tab) <- sapply(span, function(x) x[1])
+    for (i in 2:span_max) {
+      tmp <- sapply(span, function(x) x[i])
+      tmp <- rle(tmp)
+      span_list[[i - 1]] <- setNames(tmp$lengths, tmp$values)
+    }
+  }
+
   # combine arguments
   arguments <- arguments[base::intersect(names(arguments), valid)]
   arguments <- c(list(tab), arguments)
   out <- do.call(kableExtra::kbl, arguments)
-
 
   ## footnote arguments
   valid <- c("footnote_as_chunk", "escape", "threeparttable", "fixed_small_size", "symbol_manual", "title_format")
@@ -118,15 +132,6 @@ factory_kableExtra <- function(tab,
     }
   }
 
-  span <- attr(tab, "span_kableExtra")
-  if (!is.null(span) && settings_equal("output_format", c("kableExtra", "latex", "html"))) {
-    # add_header_above not supported in markdown
-    span <- rev(span) # correct vertical order
-    for (s in span) {
-      out <- kableExtra::add_header_above(out, s, escape = escape)
-    }
-  }
-
   # theme
   theme_ms <- getOption("modelsummary_theme_kableExtra",
                         default = theme_ms_kableExtra)
@@ -134,6 +139,13 @@ factory_kableExtra <- function(tab,
                   output_format = settings_get("output_format"),
                   hrule = hrule)
 
+  # apply span
+  if (length(span_list) > 0 && settings_equal("output_format", c("kableExtra", "latex", "html"))) {
+    # add_header_above not supported in markdown
+    for (s in span_list) {
+      out <- kableExtra::add_header_above(out, s, escape = escape)
+    }
+  }
 
   # html & latex get a new class to use print.modelsummary_string
   if (settings_equal("output_format", c("latex", "latex_tabular", "html"))) {
