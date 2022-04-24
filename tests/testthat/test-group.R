@@ -47,6 +47,17 @@ test_that("horizontal statistics: dim only", {
     tab <- modelsummary(list(mod, mod), group = term ~ model + statistic,
                         output = "data.frame", gof_map = NA)
     expect_equal(dim(tab), c(4, 6))
+
+
+    tab <- modelsummary(mod,
+                        statistic = c("std.error", "conf.low", "conf.high"),
+                        group = model + term ~ statistic,
+                        conf_level = .99,
+                        output = "data.frame",
+                        gof_map = NA)
+    tab
+
+
 })
 
 

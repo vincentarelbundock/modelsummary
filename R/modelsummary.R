@@ -270,7 +270,7 @@ modelsummary <- function(
                             by = c("group", "term", "statistic"))
   est <- Reduce(f, est)
 
-  est <- group_reshape(est, group$group_formula)
+  est <- group_reshape(est, group, conf_level = conf_level)
 
   # distinguish between estimates and gof (first column for tests)
   est$part <- "estimates"
@@ -621,10 +621,11 @@ map_omit_gof <- function(gof, gof_omit, gof_map) {
 #' @importFrom stats reshape
 #' @keywords internal
 #' @noRd
-group_reshape <- function(estimates, group_formula) {
+group_reshape <- function(estimates, group, conf_level) {
+
+    group_formula <- group$group_formula
 
     insight::check_if_installed("data.table")
-
 
     idx <- intersect(colnames(estimates), c("term", "statistic", "group"))
 
@@ -633,6 +634,10 @@ group_reshape <- function(estimates, group_formula) {
                             id.vars = idx,
                             variable.name = "model",
                             value.name = "estimate")
+
+    if ("statistic" %in% group$rhs) {
+        out$statistic <- rename_statistics(out$statistic, conf_level = conf_level)
+    }
 
     # use factors to preserve order in `dcast`
     for (col in c("part", "model", "term", "group", "statistic")) {
