@@ -50,14 +50,13 @@ test_that("horizontal statistics: dim only", {
 
 
     tab <- modelsummary(mod,
-                        statistic = c("std.error", "conf.low", "conf.high"),
+                        statistic = c("std.error", "conf.int"),
                         group = model + term ~ statistic,
                         conf_level = .99,
                         output = "data.frame",
                         gof_map = NA)
-    tab
-
-
+    expect_equal(dim(tab), c(4, 7))
+    expect_true(all(c("Est.", "S.E.", "0.5 %", "99.5 %") %in% colnames(tab)))
 })
 
 
