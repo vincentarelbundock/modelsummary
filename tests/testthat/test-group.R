@@ -3,6 +3,14 @@ options(modelsummary_get = "easystats")
 skip_if_not_installed("gamlss")
 requiet("gamlss")
 
+test_that("gof merge on partial column match", {
+    options(modelsummary_factory_default = "data.frame")
+    mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
+    tab <- modelsummary(list(mod, mod), group = ~ model + statistic)
+    expect_equal(dim(tab), c(11, 6))
+    expect_true("gof" %in% tab$part)
+})
+
 test_that("partial formulas", {
     options(modelsummary_factory_default = "data.frame")
     mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)

@@ -348,14 +348,7 @@ modelsummary <- function(
   gof <- map_omit_gof(gof, gof_omit, gof_map)
 
   # combine estimates and gof
-  if (is.data.frame(gof) &&
-      nrow(gof) > 0 &&
-      all(colnames(gof) %in% colnames(est))) {
-    tab <- bind_rows(est, gof)
-  } else {
-    tab <- est
-  }
-
+  tab <- bind_est_gof(est, gof)
 
   ##################
   #  output table  #
