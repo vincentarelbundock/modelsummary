@@ -3,7 +3,7 @@ options(modelsummary_get = "easystats")
 skip_if_not_installed("gamlss")
 requiet("gamlss")
 
-test_that("horizontal statistics: one model", {
+test_that("partial formulas", {
     options(modelsummary_factory_default = "data.frame")
     mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
 
@@ -35,7 +35,19 @@ test_that("horizontal statistics: one model", {
 
     options(modelsummary_factory_default = NULL)
 })
-#
+
+
+test_that("horizontal statistics: dim only", {
+    mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
+    tab <- modelsummary(mod, group = model + term ~ statistic, output = "data.frame", gof_map = NA)
+    expect_equal(dim(tab), c(4, 5))
+    tab <- modelsummary(list(mod, mod), group = model + term ~ statistic,
+                        output = "data.frame", gof_map = NA)
+    expect_equal(dim(tab), c(8, 5))
+    tab <- modelsummary(list(mod, mod), group = term ~ model + statistic,
+                        output = "data.frame", gof_map = NA)
+    expect_equal(dim(tab), c(4, 6))
+})
 
 
 test_that("Michael E Flynn ultra-niche bug check", {
