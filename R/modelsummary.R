@@ -244,6 +244,7 @@ modelsummary <- function(
       vcov       = vcov[[i]],
       conf_level = conf_level,
       stars      = stars,
+      group      = group,
       group_name = group$group_name,
       exponentiate = exponentiate[[i]],
       ...)

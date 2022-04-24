@@ -11,6 +11,7 @@ format_estimates <- function(
   conf_level = .95,
   fmt        = "%.3f",
   stars      = FALSE,
+  group      = NULL,
   group_name = NULL,
   exponentiate = FALSE,
   ...) {
@@ -33,7 +34,12 @@ format_estimates <- function(
     sprintf("{%s}", estimate_glue))
 
   # statistics to glue
-  if (!is.null(vcov) &&     # don't add parentheses
+  if ("statistic" %in% group$rhs) { # don't add parentheses
+     statistic_glue <- ifelse(
+      grepl("\\{", statistic_glue),
+      statistic_glue,
+      sprintf("{%s}", statistic_glue))
+  } else if (!is.null(vcov) &&     # don't add parentheses
       is.character(vcov) && # to manual strings
       length(vcov) > 1) {   # of length greater than 1 (i.e., robust shortcuts)
     statistic_glue <- ifelse(

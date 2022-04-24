@@ -52,6 +52,7 @@ test_that("horizontal statistics: dim only", {
     tab <- modelsummary(mod,
                         statistic = c("std.error", "conf.int"),
                         group = model + term ~ statistic,
+                        fmt = 2,
                         conf_level = .99,
                         output = "data.frame",
                         gof_map = NA)
