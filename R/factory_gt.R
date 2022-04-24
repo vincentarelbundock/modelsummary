@@ -15,6 +15,24 @@ factory_gt <- function(tab,
 
   assert_dependency("gt")
 
+  # compute spans
+  span_list <- list()
+  if (any(grepl("\\|{4}", colnames(tab)))) {
+    span <- strsplit(colnames(tab), "\\|\\|\\|\\|")
+    span <- lapply(span, rev)
+    span_max <- max(sapply(span, length))
+    span <- lapply(span, function(x) c(x, rep(" ", span_max - length(x))))
+    colnames(tab) <- pad(sapply(span, function(x) x[1]))
+    for (i in 2:span_max) {
+      tmp <- sapply(span, function(x) x[i])
+      lab <- setdiff(unique(tmp), " ")
+      lab <- lapply(lab, function(x) list("label" = x,
+                                          "columns" = which(x == tmp),
+                                          "level" = i - 1))
+      span_list <- c(span_list, lab)
+    }
+  }
+
   # create gt table object
   idx_col <- ncol(tab)
   out <- gt::gt(tab, caption = title)
@@ -34,12 +52,12 @@ factory_gt <- function(tab,
     }
   }
 
-  # column span labels
-  span <- attr(tab, 'span_gt')
-
-  if (!is.null(span)) {
-    for (s in span) {
-      out <- gt::tab_spanner(out, label = s$label, columns = s$position)
+  if (length(span_list) > 0) {
+    for (s in span_list) {
+      out <- gt::tab_spanner(out,
+                             label = s$label,
+                             columns = s$columns,
+                             level = s$level)
     }
   }
 

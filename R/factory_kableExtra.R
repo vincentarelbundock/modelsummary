@@ -75,15 +75,19 @@ factory_kableExtra <- function(tab,
   # compute spans
   span_list <- list()
   if (any(grepl("\\|{4}", colnames(tab)))) {
-    span <- strsplit(colnames(tab), "\\|\\|\\|\\|")
-    span <- lapply(span, rev)
-    span_max <- max(sapply(span, length))
-    span <- lapply(span, function(x) c(x, rep(" ", span_max - length(x))))
-    colnames(tab) <- sapply(span, function(x) x[1])
-    for (i in 2:span_max) {
-      tmp <- sapply(span, function(x) x[i])
-      tmp <- rle(tmp)
-      span_list[[i - 1]] <- setNames(tmp$lengths, tmp$values)
+    if (settings_equal("output_format", c("kableExtra", "html", "latex"))) {
+        span <- strsplit(colnames(tab), "\\|\\|\\|\\|")
+        span <- lapply(span, rev)
+        span_max <- max(sapply(span, length))
+        span <- lapply(span, function(x) c(x, rep(" ", span_max - length(x))))
+        colnames(tab) <- sapply(span, function(x) x[1])
+        for (i in 2:span_max) {
+          tmp <- sapply(span, function(x) x[i])
+          tmp <- rle(tmp)
+          span_list[[i - 1]] <- setNames(tmp$lengths, tmp$values)
+        }
+    } else {
+        colnames(tab) <- gsub("\\|\\|\\|\\|", " / ", colnames(tab))
     }
   }
 
