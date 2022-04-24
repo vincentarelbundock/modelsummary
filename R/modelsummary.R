@@ -289,10 +289,12 @@ modelsummary <- function(
     }
     est$term <- factor(est$term, unique(term_order))
 
-    if (!is.null(group_map)) {
-        est$group <- factor(est$group, group_map)
-    } else {
-        est$group <- factor(est$group, unique(est$group))
+    if ("group" %in% colnames(est)) {
+      if (!is.null(group_map)) {
+          est$group <- factor(est$group, group_map)
+      } else {
+          est$group <- factor(est$group, unique(est$group))
+      }
     }
 
   } else if ("model" %in% colnames(est)) {
@@ -305,12 +307,6 @@ modelsummary <- function(
   }
 
   est <- est[do.call(order, as.list(est)), ]
-
-    var = "x"
-    f = y ~ x + z
-    args <- list()
-    args[[var]] <- quote(group)
-    do.call(substitute, list(expr = f, args))
 
   # character for binding
   for (col in c("term", "group", "model", "statistic")) {
@@ -629,16 +625,7 @@ group_reshape <- function(estimates, group_formula) {
 
     insight::check_if_installed("data.table")
 
-    vars <- all.vars(group_formula)
-    group_id <- setdiff(vars, c("term", "statistic", "model"))
-    if (length(group_id) == 0 || all(estimates$group == "")) {
-        group_id <- NULL
-        estimates$group <- NULL
-    } else {
-        args <- list()
-        args[[group_id]] <- quote(group)
-        group_formula <- do.call(substitute, list(expr = group_formula, args))
-    }
+
     idx <- intersect(colnames(estimates), c("term", "statistic", "group"))
 
     # long
@@ -674,11 +661,6 @@ group_reshape <- function(estimates, group_formula) {
     tmp <- out[, idx, drop = FALSE]
     idx <- apply(tmp, 1, function(x) !all(x == ""))
     out <- out[idx, ]
-
-    # make sure there is a group column for merging in `modelsummary`
-    if (!"group" %in% colnames(out)) {
-      out$group <- "group"
-    }
 
     return(out)
 }

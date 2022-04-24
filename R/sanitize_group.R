@@ -2,35 +2,49 @@
 #'
 #' @noRd
 sanitize_group <- function(group) {
+    checkmate::assert_class(group, "formula")
 
-  checkmate::assert_class(group, "formula")
+    lhs <- all.vars(update(group, ". ~ NULL"))
+    rhs <- all.vars(update(group, "NULL ~ ."))
+    lhs <- setdiff(lhs, ".")
+    rhs <- setdiff(rhs, ".")
+    variables <- all.vars(group)
+    group_formula <- group
+    group_name <- setdiff(all.vars(group_formula), c("term", "model", "statistic"))
 
-  rhs <- all.vars(stats::update(group, "0 ~ ."))
-  lhs <- all.vars(stats::update(group, ". ~ 0"))
-  variables <- c(rhs, lhs)
 
-  if (!all(c("model", "term") %in% c(lhs, rhs))) {
-    flag_error <- TRUE
-  }
+    if (length(group_name) == 0) {
+        group_name <- NULL
+    } else if (length(group_name) == 1) {
+        lhs[lhs == group_name] <- "group"
+        rhs[rhs == group_name] <- "group"
+    } else {
+        msg <- 'The `group` formula can only include one group name. The other terms must be: "term", "model", or "statistic".'
+        stop(msg, call. = FALSE)
+    }
 
-  group_name <- setdiff(variables, c("term", "model", "statistic"))
-  if (length(group_name) > 1) {
-    stop('The `group` formula can only include one group name. The other terms must be: "term", "model", or "statistic".')
-  }
+    # partial formulas
+    if (!"term" %in% variables && !"statistic" %in% variables) {
+        lhs <- c("term", lhs, "statistic")
+    } else if (!"statistic" %in% variables) {
+        lhs <- c(lhs, "statistic")
+    } else if (!"term" %in% variables) {
+        lhs <- c("term", lhs)
+    }
+    if (!"model" %in% variables) {
+        rhs <- c("model", rhs)
+    }
 
-  if (length(group_name) == 0) {
-    group_name <- NULL
-  }
+    group_formula <- as.formula(paste(paste(lhs, collapse = "+"),
+                                      "~",
+                                      paste(rhs, collapse = "+")))
 
-  group_formula <- group
-  if (!"statistic" %in% variables) {
-    group_formula <- update(group_formula, ". + statistic ~ .")
-  }
+    out <- list(
+        "lhs" = lhs,
+        "rhs" = rhs,
+        "group_name" = group_name,
+        "group_formula" = group_formula
+    )
 
-  out <- list("lhs" = lhs,
-              "rhs" = rhs,
-              "group_name" = group_name,
-              "group_formula" = group_formula)
-
-  return(out)
+    return(out)
 }

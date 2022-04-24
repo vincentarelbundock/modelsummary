@@ -3,25 +3,38 @@ options(modelsummary_get = "easystats")
 skip_if_not_installed("gamlss")
 requiet("gamlss")
 
-# test_that("horizontal statistics: one model", {
-#
-#     options(modelsummary_factory_default = "markdown")
-#     mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
-#     modelsummary(mod, group = term ~ model + statistic)
-#
-#     modelsummary(list(mod, mod), group = term ~ statistic + model)
-#     modelsummary(list(mod, mod), group = term ~ model + statistic)
-#
-#     modm <- nnet::multinom(factor(cyl) ~ mpg, data = mtcars, trace = FALSE)
-#
-#     modelsummary(list(modm, modm), group = term + y.level + statistic ~ model)
-#
-#     modelsummary(list(modm, modm), group = term + response + statistic ~ model)
-#     modelsummary(list(modm, modm), group = term + statistic + y.level ~ model)
-#
-#     modelsummary(list(modm, modm), group = y.level + model ~ statistic + term)
-#     modelsummary(list(modm, modm), group = model + term + y.level ~ statistic)
-# })
+test_that("horizontal statistics: one model", {
+    options(modelsummary_factory_default = "data.frame")
+    mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
+
+    # term + statistic ~ model
+    tab1 <- modelsummary(mod, group = ~ model, gof_map = NA)
+    tab2 <- modelsummary(mod, group = statistic ~ model, gof_map = NA)
+    tab3 <- modelsummary(mod, group = term + statistic ~ model, gof_map = NA)
+    expect_equal(dim(tab1), c(8, 4))
+    expect_equal(tab1, tab2)
+    expect_equal(tab1, tab3)
+
+    # model + statistic ~ term
+    tab1 <- modelsummary(list(mod, mod), group = model + statistic ~ term, gof_map = NA)
+    tab2 <- modelsummary(list(mod, mod), group = model ~ term, gof_map = NA)
+    expect_equal(tab1, tab2)
+    expect_equal(dim(tab1), c(4, 7))
+
+    # term + response + statistic ~ model
+    mod <- nnet::multinom(factor(cyl) ~ mpg, data = mtcars, trace = FALSE)
+    mod <- list(mod, mod)
+    tab1 <- modelsummary(mod, group = term + response + statistic ~ model, gof_map = NA)
+    tab2 <- modelsummary(mod, group = response ~ model, gof_map = NA)
+    tab3 <- modelsummary(mod, group = response + statistic ~ model, gof_map = NA)
+    tab4 <- modelsummary(mod, group = term + response ~ model, gof_map = NA)
+    expect_equal(dim(tab1), c(8, 6))
+    expect_equal(tab1, tab2)
+    expect_equal(tab1, tab3)
+    expect_equal(tab1, tab4)
+
+    options(modelsummary_factory_default = NULL)
+})
 #
 
 
