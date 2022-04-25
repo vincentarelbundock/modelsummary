@@ -16,7 +16,7 @@ factory_gt <- function(tab,
   assert_dependency("gt")
 
   # compute spans
-  span_list <- get_span_kableExtra(tab)
+  span_list <- get_span_gt(tab)
   column_names <- attr(span_list, "column_names")
   if (!is.null(column_names)) {
     colnames(tab) <- column_names

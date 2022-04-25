@@ -84,7 +84,9 @@ datasummary_extract <- function(tab,
   for (l in lab) {
     if (trimws(l) != '') {
       pos <- which(h == l)
-      span[[length(span) + 1]] <- list(label = l, position = pos)
+      span[[length(span) + 1]] <- list(label = l,
+                                       columns = pos,
+                                       level = 1)
     }
   }
   attr(main, 'span_gt') <- span
