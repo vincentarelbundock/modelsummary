@@ -81,8 +81,7 @@ test_that('numeric content of simple tables', {
 })
 
 test_that('Header carry-forward', {
-  coln <- c(" ", "4 mean", "4 sd", "6 mean", "6 sd", "8 mean", "8 sd",
-    "median")
+  coln <- c(" ", "4 / mean", "4 / sd", "6 / mean", "6 / sd", "8 / mean", "8 / sd", "median")
   tab <- datasummary(mpg + hp ~ Factor(cyl) * (mean + sd) + median,
     data = mtcars,
     output = 'dataframe')

@@ -26,11 +26,13 @@ datasummary_extract <- function(tab,
   # header
   header <- as.matrix(tables::colLabels(tab))
   stub_width <- ncol(mat) - ncol(header) # before taking the full large header
-  header <- mat[1:nrow(header), , drop = FALSE]
-
   for (i in 1:nrow(header)) {
-    header[i, ] <- carry_forward(header[i,])
+    header[i, ] <- carry_forward(as.vector(header[i,]))
   }
+
+  tmp <- mat[1:nrow(header), , drop = FALSE]
+  tmp[1:nrow(header), (stub_width + 1):ncol(mat)] <- header
+  header <- tmp
 
   # main --- TODO: test if main has only one row
   main <- mat[(idx + 1):nrow(mat), , drop = FALSE]
@@ -86,7 +88,9 @@ carry_forward <- function(x, empty = '') {
     x <- trimws(x)
     if (length(x) > 1) {
         for (i in 2:length(x)) {
-            if (is.na(x[i]) || isTRUE(grepl("^\\s*$", x[i]))) {
+            # carry foward when header is NA, but not "" because that indicates
+            # a new higher level span
+            if (is.na(x[i])) {
                 if (!is.na(x[i - 1]) && !isTRUE(x[i - 1] == "")) {
                     x[i] <- x[i - 1]
                 }
