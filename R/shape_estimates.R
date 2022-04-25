@@ -3,10 +3,13 @@
 #' @keywords internal
 #' @noRd
 shape_estimates <- function(estimates, group, conf_level) {
-    insight::check_if_installed("data.table")
+
+    # default
+    if (isTRUE(all.equal(group$group_formula, term + statistic ~ model))) {
+        return(estimates)
+    }
 
     group_formula <- group$group_formula
-
 
     idx <- intersect(colnames(estimates), c("term", "statistic", "group"))
 

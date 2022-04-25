@@ -4,8 +4,8 @@
 sanitize_group <- function(group) {
     checkmate::assert_class(group, "formula")
 
-    lhs <- all.vars(update(group, ". ~ NULL"))
-    rhs <- all.vars(update(group, "NULL ~ ."))
+    lhs <- all.vars(stats::update(group, ". ~ NULL"))
+    rhs <- all.vars(stats::update(group, "NULL ~ ."))
     lhs <- setdiff(lhs, ".")
     rhs <- setdiff(rhs, ".")
     variables <- all.vars(group)
@@ -35,9 +35,10 @@ sanitize_group <- function(group) {
         rhs <- c("model", rhs)
     }
 
-    group_formula <- as.formula(paste(paste(lhs, collapse = "+"),
-                                      "~",
-                                      paste(rhs, collapse = "+")))
+    group_formula <- stats::as.formula(
+        paste(paste(lhs, collapse = "+"),
+              "~",
+              paste(rhs, collapse = "+")))
 
     out <- list(
         "lhs" = lhs,

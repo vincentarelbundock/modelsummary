@@ -12,6 +12,8 @@ factory_flextable <- function(tab,
 
   assert_dependency("flextable")
 
+  colnames(tab) <- gsub("\\|\\|\\|\\|", " / ", colnames(tab))
+
   # measurements
   table_width <- ncol(tab)
 

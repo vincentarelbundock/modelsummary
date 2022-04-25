@@ -72,22 +72,12 @@ factory_kableExtra <- function(tab,
     arguments[["align"]] <- align
   }
 
-  # compute spans
-  span_list <- list()
-  if (any(grepl("\\|{4}", colnames(tab)))) {
-    if (settings_equal("output_format", c("kableExtra", "html", "latex"))) {
-        span <- strsplit(colnames(tab), "\\|\\|\\|\\|")
-        span <- lapply(span, rev)
-        span_max <- max(sapply(span, length))
-        span <- lapply(span, function(x) c(x, rep(" ", span_max - length(x))))
-        colnames(tab) <- sapply(span, function(x) x[1])
-        for (i in 2:span_max) {
-          tmp <- sapply(span, function(x) x[i])
-          tmp <- rle(tmp)
-          span_list[[i - 1]] <- setNames(tmp$lengths, tmp$values)
-        }
-    } else {
-        colnames(tab) <- gsub("\\|\\|\\|\\|", " / ", colnames(tab))
+  # span: compute
+  span_list <- get_span_kableExtra(tab)
+  if (!is.null(span_list) && settings_equal("output_format", c("kableExtra", "html", "latex"))) {
+    column_names <- attr(span_list, "column_names")
+    if (!is.null(column_names)) {
+      colnames(tab) <- column_names
     }
   }
 
@@ -143,11 +133,10 @@ factory_kableExtra <- function(tab,
                   output_format = settings_get("output_format"),
                   hrule = hrule)
 
-  # apply span
-  if (length(span_list) > 0 && settings_equal("output_format", c("kableExtra", "latex", "html"))) {
-    # add_header_above not supported in markdown
-    for (s in span_list) {
-      out <- kableExtra::add_header_above(out, s, escape = escape)
+  # span: apply (not supported in markdown)
+  if (!is.null(span_list) && settings_equal("output_format", c("kableExtra", "latex", "html"))) {
+    for (i in 1:length(span_list)) {
+      out <- kableExtra::add_header_above(out, span_list[[i]], escape = escape)
     }
   }
 

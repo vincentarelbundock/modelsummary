@@ -13,6 +13,8 @@ factory_huxtable <- function(tab,
 
   assert_dependency("huxtable")
 
+  colnames(tab) <- gsub("\\|\\|\\|\\|", " / ", colnames(tab))
+
   ## warning on align
   # if (!is.null(align)) {
   # warning('The `align` argument is not supported yet for huxtable objects. Please file a request or (even better) a code submission on Github if you need that feature.')

@@ -9,8 +9,22 @@ map_estimates <- function(estimates,
                           group_map) {
 
 
+    # ambiguous rename
+    check_dups <- function(dict) {
+        dups <- unique(dict[duplicated(dict)])
+        for (d in dups) {
+            tmp <- names(dict)[which(d == dict)]
+            tmp <- intersect(tmp, estimates$term)
+            if (length(tmp) > 1) {
+                msg <- sprintf("These variables have been assigned the same label in `coef_map` or `coef_rename`, but they are all part of the same model: %s", paste(tmp, collapse = ", "))
+                stop(msg, call. = FALSE)
+            }
+        }
+    }
+    check_dups(coef_map)
+    check_dups(coef_rename)
 
-    ## coef_omit
+    # coef_omit
     if (!is.null(coef_omit)) {
         idx <- !grepl(coef_omit, estimates$term, perl = TRUE)
         if (sum(idx) > 0) {

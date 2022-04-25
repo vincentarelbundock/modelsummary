@@ -271,6 +271,16 @@ modelsummary <- function(
                             by = c("group", "term", "statistic"))
   est <- Reduce(f, est)
 
+  # warn that `shape` might be needed
+  if (is.null(group$group_name)) {
+    idx <- paste(est$term, est$statistic)
+    if (anyDuplicated(idx) > 0) {
+      msg <- "There are duplicate term names in the table. The `group` argument of the `modelsummary` function can be used to print related terms together, and to label them appropriately. See `?modelsummary` for details."
+      warning(msg, call. = FALSE)
+    }
+  }
+
+  # if (is.null(group$group_name) && isTRUE(anyDuplicated(est$term))) {
   est <- shape_estimates(est, group, conf_level = conf_level)
 
   # distinguish between estimates and gof (first column for tests)
@@ -313,16 +323,6 @@ modelsummary <- function(
   for (col in c("term", "group", "model", "statistic")) {
     if (col %in% colnames(est)) {
       est[[col]] <- as.character(est[[col]])
-    }
-  }
-
-  # make sure there are no duplicate estimate names *within* a single model.
-  # this cannot be in input sanity checks. idx paste allows multiple statistics.
-  if (is.null(group$group_name) && "term" %in% group$lhs) {
-    idx <- paste(est$term, est$statistic)
-    if (anyDuplicated(idx) > 1) {
-      warning('The table includes duplicate term names. This can happen when `coef_map` or `coef_rename` are misused. This can also happen when a model produces "grouped" terms, such as in multinomial logit or gamlss models. You may want to call `get_estimates(model)` to see how estimates are labelled internally, and use the `group` argument of the `modelsummary` function.',
-              call. = FALSE)
     }
   }
 
