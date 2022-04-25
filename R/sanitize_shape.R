@@ -3,6 +3,10 @@
 #' @noRd
 sanitize_shape <- function(shape) {
 
+    if (is.null(shape)) {
+        return(term + statistic ~ model)
+    }
+
     checkmate::assert_class(shape, "formula", null.ok = TRUE)
 
     lhs <- all.vars(stats::update(shape, ". ~ NULL"))

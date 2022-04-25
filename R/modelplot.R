@@ -113,7 +113,6 @@ modelplot <- function(models,
     coef_omit   = coef_omit,
     coef_rename = coef_rename,
     gof_omit    = ".*",
-    shape       = NULL,
     vcov        = vcov,
     exponentiate = exponentiate,
     ...
