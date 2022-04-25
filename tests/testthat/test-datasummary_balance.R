@@ -74,7 +74,7 @@ test_that("factor formatting", {
 test_that("palmer penguins was once broken with kableExtra", {
   penguins <- "https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv"
   penguins <- read.csv(penguins)
-  raw <- datasummary_balance(~sex, penguins, output="html")
+  raw <- datasummary_balance(~sex, penguins, output = "html")
   expect_output(cat(raw))
 })
 
@@ -102,8 +102,8 @@ test_that('add column', {
 
 test_that('only numeric', {
   tab <- datasummary_balance(~vs, mtcars, output = 'dataframe')
-  truth <- c(" ", "0 Mean", "0 Std. Dev.", "1 Mean",
-    "1 Std. Dev.", "Diff. in Means", "Std. Error")
+  truth <- c(" ", "0 / Mean", "0 / Std. Dev.", "1 / Mean",
+    "1 / Std. Dev.", "Diff. in Means", "Std. Error")
   expect_s3_class(tab, 'data.frame')
   expect_equal(dim(tab), c(10, 7))
   expect_equal(colnames(tab), truth)
@@ -117,10 +117,10 @@ test_that('only factors', {
   tmp$vs <- as.logical(tmp$vs)
   tmp <- tmp[, c('am', 'vs', 'cyl', 'gear')]
   tab <- datasummary_balance(~am, tmp, output = 'dataframe')
-  truth <- c(" ", "  ", "0 N", "0 Pct.", "1 N", "1 Pct.")
+  truth <- c("", "", "0 / N", "0 / Pct.", "1 / N", "1 / Pct.")
   expect_s3_class(tab, 'data.frame')
   expect_equal(dim(tab), c(8, 6))
-  expect_equal(colnames(tab), truth)
+  expect_equal(trimws(colnames(tab)), truth)
 })
 
 
@@ -133,7 +133,7 @@ test_that('both factors and numerics', {
   expect_s3_class(tab, 'data.frame')
   expect_equal(dim(tab), c(16, 8))
   ## col order 
-  truth <- c(" ", "  ", "0 Mean", "0 Std. Dev.", "1 Mean", "1 Std. Dev.", "Diff. in Means", "Std. Error")
+  truth <- c(" ", "  ", "0 / Mean", "0 / Std. Dev.", "1 / Mean", "1 / Std. Dev.", "Diff. in Means", "Std. Error")
   expect_equal(colnames(tab), truth)
   ## row order with mid header
   expect_equal(tab[[1]], c("mpg", "disp", "hp", "drat", "wt", "qsec", "carb", "", "cyl", "", "", "vs", "", "gear", "", ""))
@@ -300,7 +300,7 @@ test_that("numeric weights", {
     idx <- datw$am == am
     for (v in tab[[1]]) {
       unknown <- weighted.mean(datw[[v]][idx], datw$weights[idx])
-      expect_equal(unknown, tab[tab[[1]] == v, sprintf("%s Mean", am)])
+      expect_equal(unknown, tab[tab[[1]] == v, sprintf("%s / Mean", am)])
     }
   }
 
@@ -309,7 +309,7 @@ test_that("numeric weights", {
     idx <- datw$am == am
     for (v in tab[[1]]) {
       unknown <- weighted.sd(datw[[v]][idx], datw$weights[idx])
-      expect_equal(unknown, tab[tab[[1]] == v, sprintf("%s Std. Dev.", am)])
+      expect_equal(unknown, tab[tab[[1]] == v, sprintf("%s / Std. Dev.", am)])
     }
   }
 })
