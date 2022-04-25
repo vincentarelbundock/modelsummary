@@ -18,9 +18,8 @@ test_that("single model", {
   )
   p <- modelplot(mod,
     coef_map = c("drat" = "Rear axle ratio", "mpg" = "Miles / gallon"),
-    color = "green", shape = "square", background = params)
+    color = "green", background = params)
   vdiffr::expect_doppelganger("coef_map + color + shape + background", p)
-
 })
 
 test_that("multiple models", {

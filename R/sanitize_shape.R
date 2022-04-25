@@ -1,22 +1,9 @@
 #' sanity check
 #'
 #' @noRd
-sanitize_shape <- function(shape, ...) {
+sanitize_shape <- function(shape) {
 
-    dots <- list(...)
-    # backward compatibility
-    if (isTRUE("group" %in% names(dots))) {
-        # shape is not default, means user changed it
-        if (!isTRUE(all.equal(shape, term + statistic ~ model))) {
-            msg <- "The `group` argument was deprecated and renamed `shape`. The two arguments should be used simultaneously."
-            stop(msg, call. = FALSE)
-        # shape is default, so we use `group` for backward compatibility
-        } else {
-            shape <- dots[["group"]]
-        }
-    }
-
-    checkmate::assert_class(shape, "formula")
+    checkmate::assert_class(shape, "formula", null.ok = TRUE)
 
     lhs <- all.vars(stats::update(shape, ". ~ NULL"))
     rhs <- all.vars(stats::update(shape, "NULL ~ ."))
