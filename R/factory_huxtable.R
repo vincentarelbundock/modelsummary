@@ -11,7 +11,7 @@ factory_huxtable <- function(tab,
                              ...) {
 
 
-  assert_dependency("huxtable")
+  insight::check_if_installed("huxtable")
 
   colnames(tab) <- gsub("\\|\\|\\|\\|", " / ", colnames(tab))
 

@@ -79,6 +79,8 @@ factory_kableExtra <- function(tab,
     if (!is.null(column_names)) {
       colnames(tab) <- column_names
     }
+  } else {
+      colnames(tab) <- gsub("\\|{4}", " / ", colnames(tab))
   }
 
   # combine arguments
@@ -139,7 +141,7 @@ factory_kableExtra <- function(tab,
       out <- kableExtra::add_header_above(out, span_list[[i]], escape = escape)
     }
   }
-
+  
   # html & latex get a new class to use print.modelsummary_string
   if (settings_equal("output_format", c("latex", "latex_tabular", "html"))) {
     class(out) <- c("modelsummary_string", class(out))

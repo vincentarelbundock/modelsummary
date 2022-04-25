@@ -1,7 +1,7 @@
 #' @include glance_custom.R
 #' @keywords internal
 glance_custom_internal.felm <- function(x, vcov_type = NULL, ...) {
-    assert_dependency("lfe")
+    insight::check_if_installed("lfe")
     out <- data.frame(row.names = "firstrow")
     if (is.null(vcov_type) || !vcov_type %in% c("vector", "matrix", "function")) {
         if (!is.null(x$clustervar)) {

@@ -170,7 +170,7 @@ modelplot <- function(models,
   if (!draw) {
     return(dat)
   } else {
-    assert_dependency("ggplot2")
+    insight::check_if_installed("ggplot2")
   }
 
   p <- ggplot2::ggplot(dat) +

@@ -84,7 +84,7 @@ datasummary_skim <- function(data,
     return(invisible(out))
   } else {
     if (output == "jupyter" || (output == "default" && settings_equal("output_default", "jupyter"))) {
-      assert_dependency("IRdisplay")
+      insight::check_if_installed("IRdisplay")
       return(invisible(IRdisplay::display_html(as.character(out))))
     }
     settings_rm()

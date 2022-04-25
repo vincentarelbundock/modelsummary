@@ -289,7 +289,7 @@ datasummary_balance <- function(formula,
 #' @noRd
 DinM <- function(lhs, rhs, data, fmt, statistic) {
 
-  assert_dependency("estimatr")
+  insight::check_if_installed("estimatr")
 
   if (!"clusters" %in% colnames(data)) {
       clusters <- NULL

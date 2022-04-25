@@ -1,6 +1,4 @@
-library(modelsummary)
 penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
-
 
 test_that("regression test: gt duplicate span labels", {
     expect_error(datasummary(All(mtcars) ~ Factor(vs) * (Factor(am) * (Mean + SD)),
@@ -88,7 +86,7 @@ test_that('Header carry-forward', {
   tab <- datasummary(mpg + hp ~ Factor(cyl) * (mean + sd) + median,
     data = mtcars,
     output = 'dataframe')
-  expect_equal(coln, colnames(tab))
+  expect_equal(colnames(tab), coln)
 })
 
 test_that('Factor() is equivalent to assign', {

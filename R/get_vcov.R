@@ -33,7 +33,7 @@ get_vcov.default <- function(model, vcov = NULL, conf_level = NULL, ...) {
       return(NULL)
     }
 
-    assert_dependency("sandwich")
+    insight::check_if_installed("sandwich")
 
     vcovtype <- switch(
       vcov,
@@ -69,7 +69,7 @@ get_vcov.default <- function(model, vcov = NULL, conf_level = NULL, ...) {
 
   # vcov is formula (clusters)
   if (isTRUE(checkmate::check_formula(vcov))) {
-    assert_dependency("sandwich")
+    insight::check_if_installed("sandwich")
     mat <- try(sandwich::vcovCL(model, cluster = vcov), silent = TRUE)
 
     if (!inherits(mat, "matrix")) {

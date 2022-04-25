@@ -10,7 +10,7 @@ factory_flextable <- function(tab,
                               title = NULL,
                               ...) {
 
-  assert_dependency("flextable")
+  insight::check_if_installed("flextable")
 
   colnames(tab) <- gsub("\\|\\|\\|\\|", " / ", colnames(tab))
 
@@ -51,5 +51,4 @@ factory_flextable <- function(tab,
   } else if (settings_equal("output_format", "html")) {
     flextable::save_as_html(out, path = settings_get("output_file"))
   }
-
 }

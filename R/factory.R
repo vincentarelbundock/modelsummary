@@ -169,7 +169,7 @@ factory <- function(tab,
 
   if (output == "jupyter" ||
       (output == "default" && settings_equal("output_default", "jupyter"))) {
-    assert_dependency("IRdisplay")
+    insight::check_if_installed("IRdisplay")
     IRdisplay::display_html(as.character(out))
   } else {
     return(out)

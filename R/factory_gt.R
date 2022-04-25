@@ -13,7 +13,7 @@ factory_gt <- function(tab,
                        escape = TRUE,
                        ...) {
 
-  assert_dependency("gt")
+  insight::check_if_installed("gt", minimum_version = "0.5.0")
 
   # compute spans
   span_list <- get_span_gt(tab)

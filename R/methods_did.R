@@ -1,7 +1,7 @@
 #' @include glance_custom.R
 #' @keywords internal
 glance_custom_internal.MP <- function(x, vcov_type = NULL, ...) {
-  assert_dependency("did")
+  insight::check_if_installed("did")
   out <- data.frame(row.names = "firstrow")
   if (is.null(vcov_type) || !vcov_type %in% c("vector", "matrix", "function")) {
     if (x$DIDparams$bstrap) {
