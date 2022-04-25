@@ -25,24 +25,19 @@ datasummary_extract <- function(tab,
 
   # header
   header <- as.matrix(tables::colLabels(tab))
+  stub_width <- ncol(mat) - ncol(header) # before taking the full large header
+  header <- mat[1:nrow(header), , drop = FALSE]
 
   for (i in 1:nrow(header)) {
     header[i, ] <- carry_forward(header[i, , drop = TRUE])
   }
 
-  stub_width <- ncol(mat) - ncol(header)
-
-  pad_header <- matrix('',
-    nrow = nrow(header),
-    ncol = stub_width)
-  header <- cbind(pad_header, header)
 
   # main --- TODO: test if main has only one row
   main <- mat[(idx + 1):nrow(mat), , drop = FALSE]
   main <- data.frame(main)
 
   colnames(main) <- as.vector(mat[idx, ])
-
 
   # remove NAs, but not in stub or header
   for (i in (stub_width + 1):ncol(main)) {

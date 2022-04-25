@@ -58,6 +58,7 @@ test_that("datasummary_crosstab escape colnames and stub", {
 })
 
 
+
 test_that("datasummary_correlation escape rownames and colnames", {
     # unicode minus signs break on windows
     skip_on_os("windows")
