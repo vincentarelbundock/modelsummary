@@ -197,8 +197,8 @@ modelsummary <- function(
   number_of_models <- max(length(models), length(vcov))
   estimate <- sanitize_estimate(estimate, number_of_models)
   exponentiate <- sanitize_exponentiate(exponentiate, number_of_models)
-  statistic <- sanitize_statistic(statistic, shape)
   shape <- sanitize_shape(shape, ...)
+  statistic <- sanitize_statistic(statistic, shape) # after shape
   gof_map <- sanitize_gof_map(gof_map)
   sanity_group_map(group_map)
   sanity_conf_level(conf_level)

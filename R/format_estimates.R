@@ -11,7 +11,7 @@ format_estimates <- function(
   conf_level = .95,
   fmt        = "%.3f",
   stars      = FALSE,
-  group      = NULL,
+  shape      = NULL,
   group_name = NULL,
   exponentiate = FALSE,
   ...) {
@@ -34,7 +34,7 @@ format_estimates <- function(
     sprintf("{%s}", estimate_glue))
 
   # statistics to glue
-  if ("statistic" %in% group$rhs) { # don't add parentheses
+  if ("statistic" %in% shape$rhs) { # don't add parentheses
      statistic_glue <- ifelse(
       grepl("\\{", statistic_glue),
       statistic_glue,

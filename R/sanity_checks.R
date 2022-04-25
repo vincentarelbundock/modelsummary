@@ -125,9 +125,9 @@ sanitize_estimate <- function(estimate, number_of_models) {
 #' sanity_check
 #'
 #' @noRd
-sanitize_statistic <- function(statistic, group) {
+sanitize_statistic <- function(statistic, shape) {
   checkmate::assert_character(statistic, null.ok = TRUE)
-  if ("statistic" %in% group$rhs && "conf.int" %in% statistic) {
+  if ("statistic" %in% shape$rhs && "conf.int" %in% statistic) {
     idx <- grep("conf.int", statistic)
     statistic[idx] <- "conf.low"
     # conf.int in last position

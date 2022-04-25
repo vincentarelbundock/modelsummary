@@ -420,15 +420,44 @@ modelsummary(
   escape = FALSE)
 ```
 
-## group
+## shape
 
-Some models produce "grouped" parameter estimates. For example, multinomial logit models produce estimates for each level of the outcome variable, and GAMLSS models produce estimates for different "components." To display the results of such models, we can specify the kind of table we want by feeding a two sided formula to the `group` argument.
+The `shape` argument accepts a formula which determines the structure of the table, and can display "grouped" coefficients together (e.g., multivariate outcome or mixed-effects models).
 
-The left-hand side of the formula governs rows, and the right-hand side governs columns. The order of terms determines the order of columns in the final table. The formula must have 3 terms: "model", "term", and the name of the group identifier. 
-
-The group identifier must be one of the column names produced by `get_estimates(model)`. For example, in models produced by `nnet::multinom`, the group identifier is called "y.level":
+The left side of the formula represents the rows and the right side represents the columns. The default formula is: `term+statistic~model`
 
 ```{r}
+m <- list(
+    lm(mpg ~ hp, data = mtcars),
+    lm(mpg ~ hp + drat, data = mtcars))
+
+modelsummary(m, shape = term + statistic ~ model, gof_map = NA)
+```
+
+We can display statistics horizontally with:
+
+```{r}
+modelsummary(m, shape = term ~ model + statistic, gof_map = NA)
+```
+
+`shape` does partial matching, so the following command will produce the same result as above:
+
+```{r, eval = FALSE}
+modelsummary(m, shape = ~ statistic)
+```
+
+The order of terms in the formula determine the order of headers:
+
+```{r}
+modelsummary(m,
+             statistic = "conf.int",
+             shape = term ~ model + statistic,
+             gof_map = NA)
+```
+
+Some models like multinomial logit or GAMLSS produce "grouped" parameter estimates. To display these groups, we can include a group identifier in the `shape` formula. This group identifier must be one of the column names produced by `get_estimates(model)`. For example, in models produced by `nnet::multinom`, the group identifier is called "y.level":
+
+```{r, message = FALSE}
 library(nnet)
 
 dat_multinom <- mtcars
@@ -444,45 +473,13 @@ get_estimates(mod[[1]])
 To summarize the results, we can type: 
 
 ```{r, warning=FALSE}
-modelsummary(mod, group = y.level + term ~ model)
-
-modelsummary(mod, group = model + term ~ y.level)
-
-modelsummary(mod, group = term ~ model + y.level)
+modelsummary(mod, shape = term + y.level ~ statistic)
 ```
 
-Sometimes, we want to combine models with and without grouped parameters. For instance, we may want to compare the results from a GAMLSS model to the results from a GLM model. In GAMLSS models, the group id is called `parameter`, so we call:
-
-```{r, message=FALSE, warning=FALSE}
-library(gamlss)
-dat <- rgamma(100, shape=1, scale=10)
-
-mod <- list(
-  "GA" = gamlss(dat ~ 1, family = GA, trace = FALSE),
-  "GAGLM" = glm(dat ~ 1, family = Gamma("log")))
-
-modelsummary(mod, group = parameter + term ~ model)
-```
-
-This table is "OK", but the GLM intercept corresponds to the GAMLSS "mu" intercept, so we may want to align those quantities. The problem is that `modelsummary` doesn't have the same statistical knowledge we do: Applying the `get_estimates` function to the GLM model does not produce a `parameter` column.
-
-From the `modelsummary` developpers' perspective, it is impossible to know in advance how users will want to align grouped and non-grouped coefficients. (What if a user tries to combine a GLM with a multinomial logit?!) As a result, some additional user intervention is necessary to clearly indicate which rows need to be aligned.
-
-To do this, we create a `modelsummary_list` object for our GLM model, and we add a new `parameter` column to its `tidy` component (See section on "Adding New Models" below).
+The terms of the `shape` formula above can of course be rearranged to reshape the table. For example:
 
 ```{r, warning=FALSE}
-mod_ga <- gamlss(dat ~ 1, trace = FALSE)
-mod_glm <- glm(dat ~ 1, family = Gamma("log"))
-
-# convert glm to `modelsummary_list` object
-mod_glm <- modelsummary(mod_glm, output = "modelsummary_list")
-
-# add a group id
-mod_glm$tidy$parameter <- "mu"
-
-# summarize the table
-modelsummary(list(mod_ga, mod_glm),
-             group = parameter + term ~ model)
+modelsummary(mod, shape = model + term ~ y.level)
 ```
 
 ## align

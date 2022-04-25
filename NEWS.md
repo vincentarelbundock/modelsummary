@@ -1,8 +1,12 @@
 # modelsummary 0.10.0.9000
 
-Misc:
-
-* `fmt = NULL` leaves variables as numeric long enough to apply glue functions on them. 
+* The `shape` argument accepts a formula and can reshape information in myriad ways. Deprecates the `group` argument. Examples:
+    - `~ statistic`: statistics are shown horizontally in distinct columns.
+    - `model ~ term`: models in rows and terms in columns.
+    - `term + y.level + statistic ~ model`: grouped coefficients for multivariate outcome in `nnet::multinom`
+    - `y.level ~ model`: partial match is the same as the previous formula
+* Use `glue` to apply functions to numeric values by setting `fmt = NULL`. Example:
+    - `modelsummary(model, fmt = NULL, estimate = "{log(estimate)}")`
 * Update for breaking changes after fixest 0.10.4
 
 Bug fixes:
