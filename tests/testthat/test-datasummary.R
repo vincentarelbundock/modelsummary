@@ -2,6 +2,14 @@ library(modelsummary)
 penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
 
 
+test_that("regression test: gt duplicate span labels", {
+    expect_error(datasummary(All(mtcars) ~ Factor(vs) * (Factor(am) * (Mean + SD)),
+                             data = mtcars,
+                             output = "gt"),
+                NA)
+})
+
+
 test_that("tables::All() warning does not accept tibbles yet", {
   # https://github.com/vincentarelbundock/modelsummary/issues/395
   skip_if_not_installed("tibble")

@@ -71,48 +71,16 @@ datasummary_extract <- function(tab,
 
   # header matrices: remove rows with a single label
   header_sparse <- sparsify(header)
-  header_nocolnames_sparse <- sparsify(header_nocolnames)
 
-  # header vectors
-  header_sparse_flat <- apply(header_sparse, 2, paste, collapse = ' ')
-  header_nocolnames_sparse_flat <- apply(header_nocolnames_sparse, 2, paste, collapse = ' ')
-
-  # gt only supports one span level, so we use the flat vector WITHOUT colnames
-  h <- header_nocolnames_sparse_flat
-  lab <- base::setdiff(unique(h), '')
-  span <- list()
-  for (l in lab) {
-    if (trimws(l) != '') {
-      pos <- which(h == l)
-      span[[length(span) + 1]] <- list(label = l,
-                                       columns = pos,
-                                       level = 1)
-    }
-  }
-  attr(main, 'span_gt') <- span
-
-  # kableExtra supports several span levels, so we use the matrix
-  if (sparse_header) {
-    h <- header_nocolnames_sparse
+  # header flat with sep="||||"
+  if (nrow(header_sparse) > 1) {
+      cols <- apply(header_sparse, 2, paste, collapse = "||||")
+      cols <- gsub("^\\|*$", "", cols)
+      cols <- pad(cols)
   } else {
-    h <- header_nocolnames
+      cols <- unlist(header_sparse)
   }
-
-  if (nrow(h) > 0) { # are there any spans?
-    span <- list()
-    for (i in 1:nrow(h)) {
-      z <- ifelse(h[i, ] == "", " ", h[i, ]) # needed in factory_kableExtra
-      idx <- rle(z)
-      span[[i]] <- stats::setNames(idx$lengths, idx$values)
-    }
-  } else {
-    span <- NULL
-  }
-  attr(main, 'span_kableExtra') <- span
-
-  # attributes
-  attr(main, 'header_sparse_flat') <- header_sparse_flat
-
+  colnames(main) <- cols
 
   # return
   return(main)
