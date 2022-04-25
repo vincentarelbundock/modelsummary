@@ -29,9 +29,8 @@ datasummary_extract <- function(tab,
   header <- mat[1:nrow(header), , drop = FALSE]
 
   for (i in 1:nrow(header)) {
-    header[i, ] <- carry_forward(header[i, , drop = TRUE])
+    header[i, ] <- carry_forward(header[i,])
   }
-
 
   # main --- TODO: test if main has only one row
   main <- mat[(idx + 1):nrow(mat), , drop = FALSE]
@@ -87,9 +86,11 @@ carry_forward <- function(x, empty = '') {
     x <- trimws(x)
     if (length(x) > 1) {
         for (i in 2:length(x)) {
-        if (is.na(x[i])) {
-            x[i] <- x[i - 1]
-        }
+            if (is.na(x[i]) || isTRUE(grepl("^\\s*$", x[i]))) {
+                if (!is.na(x[i - 1]) && !isTRUE(x[i - 1] == "")) {
+                    x[i] <- x[i - 1]
+                }
+            }
         }
     }
     x

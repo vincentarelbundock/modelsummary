@@ -312,6 +312,7 @@ test_that("numeric weights", {
       expect_equal(unknown, tab[tab[[1]] == v, sprintf("%s / Std. Dev.", am)])
     }
   }
+
 })
 
 
