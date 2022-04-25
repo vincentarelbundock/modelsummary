@@ -100,16 +100,22 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `"IC"`: omit statistics matching the "IC" substring.
 #' * `"BIC|AIC"`: omit statistics matching the "AIC" or "BIC" substrings.
 #' * `"^(?!.*IC)"`: keep statistics matching the "IC" substring. 
-#' @param group transpose or group models and estimates (formula). The left
-#' side of the formula represents rows and the right side columns.
-#' * Formula with two components called `term` and `model`.
-#'   - `term ~ model`
-#'   - `model ~ term`
-#' * Formula with three components, including one of the column names in the data frame produced by `get_estimates(model)`. Examples:
-#'   - `response + term ~ model`
-#'   - `term ~ model + y.level`
 #' @param group_map named or unnamed character vector. Subset, rename, and
-#' reorder coefficient groups specified in the `group` argument. See `coef_map`.
+#' reorder coefficient groups specified a grouping variable specified in the
+#' `shape` argument formula. This argument behaves like `coef_map`.
+#' @param shape formula which determines the shape of the table. The left side
+#' determines what appears on rows, and the right side determines what appears
+#' on columns. The formula can include a group identifier to display related terms
+#' together, which can be useful for models with multivariate outcomes or
+#' grouped coefficients (See examples section below). This identifier must be
+#' one of the column names produced by: `get_estimates(model)`. If an
+#' incomplete formula is supplied (e.g., `~statistic`), `modelsummary` tries to
+#' complete it automatically. Potential `shape` values include:
+#' * `term + statistic ~ model`: default
+#' * `term ~ model + statistic`: statistics in separate columns
+#' * `model + statistic ~ term`: models in rows and terms in columns
+#' * `term + y.level + statistic ~ model`: 
+#' * `term ~ y.level`
 #' @param add_rows a data.frame (or tibble) with the same number of columns as
 #' your main table. By default, rows are appended to the bottom of the table.
 #' You can define a "position" attribute of integers to set the row positions.
@@ -152,12 +158,12 @@ modelsummary <- function(
   conf_level  = 0.95,
   exponentiate = FALSE,
   stars       = FALSE,
+  shape       = term + statistic ~ model,
   coef_map    = NULL,
   coef_omit   = NULL,
   coef_rename = NULL,
   gof_map     = NULL,
   gof_omit    = NULL,
-  group       = term ~ model,
   group_map   = NULL,
   add_rows    = NULL,
   align       = NULL,
@@ -171,6 +177,15 @@ modelsummary <- function(
      "function_called" = "modelsummary"
   ))
 
+  # bug: deprecated `group` argument gets partial matched
+  scall <- sys.call()
+  if (all(c("group", "shape") %in% names(scall))) {
+    stop("The `group` argument is deprecated. Please use `shape` instead.", call. = FALSE)
+  } else if (!"group_map" %in% names(scall) && "group" %in% names(scall)) {
+    shape <- group_map
+    group_map <- NULL
+  }
+
   ## sanity functions validate variables/settings
   ## sanitize functions validate & modify & initialize
   checkmate::assert_string(gof_omit, null.ok = TRUE)
@@ -182,9 +197,9 @@ modelsummary <- function(
   number_of_models <- max(length(models), length(vcov))
   estimate <- sanitize_estimate(estimate, number_of_models)
   exponentiate <- sanitize_exponentiate(exponentiate, number_of_models)
-  group <- sanitize_group(group)
+  statistic <- sanitize_statistic(statistic, shape)
+  shape <- sanitize_shape(shape, ...)
   gof_map <- sanitize_gof_map(gof_map)
-  statistic <- sanitize_statistic(statistic, group)
   sanity_group_map(group_map)
   sanity_conf_level(conf_level)
   sanity_coef(coef_map, coef_rename, coef_omit)
@@ -244,8 +259,8 @@ modelsummary <- function(
       vcov       = vcov[[i]],
       conf_level = conf_level,
       stars      = stars,
-      group      = group,
-      group_name = group$group_name,
+      shape      = shape,
+      group_name = shape$group_name,
       exponentiate = exponentiate[[i]],
       ...)
 
@@ -272,7 +287,7 @@ modelsummary <- function(
   est <- Reduce(f, est)
 
   # warn that `shape` might be needed
-  if (is.null(group$group_name)) {
+  if (is.null(shape$group_name)) {
     idx <- paste(est$term, est$statistic)
     if (anyDuplicated(idx) > 0) {
       msg <- "There are duplicate term names in the table. The `group` argument of the `modelsummary` function can be used to print related terms together, and to label them appropriately. See `?modelsummary` for details."
@@ -280,8 +295,7 @@ modelsummary <- function(
     }
   }
 
-  # if (is.null(group$group_name) && isTRUE(anyDuplicated(est$term))) {
-  est <- shape_estimates(est, group, conf_level = conf_level)
+  est <- shape_estimates(est, shape, conf_level = conf_level)
 
   # distinguish between estimates and gof (first column for tests)
   est$part <- "estimates"
@@ -346,6 +360,7 @@ modelsummary <- function(
   gof <- Reduce(f, gof)
 
   gof <- map_gof(gof, gof_omit, gof_map)
+
 
   # combine estimates and gof
   tab <- bind_est_gof(est, gof)
@@ -414,7 +429,7 @@ modelsummary <- function(
   }
 
   # only show group label if it is a row-property (lhs of the group formula)
-  tmp <- setdiff(group$lhs, c("model", "term"))
+  tmp <- setdiff(shape$lhs, c("model", "term"))
   if (length(tmp) == 0) {
     tab$group <- NULL
   } else if (!settings_equal("output_format", "dataframe")) {

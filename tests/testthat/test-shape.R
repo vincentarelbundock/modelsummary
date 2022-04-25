@@ -3,6 +3,14 @@ options(modelsummary_get = "easystats")
 skip_if_not_installed("gamlss")
 requiet("gamlss")
 
+
+test_that("group -> shape", {
+    mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
+    tab1 <- modelsummary(list(mod, mod), group = ~ statistic, output = "data.frame")
+    tab2 <- modelsummary(list(mod, mod), shape = ~ statistic, output = "data.frame")
+    expect_equal(tab1, tab2)
+    expect_error(modelsummary(mod, shape = ~ statistic, group = ~ statistic))
+
 test_that("gof merge on partial column match", {
     options(modelsummary_factory_default = "data.frame")
     mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)

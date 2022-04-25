@@ -14,12 +14,12 @@ modelsummary(
   conf_level = 0.95,
   exponentiate = FALSE,
   stars = FALSE,
+  shape = term + statistic ~ model,
   coef_map = NULL,
   coef_omit = NULL,
   coef_rename = NULL,
   gof_map = NULL,
   gof_omit = NULL,
-  group = term ~ model,
   group_map = NULL,
   add_rows = NULL,
   align = NULL,
@@ -101,6 +101,22 @@ statistics are exponentiated, and the \code{std.error} is transformed to
 \item Note: a legend will not be inserted at the bottom of the table when the \code{estimate} or \code{statistic} arguments use "glue strings" with \code{{stars}}.
 }}
 
+\item{shape}{formula which determines the shape of the table. The left side
+determines what appears on rows, and the right side determines what appears
+on columns. The formula can include a group identifier to display related terms
+together, which can be useful for models with multivariate outcomes or
+grouped coefficients (See examples section below). This identifier must be
+one of the column names produced by: \code{get_estimates(model)}. If an
+incomplete formula is supplied (e.g., \code{~statistic}), \code{modelsummary} tries to
+complete it automatically. Potential \code{shape} values include:
+\itemize{
+\item \code{term + statistic ~ model}: default
+\item \code{term ~ model + statistic}: statistics in separate columns
+\item \code{model + statistic ~ term}: models in rows and terms in columns
+\item \code{term + y.level + statistic ~ model}:
+\item \code{term ~ y.level}
+}}
+
 \item{coef_map}{character vector. Subset, rename, and reorder coefficients.
 Coefficients omitted from this vector are omitted from the table. The order
 of the vector determines the order of the table. \code{coef_map} can be a named
@@ -145,23 +161,9 @@ model information. This argument accepts 4 types of values:
 \item \code{"^(?!.*IC)"}: keep statistics matching the "IC" substring.
 }}
 
-\item{group}{transpose or group models and estimates (formula). The left
-side of the formula represents rows and the right side columns.
-\itemize{
-\item Formula with two components called \code{term} and \code{model}.
-\itemize{
-\item \code{term ~ model}
-\item \code{model ~ term}
-}
-\item Formula with three components, including one of the column names in the data frame produced by \code{get_estimates(model)}. Examples:
-\itemize{
-\item \code{response + term ~ model}
-\item \code{term ~ model + y.level}
-}
-}}
-
 \item{group_map}{named or unnamed character vector. Subset, rename, and
-reorder coefficient groups specified in the \code{group} argument. See \code{coef_map}.}
+reorder coefficient groups specified a grouping variable specified in the
+\code{shape} argument formula. This argument behaves like \code{coef_map}.}
 
 \item{add_rows}{a data.frame (or tibble) with the same number of columns as
 your main table. By default, rows are appended to the bottom of the table.
@@ -386,6 +388,11 @@ modelsummary(models, coef_omit = "^(?!Vol)", omit = ".*")
 # coef_omit: keep coefficients matching a substring
 modelsummary(models, coef_omit = "^(?!.*ei|.*pt)", omit = ".*")
 
+# shape
+library(nnet)
+multi <- multinom(factor(cyl) ~ mpg + hp, data = mtcars, trace = FALSE) 
+modelsummary(multi, shape = y.level ~ model)
+modelsummary(multi, shape = term ~ y.level)
 
 # title
 modelsummary(models, title = 'This is the title')

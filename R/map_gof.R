@@ -17,6 +17,7 @@ map_gof <- function(gof, gof_omit, gof_map) {
     gof <- gof[idx, , drop = FALSE]
   }
 
+
   # map
   gm_raw <- sapply(gof_map, function(x) x$raw)
   gm_clean <- sapply(gof_map, function(x) x$clean)

@@ -2,14 +2,14 @@
 #'
 #' @keywords internal
 #' @noRd
-shape_estimates <- function(estimates, group, conf_level) {
+shape_estimates <- function(estimates, shape, conf_level) {
 
     # default
-    if (isTRUE(all.equal(group$group_formula, term + statistic ~ model))) {
+    if (isTRUE(all.equal(shape$shape_formula, term + statistic ~ model))) {
         return(estimates)
     }
 
-    group_formula <- group$group_formula
+    shape_formula <- shape$shape_formula
 
     idx <- intersect(colnames(estimates), c("term", "statistic", "group"))
 
@@ -19,7 +19,7 @@ shape_estimates <- function(estimates, group, conf_level) {
                             variable.name = "model",
                             value.name = "estimate")
 
-    if ("statistic" %in% group$rhs) {
+    if ("statistic" %in% shape$rhs) {
         out$statistic <- rename_statistics(out$statistic, conf_level = conf_level)
     }
 
@@ -31,7 +31,7 @@ shape_estimates <- function(estimates, group, conf_level) {
     }
 
     # wide
-    out <- data.table::dcast(eval(group_formula),
+    out <- data.table::dcast(eval(shape_formula),
                              data = out,
                              value.var = "estimate",
                              sep = "||||")

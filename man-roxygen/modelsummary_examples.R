@@ -73,6 +73,11 @@
 #' # coef_omit: keep coefficients matching a substring
 #' modelsummary(models, coef_omit = "^(?!.*ei|.*pt)", omit = ".*")
 #' 
+#' # shape
+#' library(nnet)
+#' multi <- multinom(factor(cyl) ~ mpg + hp, data = mtcars, trace = FALSE) 
+#' modelsummary(multi, shape = y.level ~ model)
+#' modelsummary(multi, shape = term ~ y.level)
 #'
 #' # title
 #' modelsummary(models, title = 'This is the title')
