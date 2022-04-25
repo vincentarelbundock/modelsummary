@@ -92,7 +92,7 @@ test_that("character vector", {
   # bad input
   expect_error(modelsummary(models, vcov="bad", output="data.frame"))
   # no standard error or F-stata row when `vcov` is an unknown function
-  expect_equal(nrow(tab1), nrow(tab4) + 2)
+  expect_equal(nrow(tab1), nrow(tab4) + 1)
 })
 
 
