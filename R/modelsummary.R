@@ -181,7 +181,7 @@ modelsummary <- function(
   scall <- sys.call()
   if (all(c("group", "shape") %in% names(scall))) {
     stop("The `group` argument is deprecated. Please use `shape` instead.", call. = FALSE)
-  } else if ("group_map" %in% names(scall) && !"group" %in% names(scall)) {
+  } else if ("group" %in% names(scall) && !"group_map" %in% names(scall)) {
     shape <- group_map
     group_map <- NULL
   }
