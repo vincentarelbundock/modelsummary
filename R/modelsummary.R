@@ -405,7 +405,7 @@ modelsummary <- function(
     # HACK: arbitrary spaces to avoid name conflict
     if ("term" %in% colnames(tab)) colnames(tab)[colnames(tab) == "term"]   <- "       "
     if ("model" %in% colnames(tab)) colnames(tab)[colnames(tab) == "model"] <- "         "
-
+    if ("group" %in% colnames(tab)) colnames(tab)[colnames(tab) == "model"] <- "          "
   }
 
   # only show group label if it is a row-property (lhs of the group formula)
@@ -418,11 +418,8 @@ modelsummary <- function(
 
   # align
   if (is.null(align)) {
-    if (!is.null(group) && length(group$lhs) == 2) {
-      align <- paste0("ll", strrep("c", ncol(tab) - 2))
-    } else {
-      align <- paste0("l", strrep("c", ncol(tab) - 1))
-    }
+    n_stub <- sum(grepl("^ *$", colnames(tab)))
+    align <- paste0(strrep("l", n_stub), strrep("c", ncol(tab) - n_stub))
   }
 
 
@@ -436,7 +433,6 @@ modelsummary <- function(
   }
   idx <- apply(tab, 1, function(x) any(x != ""))
   tab <- tab[idx, ]
-
 
   ## build table
   out <- factory(
