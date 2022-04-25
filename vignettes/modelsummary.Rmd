@@ -340,27 +340,26 @@ modelsummary(models, coef_map = cm)
 An alternative mechanism to subset coefficients is to use the `coef_omit` argument. This string is a regular expression which will be fed to `stringr::str_detect` to detect the variable names which should be excluded from the table.
 
 ```{r}
-modelsummary(models, coef_omit = "Intercept|Commerce", gof_omit=".*")
+modelsummary(models, coef_omit = "Intercept|.*merce", gof_map = NA)
 ```
 
-Since `coef_omit` accepts regexes, you can do interesting things with it, such as specifying the list of variables that `modelsummary` should *keep* instead of omit. To do this, we use the `[^]` construct that specifies what *not* to match, we use the `|` pipe operator to separate the list of variables to include:
+Since `coef_omit` accepts regexes, you can do interesting things with it, such as specifying the list of variables that `modelsummary` should *keep* instead of omit. To do this, we use [a negative lookahead.](https://www.regular-expressions.info/lookaround.html) To keep only the coefficients *starting* with "Lit", we call:
 
 ```{r}
-modelsummary(models, coef_omit = "[^Commerce|(Intercept)]", gof_omit=".*")
+modelsummary(models, coef_omit = "^(?!Lit)", gof_map = NA)
 ```
 
-Another way to achieve the same result would be to use fancy [look-ahead or look-behind assertions](https://en.wikipedia.org/wiki/Perl_Compatible_Regular_Expressions#Look-ahead_and_look-behind_assertions). For example, if you want the *opposite* of `coef_omit` (call it `coef_keep`), and you want to "keep" parameters that match a certain pattern, you could try:
+To keep all coefficients matching the "y" substring:
 
 ```{r}
-modelsummary(models, coef_omit = "^(?!.*Commerce)", gof_omit=".*")
+modelsummary(models, coef_omit = "^(?!.*y)", gof_map = NA)
 ```
 
-You can chain those look-behinds as needed to match multiple patterns (noting that parentheses must be escaped):
+To keep all coefficients matching one of two substrings:
 
 ```{r}
-modelsummary(models, coef_omit = "^(?!.*Commerce)(?!.*\\(Int)", gof_omit=".*")
+modelsummary(models, coef_omit = "^(?!.*tercept|.*y)", gof_map = NA)
 ```
-
 
 ## gof_omit
 

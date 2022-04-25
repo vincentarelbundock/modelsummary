@@ -30,7 +30,7 @@ map_estimates <- function(estimates,
         if (sum(idx) > 0) {
             estimates <- estimates[idx, , drop = FALSE]
         } else {
-            msg <- 'The regular expression supplied to `coef_omit` matched and omitted all the coefficients, but `modelsummary` requires at least one coefficient to produce a table. Here are some examples of valid regular expressions for different use-cases:
+            msg <- 'The regular expression supplied to `coef_omit` matched and omitted all the coefficients of (at least) one model, but `modelsummary` requires at least one coefficient to produce a table. Here are some examples of valid regular expressions for different use-cases:
 
 library(modelsummary)
 data(trees)
