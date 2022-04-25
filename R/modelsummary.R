@@ -92,7 +92,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @param gof_map rename, reorder, and omit goodness-of-fit statistics and other
 #'   model information. This argument accepts 4 types of values:
 #' * NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.
-#' * NA: excludes all statistics from the bottom part of hte table.
+#' * NA: excludes all statistics from the bottom part of the table.
 #' * character vector such as `c("rmse", "nobs", "r.squared")`. Elements correspond to colnames in the data.frame produced by `get_gof(model)`. The default dictionary is used to format and rename statistics.
 #' * data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
 #' * list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
@@ -399,13 +399,18 @@ modelsummary <- function(
     tab <- redundant_labels(tab, "group")
     tab <- redundant_labels(tab, "term")
 
-    # after label redundancy
+    # after label redundancy, before align
     tab$statistic <- tab$part <- NULL
+
 
     # HACK: arbitrary spaces to avoid name conflict
     if ("term" %in% colnames(tab)) colnames(tab)[colnames(tab) == "term"]   <- "       "
     if ("model" %in% colnames(tab)) colnames(tab)[colnames(tab) == "model"] <- "         "
     if ("group" %in% colnames(tab)) colnames(tab)[colnames(tab) == "model"] <- "          "
+  }
+
+  if (length(unique(tab$group)) == 1) {
+    tab$group <- NULL
   }
 
   # only show group label if it is a row-property (lhs of the group formula)
@@ -416,12 +421,12 @@ modelsummary <- function(
     colnames(tab)[colnames(tab) == "group"] <- "        "
   }
 
+
   # align
   if (is.null(align)) {
     n_stub <- sum(grepl("^ *$", colnames(tab)))
     align <- paste0(strrep("l", n_stub), strrep("c", ncol(tab) - n_stub))
   }
-
 
   # HACK: remove "empty" confidence intervals or standard errors and omit empty rows
   for (i in seq_along(tab)) {
@@ -433,6 +438,7 @@ modelsummary <- function(
   }
   idx <- apply(tab, 1, function(x) any(x != ""))
   tab <- tab[idx, ]
+
 
   ## build table
   out <- factory(

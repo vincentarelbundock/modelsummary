@@ -1,5 +1,3 @@
-library(modelsummary)
-
 test_that("coef_map must include at least one term per model", {
     mod <- lm(hp ~ mpg + cyl, mtcars)
     expect_error(modelsummary(mod, coef_map = c("Blah" = "blah")),

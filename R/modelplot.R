@@ -105,7 +105,7 @@ modelplot <- function(models,
   out <- modelsummary(
     output      = "dataframe",
     models      = models,
-    fmt         = "%.50f",
+    fmt         = NULL,
     estimate    = estimate,
     statistic   = NULL,
     conf_level  = conf_level,

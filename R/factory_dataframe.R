@@ -18,6 +18,7 @@ factory_dataframe <- function(tab,
 
   colnames(out) <- gsub("\\|\\|\\|\\|", " / ", colnames(tab))
 
+
   # factor -> character (useful for R<4.0.0)
   for (i in seq_along(out)) {
     if (is.factor(out[[i]])) {
