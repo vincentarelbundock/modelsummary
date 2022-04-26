@@ -55,14 +55,21 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.10.0.9000" id="modelsummary-01009000">modelsummary 0.10.0.9000<a class="anchor" aria-label="anchor" href="#modelsummary-01009000"></a></h2>
-<p>Misc:</p>
-<ul><li>
-<code>fmt = NULL</code> leaves variables as numeric long enough to apply glue functions on them.</li>
+<ul><li>The <code>shape</code> argument accepts a formula and can reshape information in myriad ways. Deprecates the <code>group</code> argument. Examples:<ul><li>
+<code>~ statistic</code>: statistics are shown horizontally in distinct columns.</li>
+<li>
+<code>model ~ term</code>: models in rows and terms in columns.</li>
+<li>
+<code>term + y.level + statistic ~ model</code>: grouped coefficients for multivariate outcome in <code><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">nnet::multinom</a></code>
+</li>
+<li>
+<code>y.level ~ model</code>: partial match is the same as the previous formula</li>
+</ul></li>
+<li>Use <code>glue</code> to apply functions to numeric values by setting <code>fmt = NULL</code>. Example:<ul><li><code>modelsummary(model, fmt = NULL, estimate = "{log(estimate)}")</code></li></ul></li>
 <li>Update for breaking changes after fixest 0.10.4</li>
 </ul><p>Bug fixes:</p>
 <ul><li>
-<code>group_map</code> rename issue</li>
-</ul></div>
+<code>group_map</code> rename issue</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.10.0" id="modelsummary-0100">modelsummary 0.10.0<small>2022-04-14</small><a class="anchor" aria-label="anchor" href="#modelsummary-0100"></a></h2>
 <ul><li>New <code>exponentiate</code> argument for <code><a href="../reference/modelsummary.html">modelsummary()</a></code> and <code><a href="../reference/modelplot.html">modelplot()</a></code>
@@ -76,8 +83,7 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9.6" id="modelsummary-096">modelsummary 0.9.6<small>2022-02-25</small><a class="anchor" aria-label="anchor" href="#modelsummary-096"></a></h2>
 <p><code>datasummary_balance</code>:</p>
-<ul><li>Accepts <code>~ 1</code> as a formula to summarize all data.</li>
-</ul><p>Misc:</p>
+<ul><li>Accepts <code>~ 1</code> as a formula to summarize all data.</li></ul><p>Misc:</p>
 <ul><li>documentation improvements</li>
 <li>RMSE included by default in models of class <code>lm</code>
 </li>
@@ -95,24 +101,21 @@
 <ul><li>Histograms now work in Jupyter</li>
 <li>Bugfix: harmless error message is no longer printed</li>
 </ul><p><code>kableExtra</code> factory:</p>
-<ul><li>The <code>col.names</code> argument can now be passed to <code><a href="https://rdrr.io/pkg/kableExtra/man/kbl.html" class="external-link">kableExtra::kbl</a></code> through the … ellipsis.</li>
-</ul><p>Misc:</p>
+<ul><li>The <code>col.names</code> argument can now be passed to <code><a href="https://rdrr.io/pkg/kableExtra/man/kbl.html" class="external-link">kableExtra::kbl</a></code> through the … ellipsis.</li></ul><p>Misc:</p>
 <ul><li>Many small improvements to the vignettes and docs</li>
 <li>
 <code>output = "github_document"</code> is now supported</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9.4" id="modelsummary-094">modelsummary 0.9.4<small>2021-11-05</small><a class="anchor" aria-label="anchor" href="#modelsummary-094"></a></h2>
-<ul><li>Bug fix: siunitx and rounding NA</li>
-</ul></div>
+<ul><li>Bug fix: siunitx and rounding NA</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9.3" id="modelsummary-093">modelsummary 0.9.3<small>2021-11-02</small><a class="anchor" aria-label="anchor" href="#modelsummary-093"></a></h2>
 <p><code>modelsummary</code>:</p>
 <ul><li>F statistic takes into account <code>vcov</code> argument</li>
 <li>Support group = group ~ model + term</li>
 </ul><p><code>datasummary_balance</code>:</p>
-<ul><li>Weighted means and standard deviations are now supported. Counts and percentages are not, but raise a warning.</li>
-</ul><p>Misc:</p>
+<ul><li>Weighted means and standard deviations are now supported. Counts and percentages are not, but raise a warning.</li></ul><p>Misc:</p>
 <ul><li>Bugfix: rounding in LaTeX w/ siunitx and NaN entries.</li>
 <li>output=‘jupyter’ no longer prints an extraneous TRUE to the notebook</li>
 </ul></div>
@@ -124,8 +127,7 @@
 <li>Consistent display of clustered SEs (<a href="https://github.com/vincentarelbundock/modelsummary/issues/356" class="external-link">#356</a>, <a href="https://github.com/vincentarelbundock/modelsummary/issues/363" class="external-link">#363</a> and <a href="https://github.com/vincentarelbundock/modelsummary/issues/366" class="external-link">#366</a> by <a href="https://github.com/grantmcdermott" class="external-link">@grantmcdermott</a>)</li>
 </ul><p><code>datasummary_correlation</code>:</p>
 <ul><li>
-<code>add_rows</code> and <code>add_columns</code> arguments are now available here.</li>
-</ul><p>Misc:</p>
+<code>add_rows</code> and <code>add_columns</code> arguments are now available here.</li></ul><p>Misc:</p>
 <ul><li>Global options for output factories are renamed: <code>modelsummary_factory_default</code>, <code>modelsummary_factory_html</code>, etc.</li>
 <li>Hot fix for change in R-devel behavior or <code>intersect</code>
 </li>
@@ -138,8 +140,7 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9.1" id="modelsummary-091">modelsummary 0.9.1<small>2021-08-12</small><a class="anchor" aria-label="anchor" href="#modelsummary-091"></a></h2>
 <p>Breaking change:</p>
-<ul><li>Support for <code>dcolumn</code> for dot-aligned columns is deprecated. Use “d” in the <code>align</code> argument instead.</li>
-</ul><p>Other changes:</p>
+<ul><li>Support for <code>dcolumn</code> for dot-aligned columns is deprecated. Use “d” in the <code>align</code> argument instead.</li></ul><p>Other changes:</p>
 <ul><li>LaTeX output: Numeric entries are wrapped in the <code>\num{}</code> function from the <code>siunitx</code> package by default. This produces much nicer formatting. This can be disabled with a global option. See <code><a href="../reference/modelsummary.html">?modelsummary</a></code>
 </li>
 <li>The <code>align</code> argument accepts a “d” column for dot-alignment using the <code>siunitx</code> LaTeX package: <code>align="ldd"</code>.</li>
@@ -151,18 +152,14 @@
 </li>
 </ul><p><code>modelsummary</code>:</p>
 <ul><li>
-<code>group</code>: The order of terms in the formula determines the order of rows/columns</li>
-</ul><p><code>modelsummary_wide</code>:</p>
+<code>group</code>: The order of terms in the formula determines the order of rows/columns</li></ul><p><code>modelsummary_wide</code>:</p>
 <ul><li>Note: This function will eventually be deprecated</li>
 <li>Bugfix with statistic=NULL.</li>
 </ul><p><code>modelplot</code>:</p>
-<ul><li>Preserves order of models in the user-supplied list</li>
-</ul><p><code>datasummary_crosstab</code>:</p>
+<ul><li>Preserves order of models in the user-supplied list</li></ul><p><code>datasummary_crosstab</code>:</p>
 <ul><li>
-<code>statistic=NULL</code> produces a very basic crosstab</li>
-</ul><p><code>datasummary_crosstab</code>:</p>
-<ul><li>Default alignment “lrrrrr” consistent with other datasummary_* functions</li>
-</ul></div>
+<code>statistic=NULL</code> produces a very basic crosstab</li></ul><p><code>datasummary_crosstab</code>:</p>
+<ul><li>Default alignment “lrrrrr” consistent with other datasummary_* functions</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.8.1" id="modelsummary-081">modelsummary 0.8.1<small>2021-06-17</small><a class="anchor" aria-label="anchor" href="#modelsummary-081"></a></h2>
 <p><code>modelsummary</code>:</p>
@@ -175,8 +172,7 @@
 <code>group = model ~ term + group</code> is now supported.</li>
 </ul><p><code>datasummary_skim</code>:</p>
 <ul><li>
-<code>datasummary_skim("categorical")</code> keeps <code>NA</code> by default. Users can convert variables to factors before calling <code>datasummary_skim</code> to exclude <code>NA</code>.</li>
-</ul><p>Other:</p>
+<code>datasummary_skim("categorical")</code> keeps <code>NA</code> by default. Users can convert variables to factors before calling <code>datasummary_skim</code> to exclude <code>NA</code>.</li></ul><p>Other:</p>
 <ul><li>Improved warnings for bad calls: <code>modelsummary(model1, model2)</code>
 </li>
 <li>
@@ -186,15 +182,11 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.8.0" id="modelsummary-080">modelsummary 0.8.0<small>2021-05-21</small><a class="anchor" aria-label="anchor" href="#modelsummary-080"></a></h2>
 <p>Breaking change:</p>
-<ul><li>The default significance markers <code>stars=TRUE</code> have been updated to be consistent with the default output from base R (e.g., in summary.lm). The new significance thresholds are: “+” p &lt; 0.1, “<em>" p &lt; 0.05, "<strong>" p &lt; 0.01, "</strong></em>” p &lt; 0.001</li>
-</ul><p><code>datasummary_crosstab</code>:</p>
-<ul><li>New function to produce cross-tabulations</li>
-</ul><p><code>datasummary</code>:</p>
+<ul><li>The default significance markers <code>stars=TRUE</code> have been updated to be consistent with the default output from base R (e.g., in summary.lm). The new significance thresholds are: “+” p &lt; 0.1, “<em>" p &lt; 0.05, "<strong>" p &lt; 0.01, "</strong></em>” p &lt; 0.001</li></ul><p><code>datasummary_crosstab</code>:</p>
+<ul><li>New function to produce cross-tabulations</li></ul><p><code>datasummary</code>:</p>
 <ul><li>
-<code>N</code> is smart enough to return either the number of elements in a subset or the number of non-missing observations in a variable</li>
-</ul><p><code>datasummary_balance</code>:</p>
-<ul><li>Keeps <code>NA</code>s in factor variables by default. Users can convert their variables with the <code><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor()</a></code> function to omit <code>NA</code>s automatically.</li>
-</ul><p><code>modelsummary</code>:</p>
+<code>N</code> is smart enough to return either the number of elements in a subset or the number of non-missing observations in a variable</li></ul><p><code>datasummary_balance</code>:</p>
+<ul><li>Keeps <code>NA</code>s in factor variables by default. Users can convert their variables with the <code><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor()</a></code> function to omit <code>NA</code>s automatically.</li></ul><p><code>modelsummary</code>:</p>
 <ul><li>themes can be set using global options (experimental)</li>
 <li>new vcov options: “bootstrap”, “HAC”, “NeweyWest”, “Andrews”, “panel-corrected”, “weave”, “outer-product”</li>
 <li>A valid <code>get_gof</code> (<code>glance</code>) is now optional.</li>
@@ -240,8 +232,7 @@
 <code>datasummary_correlation</code>’s <code>method</code> argument accepts functions and “pearspear” (thanks to <a href="https://github.com/joachim-gassen" class="external-link">@joachim-gassen</a>)</li>
 </ul><p><code>datasummary</code>:</p>
 <ul><li>
-<code>datasummary</code> functions and <code>rounding</code> accept …, big.mark, etc.</li>
-</ul><p><code>datasummary_skim</code>:</p>
+<code>datasummary</code> functions and <code>rounding</code> accept …, big.mark, etc.</li></ul><p><code>datasummary_skim</code>:</p>
 <ul><li>now works with haven_labeled numeric</li>
 <li>faster tables with bayesian models.</li>
 </ul><p>Bug fixes and lints</p>
@@ -317,8 +308,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.6.1" id="modelsummary-061">modelsummary 0.6.1<small>2020-09-04</small><a class="anchor" aria-label="anchor" href="#modelsummary-061"></a></h2>
-<ul><li>bug fixes</li>
-</ul></div>
+<ul><li>bug fixes</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.6.0" id="modelsummary-060">modelsummary 0.6.0<small>2020-09-02</small><a class="anchor" aria-label="anchor" href="#modelsummary-060"></a></h2>
 <ul><li>default HTML output factory is now kableExtra</li>
@@ -329,8 +319,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.5.1" id="modelsummary-051">modelsummary 0.5.1<small>2020-08-02</small><a class="anchor" aria-label="anchor" href="#modelsummary-051"></a></h2>
-<ul><li>glance_custom.fixest ships with modelsummary</li>
-</ul></div>
+<ul><li>glance_custom.fixest ships with modelsummary</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.5.0" id="modelsummary-050">modelsummary 0.5.0<small>2020-07-05</small><a class="anchor" aria-label="anchor" href="#modelsummary-050"></a></h2>
 <ul><li>datasummary</li>
@@ -398,8 +387,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0" id="modelsummary-010">modelsummary 0.1.0<small>2019-07-15</small><a class="anchor" aria-label="anchor" href="#modelsummary-010"></a></h2>
-<ul><li>Initial release (gt still needs to be installed from github)</li>
-</ul></div>
+<ul><li>Initial release (gt still needs to be installed from github)</li></ul></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -414,7 +402,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

@@ -84,14 +84,20 @@
 <dt>coef_map</dt>
 <dd><p>character vector. Subset, rename, and reorder coefficients.
 Coefficients omitted from this vector are omitted from the table. The order
-of the vector determines the order of the table.  <code>coef_map</code> can be a named
-or an unnamed character vector (see the Examples section below). If
-<code>coef_map</code> is a named vector, its values define the labels that must appear
-in the table, and its names identify the original term names stored in the
-model object: <code>c("hp:mpg"="HPxM/G")</code>.</p></dd>
+of the vector determines the order of the table. <code>coef_map</code> can be a named
+or an unnamed character vector. If <code>coef_map</code> is a named vector, its values
+define the labels that must appear in the table, and its names identify the
+original term names stored in the model object: <code>c("hp:mpg"="HPxM/G")</code>. See
+Examples section below.</p></dd>
 <dt>coef_omit</dt>
-<dd><p>string regular expression. Omits all matching coefficients
-from the table using <code>grepl(perl=TRUE)</code>. This argument uses perl-compatible regular expressions, which allows expressions such as <code>"Int|ABC" which omits coefficients matching either "Int" or "ABC", and </code>"^(?!.*Intercept)"` which omits every term except the intercept.</p></dd>
+<dd><p>string regular expression (perl-compatible) used to determine which coefficients to omit from the table. A "negative lookahead" can be used to specify which coefficients to <em>keep</em> in the table. Examples:</p><ul><li><p><code>"ei"</code>: omit coefficients matching the "ei" substring.</p></li>
+<li><p><code>"^Volume$"</code>: omit the "Volume" coefficient.</p></li>
+<li><p><code>"ei|rc"</code>: omit coefficients matching either the "ei" or the "rc" substrings.</p></li>
+<li><p><code>"^(?!Vol)"</code>: keep coefficients starting with "Vol" (inverse match using a negative lookahead).</p></li>
+<li><p><code>"^(?!.*ei)"</code>: keep coefficients matching the "ei" substring.</p></li>
+<li><p><code>"^(?!.*ei|.*pt)"</code>: keep coefficients matching either the "ei" or the "pt" substrings.</p></li>
+<li><p>See the Examples section below for complete code.</p></li>
+</ul></dd>
 <dt>coef_rename</dt>
 <dd><p>named character vector or function which returns a named
 vector. Values of the vector refer to the variable names that will appear
@@ -211,7 +217,7 @@ scenes. For example,</p><ul><li><p><code>metrics="none"</code>, <code>metrics="a
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

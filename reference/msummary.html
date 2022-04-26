@@ -83,12 +83,12 @@ global options (See the <em>Details</em> section below.)</p>
   conf_level <span class="op">=</span> <span class="fl">0.95</span>,
   exponentiate <span class="op">=</span> <span class="cn">FALSE</span>,
   stars <span class="op">=</span> <span class="cn">FALSE</span>,
+  shape <span class="op">=</span> <span class="va">term</span> <span class="op">+</span> <span class="va">statistic</span> <span class="op">~</span> <span class="va">model</span>,
   coef_map <span class="op">=</span> <span class="cn">NULL</span>,
   coef_omit <span class="op">=</span> <span class="cn">NULL</span>,
   coef_rename <span class="op">=</span> <span class="cn">NULL</span>,
   gof_map <span class="op">=</span> <span class="cn">NULL</span>,
   gof_omit <span class="op">=</span> <span class="cn">NULL</span>,
-  group <span class="op">=</span> <span class="va">term</span> <span class="op">~</span> <span class="va">model</span>,
   group_map <span class="op">=</span> <span class="cn">NULL</span>,
   add_rows <span class="op">=</span> <span class="cn">NULL</span>,
   align <span class="op">=</span> <span class="cn">NULL</span>,
@@ -158,17 +158,37 @@ statistics are exponentiated, and the <code>std.error</code> is transformed to
 <li><p>Named numeric vector for custom stars such as <code>c('*' = .1, '+' = .05)</code></p></li>
 <li><p>Note: a legend will not be inserted at the bottom of the table when the <code>estimate</code> or <code>statistic</code> arguments use "glue strings" with <code>{stars}</code>.</p></li>
 </ul></dd>
+<dt>shape</dt>
+<dd><p>formula which determines the shape of the table. The left side
+determines what appears on rows, and the right side determines what appears
+on columns. The formula can include a group identifier to display related terms
+together, which can be useful for models with multivariate outcomes or
+grouped coefficients (See examples section below). This identifier must be
+one of the column names produced by: <code>get_estimates(model)</code>. If an
+incomplete formula is supplied (e.g., <code>~statistic</code>), <code>modelsummary</code> tries to
+complete it automatically. Potential <code>shape</code> values include:</p><ul><li><p><code>term + statistic ~ model</code>: default</p></li>
+<li><p><code>term ~ model + statistic</code>: statistics in separate columns</p></li>
+<li><p><code>model + statistic ~ term</code>: models in rows and terms in columns</p></li>
+<li><p><code>term + y.level + statistic ~ model</code>:</p></li>
+<li><p><code>term ~ y.level</code></p></li>
+</ul></dd>
 <dt>coef_map</dt>
 <dd><p>character vector. Subset, rename, and reorder coefficients.
 Coefficients omitted from this vector are omitted from the table. The order
-of the vector determines the order of the table.  <code>coef_map</code> can be a named
-or an unnamed character vector (see the Examples section below). If
-<code>coef_map</code> is a named vector, its values define the labels that must appear
-in the table, and its names identify the original term names stored in the
-model object: <code>c("hp:mpg"="HPxM/G")</code>.</p></dd>
+of the vector determines the order of the table. <code>coef_map</code> can be a named
+or an unnamed character vector. If <code>coef_map</code> is a named vector, its values
+define the labels that must appear in the table, and its names identify the
+original term names stored in the model object: <code>c("hp:mpg"="HPxM/G")</code>. See
+Examples section below.</p></dd>
 <dt>coef_omit</dt>
-<dd><p>string regular expression. Omits all matching coefficients
-from the table using <code>grepl(perl=TRUE)</code>. This argument uses perl-compatible regular expressions, which allows expressions such as <code>"Int|ABC" which omits coefficients matching either "Int" or "ABC", and </code>"^(?!.*Intercept)"` which omits every term except the intercept.</p></dd>
+<dd><p>string regular expression (perl-compatible) used to determine which coefficients to omit from the table. A "negative lookahead" can be used to specify which coefficients to <em>keep</em> in the table. Examples:</p><ul><li><p><code>"ei"</code>: omit coefficients matching the "ei" substring.</p></li>
+<li><p><code>"^Volume$"</code>: omit the "Volume" coefficient.</p></li>
+<li><p><code>"ei|rc"</code>: omit coefficients matching either the "ei" or the "rc" substrings.</p></li>
+<li><p><code>"^(?!Vol)"</code>: keep coefficients starting with "Vol" (inverse match using a negative lookahead).</p></li>
+<li><p><code>"^(?!.*ei)"</code>: keep coefficients matching the "ei" substring.</p></li>
+<li><p><code>"^(?!.*ei|.*pt)"</code>: keep coefficients matching either the "ei" or the "pt" substrings.</p></li>
+<li><p>See the Examples section below for complete code.</p></li>
+</ul></dd>
 <dt>coef_rename</dt>
 <dd><p>named character vector or function which returns a named
 vector. Values of the vector refer to the variable names that will appear
@@ -180,26 +200,20 @@ term names with your function.</p></dd>
 <dt>gof_map</dt>
 <dd><p>rename, reorder, and omit goodness-of-fit statistics and other
 model information. This argument accepts 4 types of values:</p><ul><li><p>NULL (default): the <code><a href="gof_map.html">modelsummary::gof_map</a></code> dictionary is used for formatting, and all unknown statistic are included.</p></li>
-<li><p>NA: excludes all statistics from the bottom part of hte table.</p></li>
+<li><p>NA: excludes all statistics from the bottom part of the table.</p></li>
 <li><p>character vector such as <code>c("rmse", "nobs", "r.squared")</code>. Elements correspond to colnames in the data.frame produced by <code>get_gof(model)</code>. The default dictionary is used to format and rename statistics.</p></li>
 <li><p>data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.</p></li>
 <li><p>list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.</p></li>
 </ul></dd>
 <dt>gof_omit</dt>
-<dd><p>string regular expression. Omits all matching gof statistics from
-the table. This argument uses perl-compatible regular expressions (<code>grepl(perl=TRUE)</code>), which allows expressions such as <code>".*"</code> which omits everything, and <code>"^(?!R2|Num)"</code> which omits every term except those that start with "R2" or "Num".</p></dd>
-<dt>group</dt>
-<dd><p>transpose or group models and estimates (formula). The left
-side of the formula represents rows and the right side columns.</p><ul><li><p>Formula with two components called <code>term</code> and <code>model</code>.</p><ul><li><p><code>term ~ model</code></p></li>
-<li><p><code>model ~ term</code></p></li>
-</ul></li>
-<li><p>Formula with three components, including one of the column names in the data frame produced by <code>get_estimates(model)</code>. Examples:</p><ul><li><p><code>response + term ~ model</code></p></li>
-<li><p><code>term ~ model + y.level</code></p></li>
-</ul></li>
+<dd><p>string regular expression (perl-compatible) used to determine which statistics to omit from the bottom section of the table. A "negative lookahead" can be used to specify which statistics to <em>keep</em> in the table. Examples:</p><ul><li><p><code>"IC"</code>: omit statistics matching the "IC" substring.</p></li>
+<li><p><code>"BIC|AIC"</code>: omit statistics matching the "AIC" or "BIC" substrings.</p></li>
+<li><p><code>"^(?!.*IC)"</code>: keep statistics matching the "IC" substring.</p></li>
 </ul></dd>
 <dt>group_map</dt>
 <dd><p>named or unnamed character vector. Subset, rename, and
-reorder coefficient groups specified in the <code>group</code> argument. See <code>coef_map</code>.</p></dd>
+reorder coefficient groups specified a grouping variable specified in the
+<code>shape</code> argument formula. This argument behaves like <code>coef_map</code>.</p></dd>
 <dt>add_rows</dt>
 <dd><p>a data.frame (or tibble) with the same number of columns as
 your main table. By default, rows are appended to the bottom of the table.
@@ -394,6 +408,27 @@ HTML tables:</p>
 <span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Volume'</span> <span class="op">=</span> <span class="st">'Large'</span>, <span class="st">'Height'</span> <span class="op">=</span> <span class="st">'Tall'</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Volume'</span>, <span class="st">'Height'</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
+<span class="r-in"><span class="co"># coef_omit: omit coefficients matching one substring</span></span>
+<span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"ei"</span>, omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># coef_omit: omit a specific coefficient</span></span>
+<span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^Volume$"</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span>, output <span class="op">=</span> <span class="st">"markdown"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># coef_omit: omit coefficients matching either one of two substring</span></span>
+<span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"ei|rc"</span>, omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># coef_omit: keep coefficients starting with a substring (using a negative lookahead)</span></span>
+<span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^(?!Vol)"</span>, omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># coef_omit: keep coefficients matching a substring</span></span>
+<span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^(?!.*ei|.*pt)"</span>, omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># shape</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">nnet</a></span><span class="op">)</span></span>
+<span class="r-in"><span class="va">multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">multinom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span>
+<span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">y.level</span> <span class="op">~</span> <span class="va">model</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">term</span> <span class="op">~</span> <span class="va">y.level</span><span class="op">)</span></span>
+<span class="r-in"></span>
 <span class="r-in"><span class="co"># title</span></span>
 <span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, title <span class="op">=</span> <span class="st">'This is the title'</span><span class="op">)</span></span>
 <span class="r-in"></span>
@@ -449,7 +484,7 @@ HTML tables:</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>
