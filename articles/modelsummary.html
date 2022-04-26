@@ -4133,8 +4133,8 @@ R<sup>2</sup>
 <div class="section level3">
 <h3 id="shape">shape<a class="anchor" aria-label="anchor" href="#shape"></a>
 </h3>
-<p>The <code>shape</code> argument accepts a formula which determines the structure of the table, and can display “grouped” coefficients together (e.g., multivariate outcome or mixed-effects models).</p>
-<p>The left side of the formula represents the rows and the right side represents the columns. The default formula is: <code>term+statistic~model</code></p>
+<p>The <code>shape</code> argument accepts a formula which determines the structure of the table, and can display “grouped” coefficients together (e.g., multivariate outcome or mixed-effects models). The left side of the formula represents the rows and the right side represents the columns.</p>
+<p>The default formula is <code>term + statistic ~ model</code>:</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
     <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,
@@ -4218,100 +4218,9 @@ drat
 </table>
 <p>We can display statistics horizontally with:</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">m</span>, shape <span class="op">=</span> <span class="va">term</span> <span class="op">~</span> <span class="va">model</span> <span class="op">+</span> <span class="va">statistic</span>, gof_map <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
-<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
-</th>
-<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
-<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-Model 1
-</div>
-</th>
-<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
-<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-Model 2
-</div>
-</th>
-</tr>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:center;">
-Est.
-</th>
-<th style="text-align:center;">
-S.E.
-</th>
-<th style="text-align:center;">
-Est.
-</th>
-<th style="text-align:center;">
-S.E.
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-(Intercept)
-</td>
-<td style="text-align:center;">
-30.099
-</td>
-<td style="text-align:center;">
-1.634
-</td>
-<td style="text-align:center;">
-10.790
-</td>
-<td style="text-align:center;">
-5.078
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-hp
-</td>
-<td style="text-align:center;">
-−0.068
-</td>
-<td style="text-align:center;">
-0.010
-</td>
-<td style="text-align:center;">
-−0.052
-</td>
-<td style="text-align:center;">
-0.009
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-drat
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-4.698
-</td>
-<td style="text-align:center;">
-1.192
-</td>
-</tr>
-</tbody>
-</table>
-<p><code>shape</code> does partial matching, so the following command will produce the same result as above:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">m</span>, shape <span class="op">=</span> <span class="op">~</span> <span class="va">statistic</span><span class="op">)</span></code></pre></div>
-<p>The order of terms in the formula determine the order of headers:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">m</span>,
-             statistic <span class="op">=</span> <span class="st">"conf.int"</span>,
              shape <span class="op">=</span> <span class="va">term</span> <span class="op">~</span> <span class="va">model</span> <span class="op">+</span> <span class="va">statistic</span>,
+             statistic <span class="op">=</span> <span class="st">"conf.int"</span>,
              gof_map <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -4421,6 +4330,128 @@ drat
 </tr>
 </tbody>
 </table>
+<p>The order of terms in the formula determines the order of headers in the table.</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">m</span>,
+             shape <span class="op">=</span> <span class="va">term</span> <span class="op">~</span> <span class="va">statistic</span> <span class="op">+</span> <span class="va">model</span>,
+             statistic <span class="op">=</span> <span class="st">"conf.int"</span>,
+             gof_map <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
+<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Est.
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+2.5 %
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+97.5 %
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+Model 1
+</th>
+<th style="text-align:center;">
+Model 2
+</th>
+<th style="text-align:center;">
+Model 1
+</th>
+<th style="text-align:center;">
+Model 2
+</th>
+<th style="text-align:center;">
+Model 1
+</th>
+<th style="text-align:center;">
+Model 2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
+30.099
+</td>
+<td style="text-align:center;">
+10.790
+</td>
+<td style="text-align:center;">
+26.762
+</td>
+<td style="text-align:center;">
+0.405
+</td>
+<td style="text-align:center;">
+33.436
+</td>
+<td style="text-align:center;">
+21.175
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hp
+</td>
+<td style="text-align:center;">
+−0.068
+</td>
+<td style="text-align:center;">
+−0.052
+</td>
+<td style="text-align:center;">
+−0.089
+</td>
+<td style="text-align:center;">
+−0.071
+</td>
+<td style="text-align:center;">
+−0.048
+</td>
+<td style="text-align:center;">
+−0.033
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+drat
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+4.698
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+2.261
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+7.135
+</td>
+</tr>
+</tbody>
+</table>
+<p><code>shape</code> does partial matching and will try to fill-in incomplete formulas:</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">m</span>, shape <span class="op">=</span> <span class="op">~</span> <span class="va">statistic</span><span class="op">)</span></code></pre></div>
 <p>Some models like multinomial logit or GAMLSS produce “grouped” parameter estimates. To display these groups, we can include a group identifier in the <code>shape</code> formula. This group identifier must be one of the column names produced by <code>get_estimates(model)</code>. For example, in models produced by <code><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">nnet::multinom</a></code>, the group identifier is called “y.level”:</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">nnet</a></span><span class="op">)</span>
@@ -6719,20 +6750,20 @@ Model 2
 (Intercept)
 </td>
 <td style="text-align:center;">
-325.559
+324.219
 </td>
 <td style="text-align:center;">
-282.745
+283.212
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(30.837)
+(31.639)
 </td>
 <td style="text-align:center;">
-(44.860)
+(43.260)
 </td>
 </tr>
 <tr>
@@ -6740,20 +6771,20 @@ Model 2
 mpg
 </td>
 <td style="text-align:center;">
-−8.949
+−8.915
 </td>
 <td style="text-align:center;">
-−9.979
+−10.013
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(1.381)
+(1.417)
 </td>
 <td style="text-align:center;">
-(2.369)
+(2.418)
 </td>
 </tr>
 <tr>
@@ -6763,7 +6794,7 @@ drat
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
-17.683
+17.794
 </td>
 </tr>
 <tr>
@@ -6772,7 +6803,7 @@ drat
 <td style="text-align:center;box-shadow: 0px 1px">
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(21.653)
+(21.977)
 </td>
 </tr>
 <tr>
@@ -6905,14 +6936,14 @@ Model 1
 fit_x_endo_1
 </td>
 <td style="text-align:center;">
-0.324
+1.117
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.165)
+(0.302)
 </td>
 </tr>
 <tr>
@@ -6920,14 +6951,14 @@ fit_x_endo_1
 fit_x_endo_2
 </td>
 <td style="text-align:center;">
-1.513
+2.418
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.519)
+(1.697)
 </td>
 </tr>
 <tr>
@@ -6935,14 +6966,14 @@ fit_x_endo_2
 x1
 </td>
 <td style="text-align:center;">
-0.492
+−0.085
 </td>
 </tr>
 <tr>
 <td style="text-align:left;box-shadow: 0px 1px">
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.281)
+(0.421)
 </td>
 </tr>
 <tr>
@@ -6958,7 +6989,7 @@ Num.Obs.
 R2
 </td>
 <td style="text-align:center;">
-−0.045
+−1.041
 </td>
 </tr>
 <tr>
@@ -6966,7 +6997,7 @@ R2
 R2 Adj.
 </td>
 <td style="text-align:center;">
-−0.081
+−1.112
 </td>
 </tr>
 <tr>
@@ -6974,7 +7005,7 @@ R2 Adj.
 R2 Within
 </td>
 <td style="text-align:center;">
-−1.740
+−4.353
 </td>
 </tr>
 <tr>
@@ -6989,7 +7020,7 @@ R2 Pseudo
 AIC
 </td>
 <td style="text-align:center;">
-386.7
+487.1
 </td>
 </tr>
 <tr>
@@ -6997,7 +7028,7 @@ AIC
 BIC
 </td>
 <td style="text-align:center;">
-404.7
+505.2
 </td>
 </tr>
 <tr>
@@ -7005,7 +7036,7 @@ BIC
 Log.Lik.
 </td>
 <td style="text-align:center;">
-−187.331
+−237.544
 </td>
 </tr>
 <tr>
@@ -7029,7 +7060,7 @@ X
 IV Wald
 </td>
 <td style="text-align:center;">
-17.464
+14.737
 </td>
 </tr>
 </tbody>
@@ -7089,26 +7120,26 @@ Amelia
 (Intercept)
 </td>
 <td style="text-align:center;">
-79.063
+86.270
 </td>
 <td style="text-align:center;">
-73.157
+80.268
 </td>
 <td style="text-align:center;">
-77.547
+80.630
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(15.972)
+(16.134)
 </td>
 <td style="text-align:center;">
-(13.669)
+(14.486)
 </td>
 <td style="text-align:center;">
-(13.047)
+(14.613)
 </td>
 </tr>
 <tr>
@@ -7116,26 +7147,26 @@ Amelia
 Literacy
 </td>
 <td style="text-align:center;">
-−0.548
+−0.534
 </td>
 <td style="text-align:center;">
-−0.480
+−0.497
 </td>
 <td style="text-align:center;">
-−0.518
+−0.491
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.240)
+(0.254)
 </td>
 <td style="text-align:center;">
-(0.202)
+(0.230)
 </td>
 <td style="text-align:center;">
-(0.202)
+(0.219)
 </td>
 </tr>
 <tr>
@@ -7143,26 +7174,26 @@ Literacy
 Commerce
 </td>
 <td style="text-align:center;">
-−0.346
+−0.500
 </td>
 <td style="text-align:center;">
-−0.283
+−0.391
 </td>
 <td style="text-align:center;">
-−0.343
+−0.410
 </td>
 </tr>
 <tr>
 <td style="text-align:left;box-shadow: 0px 1px">
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.173)
+(0.169)
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.147)
+(0.149)
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.136)
+(0.149)
 </td>
 </tr>
 <tr>
@@ -7170,7 +7201,7 @@ Commerce
 Num.Obs.
 </td>
 <td style="text-align:center;">
-58
+57
 </td>
 <td style="text-align:center;">
 86
@@ -7197,13 +7228,13 @@ Num.Imp.
 R2
 </td>
 <td style="text-align:center;">
-0.096
+0.140
 </td>
 <td style="text-align:center;">
-0.079
+0.110
 </td>
 <td style="text-align:center;">
-0.100
+0.119
 </td>
 </tr>
 <tr>
@@ -7211,13 +7242,13 @@ R2
 R2 Adj.
 </td>
 <td style="text-align:center;">
-0.063
+0.108
 </td>
 <td style="text-align:center;">
-0.057
+0.087
 </td>
 <td style="text-align:center;">
-0.078
+0.097
 </td>
 </tr>
 <tr>
@@ -7225,7 +7256,7 @@ R2 Adj.
 AIC
 </td>
 <td style="text-align:center;">
-548.5
+528.6
 </td>
 <td style="text-align:center;">
 </td>
@@ -7237,7 +7268,7 @@ AIC
 BIC
 </td>
 <td style="text-align:center;">
-556.7
+536.8
 </td>
 <td style="text-align:center;">
 </td>
@@ -7249,7 +7280,7 @@ BIC
 Log.Lik.
 </td>
 <td style="text-align:center;">
-−270.248
+−260.319
 </td>
 <td style="text-align:center;">
 </td>
@@ -7261,7 +7292,7 @@ Log.Lik.
 F
 </td>
 <td style="text-align:center;">
-2.913
+4.385
 </td>
 <td style="text-align:center;">
 </td>
@@ -7273,7 +7304,7 @@ F
 RMSE
 </td>
 <td style="text-align:center;">
-26.23
+23.93
 </td>
 <td style="text-align:center;">
 </td>
@@ -7369,22 +7400,22 @@ RMSE
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">tic</a></span><span class="op">(</span><span class="st">"tidy"</span><span class="op">)</span>
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; tidy: 0.007 sec elapsed</span>
+<span class="co">#&gt; tidy: 0.009 sec elapsed</span>
 
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">tic</a></span><span class="op">(</span><span class="st">"glance"</span><span class="op">)</span>
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; glance: 0.005 sec elapsed</span>
+<span class="co">#&gt; glance: 0.008 sec elapsed</span>
 
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">tic</a></span><span class="op">(</span><span class="st">"parameters"</span><span class="op">)</span>
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; parameters: 0.04 sec elapsed</span>
+<span class="co">#&gt; parameters: 0.05 sec elapsed</span>
 
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">tic</a></span><span class="op">(</span><span class="st">"performance"</span><span class="op">)</span>
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/model_performance.html" class="external-link">performance</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; performance: 0.016 sec elapsed</span></code></pre></div>
+<span class="co">#&gt; performance: 0.02 sec elapsed</span></code></pre></div>
 <p>In my experience, the main bottleneck tends to be computing goodness-of-fit statistics. The <code>performance</code> extractor allows users to specify a <code>metrics</code> argument to select a subset of GOF to include. Using this can speedup things considerably.</p>
 <p>First, we set a global option to run the <code>performance</code> extractor first, before <code><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">broom::glance</a></code>:</p>
 <div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
