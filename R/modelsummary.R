@@ -181,10 +181,15 @@ modelsummary <- function(
   scall <- sys.call()
   if (all(c("group", "shape") %in% names(scall))) {
     stop("The `group` argument is deprecated. Please use `shape` instead.", call. = FALSE)
+  # both group and group_map -> group is pushed to ...
+  } else if ("group" %in% names(scall) && "group_map" %in% names(scall)) {
+    shape <- list(...)[["group"]]
+  # only group -> partial match assigns to group_map
   } else if ("group" %in% names(scall) && !"group_map" %in% names(scall)) {
     shape <- group_map
     group_map <- NULL
   }
+
 
   ## sanity functions validate variables/settings
   ## sanitize functions validate & modify & initialize
