@@ -71,7 +71,9 @@ datasummary_extract <- function(tab,
   # header flat with sep="||||"
   if (nrow(header_sparse) > 1) {
       cols <- apply(header_sparse, 2, paste, collapse = "||||")
+      # remove extraneous levels
       cols <- gsub("^\\|*$", "", cols)
+      cols <- gsub("^\\|{4}", "", cols)
       cols <- pad(cols)
   } else {
       cols <- unlist(header_sparse)
