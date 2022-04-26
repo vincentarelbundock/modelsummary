@@ -21,8 +21,6 @@ map_estimates <- function(estimates,
             }
         }
     }
-    check_dups(coef_map)
-    check_dups(coef_rename)
 
     # coef_omit
     if (!is.null(coef_omit)) {
@@ -62,11 +60,13 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
         } else if (is.function(coef_rename)) {
             dict <- stats::setNames(coef_rename(estimates$term), estimates$term)
         }
+        check_dups(dict)
         estimates$term <- replace_dict(estimates$term, dict)
     }
 
     # coef_map
     if (!is.null(coef_map)) {
+        check_dups(coef_map)
         if (is.null(names(coef_map))) {
             coef_map <- stats::setNames(coef_map, coef_map)
         }

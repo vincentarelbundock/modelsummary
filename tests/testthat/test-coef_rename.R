@@ -25,3 +25,11 @@ test_that("coef_rename and coef_map are incompatible", {
   cmap <- c('(Intercept)'='Constant', 'drat'='Rear axle ratio')
   expect_error(modelsummary(mod, coef_rename=cmap, coef_map=cmap))
 })
+
+
+test_that("regression test: coef_rename() function", {
+    x <- list(
+      lm(mpg ~ factor(cyl) + drat + disp, data = mtcars),
+      lm(hp ~ factor(cyl) + drat + disp, data = mtcars))
+    expect_error(modelsummary(dvnames(x), coef_rename = coef_rename), NA)
+})
