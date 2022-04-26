@@ -422,9 +422,9 @@ modelsummary(
 
 ## shape
 
-The `shape` argument accepts a formula which determines the structure of the table, and can display "grouped" coefficients together (e.g., multivariate outcome or mixed-effects models).
+The `shape` argument accepts a formula which determines the structure of the table, and can display "grouped" coefficients together (e.g., multivariate outcome or mixed-effects models). The left side of the formula represents the rows and the right side represents the columns. 
 
-The left side of the formula represents the rows and the right side represents the columns. The default formula is: `term+statistic~model`
+The default formula is `term + statistic ~ model`:
 
 ```{r}
 m <- list(
@@ -437,22 +437,26 @@ modelsummary(m, shape = term + statistic ~ model, gof_map = NA)
 We can display statistics horizontally with:
 
 ```{r}
-modelsummary(m, shape = term ~ model + statistic, gof_map = NA)
+modelsummary(m,
+             shape = term ~ model + statistic,
+             statistic = "conf.int",
+             gof_map = NA)
 ```
 
-`shape` does partial matching, so the following command will produce the same result as above:
+The order of terms in the formula determines the order of headers in the table.
 
-```{r, eval = FALSE}
-modelsummary(m, shape = ~ statistic)
-```
-
-The order of terms in the formula determine the order of headers:
 
 ```{r}
 modelsummary(m,
+             shape = term ~ statistic + model,
              statistic = "conf.int",
-             shape = term ~ model + statistic,
              gof_map = NA)
+```
+
+`shape` does partial matching and will try to fill-in incomplete formulas:
+
+```{r, eval = FALSE}
+modelsummary(m, shape = ~ statistic)
 ```
 
 Some models like multinomial logit or GAMLSS produce "grouped" parameter estimates. To display these groups, we can include a group identifier in the `shape` formula. This group identifier must be one of the column names produced by `get_estimates(model)`. For example, in models produced by `nnet::multinom`, the group identifier is called "y.level":
