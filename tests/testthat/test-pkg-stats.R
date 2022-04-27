@@ -21,3 +21,19 @@ test_that("lm & glm F tests conform to `vcov` argument", {
     expect_true(res[res$term == "F", "Model 3"] == res[res$term == "F", "Model 4"])
     expect_false(res[res$term == "F", "Model 1"] == res[res$term == "F", "Model 4"])
 })
+
+
+mod <- lm(cbind(cyl, disp, hp) ~ mpg + drat, data = mtcars) 
+
+tab <- modelsummary(
+    mod,
+    output = "data.frame",
+    shape = term + response ~ model,
+    vcov = list(NULL, "HC3"),
+    gof_omit = "response")
+tab
+
+get_estimates(mod, vcov = "HC3")
+get_estimates(mod)
+get_vcov(mod, vcov = "HC3")
+get_vcov(mod)

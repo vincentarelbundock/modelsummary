@@ -9,6 +9,7 @@ get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
 
 
 
+#' @export
 #' @keywords internal
 get_vcov.default <- function(model, vcov = NULL, conf_level = NULL, ...) {
 
