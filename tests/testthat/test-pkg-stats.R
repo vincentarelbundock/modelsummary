@@ -24,7 +24,8 @@ test_that("lm & glm F tests conform to `vcov` argument", {
 
 
 test_that("mlm regression test: no error on sandwich", {
-    mod <- lm(cbind(cyl, disp, hp) ~ mpg + drat, data = mtcars) 
+    dat <<- mtcars
+    mod <- lm(cbind(cyl, disp, hp) ~ mpg + drat, data = dat) 
     est1 <- get_estimates(mod)
     est2 <- get_estimates(mod, vcov = "HC3")
     expect_true(all(est1$std.error != est2$std.error))
