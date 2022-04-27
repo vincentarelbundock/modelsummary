@@ -23,17 +23,9 @@ test_that("lm & glm F tests conform to `vcov` argument", {
 })
 
 
-mod <- lm(cbind(cyl, disp, hp) ~ mpg + drat, data = mtcars) 
-
-tab <- modelsummary(
-    mod,
-    output = "data.frame",
-    shape = term + response ~ model,
-    vcov = list(NULL, "HC3"),
-    gof_omit = "response")
-tab
-
-get_estimates(mod, vcov = "HC3")
-get_estimates(mod)
-get_vcov(mod, vcov = "HC3")
-get_vcov(mod)
+test_that("mlm regression test: no error on sandwich", {
+    mod <- lm(cbind(cyl, disp, hp) ~ mpg + drat, data = mtcars) 
+    est1 <- get_estimates(mod)
+    est2 <- get_estimates(mod, vcov = "HC3")
+    expect_true(all(est1$std.error != est2$std.error))
+})

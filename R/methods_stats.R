@@ -46,3 +46,12 @@ glance_custom_internal.lm <- function(x, vcov_type = NULL, gof = NULL, ...) {
   row.names(out) <- NULL
   return(out)
 }
+
+
+#' @inherit get_vcov
+#' @keywords internal
+get_vcov.mlm <- function(model, vcov = NULL, conf_level = NULL, ...) {
+    out <- parameters::parameters(model, vcov = vcov, ci = conf_level, ...)
+    out <- parameters::standardize_names(out, style = "broom")
+    return(out)
+}

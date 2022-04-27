@@ -126,11 +126,14 @@ These errors messages were generated during extraction:
         ...)
 
       if (!is.null(so) && nrow(out) == nrow(so)) {
-        # keep only columns that do not appear in so
-        out <- out[, c('term', base::setdiff(colnames(out), colnames(so))), drop = FALSE]
+        # so overrides out, so we drop columns first
+        idx <- c("group", "term", "response")
+        good <- setdiff(colnames(out), colnames(so))
+        good <- intersect(colnames(out), c(good, idx))
+        out <- out[, good, drop = FALSE]
         # merge vcov and estimates
-        out <- merge(out, so, by = "term", sort = FALSE)
-
+        idx <- Reduce("intersect", list(colnames(out), colnames(so), idx)) 
+        out <- merge(out, so, by = idx, sort = FALSE)
       }
     }
 
