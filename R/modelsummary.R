@@ -23,6 +23,8 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'
 #' @template options
 #'
+#' @template modelsummary_parallel
+#' 
 #' @template modelsummary_examples
 #'
 #' @param models a model or (optionally named) list of models

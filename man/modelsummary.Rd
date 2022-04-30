@@ -314,6 +314,15 @@ HTML tables:
 }
 }
 
+\section{Parallel computation}{
+
+
+It can take a long time to compute and extract summary statistics from certain models (e.g., Bayesian). In those cases, users can parallelize the process. Since parallelization occurs at the model level, no speedup is available for tables with a single model. To use parallel computation, all users have to do is load the \code{future.apply} package and call the \code{plan()} function. Example:\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(future.apply)
+plan("multisession")
+modelsummary(model_list)
+}\if{html}{\out{</div>}}
+}
+
 \examples{
 \dontrun{
 
