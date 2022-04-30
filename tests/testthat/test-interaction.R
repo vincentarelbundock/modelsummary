@@ -1,8 +1,7 @@
 # CRAN win-devel does not play well with fancy unicode x
 # Windows tests neither, but it works interactively
-# skip_on_cran()
-# skip_on_os("window")
-requiet("fixest")
+skip_on_cran()
+skip_on_os("window")
 
 test_that(": in interactions become x", {
   mod <- lm(am ~ drat * mpg * vs, mtcars)
@@ -10,7 +9,8 @@ test_that(": in interactions become x", {
 })
 
 test_that("fixest i() becomes =", {
-  testthat::skip_if_not_installed("fixest")
+  requiet("fixest")
+  skip_if_not_installed("fixest", minimum_version = "0.10.5")
   mod <- suppressMessages(feols(Ozone ~ Solar.R + i(Month), airquality))
   expect_snapshot(modelsummary(mod, "markdown", gof_map = list()))
 })

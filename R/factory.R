@@ -156,7 +156,6 @@ factory <- function(tab,
   }
   align <- strsplit(align, "")[[1]]
 
-
   ## build table
   out <- factory_fun(tab,
     align = align,

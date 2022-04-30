@@ -151,11 +151,9 @@ datasummary_skim_numeric <- function(
   escape,
   ...) {
 
-  # output format
-  sanitize_output(output)
-
   # fake formula to indicate that we definitely use All() eventually
   sanity_ds_data(All(data) ~ x + y, data)
+
 
   # draw histogram?
   if (histogram) {
@@ -215,17 +213,19 @@ datasummary_skim_numeric <- function(
 
     histogram_col <- function(x) ""
     f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
-         Heading("Unique (#)") * NUnique +
-         Heading("Missing (%)") * PercentMissing +
-         (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
-         Heading("") * histogram_col
+        Heading("Unique (#)") * NUnique +
+        Heading("Missing (%)") * PercentMissing +
+        (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
+        Heading("") * histogram_col
 
     # prepare list of histograms
     # TODO: inefficient because it computes the table twice. But I need to
     # know the exact subset of variables kept by tabular, in the exact
     # order, to print the right histograms.
-
+    cache <- settings_cache(c("output_format", "output_file", "output_factory"))
     idx <- datasummary(f, data = dat_new, output = "data.frame")[[1]]
+    settings_restore(cache)
+
     histogram_list <- as.list(dat_new[, idx, drop = FALSE])
     histogram_list <- lapply(histogram_list, stats::na.omit)
 
@@ -246,14 +246,18 @@ datasummary_skim_numeric <- function(
         output_fmt <- output
     }
 
+
     # draw table
+    cache <- settings_cache(c("output_format", "output_file", "output_factory"))
     out <- datasummary(formula = f,
         data = dat_new,
-        output = output_fmt,
+        output = "kableExtra",
+        # output = output_fmt,
         title = title,
         align = align,
         notes = notes,
         escape = escape)
+    settings_restore(cache)
 
     out <- kableExtra::column_spec(out,
         column = 9,
@@ -280,7 +284,8 @@ datasummary_skim_numeric <- function(
         title = title,
         align = align,
         notes = notes,
-        escape = escape)
+        escape = escape,
+        internal_call = TRUE)
 
   }
 

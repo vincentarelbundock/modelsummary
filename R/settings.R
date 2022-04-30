@@ -1,5 +1,21 @@
 modelsummary_settings <- new.env()
 
+settings_cache <- function(setti) {
+    out <- list()
+    for (s in setti) {
+        out[[s]] <- settings_get(s)
+    }
+    return(out)
+}
+
+settings_restore <- function(cache) {
+    for (n in names(cache)) {
+        settings_set(n, cache[[n]])
+    }
+}
+        
+        
+
 settings_init <- function(settings = NULL) {
     settings_rm()
 

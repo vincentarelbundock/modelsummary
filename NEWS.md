@@ -1,5 +1,11 @@
 # modelsummary 0.10.0.9000
 
+Breaking change:
+
+* `modelsummary` now uses the `easystats` packages (`performance` and `parameters`) to extract estimates and goodness-of-fit statistics instead of `broom`. This can be reverted by setting a global option: `options(modelsummary_get="broom")`. This change aims to (1) increase consistency across models, (2) improve the developers' ability to push bug fixes upstream when necessary, and (3) improve support for mixed effects, bayesian, and GAM models. The two main drawbacks are: (1) The set of printed statistics may be slightly different from previous versions of `modelsummary` (2) The group identifiers used in the `shape` formula will also be different for certain models (e.g., in `nnet::multinom`, `y.level` becomes `response`). 
+
+New features:
+
 * The `shape` argument accepts a formula and can reshape information in myriad ways. Deprecates the `group` argument. Examples:
     - `~ statistic`: statistics are shown horizontally in distinct columns.
     - `model ~ term`: models in rows and terms in columns.
@@ -13,6 +19,8 @@ Bug fixes:
 
 * `group_map` rename issue
 * Residual standard error mistakenly labelled "RMSE" in `lm` models.
+* `datasummary_skim` output to jpg should now works
+* `escape` fixes
 
 # modelsummary 0.10.0
 

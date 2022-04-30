@@ -1,12 +1,11 @@
-library(modelsummary)
-
 mod <- list()
-dat <- mtcars
+dat <<- mtcars # otherwise lmtest::waldtest breaks
 dat$cyl <- factor(dat$cyl)
 mod$OLS <- lm(am ~ cyl, data = dat)
 mod$Logit <- glm(am ~ cyl, data = dat, family = binomial())
 
 test_that("data.frame", {
+
   rows = read.csv(text = 
     "term      , OLS , Logit
      cyl4      , -   , - 
@@ -14,7 +13,8 @@ test_that("data.frame", {
      NEW GOF 2 , X   , X
      NEW GOF 3 , Y   , Y")
   attr(rows, 'position') <- c(3, 8, 9, 12)
-  expect_snapshot(modelsummary(mod, add_rows = rows, output = "markdown"))
+  tab <- modelsummary(mod, add_rows = rows, output = "data.frame")
+  expect_equal(dim(tab), c(17, 5))
 })
 
 test_that('add_rows numeric are formatted by fmt', {

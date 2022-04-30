@@ -1,14 +1,10 @@
-dat <- mtcars
+dat <<- mtcars
 dat$vs <- as.logical(dat$vs)
 dat$gear <- as.factor(dat$gear)
 
-penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
+penguins <<- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
 
 test_that("basic", {
-
-  # fails on devtools::check_win_devel()
-  skip_on_cran()
-
   expect_warning(datasummary_skim(dat, output="data.frame"))
   tmp <- suppressWarnings(datasummary_skim(dat, output="data.frame"))
   expect_equal(dim(tmp), c(9, 8))

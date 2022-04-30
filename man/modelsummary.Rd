@@ -46,6 +46,7 @@ modelsummary(
 \item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
 \item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
 \item function: returns a formatted character string.
+\item NULL: does not format numbers, which allows users to include function in the "glue" strings in the \code{estimate} and \code{statistic} arguments.
 \item LaTeX output: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command, which requires the \code{siunitx} package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 }}
 
@@ -312,6 +313,15 @@ HTML tables:
 
 \code{options(modelsummary_format_numeric_html = "mathjax")}
 }
+}
+
+\section{Parallel computation}{
+
+
+It can take a long time to compute and extract summary statistics from certain models (e.g., Bayesian). In those cases, users can parallelize the process. Since parallelization occurs at the model level, no speedup is available for tables with a single model. To use parallel computation, all users have to do is load the \code{future.apply} package and call the \code{plan()} function. Example:\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(future.apply)
+plan("multisession")
+modelsummary(model_list)
+}\if{html}{\out{</div>}}
 }
 
 \examples{

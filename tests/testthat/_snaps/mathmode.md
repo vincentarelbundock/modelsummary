@@ -21,9 +21,8 @@
       R2 Adj. & 0.589 & 0.723\\
       AIC & 181.2 & 169.5\\
       BIC & 185.6 & 175.4\\
-      Log.Lik. & -87.619 & -80.752\\
       F & 45.460 & 41.522\\
-      RMSE & 3.86 & 3.17\\
+      RMSE & 3.74 & 3.02\\
       \bottomrule
       \end{tabular}
       \end{table}
@@ -98,19 +97,14 @@
          <td style="text-align:center;"> 175.4 </td>
         </tr>
         <tr>
-         <td style="text-align:left;"> Log.Lik. </td>
-         <td style="text-align:center;"> −87.619 </td>
-         <td style="text-align:center;"> −80.752 </td>
-        </tr>
-        <tr>
          <td style="text-align:left;"> F </td>
          <td style="text-align:center;"> 45.460 </td>
          <td style="text-align:center;"> 41.522 </td>
         </tr>
         <tr>
          <td style="text-align:left;"> RMSE </td>
-         <td style="text-align:center;"> 3.86 </td>
-         <td style="text-align:center;"> 3.17 </td>
+         <td style="text-align:center;"> 3.74 </td>
+         <td style="text-align:center;"> 3.02 </td>
         </tr>
       </tbody>
       </table>
@@ -185,19 +179,14 @@
          <td style="text-align:center;"> $175.4$ </td>
         </tr>
         <tr>
-         <td style="text-align:left;"> Log.Lik. </td>
-         <td style="text-align:center;"> $-87.619$ </td>
-         <td style="text-align:center;"> $-80.752$ </td>
-        </tr>
-        <tr>
          <td style="text-align:left;"> F </td>
          <td style="text-align:center;"> $45.460$ </td>
          <td style="text-align:center;"> $41.522$ </td>
         </tr>
         <tr>
          <td style="text-align:left;"> RMSE </td>
-         <td style="text-align:center;"> $3.86$ </td>
-         <td style="text-align:center;"> $3.17$ </td>
+         <td style="text-align:center;"> $3.74$ </td>
+         <td style="text-align:center;"> $3.02$ </td>
         </tr>
       </tbody>
       </table>
@@ -272,19 +261,14 @@
          <td style="text-align:center;"> 175.4 </td>
         </tr>
         <tr>
-         <td style="text-align:left;"> Log.Lik. </td>
-         <td style="text-align:center;"> -87.619 </td>
-         <td style="text-align:center;"> -80.752 </td>
-        </tr>
-        <tr>
          <td style="text-align:left;"> F </td>
          <td style="text-align:center;"> 45.460 </td>
          <td style="text-align:center;"> 41.522 </td>
         </tr>
         <tr>
          <td style="text-align:left;"> RMSE </td>
-         <td style="text-align:center;"> 3.86 </td>
-         <td style="text-align:center;"> 3.17 </td>
+         <td style="text-align:center;"> 3.74 </td>
+         <td style="text-align:center;"> 3.02 </td>
         </tr>
       </tbody>
       </table>
@@ -312,9 +296,8 @@
       R2 Adj. & \num{0.589} & \num{0.723}\\
       AIC & \num{181.2} & \num{169.5}\\
       BIC & \num{185.6} & \num{175.4}\\
-      Log.Lik. & \num{-87.619} & \num{-80.752}\\
       F & \num{45.460} & \num{41.522}\\
-      RMSE & \num{3.86} & \num{3.17}\\
+      RMSE & \num{3.74} & \num{3.02}\\
       \bottomrule
       \end{tabular}
       \end{table}
@@ -342,9 +325,8 @@
       R2 Adj. & $0.589$ & $0.723$\\
       AIC & $181.2$ & $169.5$\\
       BIC & $185.6$ & $175.4$\\
-      Log.Lik. & $-87.619$ & $-80.752$\\
       F & $45.460$ & $41.522$\\
-      RMSE & $3.86$ & $3.17$\\
+      RMSE & $3.74$ & $3.02$\\
       \bottomrule
       \end{tabular}
       \end{table}
@@ -372,9 +354,8 @@
       R2 Adj. & 0.589 & 0.723\\
       AIC & 181.2 & 169.5\\
       BIC & 185.6 & 175.4\\
-      Log.Lik. & -87.619 & -80.752\\
       F & 45.460 & 41.522\\
-      RMSE & 3.86 & 3.17\\
+      RMSE & 3.74 & 3.02\\
       \bottomrule
       \end{tabular}
       \end{table}

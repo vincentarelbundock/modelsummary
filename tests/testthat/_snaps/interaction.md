@@ -28,9 +28,8 @@
       |R2 Adj.         |  0.563  |
       |AIC             |  28.6   |
       |BIC             |  41.8   |
-      |Log.Lik.        | -5.298  |
       |F               |  6.715  |
-      |RMSE            |  0.33   |
+      |RMSE            |  0.29   |
 
 # fixest i() becomes =
 

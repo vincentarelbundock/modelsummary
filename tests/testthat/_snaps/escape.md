@@ -13,7 +13,7 @@
        & (\num{103.551}) & (\num{103.551})\\
       under\_score & \num{-3.899} & \num{-3.899}\\
        & (\num{2.072}) & (\num{2.072})\\
-      `oh\&yeah<sup>2</sup>` & \num{29.329} & \num{29.329}\\
+      oh\&yeah<sup>2</sup> & \num{29.329} & \num{29.329}\\
        & (\num{7.169}) & (\num{7.169})\\
       drat & \num{40.961} & \num{40.961}\\
        & (\num{17.115}) & (\num{17.115})\\
@@ -23,9 +23,8 @@
       R2 Adj. & \num{0.733} & \num{0.733}\\
       AIC & \num{324.9} & \num{324.9}\\
       BIC & \num{332.2} & \num{332.2}\\
-      Log.Lik. & \num{-157.443} & \num{-157.443}\\
       F & \num{29.335} & \num{29.335}\\
-      RMSE & \num{35.44} & \num{35.44}\\
+      RMSE & \num{33.15} & \num{33.15}\\
       \bottomrule
       \end{tabular}
       \end{table}
@@ -45,7 +44,7 @@
        & (\num{103.551}) & (\num{103.551})\\
       under\_score & \num{-3.899} & \num{-3.899}\\
        & (\num{2.072}) & (\num{2.072})\\
-      `oh\&yeah<sup>2</sup>` & \num{29.329} & \num{29.329}\\
+      oh\&yeah<sup>2</sup> & \num{29.329} & \num{29.329}\\
        & (\num{7.169}) & (\num{7.169})\\
       drat & \num{40.961} & \num{40.961}\\
        & (\num{17.115}) & (\num{17.115})\\
@@ -55,9 +54,8 @@
       R2 Adj. & \num{0.733} & \num{0.733}\\
       AIC & \num{324.9} & \num{324.9}\\
       BIC & \num{332.2} & \num{332.2}\\
-      Log.Lik. & \num{-157.443} & \num{-157.443}\\
       F & \num{29.335} & \num{29.335}\\
-      RMSE & \num{35.44} & \num{35.44}\\
+      RMSE & \num{33.15} & \num{33.15}\\
       \bottomrule
       \end{tabular}
       \end{table}
@@ -97,7 +95,7 @@
          <td style="text-align:center;"> (2.072) </td>
         </tr>
         <tr>
-         <td style="text-align:left;"> `oh&amp;yeah&lt;sup&gt;2&lt;/sup&gt;` </td>
+         <td style="text-align:left;"> oh&amp;yeah&lt;sup&gt;2&lt;/sup&gt; </td>
          <td style="text-align:center;"> 29.329 </td>
          <td style="text-align:center;"> 29.329 </td>
         </tr>
@@ -142,19 +140,14 @@
          <td style="text-align:center;"> 332.2 </td>
         </tr>
         <tr>
-         <td style="text-align:left;"> Log.Lik. </td>
-         <td style="text-align:center;"> −157.443 </td>
-         <td style="text-align:center;"> −157.443 </td>
-        </tr>
-        <tr>
          <td style="text-align:left;"> F </td>
          <td style="text-align:center;"> 29.335 </td>
          <td style="text-align:center;"> 29.335 </td>
         </tr>
         <tr>
          <td style="text-align:left;"> RMSE </td>
-         <td style="text-align:center;"> 35.44 </td>
-         <td style="text-align:center;"> 35.44 </td>
+         <td style="text-align:center;"> 33.15 </td>
+         <td style="text-align:center;"> 33.15 </td>
         </tr>
       </tbody>
       </table>
@@ -194,7 +187,7 @@
          <td style="text-align:center;"> (2.072) </td>
         </tr>
         <tr>
-         <td style="text-align:left;"> `oh&amp;yeah<sup>2</sup>` </td>
+         <td style="text-align:left;"> oh&amp;yeah<sup>2</sup> </td>
          <td style="text-align:center;"> 29.329 </td>
          <td style="text-align:center;"> 29.329 </td>
         </tr>
@@ -239,19 +232,14 @@
          <td style="text-align:center;"> 332.2 </td>
         </tr>
         <tr>
-         <td style="text-align:left;"> Log.Lik. </td>
-         <td style="text-align:center;"> −157.443 </td>
-         <td style="text-align:center;"> −157.443 </td>
-        </tr>
-        <tr>
          <td style="text-align:left;"> F </td>
          <td style="text-align:center;"> 29.335 </td>
          <td style="text-align:center;"> 29.335 </td>
         </tr>
         <tr>
          <td style="text-align:left;"> RMSE </td>
-         <td style="text-align:center;"> 35.44 </td>
-         <td style="text-align:center;"> 35.44 </td>
+         <td style="text-align:center;"> 33.15 </td>
+         <td style="text-align:center;"> 33.15 </td>
         </tr>
       </tbody>
       </table>
@@ -785,9 +773,7 @@
       R2 Adj. & \num{0.709} & \num{0.766} & \num{0.758}\\
       AIC & \num{170.2} & \num{164.2} & \num{166.2}\\
       BIC & \num{174.6} & \num{170.0} & \num{173.5}\\
-      Log.Lik. & \num{-82.105} & \num{-78.084} & \num{-78.076}\\
-      F & \num{76.513} & \num{51.689} & \num{33.293}\\
-      RMSE & \num{3.25} & \num{2.92} & \num{2.97}\\
+      RMSE & \num{3.15} & \num{2.78} & \num{2.78}\\
       \bottomrule
       \end{tabular}
       \end{table}
@@ -813,9 +799,7 @@
       R2 Adj. & \num{0.709} & \num{0.766} & \num{0.758}\\
       AIC & \num{170.2} & \num{164.2} & \num{166.2}\\
       BIC & \num{174.6} & \num{170.0} & \num{173.5}\\
-      Log.Lik. & \num{-82.105} & \num{-78.084} & \num{-78.076}\\
-      F & \num{76.513} & \num{51.689} & \num{33.293}\\
-      RMSE & \num{3.25} & \num{2.92} & \num{2.97}\\
+      RMSE & \num{3.15} & \num{2.78} & \num{2.78}\\
       \bottomrule
       \end{tabular}
       \end{table}
@@ -842,9 +826,7 @@
       R2 Adj. & \num{0.069}\\
       AIC & \num{1734.4}\\
       BIC & \num{1744.2}\\
-      Log.Lik. & \num{-863.198}\\
-      F & \num{4.133}\\
-      RMSE & \num{5630.76}\\
+      RMSE & \num{5531.68}\\
       \bottomrule
       \end{tabular}
 
@@ -918,19 +900,14 @@
          <td style="text-align:center;"> 175.4 </td>
         </tr>
         <tr>
-         <td style="text-align:left;"> Log.Lik. </td>
-         <td style="text-align:center;"> −80.752 </td>
-         <td style="text-align:center;"> −80.752 </td>
-        </tr>
-        <tr>
          <td style="text-align:left;"> F </td>
          <td style="text-align:center;"> 41.522 </td>
          <td style="text-align:center;"> 41.153 </td>
         </tr>
         <tr>
          <td style="text-align:left;"> RMSE </td>
-         <td style="text-align:center;"> 3.17 </td>
-         <td style="text-align:center;">  </td>
+         <td style="text-align:center;"> 3.02 </td>
+         <td style="text-align:center;"> 3.02 </td>
         </tr>
         <tr>
          <td style="text-align:left;"> Std.Errors </td>

@@ -1,4 +1,4 @@
-skip_if_not_installed("estimatr")
+requiet("estimatr")
 
 random_string <- function() {
   paste(sample(letters, 30, replace=TRUE), collapse="")
@@ -142,9 +142,7 @@ test_that('both factors and numerics', {
 
 
 test_that('more than two conditions', {
-  # fails on devtools::check_win_devel
-  skip_on_cran()
-  tmp <- mtcars
+  tmp <<- mtcars
   tmp$cyl <- factor(tmp$cyl)
   tmp$vs <- as.logical(tmp$vs)
   tab <- datasummary_balance(~gear, tmp, output = 'dataframe', dinm = FALSE)
@@ -156,9 +154,7 @@ test_that('more than two conditions', {
 })
 
 test_that('no conditions - grand summary', {
-    # fails on devtools::check_win_devel
-    skip_on_cran()
-    tmp <- mtcars
+    tmp <<- mtcars
     tmp$cyl <- factor(tmp$cyl)
     tmp$vs <- as.logical(tmp$vs)
     tab <- datasummary_balance(~1, tmp, output = 'dataframe', dinm = FALSE)

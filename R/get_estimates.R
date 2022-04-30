@@ -19,7 +19,7 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, ...) {
     }
 
     # priority
-    get_priority <- getOption("modelsummary_get", default = "broom")
+    get_priority <- getOption("modelsummary_get", default = "easystats")
     checkmate::assert_choice(
       get_priority,
       choices = c("broom", "easystats", "parameters", "performance", "all"))

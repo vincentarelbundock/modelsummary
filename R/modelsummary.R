@@ -23,6 +23,8 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'
 #' @template options
 #'
+#' @template modelsummary_parallel
+#' 
 #' @template modelsummary_examples
 #'
 #' @param models a model or (optionally named) list of models
@@ -36,6 +38,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
 #' * character: passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`
 #' * function: returns a formatted character string.
+#' * NULL: does not format numbers, which allows users to include function in the "glue" strings in the `estimate` and `statistic` arguments. 
 #' * LaTeX output: To ensure proper typography, all numeric entries are enclosed in the `\num{}` command, which requires the `siunitx` package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 #' @param stars to indicate statistical significance
 #' * FALSE (default): no significance stars.
@@ -114,8 +117,8 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `term + statistic ~ model`: default
 #' * `term ~ model + statistic`: statistics in separate columns
 #' * `model + statistic ~ term`: models in rows and terms in columns
-#' * `term + y.level + statistic ~ model`: 
-#' * `term ~ y.level`
+#' * `term + response + statistic ~ model`: 
+#' * `term ~ response`
 #' @param add_rows a data.frame (or tibble) with the same number of columns as
 #' your main table. By default, rows are appended to the bottom of the table.
 #' You can define a "position" attribute of integers to set the row positions.
@@ -295,7 +298,20 @@ modelsummary <- function(
   if (is.null(shape$group_name)) {
     idx <- paste(est$term, est$statistic)
     if (anyDuplicated(idx) > 0) {
-      msg <- "There are duplicate term names in the table. The `group` argument of the `modelsummary` function can be used to print related terms together, and to label them appropriately. See `?modelsummary` for details."
+      candidate_groups <- sapply(msl, function(x) colnames(x[["tidy"]]))
+      candidate_groups <- unlist(candidate_groups)
+      candidate_groups <- setdiff(
+        candidate_groups,
+        c("term", "estimate", "std.error", "conf.level", "conf.low", "conf.high",
+          "statistic", "df.error", "p.value"))
+      if (length(candidate_groups) > 0) {
+        candidate_groups <- sprintf("Candidate group identifiers include: %s.",
+                                    paste(candidate_groups, collapse = ", "))
+      } else{
+        candidate_groups <- ""
+      }
+      msg <- sprintf("There are duplicate term names in the table. The `shape` argument of the `modelsummary` function can be used to print related terms together, and to label them appropriately. You can find the group identifier to use in the `shape` argument by calling `get_estimates()` on one of your models. %s See `?modelsummary` for details.", candidate_groups)
+
       warning(msg, call. = FALSE)
     }
   }

@@ -1,7 +1,7 @@
 # CRAN fails on artefacts
 skip_on_cran()
-skip_if_not_installed("digest")
-skip_if_not_installed("flextable")
+requiet("digest")
+requiet("flextable")
 
 random_string <- function() {
   paste(sample(letters, 30, replace=TRUE), collapse="")

@@ -459,7 +459,7 @@ modelsummary(m,
 modelsummary(m, shape = ~ statistic)
 ```
 
-Some models like multinomial logit or GAMLSS produce "grouped" parameter estimates. To display these groups, we can include a group identifier in the `shape` formula. This group identifier must be one of the column names produced by `get_estimates(model)`. For example, in models produced by `nnet::multinom`, the group identifier is called "y.level":
+Some models like multinomial logit or GAMLSS produce "grouped" parameter estimates. To display these groups, we can include a group identifier in the `shape` formula. This group identifier must be one of the column names produced by `get_estimates(model)`. For example, in models produced by `nnet::multinom`, the group identifier is called "response":
 
 ```{r, message = FALSE}
 library(nnet)
@@ -477,13 +477,13 @@ get_estimates(mod[[1]])
 To summarize the results, we can type: 
 
 ```{r, warning=FALSE}
-modelsummary(mod, shape = term + y.level ~ statistic)
+modelsummary(mod, shape = term + response ~ statistic)
 ```
 
 The terms of the `shape` formula above can of course be rearranged to reshape the table. For example:
 
 ```{r, warning=FALSE}
-modelsummary(mod, shape = model + term ~ y.level)
+modelsummary(mod, shape = model + term ~ response)
 ```
 
 ## align
@@ -1165,7 +1165,19 @@ options(modelsummary_factory_word = "huxtable")
 options(modelsummary_factory_png = "gt")
 ```
 
-# FAQ.
+# FAQ
+
+## Where can I get help?
+
+First, please read the documentation in `?modelsummary` and on [the `modelsummary` website.](https://vincentarelbundock.github.io/modelsummary/) The website includes dozens of worked examples and a lot of detailed explanation.
+
+Second, try to [use the `[modelsummary]` tag on StackOverflow.](https://stackoverflow.com/search?tab=newest&q=%5br%5d%20modelsummary)
+
+Third, if you think you found a bug or have a feature request, please file it on the Github issue tracker: 
+
+## How can I add or modify statistics in a table?
+
+See the detailed documentation in the ["Adding and Customizing Models" section of the `modelsummary` website.](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html)
 
 ## How does `modelsummary` extract estimates and goodness-of-fit statistics?
 
@@ -1218,11 +1230,17 @@ If none of these options work, you can create your own `tidy` and `glance` metho
 
 If one of the extractor functions does not work well or takes too long to process, you can define a new "custom" model class and choose your own extractors, as described in the [Adding new models section.](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html#adding-new-models-1)
 
-## Why is `modelsummary` so slow?
+## How can I speed up `modelsummary`?
 
-The `modelsummary` function, by itself, is *not* slow: it should only take a couple seconds to produce a table in any output format. However, sometimes it can be computationally expensive (and long) to extract estimates and to compute goodness-of-fit statistics for your models.
+The `modelsummary` function, by itself, is *not* slow: it should only take a couple seconds to produce a table in any output format. However, sometimes it can be computationally expensive (and long) to extract estimates and to compute goodness-of-fit statistics for your model.
 
-To find the bottleneck, you can try to benchmark the various extractor functions:
+The main options to speed up `modelsummary` are:
+
+1. Set `gof_map=NA` to avoid computing expensive goodness-of-fit statistics.
+2. Use the `easystats` extractor functions and the `metrics` argument to avoid computing expensive statistics (see below for an example).
+3. Use parallel computation if you are summarizing multiple models. See the "Parallel computation" section in the `?modelsummary` documentation.
+
+To diagnose the slowdown and find the bottleneck, you can try to benchmark the various extractor functions:
 
 ```{r}
 library(tictoc)
