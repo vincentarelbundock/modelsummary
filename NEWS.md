@@ -12,6 +12,7 @@
 Bug fixes:
 
 * `group_map` rename issue
+* Residual standard error mistakenly labelled "RMSE" in `lm` models.
 
 # modelsummary 0.10.0
 

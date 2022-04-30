@@ -31,3 +31,18 @@ test_that("mlm regression test: no error on sandwich", {
     est2 <- get_estimates(mod, vcov = "HC3")
     expect_true(all(est1$std.error != est2$std.error))
 })
+
+
+test_that("regression test: rmse manual", {
+    requiet("insight")
+    # Issue 473 
+    mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
+    tab <- modelsummary(mod, output = "data.frame")
+    y <- insight::get_response(mod)
+    yhat <- insight::get_predicted(mod)
+    e <- y - yhat
+    rmse <- sqrt(mean(e^2))
+    rmse <- sprintf("%.2f", rmse)
+    expect_equal(rmse, tab[["Model 1"]][tab$term == "RMSE"])
+})
+
