@@ -2,17 +2,6 @@
 
     Code
       modelsummary(mod, output = "latex")
-    Warning <simpleWarning>
-      To compile a LaTeX document with this table, the following commands must be placed in the document preamble:
-      
-      \usepackage{booktabs}
-      \usepackage{siunitx}
-      \newcolumntype{d}{S[input-symbols = ()]}
-      
-      To disable `siunitx` and prevent `modelsummary` from wrapping numeric entries in `\num{}`, call:
-      
-      options("modelsummary_format_numeric_latex" = "plain")
-       This warning appears once per session.
     Output
       \begin{table}
       \centering
