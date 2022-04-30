@@ -30,7 +30,7 @@
       |BIC             |  41.8   |
       |Log.Lik.        | -5.298  |
       |F               |  6.715  |
-      |RMSE            |  0.33   |
+      |RMSE            |  0.29   |
 
 # fixest i() becomes =
 
