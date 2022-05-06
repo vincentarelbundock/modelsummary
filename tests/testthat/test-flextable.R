@@ -1,5 +1,4 @@
-# flextable is not installed on CRAN's M1 machine
-skip_if_not_installed("flextable")
+requiet("flextable")
 
 models <- list()
 models[['OLS 1']] <- lm(hp ~ mpg + wt, mtcars)

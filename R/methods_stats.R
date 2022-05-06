@@ -25,12 +25,6 @@ glance_custom_internal.lm <- function(x, vcov_type = NULL, gof = NULL, ...) {
         out[["F"]] <- fstat
       }
     }
-    # RMSE is not extracted by {broom} but we want it
-    if (!"rmse" %in% colnames(gof)) {
-        out[["rmse"]] <- tryCatch(
-            sqrt(mean(stats::residuals(x)^2)),
-            error = function(e) NULL)
-    }
   }
 
   # sandwich HC

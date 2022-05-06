@@ -1,7 +1,5 @@
-# replicability: this gets reverted at the end of the file 
-options(modelsummary_get = "easystats")
-skip_if_not_installed("gamlss")
 requiet("gamlss")
+requiet("nnet")
 
 
 test_that("gof merge on partial column match", {
@@ -71,7 +69,6 @@ test_that("horizontal statistics: dim only", {
 
 
 test_that("Michael E Flynn ultra-niche bug check", {
-    skip_if_not_installed("nnet")
     requiet("nnet")
     dat_multinom <- mtcars
     dat_multinom$cyl <- as.factor(dat_multinom$cyl)
@@ -81,10 +78,11 @@ test_that("Michael E Flynn ultra-niche bug check", {
         "b" = nnet::multinom(cyl ~ under_score + drat, data = dat_multinom, trace = FALSE))
     coef_list = c("under_score" = "Under Score")
     void <- capture.output(
-    tab <- modelsummary(mod,
-                        output = "latex",
-                        ccoef_map = coef_list,
-                        shape = term ~ model + response))
+        tab <- modelsummary(mod,
+                            output = "latex",
+                            coef_map = coef_list,
+                            shape = term ~ model + response)
+    )
     expect_snapshot(cat(tab))
 })
 
@@ -101,7 +99,6 @@ test_that("flipped table (no groups)", {
 
 
 test_that("nnet::multinom: order of rows determined by formula terms", {
-    skip_if_not_installed("nnet")
     requiet("nnet")
     dat_multinom <- mtcars
     dat_multinom$cyl <- as.factor(dat_multinom$cyl)
@@ -169,10 +166,8 @@ test_that("group ~ model + term", {
 })
 
 test_that("nnet::multinom: order of columns determined by formula terms", {
-    skip_if_not_installed("nnet")
-
-    library(nnet)
-    dat_multinom <- mtcars
+    requiet("nnet")
+    dat_multinom <<- mtcars
     dat_multinom$cyl <- as.factor(dat_multinom$cyl)
 
     mod <- list(
@@ -210,7 +205,6 @@ test_that("nnet::multinom: order of columns determined by formula terms", {
 
 
 test_that("grouped coefficients: gamlss", {
-    skip_if_not_installed("gamlss")
     requiet("gamlss")
 
     data(abdom)
@@ -247,7 +241,6 @@ test_that("grouped coefficients: gamlss", {
 
 
 test_that("model names are preserved", {
-    skip_if_not_installed("gamlss")
     requiet("gamlss")
     dat <- rgamma(100, shape=1, scale=10)
     models <- list()
@@ -269,5 +262,3 @@ test_that("group_map reorder rename", {
     expect_equal(tab$group[1], "Zero")
 })
 
-
-options(modelsummary_get = NULL)

@@ -29,7 +29,7 @@ test_that("clustered standard errors", {
 
 
 test_that("robust character shortcuts", {
-  testthat::skip_if_not_installed("estimatr") 
+  requiet("estimatr") 
 
   mod = lm(hp ~ mpg, mtcars)
   mod_estimatr = estimatr::lm_robust(hp ~ mpg, mtcars)

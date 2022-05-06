@@ -1,5 +1,3 @@
-skip_if_not_installed("gt")
-skip_on_ci() # always weirdness with snapshot
 requiet("gt")
 
 models <- list()

@@ -112,7 +112,7 @@ factory_kableExtra <- function(tab,
       ## when using coef_map and stars in Rmarkdown PDF output
       for (n in notes) {
         ## otherwise stars_note breaks in PDF output under pdflatex
-        if (kable_format == "latex" && isTRUE(grepl(" < ", n))) {
+        if (isTRUE(kable_format == "latex") && isTRUE(grepl(" < ", n))) {
           n <- gsub(" < ", " $<$ ", n)
         }
         arguments[["general"]] <- n

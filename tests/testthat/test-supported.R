@@ -1,5 +1,4 @@
 # several tests adapted from `parameters` package under GPL3
-# skip_on_cran()
 
 test_that("supported_models() returns a long character vector", {
   x <- supported_models()
@@ -9,19 +8,17 @@ test_that("supported_models() returns a long character vector", {
 
 
 test_that("margins", {
-  testthat::skip_if_not_installed("margins")
-  suppressMessages(library(margins))
+  requiet("margins")
   mod = glm(vs ~ hp + drat, data = mtcars, family = binomial)
   mfx = margins(mod)
   tab = modelsummary(mfx, "data.frame")
   expect_s3_class(tab, "data.frame")
-  expect_equal(dim(tab), c(8, 4))
+  expect_equal(dim(tab), c(7, 4))
 })
 
 
-test_that("nnet::multinom with `y.level` column", {
-  testthat::skip_if_not_installed("nnet")
-  library(nnet)
+test_that("nnet::multinom with `response` column", {
+  requiet("nnet")
   make_data <- function(response = c("A", "B", "C")) {
     var1 <- sample(response, replace = T, size=100)
     var2 <- sample(c(0,1), size=100, replace=T)
@@ -30,24 +27,21 @@ test_that("nnet::multinom with `y.level` column", {
     df1 <- data.frame(var1, var2, var3)
     df1
   }
-  dat <- make_data()
+  dat <<- make_data()
   invisible(capture.output(mod <- nnet::multinom(var1 ~ var2, data = dat)))
   expect_warning(modelsummary(mod, output = "dataframe"), regexp = "duplicate")
-  expect_warning(modelsummary(mod, group = y.level + term ~ model, output = "dataframe"), NA)
-  tab <- suppressWarnings(modelsummary(mod, group = y.level + term ~ model, output = "dataframe"), NA)
+  expect_warning(modelsummary(mod, group = response + term ~ model, output = "dataframe"), NA)
+  tab <- suppressWarnings(modelsummary(mod, group = response + term ~ model, output = "dataframe"), NA)
   expect_s3_class(tab, "data.frame")
-  expect_equal(dim(tab), c(11, 5))
+  expect_equal(dim(tab), c(14, 5))
 })
 
 
 test_that("MASS", {
   requiet("MASS")
-  # broom::tidy requires p.values=TRUE
+  # broom::tidy requires p.values=TRUE, but we now use easystats, so no need to error checking
   fit <- polr(Sat ~ Freq, weights = Freq, data = housing)
-  expect_error(suppressMessages(modelsummary(fit, statistic="p.value")))
-  expect_error(suppressMessages(modelsummary(fit, p.values=TRUE,
-                                             statistic="p.value")), NA)
-  expect_error(suppressMessages(modelsummary(fit, stars=TRUE)))
+  expect_error(modelsummary(fit, statistic="p.value"), NA)
 })
 
 
@@ -70,14 +64,13 @@ test_that("mgcv::gam", {
     formula = mpg ~ s(hp) + s(wt) + factor(cyl) + am + qsec,
     family = stats::quasi(),
     data = mtcars)
-  tab <- modelsummary(mod, estimate = "edf", output="data.frame", statistic="p.value")
+  tab <- modelsummary(mod, output="data.frame", statistic="p.value")
   expect_s3_class(tab, "data.frame")
   expect_true(nrow(tab) > 5)
 })
 
 
 test_that("betareg::betareg", {
-  testthat::skip_if_not_installed("betareg")
   requiet("betareg")
   data("GasolineYield", package = "betareg")
   data("FoodExpenditure", package = "betareg")
@@ -93,7 +86,7 @@ test_that("ivreg::ivreg", {
   # these two packages depend on `car`, which depends on `rio`, which depends
   # on `foreign`, which cannot be installed on R<4.0.0
   requiet("AER")
-  requiet("ivreg")
+  suppressMessages(requiet("ivreg"))
   data(CigarettesSW, package = "AER")
   mod <- ivreg::ivreg(
     log(packs) ~ log(price) + log(income) | log(income) + I(tax / cpi),

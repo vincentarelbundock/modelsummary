@@ -152,15 +152,14 @@ datasummary <- function(formula,
     }
   }
 
-  ## settings 
+  ## settings: don't overwrite settings on internal calls
   settings_init(settings = list(
      "function_called" = "datasummary"
   ))
+  sanitize_output(output)
 
   sanity_ds_data(formula = formula, data = data)
-  sanitize_output(output)
   sanitize_escape(escape)
-
 
   # convenience: transform logical and character to factor
   # are there use-cases for character variables?

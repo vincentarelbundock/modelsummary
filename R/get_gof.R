@@ -13,7 +13,7 @@ get_gof <- function(model, vcov_type = NULL, ...) {
     if (isTRUE(is.na(dots$gof_map))) return(NULL)
 
     # priority
-    get_priority <- getOption("modelsummary_get", default = "broom")
+    get_priority <- getOption("modelsummary_get", default = "easystats")
     checkmate::assert_choice(
       get_priority,
       choices = c("broom", "easystats", "parameters", "performance", "all"))
@@ -158,7 +158,7 @@ get_gof_parameters <- function(model, ...) {
       metrics <- "common"
     }
     out <- suppressWarnings(try(
-      performance::model_performance(model, metrics = metrics, ...)))
+      performance::model_performance(model, metrics = metrics, ...), silent = TRUE))
   }
 
   # sanity
@@ -177,8 +177,8 @@ get_gof_parameters <- function(model, ...) {
 
   # nobs
   if (inherits(out, "data.frame")) {
-    mi <- insight::model_info(model)
-    if ("n_obs" %in% names(mi)) {
+    mi <- try(insight::model_info(model), silent = TRUE)
+    if (isTRUE("n_obs" %in% names(mi))) {
       out$nobs <- mi$n_obs
     }
   }

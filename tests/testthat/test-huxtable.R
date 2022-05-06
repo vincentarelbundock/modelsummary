@@ -1,7 +1,7 @@
 # flextable is not installed on CRAN's M1 machine
 # huxtable is not installed on CRAN's solaris / fedora-clang / fedora-gcc
-skip_if_not_installed("flextable")
-skip_if_not_installed("huxtable")
+requiet("flextable")
+requiet("huxtable")
 
 random_string <- function() {
   paste(sample(letters, 30, replace=TRUE), collapse="")

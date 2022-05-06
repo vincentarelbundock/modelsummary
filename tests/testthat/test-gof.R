@@ -26,7 +26,7 @@ test_that('list of lists', {
   f2 <- function(x) sprintf("%.1f", x)
   gm <- list(
     list("raw" = "nobs", "clean" = "N", "fmt" = f1),
-    list("raw" = "AIC", "clean" = "aic", "fmt" = f2))
+    list("raw" = "aic", "clean" = "AIC", "fmt" = f2))
   tab <- modelsummary(mod, output = "data.frame", gof_map = gm)
   tab <- tab[tab$part == "gof",]
   expect_equal(tab$OLS, c("32", "28.6"))

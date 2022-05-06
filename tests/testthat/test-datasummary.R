@@ -11,7 +11,7 @@ test_that("regression test: gt duplicate span labels", {
 
 test_that("tables::All() warning does not accept tibbles yet", {
   # https://github.com/vincentarelbundock/modelsummary/issues/395
-  skip_if_not_installed("tibble")
+  requiet("tibble")
   dat <- tibble::as_tibble(mtcars)
   expect_warning(datasummary(All(dat) ~ Mean + SD, data = dat), regexp = "does not accept tibbles")
   expect_warning(datasummary(All(mtcars) ~ Mean + SD, data = mtcars), NA)
@@ -113,8 +113,8 @@ test_that('logical and characters converted to factors automatically', {
 })
 
 test_that('datasummary: output format do not produce errors', {
-  skip_if_not_installed("huxtable")
-  skip_if_not_installed("kableExtra")
+  requiet("huxtable")
+  requiet("kableExtra")
   # output formats do not produce errors
   expect_error(datasummary(All(mtcars) ~ Mean + SD, mtcars, output = 'huxtable'), NA)
   expect_error(datasummary(All(mtcars) ~ Mean + SD, mtcars, output = 'kableExtra'), NA)
@@ -126,7 +126,7 @@ test_that('datasummary: output format do not produce errors', {
 })
 
 test_that('datasummary: output format do not produce errors (flextable)', {
-  skip_if_not_installed("flextable")
+  requiet("flextable")
   expect_error(datasummary(All(mtcars) ~ Mean + SD, mtcars, output = 'flextable'), NA)
 })
 

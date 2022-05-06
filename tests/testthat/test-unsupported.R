@@ -1,7 +1,8 @@
 # CRAN and old versions fail when trying to load `broom.mixed`
 # unsupported models require `broom.mixed`
-skip_on_cran()
-skip_if(getRversion() < '4.0.0')
+# should no longer be a problem now that easystats is first
+# skip_on_cran()
+# skip_if(getRversion() < '4.0.0')
 
 test_that('Characters raise error', {
   # build issue with packages broom.mixed and TMB

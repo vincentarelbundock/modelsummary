@@ -1,6 +1,6 @@
 skip_if(getRversion() < '3.6.6') # change in .Rng
-requiet("fixest")
 skip_if_not_installed("fixest", minimum_version = "0.10.5")
+requiet("fixest")
 
 
 test_that("multi: after 0.10.4", {
@@ -15,11 +15,10 @@ test_that("multi: after 0.10.4", {
 })
 
 test_that("simple model", {
-  skip_if_not_installed("fixest", minimum_version = "0.10.5")# Issue #291 on fixest repo
   mod <- feols(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris)
   raw <- modelsummary(mod, "data.frame")
   expect_s3_class(raw, "data.frame")
-  expect_equal(dim(raw), c(14, 4))
+  expect_equal(dim(raw), c(13, 4))
 })
 
 
