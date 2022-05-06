@@ -907,7 +907,6 @@
         <tr>
          <td style="text-align:left;"> RMSE </td>
          <td style="text-align:center;"> 3.02 </td>
-         <td style="text-align:center;">  </td>
          <td style="text-align:center;"> 3.02 </td>
         </tr>
         <tr>
