@@ -65,10 +65,6 @@ glance_custom_internal.fixest <- function(x, vcov_type = NULL, ...) {
     }
     out[["vcov.type"]] <- fvcov_type
   }
-  r2 <- try(performance::r2(x))
-  if (inherits(r2, "r2_generic")) {
-    out[["within.r.squared"]] <- r2[["R2_within"]]
-  }
   row.names(out) <- NULL
   return(out)
 }
