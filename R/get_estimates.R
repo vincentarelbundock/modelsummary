@@ -172,7 +172,16 @@ get_estimates_broom <- function(model, conf_int, conf_level, ...) {
 }
 
 
-get_estimates_parameters <- function(model, conf_int, conf_level, effects = "all", ...) {
+get_estimates_parameters <- function(model,
+                                     conf_int,
+                                     conf_level,
+                                     effects = "all", ...) {
+
+    if (inherits(model, "marginaleffects") ||
+        inherits(model, "comparisons") ||
+        inherits(model, "marginalmeans")) {
+        return("`parameters` does not support marginaleffects yet.")
+    }
 
     f <- tidy_easystats <- function(x, ...) {
         out <- parameters::parameters(x, ...)

@@ -58,10 +58,21 @@ test_that("vcov", {
   mod <- list(lm(hp ~ mpg + drat, data = mtcars),
               lm(hp ~ mpg + drat, data = mtcars))
   so <- list(vcov, sandwich::vcovHC)
-  p <- modelplot(mod, vcov=so, draw=FALSE)
+  p <- modelplot(mod, vcov = so, draw = FALSE)
+  known <- c(165.179327669237, 182.406373565931, -13.6502180401172, -15.0390897152001, -22.1832974370102, -28.1858724755655)
+  p <- modelplot(mod, vcov = "HC3", draw = FALSE)
   known <- c(165.179327669237, 182.406373565931, -13.6502180401172, -15.0390897152001, -22.1832974370102, -28.1858724755655)
   expect_equal(p$conf.low, known)
 })
+
+
+dat <- mtcars
+colnames(mtcars)[1] <- "Miles per gallon"
+mod <- lm(hp ~ `Miles per gallon`, data = mtcars)
+tab <- modelsummary(mod, output = "dataframe")
+expect_equal(sum(tab$part == "estimates"), 4)
+
+models = lm(dpa ~ `Crime committed abroad` + `5000 jobs at risk` + `Criminal charges`, data = dat)
 
 
 # TODO: these tests are too minimalist
