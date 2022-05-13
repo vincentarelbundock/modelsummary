@@ -163,6 +163,12 @@ HTMLWidgets.widget({
   type: "output",
   renderOnNullValue: true,
   initialize: function(el, width, height) {
+    // in order that the type=number inputs return a number
+    $.valHooks.number = {
+      get: function(el) {
+        return el.value * 1;
+      }
+    };
     $(el).html('&nbsp;');
     return {
       data: null,
