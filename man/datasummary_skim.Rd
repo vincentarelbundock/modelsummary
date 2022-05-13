@@ -80,6 +80,9 @@ the scenes, for instance:
 }
 \description{
 This function was inspired by the excellent \code{skimr} package for R.
+See the Details and Examples sections below, and the vignettes on the
+\code{modelsummary} website: https://vincentarelbundock.github.io/modelsummary/ *
+\href{https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html}{datasummary Vignette.}
 }
 \section{Global Options}{
 

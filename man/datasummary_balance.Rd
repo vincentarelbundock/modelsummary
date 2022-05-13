@@ -99,6 +99,9 @@ scenes. For example,
 Creates balance tables with summary statistics for different subsets of the
 data (e.g., control and treatment groups). It can also be used to create
 summary tables for full data sets.
+See the Details and Examples sections below, and the vignettes on the
+\code{modelsummary} website: https://vincentarelbundock.github.io/modelsummary/ *
+\href{https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html}{datasummary Vignette.}
 }
 \section{Global Options}{
 

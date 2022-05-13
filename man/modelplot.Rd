@@ -94,7 +94,13 @@ scenes. For example,
 }}
 }
 \description{
-Model Summary Plots with Estimates and Confidence Intervals
+Dot-Whisker plot of coefficient estimates with confidence intervals. For
+more information, see the Details and Examples sections below, and the
+vignettes on the \code{modelsummary} website:
+https://vincentarelbundock.github.io/modelsummary/
+\itemize{
+\item \href{https://vincentarelbundock.github.io/modelsummary/articles/modelplot.html}{modelplot Vignette.}
+}
 }
 \examples{
 \dontrun{

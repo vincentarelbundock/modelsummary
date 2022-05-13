@@ -4,6 +4,10 @@
 #' Creates balance tables with summary statistics for different subsets of the
 #' data (e.g., control and treatment groups). It can also be used to create
 #' summary tables for full data sets.
+#' See the Details and Examples sections below, and the vignettes on the
+#' `modelsummary` website: https://vincentarelbundock.github.io/modelsummary/ *
+#' [datasummary Vignette.](https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html)
+
 #'
 #' @param formula a one-sided formula with the "condition" or "column" variable
 #'   on the right-hand side. ~1 can be used to show summary statistics for the

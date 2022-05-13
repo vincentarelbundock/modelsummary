@@ -1,6 +1,9 @@
 #' Quick overview of numeric or categorical variables
 #'
 #' This function was inspired by the excellent `skimr` package for R.
+#' See the Details and Examples sections below, and the vignettes on the
+#' `modelsummary` website: https://vincentarelbundock.github.io/modelsummary/ *
+#' [datasummary Vignette.](https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html)
 #'
 #' @inheritParams datasummary
 #' @inheritParams modelsummary

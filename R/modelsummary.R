@@ -16,8 +16,11 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' Excel, RTF, JPG, or PNG. The appearance of the tables can be customized
 #' extensively by specifying the `output` argument, and by using functions from
 #' one of the supported table customization packages: `kableExtra`, `gt`,
-#' `flextable`, `huxtable`. This function's behavior can be altered using
-#' global options (See the _Details_ section below.)
+#' `flextable`, `huxtable`. For more information, see the Details and Examples
+#' sections below, and the vignettes on the `modelsummary` website:
+#' https://vincentarelbundock.github.io/modelsummary/
+#' * [The `modelsummary` Vignette includes dozens of examples of tables with extensive customizations.](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html)
+#' * [The Appearance Vignette shows how to modify the look of tables.](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html)
 #'
 #' @template modelsummary_details
 #'

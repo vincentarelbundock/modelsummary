@@ -95,6 +95,9 @@ character value per variable. The examples section of this documentation
 shows how to define custom summary functions. The package also ships with
 several shortcut summary functions: Min, Max, Mean, Median, Var, SD,
 NPercent, NUnique, Ncol, P0, P25, P50, P75, P100.
+See the Details and Examples sections below, and the vignettes on the
+\code{modelsummary} website: https://vincentarelbundock.github.io/modelsummary/ *
+\href{https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html}{datasummary Vignette.}
 }
 \details{
 Visit the 'modelsummary' website for more usage examples:

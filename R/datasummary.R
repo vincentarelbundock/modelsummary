@@ -6,6 +6,9 @@
 #' shows how to define custom summary functions. The package also ships with
 #' several shortcut summary functions: Min, Max, Mean, Median, Var, SD,
 #' NPercent, NUnique, Ncol, P0, P25, P50, P75, P100.
+#' See the Details and Examples sections below, and the vignettes on the
+#' `modelsummary` website: https://vincentarelbundock.github.io/modelsummary/ *
+#' [datasummary Vignette.](https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html)
 #'
 #' @inheritParams modelsummary
 #' @import tables

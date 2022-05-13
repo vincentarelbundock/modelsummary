@@ -3,6 +3,9 @@
 #' The names of the variables displayed in the correlation table are the names
 #' of the columns in the `data`. You can rename those columns (with or without
 #' spaces) to produce a table of human-readable variables.
+#' See the Details and Examples sections below, and the vignettes on the
+#' `modelsummary` website: https://vincentarelbundock.github.io/modelsummary/ *
+#' [datasummary Vignette.](https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html)
 #'
 #' @inheritParams datasummary
 #' @param method character or function

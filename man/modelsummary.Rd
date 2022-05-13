@@ -114,8 +114,8 @@ complete it automatically. Potential \code{shape} values include:
 \item \code{term + statistic ~ model}: default
 \item \code{term ~ model + statistic}: statistics in separate columns
 \item \code{model + statistic ~ term}: models in rows and terms in columns
-\item \code{term + y.level + statistic ~ model}:
-\item \code{term ~ y.level}
+\item \code{term + response + statistic ~ model}:
+\item \code{term ~ response}
 }}
 
 \item{coef_map}{character vector. Subset, rename, and reorder coefficients.
@@ -211,8 +211,13 @@ and it can produce tables in HTML, LaTeX, Word, Markdown, PDF, PowerPoint,
 Excel, RTF, JPG, or PNG. The appearance of the tables can be customized
 extensively by specifying the \code{output} argument, and by using functions from
 one of the supported table customization packages: \code{kableExtra}, \code{gt},
-\code{flextable}, \code{huxtable}. This function's behavior can be altered using
-global options (See the \emph{Details} section below.)
+\code{flextable}, \code{huxtable}. For more information, see the Details and Examples
+sections below, and the vignettes on the \code{modelsummary} website:
+https://vincentarelbundock.github.io/modelsummary/
+\itemize{
+\item \href{https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html}{The \code{modelsummary} Vignette includes dozens of examples of tables with extensive customizations.}
+\item \href{https://vincentarelbundock.github.io/modelsummary/articles/appearance.html}{The Appearance Vignette shows how to modify the look of tables.}
+}
 }
 \details{
 \subsection{\code{output}}{
