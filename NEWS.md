@@ -1,8 +1,9 @@
 # modelsummary 0.10.0.9000
 
-Breaking change:
+Breaking changes:
 
-* `modelsummary` now uses the `easystats` packages (`performance` and `parameters`) to extract estimates and goodness-of-fit statistics instead of `broom`. This can be reverted by setting a global option: `options(modelsummary_get="broom")`. This change aims to (1) increase consistency across models, (2) improve the developers' ability to push bug fixes upstream when necessary, and (3) improve support for mixed effects, bayesian, and GAM models. The two main drawbacks are: (1) The set of printed statistics may be slightly different from previous versions of `modelsummary` (2) The group identifiers used in the `shape` formula will also be different for certain models (e.g., in `nnet::multinom`, `y.level` becomes `response`). 
+* `modelsummary_wide` is no longer available. Use the `shape` argument of `modelsummary` instead.
+* `modelsummary` now uses the `easystats` packages (`performance` and `parameters`) to extract estimates and goodness-of-fit statistics instead of `broom`. This can be reverted by setting a global option: `options(modelsummary_get="broom")`. This change aims to (1) increase consistency across models, (2) improve the developers' ability to push bug fixes upstream when necessary, and (3) improve support for mixed effects, bayesian, and GAM models. The two main drawbacks are: (a) The set of printed statistics may be slightly different from previous versions of `modelsummary` (b) The group identifiers used in the `shape` formula will also be different for certain models (e.g., in `nnet::multinom`, `y.level` becomes `response`). 
 
 New features:
 
@@ -11,6 +12,8 @@ New features:
     - `model ~ term`: models in rows and terms in columns.
     - `term + y.level + statistic ~ model`: grouped coefficients for multivariate outcome in `nnet::multinom`
     - `y.level ~ model`: partial match is the same as the previous formula
+* Format distinct statistics differently by passing a named list to `fmt`:
+    - `modelsummary(mod, fmt = list(estimate = 2, std.error = 1, rmse = 4))`
 * Use `glue` to apply functions to numeric values by setting `fmt = NULL`. Example:
     - `modelsummary(model, fmt = NULL, estimate = "{log(estimate)}")`
 * Update for breaking changes after fixest 0.10.4

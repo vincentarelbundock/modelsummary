@@ -14,14 +14,18 @@ format_gof <- function(gof, fmt, gof_map, ...) {
   gm_raw <- as.character(sapply(gof_map, function(x) x$raw))
   gm_clean <- as.character(sapply(gof_map, function(x) x$clean))
 
-  # apply `fmt`
-  unknown <- setdiff(colnames(gof), gm_raw)
-  for (u in unknown) {
-    gof[[u]] <- rounding(gof[[u]], fmt)
+  # formating arguments priority: `fmt` > `gof_map` > 3
+  for (g in gof_map) {
+    if (!g$raw %in% names(fmt)) {
+      fmt[[g$raw]] <- g$fmt
+    }
   }
-  for (gm in gof_map) {
-    if (gm$raw %in% colnames(gof)) {
-      gof[[gm$raw]] <- rounding(gof[[gm$raw]], gm$fmt)
+  for (g in colnames(gof)) {
+    if (g %in% names(fmt)) {
+      gof[[g]] <- rounding(gof[[g]], fmt[[g]])
+    } else {
+      # set by default in `sanitize_fmt()`
+      gof[[g]] <- rounding(gof[[g]], fmt[["fmt"]])
     }
   }
 

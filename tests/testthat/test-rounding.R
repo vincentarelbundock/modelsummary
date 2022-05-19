@@ -1,15 +1,17 @@
 test_that("rounding gives expected results", {
-  expect_equal("blah", modelsummary:::rounding("blah"))
-  expect_equal("3.142", modelsummary:::rounding(pi))
-  expect_equal(c("1", "2"), modelsummary:::rounding(factor(1:2)))
-  expect_equal("2", modelsummary:::rounding(2, TRUE))
+    expect_equal("blah", modelsummary:::rounding("blah"))
+    expect_equal("3.142", modelsummary:::rounding(pi))
+    expect_equal(c("1", "2"), modelsummary:::rounding(factor(1:2)))
+    expect_equal("2", modelsummary:::rounding(2, TRUE))
 })
+
 
 test_that("rounding cleans up NaN inside \\num", {
     dat <- mtcars
     dat$cyl <- factor(dat$cyl)
     expect_snapshot(datasummary(cyl + mpg ~ SD + N, data = dat, output = "latex"))
 })
+
 
 test_that("siunitx works with empty cells", {
   requiet("lme4")
@@ -20,4 +22,23 @@ test_that("siunitx works with empty cells", {
       mod,
       output = "latex",
       estimate = "{estimate} [{conf.low}, {conf.high}]"))
+})
+
+
+test_that("named list", {
+    mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
+    tab <- modelsummary(
+        mod,
+        statistic = c("SE: {std.error}", "conf.int"),
+        fmt = list(estimate = 0, std.error = 4, r.squared = 7, rmse = 5),
+        output = "data.frame")
+    expect_equal(
+        tab[["Model 1"]][1:3],
+        c("29", "SE: 1.5878", "[25.398, 31.903]"))
+    expect_equal(
+        tab[["Model 1"]][tab$term == "R2"],
+        "0.7538578")
+    expect_equal(
+        tab[["Model 1"]][tab$term == "RMSE"],
+        "2.94304")
 })

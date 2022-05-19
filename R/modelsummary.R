@@ -42,6 +42,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * character: passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`
 #' * function: returns a formatted character string.
 #' * NULL: does not format numbers, which allows users to include function in the "glue" strings in the `estimate` and `statistic` arguments. 
+#' * A named list to format distinct elements of the table differently. Names correspond to column names produced by `get_estimates(model)` or `get_gof(model)`. Values are integers, characters, or functions, as described above. Ex: `fmt=list("estimate"=2, "std.error"=1, "r.squared"=4)`
 #' * LaTeX output: To ensure proper typography, all numeric entries are enclosed in the `\num{}` command, which requires the `siunitx` package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 #' @param stars to indicate statistical significance
 #' * FALSE (default): no significance stars.
@@ -211,11 +212,11 @@ modelsummary <- function(
   shape <- sanitize_shape(shape)
   statistic <- sanitize_statistic(statistic, shape) # after shape
   gof_map <- sanitize_gof_map(gof_map)
+  fmt <- sanitize_fmt(fmt, calling_function = "modelsummary")
   sanity_group_map(group_map)
   sanity_conf_level(conf_level)
   sanity_coef(coef_map, coef_rename, coef_omit)
   sanity_stars(stars)
-  sanity_fmt(fmt)
   sanity_align(align, estimate = estimate, statistic = statistic, stars = stars)
 
   # confidence intervals are expensive

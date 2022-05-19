@@ -4,8 +4,8 @@
 #' @param tab table body (data.frame)
 #' @param hrule position of horizontal rules (integer vector)
 #' @noRd
-#' @inheritParams modelsummary
 #' @inheritParams datasummary
+#' @inheritParams modelsummary
 factory <- function(tab,
                     align = NULL,
                     fmt = 3,
@@ -65,7 +65,11 @@ factory <- function(tab,
 
     pos <- attr(add_columns, 'position')
 
-    # convert to numeric
+    # `fmt`: modelsummary() supplies a list with `fmt` default, but not other functions
+    if (isTRUE(checkmate::check_list(fmt))) {
+      fmt <- fmt[["fmt"]]
+    }
+
     for (i in seq_along(add_columns)) {
       if (is.numeric(add_columns[[i]])) {
         add_columns[[i]] <- rounding(add_columns[[i]], fmt)

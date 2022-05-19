@@ -22,8 +22,8 @@
 #'   "weights", this information will be taken into account automatically by
 #'   `estimatr::difference_in_means`.
 #' @param dinm_statistic string: "std.error" or "p.value"
-#' @inheritParams modelsummary
 #' @inheritParams datasummary
+#' @inheritParams modelsummary
 #' @template options
 #' @export
 #' @examples

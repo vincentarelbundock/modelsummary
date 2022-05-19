@@ -5,15 +5,15 @@
 #' @noRd
 format_estimates <- function(
   est,
-  estimate   = "estimate",
-  statistic  = "std.error",
-  vcov       = NULL,
-  conf_level = .95,
-  fmt        = "%.3f",
-  stars      = FALSE,
-  shape      = NULL,
-  group_name = NULL,
-  exponentiate = FALSE,
+  estimate,
+  statistic,
+  vcov,
+  conf_level,
+  fmt,
+  stars,
+  shape,
+  group_name,
+  exponentiate,
   ...) {
 
   # conf.int to glue
@@ -105,14 +105,18 @@ format_estimates <- function(
   }
 
 
-  ## round all 
+  ## round all
   ## ensures that the reshape doesn't produce incompatible types
   ## exclude factors and characters, otherwise `rounding` will escape them
   ## which is premature since we then call coef_map
   if (!is.null(fmt)) {
     for (n in colnames(est)) {
       if (!is.character(est[[n]]) && !is.factor(est[[n]])) {
-        est[[n]] <- rounding(est[[n]], fmt)
+        if (n %in% names(fmt)) {
+          est[[n]] <- rounding(est[[n]], fmt[[n]])
+        } else {
+          est[[n]] <- rounding(est[[n]], fmt[["fmt"]])
+        }
       }
     }
   }

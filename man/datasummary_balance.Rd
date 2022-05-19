@@ -46,7 +46,6 @@ column, the reported mean and standard errors will also be weighted.}
 \item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
 \item function: returns a formatted character string.
 \item NULL: does not format numbers, which allows users to include function in the "glue" strings in the \code{estimate} and \code{statistic} arguments.
-\item LaTeX output: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command, which requires the \code{siunitx} package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 }}
 
 \item{title}{string}
@@ -86,13 +85,12 @@ installed. If \code{data} includes columns named "blocks", "clusters", or
 \item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML characters which could
 prevent the file from compiling/displaying. This setting does not affect captions or notes.}
 
-\item{...}{all other arguments are passed through to the extractor and
-table-making functions (by default \code{broom::tidy} and \code{kableExtra::kbl}, but
-this can be customized). This allows users to pass arguments directly to
-\code{modelsummary} in order to affect the behavior of other functions behind the
-scenes. For example,
+\item{...}{all other arguments are passed through to the
+table-making functions. This allows users to pass arguments directly to
+\code{datasummary} in order to affect the behavior of other functions behind
+the scenes, for instance:
 \itemize{
-\item \code{metrics="none"}, \code{metrics="all"}, or \code{metrics=c("R2", "RMSE")} to select the goodness-of-fit extracted by the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first). This can be useful for some models when statistics take a long time to compute. See \code{?performance::performance}
+\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in \code{kableExtra} tables.
 }}
 }
 \description{

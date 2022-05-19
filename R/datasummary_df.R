@@ -1,7 +1,7 @@
 #' Draw a table from a data.frame
 #'
-#' @inheritParams modelsummary
 #' @inheritParams datasummary
+#' @inheritParams modelsummary
 #' @param hrule position of horizontal rules (integer vector)
 #' @export
 datasummary_df <- function(data,
