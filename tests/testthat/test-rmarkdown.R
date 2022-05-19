@@ -1,5 +1,6 @@
 # solaris failure and complaints about pandoc in "Writing R Extensions" ("annoyingly so")
-skip_on_cran() 
+# pkgdown failure on github actions
+skip_on_ci() 
 
 dangerous_document <- '
 ---
