@@ -138,13 +138,11 @@ Examples section below.}
 \item See the Examples section below for complete code.
 }}
 
-\item{coef_rename}{named character vector or function which returns a named
-vector. Values of the vector refer to the variable names that will appear
-in the table. Names refer to the original term names stored in the model
-object, e.g. c("hp:mpg"="hp X mpg") for an interaction term.
-If you provide a function to \code{coef_rename}, \code{modelsummary} will create a named
-vector for you by deriving the new variable names from the vector of original
-term names with your function.}
+\item{coef_rename}{named character vector or function
+\itemize{
+\item Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg")
+\item Function: Accepts a character vector of the model's term names and returns a named vector like the one described above. The \code{modelsummary} package supplies a \code{coef_rename()} function which can do common cleaning tasks: \code{modelsummary(model, coef_rename = coef_rename)}
+}}
 
 \item{gof_map}{rename, reorder, and omit goodness-of-fit statistics and other
 model information. This argument accepts 4 types of values:
