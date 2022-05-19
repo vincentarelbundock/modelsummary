@@ -42,3 +42,17 @@ test_that("named list", {
         tab[["Model 1"]][tab$term == "RMSE"],
         "2.94304")
 })
+
+
+test_that("glue function", {
+    m <- glm(am ~ mpg, data = mtcars, family = binomial)
+    tab <- modelsummary(
+        m,
+        output = "data.frame",
+        fmt = NULL,
+        estimate = "{round(exp(estimate), 5)}",
+        statistic = "{round(exp(estimate) * std.error, 3)}")
+    known <- c("0.00136", "0.003", "1.35938", "0.156")
+    expect_equal(tab[["Model 1"]][1:4], known)
+})
+

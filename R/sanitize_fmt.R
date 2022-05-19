@@ -12,10 +12,11 @@ sanitize_fmt <- function(fmt, calling_function = NULL) {
             checkmate::check_list(fmt, names = "unique"))
 
         if (!isTRUE(checkmate::check_list(fmt))) {
-            fmt <- list("fmt" = fmt)
-            if ("conf.int" %in% names(fmt) && !"conf.low" %in% names(fmt)) {
-                fmt[["conf.low"]] <- fmt[["conf.high"]] <- fmt[["conf.int"]]
+            fmtlist <- list("fmt" = fmt)
+            if ("conf.int" %in% names(fmtlist) && !"conf.low" %in% names(fmtlist)) {
+                fmtlist[["conf.low"]] <- fmtlist[["conf.high"]] <- fmtlist[["conf.int"]]
             }
+            fmt <- fmtlist
         } else {
             if (!"fmt" %in% names(fmt)) {
                 fmt[["fmt"]] <- 3

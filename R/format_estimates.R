@@ -109,18 +109,19 @@ format_estimates <- function(
   ## ensures that the reshape doesn't produce incompatible types
   ## exclude factors and characters, otherwise `rounding` will escape them
   ## which is premature since we then call coef_map
-  if (!is.null(fmt)) {
-    for (n in colnames(est)) {
-      if (!is.character(est[[n]]) && !is.factor(est[[n]])) {
-        if (n %in% names(fmt)) {
-          est[[n]] <- rounding(est[[n]], fmt[[n]])
-        } else {
-          est[[n]] <- rounding(est[[n]], fmt[["fmt"]])
-        }
+  for (n in colnames(est)) {
+    if (!is.character(est[[n]]) && !is.factor(est[[n]])) {
+      if (n %in% names(fmt)) {
+        fmt1 <- fmt[[n]]
+      } else {
+        fmt1 <- fmt[["fmt"]]
+      }
+      # keep as numeric foir glue functions
+      if (!is.null(fmt1)) {
+        est[[n]] <- rounding(est[[n]], fmt1)
       }
     }
   }
-
 
   # extract estimates (there can be several)
   for (i in seq_along(estimate_glue)) {
