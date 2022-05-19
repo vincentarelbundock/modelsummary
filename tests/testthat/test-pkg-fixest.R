@@ -18,7 +18,7 @@ test_that("simple model", {
   mod <- feols(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris)
   raw <- modelsummary(mod, "data.frame")
   expect_s3_class(raw, "data.frame")
-  expect_equal(dim(raw), c(13, 4))
+  expect_equal(dim(raw), c(14, 4))
 })
 
 
