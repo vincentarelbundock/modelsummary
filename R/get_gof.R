@@ -152,8 +152,11 @@ get_gof_parameters <- function(model, ...) {
       # a two-row glance and gives us issues.
       msg <- '`modelsummary` uses the `performance` package to extract goodness-of-fit statistics from models of this class. You can specify the statistics you wish to compute by supplying a `metrics` argument to `modelsummary`, which will then push it forward to `performance`. Acceptable values are: "all", "common", "none", or a character vector of metrics names. For example: `modelsummary(mod, metrics = c("RMSE", "R2")` Note that some metrics are computationally expensive. See `?performance::performance` for details.'
       warn_once(msg, "performance_gof_expensive")
-
       metrics <- c("RMSE", "LOOIC", "WAIC")
+
+    } else if (inherits(model, "fixest") && isTRUE(utils::packageVersion("performance") < "0.9.1")) {
+      metrics <- c("RMSE", "R2", "R2_adj")
+
     } else {
       metrics <- "common"
     }
