@@ -107,172 +107,34 @@ tbody {
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/" class="external-link">modelsummary</a></span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span></code></pre>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 <div class="section level2">
 <h2 id="rename-reorder-subset">Rename, reorder, subset<a class="anchor" aria-label="anchor" href="#rename-reorder-subset"></a>
 </h2>
 <p><code>modelplot</code> uses the same mechanics as <code>modelsummary</code> to rename, reorder, and subset estimates. First, you can use the <code>coef_omit</code> argument. This will omit any coefficient that matches a string or regular expression. To omit the intercept, for example, we can type:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span>, coef_omit <span class="op">=</span> <span class="st">'Interc'</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span></code></pre>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <p>Second, you can use the <code>coef_map</code> argument. <code>coef_map</code> is a named character vector, where names correspond to the original term names, and values correspond the names you want to assign. Any variable that is <em>not</em> included in <code>coef_map</code> will be excluded. Variables will also be drawn in the same order as in <code>coef_map</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'speciesChinstrap'</span> <span class="op">=</span> <span class="st">'Chinstrap'</span>,
         <span class="st">'speciesGentoo'</span> <span class="op">=</span> <span class="st">'Gentoo'</span>, 
         <span class="st">'flipper_length_cm'</span> <span class="op">=</span> <span class="st">'Flipper length (cm)'</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span>, coef_map <span class="op">=</span> <span class="va">cm</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span></code></pre>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="several-models">Several models<a class="anchor" aria-label="anchor" href="#several-models"></a>
 </h2>
 <p>The main <code>modelsummary</code> functions allows you to create a table with the results of several models side-by-side, by storing them in a (potentially named) list:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
   <span class="st">"Small model"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">bill_length_cm</span> <span class="op">~</span> <span class="va">flipper_length_cm</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
   <span class="st">"Medium model"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">bill_length_cm</span> <span class="op">~</span> <span class="va">flipper_length_cm</span> <span class="op">+</span> <span class="va">body_mass_g</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,
   <span class="st">"Large model"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">bill_length_cm</span> <span class="op">~</span> <span class="va">flipper_length_cm</span> <span class="op">+</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="st">'conf.int'</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span></code></pre>
 <pre><code><span class="co">## Warning in !is.null(rmarkdown::metadata$output) &amp;&amp; rmarkdown::metadata$output</span>
 <span class="co">## %in% : 'length(x) = 2 &gt; 1' in coercion to 'logical(1)'</span></code></pre>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -516,87 +378,18 @@ RMSE
 </tbody>
 </table>
 <p><code>modelplot</code> works the same way:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">'Interc'</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span></code></pre>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>Instead of displaying results with “dodged” side-by-side lines, you can also use <code>facet</code>:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, facet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="customizing-plots">Customizing plots<a class="anchor" aria-label="anchor" href="#customizing-plots"></a>
 </h2>
 <p>The graphs produced by <code>modelplot</code> are simple <code>ggplot2</code> objects. You can thus post-process them using the normal suite of functions available for all objects of this type. Here, we change the axis labels, add a title and a caption, and use a color scheme inspired by Wes Anderson’s <em>Darjeeling Limited</em>:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/karthik/wesanderson" class="external-link">wesanderson</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 
@@ -606,109 +399,17 @@ RMSE
          title <span class="op">=</span> <span class="st">'Linear regression models of "Bill Length (cm)"'</span>,
          caption <span class="op">=</span> <span class="st">"Data source: Gorman, Williams &amp; Fraser (2014), packaged for R by @apreshill and @allison_horst"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/wesanderson/man/wes_palette.html" class="external-link">wes_palette</a></span><span class="op">(</span><span class="st">'Darjeeling1'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span></code></pre>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>In <code>ggplot2</code>, some visual choices must be made when calling the “geom”, rather than with post-processing functions. For instance, the <code>size</code>, <code>color</code>, <code>fatten</code>, <code>linetype</code> arguments must all be specified inside the <code>geom_pointrange</code> function for them to take effect. <code>modelplot</code> will pass any unknown argument to <code>geom_pointrange</code>, so users can simply call:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span>, size <span class="op">=</span> <span class="fl">1</span>, fatten <span class="op">=</span> <span class="fl">.7</span>, color <span class="op">=</span> <span class="st">'darkgreen'</span>, linetype <span class="op">=</span> <span class="st">'dotted'</span><span class="op">)</span> <span class="op">+</span> 
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span></code></pre>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <div class="section level3">
 <h3 id="example-using-facets-to-compare-models">Example: Using facets to compare models<a class="anchor" aria-label="anchor" href="#example-using-facets-to-compare-models"></a>
 </h3>
 <p>Customizing plots with <code>ggplot2</code> makes <code>modelplot</code> very flexible. For example, imagine you want to compare the coefficients of three models with different dependent variables. First, we load the packages and estimate our models:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/" class="external-link">modelsummary</a></span><span class="op">)</span>
 
@@ -717,80 +418,11 @@ RMSE
   <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">carb</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,
   <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">carb</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Then, we use the <code>dvnames</code> function to rename our list with names matching the the dependent variable in each model:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dvnames.html">dvnames</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span></code></pre></div>
 <p>By calling <code>modelplot</code> with the <code>draw=FALSE</code> argument, we see the raw data used to draw the plot. Here, we see that there is a <code>model</code> column:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, draw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span></code></pre>
 <pre><code><span class="co">##           term model     estimate    std.error      conf.low    conf.high</span>
 <span class="co">## 1  (Intercept)    vs   2.41742511   0.67622094    1.03224931   3.80260091</span>
 <span class="co">## 5  (Intercept)  disp 112.57276339 114.86315481 -122.71374324 347.85927003</span>
@@ -805,77 +437,8 @@ RMSE
 <span class="co">## 8          cyl  disp  47.90105842   9.66160634   28.11015499  67.69196184</span>
 <span class="co">## 12         cyl    hp  20.60581208   5.78363747    8.75856779  32.45305638</span></code></pre>
 <p>Finally, we use the <code>model</code> column as our identifier in <code>ggplot2</code>’s <code>facet_grid</code> command to display models side by side:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="op">~</span><span class="va">model</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span></code></pre>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 </div>
 </div>
@@ -883,57 +446,11 @@ RMSE
 <h2 id="confidence-intervals-change-or-omit">Confidence intervals: change or omit<a class="anchor" aria-label="anchor" href="#confidence-intervals-change-or-omit"></a>
 </h2>
 <p>You can change the <span class="math inline">\(\alpha\)</span> level of your confidence intervals by changing the <code>conf_level</code> argument:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span>, conf_level <span class="op">=</span> <span class="fl">.99</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span></code></pre>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span>, conf_level <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span></code></pre>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-15-2.png" width="700"></p>
 </div>
 <div class="section level2">
@@ -941,7 +458,7 @@ RMSE
 </h2>
 <p>Sometimes, you want to display annotations on a plot, but you would like to draw these annotations <em>behind</em> the <code>geom_pointrange</code> which displays the estimates. Since <code>modelplot</code> draws the <code>geom_pointrange</code> automatically, any <code>ggplot2</code> annotation you add to the plot using <code>+</code> will be added on <em>top</em> of the existing ones.</p>
 <p>To add your annotations in the background, you can pass them as a list of <code>ggplot2</code> “geoms”:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 
 <span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">'orange'</span><span class="op">)</span>,
@@ -952,106 +469,14 @@ RMSE
                      size <span class="op">=</span> <span class="fl">10</span>, color <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span>, background <span class="op">=</span> <span class="va">b</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span></code></pre>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="raw-data-more-customization">Raw data &amp; More customization<a class="anchor" aria-label="anchor" href="#raw-data-more-customization"></a>
 </h2>
 <p>If you would like to customize the plots even more than what <code>modelplot</code> allows, you can obtain the raw data used to draw the plots by setting <code>draw=FALSE</code>:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, draw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span></code></pre>
 <pre><code><span class="co">##           term model     estimate    std.error      conf.low    conf.high</span>
 <span class="co">## 1  (Intercept)    vs   2.41742511   0.67622094    1.03224931   3.80260091</span>
 <span class="co">## 5  (Intercept)  disp 112.57276339 114.86315481 -122.71374324 347.85927003</span>
@@ -1066,7 +491,7 @@ RMSE
 <span class="co">## 8          cyl  disp  47.90105842   9.66160634   28.11015499  67.69196184</span>
 <span class="co">## 12         cyl    hp  20.60581208   5.78363747    8.75856779  32.45305638</span></code></pre>
 <p>This allows users to use external tools such as <a href="https://mjskay.github.io/ggdist/" class="external-link">the powerful <code>ggdist</code> package</a>. In this example, we use the <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map_dfr</a></code> function to call <code>modelplot</code> several times with different confidence levels. Then, we draw a plot where the different confidence intervals are drawn with different thicknesses:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/" class="external-link">modelsummary</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mjskay.github.io/ggdist/" class="external-link">ggdist</a></span><span class="op">)</span>
@@ -1080,147 +505,9 @@ RMSE
 <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_dfr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">.9</span>, <span class="fl">.99</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, conf_level <span class="op">=</span> <span class="va">x</span>, draw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>.width <span class="op">=</span> <span class="va">x</span><span class="op">)</span>
-<span class="op">}</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span>
-<span class="co">## Called from: f(model, ...)</span>
-<span class="co">## debug: out &lt;- suppressWarnings(try(performance::model_performance(model, </span>
-<span class="co">##     metrics = metrics, ...), silent = TRUE))</span>
-<span class="co">## debug: if (!inherits(out, "data.frame") &amp;&amp; isTRUE(dots$metrics == "none")) {</span>
-<span class="co">##     return("`performance::model_performance(model)` did not return a data.frame.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: if (is.null(out)) return(out)</span>
-<span class="co">## debug: if (inherits(out, "data.frame") &amp;&amp; nrow(out) &gt; 1) {</span>
-<span class="co">##     return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")</span>
-<span class="co">## }</span>
-<span class="co">## debug: out &lt;- insight::standardize_names(out, style = "broom")</span>
-<span class="co">## debug: if (inherits(out, "data.frame")) {</span>
-<span class="co">##     mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">##     if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##         out$nobs &lt;- mi$n_obs</span>
-<span class="co">##     }</span>
-<span class="co">## }</span>
-<span class="co">## debug: mi &lt;- try(insight::model_info(model), silent = TRUE)</span>
-<span class="co">## debug: if (isTRUE("n_obs" %in% names(mi))) {</span>
-<span class="co">##     out$nobs &lt;- mi$n_obs</span>
-<span class="co">## }</span>
-<span class="co">## debug: out$nobs &lt;- mi$n_obs</span>
-<span class="co">## debug: return(out)</span></code></pre>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># plot</span>
+<span class="op">}</span><span class="op">)</span>
+
+<span class="co"># plot</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>
     y <span class="op">=</span> <span class="va">term</span>, x <span class="op">=</span> <span class="va">estimate</span>,
     xmin <span class="op">=</span> <span class="va">conf.low</span>, xmax <span class="op">=</span> <span class="va">conf.high</span>,
