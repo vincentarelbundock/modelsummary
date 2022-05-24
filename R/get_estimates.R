@@ -184,7 +184,7 @@ get_estimates_parameters <- function(model,
     }
 
     f <- tidy_easystats <- function(x, ...) {
-        out <- parameters::parameters(x, ...)
+        out <- parameters::parameters(x, verbose = FALSE, ...)
         out <- parameters::standardize_names(out, style = "broom")
     }
 
