@@ -55,9 +55,12 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.10.0.9000" id="modelsummary-01009000">modelsummary 0.10.0.9000<a class="anchor" aria-label="anchor" href="#modelsummary-01009000"></a></h2>
-<p>Breaking change:</p>
+<p>Breaking changes:</p>
 <ul><li>
-<code>modelsummary</code> now uses the <code>easystats</code> packages (<code>performance</code> and <code>parameters</code>) to extract estimates and goodness-of-fit statistics instead of <code>broom</code>. This can be reverted by setting a global option: <code>options(modelsummary_get="broom")</code>. This change aims to (1) increase consistency across models, (2) improve the developers’ ability to push bug fixes upstream when necessary, and (3) improve support for mixed effects, bayesian, and GAM models. The two main drawbacks are: (1) The set of printed statistics may be slightly different from previous versions of <code>modelsummary</code> (2) The group identifiers used in the <code>shape</code> formula will also be different for certain models (e.g., in <code><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">nnet::multinom</a></code>, <code>y.level</code> becomes <code>response</code>).</li></ul><p>New features:</p>
+<code>modelsummary_wide</code> is no longer available. Use the <code>shape</code> argument of <code>modelsummary</code> instead.</li>
+<li>
+<code>modelsummary</code> now uses the <code>easystats</code> packages (<code>performance</code> and <code>parameters</code>) to extract estimates and goodness-of-fit statistics instead of <code>broom</code>. This can be reverted by setting a global option: <code>options(modelsummary_get="broom")</code>. This change aims to (1) increase consistency across models, (2) improve the developers’ ability to push bug fixes upstream when necessary, and (3) improve support for mixed effects, bayesian, and GAM models. The two main drawbacks are: (a) The set of printed statistics may be slightly different from previous versions of <code>modelsummary</code> (b) The group identifiers used in the <code>shape</code> formula will also be different for certain models (e.g., in <code><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">nnet::multinom</a></code>, <code>y.level</code> becomes <code>response</code>).</li>
+</ul><p>New features:</p>
 <ul><li>The <code>shape</code> argument accepts a formula and can reshape information in myriad ways. Deprecates the <code>group</code> argument. Examples:<ul><li>
 <code>~ statistic</code>: statistics are shown horizontally in distinct columns.</li>
 <li>
@@ -68,6 +71,7 @@
 <li>
 <code>y.level ~ model</code>: partial match is the same as the previous formula</li>
 </ul></li>
+<li>Format distinct statistics differently by passing a named list to <code>fmt</code>:<ul><li><code>modelsummary(mod, fmt = list(estimate = 2, std.error = 1, rmse = 4))</code></li></ul></li>
 <li>Use <code>glue</code> to apply functions to numeric values by setting <code>fmt = NULL</code>. Example:<ul><li><code>modelsummary(model, fmt = NULL, estimate = "{log(estimate)}")</code></li></ul></li>
 <li>Update for breaking changes after fixest 0.10.4</li>
 </ul><p>Bug fixes:</p>
