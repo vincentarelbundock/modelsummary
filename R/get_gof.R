@@ -137,8 +137,8 @@ get_gof_parameters <- function(model, ...) {
       out <- NULL
 
     } else {
-      out <- suppressWarnings(try(
-        performance::model_performance(model, verbose = FALSE, ...)))
+      out <- suppressMessages(suppressWarnings(try(
+        performance::model_performance(model, verbose = FALSE, ...))))
     }
 
   # defaults for stan models: exclude r2_adjusted because veeeery slow
@@ -160,8 +160,8 @@ get_gof_parameters <- function(model, ...) {
     } else {
       metrics <- "common"
     }
-    out <- suppressWarnings(try(
-      performance::model_performance(model, metrics = metrics, ...), silent = TRUE))
+    out <- suppressMessages(suppressWarnings(try(
+      performance::model_performance(model, verbose = FALSE, metrics = metrics, ...), silent = TRUE)))
   }
 
   # sanity
