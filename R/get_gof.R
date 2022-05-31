@@ -154,7 +154,7 @@ get_gof_parameters <- function(model, ...) {
       warn_once(msg, "performance_gof_expensive")
       metrics <- c("RMSE", "LOOIC", "WAIC")
 
-    } else if (inherits(model, "fixest") && isTRUE(utils::packageVersion("performance") < "0.9.1")) {
+    } else if (inherits(model, "fixest") && isTRUE(utils::packageVersion("insight") < "0.17.1.7")) {
       metrics <- c("RMSE", "R2", "R2_adj")
 
     } else {
