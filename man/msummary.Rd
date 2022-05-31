@@ -47,7 +47,7 @@ msummary(
 \item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
 \item function: returns a formatted character string.
 \item NULL: does not format numbers, which allows users to include function in the "glue" strings in the \code{estimate} and \code{statistic} arguments.
-\item A named list to format distinct elements of the table differently. Names correspond to column names produced by \code{get_estimates(model)} or \code{get_gof(model)}. Values are integers, characters, or functions, as described above. Ex: \code{fmt=list("estimate"=2, "std.error"=1, "r.squared"=4)}
+\item A named list to format distinct elements of the table differently. Names correspond to column names produced by \code{get_estimates(model)} or \code{get_gof(model)}. Values are integers, characters, or functions, as described above. The \code{fmt} element is used as default for unspecified elements Ex: \code{fmt=list("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)}
 \item LaTeX output: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command, which requires the \code{siunitx} package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 }}
 
@@ -322,7 +322,9 @@ HTML tables:
 \section{Parallel computation}{
 
 
-It can take a long time to compute and extract summary statistics from certain models (e.g., Bayesian). In those cases, users can parallelize the process. Since parallelization occurs at the model level, no speedup is available for tables with a single model. To use parallel computation, all users have to do is load the \code{future.apply} package and call the \code{plan()} function. Example:\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(future.apply)
+It can take a long time to compute and extract summary statistics from certain models (e.g., Bayesian). In those cases, users can parallelize the process. Since parallelization occurs at the model level, no speedup is available for tables with a single model. To use parallel computation, all users have to do is load the \code{future.apply} package and call the \code{plan()} function. Example:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(future.apply)
 plan("multisession")
 modelsummary(model_list)
 }\if{html}{\out{</div>}}
