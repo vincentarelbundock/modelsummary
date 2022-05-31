@@ -179,10 +179,15 @@ modelplot <- function(models,
     insight::check_if_installed("ggplot2")
   }
 
-  p <- ggplot2::ggplot(dat) +
-    ggplot2::theme_minimal() +
-    ggplot2::theme(legend.title = ggplot2::element_blank())
+  p <- ggplot2::ggplot(dat)
 
+  # set a new theme only if the default is theme_grey(). this prevents user's
+  # theme_set() from being overwritten
+  if (identical(ggplot2::theme_get(), ggplot2::theme_grey())) {
+    p <- p + 
+         ggplot2::theme_minimal()
+         ggplot2::theme(legend.title = ggplot2::element_blank())
+  }
 
   # background geoms
   if (is.list(background)) {
