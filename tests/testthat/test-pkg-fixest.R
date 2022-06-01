@@ -3,6 +3,13 @@ skip_if_not_installed("fixest", minimum_version = "0.10.5")
 requiet("fixest")
 
 
+test_that("fixest built in SE label", {
+    mod <- feols(Euros ~ dist_km | Product + Destination + Origin, data = trade)
+    tab <- modelsummary(mod, "data.frame")
+    expect_true("by: Product" %in% tab[["Model 1"]])
+})
+
+
 test_that("multi: after 0.10.4", {
   mod <- feols(mpg ~ hp, split = ~cyl, data = mtcars)
   tab <- modelsummary(mod, "data.frame")

@@ -59,7 +59,7 @@ glance_custom_internal.fixest <- function(x, vcov_type = NULL, ...) {
     out[[paste('FE:', n)]] <- 'X'
   }
   if (is.null(vcov_type) || !vcov_type %in% c("vector", "matrix", "function")) {
-    fvcov_type <- attr(x[["se"]], "type")
+    fvcov_type <- attr(summary(x)[["se"]], "type")
     if (isTRUE(grepl("^Clustered", fvcov_type))) {
       fvcov_type <- gsub("^Clustered \\((.*)\\)$", "by: \\1", fvcov_type)
     }
