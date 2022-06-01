@@ -139,10 +139,10 @@ the \code{options} function:
 \subsection{Model extraction functions}{
 
 \code{modelsummary} can use two sets of packages to extract information from
-statistical models: \code{broom} and the \code{easystats} family (\code{performance} and
-\code{parameters}). By default, it uses \code{broom} first and \code{easystats} as a
-fallback if \code{broom} fails. You can change the order of priorities
-or include goodness-of-fit extracted by \emph{both} packages by setting:
+statistical models: the \code{easystats} family (\code{performance} and \code{parameters})
+and \code{broom}. By default, it uses \code{easystats} first and then falls back on
+\code{broom} in ase of failure. You can change the order of priorities or include
+goodness-of-fit extracted by \emph{both} packages by setting:
 
 \code{options(modelsummary_get = "broom")}
 \code{options(modelsummary_get = "easystats")}

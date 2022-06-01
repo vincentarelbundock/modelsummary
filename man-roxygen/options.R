@@ -27,10 +27,10 @@
 #' ### Model extraction functions
 #' 
 #' `modelsummary` can use two sets of packages to extract information from
-#' statistical models: `broom` and the `easystats` family (`performance` and
-#' `parameters`). By default, it uses `broom` first and `easystats` as a
-#' fallback if `broom` fails. You can change the order of priorities
-#' or include goodness-of-fit extracted by *both* packages by setting:
+#' statistical models: the `easystats` family (`performance` and `parameters`)
+#' and `broom`. By default, it uses `easystats` first and then falls back on
+#' `broom` in ase of failure. You can change the order of priorities or include
+#' goodness-of-fit extracted by *both* packages by setting:
 #'
 #' `options(modelsummary_get = "broom")`
 #' `options(modelsummary_get = "easystats")`

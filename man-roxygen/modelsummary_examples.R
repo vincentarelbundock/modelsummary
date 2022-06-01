@@ -104,9 +104,9 @@
 #' 
 #' # gof_map: data.frame
 #' gm <- modelsummary::gof_map
-#' gof_custom$omit[gof_custom$raw == 'deviance'] <- FALSE
-#' gof_custom$fmt[gof_custom$raw == 'r.squared'] <- "%.5f"
-#' modelsummary(models, gof_map = gof_custom)
+#' gm$omit[gof_custom$raw == 'deviance'] <- FALSE
+#' gm$fmt[gm$raw == 'r.squared'] <- "%.5f"
+#' modelsummary(models, gof_map = gm)
 #'
 #' # gof_map: list of lists
 #' f1 <- function(x) format(round(x, 3), big.mark=",")
