@@ -88,8 +88,8 @@ get_gof <- function(model, vcov_type = NULL, ...) {
 '`modelsummary could not extract goodness-of-fit statistics from a model
 of class "%s". The package tried a sequence of 2 helper functions:
 
-broom::glance(model)
 performance::model_performance(model)
+broom::glance(model)
 
 One of these functions must return a one-row `data.frame`. The `modelsummary` website explains how to summarize unsupported models or add support for new models yourself:
 
