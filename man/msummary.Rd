@@ -435,7 +435,7 @@ modelsummary(models, gof_map = gm)
 
 # gof_map: data.frame
 gm <- modelsummary::gof_map
-gm$omit[gof_custom$raw == 'deviance'] <- FALSE
+gm$omit[gm$raw == 'deviance'] <- FALSE
 gm$fmt[gm$raw == 'r.squared'] <- "\%.5f"
 modelsummary(models, gof_map = gm)
 
