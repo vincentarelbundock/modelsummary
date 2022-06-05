@@ -1,4 +1,4 @@
-# modelsummary 0.10.0.9000
+# modelsummary 0.11.0
 
 Breaking changes:
 
