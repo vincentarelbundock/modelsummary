@@ -1,9 +1,15 @@
 fixest_multi_names <- function(x) {
-    tree <- fixest::models(x)
-    if ("lhs" %in% names(tree)) {
-        out <- tree$lhs
-    } else if ("sample" %in% names(tree)) {
-        out <- sprintf("%s: %s", tree$sample.var, tree$sample)
+    if (requireNamespace("fixest", quietly = TRUE) &&
+        utils::packageVersion("fixest") > "0.10.5") {
+        fun <- utils::getFromNamespace("model", "fixest")
+        tree <- fun(x)
+        if ("lhs" %in% names(tree)) {
+            out <- tree$lhs
+        } else if ("sample" %in% names(tree)) {
+            out <- sprintf("%s: %s", tree$sample.var, tree$sample)
+        } else {
+            out <- paste("Model", seq_along(x))
+        }
     } else {
         out <- paste("Model", seq_along(x))
     }
