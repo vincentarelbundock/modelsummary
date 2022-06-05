@@ -185,7 +185,7 @@ modelplot <- function(models,
   # theme_set() from being overwritten
   if (identical(ggplot2::theme_get(), ggplot2::theme_grey())) {
     p <- p + 
-         ggplot2::theme_minimal()
+         ggplot2::theme_minimal() +
          ggplot2::theme(legend.title = ggplot2::element_blank())
   }
 

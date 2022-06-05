@@ -1,9 +1,22 @@
+fixest_multi_names <- function(x) {
+    tree <- fixest::models(x)
+    if ("lhs" %in% names(tree)) {
+        out <- tree$lhs
+    } else if ("sample" %in% names(tree)) {
+        out <- sprintf("%s: %s", tree$sample.var, tree$sample)
+    } else {
+        out <- paste("Model", seq_along(x))
+    }
+    return(out)
+}
+
+
 #' @include get_vcov.R
 get_vcov.fixest <- function(model, vcov = NULL, conf_level = NULL, ...) {
 
   ## Versions older than 0.10.0 require a different approach, since they don't
   ## support the flexible vcov argument
-  insight::check_if_installed("fixest", minimum_version = "0.10.5")
+  insight::check_if_installed("fixest", minimum_version = "0.10.4")
 
   ## known fixest vcovs
   fixest_vcovs <- c("iid", "standard", "hetero", "HC1", "White", "cluster",
@@ -52,7 +65,7 @@ get_vcov.fixest_multi <- get_vcov.fixest
 #' @include glance_custom.R
 #' @keywords internal
 glance_custom_internal.fixest <- function(x, vcov_type = NULL, ...) {
-  insight::check_if_installed("fixest", minimum_version = "0.10.5")
+  insight::check_if_installed("fixest", minimum_version = "0.10.4")
 
   out <- data.frame(row.names = "firstrow")
   for (n in x$fixef_vars) {

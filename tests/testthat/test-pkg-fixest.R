@@ -10,7 +10,8 @@ test_that("fixest built in SE label", {
 })
 
 
-test_that("multi: after 0.10.4", {
+test_that("multi: after 0.10.5", {
+  skip_if_not_installed("fixest", "0.10.5")
   mod <- feols(mpg ~ hp, split = ~cyl, data = mtcars)
   tab <- modelsummary(mod, "data.frame")
   expect_true(all(c("cyl: 4", "cyl: 6", "cyl: 8") %in% colnames(tab)))
@@ -21,11 +22,13 @@ test_that("multi: after 0.10.4", {
   expect_true(all(c("mpg", "wt", "drat") %in% colnames(tab)))
 })
 
+
 test_that("simple model", {
   mod <- feols(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris)
   raw <- modelsummary(mod, "data.frame")
   expect_s3_class(raw, "data.frame")
-  expect_equal(dim(raw), c(14, 4))
+  expect_equal(ncol(raw), 4)
+  expect_true("by: Species" %in% raw[["Model 1"]])
 })
 
 
@@ -67,8 +70,7 @@ test_that("fixest std.error labels", {
 })
 
 
-test_that("regression: 
-          issue #450", {
+test_that("regression: issue #450", {
     requiet("sandwich")
     mod <- feols(mpg ~ wt, data = mtcars)
 
