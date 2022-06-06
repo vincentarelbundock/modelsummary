@@ -52,9 +52,13 @@ gof_map_build <- function() {
   p.value.Weak.instrument,   Weak IV p,          3, TRUE,
   p.value.Wu.Hausman,        Wu-Hausman p,       3, TRUE,
   p.value.Sargan,            Sargan p,           3, TRUE,
+  nrow,                      Rows,               0, FALSE,
+  ncol,                      Columns,            0, FALSE,
+  complete.obs,              Num.Obs.,           0, FALSE,
+  na.fraction,               Share missing,      2, FALSE,
   std.error.type,            Std.Errors,         3, FALSE,
   se_type,                   Std.Errors,         3, FALSE,
-  vcov.type,                 Std.Errors,         0, FALSE'
+  vcov.type,                 Std.Errors,         0, FALSE,'
   out <- utils::read.csv(
     text = text,
     colClasses = c("character", "character", "numeric", "logical", "NULL"))
