@@ -198,6 +198,20 @@ get_estimates_parameters <- function(model,
             silent = TRUE)))
     }
 
+    # cleaner term names for mixed-effects models
+    if (insight::model_info(model)$is_mixed && "group" %in% colnames(out)) {
+        idx <- out$term != "SD (Observations)" &
+               out$group != "" &
+               !grepl(":", out$term) &
+               grepl("\\)$", out$term)
+        out$term <- ifelse(
+            idx,
+            sprintf("%s: %s)", gsub("\\)$", "", out$term), out$group),
+            out$term)
+        # otherwise gets converted to x
+        out$term <- gsub(":", "", out$term)
+    }
+
     if (!inherits(out, "data.frame") || nrow(out) < 1) {
         return("`parameters::parameters(model)` did not return a valid data.frame.")
     }

@@ -1,9 +1,28 @@
 requiet("lme4")
 
+
+test_that("better lme4 printout", {
+    data(sleepstudy)
+    set.seed(12345)
+    sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)
+    mod <- lmer(
+      Reaction ~ (Days + 1 | grp ) + (1 | Subject),
+      data = sleepstudy)
+    expect_warning(tab <- msummary(mod, "dataframe"), NA)
+    expect_true("SD (Days grp)" %in% tab$term)
+
+    mod <- lmer(
+      Reaction ~ Days + (1 | grp ) + (1 + Days | Subject),
+      data = sleepstudy)
+    expect_warning(modelsummary(mod, "dataframe"), NA)
+})
+
+
 test_that("first call raises a warning about `performance` metrics.", {
     mod <- lmer(mpg ~ hp + (1 | gear), data = mtcars)
     expect_warning(modelsummary(mod))
 })
+
 
 test_that('random effects variance components do not have standard errors and produce "empty"', {
     mod <- lmer(mpg ~ hp + (1 | gear), mtcars)
@@ -11,6 +30,7 @@ test_that('random effects variance components do not have standard errors and pr
     known <- c("(Intercept)", "(Intercept)", "hp", "hp", "SD (Intercept)", "SD (Observations)", "Num.Obs.", "RMSE")
     expect_equal(tab$term, known)
 })
+
 
 test_that("performance metrics", {
     N <- 1e4
@@ -28,6 +48,7 @@ test_that("performance metrics", {
     expect_false("R2" %in% tab1$term)
     expect_true(all(c("RMSE", "BIC") %in% tab2$term))
 })
+
 
 test_that("lme4", {
   d <- as.data.frame(ChickWeight)
