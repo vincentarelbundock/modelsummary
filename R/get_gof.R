@@ -180,7 +180,7 @@ get_gof_parameters <- function(model, ...) {
 
   # nobs
   if (inherits(out, "data.frame")) {
-    mi <- try(insight::model_info(model), silent = TRUE)
+    mi <- suppressWarnings(try(insight::model_info(model), silent = TRUE))
     if (isTRUE("n_obs" %in% names(mi))) {
       out$nobs <- mi$n_obs
     }

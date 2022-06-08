@@ -32,6 +32,8 @@
        & (\num{3.132})\\
       hp & \num{-0.030} [\num{-0.060}, \num{-0.001}]\\
        & (\num{0.015})\\
+      SD (Intercept cyl) & \num{4.023}\\
+      SD (Observations) & \num{3.149}\\
       \midrule
       Num.Obs. & \num{32}\\
       RMSE & \num{2.96}\\

@@ -128,11 +128,15 @@ format_estimates <- function(
     s <- estimate_glue[i]
     # At this point, NAs are "". `glue_data(.na=NULL)` works with NAs
     tmp <- est
-    tmp[tmp == ""] <- NA
-    if ("stars" %in% colnames(tmp)) {
-      tmp$stars[is.na(tmp$stars)] <- "" # otherwise NAs propagate when stars = FALSE in user-level call
-    }
-    tmp <- glue::glue_data(tmp, s, .na = NULL)
+    tmp <- glue::glue_data(tmp, s, .na = " ")
+
+    # remove common patterns of missing data, but we can't catch everything
+    # since strings are user-arbitrary...
+    tmp <- gsub("\\s*\\[[\\s|,]*\\]", "", tmp, perl = TRUE) # [, ] or ()
+    tmp <- gsub("\\s*\\([\\s|,]*\\)", "", tmp, perl = TRUE) # (, ) or ()
+    tmp[tmp == gsub("\\{.*\\}", "", s)] <- "" # glue without {} means we failed
+    tmp <- trimws(tmp)
+
     tmp[is.na(tmp)] <- ""
     est[[paste0("modelsummary_tmp", i)]] <- as.character(tmp)
     # avoid empty parentheses for NAs

@@ -4,7 +4,8 @@ sanitize_models <- function(models) {
     # handles cases with `split` or with both `fsplit` and ` do this before
     # wrapping into a list vincent personally uses this type of model a lot,
     # but he does not want to hard-code a ton of exceptions like this.
-    if (inherits(models, "fixest_multi")) {
+
+    if (inherits(x = models, "fixest_multi")) {
         # no names or default names
         if (is.null(names(models)) || all(grepl("^lhs|^sample.var", names(models)))) {
             nam <- fixest_multi_names(models)

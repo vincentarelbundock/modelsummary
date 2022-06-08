@@ -1,5 +1,22 @@
 requiet("lme4")
 
+test_that("first call raises a warning about `performance` metrics.", {
+    mod <- lmer(mpg ~ hp + (1 | gear), data = mtcars)
+    expect_warning(modelsummary(mod))
+})
+
+
+test_that("Issue #494: glue-related partial breakage", {
+    mod <- lmer(Sepal.Width ~ Petal.Length + (1|Species), data = iris)
+    tab <- modelsummary(
+        mod,
+        output = "dataframe",
+        estimate = "{estimate} [{conf.low}, {conf.high}] ({p.value})",
+        statistic = NULL,
+        gof_map = NA)
+    expect_equal(nrow(tab), 4) # a lot of rows used to be omitted
+})
+
 
 test_that("better lme4 printout", {
     data(sleepstudy)
@@ -18,16 +35,10 @@ test_that("better lme4 printout", {
 })
 
 
-test_that("first call raises a warning about `performance` metrics.", {
-    mod <- lmer(mpg ~ hp + (1 | gear), data = mtcars)
-    expect_warning(modelsummary(mod))
-})
-
-
 test_that('random effects variance components do not have standard errors and produce "empty"', {
     mod <- lmer(mpg ~ hp + (1 | gear), mtcars)
     tab <- modelsummary(mod, output = "data.frame", metrics = "RMSE")
-    known <- c("(Intercept)", "(Intercept)", "hp", "hp", "SD (Intercept)", "SD (Observations)", "Num.Obs.", "RMSE")
+    known <- c("(Intercept)", "(Intercept)", "hp", "hp", "SD (Intercept gear)", "SD (Observations)", "Num.Obs.", "RMSE")
     expect_equal(tab$term, known)
 })
 
@@ -66,8 +77,7 @@ test_that("lme4", {
 
 test_that("lme4 with 2 random effects", {
   mod <- lmer(mpg ~ hp + (1|am) + (1|cyl), data = mtcars)
-  expect_warning(modelsummary(mod, output = "data.frame", gof_omit = ".*"),
-                 regexp = "duplicate")
+  expect_warning(modelsummary(mod, output = "data.frame", gof_omit = ".*"), NA) # no longer raises warning
   tab <- suppressWarnings(modelsummary(mod, output = "data.frame", gof_omit = ".*"))
   expect_s3_class(tab, "data.frame")
   tab <- modelsummary(mod, output = "data.frame", gof_omit = ".*",

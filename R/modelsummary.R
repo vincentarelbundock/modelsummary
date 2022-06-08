@@ -193,7 +193,6 @@ modelsummary <- function(
     group_map <- NULL
   }
 
-
   ## sanity functions validate variables/settings
   ## sanitize functions validate & modify & initialize
   checkmate::assert_string(gof_omit, null.ok = TRUE)

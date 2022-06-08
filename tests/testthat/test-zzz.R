@@ -2,6 +2,7 @@ test_that("glue with no statistic", {
     # first time lmer raises a warn_once
     requiet("lme4")
     mod <- lmer(mpg ~ hp + (1 | cyl), data = mtcars)
+
     tab <- modelsummary(mod,
         output = "data.frame",
         statistic = c(
