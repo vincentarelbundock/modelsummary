@@ -6,6 +6,24 @@ test_that("first call raises a warning about `performance` metrics.", {
 })
 
 
+test_that("Issue #494 comment", {
+    suppressMessages({
+    models <- list(
+        lme4::lmer(Sepal.Width ~ Petal.Length + (1|Species), data = iris),
+        lme4::lmer(Sepal.Width ~ Petal.Length + (1 + Petal.Length |Species), data = iris),
+        lme4::lmer(Sepal.Width ~ Petal.Length + Petal.Width + (1 + Petal.Length |Species), data = iris))
+    })
+    tab1 <- modelsummary(
+        models,
+        estimate = "{estimate} [{conf.low}, {conf.high}]",
+        statistic = NULL,
+        gof_map = NA,
+        output = "dataframe")
+    tab2 <- suppressMessages(data.frame(parameters::parameters(mod, effects = "all")))
+    expect_equal(nrow(tab1), nrow(tab2))
+})
+
+
 test_that("Issue #496: multiple models keeps random/fixed grouped together", {
     suppressMessages({
     models <- list(
