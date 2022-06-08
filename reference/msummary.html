@@ -29,7 +29,7 @@ The Appearance Vignette shows how to modify the look of tables.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.11.0.9000</span>
       </span>
     </div>
 
@@ -122,7 +122,7 @@ https://vincentarelbundock.github.io/modelsummary/</p><ul><li><p><a href="https:
 <li><p>character: passed to the <code>sprintf</code> function (e.g., '%.3f' keeps 3 digits with trailing zero). See <code><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">?sprintf</a></code></p></li>
 <li><p>function: returns a formatted character string.</p></li>
 <li><p>NULL: does not format numbers, which allows users to include function in the "glue" strings in the <code>estimate</code> and <code>statistic</code> arguments.</p></li>
-<li><p>A named list to format distinct elements of the table differently. Names correspond to column names produced by <code>get_estimates(model)</code> or <code>get_gof(model)</code>. Values are integers, characters, or functions, as described above. Ex: <code>fmt=list("estimate"=2, "std.error"=1, "r.squared"=4)</code></p></li>
+<li><p>A named list to format distinct elements of the table differently. Names correspond to column names produced by <code>get_estimates(model)</code> or <code>get_gof(model)</code>. Values are integers, characters, or functions, as described above. The <code>fmt</code> element is used as default for unspecified elements Ex: <code>fmt=list("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)</code></p></li>
 <li><p>LaTeX output: To ensure proper typography, all numeric entries are enclosed in the <code>\num{}</code> command, which requires the <code>siunitx</code> package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.</p></li>
 </ul></dd>
 <dt>estimate</dt>
@@ -328,10 +328,10 @@ the <code>options</code> function:</p>
 
 
 <p><code>modelsummary</code> can use two sets of packages to extract information from
-statistical models: <code>broom</code> and the <code>easystats</code> family (<code>performance</code> and
-<code>parameters</code>). By default, it uses <code>broom</code> first and <code>easystats</code> as a
-fallback if <code>broom</code> fails. You can change the order of priorities
-or include goodness-of-fit extracted by <em>both</em> packages by setting:</p>
+statistical models: the <code>easystats</code> family (<code>performance</code> and <code>parameters</code>)
+and <code>broom</code>. By default, it uses <code>easystats</code> first and then falls back on
+<code>broom</code> in ase of failure. You can change the order of priorities or include
+goodness-of-fit extracted by <em>both</em> packages by setting:</p>
 <p><code>options(modelsummary_get = "broom")</code>
 <code>options(modelsummary_get = "easystats")</code>
 <code>options(modelsummary_get = "all")</code></p>
@@ -357,7 +357,8 @@ HTML tables:</p>
     
 
 
-<p>It can take a long time to compute and extract summary statistics from certain models (e.g., Bayesian). In those cases, users can parallelize the process. Since parallelization occurs at the model level, no speedup is available for tables with a single model. To use parallel computation, all users have to do is load the <code>future.apply</code> package and call the <code><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan()</a></code> function. Example:</p><div class="sourceCode r"><pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.apply.futureverse.org" class="external-link">future.apply</a></span><span class="op">)</span>
+<p>It can take a long time to compute and extract summary statistics from certain models (e.g., Bayesian). In those cases, users can parallelize the process. Since parallelization occurs at the model level, no speedup is available for tables with a single model. To use parallel computation, all users have to do is load the <code>future.apply</code> package and call the <code><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan()</a></code> function. Example:</p>
+<p></p><div class="sourceCode r"><pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.apply.futureverse.org" class="external-link">future.apply</a></span><span class="op">)</span>
 <span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="st">"multisession"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">model_list</span><span class="op">)</span></code></pre><p></p></div>
     </div>
@@ -468,9 +469,9 @@ HTML tables:</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># gof_map: data.frame</span></span>
 <span class="r-in"><span class="va">gm</span> <span class="op">&lt;-</span> <span class="fu">modelsummary</span><span class="fu">::</span><span class="va"><a href="gof_map.html">gof_map</a></span></span>
-<span class="r-in"><span class="va">gof_custom</span><span class="op">$</span><span class="va">omit</span><span class="op">[</span><span class="va">gof_custom</span><span class="op">$</span><span class="va">raw</span> <span class="op">==</span> <span class="st">'deviance'</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span>
-<span class="r-in"><span class="va">gof_custom</span><span class="op">$</span><span class="va">fmt</span><span class="op">[</span><span class="va">gof_custom</span><span class="op">$</span><span class="va">raw</span> <span class="op">==</span> <span class="st">'r.squared'</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"%.5f"</span></span>
-<span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_map <span class="op">=</span> <span class="va">gof_custom</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">gm</span><span class="op">$</span><span class="va">omit</span><span class="op">[</span><span class="va">gm</span><span class="op">$</span><span class="va">raw</span> <span class="op">==</span> <span class="st">'deviance'</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span>
+<span class="r-in"><span class="va">gm</span><span class="op">$</span><span class="va">fmt</span><span class="op">[</span><span class="va">gm</span><span class="op">$</span><span class="va">raw</span> <span class="op">==</span> <span class="st">'r.squared'</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"%.5f"</span></span>
+<span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_map <span class="op">=</span> <span class="va">gm</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># gof_map: list of lists</span></span>
 <span class="r-in"><span class="va">f1</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">3</span><span class="op">)</span>, big.mark<span class="op">=</span><span class="st">","</span><span class="op">)</span></span>
