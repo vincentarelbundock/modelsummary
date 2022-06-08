@@ -6,6 +6,25 @@ test_that("first call raises a warning about `performance` metrics.", {
 })
 
 
+test_that("Issue #496: multiple models keeps random/fixed grouped together", {
+    suppressMessages({
+    models <- list(
+        lm(Sepal.Width ~ Petal.Length, data = iris),
+        lmer(Sepal.Width ~ Petal.Length + (1|Species), data = iris),
+        lmer(Sepal.Width ~ Petal.Length + (1 + Petal.Length |Species), data = iris),
+        lmer(Sepal.Width ~ Petal.Length + Petal.Width + (1 + Petal.Length |Species), data = iris))
+    })
+    tab <- modelsummary(
+        models,
+        output = "data.frame",
+        statistic = NULL)
+    expect_equal(
+        tab$term[1:7],
+        c("(Intercept)", "Petal.Length", "Petal.Width", "SD (Intercept Species)",
+        "SD (Petal.Length Species)", "Cor (Intercept~Petal.Length Species)", "SD (Observations)"))
+})
+
+
 test_that("Issue #494: glue-related partial breakage", {
     mod <- lmer(Sepal.Width ~ Petal.Length + (1|Species), data = iris)
     tab <- modelsummary(

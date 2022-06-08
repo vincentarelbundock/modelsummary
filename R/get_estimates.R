@@ -221,5 +221,10 @@ get_estimates_parameters <- function(model,
         return("`parameters::parameters(model)` did not return a data.frame with a `term` column.")
     }
 
+    # important to merge lm() and lme4::lmer() for example.
+    if (!"group" %in% colnames(out)) {
+        out[["group"]] <- ""
+    }
+
     return(out)
 }

@@ -295,6 +295,7 @@ modelsummary <- function(
 
   # warn that `shape` might be needed
   if (is.null(shape$group_name)) {
+    # est[["group"]] <- NULL
     idx <- paste(est$term, est$statistic)
     if (anyDuplicated(idx) > 0) {
       candidate_groups <- sapply(msl, function(x) colnames(x[["tidy"]]))
@@ -352,6 +353,11 @@ modelsummary <- function(
   }
 
   est <- est[do.call(order, as.list(est)), ]
+
+  # we kept the group column until here for sorting of mixed-effects by group
+  if (is.null(shape$group_name)) {
+    est[["group"]] <- NULL
+  }
 
   # character for binding
   for (col in c("term", "group", "model", "statistic")) {
