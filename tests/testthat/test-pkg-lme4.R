@@ -14,12 +14,12 @@ test_that("Issue #494 comment", {
         lme4::lmer(Sepal.Width ~ Petal.Length + Petal.Width + (1 + Petal.Length |Species), data = iris))
     })
     tab1 <- modelsummary(
-        models,
+        models[[3]],
         estimate = "{estimate} [{conf.low}, {conf.high}]",
         statistic = NULL,
         gof_map = NA,
         output = "dataframe")
-    tab2 <- suppressMessages(data.frame(parameters::parameters(mod, effects = "all")))
+    tab2 <- suppressMessages(data.frame(parameters::parameters(models[[3]], effects = "all")))
     expect_equal(nrow(tab1), nrow(tab2))
 })
 
