@@ -1,3 +1,5 @@
+
+
 test_that("single model", {
   mod <- lm(hp ~ mpg + drat, data = mtcars)
   p <- modelplot(mod)
@@ -87,4 +89,13 @@ test_that("multiple models without ci", {
   )
   expect_error(modelplot(mod, facet=TRUE, conf_level=NULL), NA)
   expect_error(modelplot(mod, facet=FALSE, conf_level=NULL), NA)
+})
+
+
+test_that("car::deltaMethod: Issue #491", {
+    skip_if_not_installed("parameters", minimum_version = "0.18.1.2")
+    requiet("car")
+    fit <- lm(mpg ~ disp + hp, mtcars)
+    fit_dm <- deltaMethod(fit, 'disp / hp', rhs = 1)
+    expect_error(modelplot(fit_dm), NA)
 })
