@@ -1,4 +1,6 @@
 library(testthat)
 library(modelsummary)
 
-test_check("modelsummary")
+if (isTRUE(Sys.getenv("R_NOT_CRAN") == "true")) {
+    test_check("modelsummary")
+}
