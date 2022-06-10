@@ -142,12 +142,11 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   - `\newcolumntype{d}{S[input-symbols = ()]}`
 #' @param escape boolean TRUE escapes or substitutes LaTeX/HTML characters which could
 #' prevent the file from compiling/displaying. This setting does not affect captions or notes.
-#' @param ... all other arguments are passed through to the extractor and
-#' table-making functions (by default `broom::tidy` and `kableExtra::kbl`, but
-#' this can be customized). This allows users to pass arguments directly to
-#' `modelsummary` in order to affect the behavior of other functions behind the
-#' scenes. For example,
-#' * `metrics="none"`, `metrics="all"`, or `metrics=c("R2", "RMSE")` to select the goodness-of-fit extracted by the `performance` package (must have set `options(modelsummary_get="easystats")` first). This can be useful for some models when statistics take a long time to compute. See `?performance::performance`
+#' @param ... all other arguments are passed through to three functions. See the documentation of these functions to learn about available arguments.
+#' + [parameters::model_parameters] extracts parameter estimates.
+#' + [performance::model_performance] extracts goodness-of-fit statistics.
+#' + [kableExtra::kbl] or [gt::gt] draw tables, depending on the value of the `output` argument.
+#' * Hint: Summarizing some models is much faster when adding `metrics="none"`, `test=NULL`, `diagnostic=NULL` to the arguments inside the `modelsummary` call.
 #' @return a regression table in a format determined by the `output` argument.
 #' @importFrom generics glance tidy
 #' @export

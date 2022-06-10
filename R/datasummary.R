@@ -29,11 +29,10 @@
 #' the formula determines the order in which headers appear. For example,
 #' `x~mean*z` will print the `mean`-related header above the `z`-related
 #' header.`
-#' @param ... all other arguments are passed through to the
-#' table-making functions. This allows users to pass arguments directly to
-#' `datasummary` in order to affect the behavior of other functions behind
-#' the scenes, for instance:
-#' * `kableExtra::kbl(escape=FALSE)` to avoid escaping math characters in `kableExtra` tables.
+#' @param ... all other arguments are passed through to the table-making
+#' functions [kableExtra::kbl] or [gt::gt], depending on the `output` argument.
+#' This allows users to pass arguments directly to `datasummary` in order to
+#' affect the behavior of other functions behind the scenes.
 #' @template options
 #' @examples
 #'

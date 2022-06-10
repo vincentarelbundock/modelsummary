@@ -191,13 +191,14 @@ the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, d.
 \item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML characters which could
 prevent the file from compiling/displaying. This setting does not affect captions or notes.}
 
-\item{...}{all other arguments are passed through to the extractor and
-table-making functions (by default \code{broom::tidy} and \code{kableExtra::kbl}, but
-this can be customized). This allows users to pass arguments directly to
-\code{modelsummary} in order to affect the behavior of other functions behind the
-scenes. For example,
+\item{...}{all other arguments are passed through to three functions. See the documentation of these functions to learn about available arguments.
 \itemize{
-\item \code{metrics="none"}, \code{metrics="all"}, or \code{metrics=c("R2", "RMSE")} to select the goodness-of-fit extracted by the \code{performance} package (must have set \code{options(modelsummary_get="easystats")} first). This can be useful for some models when statistics take a long time to compute. See \code{?performance::performance}
+\item \link[parameters:model_parameters]{parameters::model_parameters} extracts parameter estimates.
+\item \link[performance:model_performance]{performance::model_performance} extracts goodness-of-fit statistics.
+\item \link[kableExtra:kbl]{kableExtra::kbl} or \link[gt:gt]{gt::gt} draw tables, depending on the value of the \code{output} argument.
+}
+\itemize{
+\item Hint: Summarizing some models is much faster when adding \code{metrics="none"}, \code{test=NULL}, \code{diagnostic=NULL} to the arguments inside the \code{modelsummary} call.
 }}
 }
 \value{

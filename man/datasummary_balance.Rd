@@ -85,13 +85,10 @@ installed. If \code{data} includes columns named "blocks", "clusters", or
 \item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML characters which could
 prevent the file from compiling/displaying. This setting does not affect captions or notes.}
 
-\item{...}{all other arguments are passed through to the
-table-making functions. This allows users to pass arguments directly to
-\code{datasummary} in order to affect the behavior of other functions behind
-the scenes, for instance:
-\itemize{
-\item \code{kableExtra::kbl(escape=FALSE)} to avoid escaping math characters in \code{kableExtra} tables.
-}}
+\item{...}{all other arguments are passed through to the table-making
+functions \link[kableExtra:kbl]{kableExtra::kbl} or \link[gt:gt]{gt::gt}, depending on the \code{output} argument.
+This allows users to pass arguments directly to \code{datasummary} in order to
+affect the behavior of other functions behind the scenes.}
 }
 \description{
 Creates balance tables with summary statistics for different subsets of the
