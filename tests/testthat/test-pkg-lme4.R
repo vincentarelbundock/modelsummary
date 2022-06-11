@@ -1,10 +1,5 @@
 requiet("lme4")
 
-test_that("first call raises a warning about `performance` metrics.", {
-    mod <- lmer(mpg ~ hp + (1 | gear), data = mtcars)
-    expect_warning(modelsummary(mod))
-})
-
 
 test_that("Issue #494 comment", {
     suppressMessages({

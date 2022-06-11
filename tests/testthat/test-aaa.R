@@ -8,3 +8,9 @@ test_that("first time output='latex' produces a warning (run first)", {
   mod <- lm(mpg ~ hp, mtcars)
   expect_warning(modelsummary(mod, "latex"))
 })
+
+
+test_that("first call raises a warning about `performance` metrics.", {
+    mod <- lmer(mpg ~ hp + (1 | gear), data = mtcars)
+    expect_warning(modelsummary(mod))
+})
