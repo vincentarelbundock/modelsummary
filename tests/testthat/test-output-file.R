@@ -1,5 +1,6 @@
 # CRAN fails on artefacts
 skip_on_cran()
+skip_on_ci()
 requiet("digest")
 requiet("flextable")
 
