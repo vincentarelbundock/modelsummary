@@ -35,10 +35,11 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, ...) {
 
     for (f in funs) {
         if (!inherits(out, "data.frame") || nrow(out) == 0) {
-            out <- f(model,
-                    conf_int = conf_int,
-                    conf_level = conf_level,
-                    ...)
+            out <- f(
+                model,
+                conf_int = conf_int,
+                conf_level = conf_level,
+                ...)
             if (is.character(out)) {
                 warning_msg <- c(warning_msg, out)
             }
@@ -175,12 +176,16 @@ get_estimates_broom <- function(model, conf_int, conf_level, ...) {
 get_estimates_parameters <- function(model,
                                      conf_int,
                                      conf_level,
-                                     effects = "all", ...) {
+                                     ...) {
 
-    if (inherits(model, "marginaleffects") ||
-        inherits(model, "comparisons") ||
-        inherits(model, "marginalmeans")) {
-        return("`parameters` does not support marginaleffects yet.")
+    dots <- list(...)
+
+    if (!"effects" %in% names(dots)) dots[["effects"]] <- "all"
+
+    # bayesian diagnostics are expensive
+    if (inherits(model, "brmsfit") || inherits(model, "stanreg")) {
+        if (!"test" %in% names(dots)) dots[["test"]] <- NULL
+        if (!"diagnostic" %in% names(dots)) dots[["diagnostic"]] <- NULL
     }
 
     f <- tidy_easystats <- function(x, ...) {
@@ -189,12 +194,21 @@ get_estimates_parameters <- function(model,
     }
 
     if (isTRUE(conf_int)) {
+        args <- list(
+            model = model,
+            ci = conf_level,
+            effects = effects)
+        args <- c(args, dots)
         out <- suppressMessages(suppressWarnings(try(
-            f(model, ci = conf_level, effects = effects, ...),
+            do.call("f", args),
             silent = TRUE)))
     } else {
+        args <- list(
+            model = model,
+            effects = effects)
+        args <- c(args, dots)
         out <- suppressMessages(suppressWarnings(try(
-            f(model, effects = effects, ...),
+            do.call("f", args),
             silent = TRUE)))
     }
 
