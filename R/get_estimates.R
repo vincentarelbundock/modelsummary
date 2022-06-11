@@ -184,8 +184,8 @@ get_estimates_parameters <- function(model,
 
     # bayesian diagnostics are expensive
     if (inherits(model, "brmsfit") || inherits(model, "stanreg")) {
-        if (!"test" %in% names(dots)) dots[["test"]] <- NULL
-        if (!"diagnostic" %in% names(dots)) dots[["diagnostic"]] <- NULL
+        if (!"test" %in% names(dots)) dots <- c(dots, list("test" = NULL))
+        if (!"diagnostic" %in% names(dots)) dots <- c(dots, list("diagnostic" = NULL))
     }
 
     f <- tidy_easystats <- function(x, ...) {
@@ -195,17 +195,15 @@ get_estimates_parameters <- function(model,
 
     if (isTRUE(conf_int)) {
         args <- list(
-            model = model,
-            ci = conf_level,
-            effects = effects)
+            model,
+            ci = conf_level)
         args <- c(args, dots)
         out <- suppressMessages(suppressWarnings(try(
             do.call("f", args),
             silent = TRUE)))
+
     } else {
-        args <- list(
-            model = model,
-            effects = effects)
+        args <- list(model)
         args <- c(args, dots)
         out <- suppressMessages(suppressWarnings(try(
             do.call("f", args),

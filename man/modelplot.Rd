@@ -82,14 +82,11 @@ used to draw the plot.}
 plot.  This is especially useful to display annotations "behind" the
 'geom_pointrange' that 'modelplot' draws.}
 
-\item{...}{all other arguments are passed through to three functions. See the documentation of these functions to learn about available arguments.
+\item{...}{all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.
 \itemize{
 \item \link[parameters:model_parameters]{parameters::model_parameters} extracts parameter estimates.
 \item \link[performance:model_performance]{performance::model_performance} extracts goodness-of-fit statistics.
 \item \link[kableExtra:kbl]{kableExtra::kbl} or \link[gt:gt]{gt::gt} draw tables, depending on the value of the \code{output} argument.
-}
-\itemize{
-\item Hint: Summarizing some models is much faster when adding \code{metrics="none"}, \code{test=NULL}, \code{diagnostic=NULL} to the arguments inside the \code{modelsummary} call.
 }}
 }
 \description{

@@ -70,7 +70,8 @@ format_estimates <- function(
       stars <- TRUE
     }
     if (!'p.value' %in% colnames(est)) {
-      stop('To use the `stars` argument, the `tidy` function must produce a column called "p.value"')
+      stop('To use the `stars` argument, the `tidy` function must produce a column called "p.value"',
+           call. = FALSE)
     }
     est$stars <- make_stars(est$p.value, stars)
     est$stars[is.na(est$stars)] <- ""
@@ -85,7 +86,7 @@ format_estimates <- function(
   statistic_nonglue[statistic_nonglue == "conf.int"] <- "conf.low"
   for (s in statistic_nonglue) {
     if (!s %in% colnames(est)) {
-      stop(sprintf("`%s` is not available. The `estimate` and `statistic` arguments must correspond to column names in the output of this command: `get_estimates(model)`", s))
+      stop(sprintf("`%s` is not available. The `estimate` and `statistic` arguments must correspond to column names in the output of this command: `get_estimates(model)`", s), call. = FALSE)
     }
   }
 

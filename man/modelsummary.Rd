@@ -191,14 +191,11 @@ the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, d.
 \item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML characters which could
 prevent the file from compiling/displaying. This setting does not affect captions or notes.}
 
-\item{...}{all other arguments are passed through to three functions. See the documentation of these functions to learn about available arguments.
+\item{...}{all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.
 \itemize{
 \item \link[parameters:model_parameters]{parameters::model_parameters} extracts parameter estimates.
 \item \link[performance:model_performance]{performance::model_performance} extracts goodness-of-fit statistics.
 \item \link[kableExtra:kbl]{kableExtra::kbl} or \link[gt:gt]{gt::gt} draw tables, depending on the value of the \code{output} argument.
-}
-\itemize{
-\item Hint: Summarizing some models is much faster when adding \code{metrics="none"}, \code{test=NULL}, \code{diagnostic=NULL} to the arguments inside the \code{modelsummary} call.
 }}
 }
 \value{
