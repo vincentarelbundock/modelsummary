@@ -390,6 +390,29 @@ datasummary(species * sex + 1 ~ N + Percent(),
 
 Note that the `Percent()` function accepts a `denom` argument to determine if percentages should be calculated row or column-wise, or if they should take into account all cells.
 
+## Weighted percentages
+
+The `Percent()` pseudo-function also accepts a `fn` argument, which must be a function which accepts two vectors: `x` is the values in the current cell, and `y` is all the values in the whole dataset. The default `fn` is:
+
+```{r}
+datasummary(species * sex + 1 ~ N + Percent(fn = function(x, y) 100 * length(x) / length(y)),
+            output = "markdown",
+            data = penguins)
+```
+
+The code above takes the number of elements in the cell `length(x)` and divides it by the number of total elements `length(y)`.
+
+Now, let's say we want to display percentages weighted by one of the variables of the dataset. This can often be useful with survey weights, for example. Here, we use an arbitrary column of weights called `flipper_length_mm`:
+
+```{r}
+wtpct <- function(x, y) sum(x, na.rm = TRUE) / sum(y, na.rm = TRUE) * 100
+datasummary(species * sex + 1 ~ N + flipper_length_mm * Percent(fn = wtpct),
+            output = "markdown",
+            data = penguins)
+```
+
+In each cell we now have the sum of weights in that cell, divided by the total sum of weights in the column.
+
 ## `Factor`
 
 The `*` nesting operator that we used above works automatically for factor, character, and logical variables. Sometimes, it is convenient to use it with other types of variables, such as binary numeric variables. In that case, we can wrap the variable name inside a call to `Factor()`. This allows us to treat a variable as factor, without having to modify it in the original data. For example, in the `mtcars` data, there is a binary numeric variable call `am`. We nest statistics within categories of `am` by typing:
