@@ -1,6 +1,8 @@
 # modelsummary 0.11.1.9000
 
+* `gof_map="all"` includes all available statistics. `gof_map="none"` excludes all statistics.
 * Bug fixes
+
 
 # modelsummary 0.11.1
 

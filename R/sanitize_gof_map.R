@@ -11,11 +11,14 @@ sanitize_gof_map <- function(gof_map) {
     combine = "or")
 
   # omit everything
-  if (isTRUE(is.na(gof_map))) return(gof_map)
+  if (isTRUE(is.na(gof_map)) || isTRUE(gof_map == "none")) {
+    return(NA)
+  }
 
   # character vector
   # min.len = 1, otherwise list() triggers, and we want list() to omit all
-  if (isTRUE(checkmate::check_character(gof_map, min.len = 1))) {
+  if (!isTRUE(gof_map == "all") && # handle this case later
+      isTRUE(checkmate::check_character(gof_map, min.len = 1))) {
     known <- intersect(gof_map, modelsummary::gof_map$raw)
     unknown <- setdiff(gof_map, modelsummary::gof_map$raw)
     if (length(known) > 0) {
@@ -48,10 +51,15 @@ sanitize_gof_map <- function(gof_map) {
     }
   }
 
-  # default map
-  if (is.null(gof_map)) {
+  if (isTRUE(gof_map == "all")) {
+    gof_map <- modelsummary::gof_map
+    gof_map$omit <- FALSE
+    whitelist <- FALSE
+
+  } else if (is.null(gof_map)) {
     gof_map <- modelsummary::gof_map
     whitelist <- FALSE
+
   } else {
     whitelist <- TRUE
   }
