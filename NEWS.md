@@ -1,3 +1,7 @@
+# modelsummary 0.11.1.9000
+
+* Bug fixes
+
 # modelsummary 0.11.1
 
 * Better printout for term names in mixed-effects models
