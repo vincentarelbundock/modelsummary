@@ -210,7 +210,13 @@ get_estimates_parameters <- function(model,
             silent = TRUE)))
     }
 
-    # cleaner term names for mixed-effects models
+    # lavaan term names
+    if (inherits(model, "lavaan") && all(c("to", "operator", "from") %in% colnames(out))) {
+        out$term <- paste(out$to, out$operator, out$from)
+        out$to <- out$operator <- out$from <- NULL
+    }
+
+    # mixed-effects term names
     mi <- suppressWarnings(tryCatch(insight::model_info(model), error = function(e) NULL))
     if (isTRUE(mi[["is_mixed"]]) && isTRUE("group" %in% colnames(out))) {
         idx <- out$term != "SD (Observations)" &
