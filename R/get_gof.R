@@ -130,12 +130,16 @@ get_gof_parameters <- function(model, ...) {
 
     dots <- list(...)
 
+    mi <- tryCatch(
+        suppressMessages(suppressWarnings(insight::model_info(model))),
+        error = function(e) NULL)
+
     if (isTRUE(dots[["metrics"]] == "none")) {
         return(NULL)
     }
 
     if (!"metrics" %in% names(dots)) {
-        if (isTRUE(insight::model_info(model)[["is_bayesian"]])) {
+        if (isTRUE(mi[["is_bayesian"]])) {
             # this is the list of "common" metrics in `performance`
             # documentation, but their code includes R2_adj, which produces
             # a two-row glance and gives us issues.
@@ -160,7 +164,7 @@ get_gof_parameters <- function(model, ...) {
 
     args <- c(list(model), dots)
     args[["verbose"]] <- FALSE
-    fun <- getFromNamespace("model_performance", ns = "performance")
+    fun <- utils::getFromNamespace("model_performance", ns = "performance")
     suppressMessages(suppressWarnings(
         out <- tryCatch(do.call("fun", args), error = function(e) NULL)
     ))

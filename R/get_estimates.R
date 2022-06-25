@@ -18,6 +18,10 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, ...) {
         conf_int <- TRUE
     }
 
+    if (inherits(model, "modelsummary_list") && "tidy" %in% names(model)) {
+        return(model[["tidy"]])
+    }
+
     # priority
     get_priority <- getOption("modelsummary_get", default = "easystats")
     checkmate::assert_choice(
