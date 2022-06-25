@@ -1,7 +1,7 @@
 fixest_multi_names <- function(x) {
     if (requireNamespace("fixest", quietly = TRUE) &&
-        utils::packageVersion("fixest") > "0.10.5") {
-        fun <- utils::getFromNamespace("model", "fixest")
+        utils::packageVersion("fixest") >= "0.10.5") {
+        fun <- utils::getFromNamespace("models", "fixest")
         tree <- fun(x)
         if ("lhs" %in% names(tree)) {
             out <- tree$lhs
