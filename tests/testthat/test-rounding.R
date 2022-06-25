@@ -14,6 +14,7 @@ test_that("rounding cleans up NaN inside \\num", {
 
 
 test_that("siunitx works with empty cells", {
+  skip("new versions of parameters return CI, so this is no longer a usefult est")
   requiet("lme4")
   dat <- mtcars
   dat$cyl <- factor(dat$cyl)

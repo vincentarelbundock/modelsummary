@@ -165,7 +165,7 @@ get_gof_parameters <- function(model, ...) {
 
     args <- c(list(model), dots)
     args[["verbose"]] <- FALSE
-    fun <- utils::getFromNamespace("model_performance", ns = "performance")
+    fun <- performance::model_performance
     suppressMessages(suppressWarnings(
         out <- tryCatch(do.call("fun", args), error = function(e) NULL)
     ))
