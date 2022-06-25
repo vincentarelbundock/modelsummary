@@ -1,6 +1,13 @@
 requiet("lme4")
 
 
+test_that("Issue #501", {
+    mod <- lme4::lmer(Sepal.Width ~ Petal.Length + (1|Species), data = iris)
+    tab <- modelsummary(mod, "data.frame")
+    expect_true("AIC" %in% tab$term)
+})
+
+
 test_that("Issue #494 comment", {
     suppressMessages({
     models <- list(

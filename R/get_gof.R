@@ -128,63 +128,58 @@ get_gof_broom <- function(model, ...) {
 #' @keywords internal
 get_gof_parameters <- function(model, ...) {
 
-  dots <- list(...)
+    dots <- list(...)
 
-  # user explicitly supplies a "metrics" argument
-  if ("metrics" %in% names(list(...))) {
-    # "none" is a custom option here
-    if (isTRUE(dots$metrics == "none")) {
-      out <- NULL
-
-    } else {
-      out <- suppressMessages(suppressWarnings(try(
-        performance::model_performance(model, verbose = FALSE, ...))))
+    if (isTRUE(dots[["metrics"]] == "none")) {
+        return(NULL)
     }
 
-  # defaults for stan models: exclude r2_adjusted because veeeery slow
-  } else {
-    if (inherits(model, "stanreg") ||
-        inherits(model, "brmsfit") ||
-        inherits(model, "stanmvreg") ||
-        inherits(model, "merMod")) {
-      # this is the list of "common" metrics in `performance`
-      # documentation, but their code includes R2_adj, which produces
-      # a two-row glance and gives us issues.
-      msg <- '`modelsummary` uses the `performance` package to extract goodness-of-fit statistics from models of this class. You can specify the statistics you wish to compute by supplying a `metrics` argument to `modelsummary`, which will then push it forward to `performance`. Acceptable values are: "all", "common", "none", or a character vector of metrics names. For example: `modelsummary(mod, metrics = c("RMSE", "R2")` Note that some metrics are computationally expensive. See `?performance::performance` for details.'
-      warn_once(msg, "performance_gof_expensive")
-      metrics <- c("RMSE", "LOOIC", "WAIC")
+    if (!"metrics" %in% names(dots)) {
+        if (isTRUE(insight::model_info(model)[["is_bayesian"]])) {
+            # this is the list of "common" metrics in `performance`
+            # documentation, but their code includes R2_adj, which produces
+            # a two-row glance and gives us issues.
+            msg <- format_msg(
+            '`modelsummary` uses the `performance` package to extract goodness-of-fit
+            statistics from models of this class. You can specify the statistics you wish
+            to compute by supplying a `metrics` argument to `modelsummary`, which will then
+            push it forward to `performance`. Acceptable values are: "all", "common",
+            "none", or a character vector of metrics names. For example: `modelsummary(mod,
+            metrics = c("RMSE", "R2")` Note that some metrics are computationally
+            expensive. See `?performance::performance` for details.')
+            warn_once(msg, "performance_gof_expensive")
+            metrics <- c("RMSE", "LOOIC", "WAIC")
 
-    } else if (inherits(model, "fixest") && isTRUE(utils::packageVersion("insight") < "0.17.1.7")) {
-      metrics <- c("RMSE", "R2", "R2_adj")
+        } else if (inherits(model, "fixest") && isTRUE(utils::packageVersion("insight") < "0.17.1.7")) {
+            metrics <- c("RMSE", "R2", "R2_adj")
 
-    } else {
-      metrics <- "common"
+        } else {
+            metrics <- "common"
+        }
     }
-    out <- suppressMessages(suppressWarnings(try(
-      performance::model_performance(model, verbose = FALSE, metrics = metrics, ...), silent = TRUE)))
-  }
 
-  # sanity
-  if (!inherits(out, "data.frame") && isTRUE(dots$metrics == "none")) {
-    return("`performance::model_performance(model)` did not return a data.frame.")
-  }
+    args <- c(list(model), dots)
+    args[["verbose"]] <- FALSE
+    fun <- getFromNamespace("model_performance", ns = "performance")
+    suppressMessages(suppressWarnings(
+        out <- tryCatch(do.call("fun", args), error = function(e) NULL)
+    ))
 
-  if (is.null(out)) return(out)
-
-  if (inherits(out, "data.frame") && nrow(out) > 1) {
-    return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")
-  }
-
-  # cleanup
-  out <- insight::standardize_names(out, style = "broom")
-
-  # nobs
-  if (inherits(out, "data.frame")) {
-    mi <- suppressWarnings(try(insight::model_info(model), silent = TRUE))
-    if (isTRUE("n_obs" %in% names(mi))) {
-      out$nobs <- mi$n_obs
+    # sanity
+    if (!inherits(out, "data.frame") && isTRUE(dots$metrics != "none")) {
+        return("`performance::model_performance(model)` did not return a data.frame.")
     }
-  }
 
-  return(out)
+    if (inherits(out, "data.frame") && nrow(out) > 1) {
+        return("`performance::model_performance(model)` returned a data.frame with more than 1 row.")
+    }
+
+    # cleanup
+    out <- insight::standardize_names(out, style = "broom")
+
+    # nobs
+    n_obs <- tryCatch(insight::n_obs(model)[1], error = function(e) NULL)
+    out[["nobs"]] <- n_obs
+
+    return(out)
 }
