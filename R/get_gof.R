@@ -132,7 +132,8 @@ get_gof_parameters <- function(model, ...) {
 
     mi <- tryCatch(
         suppressMessages(suppressWarnings(insight::model_info(model))),
-        error = function(e) NULL)
+        error = function(e) NULL,
+        warning = function(e) NULL)
 
     if (isTRUE(dots[["metrics"]] == "none")) {
         return(NULL)

@@ -5,8 +5,9 @@ test_that("glue with no statistic", {
 
     tab <- modelsummary(mod,
         output = "data.frame",
+        gof_map = NA,
         statistic = c(
             "t = {statistic}",
             "p = {p.value}"))
-    expect_equal(nrow(tab), 10)
+    expect_equal(nrow(tab), 8)
 })

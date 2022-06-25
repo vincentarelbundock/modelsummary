@@ -5,6 +5,7 @@ test_that("Issue #501", {
     mod <- lme4::lmer(Sepal.Width ~ Petal.Length + (1|Species), data = iris)
     tab <- modelsummary(mod, "data.frame")
     expect_true("AIC" %in% tab$term)
+    expect_false("aicc" %in% tab$term)
 })
 
 

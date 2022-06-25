@@ -221,7 +221,11 @@ get_estimates_parameters <- function(model,
     }
 
     # mixed-effects term names
-    mi <- suppressWarnings(tryCatch(insight::model_info(model), error = function(e) NULL))
+    mi <- tryCatch(
+        suppressMessages(suppressWarnings(insight::model_info(model))),
+        error = function(e) NULL,
+        warning = function(e) NULL)
+
     if (isTRUE(mi[["is_mixed"]]) && isTRUE("group" %in% colnames(out))) {
         idx <- out$term != "SD (Observations)" &
                out$group != "" &
