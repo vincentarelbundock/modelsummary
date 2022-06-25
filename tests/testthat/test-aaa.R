@@ -11,7 +11,7 @@ test_that("first time output='latex' produces a warning (run first)", {
 
 
 test_that("first call raises a warning about `performance` metrics.", {
-    requiet("lme4")
-    mod <- lmer(mpg ~ hp + (1 | gear), data = mtcars)
-    expect_warning(modelsummary(mod))
+    requiet("brms")
+    mod <- insight::download_model("brms_1")
+    expect_warning(modelsummary(mod, statistic = "conf.int"))
 })
