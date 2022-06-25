@@ -89,16 +89,22 @@ The `fmt` argument defines how numeric values are rounded and presented in the t
 For example:
 
 ```{r, eval=FALSE}
+# 4 digits and trailing zero
 modelsummary(models, fmt = 4)
 
-# 4 digits and trailing zero
+# 4 digits and trailing zero: using sprintf()
 modelsummary(models, fmt = "%.4f")
 
 # scientific notation
 modelsummary(models, fmt = "%.4e")
+```
 
-# custom function with big mark commas
-modelsummary(models, fmt = function(x) format(round(x, 0), big.mark=","))
+Custom formatting function with big mark commas:
+
+```{r}
+modf <- lm(I(mpg * 100) ~ hp, mtcars)
+f <- function(x) formatC(x, digits = 2, big.mark = ",", format = "f")
+modelsummary(modf, fmt = f, gof_map = NA)
 ```
 
 In many languages the comma is used as a decimal mark instead of the period.  `modelsummary` respects the global `R` `OutDec` option, so you can simply execute this command and your tables will be adjusted automatically:
