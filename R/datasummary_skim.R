@@ -17,6 +17,7 @@
 #' }
 #' @param type of variables to summarize: "numeric" or "categorical" (character)
 #'
+#' @template citation
 #' @template options
 #' @examples
 #'

@@ -33,6 +33,7 @@
 #'   Finally, the `formula` and `statistic` formulas are combined into a single
 #'   formula which is fed directly to the `datasummary` function to produce the
 #'   table.
+#' @template citation
 #' @template options
 #' @examples
 #' \dontrun{

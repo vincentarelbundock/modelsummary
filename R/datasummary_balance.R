@@ -24,6 +24,7 @@
 #' @param dinm_statistic string: "std.error" or "p.value"
 #' @inheritParams datasummary
 #' @inheritParams modelsummary
+#' @template citation
 #' @template options
 #' @export
 #' @examples

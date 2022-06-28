@@ -256,3 +256,6 @@ datasummary(mpg + hp ~ mean + sd, data = mtcars, add_rows = new_rows)
 }
 
 }
+\references{
+Arel-Bundock V (2022). “modelsummary: Data and Model Summaries in R.” \emph{Journal of Statistical Software}, \emph{103}(1), 1-23. doi:10.18637/jss.v103.i01 \url{https://doi.org/10.18637/jss.v103.i01}.'
+}

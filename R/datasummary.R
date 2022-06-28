@@ -33,6 +33,7 @@
 #' functions [kableExtra::kbl] or [gt::gt], depending on the `output` argument.
 #' This allows users to pass arguments directly to `datasummary` in order to
 #' affect the behavior of other functions behind the scenes.
+#' @template citation
 #' @template options
 #' @examples
 #'

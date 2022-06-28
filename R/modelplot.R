@@ -15,6 +15,7 @@
 #' @param background A list of 'ggplot2' geoms to add to the background of the
 #' plot.  This is especially useful to display annotations "behind" the
 #' 'geom_pointrange' that 'modelplot' draws.
+#' @template citation
 #' @examples
 #' \dontrun{
 #'

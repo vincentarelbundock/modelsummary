@@ -3,6 +3,7 @@
 #' @inheritParams datasummary
 #' @inheritParams modelsummary
 #' @param hrule position of horizontal rules (integer vector)
+#' @template citation
 #' @export
 datasummary_df <- function(data,
                            output = "default",

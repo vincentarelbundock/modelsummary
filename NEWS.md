@@ -1,8 +1,15 @@
-# modelsummary 0.11.1.9000
+# modelsummary 1.0.0
+
+This first major release accompanies the publication of an article in the Journal of Statistical Software:
+
+Arel-Bundock, Vincent (2022). "modelsummary: Data and Model Summaries in R." _Journal of Statistical Software_, *103*(1), 1-23. doi:10.18637/jss.v103.i01 <https://doi.org/10.18637/jss.v103.i01>.'
+
+If you like `modelsummary`, please cite the JSS article and tell your friends about it.
+
+Minor changes:
 
 * `gof_map="all"` includes all available statistics. `gof_map="none"` excludes all statistics.
 * Bug fixes
-
 
 # modelsummary 0.11.1
 
