@@ -293,7 +293,7 @@ the \code{options} function:
 \code{modelsummary} can use two sets of packages to extract information from
 statistical models: the \code{easystats} family (\code{performance} and \code{parameters})
 and \code{broom}. By default, it uses \code{easystats} first and then falls back on
-\code{broom} in ase of failure. You can change the order of priorities or include
+\code{broom} in case of failure. You can change the order of priorities or include
 goodness-of-fit extracted by \emph{both} packages by setting:
 
 \code{options(modelsummary_get = "broom")}

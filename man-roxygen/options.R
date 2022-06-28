@@ -29,7 +29,7 @@
 #' `modelsummary` can use two sets of packages to extract information from
 #' statistical models: the `easystats` family (`performance` and `parameters`)
 #' and `broom`. By default, it uses `easystats` first and then falls back on
-#' `broom` in ase of failure. You can change the order of priorities or include
+#' `broom` in case of failure. You can change the order of priorities or include
 #' goodness-of-fit extracted by *both* packages by setting:
 #'
 #' `options(modelsummary_get = "broom")`
