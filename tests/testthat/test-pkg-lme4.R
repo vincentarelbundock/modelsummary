@@ -1,8 +1,21 @@
 requiet("lme4")
 
 
+test_that("Issue #505", {
+    skip_if_not_installed("parameters", minimum_version = "0.18.1.7")
+    mod <- lme4::lmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
+    expect_error(modelsummary(mod), NA)
+    expect_error(modelsummary(mod, ci_random = TRUE), NA)
+    expect_error(modelsummary(mod, statistic = "conf.int", ci_random = TRUE), NA)
+    expect_error(modelsummary(mod, output = "data.frame", statistic = "conf.int", ci_random = TRUE), NA)
+    tab <- modelsummary(mod, output = "data.frame", statistic = "conf.int", ci_random = TRUE)
+    # 4 confidence intervals includes the random terms
+    expect_equal(sum(grepl("\\[", tab[["Model 1"]])), 4)
+})
+
+
 test_that("Issue #501", {
-    mod <- lme4::lmer(Sepal.Width ~ Petal.Length + (1|Species), data = iris)
+    mod <- lme4::lmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
     tab <- modelsummary(mod, "data.frame")
     expect_true("AIC" %in% tab$term)
     expect_false("aicc" %in% tab$term)
@@ -110,8 +123,8 @@ test_that("lme4", {
   expect_true(nrow(tab) > 21)
 
   # sandwich does not support lmer
-  expect_error(modelsummary(mod, vcov = "robust"), regexp = "Unable to extract")
-  expect_error(modelsummary(mod, vcov =~ subj), regexp = "Unable to extract")
+  expect_error(suppressWarnings(modelsummary(mod, vcov = "robust")), regexp = "Unable to extract")
+  expect_error(suppressWarnings(modelsummary(mod, vcov =~ subj)), regexp = "Unable to extract")
 })
 
 

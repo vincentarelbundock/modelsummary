@@ -139,6 +139,8 @@ get_gof_parameters <- function(model, ...) {
         return(NULL)
     }
 
+    args <- c(list(model, verbose = FALSE), dots)
+
     if (!"metrics" %in% names(dots)) {
         if (isTRUE(mi[["is_bayesian"]])) {
             # this is the list of "common" metrics in `performance`
@@ -156,15 +158,15 @@ get_gof_parameters <- function(model, ...) {
             metrics <- c("RMSE", "LOOIC", "WAIC")
 
         } else if (inherits(model, "fixest") && isTRUE(utils::packageVersion("insight") < "0.17.1.7")) {
-            metrics <- c("RMSE", "R2", "R2_adj")
+            args[["metrics"]] <- c("RMSE", "R2", "R2_adj")
 
         } else {
-            metrics <- "common"
+            args[["metrics"]] <- "common"
         }
     }
 
-    args <- c(list(model), dots)
-    args[["verbose"]] <- FALSE
+
+
     fun <- performance::model_performance
     suppressMessages(suppressWarnings(
         out <- tryCatch(do.call("fun", args), error = function(e) NULL)
