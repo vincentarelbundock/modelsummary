@@ -78,5 +78,5 @@ affect the behavior of other functions behind the scenes.}
 Draw a table from a data.frame
 }
 \references{
-Arel-Bundock V (2022). “modelsummary: Data and Model Summaries in R.” \emph{Journal of Statistical Software}, \emph{103}(1), 1-23. doi:10.18637/jss.v103.i01 \doi{10.18637/jss.v103.i01}.'
+Arel-Bundock V (2022). “modelsummary: Data and Model Summaries in R.” \emph{Journal of Statistical Software}, \emph{103}(1), 1-23. \doi{10.18637/jss.v103.i01}.'
 }
