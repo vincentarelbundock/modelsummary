@@ -205,7 +205,7 @@ modelsummary <- function(
   estimate <- sanitize_estimate(estimate, number_of_models)
   exponentiate <- sanitize_exponentiate(exponentiate, number_of_models)
   shape <- sanitize_shape(shape)
-  statistic <- sanitize_statistic(statistic, shape) # after shape
+  statistic <- sanitize_statistic(statistic, shape, conf_level) # after shape
   gof_map <- sanitize_gof_map(gof_map)
   fmt <- sanitize_fmt(fmt, calling_function = "modelsummary")
   sanity_group_map(group_map)
