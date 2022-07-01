@@ -211,7 +211,7 @@ modelsummary <- function(
   gof_map <- sanitize_gof_map(gof_map)
   fmt <- sanitize_fmt(fmt, calling_function = "modelsummary")
   sanity_group_map(group_map)
-  sanity_conf_level(conf_level)
+  conf_level <- sanitize_conf_level(conf_level, estimate, statistic)
   sanity_coef(coef_map, coef_rename, coef_omit)
   sanity_stars(stars)
   sanity_align(align, estimate = estimate, statistic = statistic, stars = stars)

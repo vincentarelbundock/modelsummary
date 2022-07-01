@@ -145,7 +145,6 @@ These errors messages were generated during extraction:
     # term must be a character (not rounded with decimals when integer)
     out$term <- as.character(out$term)
 
-
     if (inherits(out, "data.frame")) {
         return(out)
     }
