@@ -22,7 +22,9 @@ modelplot(
 \arguments{
 \item{models}{a model or (optionally named) list of models}
 
-\item{conf_level}{confidence level to use for confidence intervals}
+\item{conf_level}{numeric value between 0 and 1. confidence level to use for
+confidence intervals. Setting this argument to \code{NULL} does not extract
+confidence intervals, which can be faster for some models.}
 
 \item{coef_map}{character vector. Subset, rename, and reorder coefficients.
 Coefficients omitted from this vector are omitted from the table. The order

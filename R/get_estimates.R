@@ -154,7 +154,7 @@ These errors messages were generated during extraction:
 
 get_estimates_broom <- function(model, conf_int, conf_level, ...) {
 
-    if (isTRUE(conf_int)) {
+    if (isTRUE(conf_int) && !is.null(conf_level)) {
         out <- suppressWarnings(try(
             broom::tidy(model, conf.int = conf_int, conf.level = conf_level, ...),
             silent = TRUE))

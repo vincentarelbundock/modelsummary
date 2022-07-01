@@ -9,7 +9,9 @@ get_estimates(model, conf_level = 0.95, vcov = NULL, ...)
 \arguments{
 \item{model}{a single model object}
 
-\item{conf_level}{confidence level to use for confidence intervals}
+\item{conf_level}{numeric value between 0 and 1. confidence level to use for
+confidence intervals. Setting this argument to \code{NULL} does not extract
+confidence intervals, which can be faster for some models.}
 
 \item{vcov}{robust standard errors and other manual statistics. The \code{vcov}
 argument accepts six types of input (see the 'Details' and 'Examples'
