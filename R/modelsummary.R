@@ -556,6 +556,7 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, ..
         return(out)
     }
 
+
     # parallel
     if (isTRUE(check_dependency("future.apply"))) {
         parallel_flag <- !"sequential" %in% attr(future::plan(), "class") && number_of_models > 1
@@ -563,8 +564,23 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, ..
         parallel_flag <- FALSE
     }
 
-    if (isTRUE(parallel_flag)) {
-        out <- future.apply::future_lapply(seq_len(number_of_models), inner_loop)
+    dots <- list(...)
+    if ("mc.cores" %in% names(dots)) {
+        out <- parallel::mclapply(seq_len(number_of_models), inner_loop, mc.cores = dots$mc.cores)
+    } else if (isTRUE(parallel_flag)) {
+        out <- list()
+        for (i in seq_along(models)) {
+            j <- ifelse(length(models) == 1, 1, i)
+            M <- models[[j]]
+            V <- vcov[[i]]
+            out[[i]] <- future::future({
+                # recycling when 1 model and many vcov
+                # don't waste time if we are going to exclude all gof anyway
+                list("tidy" = get_estimates(M, conf_level = conf_level, vcov = V, ...),
+                     "glance" = get_gof(M, vcov_type[[i]], gof_map = gof_map, ...))
+            })
+        }
+        out <- lapply(out, future::value)
     } else {
         out <- lapply(seq_len(number_of_models), inner_loop)
     }
