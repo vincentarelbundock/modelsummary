@@ -1,3 +1,7 @@
+# modelsummary 1.0.0.9000
+
+* Parallelization using `parallel::mclapply`. See `?modelsummary` 
+
 # modelsummary 1.0.0
 
 This first major release accompanies the publication of an article in the Journal of Statistical Software:

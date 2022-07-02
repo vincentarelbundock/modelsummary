@@ -322,7 +322,21 @@ HTML tables:
 \section{Parallel computation}{
 
 
-It can take a long time to compute and extract summary statistics from certain models (e.g., Bayesian). In those cases, users can parallelize the process. Since parallelization occurs at the model level, no speedup is available for tables with a single model. To use parallel computation, all users have to do is load the \code{future.apply} package and call the \code{plan()} function. Example:
+It can take a long time to compute and extract summary statistics from
+certain models (e.g., Bayesian). In those cases, users can parallelize the
+process. Since parallelization occurs at the model level, no speedup is
+available for tables with a single model. Users on mac or linux can launch
+parallel computation using the built-in \code{parallel} package. All they need to
+do is supply a \code{mc.cores} argument which will be pushed forward to the
+\code{parallel::mclapply} function:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{modelsummary(model_list, mc.cores = 5)
+}\if{html}{\out{</div>}}
+
+The command above will often -- but not always -- work for Windows users.
+Alternatively, users can also use the \code{future} parallelization framework by
+installing the \code{future.apply} package and by calling the \code{plan()} function.
+Example:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(future.apply)
 plan("multisession")
