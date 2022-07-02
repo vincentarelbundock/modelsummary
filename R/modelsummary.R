@@ -543,6 +543,13 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, ..
     }
 
     inner_loop <- function(i) {
+
+        if (inherits(models[[i]], "modelsummary_list")) {
+            out <- list(
+                tidy = models[[i]][["tidy"]],
+                glance = models[[i]][["glance"]])
+            return(out)
+        }
         # recycling when 1 model and many vcov
         j <- ifelse(length(models) == 1, 1, i)
 
