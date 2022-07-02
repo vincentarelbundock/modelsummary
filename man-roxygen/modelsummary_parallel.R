@@ -23,3 +23,6 @@
 #' modelsummary(model_list)
 #' ```
 #'
+#' Note that parallel computation using the `future` framework can sometimes be
+#' slower the first time `modelsummary` is called during a session, but it can
+#' often go faster on subsequent calls.

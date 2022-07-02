@@ -342,6 +342,10 @@ Example:
 plan("multisession")
 modelsummary(model_list)
 }\if{html}{\out{</div>}}
+
+Note that parallel computation using the \code{future} framework can sometimes be
+slower the first time \code{modelsummary} is called during a session, but it can
+often go faster on subsequent calls.
 }
 
 \examples{
