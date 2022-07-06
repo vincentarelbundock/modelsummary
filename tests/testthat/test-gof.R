@@ -3,6 +3,13 @@ mod$OLS <- lm(am ~ drat, data = mtcars)
 mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
 
 
+test_that("Issue #520", {
+    tab <- modelsummary(mod, "dataframe")
+    expect_true("Log.Lik." %in% tab[["term"]])
+    expect_true(tab$OLS[tab$term == "Log.Lik."] != "")
+    expect_true(tab$Logit[tab$term == "Log.Lik."] != "")
+})
+
 test_that('gof_omit omits everything', {
   tab <- modelsummary(mod, gof_omit = ".*", output = "data.frame")
   expect_equal(dim(tab), c(6, 5))
