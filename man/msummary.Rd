@@ -333,19 +333,16 @@ do is supply a \code{mc.cores} argument which will be pushed forward to the
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{modelsummary(model_list, mc.cores = 5)
 }\if{html}{\out{</div>}}
 
-The command above will often -- but not always -- work for Windows users.
-Alternatively, users can also use the \code{future} parallelization framework by
-installing the \code{future.apply} package and by calling the \code{plan()} function.
-Example:
+All users can also use the \code{future.apply} package to parallelize model summaries.
+For example, to use 4 cores to extract results:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(future.apply)
-plan("multisession")
+plan(multicore, workers = 4)
 modelsummary(model_list)
 }\if{html}{\out{</div>}}
 
-Note that parallel computation using the \code{future} framework can sometimes be
-slower the first time \code{modelsummary} is called during a session, but it can
-often go faster on subsequent calls.
+Note that the "multicore" plan only parallelizes under mac or linux. Windows
+users can use \verb{plan(multisession)' instead. However, note that the first time }modelsummary()\verb{is called under multisession can be a fair bit longer, because of extra costs in passing data to and loading required packages on to workers. Subsequent calls to}modelsummary()` will often be much faster.
 }
 
 \examples{

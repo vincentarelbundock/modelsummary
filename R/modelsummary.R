@@ -570,8 +570,8 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, ..
 
     # {future}
     } else if (isTRUE(check_dependency("future.apply")) &&
-               (!"sequential" %in% attr(future::plan(), "class")) &&
-               (number_of_models > 1)) {
+               future::nbrOfWorkers() > 1 &&
+               number_of_models > 1) {
         out <- future.apply::future_lapply(seq_len(number_of_models), inner_loop, future.seed = TRUE)
 
     # sequential

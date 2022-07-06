@@ -12,17 +12,18 @@
 #' modelsummary(model_list, mc.cores = 5)
 #' ```
 #'
-#' The command above will often -- but not always -- work for Windows users.
-#' Alternatively, users can also use the `future` parallelization framework by
-#' installing the `future.apply` package and by calling the `plan()` function.
-#' Example:
+#' All users can also use the `future.apply` package to parallelize model summaries.
+#' For example, to use 4 cores to extract results:
 #' 
 #' ```{r, eval = FALSE}
 #' library(future.apply)
-#' plan("multisession")
+#' plan(multicore, workers = 4)
 #' modelsummary(model_list)
 #' ```
 #'
-#' Note that parallel computation using the `future` framework can sometimes be
-#' slower the first time `modelsummary` is called during a session, but it can
-#' often go faster on subsequent calls.
+#' Note that the "multicore" plan only parallelizes under mac or linux. Windows
+#' users can use `plan(multisession)' instead. However, note that the first
+#' time `modelsummary()` is called under multisession can be a fair bit longer,
+#' because of extra costs in passing data to and loading required packages on
+#' to workers. Subsequent calls to `modelsummary()` will often be much faster.
+#'
