@@ -151,8 +151,10 @@ get_coeftest <- function(model, vcov, conf_level) {
   gof <- tryCatch(
       {
           tmp <- lmtest::coeftest(model, vcov. = vcov)
+          tmp <- unclass(tmp)
           tmp <- as.data.frame(tmp)
           tmp <- stats::setNames(tmp, c("estimate", "std.error", "statistic", "p.value"))
+          tmp$term <- row.names(tmp)
           row.names(tmp) <- NULL
           tmp
       },
