@@ -6,7 +6,7 @@ test_that("gof merge on partial column match", {
     options(modelsummary_factory_default = "data.frame")
     mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
     tab <- modelsummary(list(mod, mod), shape = ~ model + statistic)
-    expect_equal(dim(tab), c(11, 6))
+    expect_equal(dim(tab), c(12, 6))
     expect_true("gof" %in% tab$part)
 })
 

@@ -14,7 +14,7 @@ test_that("data.frame", {
      NEW GOF 3 , Y   , Y")
   attr(rows, 'position') <- c(3, 8, 9, 12)
   tab <- modelsummary(mod, add_rows = rows, output = "data.frame")
-  expect_equal(dim(tab), c(17, 5))
+  expect_equal(dim(tab), c(18, 5))
 })
 
 test_that('add_rows numeric are formatted by fmt', {

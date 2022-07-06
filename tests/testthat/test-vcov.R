@@ -186,7 +186,7 @@ test_that("sublist (sandwich vignette)", {
     output="data.frame",
     vcov = list(vcov))
   expect_s3_class(tab, "data.frame")
-  expect_equal(dim(tab), c(12, 4))
+  expect_equal(dim(tab), c(13, 4))
 })
 
 # reference tables

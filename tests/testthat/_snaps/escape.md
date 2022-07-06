@@ -23,6 +23,7 @@
       R2 Adj. & \num{0.733} & \num{0.733}\\
       AIC & \num{324.9} & \num{324.9}\\
       BIC & \num{332.2} & \num{332.2}\\
+      Log.Lik. & \num{-157.443} & \num{-157.443}\\
       F & \num{29.335} & \num{29.335}\\
       RMSE & \num{33.15} & \num{33.15}\\
       \bottomrule
@@ -54,6 +55,7 @@
       R2 Adj. & \num{0.733} & \num{0.733}\\
       AIC & \num{324.9} & \num{324.9}\\
       BIC & \num{332.2} & \num{332.2}\\
+      Log.Lik. & \num{-157.443} & \num{-157.443}\\
       F & \num{29.335} & \num{29.335}\\
       RMSE & \num{33.15} & \num{33.15}\\
       \bottomrule
@@ -138,6 +140,11 @@
          <td style="text-align:left;"> BIC </td>
          <td style="text-align:center;"> 332.2 </td>
          <td style="text-align:center;"> 332.2 </td>
+        </tr>
+        <tr>
+         <td style="text-align:left;"> Log.Lik. </td>
+         <td style="text-align:center;"> −157.443 </td>
+         <td style="text-align:center;"> −157.443 </td>
         </tr>
         <tr>
          <td style="text-align:left;"> F </td>
@@ -230,6 +237,11 @@
          <td style="text-align:left;"> BIC </td>
          <td style="text-align:center;"> 332.2 </td>
          <td style="text-align:center;"> 332.2 </td>
+        </tr>
+        <tr>
+         <td style="text-align:left;"> Log.Lik. </td>
+         <td style="text-align:center;"> −157.443 </td>
+         <td style="text-align:center;"> −157.443 </td>
         </tr>
         <tr>
          <td style="text-align:left;"> F </td>
@@ -773,6 +785,7 @@
       R2 Adj. & \num{0.709} & \num{0.766} & \num{0.758}\\
       AIC & \num{170.2} & \num{164.2} & \num{166.2}\\
       BIC & \num{174.6} & \num{170.0} & \num{173.5}\\
+      Log.Lik. & \num{-82.105} & \num{-78.084} & \num{-78.076}\\
       RMSE & \num{3.15} & \num{2.78} & \num{2.78}\\
       \bottomrule
       \end{tabular}
@@ -799,6 +812,7 @@
       R2 Adj. & \num{0.709} & \num{0.766} & \num{0.758}\\
       AIC & \num{170.2} & \num{164.2} & \num{166.2}\\
       BIC & \num{174.6} & \num{170.0} & \num{173.5}\\
+      Log.Lik. & \num{-82.105} & \num{-78.084} & \num{-78.076}\\
       RMSE & \num{3.15} & \num{2.78} & \num{2.78}\\
       \bottomrule
       \end{tabular}
@@ -826,6 +840,7 @@
       R2 Adj. & \num{0.069}\\
       AIC & \num{1734.4}\\
       BIC & \num{1744.2}\\
+      Log.Lik. & \num{-863.198}\\
       RMSE & \num{5531.68}\\
       \bottomrule
       \end{tabular}
@@ -898,6 +913,11 @@
          <td style="text-align:left;"> BIC </td>
          <td style="text-align:center;"> 175.4 </td>
          <td style="text-align:center;"> 175.4 </td>
+        </tr>
+        <tr>
+         <td style="text-align:left;"> Log.Lik. </td>
+         <td style="text-align:center;"> −80.752 </td>
+         <td style="text-align:center;"> −80.752 </td>
         </tr>
         <tr>
          <td style="text-align:left;"> F </td>
