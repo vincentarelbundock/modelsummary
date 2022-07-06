@@ -152,7 +152,7 @@ get_coeftest <- function(model, vcov, conf_level) {
       {
           tmp <- lmtest::coeftest(model, vcov. = vcov)
           tmp <- as.data.frame(tmp)
-          tmp <- setNames(tmp, c("estimate", "std.error", "statistic", "p.value"))
+          tmp <- stats::setNames(tmp, c("estimate", "std.error", "statistic", "p.value"))
           row.names(tmp) <- NULL
           tmp
       },
