@@ -1078,7 +1078,11 @@ rm("tidy_custom.lm")
 
 One common use-case for `glance_custom` is to include additional goodness-of-fit statistics. For example, in an instrumental variable estimation computed by the `fixest` package, we may want to include an IV-Wald statistic for the first-stage regression of each endogenous regressor:
 
-```{r, message=FALSE}
+```{r, include = FALSE}
+eval_fixest <- utils::packageVersion("fixest") >= "0.10.5"
+```
+
+```{r, message = FALSE, eval = eval_fixest}
 library(fixest)
 library(tidyverse)
 
@@ -1103,7 +1107,7 @@ glance_custom.fixest <- function(x) {
 modelsummary(mod)
 ```
 
-```{r, include=FALSE}
+```{r, message = FALSE, eval = eval_fixest}
 rm("glance_custom.fixest")
 ```
 
