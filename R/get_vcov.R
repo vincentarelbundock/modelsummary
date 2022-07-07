@@ -160,7 +160,10 @@ get_coeftest <- function(model, vcov, conf_level) {
       },
       error = function(e) NULL)
 
-  if (!is.data.frame(gof)) return(NULL)
+  # coeftest returns only se for coefficients and not for intercepts in MASS::polr
+  if (!is.data.frame(gof) || nrow(gof) != nrow(vcov)) {
+    return(NULL)
+  }
 
   gof_ci <- try(
     lmtest::coefci(model, vcov. = vcov, level = conf_level),
