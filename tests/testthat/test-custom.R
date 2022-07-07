@@ -88,6 +88,7 @@ test_that("tidy_custom.glm wrong term names", {
 #  tidy.custom  #
 #################
 test_that("tidy.custom", {
+  options(modelsummary_get = "broom")
   mod_custom <- mod
   class(mod_custom) <- c("custom", class(mod_custom))
   tidy.custom <- function(x, ...) {
@@ -104,7 +105,8 @@ test_that("tidy.custom", {
   assign("tidy.custom", tidy.custom, envir = .GlobalEnv)
   assign("glance.custom", glance.custom, envir = .GlobalEnv)
   tab <- modelsummary(mod_custom, output = "dataframe")
-  expect_equal(dim(tab), c(9, 4))
+  expect_equal(dim(tab), c(6, 4))
   rm("tidy.custom", envir = .GlobalEnv)
   rm("glance.custom", envir = .GlobalEnv)
+  options(modelsummary_get = "easystats")
 })
