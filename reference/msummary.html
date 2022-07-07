@@ -29,7 +29,7 @@ The Appearance Vignette shows how to modify the look of tables.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.11.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -155,7 +155,9 @@ sections below):</p><ul><li><p>NULL returns the default uncertainty estimates of
 <li><p>a named list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, <code>modelsummary</code> cannot automatically calculate p values. The <code>stars</code> argument may thus use incorrect significance thresholds when <code>vcov</code> is a list of vectors.</p></li>
 </ul></dd>
 <dt>conf_level</dt>
-<dd><p>confidence level to use for confidence intervals</p></dd>
+<dd><p>numeric value between 0 and 1. confidence level to use for
+confidence intervals. Setting this argument to <code>NULL</code> does not extract
+confidence intervals, which can be faster for some models.</p></dd>
 <dt>exponentiate</dt>
 <dd><p>TRUE, FALSE, or logical vector of length equal to the
 number of models. If TRUE, the <code>estimate</code>, <code>conf.low</code>, and <code>conf.high</code>
@@ -328,7 +330,7 @@ the <code>options</code> function:</p>
 <p><code>modelsummary</code> can use two sets of packages to extract information from
 statistical models: the <code>easystats</code> family (<code>performance</code> and <code>parameters</code>)
 and <code>broom</code>. By default, it uses <code>easystats</code> first and then falls back on
-<code>broom</code> in ase of failure. You can change the order of priorities or include
+<code>broom</code> in case of failure. You can change the order of priorities or include
 goodness-of-fit extracted by <em>both</em> packages by setting:</p>
 <p><code>options(modelsummary_get = "broom")</code>
 <code>options(modelsummary_get = "easystats")</code>
@@ -355,10 +357,26 @@ HTML tables:</p>
     
 
 
-<p>It can take a long time to compute and extract summary statistics from certain models (e.g., Bayesian). In those cases, users can parallelize the process. Since parallelization occurs at the model level, no speedup is available for tables with a single model. To use parallel computation, all users have to do is load the <code>future.apply</code> package and call the <code><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan()</a></code> function. Example:</p>
+<p>It can take a long time to compute and extract summary statistics from
+certain models (e.g., Bayesian). In those cases, users can parallelize the
+process. Since parallelization occurs at the model level, no speedup is
+available for tables with a single model. Users on mac or linux can launch
+parallel computation using the built-in <code>parallel</code> package. All they need to
+do is supply a <code>mc.cores</code> argument which will be pushed forward to the
+<code><a href="https://rdrr.io/r/parallel/mclapply.html" class="external-link">parallel::mclapply</a></code> function:</p>
+<p></p><div class="sourceCode r"><pre><code><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">model_list</span>, mc.cores <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre><p></p></div>
+<p>All users can also use the <code>future.apply</code> package to parallelize model summaries.
+For example, to use 4 cores to extract results:</p>
 <p></p><div class="sourceCode r"><pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.apply.futureverse.org" class="external-link">future.apply</a></span><span class="op">)</span>
-<span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="st">"multisession"</span><span class="op">)</span>
+<span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multicore</span>, workers <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">model_list</span><span class="op">)</span></code></pre><p></p></div>
+<p>Note that the "multicore" plan only parallelizes under mac or linux. Windows
+users can use <code>plan(multisession)' instead. However, note that the first time </code>modelsummary()<code>is called under multisession can be a fair bit longer, because of extra costs in passing data to and loading required packages on to workers. Subsequent calls to</code>modelsummary()` will often be much faster.</p>
+    </div>
+    <div id="references">
+    <h2>References</h2>
+    <p>Arel-Bundock V (2022). “modelsummary: Data and Model Summaries in R.” <em>Journal of Statistical Software</em>, <em>103</em>(1), 1-23. <a href="https://doi.org/10.18637/jss.v103.i01" class="external-link">doi:10.18637/jss.v103.i01</a>
+.'</p>
     </div>
 
     <div id="ref-examples">
