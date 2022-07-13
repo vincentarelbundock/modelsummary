@@ -10,7 +10,7 @@
 #' @param model a single model object
 #' 
 #' @export
-get_estimates <- function(model, conf_level = .95, vcov = NULL, ...) {
+get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, ...) {
 
     if (is.null(conf_level)) {
         conf_int <- FALSE
@@ -111,7 +111,7 @@ These errors messages were generated during extraction:
     }
 
     # fixest mods
-    fixest_mod = inherits(model, "fixest") || inherits(model, "fixest_multi")
+    fixest_mod <- inherits(model, "fixest") || inherits(model, "fixest_multi")
 
     # vcov override
     flag1 <- !is.null(vcov)
@@ -140,6 +140,12 @@ These errors messages were generated during extraction:
         idx <- Reduce("intersect", list(colnames(out), colnames(so), idx)) 
         out <- merge(out, so, by = idx, sort = FALSE)
       }
+    }
+
+    # combine columns if requested in `shape` argument using an : interaction
+    for (x in shape$combine) {
+        vars <- strsplit(x, ":")[[1]]
+        out[[vars[1]]] <- paste(out[[vars[1]]], out[[vars[2]]])
     }
 
     # term must be a character (not rounded with decimals when integer)

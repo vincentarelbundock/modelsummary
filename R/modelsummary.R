@@ -115,13 +115,16 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' on columns. The formula can include a group identifier to display related terms
 #' together, which can be useful for models with multivariate outcomes or
 #' grouped coefficients (See examples section below). This identifier must be
-#' one of the column names produced by: `get_estimates(model)`. If an
-#' incomplete formula is supplied (e.g., `~statistic`), `modelsummary` tries to
-#' complete it automatically. Potential `shape` values include:
+#' one of the column names produced by: `get_estimates(model)`. The group
+#' identifier can be combined with the term identifier in a single column by
+#' using the colon to represent an interaction. If an incomplete formula is
+#' supplied (e.g., `~statistic`), `modelsummary` tries to complete it
+#' automatically. Potential `shape` values include:
 #' * `term + statistic ~ model`: default
 #' * `term ~ model + statistic`: statistics in separate columns
 #' * `model + statistic ~ term`: models in rows and terms in columns
-#' * `term + response + statistic ~ model`: 
+#' * `term + response + statistic ~ model`: term and group id in separate columns
+#' * `term : response + statistic ~ model`: term and group id in a single column
 #' * `term ~ response`
 #' @param add_rows a data.frame (or tibble) with the same number of columns as
 #' your main table. By default, rows are appended to the bottom of the table.
@@ -240,6 +243,7 @@ modelsummary <- function(
                                         conf_level = conf_level,
                                         vcov = vcov,
                                         gof_map = gof_map, # check if we can skip all gof computation
+                                        shape = shape,
                                         ...)
   names(msl) <- model_names
 
@@ -304,16 +308,18 @@ modelsummary <- function(
       candidate_groups <- unlist(candidate_groups)
       candidate_groups <- setdiff(
         candidate_groups,
-        c("term", "estimate", "std.error", "conf.level", "conf.low", "conf.high",
+        c("term", "type", "estimate", "std.error", "conf.level", "conf.low", "conf.high",
           "statistic", "df.error", "p.value"))
-      if (length(candidate_groups) > 0) {
-        candidate_groups <- sprintf("Candidate group identifiers include: %s.",
-                                    paste(candidate_groups, collapse = ", "))
-      } else{
-        candidate_groups <- ""
-      }
-      msg <- sprintf("There are duplicate term names in the table. The `shape` argument of the `modelsummary` function can be used to print related terms together, and to label them appropriately. You can find the group identifier to use in the `shape` argument by calling `get_estimates()` on one of your models. %s See `?modelsummary` for details.", candidate_groups)
+      msg <- format_msg(
+      "There are duplicate term names in the table.
 
+      The `shape` argument of the `modelsummary` function can be used to print
+      related terms together. The `group_map` argument can be used to reorder,
+      subset, and rename group identifiers. See `?modelsummary` for details.
+
+      You can find the group identifier to use in the `shape` argument by calling
+      `get_estimates()` on one of your models. Candidates include: %s ")
+      msg <- sprintf(msg, paste(candidate_groups, collapse = ", "))
       warning(msg, call. = FALSE)
     }
   }
@@ -511,7 +517,7 @@ modelsummary <- function(
 }
 
 
-get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, ...) {
+get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, shape, ...) {
 
     number_of_models <- max(length(models), length(vcov))
 
@@ -556,7 +562,12 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, ..
         # don't waste time if we are going to exclude all gof anyway
         gla <- get_gof(models[[j]], vcov_type[[i]], gof_map = gof_map, ...)
 
-        tid <- get_estimates(models[[j]], conf_level = conf_level, vcov = vcov[[i]], ...)
+        tid <- get_estimates(
+            models[[j]],
+            conf_level = conf_level,
+            vcov = vcov[[i]],
+            shape = shape,
+            ...)
 
         out <- list("tidy" = tid, "glance" = gla)
         class(out) <- "modelsummary_list"
@@ -602,3 +613,6 @@ redundant_labels <- function(dat, column) {
 #' @keywords internal
 #' @export
 msummary <- modelsummary
+
+
+

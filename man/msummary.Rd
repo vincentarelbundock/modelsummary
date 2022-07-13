@@ -110,14 +110,17 @@ determines what appears on rows, and the right side determines what appears
 on columns. The formula can include a group identifier to display related terms
 together, which can be useful for models with multivariate outcomes or
 grouped coefficients (See examples section below). This identifier must be
-one of the column names produced by: \code{get_estimates(model)}. If an
-incomplete formula is supplied (e.g., \code{~statistic}), \code{modelsummary} tries to
-complete it automatically. Potential \code{shape} values include:
+one of the column names produced by: \code{get_estimates(model)}. The group
+identifier can be combined with the term identifier in a single column by
+using the colon to represent an interaction. If an incomplete formula is
+supplied (e.g., \code{~statistic}), \code{modelsummary} tries to complete it
+automatically. Potential \code{shape} values include:
 \itemize{
 \item \code{term + statistic ~ model}: default
 \item \code{term ~ model + statistic}: statistics in separate columns
 \item \code{model + statistic ~ term}: models in rows and terms in columns
-\item \code{term + response + statistic ~ model}:
+\item \code{term + response + statistic ~ model}: term and group id in separate columns
+\item \code{term : response + statistic ~ model}: term and group id in a single column
 \item \code{term ~ response}
 }}
 
@@ -419,11 +422,18 @@ modelsummary(models, coef_omit = "^(?!Vol)", omit = ".*")
 # coef_omit: keep coefficients matching a substring
 modelsummary(models, coef_omit = "^(?!.*ei|.*pt)", omit = ".*")
 
-# shape
+# shape: multinomial model
 library(nnet)
 multi <- multinom(factor(cyl) ~ mpg + hp, data = mtcars, trace = FALSE) 
-modelsummary(multi, shape = y.level ~ model)
-modelsummary(multi, shape = term ~ y.level)
+
+# term names and group ids in rows, models in columns
+modelsummary(multi, shape = response ~ model)
+
+# term names and group ids in rows in a single column
+modelsummary(multi, shape = term : response ~ model)
+
+# term names in rows and group ids in columns
+modelsummary(multi, shape = term ~ response:model)
 
 # title
 modelsummary(models, title = 'This is the title')

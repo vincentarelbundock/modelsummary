@@ -7,7 +7,22 @@ sanitize_shape <- function(shape) {
         return(term + statistic ~ model)
     }
 
-    checkmate::assert_class(shape, "formula", null.ok = TRUE)
+    checkmate::assert_formula(shape, null.ok = TRUE)
+
+    # interactions with ":" are used to combine columns
+    shape_cha <- deparse(shape)
+    if (isTRUE(grepl("\\*|\\(", shape_cha))) {
+        stop("The * and () characters are not supported in the `shape` formula.", call. = FALSE)
+    }
+    regex <- "\\b\\w+:\\w+\\b"
+    combine <- unlist(regmatches(shape_cha, gregexpr(regex, shape_cha)))
+
+    # remove interactions from the formula since we are going to combine them in get_estimates
+    for (com in combine) { 
+        shape_cha <- gsub(com, gsub(":.*", "", com), shape_cha, fixed = TRUE)
+    }
+    shape <- stats::as.formula(shape_cha)
+
 
     lhs <- all.vars(stats::update(shape, ". ~ NULL"))
     rhs <- all.vars(stats::update(shape, "NULL ~ ."))
@@ -23,7 +38,9 @@ sanitize_shape <- function(shape) {
         lhs[lhs == group_name] <- "group"
         rhs[rhs == group_name] <- "group"
     } else {
-        msg <- 'The `shape` formula can only include one group name. The other terms must be: "term", "model", or "statistic".'
+        msg <- format_msg(
+        'The `shape` formula can only include one group name. The other terms must be:
+        "term", "model", or "statistic".')
         stop(msg, call. = FALSE)
     }
 
@@ -48,8 +65,11 @@ sanitize_shape <- function(shape) {
         "lhs" = lhs,
         "rhs" = rhs,
         "group_name" = group_name,
-        "shape_formula" = shape_formula
+        "shape_formula" = shape_formula,
+        "combine" = combine
     )
 
     return(out)
 }
+
+

@@ -4,7 +4,7 @@
 \alias{get_estimates}
 \title{Extract model estimates in a tidy format.}
 \usage{
-get_estimates(model, conf_level = 0.95, vcov = NULL, ...)
+get_estimates(model, conf_level = 0.95, vcov = NULL, shape = NULL, ...)
 }
 \arguments{
 \item{model}{a single model object}
@@ -23,6 +23,25 @@ sections below):
 \item formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
 \item named list of \code{length(models)} variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
 \item a named list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, \code{modelsummary} cannot automatically calculate p values. The \code{stars} argument may thus use incorrect significance thresholds when \code{vcov} is a list of vectors.
+}}
+
+\item{shape}{formula which determines the shape of the table. The left side
+determines what appears on rows, and the right side determines what appears
+on columns. The formula can include a group identifier to display related terms
+together, which can be useful for models with multivariate outcomes or
+grouped coefficients (See examples section below). This identifier must be
+one of the column names produced by: \code{get_estimates(model)}. The group
+identifier can be combined with the term identifier in a single column by
+using the colon to represent an interaction. If an incomplete formula is
+supplied (e.g., \code{~statistic}), \code{modelsummary} tries to complete it
+automatically. Potential \code{shape} values include:
+\itemize{
+\item \code{term + statistic ~ model}: default
+\item \code{term ~ model + statistic}: statistics in separate columns
+\item \code{model + statistic ~ term}: models in rows and terms in columns
+\item \code{term + response + statistic ~ model}: term and group id in separate columns
+\item \code{term : response + statistic ~ model}: term and group id in a single column
+\item \code{term ~ response}
 }}
 
 \item{...}{all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.

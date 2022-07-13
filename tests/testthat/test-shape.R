@@ -1,6 +1,24 @@
 requiet("gamlss")
 requiet("nnet")
 
+test_that("combine columns with :", {
+    requiet("marginaleffects")
+    mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
+    mfx <- marginaleffects(mod)
+    tab1 <- modelsummary(mfx, output = "dataframe", shape = term:contrast ~ model)
+    tab2 <- modelsummary(mfx, output = "dataframe", shape = term:contrast + statistic ~ model)
+    tab3 <- modelsummary(mfx, output = "dataframe", shape = term + contrast + statistic ~ model)
+    tab4 <- modelsummary(
+        mfx,
+        output = "dataframe",
+        coef_rename = function(x) gsub(" dY/dX", " (Slope)", x),
+        shape = term : contrast ~ model)
+    expect_equal(tab1, tab2)
+    expect_equal(nrow(tab1), nrow(tab3))
+    expect_equal(ncol(tab1) + 1, ncol(tab3))
+    expect_error(modelsummary(mfx, shape = term * contrast + statistic ~ model), regexp = "character")
+    expect_error(modelsummary(mfx, output = "dataframe", shape = term:contrast + statistic ~ model), NA)
+})
 
 test_that("gof merge on partial column match", {
     options(modelsummary_factory_default = "data.frame")
