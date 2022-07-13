@@ -1,4 +1,4 @@
-# modelsummary 1.0.0.9000
+# modelsummary 1.0.1
 
 * `shape` argument accepts interactions with the colon ":" character. This combines two columns into one, which can be useful to display terms and group names in a single column.
 * Parallelization using `parallel::mclapply`. See `?modelsummary` 
