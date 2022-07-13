@@ -19,19 +19,21 @@ test_that("tables::All() warning does not accept tibbles yet", {
 
 
 test_that("big.mark formatting", {
-            set.seed(10)
-            rock <- data.frame(
-                               area = runif(100, 1000, 10000),
-                               shape = runif(100, 0, 1))
-            f <- area * Arguments(fmt = 1, big.mark = ",") +
-              shape * Arguments(fmt = 3) ~
-              Min + Mean + Max
-            expect_snapshot(datasummary(f, data = rock, output = "data.frame"))
+    set.seed(10)
+    rock <- data.frame(
+        area = runif(100, 1000, 10000),
+        shape = runif(100, 0, 1))
+    f <- area * Arguments(fmt = 1, big.mark = ",") +
+        shape * Arguments(fmt = 3) ~
+        Min + Mean + Max
+    expect_snapshot(datasummary(f, data = rock, output = "data.frame"))
 })
+
 
 test_that("cannot nest two continuous variables", {
   expect_error(suppressMessages(datasummary(mpg * hp ~ Mean + SD, mtcars)))
 })
+
 
 test_that('numeric content of simple tables', {
 

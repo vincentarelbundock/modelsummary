@@ -197,7 +197,7 @@ get_estimates_parameters <- function(model,
     if (isTRUE(conf_int)) {
         args[["ci"]] <- conf_level
     } else if (!"ci" %in% names(dots)) { # faster
-        args <- c(args, list(ci = NULL))
+        args <- c(args, list(ci = NULL, ci_random = FALSE))
     }
 
     # bayes: diagnostics can be very expensive
@@ -206,12 +206,28 @@ get_estimates_parameters <- function(model,
         if (!"diagnostic" %in% names(dots)) args <- c(args, list("diagnostic" = NULL))
     }
 
-    # mixed-effects: ci_random can be very slow in some models
-    if (isTRUE(mi[["is_mixed"]]) &&
-        isTRUE(conf_int) &&
-        !"ci_random" %in% names(args) &&
-        utils::packageVersion("parameters") > "0.18.1.5") {
-        args[["ci_random"]] <- FALSE
+    # mixed-effects: ci_random can be very slow in some models in parameters<=0.18.1
+    fmi <- isTRUE(mi[["is_mixed"]])
+    fci <- isTRUE(conf_int)
+    fra <- !"ci_random" %in% names(args)
+    fve <- utils::packageVersion("parameters") <= "0.18.1"
+    if (fmi && fci && fra && fve) {
+        msg <- format_msg(
+        'Computing confidence intervals for mixed-effects models requires installing a
+        version of the {parameters} package greater than 0.18.1. This version may be
+        available on CRAN:
+
+        install.packages("parameters")
+
+        If {parameters} 0.18.2 is not yet available on CRAN, you can install the
+        development version:
+
+        library(remotes)
+        install_github("easystats/parameters") 
+
+        Make sure you restart R after updating.
+        ')
+        stop(msg, call. = FALSE)
     }
 
     # main call
@@ -220,9 +236,7 @@ get_estimates_parameters <- function(model,
         out <- parameters::standardize_names(out, style = "broom")
     }
 
-    out <- suppressMessages(suppressWarnings(try(
-        do.call("f", args),
-        silent = TRUE)))
+    out <- hush(tryCatch(do.call("f", args), error = function(e) NULL))
 
     # errors and warnings: before processing the data frame term names
     if (!inherits(out, "data.frame") || nrow(out) < 1) {
@@ -260,3 +274,5 @@ get_estimates_parameters <- function(model,
 
     return(out)
 }
+
+

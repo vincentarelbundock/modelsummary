@@ -130,10 +130,10 @@ get_gof_parameters <- function(model, ...) {
 
     dots <- list(...)
 
-    mi <- tryCatch(
-        suppressMessages(suppressWarnings(insight::model_info(model))),
+    mi <- hush(tryCatch(
+        insight::model_info(model),
         error = function(e) NULL,
-        warning = function(e) NULL)
+        warning = function(e) NULL))
 
     if (isTRUE(dots[["metrics"]] == "none")) {
         return(NULL)
@@ -165,11 +165,9 @@ get_gof_parameters <- function(model, ...) {
         }
     }
 
-
-
     fun <- performance::model_performance
     suppressMessages(suppressWarnings(
-        out <- tryCatch(do.call("fun", args), error = function(e) NULL)
+        out <- hush(tryCatch(do.call("fun", args), error = function(e) NULL))
     ))
 
     # sanity
@@ -185,7 +183,7 @@ get_gof_parameters <- function(model, ...) {
     out <- insight::standardize_names(out, style = "broom")
 
     # nobs
-    n_obs <- tryCatch(insight::n_obs(model)[1], error = function(e) NULL)
+    n_obs <- hush(tryCatch(insight::n_obs(model)[1], error = function(e) NULL))
     out[["nobs"]] <- n_obs
 
     return(out)
