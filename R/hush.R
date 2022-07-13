@@ -3,7 +3,7 @@
 #' @export
 #' @keywords internal
 hush <- function(code) {
-    void <- capture.output({
+    void <- utils::capture.output({
         out <- invisible(suppressMessages(suppressWarnings(code)))
     })
     return(out)
