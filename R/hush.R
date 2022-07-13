@@ -1,3 +1,5 @@
+#' Execute code silently
+#'
 #' @export
 #' @noRd
 hush <- function(code) {
