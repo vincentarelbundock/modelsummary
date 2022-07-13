@@ -166,9 +166,7 @@ get_gof_parameters <- function(model, ...) {
     }
 
     fun <- performance::model_performance
-    suppressMessages(suppressWarnings(
-        out <- hush(tryCatch(do.call("fun", args), error = function(e) NULL))
-    ))
+    out <- hush(tryCatch(do.call("fun", args), error = function(e) NULL))
 
     # sanity
     if (!inherits(out, "data.frame") && isTRUE(dots$metrics != "none")) {
@@ -180,7 +178,7 @@ get_gof_parameters <- function(model, ...) {
     }
 
     # cleanup
-    out <- insight::standardize_names(out, style = "broom")
+    out <- hush(insight::standardize_names(out, style = "broom"))
 
     # nobs
     n_obs <- hush(tryCatch(insight::n_obs(model)[1], error = function(e) NULL))
