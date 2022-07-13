@@ -96,6 +96,22 @@ test_that('random effects variance components do not have standard errors and pr
 })
 
 
+test_that("random component CI not supported on older versions of parameters", {
+    N <- 1e4
+    dat <- data.frame(
+      x = rnorm(N),
+      y = rnorm(N),
+      k = factor(sample(1:50, N, replace = TRUE)),
+      m = factor(sample(1:1000, N, replace = TRUE)))
+    mod <- suppressMessages(lmer(y ~ x + (1 | k) + (1 | m), data = dat))
+    if (packageVersion("parameters") <= "0.18.1") {
+        expect_error(modelsummary(mod, statistic = "conf.int"), regexp = "development")
+    } else {
+        expect_error(modelsummary(mod, statistic = "conf.int"), NA)
+    }
+})
+
+
 test_that("performance metrics", {
     N <- 1e4
     dat <- data.frame(
@@ -118,20 +134,6 @@ test_that("performance metrics", {
 })
 
 
-test_that("random component CI not supported on older versions of parameters", {
-    N <- 1e4
-    dat <- data.frame(
-      x = rnorm(N),
-      y = rnorm(N),
-      k = factor(sample(1:50, N, replace = TRUE)),
-      m = factor(sample(1:1000, N, replace = TRUE)))
-    mod <- suppressMessages(lmer(y ~ x + (1 | k) + (1 | m), data = dat))
-    if (packageVersion("parameters") <= "0.18.1") {
-        expect_error(modelsummary(mod, statistic = "conf.int"), regexp = "development")
-    } else {
-        expect_error(modelsummary(mod, statistic = "conf.int"), NA)
-    }
-})
 
 
 test_that("lme4", {

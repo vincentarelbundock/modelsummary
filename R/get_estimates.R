@@ -231,12 +231,12 @@ get_estimates_parameters <- function(model,
     }
 
     # main call
-    f <- tidy_easystats <- function(x, ...) {
+    fun <- tidy_easystats <- function(x, ...) {
         out <- parameters::parameters(x, ...)
         out <- parameters::standardize_names(out, style = "broom")
     }
 
-    out <- hush(tryCatch(do.call("f", args), error = function(e) NULL))
+    out <- hush(tryCatch(do.call("fun", args), error = function(e) NULL))
 
     # errors and warnings: before processing the data frame term names
     if (!inherits(out, "data.frame") || nrow(out) < 1) {
