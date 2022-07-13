@@ -93,7 +93,7 @@ test_that("multiple models without ci", {
 
 
 test_that("car::deltaMethod: Issue #491", {
-    skip_if_not_installed("parameters", minimum_version = "0.18.1.2")
+    skip_if_not_installed("parameters", minimum_version = "0.18.1.7")
     requiet("car")
     fit <- lm(mpg ~ disp + hp, mtcars)
     fit_dm <- deltaMethod(fit, 'disp / hp', rhs = 1)

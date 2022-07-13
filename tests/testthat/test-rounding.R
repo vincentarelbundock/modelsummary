@@ -13,19 +13,6 @@ test_that("rounding cleans up NaN inside \\num", {
 })
 
 
-test_that("siunitx works with empty cells", {
-  skip("new versions of parameters return CI, so this is no longer a usefult est")
-  requiet("lme4")
-  dat <- mtcars
-  dat$cyl <- factor(dat$cyl)
-  mod <- lme4::lmer(mpg ~ hp + (1 | cyl), data = dat)
-  expect_snapshot(modelsummary(
-      mod,
-      output = "latex",
-      estimate = "{estimate} [{conf.low}, {conf.high}]"))
-})
-
-
 test_that("named list", {
     mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
     tab <- modelsummary(
@@ -57,3 +44,29 @@ test_that("glue function", {
     expect_equal(tab[["Model 1"]][1:4], known)
 })
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+test_that("siunitx works with empty cells", {
+  skip("obsolete")
+  # new versions of parameters return CI, so this is no longer a useful test
+  requiet("lme4")
+  dat <- mtcars
+  dat$cyl <- factor(dat$cyl)
+  mod <- lme4::lmer(mpg ~ hp + (1 | cyl), data = dat)
+  expect_snapshot(modelsummary(
+      mod,
+      output = "latex",
+      estimate = "{estimate} [{conf.low}, {conf.high}]"))
+})

@@ -2,7 +2,7 @@ requiet("lme4")
 
 
 test_that("Issue #505", {
-    skip_if_not_installed("parameters", minimum_version = "0.18.2")
+    skip_if_not_installed("parameters", minimum_version = "0.18.1.7")
     mod <- lme4::lmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
     expect_error(modelsummary(mod), NA)
     expect_error(modelsummary(mod, ci_random = TRUE), NA)

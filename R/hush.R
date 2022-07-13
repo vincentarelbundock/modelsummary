@@ -1,7 +1,7 @@
 #' Execute code silently
 #'
 #' @export
-#' @noRd
+#' @keywords internal
 hush <- function(code) {
     void <- capture.output({
         out <- invisible(suppressMessages(suppressWarnings(code)))
