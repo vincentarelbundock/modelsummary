@@ -175,12 +175,15 @@ determines what appears on rows, and the right side determines what appears
 on columns. The formula can include a group identifier to display related terms
 together, which can be useful for models with multivariate outcomes or
 grouped coefficients (See examples section below). This identifier must be
-one of the column names produced by: <code>get_estimates(model)</code>. If an
-incomplete formula is supplied (e.g., <code>~statistic</code>), <code>modelsummary</code> tries to
-complete it automatically. Potential <code>shape</code> values include:</p><ul><li><p><code>term + statistic ~ model</code>: default</p></li>
+one of the column names produced by: <code>get_estimates(model)</code>. The group
+identifier can be combined with the term identifier in a single column by
+using the colon to represent an interaction. If an incomplete formula is
+supplied (e.g., <code>~statistic</code>), <code>modelsummary</code> tries to complete it
+automatically. Potential <code>shape</code> values include:</p><ul><li><p><code>term + statistic ~ model</code>: default</p></li>
 <li><p><code>term ~ model + statistic</code>: statistics in separate columns</p></li>
 <li><p><code>model + statistic ~ term</code>: models in rows and terms in columns</p></li>
-<li><p><code>term + response + statistic ~ model</code>:</p></li>
+<li><p><code>term + response + statistic ~ model</code>: term and group id in separate columns</p></li>
+<li><p><code>term : response + statistic ~ model</code>: term and group id in a single column</p></li>
 <li><p><code>term ~ response</code></p></li>
 </ul></dd>
 <dt>coef_map</dt>
@@ -454,11 +457,18 @@ users can use <code>plan(multisession)' instead. However, note that the first ti
 <span class="r-in"><span class="co"># coef_omit: keep coefficients matching a substring</span></span>
 <span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^(?!.*ei|.*pt)"</span>, omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># shape</span></span>
+<span class="r-in"><span class="co"># shape: multinomial model</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">nnet</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="va">multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">multinom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span>
-<span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">y.level</span> <span class="op">~</span> <span class="va">model</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">term</span> <span class="op">~</span> <span class="va">y.level</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># term names and group ids in rows, models in columns</span></span>
+<span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">response</span> <span class="op">~</span> <span class="va">model</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># term names and group ids in rows in a single column</span></span>
+<span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">term</span> <span class="op">:</span> <span class="va">response</span> <span class="op">~</span> <span class="va">model</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># term names in rows and group ids in columns</span></span>
+<span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">term</span> <span class="op">~</span> <span class="va">response</span><span class="op">:</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># title</span></span>
 <span class="r-in"><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, title <span class="op">=</span> <span class="st">'This is the title'</span><span class="op">)</span></span>
