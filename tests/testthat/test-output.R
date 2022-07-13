@@ -101,7 +101,6 @@ test_that("unsupported global options", {
 })
 
 test_that("save to file", {
-
   random <- random_string()
 
   filename <- paste0(random, '.html')
@@ -128,6 +127,7 @@ test_that("save to file", {
   expect_error(modelsummary(mod, filename), NA)
   unlink(filename)
 
+  skip_if(Sys.getenv("R_WSL2") == "true")
   filename <- paste0(random, '.jpg')
   expect_error(modelsummary(mod, filename), NA)
   unlink(filename)

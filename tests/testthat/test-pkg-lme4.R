@@ -23,12 +23,12 @@ test_that("Issue #501", {
 
 
 test_that("Issue #494 comment", {
-    suppressMessages({
-    models <- list(
+    skip_if_not_installed("parameters", minimum_version = "0.18.1.7")
+    models <- hush(list(
         lme4::lmer(Sepal.Width ~ Petal.Length + (1|Species), data = iris),
         lme4::lmer(Sepal.Width ~ Petal.Length + (1 + Petal.Length |Species), data = iris),
-        lme4::lmer(Sepal.Width ~ Petal.Length + Petal.Width + (1 + Petal.Length |Species), data = iris))
-    })
+        lme4::lmer(Sepal.Width ~ Petal.Length + Petal.Width + (1 + Petal.Length |Species), data = iris)
+    ))
     tab1 <- modelsummary(
         models[[3]],
         estimate = "{estimate} [{conf.low}, {conf.high}]",
@@ -41,13 +41,12 @@ test_that("Issue #494 comment", {
 
 
 test_that("Issue #496: multiple models keeps random/fixed grouped together", {
-    invisible(suppressMessages({
-    models <- list(
+    models <- hush(list(
         lm(Sepal.Width ~ Petal.Length, data = iris),
         lmer(Sepal.Width ~ Petal.Length + (1|Species), data = iris),
         lmer(Sepal.Width ~ Petal.Length + (1 + Petal.Length |Species), data = iris),
-        lmer(Sepal.Width ~ Petal.Length + Petal.Width + (1 + Petal.Length | Species), data = iris))
-    }))
+        lmer(Sepal.Width ~ Petal.Length + Petal.Width + (1 + Petal.Length | Species), data = iris)
+    ))
     tab <- modelsummary(
         models,
         output = "data.frame",
@@ -60,6 +59,7 @@ test_that("Issue #496: multiple models keeps random/fixed grouped together", {
 
 
 test_that("Issue #494: glue-related partial breakage", {
+    skip_if_not_installed("parameters", minimum_version = "0.18.1.7")
     mod <- lmer(Sepal.Width ~ Petal.Length + (1|Species), data = iris)
     tab <- modelsummary(
         mod,
