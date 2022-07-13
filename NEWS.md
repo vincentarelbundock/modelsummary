@@ -1,6 +1,10 @@
 # modelsummary 1.0.0.9000
 
 * Parallelization using `parallel::mclapply`. See `?modelsummary` 
+* `modelsummary` no longer computes confidence intervals when not necessary, which can save some time. Also see: `conf_level=NULL`
+* Added log likelihood to GOF for lm and glm models.
+* Removed extraneous warnings
+* Bug fixes
 
 # modelsummary 1.0.0
 
