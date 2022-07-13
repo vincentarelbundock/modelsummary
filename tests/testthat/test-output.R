@@ -127,7 +127,6 @@ test_that("save to file", {
   expect_error(modelsummary(mod, filename), NA)
   unlink(filename)
 
-  skip_if(Sys.getenv("R_WSL2") == "true")
   filename <- paste0(random, '.jpg')
   expect_error(modelsummary(mod, filename), NA)
   unlink(filename)
