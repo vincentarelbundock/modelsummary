@@ -1,3 +1,7 @@
+# modelsummary 1.0.2
+
+* Minor release to fix CRAN failure
+
 # modelsummary 1.0.1
 
 * `shape` argument accepts interactions with the colon ":" character. This combines two columns into one, which can be useful to display terms and group names in a single column.
