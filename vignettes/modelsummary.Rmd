@@ -791,7 +791,7 @@ An even more fundamental way to customize the output would be to completely bypa
 mod_custom <- lm(hp ~ mpg + drat, mtcars)
 
 # assign it a new class
-class(mod_custom) <- c("custom", class(mod_custom))
+class(mod_custom) <- "custom"
 
 # define tidy and glance methods
 tidy.custom <- function(x, ...) {
@@ -805,7 +805,7 @@ tidy.custom <- function(x, ...) {
 glance.custom <- function(x, ...) {
   data.frame(
     "Model" = "Custom",
-    "nobs" = stats::nobs(x)
+    "nobs" = stats:::nobs.lm(x)
   )
 }
 
@@ -814,6 +814,15 @@ modelsummary(mod_custom)
 ```
 
 Warning: When defining new `tidy` and `glance` methods, it is important to include an ellipsis argument (`...`).
+
+Note that in the `glance.custom()` method, we called `stats:::nobs.lm()` instead of the default `stats::nobs()` method, because the latter know does not know where to dispatch models of our new "custom" class. Being more explicit solves the problem.
+
+An alternative would be to set a new class that inherits from the previous one, and to use a global option to set `broom` as the default extractor function (otherwise `modelsummary` will use its standard `lm` extractors by inheritance):
+
+```{r, eval = FALSE}
+options(modelsummary_get = "broom")
+class(mod_custom) <- c("custom", "lm")
+```
 
 # Customizing existing models (part III)
 
