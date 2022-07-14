@@ -2,6 +2,7 @@ requiet("lme4")
 
 
 test_that("Issue #505", {
+    skip_if_not_installed("parameters", minimum_version = "0.18.1.7")
     mod <- lme4::lmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
     expect_error(modelsummary(mod, output = "dataframe"), NA)
     expect_error(modelsummary(mod, ci_random = TRUE, output = "dataframe"), NA)
@@ -92,22 +93,6 @@ test_that('random effects variance components do not have standard errors and pr
     tab <- modelsummary(mod, output = "data.frame", metrics = "RMSE")
     known <- c("(Intercept)", "(Intercept)", "hp", "hp", "SD (Intercept gear)", "SD (Observations)", "Num.Obs.", "RMSE")
     expect_equal(tab$term, known)
-})
-
-
-test_that("random component CI not supported on older versions of parameters", {
-    N <- 1e4
-    dat <- data.frame(
-      x = rnorm(N),
-      y = rnorm(N),
-      k = factor(sample(1:50, N, replace = TRUE)),
-      m = factor(sample(1:1000, N, replace = TRUE)))
-    mod <- suppressMessages(lmer(y ~ x + (1 | k) + (1 | m), data = dat))
-    if (packageVersion("parameters") <= "0.18.1") {
-        expect_error(modelsummary(mod, statistic = "conf.int"), regexp = "development")
-    } else {
-        expect_error(modelsummary(mod, statistic = "conf.int"), NA)
-    }
 })
 
 
