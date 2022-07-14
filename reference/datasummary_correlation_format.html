@@ -61,60 +61,81 @@ the <code>method</code> argument of <code>datasummary_correlation</code>.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">datasummary_correlation_format</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  <span class="va">fmt</span>,</span>
-<span>  leading_zero <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  diagonal <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  upper_triangle <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">datasummary_correlation_format</span><span class="op">(</span>
+  <span class="va">x</span>,
+  <span class="va">fmt</span>,
+  leading_zero <span class="op">=</span> <span class="cn">FALSE</span>,
+  diagonal <span class="op">=</span> <span class="cn">NULL</span>,
+  upper_triangle <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>square numeric matrix</p></dd>
-
-
 <dt>fmt</dt>
 <dd><p>determines how to format numeric values</p><ul><li><p>integer: the number of digits to keep after the period <code>format(round(x, fmt), nsmall=fmt)</code></p></li>
 <li><p>character: passed to the <code>sprintf</code> function (e.g., '%.3f' keeps 3 digits with trailing zero). See <code><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">?sprintf</a></code></p></li>
 <li><p>function: returns a formatted character string.</p></li>
 <li><p>NULL: does not format numbers, which allows users to include function in the "glue" strings in the <code>estimate</code> and <code>statistic</code> arguments.</p></li>
 </ul></dd>
-
-
 <dt>leading_zero</dt>
 <dd><p>boolean. If <code>FALSE</code>, leading zeros are removed</p></dd>
-
-
 <dt>diagonal</dt>
 <dd><p>character or NULL. If character, all elements of the
 diagonal are replaced by the same character (e.g., "1").</p></dd>
-
-
 <dt>upper_triangle</dt>
 <dd><p>character or NULL. If character, all elements of the
 upper triangle are replaced by the same character (e.g., "" or ".").</p></dd>
-
 </dl></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/" class="external-link">modelsummary</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"disp"</span><span class="op">)</span><span class="op">]</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">cor_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"kendall"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">datasummary_correlation_format</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="va">out</span>,</span></span>
-<span class="r-in"><span>    fmt <span class="op">=</span> <span class="fl">2</span>,</span></span>
-<span class="r-in"><span>    upper_triangle <span class="op">=</span> <span class="st">"x"</span>,</span></span>
-<span class="r-in"><span>    diagonal <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="datasummary_correlation.html">datasummary_correlation</a></span><span class="op">(</span><span class="va">dat</span>, method <span class="op">=</span> <span class="va">cor_fun</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/" class="external-link">modelsummary</a></span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"disp"</span><span class="op">)</span><span class="op">]</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">cor_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"kendall"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">datasummary_correlation_format</span><span class="op">(</span></span>
+<span class="r-in">    <span class="va">out</span>,</span>
+<span class="r-in">    fmt <span class="op">=</span> <span class="fl">2</span>,</span>
+<span class="r-in">    upper_triangle <span class="op">=</span> <span class="st">"x"</span>,</span>
+<span class="r-in">    diagonal <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu"><a href="datasummary_correlation.html">datasummary_correlation</a></span><span class="op">(</span><span class="va">dat</span>, method <span class="op">=</span> <span class="va">cor_fun</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;"&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;thead&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;th style="text-align:left;"&gt;   &lt;/th&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;th style="text-align:right;"&gt; mpg &lt;/th&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;th style="text-align:right;"&gt; hp &lt;/th&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;th style="text-align:right;"&gt; disp &lt;/th&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  &lt;/thead&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;tbody&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; mpg &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:right;"&gt; . &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:right;"&gt; x &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:right;"&gt; x &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; hp &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:right;"&gt; −.74 &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:right;"&gt; . &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:right;"&gt; x &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:left;"&gt; disp &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:right;"&gt; −.77 &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:right;"&gt; .67 &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;td style="text-align:right;"&gt; . &lt;/td&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;/tr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/tbody&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;/table&gt;</span>
 </code></pre></div>
     </div>
   </div>
@@ -129,7 +150,7 @@ upper triangle are replaced by the same character (e.g., "" or ".").</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>
