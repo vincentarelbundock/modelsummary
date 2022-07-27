@@ -82,7 +82,14 @@ These errors messages were generated during extraction:
             out_custom$term <- as.character(out_custom$term)
             out$term <- as.character(out$term)
             out_custom <- out_custom[out_custom$term %in% out$term, , drop = FALSE]
-            idx <- match(out_custom$term, out$term)
+            if (is.null(shape$group_name)) {
+                def <- out[["term"]]
+                cus <- out_custom[["term"]]
+            } else {
+                def <- paste(out[["term"]], out[[shape$group_name]])
+                cus <- paste(out_custom[["term"]], out_custom[[shape$group_name]])
+            }
+            idx <- match(cus, def)
             for (n in colnames(out_custom)) {
                 out[[n]][idx] <- out_custom[[n]]
             }
@@ -94,13 +101,21 @@ These errors messages were generated during extraction:
     if (inherits(out_custom, "data.frame") && nrow(out_custom) > 0) {
         if (!any(out_custom$term %in% out$term)) {
             warning('Elements of the "term" column produced by `tidy_custom` must match model terms. `tidy_custom` was ignored.',
-                    call. = FALSE)
+                    fall. = FALSE)
         } else {
             # R 3.6 doesn't deal well with factors
             out_custom$term <- as.character(out_custom$term)
             out$term <- as.character(out$term)
             out_custom <- out_custom[out_custom$term %in% out$term, , drop = FALSE]
-            idx <- match(out_custom$term, out$term)
+            # do not merge to allow partial tidy_custom
+            if (is.null(shape$group_name)) {
+                def <- out[["term"]]
+                cus <- out_custom[["term"]]
+            } else {
+                def <- paste(out[["term"]], out[[shape$group_name]])
+                cus <- paste(out_custom[["term"]], out_custom[[shape$group_name]])
+            }
+            idx <- match(cus, def)
             for (n in colnames(out_custom)) {
                 if (!n %in% colnames(out)) {
                     out[[n]] <- NA
