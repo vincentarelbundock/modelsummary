@@ -99,3 +99,14 @@ test_that("car::deltaMethod: Issue #491", {
     fit_dm <- deltaMethod(fit, 'disp / hp', rhs = 1)
     expect_error(modelplot(fit_dm), NA)
 })
+
+
+test_that("Issue #529", {
+    requiet("survey")
+    dat <- mtcars
+    dat$weights <- dat$mpg / dat$disp
+    des <- svydesign(ids = ~1, data = dat, weights = dat$weights)
+    mod <- svyglm(vs ~ hp + drat + mpg + disp, design = des, family = quasibinomial())
+    p <- suppressWarnings(modelplot(mod, color = "red"))
+    expect_s3_class(p, "gg")
+})
