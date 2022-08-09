@@ -168,3 +168,18 @@ test_that("regression test", {
                  NA)
 })
 
+test_that("datasummary correctly applies variable labels", {
+  mtcars$mpg <- haven::labelled(mtcars$mpg, label = "Miles per gallon")
+  mtcars$cyl <- haven::labelled(mtcars$cyl, label = "Number of cylinders")
+
+  out <- datasummary(mpg + drat + cyl ~ mean, data = mtcars, output = "dataframe")
+  expect_equal(
+    out,
+    data.frame(
+      ` ` = c("Miles per gallon", "drat", "Number of cylinders"),
+      mean = c("20.09", "3.60", "6.19"),
+      check.names = FALSE
+    ),
+    ignore_attr = TRUE
+  )
+})
