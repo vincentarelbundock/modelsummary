@@ -29,7 +29,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @template options
 #'
 #' @template modelsummary_parallel
-#' 
+#'
 #' @template modelsummary_examples
 #'
 #' @param models a model or (optionally named) list of models
@@ -43,7 +43,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
 #' * character: passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`
 #' * function: returns a formatted character string.
-#' * NULL: does not format numbers, which allows users to include function in the "glue" strings in the `estimate` and `statistic` arguments. 
+#' * NULL: does not format numbers, which allows users to include function in the "glue" strings in the `estimate` and `statistic` arguments.
 #' * A named list to format distinct elements of the table differently. Names correspond to column names produced by `get_estimates(model)` or `get_gof(model)`. Values are integers, characters, or functions, as described above. The `fmt` element is used as default for unspecified elements Ex: `fmt=list("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)`
 #' * LaTeX output: To ensure proper typography, all numeric entries are enclosed in the `\num{}` command, which requires the `siunitx` package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 #' @param stars to indicate statistical significance
@@ -94,7 +94,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `"^(?!.*ei|.*pt)"`: keep coefficients matching either the "ei" or the "pt" substrings.
 #' * See the Examples section below for complete code.
 #' @param coef_rename named character vector or function
-#' * Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg") 
+#' * Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg")
 #' * Function: Accepts a character vector of the model's term names and returns a named vector like the one described above. The `modelsummary` package supplies a `coef_rename()` function which can do common cleaning tasks: `modelsummary(model, coef_rename = coef_rename)`
 #' @param gof_map rename, reorder, and omit goodness-of-fit statistics and other
 #'   model information. This argument accepts 4 types of values:
@@ -106,7 +106,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @param gof_omit string regular expression (perl-compatible) used to determine which statistics to omit from the bottom section of the table. A "negative lookahead" can be used to specify which statistics to *keep* in the table. Examples:
 #' * `"IC"`: omit statistics matching the "IC" substring.
 #' * `"BIC|AIC"`: omit statistics matching the "AIC" or "BIC" substrings.
-#' * `"^(?!.*IC)"`: keep statistics matching the "IC" substring. 
+#' * `"^(?!.*IC)"`: keep statistics matching the "IC" substring.
 #' @param group_map named or unnamed character vector. Subset, rename, and
 #' reorder coefficient groups specified a grouping variable specified in the
 #' `shape` argument formula. This argument behaves like `coef_map`.
@@ -247,8 +247,6 @@ modelsummary <- function(
                                         ...)
   names(msl) <- model_names
 
-
-
   if (settings_equal("output_format", "modelsummary_list")) {
     if (length(msl) == 1) {
       return(msl[[1]])
@@ -284,6 +282,14 @@ modelsummary <- function(
         coef_map = coef_map,
         coef_omit = coef_omit,
         group_map = group_map)
+
+    if (length(msl[[i]]$labs$old) > 0) {
+      for (j in seq_along(msl[[i]]$labs$old)) {
+        old <- msl[[i]]$labs$old[j]
+        new <- msl[[i]]$labs$new[j]
+        tmp$term <- gsub(old, new, tmp$term)
+      }
+    }
 
     colnames(tmp)[4] <- model_names[i]
 
@@ -569,7 +575,9 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, sh
             shape = shape,
             ...)
 
-        out <- list("tidy" = tid, "glance" = gla)
+        labs <- get_labs(models[[j]])
+
+        out <- list("tidy" = tid, "glance" = gla, "labs" = labs)
         class(out) <- "modelsummary_list"
         return(out)
     }

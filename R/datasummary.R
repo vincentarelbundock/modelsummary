@@ -6,8 +6,8 @@
 #' shows how to define custom summary functions. The package also ships with
 #' several shortcut summary functions: Min, Max, Mean, Median, Var, SD,
 #' NPercent, NUnique, Ncol, P0, P25, P50, P75, P100. See the Details and
-#' Examples sections below, and the vignettes on the `modelsummary` website: 
-#' * https://vincentarelbundock.github.io/modelsummary/ 
+#' Examples sections below, and the vignettes on the `modelsummary` website:
+#' * https://vincentarelbundock.github.io/modelsummary/
 #' * https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html
 #'
 #' @inheritParams modelsummary
@@ -22,7 +22,7 @@
 #' * integer: the number of digits to keep after the period `format(round(x, fmt), nsmall=fmt)`
 #' * character: passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`
 #' * function: returns a formatted character string.
-#' * NULL: does not format numbers, which allows users to include function in the "glue" strings in the `estimate` and `statistic` arguments. 
+#' * NULL: does not format numbers, which allows users to include function in the "glue" strings in the `estimate` and `statistic` arguments.
 #' @param sparse_header TRUE or FALSE. TRUE eliminates column headers which
 #' have a unique label across all columns, except for the row immediately above
 #' the data. FALSE keeps all headers. The order in which terms are entered in
@@ -198,6 +198,8 @@ datasummary <- function(formula,
   dse <- datasummary_extract(tab,
     fmt = fmt,
     sparse_header = sparse_header)
+
+  dse <- apply_label(dse, data)
 
   # align stub l rest r
   stub_width <- attr(dse, 'stub_width')

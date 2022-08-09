@@ -37,7 +37,7 @@ test_that("tidiers empty", {
 
 # test_that("tidiers", {
 #   ml <- list(
-#     glance = modelsummary::get_gof(mod), 
+#     glance = modelsummary::get_gof(mod),
 #     tidy = modelsummary::get_estimates(mod))
 #   class(ml) <- "modelsummary_list"
 #   gl <- generics::glance(ml)
@@ -51,3 +51,33 @@ test_that("tidiers empty", {
 #   expect_equal(dim(ti), c(4, 6))
 #   expect_equal(dim(gl), c(1, 9))
 # })
+
+
+test_that("modelsummary correctly applies variable labels", {
+  data(trees)
+
+  models_wo_labs <- list(
+    "Bivariate" = lm(Girth ~ Height, data = trees),
+    "Multivariate" = lm(Girth ~ Height + Volume, data = trees)
+  )
+
+  # give vars some random label
+  trees$Height <- haven::labelled(trees$Height, label = "Height (in feet)")
+  trees$Volume <- haven::labelled(trees$Volume, label = "Volume (in liters)")
+
+  models_with_labs <- list(
+    "Bivariate" = lm(Girth ~ Height, data = trees),
+    "Multivariate" = lm(Girth ~ Height + Volume, data = trees)
+  )
+  with_labs <- modelsummary(models_with_labs, "data.frame")
+  wo_labs <- modelsummary(models_wo_labs, "data.frame")
+
+  # labs correctly applied
+  expect_equal(
+    unique(with_labs[1:6, "term"]),
+    c("(Intercept)", "Height (in feet)", "Volume (in liters)")
+  )
+
+  # the rest of the table is unaffected
+  expect_equal(with_labs[, -2], wo_labs[, -2])
+})
