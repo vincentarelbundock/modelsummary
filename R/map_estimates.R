@@ -6,7 +6,9 @@ map_estimates <- function(estimates,
                           coef_rename,
                           coef_map,
                           coef_omit,
-                          group_map) {
+                          coef_use_labels,
+                          group_map,
+                          labels = NULL) {
 
 
     # ambiguous rename
@@ -62,6 +64,18 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
         }
         check_dups(dict)
         estimates$term <- replace_dict(estimates$term, dict)
+    }
+
+    # Use labels
+    if (is.null(coef_rename) && is.null(coef_map) &&
+        isTRUE(coef_use_labels) && !is.null(labels)) {
+        if (length(labels$old) > 0) {
+            for (j in seq_along(labels$old)) {
+                old <- labels$old[j]
+                new <- labels$new[j]
+                estimates$term <- gsub(paste0("^", old, "$"), new, estimates$term)
+            }
+        }
     }
 
     # coef_map

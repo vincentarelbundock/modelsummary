@@ -170,6 +170,7 @@ modelsummary <- function(
   coef_map    = NULL,
   coef_omit   = NULL,
   coef_rename = NULL,
+  coef_use_labels = TRUE,
   gof_map     = NULL,
   gof_omit    = NULL,
   group_map   = NULL,
@@ -281,15 +282,9 @@ modelsummary <- function(
         coef_rename = coef_rename,
         coef_map = coef_map,
         coef_omit = coef_omit,
-        group_map = group_map)
-
-    if (length(msl[[i]]$labs$old) > 0) {
-      for (j in seq_along(msl[[i]]$labs$old)) {
-        old <- msl[[i]]$labs$old[j]
-        new <- msl[[i]]$labs$new[j]
-        tmp$term <- gsub(old, new, tmp$term)
-      }
-    }
+        group_map = group_map,
+        coef_use_labels = coef_use_labels,
+        labels = msl[[i]]$labs)
 
     colnames(tmp)[4] <- model_names[i]
 

@@ -53,7 +53,7 @@ test_that("tidiers empty", {
 # })
 
 
-test_that("modelsummary correctly applies variable labels", {
+test_that("modelsummary: 'coef_use_labels' works", {
   data(trees)
 
   models_wo_labs <- list(
@@ -80,4 +80,48 @@ test_that("modelsummary correctly applies variable labels", {
 
   # the rest of the table is unaffected
   expect_equal(with_labs[, -2], wo_labs[, -2])
+})
+
+
+test_that("modelsummary: 'coef_rename' and 'coef_map' override 'coef_use_labels'", {
+  data(trees)
+
+  # give vars some random label
+  trees$Height <- haven::labelled(trees$Height, label = "Height (in feet)")
+  trees$Volume <- haven::labelled(trees$Volume, label = "Volume (in liters)")
+
+  models <- list(
+    "Bivariate" = lm(Girth ~ Height, data = trees),
+    "Multivariate" = lm(Girth ~ Height + Volume, data = trees)
+  )
+
+  cr1 <- modelsummary(models, coef_rename = c('Volume' = 'Large', 'Height' = 'Tall'), output = "dataframe")
+  cr2 <- modelsummary(models, coef_rename = toupper, output = "dataframe")
+  cr3 <- modelsummary(models, coef_rename = coef_rename, output = "dataframe")
+
+  expect_equal(
+    unique(cr1[1:6, "term"]),
+    c("(Intercept)", "Tall", "Large")
+  )
+  expect_equal(
+    unique(cr2[1:6, "term"]),
+    c("(INTERCEPT)", "HEIGHT", "VOLUME")
+  )
+  expect_equal(
+    unique(cr3[1:6, "term"]),
+    c("(Intercept)", "Height", "Volume")
+  )
+
+  cm1 <- modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'), output = "dataframe")
+  cm2 <-modelsummary(models, coef_map = c('Volume', 'Height'), output = "dataframe")
+  cm3 <- modelsummary(models, coef_rename = coef_rename, output = "dataframe")
+
+  expect_equal(
+    unique(cm1[1:4, "term"]),
+    c("Large", "Tall")
+  )
+  expect_equal(
+    unique(cm2[1:4, "term"]),
+    c("Volume", "Height")
+  )
 })
