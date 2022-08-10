@@ -610,6 +610,8 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, sh
             shape = shape,
             ...)
 
+        # this has to be done here because it requires access to the data used
+        # in each model, so it can't be called later
         labs <- get_labs(models[[j]])
 
         out <- list("tidy" = tid, "glance" = gla, "labs" = labs)
