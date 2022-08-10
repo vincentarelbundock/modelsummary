@@ -53,7 +53,7 @@ test_that("tidiers empty", {
 # })
 
 
-test_that("modelsummary: 'coef_use_labels' works", {
+test_that("modelsummary: use variable labels by default", {
   data(trees)
 
   models_wo_labs <- list(
@@ -69,8 +69,8 @@ test_that("modelsummary: 'coef_use_labels' works", {
     "Bivariate" = lm(Girth ~ Height, data = trees),
     "Multivariate" = lm(Girth ~ Height + Volume, data = trees)
   )
-  with_labs <- modelsummary(models_with_labs, "data.frame")
-  wo_labs <- modelsummary(models_wo_labs, "data.frame")
+  with_labs <- modelsummary(models_with_labs, "dataframe")
+  wo_labs <- modelsummary(models_wo_labs, "dataframe")
 
   # labs correctly applied
   expect_equal(
@@ -83,7 +83,7 @@ test_that("modelsummary: 'coef_use_labels' works", {
 })
 
 
-test_that("modelsummary: 'coef_rename' and 'coef_map' override 'coef_use_labels'", {
+test_that("modelsummary: don't use labels with 'coef_rename' and 'coef_map'", {
   data(trees)
 
   # give vars some random label
@@ -124,4 +124,50 @@ test_that("modelsummary: 'coef_rename' and 'coef_map' override 'coef_use_labels'
     unique(cm2[1:4, "term"]),
     c("Volume", "Height")
   )
+})
+
+
+test_that("modelsummary: correctly applies the rest of formatting when using var labels", {
+  dat <- mtcars
+  dat$mpg <- haven::labelled(dat$mpg, label = "Miles per gallon")
+  dat$mpg2 <- haven::labelled(dat$mpg, label = "Miles per gallon")
+  dat$cyl <- as.factor(dat$cyl)
+  dat$cyl <- haven::labelled(dat$cyl, label = "Number of cylinders")
+
+  mod <- list(
+    lm(hp ~ mpg + drat:mpg + cyl, data = dat),
+    lm(hp ~ mpg2 * drat + cyl, data = dat)
+  )
+  out1 <- modelsummary(mod, "dataframe")
+  out2 <- modelsummary(mod, "dataframe", fmt = 1,
+                       estimate  = "{estimate} [{conf.low}, {conf.high}]",
+                       statistic = NULL,
+                       coef_omit = "Intercept")
+
+  expect_equal(
+    unique(out1[1:10, "term"]),
+    c("(Intercept)", "Miles per gallon", "Number of cylinders",
+      "Miles per gallon × drat", "drat")
+  )
+  expect_equal(
+    unique(out2[1:4, "term"]),
+    c("Miles per gallon", "Number of cylinders",
+      "Miles per gallon × drat", "drat")
+  )
+})
+
+test_that("modelsummary: also applies variable labels for depvar", {
+  dat <- mtcars
+  dat$mpg <- haven::labelled(dat$mpg, label = "Miles per gallon")
+  dat$mpg2 <- haven::labelled(dat$mpg, label = "Miles per gallon")
+  dat$cyl <- as.factor(dat$cyl)
+  dat$cyl <- haven::labelled(dat$cyl, label = "Number of cylinders")
+
+  x <- list(
+    lm(mpg ~ cyl + drat + disp, data = dat),
+    lm(hp ~ cyl + drat + disp, data = dat)
+  )
+
+  out <- modelsummary(dvnames(x), "dataframe")
+  expect_equal(names(out)[4:5], c("Miles per gallon", "hp"))
 })

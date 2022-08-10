@@ -170,7 +170,6 @@ modelsummary <- function(
   coef_map    = NULL,
   coef_omit   = NULL,
   coef_rename = NULL,
-  coef_use_labels = TRUE,
   gof_map     = NULL,
   gof_omit    = NULL,
   group_map   = NULL,
@@ -256,6 +255,31 @@ modelsummary <- function(
     }
   }
 
+  # If user doesn't specify a custom renaming, use variable labels
+  # - terms: names as specified in the estimates table (e.g "mpg:drat")
+  # - all_terms: all var names (e.g c("mpg", "drat"))
+  # - labs: list containing (1) the variable names and (2) the labels associated
+  if (is.null(coef_rename) && is.null(coef_map)) {
+    coef_rename <- function(terms, labs, all_terms) {
+      for (j in seq_along(terms)) {
+        idx <- which(labs$old %in% all_terms)
+        to_replace <- labs$old[idx]
+        replacement <- labs$new[idx]
+        if (length(to_replace) > 0 && length(replacement) > 0) {
+          for (k in seq_along(to_replace)) {
+            terms[j] <- gsub(paste0("\\b", to_replace[k],"\\b"), replacement[k], terms[j])
+          }
+        }
+      }
+      return(terms)
+    }
+    # Contrary to the other coef_rename functions, this one needs more than one
+    # argument because it also needs the labels.
+    # So we give this function a special class name to be able to recognize it
+    # in map_estimates()
+    attr(coef_rename, "class") <- c(attr(coef_rename, "class"), "coef_rename_labels")
+  }
+
 
   ###############
   #  estimates  #
@@ -276,6 +300,12 @@ modelsummary <- function(
       exponentiate = exponentiate[[i]],
       ...)
 
+    # all terms used in the formula
+    all_terms <- c(
+      insight::find_predictors(models[[i]])$conditional,
+      insight::find_random(models[[i]])$random
+    )
+
     # before merging to collapse
     tmp <- map_estimates(
         tmp,
@@ -283,8 +313,18 @@ modelsummary <- function(
         coef_map = coef_map,
         coef_omit = coef_omit,
         group_map = group_map,
-        coef_use_labels = coef_use_labels,
-        labels = msl[[i]]$labs)
+        labs = msl[[i]]$labs,
+        all_terms = all_terms)
+
+    # use var labels as model names if possible and if the user specified "dvnames()"
+    use_dvnames <- startsWith(
+      deparse(match.call()[["models"]]),
+      "dvnames("
+    )
+    mn <- grep(model_names[i], msl[[i]]$labs)
+    if (use_dvnames && length(mn) == 1) {
+      model_names[i] <- msl[[i]]$labs$new[mn]
+    }
 
     colnames(tmp)[4] <- model_names[i]
 
@@ -409,7 +449,7 @@ modelsummary <- function(
 
   # interaction : becomes ×
   if (is.null(coef_map) &&
-      is.null(coef_rename) &&
+      (is.null(coef_rename) || inherits(coef_rename, "coef_rename_labels")) &&
       "term" %in% colnames(tab) &&
       !settings_equal("output_format", "rtf")) {
     idx <- tab$part != 'gof'
