@@ -199,8 +199,6 @@ datasummary <- function(formula,
     fmt = fmt,
     sparse_header = sparse_header)
 
-  dse <- apply_label(dse, data)
-
   # align stub l rest r
   stub_width <- attr(dse, 'stub_width')
   tab_width <- ncol(dse)
@@ -229,6 +227,37 @@ datasummary <- function(formula,
       }
       colnames(dse)[1:sw] <- escape_string(colnames(dse)[1:sw])
   }
+
+  # find which part of the formula contains the variables because it will tell
+  # us if var names are in columns or in rows
+
+  # how to deal with renaming???
+  # https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html#renaming-with
+
+  LHS <- terms(formula[[2]])
+  RHS <- terms(formula[[3]])
+  if (all(LHS %in% names(data))) {
+    vars_location <- "row"
+  } else if (all(RHS %in% names(data))) {
+    vars_location <- "col"
+  }
+
+  if (vars_location == "col") {
+    old_names <- names(dse)
+    labelled_names <- unlist(lapply(old_names, function(x) {
+      is_labelled(data[[x]])
+    }))
+    labelled_names <- which(labelled_names)
+
+    if (length(labelled_names) > 0) {
+      new_names <- old_names
+      for (i in labelled_names) {
+        new_names[i] <- get_label(data[[old_names[i]]])
+      }
+      names(dse) <- new_names
+    }
+  }
+
 
   # build
   out <- factory(dse,
