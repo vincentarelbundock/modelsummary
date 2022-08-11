@@ -14,7 +14,8 @@
 #' @import tables
 #' @param formula A two-sided formula to describe the table: rows ~ columns.
 #' See the Examples section for a mini-tutorial and the Details section for
-#' more resources.
+#' more resources. Grouping/nesting variables can appear on both sides of the
+#' formula, but all summary functions must be on one side.
 #' @param data A data.frame (or tibble)
 #' @param add_columns a data.frame (or tibble) with the same number of rows as
 #' your main table.
