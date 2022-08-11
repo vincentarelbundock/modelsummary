@@ -402,6 +402,7 @@ datasummary(species * sex + 1 ~ N + Percent(fn = function(x, y) 100 * length(x) 
 
 The code above takes the number of elements in the cell `length(x)` and divides it by the number of total elements `length(y)`.
 
+
 Now, let's say we want to display percentages weighted by one of the variables of the dataset. This can often be useful with survey weights, for example. Here, we use an arbitrary column of weights called `flipper_length_mm`:
 
 ```{r}
@@ -412,6 +413,25 @@ datasummary(species * sex + 1 ~ N + flipper_length_mm * Percent(fn = wtpct),
 ```
 
 In each cell we now have the sum of weights in that cell, divided by the total sum of weights in the column.
+
+## Custom percentages
+
+Here is another simple illustration of Percent function mechanism in action, where we combine counts and percentages in a simple nice label:
+
+```{r}
+dat <- mtcars
+dat$cyl <- as.factor(dat$cyl)
+
+fn <- function(x, y) {
+    out <- sprintf(
+        "%s (%.1f%%)",
+        length(x),
+        length(x) / length(y) * 100)
+}
+datasummary(
+    cyl ~ Percent(fn = fn),
+    data = dat)
+```
 
 ## `Factor`
 
