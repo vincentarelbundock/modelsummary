@@ -23,7 +23,8 @@ datasummary(
 \arguments{
 \item{formula}{A two-sided formula to describe the table: rows ~ columns.
 See the Examples section for a mini-tutorial and the Details section for
-more resources.}
+more resources. Grouping/nesting variables can appear on both sides of the
+formula, but all summary functions must be on one side.}
 
 \item{data}{A data.frame (or tibble)}
 
