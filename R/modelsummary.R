@@ -281,6 +281,87 @@ modelsummary <- function(
   }
 
 
+  ### Check within *and* across models whether some vars have the same labels
+
+  # - within model:
+  #   - unique labels -> proceed
+  #   - duplicated labels -> warn and don't use labels
+
+  # - across models:
+  #   - vars have same names and same labels -> proceed
+  #   - vars have different names and different labels -> proceed
+  #   - vars have same names and different labels -> proceed
+  #   - vars have different names and same labels -> warn and don't use labels
+
+  # Make two flags because we only want to warn once for across checks
+  reset_coef_name_within <- FALSE
+  reset_coef_name_across <- FALSE
+  all_labs <- list()
+
+  # Check within models
+  for (i in seq_along(msl)) {
+    labels <- msl[[i]]$labs
+    if (nrow(labels) == 0) next
+    labels$model_id <- i
+    if (any(duplicated(labels$new))) {
+      warning(
+        paste0("Model number ", i,
+               " has duplicated labels. Labels were not used in `modelsummary()`."),
+        call. = FALSE)
+      reset_coef_name_within <- TRUE
+    }
+    all_labs[[i]] <- labels
+  }
+
+  # Check across models
+  #
+  # 1. get a dataframe with model_id, variable names and variable labels
+  # 2. get the duplicate labels
+  all_labs <- do.call(rbind, all_labs)
+  dupes <- table(all_labs$new)
+  dupes <- names(dupes[dupes > 1])
+
+  # 3. for each of these duplicates, get the associated variable names in each model.
+  #   - if the variable names are the same, proceed
+  #   - if there are differences, warning
+  for (i in seq_along(dupes)) {
+
+    tmp <- all_labs[all_labs$new == dupes[i], ]
+
+    # skip if the duplicates are in the same model (because we already warned
+    # above)
+    if (length(unique(tmp$model_id)) <= 1) next
+
+    for (j in unique(tmp$model_id)) {
+
+      vars_j <- tmp[tmp$model_id ==j, "old"]
+      vars_not_j <- tmp[tmp$model_id != j, "old"]
+
+      for (k in seq_along(vars_j)) {
+        if (length(vars_not_j) > 0 && !vars_j[k] %in% vars_not_j &&
+            isFALSE(reset_coef_name_across)) {
+          warning(
+            paste0(
+              "Some variables in models [", paste(unique(tmp$model_id), collapse = ", "),
+              "] have different names but identical labels. Labels were not used in `modelsummary()`."
+            ),
+            call. = FALSE
+          )
+          reset_coef_name_across <- TRUE
+        }
+      }
+
+    }
+
+  }
+
+  if (inherits(coef_rename, "coef_rename_labels") &&
+      (isTRUE(reset_coef_name_within) | isTRUE(reset_coef_name_across))) {
+    coef_rename <- NULL
+  }
+
+
+
   ###############
   #  estimates  #
   ###############

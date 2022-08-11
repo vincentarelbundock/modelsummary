@@ -14,7 +14,7 @@ get_labs <- function(mod) {
     new[i] <- get_label(tmp[[old[i]]])
   }
   names(new) <- NULL
-  return(list(old = old, new = new))
+  return(data.frame(old = old, new = new))
 }
 
 

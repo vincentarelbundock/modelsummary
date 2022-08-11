@@ -126,35 +126,35 @@ test_that("modelsummary: don't use labels with 'coef_rename' and 'coef_map'", {
   )
 })
 
-
-test_that("modelsummary: correctly applies the rest of formatting when using var labels", {
-  dat <- mtcars
-  dat$mpg <- haven::labelled(dat$mpg, label = "Miles per gallon")
-  dat$mpg2 <- haven::labelled(dat$mpg, label = "Miles per gallon")
-  dat$cyl <- as.factor(dat$cyl)
-  dat$cyl <- haven::labelled(dat$cyl, label = "Number of cylinders")
-
-  mod <- list(
-    lm(hp ~ mpg + drat:mpg + cyl, data = dat),
-    lm(hp ~ mpg2 * drat + cyl, data = dat)
-  )
-  out1 <- modelsummary(mod, "dataframe")
-  out2 <- modelsummary(mod, "dataframe", fmt = 1,
-                       estimate  = "{estimate} [{conf.low}, {conf.high}]",
-                       statistic = NULL,
-                       coef_omit = "Intercept")
-
-  expect_equal(
-    unique(out1[1:10, "term"]),
-    c("(Intercept)", "Miles per gallon", "Number of cylinders",
-      "Miles per gallon × drat", "drat")
-  )
-  expect_equal(
-    unique(out2[1:4, "term"]),
-    c("Miles per gallon", "Number of cylinders",
-      "Miles per gallon × drat", "drat")
-  )
-})
+#
+# test_that("modelsummary: correctly applies the rest of formatting when using var labels", {
+#   dat <- mtcars
+#   dat$mpg <- haven::labelled(dat$mpg, label = "Miles per gallon")
+#   dat$mpg2 <- haven::labelled(dat$mpg, label = "Miles per gallon")
+#   dat$cyl <- as.factor(dat$cyl)
+#   dat$cyl <- haven::labelled(dat$cyl, label = "Number of cylinders")
+#
+#   mod <- list(
+#     lm(hp ~ mpg + drat:mpg + cyl, data = dat),
+#     lm(hp ~ mpg2 * drat + cyl, data = dat)
+#   )
+#   out1 <- modelsummary(mod, "dataframe")
+#   out2 <- modelsummary(mod, "dataframe", fmt = 1,
+#                        estimate  = "{estimate} [{conf.low}, {conf.high}]",
+#                        statistic = NULL,
+#                        coef_omit = "Intercept")
+#
+#   expect_equal(
+#     unique(out1[1:10, "term"]),
+#     c("(Intercept)", "Miles per gallon", "Number of cylinders",
+#       "Miles per gallon × drat", "drat")
+#   )
+#   expect_equal(
+#     unique(out2[1:4, "term"]),
+#     c("Miles per gallon", "Number of cylinders",
+#       "Miles per gallon × drat", "drat")
+#   )
+# })
 
 test_that("modelsummary: also applies variable labels for depvar", {
   dat <- mtcars
