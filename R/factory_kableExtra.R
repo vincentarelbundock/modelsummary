@@ -102,7 +102,6 @@ factory_kableExtra <- function(tab,
       isTRUE(arguments[["threeparttable"]])) {
       notes <- paste(notes, collapse = " ")
   }
-
   ## user-supplied notes at the bottom of table
   if (!is.null(notes)) {
     ## kableExtra::footnote does not support markdown
@@ -114,6 +113,11 @@ factory_kableExtra <- function(tab,
         ## otherwise stars_note breaks in PDF output under pdflatex
         if (isTRUE(kable_format == "latex") && isTRUE(grepl(" < ", n))) {
           n <- gsub(" < ", " $<$ ", n)
+        }
+        if (isTRUE(kable_format == "html") && isTRUE(grepl("<|>", n))) {
+          # escape html start/end tags as they break libxml2 in modern releases
+          n <- gsub("<", "&lt;", n)
+          n <- gsub(">", "&gt;", n)
         }
         arguments[["general"]] <- n
         arguments[["general_title"]] <- ""
