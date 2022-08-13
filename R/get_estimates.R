@@ -218,7 +218,8 @@ get_estimates_parameters <- function(model,
     if (isTRUE(conf_int)) {
         args[["ci"]] <- conf_level
     } else if (!"ci" %in% names(dots)) { # faster
-        args <- c(args, list(ci = NULL, ci_random = FALSE))
+        args <- c(args, list(ci = NULL))
+        args[["ci_random"]] <- FALSE # do not append to avoid duplicate arg
     }
 
     # bayes: diagnostics can be very expensive
@@ -231,8 +232,8 @@ get_estimates_parameters <- function(model,
     fun <- tidy_easystats <- function(x, ...) {
         out <- parameters::parameters(x, ...)
         out <- parameters::standardize_names(out, style = "broom")
+        return(out)
     }
-
     out <- hush(tryCatch(do.call("fun", args), error = function(e) NULL))
 
     # errors and warnings: before processing the data frame term names
