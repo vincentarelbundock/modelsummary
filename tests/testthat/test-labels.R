@@ -1,3 +1,37 @@
+requiet("haven")
+
+test_that("datasummary labels",{
+    dat <- mtcars
+    dat$am <- haven::labelled(
+        dat$am,
+        label = "Transmission")
+    dat$mpg <- haven::labelled(
+        dat$mpg,
+        label = "Miles per Gallon")
+    dat$hp <- haven::labelled(
+        dat$hp,
+        label = "Horsepower")
+
+    tab <- datasummary(
+        output = "dataframe",
+        mpg + hp ~ Factor(am) * (Mean + SD) + Factor(vs) * (Mean + SD),
+        data = dat)
+    expect_true(all(c("Miles per Gallon", "Horsepower") %in% tab[[1]]))
+    expect_true("Transmission / 0 / Mean" %in% colnames(tab))
+    expect_true("vs / 0 / Mean" %in% colnames(tab))
+
+    tab <- datasummary_skim(dat)
+    expect_s3_class(tab, "kableExtra")
+    tab <- datasummary_skim(dat, output = "dataframe", histogram = FALSE)
+    expect_true("Miles per Gallon" %in% tab[[1]])
+    expect_true("Transmission" %in% tab[[1]])
+    expect_true("Horsepower" %in% tab[[1]])
+    expect_true("vs" %in% tab[[1]])
+
+    # tab <- datasummary_balance(~am, data = dat)
+
+})
+
 test_that("modelsummary: use variable labels by default", {
   data(trees)
   dat <- trees

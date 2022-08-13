@@ -3,7 +3,8 @@
 #' @noRd
 datasummary_extract <- function(tab,
                                 fmt = NULL,
-                                sparse_header = TRUE) {
+                                sparse_header = TRUE,
+                                data = NULL) {
 
   # arbitrary length of no formatting requested
   if (is.null(fmt)) fmt <- '%.50f'
@@ -34,6 +35,7 @@ datasummary_extract <- function(tab,
   tmp[1:nrow(header), (stub_width + 1):ncol(mat)] <- header
   header <- tmp
 
+
   # main --- TODO: test if main has only one row
   main <- mat[(idx + 1):nrow(mat), , drop = FALSE]
   main <- data.frame(main)
@@ -45,6 +47,18 @@ datasummary_extract <- function(tab,
     main[, i] <- trimws(main[, i])
     main[, i] <- ifelse(is.na(main[, i]) | is.nan(main[, i]), "", main[, i])
     main[, i] <- ifelse(main[, i] %in% c("NA", "NaN"), "", main[, i])
+  }
+
+
+  # labelled data
+  variable_labels <- get_variable_labels_data(data)
+  for (i in seq_along(variable_labels)) {
+    n <- names(variable_labels)[i]
+    v <- variable_labels[i]
+    header[header == n] <- v
+    for (j in 1:stub_width) {
+      main[, j][main[, j] == n] <- v
+    }
   }
 
   # stub_width attribute before return

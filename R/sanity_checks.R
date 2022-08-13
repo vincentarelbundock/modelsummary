@@ -280,10 +280,7 @@ sanity_ds_data <- function(formula, data) {
   is_all <- any(grepl("^All\\(", as.character(formula)))
   if (is_all && is_labelled) {
     msg <- format_msg(
-    "It is not safe to use labelled data with the `datasummary()` family of
-    functions. We recommend that you convert labelled variables to standard vectors
-    using `as.vector()` or `as.numeric()` before calling a `datasummary_*()`
-    function.")
+    "It is not safe to use labelled data with the `All()` command in a datasummary()` formula.")
     warn_once(msg, id = "datasummary_all_labelled")
   }
 }

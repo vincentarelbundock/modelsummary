@@ -198,7 +198,8 @@ datasummary <- function(formula,
   # extract content
   dse <- datasummary_extract(tab,
     fmt = fmt,
-    sparse_header = sparse_header)
+    sparse_header = sparse_header,
+    data = data)
 
   # align stub l rest r
   stub_width <- attr(dse, 'stub_width')

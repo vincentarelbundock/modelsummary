@@ -111,6 +111,7 @@ datasummary_skim_dataset <- function(
   ...) {
 
 
+
   is.binary <- function(x) {
     tryCatch(length(unique(stats::na.omit(x))) == 2, error = function(e) FALSE, silent = TRUE)
   }
@@ -205,19 +206,21 @@ datasummary_skim_numeric <- function(
   if (!any(idx)) stop('all numeric variables are completely missing.')
   dat_new <- dat_new[, idx, drop = FALSE]
 
-  # convert to numeric (tables does not play well with haven_labelled)
+  # convert to numeric (tables::All() does not play well with haven_labelled)
+  # but we want to keep the labels for display
+  dat_lab <- dat_nolab <- dat_new
   for (i in seq_along(dat_new)) {
-    dat_new[[i]] <- as.numeric(dat_new[[i]])
+    dat_nolab[[i]] <- as.numeric(dat_nolab[[i]])
   }
 
   # pad colnames in case one is named Min, Max, Mean, or other function name
-  # colnames(dat_new) <- paste0(colnames(dat_new), " ")
+  # colnames(dat_nolab) <- paste0(colnames(dat_nolab), " ")
 
   # with histogram
   if (histogram) {
 
     histogram_col <- function(x) ""
-    f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
+    f <- All(dat_nolab, numeric = TRUE, factor = FALSE) ~
         Heading("Unique (#)") * NUnique +
         Heading("Missing (%)") * PercentMissing +
         (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
@@ -228,14 +231,14 @@ datasummary_skim_numeric <- function(
     # know the exact subset of variables kept by tabular, in the exact
     # order, to print the right histograms.
     cache <- settings_cache(c("output_format", "output_file", "output_factory"))
-    idx <- datasummary(f, data = dat_new, output = "data.frame")[[1]]
+    idx <- datasummary(f, data = dat_nolab, output = "data.frame")[[1]]
     settings_restore(cache)
 
-    histogram_list <- as.list(dat_new[, idx, drop = FALSE])
+    histogram_list <- as.list(dat_lab[, idx, drop = FALSE])
     histogram_list <- lapply(histogram_list, stats::na.omit)
 
     # too large
-    if (ncol(dat_new) > 50) {
+    if (ncol(dat_lab) > 50) {
       stop("Cannot summarize more than 50 variables at a time.")
     }
 
@@ -255,7 +258,7 @@ datasummary_skim_numeric <- function(
     # draw table
     cache <- settings_cache(c("output_format", "output_file", "output_factory"))
     out <- datasummary(formula = f,
-        data = dat_new,
+        data = dat_lab,
         output = "kableExtra",
         # output = output_fmt,
         title = title,
@@ -278,13 +281,13 @@ datasummary_skim_numeric <- function(
 
   # without histogram
   } else {
-    f <- All(dat_new, numeric = TRUE, factor = FALSE) ~
+    f <- All(dat_nolab, numeric = TRUE, factor = FALSE) ~
          Heading("Unique (#)") * NUnique +
          Heading("Missing (%)") * PercentMissing +
          (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt)
 
     out <- datasummary(f,
-        data = dat_new,
+        data = dat_lab,
         output = output,
         title = title,
         align = align,

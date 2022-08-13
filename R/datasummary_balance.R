@@ -72,7 +72,19 @@ datasummary_balance <- function(formula,
         ## nobs in column spans via factor levels
         lev <- table(data[[rhs]])
         lev <- paste0(names(lev), " (N=", lev, ")")
-        levels(data[[rhs]]) <- lev
+        if (inherits(data[[rhs]], "haven_labelled")) {
+            lab <- attr(data[[rhs]], "label")
+            data[[rhs]] <- as.factor(data[[rhs]])
+            levels(data[[rhs]])
+            if (!is.null(lab)) {
+                insight::check_if_installed("haven")
+                data[[rhs]] <- haven::labelled(
+                    data[[rhs]],
+                    label = lab)
+            }
+        } else {
+            levels(data[[rhs]]) <- lev
+        }
     }
 
     ## exclude otherwise All() makes them appear as rows
@@ -352,7 +364,7 @@ sanitize_datasummary_balance_data <- function(formula, data) {
       data <- data[!is.na(data[[rhs]]), , drop = FALSE]
   } else {
       #No grouping variable - summarise full dataset
-      rhs = NULL
+      rhs <- NULL
   }
 
   if ("weights" %in% colnames(data)) {
