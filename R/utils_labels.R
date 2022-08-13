@@ -11,7 +11,7 @@ get_variable_labels_models <- function(models) {
     if (anyDuplicated(out$clean)) {
         msg <- 
         "Some variables share a name but have inconsistent labels. The labels will be ignored."
-        warn(msg, call. = FALSE)
+        warning(msg, call. = FALSE)
     }
     out <- stats::setNames(out$raw, out$clean)
     return(out)
