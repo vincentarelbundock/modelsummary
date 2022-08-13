@@ -33,3 +33,12 @@ get_variable_labels_data <- function(data) {
     }
     return(lab)
 }
+
+
+strip_labels <- function(data) {
+    for (x in colnames(data)) {
+        class(data[[x]]) <- setdiff(class(data[[x]]), c("haven_labelled", "vctrs_vctr"))
+        attr(data[[x]], "label") <- NULL
+    }
+    return(data)
+}
