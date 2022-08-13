@@ -1,3 +1,7 @@
+# modelsummary 1.0.2.9000
+
+* Automatic renaming of `haven` labels in `modelsummary()`, `datasummary()`, `datasummary_skim()`
+
 # modelsummary 1.0.2
 
 * Minor release to fix CRAN failure

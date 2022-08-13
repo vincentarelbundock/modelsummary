@@ -1,6 +1,8 @@
 requiet("haven")
 
 test_that("datasummary labels",{
+
+    # datasummary()
     dat <- mtcars
     dat$am <- haven::labelled(
         dat$am,
@@ -20,6 +22,7 @@ test_that("datasummary labels",{
     expect_true("Transmission / 0 / Mean" %in% colnames(tab))
     expect_true("vs / 0 / Mean" %in% colnames(tab))
 
+    # datasummary_skim()
     tab <- datasummary_skim(dat)
     expect_s3_class(tab, "kableExtra")
     tab <- datasummary_skim(dat, output = "dataframe", histogram = FALSE)
@@ -28,9 +31,10 @@ test_that("datasummary labels",{
     expect_true("Horsepower" %in% tab[[1]])
     expect_true("vs" %in% tab[[1]])
 
-    # tab <- datasummary_balance(~am, data = dat)
-
+    # datasummary_balance is not supported yet
+    expect_warning(tab <- datasummary_balance(~am, data = dat), regexp = "belled.*balance")
 })
+
 
 test_that("modelsummary: use variable labels by default", {
   data(trees)

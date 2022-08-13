@@ -64,6 +64,18 @@ datasummary_balance <- function(formula,
     ## rhs condition variable
     rhs <- labels(stats::terms(formula))
 
+    ## haven labels are not supported. Implementation is complicated because
+    ## tables::All() does not accept labels, so we need to strip them from the
+    ## dataset used in formulas, but not from the actual `data` argument.
+    flag <- any(sapply(data, inherits, "haven_labelled"))
+    if (isTRUE(flag)) {
+        data <- strip_labels(data)
+        warn_once(
+            msg = "Labelled data are not supported by the `datasummary_balance()` function.",
+            id = "balance haven labels"
+        )
+    }
+
     if (formula == ~1) {
         #No groups to calculate mean differences
         dinm <- FALSE
@@ -72,19 +84,7 @@ datasummary_balance <- function(formula,
         ## nobs in column spans via factor levels
         lev <- table(data[[rhs]])
         lev <- paste0(names(lev), " (N=", lev, ")")
-        if (inherits(data[[rhs]], "haven_labelled")) {
-            lab <- attr(data[[rhs]], "label")
-            data[[rhs]] <- as.factor(data[[rhs]])
-            levels(data[[rhs]])
-            if (!is.null(lab)) {
-                insight::check_if_installed("haven")
-                data[[rhs]] <- haven::labelled(
-                    data[[rhs]],
-                    label = lab)
-            }
-        } else {
-            levels(data[[rhs]]) <- lev
-        }
+        levels(data[[rhs]]) <- lev
     }
 
     ## exclude otherwise All() makes them appear as rows
