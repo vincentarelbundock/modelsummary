@@ -4,7 +4,7 @@ requiet("nnet")
 test_that("combine columns with :", {
     requiet("marginaleffects")
     mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
-    mfx <- marginaleffects(mod)
+    mfx <- suppressWarnings(marginaleffects(mod))
     tab1 <- modelsummary(mfx, output = "dataframe", shape = term:contrast ~ model)
     tab2 <- modelsummary(mfx, output = "dataframe", shape = term:contrast + statistic ~ model)
     tab3 <- modelsummary(mfx, output = "dataframe", shape = term + contrast + statistic ~ model)
