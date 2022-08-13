@@ -61,7 +61,7 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
             dict <- stats::setNames(coef_rename(estimates$term), estimates$term)
         }
         check_dups(dict)
-        estimates$term <- replace_dict(estimates$term, dict)
+        estimates$term <- replace_dict(estimates$term, dict, interaction = TRUE)
     }
 
     # coef_map
@@ -75,7 +75,7 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
             stop("At least one of the term names in each model must appear in `coef_map`.")
         }
         estimates <- estimates[idx, , drop = FALSE]
-        estimates$term <- replace_dict(estimates$term, coef_map)
+        estimates$term <- replace_dict(estimates$term, coef_map, interaction = TRUE)
     }
 
     # group_map
