@@ -26,6 +26,13 @@ dvnames <- function(models, number = FALSE, fill = 'Model') {
 
     # Get dependent variables
     dvs <- sapply(models, insight::find_response)
+
+    lab <- get_variable_labels_models(models)
+    idx <- dvs %in% names(lab)
+    if (any(idx)) {
+        dvs[idx] <- lab[dvs[idx]]
+    }
+
     # Replace nulls with fill
     dvs <- sapply(dvs, function(x)
         ifelse(is.null(x), fill, x))

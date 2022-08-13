@@ -236,6 +236,15 @@ modelsummary <- function(
   }
 
 
+  ###################
+  #  labelled data  #
+  ###################
+  coef_rename_user <- coef_rename
+  if (is.null(coef_rename) && is.null(coef_map)) {
+    coef_rename <- get_variable_labels_models(models)
+  }
+
+
   #######################
   #  modelsummary_list  #
   #######################
@@ -408,7 +417,7 @@ modelsummary <- function(
 
   # interaction : becomes ×
   if (is.null(coef_map) &&
-      is.null(coef_rename) &&
+      is.null(coef_rename_user) &&
       "term" %in% colnames(tab) &&
       !settings_equal("output_format", "rtf")) {
     idx <- tab$part != 'gof'
