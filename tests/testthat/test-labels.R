@@ -13,6 +13,10 @@ test_that("datasummary labels",{
     dat$hp <- haven::labelled(
         dat$hp,
         label = "Horsepower")
+    dat$cyl <- haven::labelled(
+        dat$cyl,
+        label = "Cylinders")
+
 
     tab <- datasummary(
         output = "dataframe",
@@ -30,6 +34,11 @@ test_that("datasummary labels",{
     expect_true("Transmission" %in% tab[[1]])
     expect_true("Horsepower" %in% tab[[1]])
     expect_true("vs" %in% tab[[1]])
+
+    # datasummary_crosstab()
+    tab <- datasummary_crosstab(am * cyl ~ gear * vs, data = dat, output = "data.frame")
+    expect_true("Cylinders" %in% colnames(tab))
+    expect_true("Transmission" %in% colnames(tab))
 
     # datasummary_balance is not supported yet
     expect_warning(tab <- datasummary_balance(~am, data = dat), regexp = "belled.*balance")

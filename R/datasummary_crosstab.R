@@ -140,17 +140,21 @@ Note that the `datasummary()` function supports the `=` sign and the `Heading()`
     lhs_formula <- paste0(all.vars(formula[[2]]))
     rhs_formula <- paste0(all.vars(formula[[3]]))
 
-    for (v in all.vars(formula)) {
-      if (!is.factor(data[[v]])) {
-        data[[v]] <- factor(data[[v]], exclude = NULL)
-      }
-    }
-
     # wrap variable names in backticks if they include spaces
     idx <- grepl("\\s", lhs_formula)
     lhs_formula[idx] <- sprintf("`%s`", lhs_formula[idx])
     idx <- grepl("\\s", rhs_formula)
     rhs_formula[idx] <- sprintf("`%s`", rhs_formula[idx])
+
+    lhs_formula <- ifelse(
+        sapply(lhs_formula, function(x) !is.factor(data[[x]])),
+        sprintf("Factor(%s)", lhs_formula),
+        lhs_formula)
+
+    rhs_formula <- ifelse(
+        sapply(rhs_formula, function(x) !is.factor(data[[x]])),
+        sprintf("Factor(%s)", rhs_formula),
+        rhs_formula)
 
     if (is.null(statistic)) {
         d_formula <- sprintf("%s ~ %s",
