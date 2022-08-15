@@ -35,6 +35,11 @@ test_that("datasummary labels",{
     expect_true("Horsepower" %in% tab[[1]])
     expect_true("vs" %in% tab[[1]])
 
+    # datasummary_correlation()
+    tab <- datasummary_correlation(dat, output = "dataframe")
+    expect_true("Transmission" %in% tab[[1]])
+    expect_true("Transmission" %in% colnames(tab))
+
     # datasummary_crosstab()
     tab <- datasummary_crosstab(am * cyl ~ gear * vs, data = dat, output = "data.frame")
     expect_true("Cylinders" %in% colnames(tab))

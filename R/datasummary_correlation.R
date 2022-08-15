@@ -189,6 +189,11 @@ datasummary_correlation <- function(data,
     colnames(out) <- escape_string(colnames(out))
   }
 
+  # labelled data
+  dict <- get_variable_labels_data(data)
+  out[, 1] <- replace_dict(out[, 1], dict)
+  colnames(out) <- replace_dict(colnames(out), dict)
+
   out <- factory(out,
     align = align,
     hrule = NULL,
