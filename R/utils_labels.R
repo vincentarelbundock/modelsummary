@@ -31,7 +31,7 @@ get_variable_labels_data <- function(data) {
         lab <- Filter(
             function(x) inherits(data[[x]], c("labelled", "haven_labelled")),
             colnames(data))
-        lab <- sapply(lab, function(x) attr(data[[x]], "label"))
+        lab <- sapply(lab, function(x) attr(data[[x]], "label", exact = TRUE))
     }
     if (length(lab) == 0) {
         lab <- NULL
