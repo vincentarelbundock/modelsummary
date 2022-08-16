@@ -448,6 +448,7 @@ modelsummary <- function(
     } else {
       notes <- c(stars_note, notes)
     }
+    notes <- escape_string(notes)
   }
 
   # data.frame output keeps redundant info
