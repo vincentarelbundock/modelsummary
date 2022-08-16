@@ -21,6 +21,11 @@ get_variable_labels_models <- function(models) {
 get_variable_labels_data <- function(data) {
     # global variables: sjlabelled-style
     lab <- attr(data, "label", exact = TRUE)
+
+    if (is.null(lab)) {
+        lab <- attr(data, "label", exact = TRUE)
+    }
+
     # variable attributes: haven-style
     if (is.null(lab)) {
         lab <- Filter(
