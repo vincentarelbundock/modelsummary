@@ -231,7 +231,7 @@ get_estimates_parameters <- function(model,
     # main call
     tidy_easystats <- function(...) {
         dots <- list(...)
-        dots <- Filter(function(x) !is.null(x), dots)
+        # bug in `parameters`
         inner <- parameters::parameters
         out <- do.call("inner", dots)
         out <- parameters::standardize_names(out, style = "broom")
