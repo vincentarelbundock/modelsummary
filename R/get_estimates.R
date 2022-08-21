@@ -22,7 +22,16 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, ..
         return(model[["tidy"]])
     }
 
-    V <- get_vcov(model, vcov = vcov)
+    if (isTRUE(checkmate::check_function(vcov)) ||
+        isTRUE(checkmate::check_formula(vcov)) ||
+        isTRUE(checkmate::check_character(vcov, len = 1))) {
+        args <- append(list(model, "vcov" = vcov), list(...))
+        V <- do.call("get_vcov", args)
+    } else if (isTRUE(checkmate::check_matrix(vcov))) {
+        V <- vcov
+    } else {
+        V <- NULL
+    }
 
     # priority
     get_priority <- getOption("modelsummary_get", default = "easystats")
@@ -126,38 +135,6 @@ These errors messages were generated during extraction:
                 out[[n]][idx] <- out_custom[[n]]
             }
         }
-    }
-
-    # fixest mods
-    fixest_mod <- inherits(model, "fixest") || inherits(model, "fixest_multi")
-
-    # vcov override
-    flag1 <- !is.null(vcov)
-    flag2 <- isFALSE(all.equal(vcov, stats::vcov))
-    flag3 <- !is.character(vcov)
-    flag4 <- is.character(vcov) && length(vcov) == 1 &&
-      (!vcov %in% c("classical", "iid", "constant") || fixest_mod)
-    flag5 <- is.character(vcov) && length(vcov) > 1
-
-    if (flag1 && (flag2 || flag3 || flag4 || flag5)) {
-
-      # extract overridden estimates
-      so <- get_vcov(
-        model,
-        vcov = vcov,
-        conf_level = conf_level,
-        ...)
-
-      if (!is.null(so) && nrow(out) == nrow(so)) {
-        # so overrides out, so we drop columns first
-        idx <- c("group", "term", "response")
-        good <- setdiff(colnames(out), colnames(so))
-        good <- intersect(colnames(out), c(good, idx))
-        out <- out[, good, drop = FALSE]
-        # merge vcov and estimates
-        idx <- Reduce("intersect", list(colnames(out), colnames(so), idx)) 
-        out <- merge(out, so, by = idx, sort = FALSE)
-      }
     }
 
     # combine columns if requested in `shape` argument using an : interaction

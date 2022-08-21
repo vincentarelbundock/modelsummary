@@ -53,46 +53,47 @@ test_that("multi vcov with model recycling", {
 
 
 test_that("character vector", {
-  tab1 = modelsummary(models, vcov="robust", output="data.frame")
-  tab2 = modelsummary(models, vcov=rep("robust", 5), output="data.frame")
-  tab3 = modelsummary(models, vcov=list("robust", "robust", "robust", "robust", "robust"), output="data.frame")
+  tab1 = modelsummary(models, vcov = "robust", output = "data.frame")
+  tab2 = modelsummary(models, vcov = rep("robust", 5), output = "data.frame")
+  tab3 = modelsummary(models, vcov = list("robust", "robust", "robust", "robust", "robust"), output = "data.frame")
   tab4 = modelsummary(models, vcov = sandwich::vcovHC, output = "data.frame")
   expect_identical(tab1, tab2)
   expect_identical(tab1, tab3)
   # bad input
-  expect_error(modelsummary(models, vcov="bad", output="data.frame"))
+  expect_error(modelsummary(models, vcov = "bad", output = "data.frame"))
   # no standard error or F-stata row when `vcov` is an unknown function
   expect_equal(nrow(tab1), nrow(tab4) + 1)
 })
 
 
 test_that("clustered standard errors", {
-  # checked manually against fixest clusters
-  # testthat::skip_if_not_installed("fixest")
-  # se = fixest::feols(f, mtcars) %>%
-  #      fixest::se(cluster=~cyl)
-  f = hp ~ mpg + drat + vs
-  mod = lm(f, mtcars)
-  tmp = modelsummary(mod,
-    gof_omit=".*",
-    vcov=~cyl,
-    output="dataframe")
-  truth = c("247.053", "(73.564)", "-7.138", "(3.162)", "18.064", "(40.237)", "-50.124", "(13.268)")
-  expect_equal(truth, tmp[[4]])
+    # checked manually against fixest clusters
+    # testthat::skip_if_not_installed("fixest")
+    # se = fixest::feols(f, mtcars) %>%
+    #      fixest::se(cluster=~cyl)
+    f = hp ~ mpg + drat + vs
+    mod = lm(f, mtcars)
+    tmp = modelsummary(mod,
+        gof_omit = ".*",
+        vcov = ~cyl,
+        output = "dataframe")
+    truth = c("247.053", "(73.564)", "-7.138", "(3.162)", "18.064", "(40.237)", "-50.124", "(13.268)")
+    expect_equal(truth, tmp[[4]])
 })
 
+
 test_that("lme4 and various warnings", {
-  requiet("lme4")
-  models = list(
-    lm(hp ~ mpg, mtcars),
-    lmer(hp ~ mpg + (1|cyl), mtcars))
-  tab = modelsummary(models, output="dataframe", vcov=list("robust", "classical"))
-  expect_s3_class(tab, "data.frame")
-  expect_equal(ncol(tab), 5)
-  expect_error(modelsummary(models, output="dataframe", vcov="robust"), regexp = "Unable to extract")
-  expect_warning(modelsummary(models, output="dataframe", vcov="classical"), NA)
-  expect_warning(modelsummary(models, output="dataframe", vcov=list("robust", "classical")), NA)
-  expect_warning(modelsummary(models[[2]], vcov=stats::vcov), regexp="Only.*error.*adjusted")
+    requiet("lme4")
+    models = list(
+        lm(hp ~ mpg, mtcars),
+        lmer(hp ~ mpg + (1 | cyl), mtcars))
+    tab = modelsummary(models, output = "dataframe", vcov = list("robust", "classical"))
+    expect_s3_class(tab, "data.frame")
+    expect_equal(ncol(tab), 5)
+    expect_error(modelsummary(models, output = "dataframe", vcov = "robust"), regexp = "Unable to extract")
+    expect_warning(modelsummary(models, output = "dataframe", vcov = "classical"), NA)
+    expect_warning(modelsummary(models, output = "dataframe", vcov = list("robust", "classical")), NA)
+    expect_warning(modelsummary(models[[2]], vcov = stats::vcov), regexp = "Only.*error.*adjusted")
 })
 
 

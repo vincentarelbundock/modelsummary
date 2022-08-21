@@ -82,6 +82,12 @@ sanitize_vcov <- function(vcov, models, ...) {
     "xy")
 
   for (i in seq_along(vcov)) {
+
+    # lme4::lmer
+    if (inherits(vcov[[i]], "dpoMatrix") || inherits(vcov[[i]], "vcovCR")) {
+      vcov[[i]] <- as.matrix(vcov[[i]])
+    }
+
     checkmate::assert(
       checkmate::check_null(vcov[[i]]),
       checkmate::check_formula(vcov[[i]]),
