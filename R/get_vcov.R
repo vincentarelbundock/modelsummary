@@ -15,94 +15,15 @@ get_vcov.default <- function(model, vcov = NULL, conf_level = NULL, ...) {
 
   if (all(sapply(vcov, is.null))) return(NULL)
 
+  dots <- list(...)
+
   # needed for logic tests
   out <- mat <- NULL
 
-  msg_vcov_error <- c(
-    "The variance-covariance matrix is required to adjust the standard errors. ",
-    "The `vcov` argument accepts a variance-covariance matrix, a vector of standard errors, or a ",
-    "function that returns one of these, such as `stats::vcov`.")
-
   if (is.null(vcov)) {
     return(NULL)
-  }
 
-  # vcov is character
-  if (is.character(vcov) && length(vcov) == 1) {
-
-    if (vcov %in% c("classical", "constant", "iid")) {
-      return(NULL)
-    }
-
-    insight::check_if_installed("sandwich")
-
-    vcovtype <- switch(
-      vcov,
-      "stata" = "HC1",
-      "robust" = "HC3",
-      vcov)
-
-    mat <- switch(vcovtype,
-        "HC" = ,
-        "HC0" = ,
-        "HC1" = ,
-        "HC2" = ,
-        "HC3" = ,
-        "HC4" = ,
-        "HC4m" = ,
-        "HC5" = ,
-        "HC" = try(sandwich::vcovHC(model, type = vcovtype, ...), silent = TRUE),
-        "HAC" = try(sandwich::vcovHAC(model, ...), silent = TRUE),
-        "NeweyWest" = try(sandwich::NeweyWest(model, ...), silent = TRUE),
-        "bootstrap" = try(sandwich::vcovBS(model, ...), silent = TRUE),
-        "Andrews" = try(sandwich::kernHAC(model, ...), silent = TRUE),
-        "panel-corrected" = try(sandwich::vcovPC(model, ...), silent = TRUE),
-        "outer-product" = try(sandwich::vcovOPG(model, ...), silent = TRUE),
-        "weave" = try(sandwich::weave(model, ...), silent = TRUE)
-    )
-
-    if (!inherits(mat, "matrix")) {
-      msg <- paste0(c("Unable to extract a variance-covariance matrix of type %s from model of class %s. ",
-        msg_vcov_error), collapse = "")
-      stop(sprintf(msg, vcov, class(model)[1]))
-    }
-  }
-
-  # vcov is formula (clusters)
-  if (isTRUE(checkmate::check_formula(vcov))) {
-    insight::check_if_installed("sandwich")
-    mat <- try(sandwich::vcovCL(model, cluster = vcov), silent = TRUE)
-
-    if (!inherits(mat, "matrix")) {
-      msg <- paste0(c("Unable to extract a clustered variance-covariance matrix from model of class %s. ",
-        msg_vcov_error), collapse = "")
-      stop(sprintf(msg, class(model)[1]))
-    }
-  }
-
-  # vcov = function
-  if (is.function(vcov)) {
-    mat <- try(vcov(model), silent = TRUE)
-
-    # lme4::lmer
-    if (inherits(mat, "dpoMatrix")) {
-      mat <- as.matrix(mat)
-    }
-
-    if (!inherits(mat, "matrix")) {
-      msg <- paste0(c("Unable to use the supplied function to extract a variance-covariance matrix from model of class %s. ",
-        msg_vcov_error), collapse = "")
-      stop(sprintf(msg, class(model)[1]))
-    }
-  }
-
-  # vcov is matrix
-  if (is.matrix(vcov)) {
-    mat <- vcov
-  }
-
-  # vcov = atomic vector
-  if (isTRUE(checkmate::check_atomic_vector(vcov, names = "named"))) {
+  } else if (isTRUE(checkmate::check_atomic_vector(vcov, names = "named"))) {
     out <- data.frame(term = names(vcov), std.error = vcov)
 
     # factor -> character (important for R<4.0.0)
@@ -112,6 +33,24 @@ get_vcov.default <- function(model, vcov = NULL, conf_level = NULL, ...) {
       }
     }
     return(out)
+
+  } else if (isTRUE(checkmate::check_character(vcov, len = 1))) {
+    mat <- insight::get_varcov(model, vcov = vcov, vcov_args = dots)
+
+  } else if (isTRUE(checkmate::check_formula(vcov))) {
+    dots[["cluster"]] <- vcov
+    mat <- insight::get_varcov(model, vcov = "vcovCL", vcov_args = dots)
+
+  } else if (isTRUE(checkmate::check_function(vcov))) {
+    mat <- try(vcov(model), silent = TRUE)
+
+  } else if (isTRUE(checkmate::check_matrix(vcov))) {
+    mat <- vcov
+  }
+
+  # lme4::lmer
+  if (inherits(mat, "dpoMatrix") || inherits(mat, "vcovCR")) {
+      mat <- as.matrix(mat)
   }
 
   # try lmtest::coeftest
@@ -125,22 +64,18 @@ get_vcov.default <- function(model, vcov = NULL, conf_level = NULL, ...) {
 
     # lmtest::coeftest failed. adjust std.error manually
     if (!inherits(out, "data.frame")) {
-
       out <- sqrt(base::diag(mat))
       out <- data.frame(term = colnames(mat), std.error = out)
 
-      msg <- format_msg(sprintf(
-      "The `lmtest::coeftest` function does not seem to produce complete results when
-      applied to a model of class %s. Only the standard errors have been adjusted. p
-      values and confidence intervals may not be correct.", class(model)[1]))
+      msg <- insight::format_message(sprintf("The `lmtest::coeftest` function does not seem to produce complete results when applied to a model of class %s. Only the standard errors have been adjusted. p values and confidence intervals may not be correct.", class(model)[1]))
       warning(msg, call. = FALSE)
       return(out)
     }
   }
 
-  msg <- paste0(c("Unable to extract a variance-covariance matrix from model of class %s. ",
-    msg_vcov_error), collapse = "")
-  stop(sprintf(msg, class(model)[1]))
+  msg <- "Unable to extract a variance-covariance matrix from model of class `%s`."
+  msg <- insight::format_message(sprintf(msg, class(model)[1]))
+  stop(msg, call. = FALSE)
 }
 
 

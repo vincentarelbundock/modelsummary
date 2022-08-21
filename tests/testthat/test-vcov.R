@@ -11,6 +11,7 @@ models[['OLS 2']] <- lm(Desertion ~ Crime_prop + Infants, dat)
 models[['Poisson 2']] <- glm(Desertion ~ Crime_prop + Donations, dat, family = poisson())
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 
+
 test_that("warning for non-iid hardcoded vcov", {
     requiet("lfe")
     requiet("estimatr")
@@ -50,7 +51,6 @@ test_that("user-supplied vcov_type in gof section", {
 
 
 test_that("sandwich arguments in ellipsis", {
-  library(sandwich)
   data(PetersenCL)
   mod <- lm(y ~ x, PetersenCL)
   tab <- modelsummary(mod,
