@@ -1,9 +1,10 @@
 #' sanity check
 #'
 #' @noRd
-sanitize_vcov <- function(vcov, number_of_models, ...) {
+sanitize_vcov <- function(vcov, models, ...) {
 
   ellip <- list(...)
+  number_of_models <- length(models)
 
   # sanity_ellipsis must be called before sanity_vcov
   if ("statistic_override" %in% names(ellip)) {
@@ -106,6 +107,7 @@ sanitize_vcov <- function(vcov, number_of_models, ...) {
     # case-insensitive sandwich types
     if (isTRUE(checkmate::check_character(vcov[[i]], len = 1))) {
 
+      cl <- 
       # modelsummary-specific shortcuts
       vcov[[i]] <- switch(tolower(vcov[[i]]),
         "stata" = "hc1",
@@ -116,9 +118,14 @@ sanitize_vcov <- function(vcov, number_of_models, ...) {
       vcov[[i]] <- sandwich_types[match(tolower(vcov[[i]]), tolower(sandwich_types))]
       names(vcov)[i] <- vcov[[i]]
 
-      if (tolower(vcov[[i]]) %in% c("classical", "constant", "iid", "default")) {
+      if (isTRUE(tolower(vcov[[i]]) %in% c("classical", "constant", "iid", "default"))) {
         vcov[i] <- list(NULL)
         names(vcov)[i] <- ""
+        j <- ifelse(length(models) == 1, 1, i)
+        if (inherits(models[[j]], c("lm_robust", "iv_robust", "felm"))) {
+          msg <- insight::format_message(sprintf('When the `vcov` argument is set to "iid", "classical", or "constant", `modelsummary` extracts the default variance-covariance matrix from the model object. For objects of class `%s`, the default vcov is not always IID. Please make sure that the standard error label matches the numeric results in the table. Note that the `vcov` argument accepts a named list for users who want to customize the standard error labels in their regression tables.', class(models[[j]])[1]))
+          warning(msg, call. = FALSE)
+        }
       }
 
       # after case normalization
@@ -167,6 +174,8 @@ sanitize_vcov <- function(vcov, number_of_models, ...) {
       names(vcov)[i] <- ""
     }
   }
+
+  if (all(names(vcov) == "")) names(vcov) <- NULL
 
   return(vcov)
 }

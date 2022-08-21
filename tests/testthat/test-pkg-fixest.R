@@ -53,7 +53,7 @@ test_that("fixest std.error labels", {
   expect_equal(tab[tab$term == "Std.Errors", "Model 1"], "by: vs")
   tab <- modelsummary(mod, vcov = list(NULL, "iid"), output = "data.frame")
   expect_equal(tab[tab$term == "Std.Errors", "Model 1"], "by: vs")
-  expect_equal(tab[tab$term == "Std.Errors", "Model 2"], "IID")
+  expect_equal(tab[tab$term == "Std.Errors", "Model 2"], "by: vs")
   # unnamed function includes no label
   tab1 <- modelsummary(mod,
                        vcov = vcov(mod, se = "standard"),
@@ -64,9 +64,9 @@ test_that("fixest std.error labels", {
   tab3 <- modelsummary(mod,
                        output = "data.frame",
                        vcov = list("test " = stats::vcov(mod, se = "standard")))
-  expect_false("Std.Errors" %in% tab1$term)
-  expect_false("Std.Errors" %in% tab2$term)
-  expect_true("Std.Errors" %in% tab3$term)
+  expect_true("Custom" %in% tab1[["Model 1"]])
+  expect_true("Custom" %in% tab2[["Model 1"]])
+  expect_true("test " %in% tab3[["Model 1"]])
 })
 
 

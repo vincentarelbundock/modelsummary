@@ -81,30 +81,6 @@ test_that("clustered standard errors", {
   expect_equal(truth, tmp[[4]])
 })
 
-test_that("fixest", {
-  requiet("fixest")
-  mod_lm = lm(hp ~ mpg + drat, mtcars)
-  if (utils::packageVersion("fixest") >= "0.10.0") {
-    mod_feols =   feols(hp ~ mpg + drat, mtcars, vcov = ~vs)
-  } else {
-    mod_feols =   feols(hp ~ mpg + drat, mtcars, cluster = ~vs)
-  }
-  models = list('lm' = mod_lm, 'feols' = mod_feols)
-
-  # no longer true since lm produces RMSE but not fixest
-  # tab = msummary(models, vcov = 'iid', gof_omit = 'R2|IC|Log|F', output = "data.frame")
-  # expect_equal(tab$lm, tab$feols)
-
-  tab = msummary(models, vcov = 'HC1', gof_omit = 'R2|IC|Log|F', output = 'data.frame')
-  expect_equal(tab$lm, tab$feols)
-
-  tab = msummary(models, vcov = ~ vs, gof_omit = 'R2|IC|Log|F', output = "data.frame")
-  expect_equal(tab$lm, tab$feols)
-
-  tab = msummary(models, vcov = ~ cyl, gof_omit = 'R2|IC|Log|F', output = 'data.frame')
-  expect_equal(tab$lm, tab$feols)
-})
-
 test_that("lme4 and various warnings", {
   requiet("lme4")
   models = list(
@@ -227,10 +203,12 @@ test_that("bad formula", {
   expect_error(modelsummary(models, vcov = ~bad))
 })
 
+
 test_that("vector must be named", {
   vec <- as.numeric(1:3)
   expect_error(modelsummary(models[[1]], estimate = c("estimate", "std.error"), vcov = vec))
 })
+
 
 test_that("vcov content", {
   expect_equal(results[["one sandwich"]], reference[["one sandwich"]], ignore_attr = TRUE)
@@ -240,6 +218,7 @@ test_that("vcov content", {
   expect_equal(results[["hardcoded arbitrary"]], reference[["hardcoded arbitrary"]], ignore_attr = TRUE)
 })
 
+
 test_that("useless: function but no ci needed", {
   expect_error(modelsummary(models, vcov=vcov, conf_level=NULL), NA)
 })
@@ -248,6 +227,41 @@ test_that("useless: function but no ci needed", {
 test_that("sanity checks", {
     expect_error(modelsummary(models, vcov = "panel-corrected"), regexp = "cluster")
 })
+
+
+test_that("lme4", {
+    requiet("lme4")
+    requiet("clubSandwich")
+    mod <- lmer(mpg ~ hp + drat + (1 | gear), data = mtcars)
+    tab <- modelsummary(mod, vcov = "CR0", output = "data.frame")
+    expect_s3_class(tab, "data.frame")
+})
+
+
+test_that("fixest", {
+  requiet("fixest")
+  mod_lm = lm(hp ~ mpg + drat, mtcars)
+  if (utils::packageVersion("fixest") >= "0.10.0") {
+    mod_feols =   feols(hp ~ mpg + drat, mtcars, vcov = ~vs)
+  } else {
+    mod_feols =   feols(hp ~ mpg + drat, mtcars, cluster = ~vs)
+  }
+  models = list('lm' = mod_lm, 'feols' = mod_feols)
+
+  # no longer true since lm produces RMSE but not fixest
+  # tab = msummary(models, vcov = 'iid', gof_omit = 'R2|IC|Log|F', output = "data.frame")
+  # expect_equal(tab$lm, tab$feols)
+
+  tab = msummary(models, vcov = 'HC1', gof_omit = 'R2|IC|Log|F', output = 'data.frame')
+  expect_equal(tab$lm, tab$feols)
+
+  tab = msummary(models, vcov = ~ vs, gof_omit = 'R2|IC|Log|F', output = "data.frame")
+  expect_equal(tab$lm, tab$feols)
+
+  tab = msummary(models, vcov = ~ cyl, gof_omit = 'R2|IC|Log|F', output = 'data.frame')
+  expect_equal(tab$lm, tab$feols)
+})
+
 
 test_that("warning for non-iid hardcoded vcov", {
     requiet("lfe")
@@ -274,5 +288,4 @@ test_that("warning for non-iid hardcoded vcov", {
     # expect_warning(modelsummary(mod, vcov = list(NULL, "classical", vcov(mod, se = "hetero")), output = "data.frame"),
     #                regexp = "IID")
 })
-
 

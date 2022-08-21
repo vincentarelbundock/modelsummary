@@ -22,6 +22,8 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, ..
         return(model[["tidy"]])
     }
 
+    V <- get_vcov(model, vcov = vcov)
+
     # priority
     get_priority <- getOption("modelsummary_get", default = "easystats")
     checkmate::assert_choice(
@@ -43,6 +45,7 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, ..
                 model,
                 conf_int = conf_int,
                 conf_level = conf_level,
+                vcov = V,
                 ...)
             if (is.character(out)) {
                 warning_msg <- c(warning_msg, out)
@@ -200,6 +203,7 @@ get_estimates_broom <- function(model, conf_int, conf_level, ...) {
 get_estimates_parameters <- function(model,
                                      conf_int,
                                      conf_level,
+                                     vcov,
                                      ...) {
 
     dots <- list(...)
@@ -237,8 +241,11 @@ get_estimates_parameters <- function(model,
         out <- parameters::standardize_names(out, style = "broom")
         return(out)
     }
-    out <- hush(tryCatch(do.call("tidy_easystats", args), error = function(e) NULL))
 
+    if (is.character(vcov) || is.matrix(vcov)) {
+      args[["vcov"]] <- vcov
+    }
+    out <- hush(tryCatch(do.call("tidy_easystats", args), error = function(e) NULL))
 
     # errors and warnings: before processing the data frame term names
     if (!inherits(out, "data.frame") || nrow(out) < 1) {

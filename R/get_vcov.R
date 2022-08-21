@@ -35,11 +35,11 @@ get_vcov.default <- function(model, vcov = NULL, conf_level = NULL, ...) {
     return(out)
 
   } else if (isTRUE(checkmate::check_character(vcov, len = 1))) {
-    mat <- insight::get_varcov(model, vcov = vcov, vcov_args = dots)
+    mat <- insight::get_varcov(model, vcov = vcov, vcov_args = dots, component = "all")
 
   } else if (isTRUE(checkmate::check_formula(vcov))) {
     dots[["cluster"]] <- vcov
-    mat <- try(insight::get_varcov(model, vcov = "vcovCL", vcov_args = dots), silent = TRUE)
+    mat <- try(insight::get_varcov(model, vcov = "vcovCL", vcov_args = dots, component = "all"), silent = TRUE)
     if (inherits(mat, "try-error")) {
       msg <- attr(mat, "condition")$message
       if (grepl("Unable to extract", msg)) {
@@ -64,22 +64,7 @@ get_vcov.default <- function(model, vcov = NULL, conf_level = NULL, ...) {
 
   # try lmtest::coeftest
   if (is.matrix(mat)) {
-    out <- get_coeftest(model, mat, conf_level)
-
-    # lmtest::coeftest worked
-    if (inherits(out, "data.frame")) {
-      return(out)
-    }
-
-    # lmtest::coeftest failed. adjust std.error manually
-    if (!inherits(out, "data.frame")) {
-      out <- sqrt(base::diag(mat))
-      out <- data.frame(term = colnames(mat), std.error = out)
-
-      msg <- insight::format_message(sprintf("The `lmtest::coeftest` function does not seem to produce complete results when applied to a model of class %s. Only the standard errors have been adjusted. p values and confidence intervals may not be correct.", class(model)[1]))
-      warning(msg, call. = FALSE)
-      return(out)
-    }
+    return(mat)
   }
 
   msg <- "Unable to extract a variance-covariance matrix from model of class `%s`."

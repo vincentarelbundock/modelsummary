@@ -205,7 +205,7 @@ modelsummary <- function(
   sanitize_escape(escape)
   sanity_ellipsis(vcov, ...)        # before sanitize_vcov
   models <- sanitize_models(models) # before sanitize_vcov
-  vcov <- sanitize_vcov(vcov, length(models), ...)
+  vcov <- sanitize_vcov(vcov, models, ...)
   number_of_models <- max(length(models), length(vcov))
   estimate <- sanitize_estimate(estimate, number_of_models)
   exponentiate <- sanitize_exponentiate(exponentiate, number_of_models)
@@ -531,30 +531,6 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, sh
 
     number_of_models <- max(length(models), length(vcov))
 
-    vcov_type <- vcov_names <- names(vcov)
-
-    # warning for models with hard-coded non-IID vcov
-    hardcoded <- c("lm_robust", "iv_robust", "felm")
-    flag_vcov <- NULL
-
-    for (i in 1:number_of_models) {
-        # trust users when they specify vcov names
-        if (is.null(vcov_names[[i]]) || vcov_names[[i]] == "") {
-            j <- ifelse(length(models) == 1, 1, i)
-            if (is.character(vcov_type[[i]]) &&
-                tolower(vcov_type[[i]]) %in% c("iid", "classical", "constant") &&
-                length(intersect(hardcoded, class(models[[j]])) > 0)) {
-                flag_vcov <- i
-            }
-        }
-    }
-
-    if (!is.null(flag_vcov)) {
-        j <- ifelse(length(models) == 1, 1, flag_vcov)
-        warning(sprintf('When the `vcov` argument is set to "iid", "classical", or "constant", `modelsummary` extracts the default variance-covariance matrix from the model object. For objects of class `%s`, the default vcov is not always IID. Please make sure that the standard error label matches the numeric results in the table. Note that the `vcov` argument accepts a named list for users who want to customize the standard error labels in their regression tables.', class(models[[j]])[1]),
-                call. = FALSE)
-    }
-
     inner_loop <- function(i) {
         # recycling when 1 model and many vcov
         j <- ifelse(length(models) == 1, 1, i)
@@ -567,7 +543,7 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, sh
         }
 
         # don't waste time if we are going to exclude all gof anyway
-        gla <- get_gof(models[[j]], vcov_type[[i]], gof_map = gof_map, ...)
+        gla <- get_gof(models[[j]], names(vcov)[i], gof_map = gof_map, ...)
 
         tid <- get_estimates(
             models[[j]],
