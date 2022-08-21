@@ -39,10 +39,19 @@ get_vcov.default <- function(model, vcov = NULL, conf_level = NULL, ...) {
 
   } else if (isTRUE(checkmate::check_formula(vcov))) {
     dots[["cluster"]] <- vcov
-    mat <- insight::get_varcov(model, vcov = "vcovCL", vcov_args = dots)
+    mat <- try(insight::get_varcov(model, vcov = "vcovCL", vcov_args = dots), silent = TRUE)
+    if (inherits(mat, "try-error")) {
+      msg <- attr(mat, "condition")$message
+      if (grepl("Unable to extract", msg)) {
+        msg <- paste(msg, "Note that the cluster variable in the formula cannot include missing `NA` observations.")
+      }
+      msg <- gsub("\\n", " ", msg)
+      stop(insight::format_message(msg), call. = FALSE)
+    }
 
   } else if (isTRUE(checkmate::check_function(vcov))) {
-    mat <- try(vcov(model), silent = TRUE)
+    args <- c(list(model), dots)
+    mat <- try(do.call("vcov", args), silent = TRUE)
 
   } else if (isTRUE(checkmate::check_matrix(vcov))) {
     mat <- vcov
@@ -117,46 +126,4 @@ get_coeftest <- function(model, vcov, conf_level) {
 
   return(gof)
 }
-
-
-#' internal function
-#'
-#' @param v a string or formula describing the standard error type
-#' @keywords internal
-get_vcov_type <- function(vcov) {
-
-  # user-supplied std.error names
-  if (!is.null(names(vcov))) return(names(vcov))
-
-  get_vcov_type_inner <- function(v) {
-
-    if (is.character(v)) {
-      if (v %in% c("robust", "classical", "stata", "classical", "constant", "panel-corrected", "Andrews", "outer-product")) {
-         out <- tools::toTitleCase(v)
-       } else if (v == "NeweyWest") {
-         out <- "Newey-West"
-       } else {
-         out <- toupper(v)
-       }
-    } else if (inherits(v, "formula")) {
-      out <- paste("by:", gsub("\\+", "\\&", gsub(":", "\\ & ", as.character(v)[2])))
-    } else if (is.null(v)) {
-      out <- NULL
-    } else if (is.function(v)) {
-      out <- "function"
-    } else if (is.matrix(v)) {
-      out <- "matrix"
-    } else if (checkmate::test_atomic_vector(v)) {
-      out <- "vector"
-    } else {
-      out <- NULL
-    }
-    return(out)
-  }
-
-  vcov_type <- sapply(vcov, get_vcov_type_inner)
-
-  return(vcov_type)
-}
-
 

@@ -531,10 +531,7 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, sh
 
     number_of_models <- max(length(models), length(vcov))
 
-    vcov_type <- get_vcov_type(vcov)
-
-    vcov_names <- names(vcov)
-
+    vcov_type <- vcov_names <- names(vcov)
 
     # warning for models with hard-coded non-IID vcov
     hardcoded <- c("lm_robust", "iv_robust", "felm")
