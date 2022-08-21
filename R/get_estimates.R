@@ -203,7 +203,7 @@ get_estimates_parameters <- function(model,
                                      ...) {
 
     dots <- list(...)
-    args <- c(list(model), dots)
+    args <- c(list("model" = model), dots)
     args[["verbose"]] <- FALSE
 
     mi <- tryCatch(
@@ -229,26 +229,31 @@ get_estimates_parameters <- function(model,
     }
 
     # main call
-    fun <- tidy_easystats <- function(x, ...) {
-        out <- parameters::parameters(x, ...)
+    tidy_easystats <- function(...) {
+        dots <- list(...)
+        dots <- Filter(function(x) !is.null(x), dots)
+        inner <- parameters::parameters
+        out <- do.call("inner", dots)
         out <- parameters::standardize_names(out, style = "broom")
         return(out)
     }
-    out <- hush(tryCatch(do.call("fun", args), error = function(e) NULL))
+    out <- hush(tryCatch(do.call("tidy_easystats", args), error = function(e) NULL))
+
 
     # errors and warnings: before processing the data frame term names
     if (!inherits(out, "data.frame") || nrow(out) < 1) {
         return("`parameters::parameters(model)` did not return a valid data.frame.")
     }
 
-    if (!"term" %in% colnames(out)) {
-        return("`parameters::parameters(model)` did not return a data.frame with a `term` column.")
-    }
-
     # term names: lavaan
+    # before check if there is a `term` name column
     if (inherits(model, "lavaan") && all(c("to", "operator", "from") %in% colnames(out))) {
         out$term <- paste(out$to, out$operator, out$from)
         out$to <- out$operator <- out$from <- NULL
+    }
+
+    if (!"term" %in% colnames(out)) {
+        return("`parameters::parameters(model)` did not return a data.frame with a `term` column.")
     }
 
     # term names: mixed-effects

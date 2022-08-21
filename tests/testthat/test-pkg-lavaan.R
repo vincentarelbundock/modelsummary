@@ -6,7 +6,7 @@ test_that("Issue #502", {
     model <- 'ind60 =~ x1 + x2 + x3'
     fit <- cfa(model, data = PoliticalDemocracy)
     void <- capture.output({
-     tab <- modelsummary(fit, output = "data.frame", standardize = TRUE)
+     tab <- modelsummary(fit, output = "data.frame", standardize = "all")
     })
     expect_s3_class(tab, "data.frame")
     expect_true(nrow(tab) > 7)
