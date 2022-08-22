@@ -22,16 +22,8 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, ..
         return(model[["tidy"]])
     }
 
-    if (isTRUE(checkmate::check_function(vcov)) ||
-        isTRUE(checkmate::check_formula(vcov)) ||
-        isTRUE(checkmate::check_character(vcov, len = 1))) {
-        args <- append(list(model, "vcov" = vcov), list(...))
-        V <- do.call("get_vcov", args)
-    } else if (isTRUE(checkmate::check_matrix(vcov))) {
-        V <- vcov
-    } else {
-        V <- NULL
-    }
+    args <- append(list(model, "vcov" = vcov), list(...))
+    vcov <- do.call("get_vcov", args)
 
     # priority
     get_priority <- getOption("modelsummary_get", default = "easystats")
@@ -50,6 +42,11 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, ..
 
     for (f in funs) {
         if (!inherits(out, "data.frame") || nrow(out) == 0) {
+            if (is.matrix(vcov)) {
+                V <- vcov
+            } else {
+                V <- NULL
+            }
             out <- f(
                 model,
                 conf_int = conf_int,
@@ -83,59 +80,35 @@ These errors messages were generated during extraction:
       ))
     }
 
+    override <- function(old, new, columns) {
+        columns <- setdiff(columns, c("term", shape$group_name))
+        if (!inherits(new, "data.frame") || nrow(new) == 0 || !"term" %in% colnames(new)) {
+            return(old)
+        }
+        if (is.null(shape$group_name)) {
+            def <- old[["term"]]
+            cus <- new[["term"]]
+        } else {
+            def <- paste(old[["term"]], old[[shape$group_name]])
+            cus <- paste(new[["term"]], new[[shape$group_name]])
+        }
+        idx <- match(cus, def)
+        for (n in columns) {
+            old[[n]][idx] <- new[[n]]
+        }
+        return(old)
+    }
+
+    # override standard errors if `vcov` is a named vector
+    out <- override(old = out, new = vcov, columns = "std.error")
+
     # tidy_custom_internal (modelsummary customization avoids name conflict)
     out_custom <- tidy_custom_internal(model)
-    if (inherits(out_custom, "data.frame") && nrow(out_custom) > 0) {
-        if (!any(out_custom$term %in% out$term)) {
-            warning('Elements of the "term" column produced by `tidy_custom` must match model terms. `tidy_custom` was ignored.',
-                    call. = FALSE)
-        } else {
-            # R 3.6 doesn't deal well with factors
-            out_custom$term <- as.character(out_custom$term)
-            out$term <- as.character(out$term)
-            out_custom <- out_custom[out_custom$term %in% out$term, , drop = FALSE]
-            if (is.null(shape$group_name)) {
-                def <- out[["term"]]
-                cus <- out_custom[["term"]]
-            } else {
-                def <- paste(out[["term"]], out[[shape$group_name]])
-                cus <- paste(out_custom[["term"]], out_custom[[shape$group_name]])
-            }
-            idx <- match(cus, def)
-            for (n in colnames(out_custom)) {
-                out[[n]][idx] <- out_custom[[n]]
-            }
-        }
-    }
+    out <- override(old = out, new = out_custom, columns = colnames(out_custom))
 
     # tidy_custom
     out_custom <- tidy_custom(model)
-    if (inherits(out_custom, "data.frame") && nrow(out_custom) > 0) {
-        if (!any(out_custom$term %in% out$term)) {
-            warning('Elements of the "term" column produced by `tidy_custom` must match model terms. `tidy_custom` was ignored.',
-                    fall. = FALSE)
-        } else {
-            # R 3.6 doesn't deal well with factors
-            out_custom$term <- as.character(out_custom$term)
-            out$term <- as.character(out$term)
-            out_custom <- out_custom[out_custom$term %in% out$term, , drop = FALSE]
-            # do not merge to allow partial tidy_custom
-            if (is.null(shape$group_name)) {
-                def <- out[["term"]]
-                cus <- out_custom[["term"]]
-            } else {
-                def <- paste(out[["term"]], out[[shape$group_name]])
-                cus <- paste(out_custom[["term"]], out_custom[[shape$group_name]])
-            }
-            idx <- match(cus, def)
-            for (n in colnames(out_custom)) {
-                if (!n %in% colnames(out)) {
-                    out[[n]] <- NA
-                }
-                out[[n]][idx] <- out_custom[[n]]
-            }
-        }
-    }
+    out <- override(old = out, new = out_custom, columns = colnames(out_custom))
 
     # combine columns if requested in `shape` argument using an : interaction
     for (x in shape$combine) {

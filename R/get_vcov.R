@@ -3,15 +3,14 @@
 #' @inheritParams modelsummary
 #' @keywords internal
 #' @return a numeric vector of test statistics
-get_vcov <- function(model, vcov = NULL, conf_level = NULL, ...) {
+get_vcov <- function(model, vcov = NULL, ...) {
     UseMethod("get_vcov", model)
 }
 
 
-
 #' @export
 #' @keywords internal
-get_vcov.default <- function(model, vcov = NULL, conf_level = NULL, ...) {
+get_vcov.default <- function(model, vcov = NULL, ...) {
 
   if (all(sapply(vcov, is.null))) return(NULL)
 
@@ -24,24 +23,17 @@ get_vcov.default <- function(model, vcov = NULL, conf_level = NULL, ...) {
     return(NULL)
 
   } else if (isTRUE(checkmate::check_atomic_vector(vcov, names = "named"))) {
-    out <- data.frame(term = names(vcov), std.error = vcov)
-
-    # factor -> character (important for R<4.0.0)
-    for (i in seq_along(out)) {
-      if (is.factor(out[[i]])) {
-        out[[i]] <- as.character(out[[i]])
-      }
-    }
+    out <- data.frame(term = names(vcov), std.error = vcov, stringsAsFactors = FALSE)
     return(out)
 
   } else if (isTRUE(checkmate::check_character(vcov, len = 1))) {
-    mat <- insight::get_varcov(model, vcov = vcov, vcov_args = dots, component = "all")
+    out <- insight::get_varcov(model, vcov = vcov, vcov_args = dots, component = "all")
 
   } else if (isTRUE(checkmate::check_formula(vcov))) {
     dots[["cluster"]] <- vcov
-    mat <- try(insight::get_varcov(model, vcov = "vcovCL", vcov_args = dots, component = "all"), silent = TRUE)
-    if (inherits(mat, "try-error")) {
-      msg <- attr(mat, "condition")$message
+    out <- try(insight::get_varcov(model, vcov = "vcovCL", vcov_args = dots, component = "all"), silent = TRUE)
+    if (inherits(out, "try-error")) {
+      msg <- attr(out, "condition")$message
       if (grepl("Unable to extract", msg)) {
         msg <- paste(msg, "Note that the cluster variable in the formula cannot include missing `NA` observations.")
       }
@@ -51,64 +43,24 @@ get_vcov.default <- function(model, vcov = NULL, conf_level = NULL, ...) {
 
   } else if (isTRUE(checkmate::check_function(vcov))) {
     args <- c(list(model), dots)
-    mat <- try(do.call("vcov", args), silent = TRUE)
+    out <- try(do.call("vcov", args), silent = TRUE)
 
   } else if (isTRUE(checkmate::check_matrix(vcov))) {
-    mat <- vcov
+    out <- vcov
   }
+
 
   # lme4::lmer
-  if (inherits(mat, "dpoMatrix") || inherits(mat, "vcovCR")) {
-      mat <- as.matrix(mat)
+  if (inherits(out, "dpoMatrix") || inherits(out, "vcovCR")) {
+      out <- as.matrix(out)
   }
 
-  # try lmtest::coeftest
-  if (is.matrix(mat)) {
-    return(mat)
-  }
+  if (is.matrix(out)) {
+    return(out)
 
-  msg <- "Unable to extract a variance-covariance matrix from model of class `%s`."
-  msg <- insight::format_message(sprintf(msg, class(model)[1]))
-  stop(msg, call. = FALSE)
+  } else {
+    msg <- "Unable to extract a variance-covariance matrix from model of class `%s`."
+    msg <- insight::format_message(sprintf(msg, class(model)[1]))
+    stop(msg, call. = FALSE)
+  }
 }
-
-
-get_coeftest <- function(model, vcov, conf_level) {
-
-  if (!isTRUE(check_dependency("lmtest"))) return(NULL)
-
-  gof <- tryCatch(
-      {
-          tmp <- lmtest::coeftest(model, vcov. = vcov)
-          tmp <- unclass(tmp)
-          tmp <- as.data.frame(tmp)
-          tmp <- stats::setNames(tmp, c("estimate", "std.error", "statistic", "p.value"))
-          tmp$term <- row.names(tmp)
-          row.names(tmp) <- NULL
-          tmp
-      },
-      error = function(e) NULL)
-
-  # coeftest returns only se for coefficients and not for intercepts in MASS::polr
-  if (!is.data.frame(gof) || nrow(gof) != nrow(vcov)) {
-    return(NULL)
-  }
-
-  gof_ci <- try(
-    lmtest::coefci(model, vcov. = vcov, level = conf_level),
-    silent = TRUE)
-
-  if (!inherits(gof_ci, "try-error") && !inherits(gof, "try-error")) {
-    gof_ci <- as.data.frame(unclass(gof_ci))
-    colnames(gof_ci) <- c("conf.low", "conf.high")
-    gof_ci$term <- row.names(gof_ci)
-    gof <- merge(gof, gof_ci, by = "term")
-  }
-
-  if (inherits(gof, "try-error")) {
-    gof <- NULL
-  }
-
-  return(gof)
-}
-

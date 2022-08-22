@@ -93,7 +93,7 @@ test_that("lme4 and various warnings", {
     expect_error(modelsummary(models, output = "dataframe", vcov = "robust"), regexp = "Unable to extract")
     expect_warning(modelsummary(models, output = "dataframe", vcov = "classical"), NA)
     expect_warning(modelsummary(models, output = "dataframe", vcov = list("robust", "classical")), NA)
-    expect_warning(modelsummary(models[[2]], vcov = stats::vcov), regexp = "Only.*error.*adjusted")
+    expect_s3_class(modelsummary(models[[2]], output = "dataframe", vcov = stats::vcov), "data.frame")
 })
 
 
@@ -290,3 +290,18 @@ test_that("warning for non-iid hardcoded vcov", {
     #                regexp = "IID")
 })
 
+
+
+test_that("hardcoded numerical", {
+    mod <- lm(mpg ~ hp + drat, mtcars)
+    tab <- modelsummary(mod,
+        gof_map = NA,
+        estimate = "std.error",
+        statistic = NULL,
+        output = "data.frame",
+        vcov = c(
+            "(Intercept)" = 9,
+            "drat" = 3,
+            "hp" = 2))
+    expect_equivalent(tab[["Model 1"]], c("9.000", "2.000", "3.000"))
+})
