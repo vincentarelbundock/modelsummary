@@ -62,7 +62,9 @@ get_gof <- function(model, vcov_type = NULL, ...) {
         for (n in colnames(gof_custom)) {
             # modelsummary's vcov argument has precedence
             # mainly useful to avoid collision with `fixest::glance_custom`
-            if (is.null(vcov_type) || n != "vcov.type") {
+            overwriteable <- c("IID", "Default", "")
+            if (is.null(vcov_type) || n != "vcov.type" || gof[["vcov.type"]] %in% overwriteable) {
+
                 gof[[n]] <- gof_custom[[n]]
             }
         }

@@ -23,12 +23,16 @@ fixest_multi_names <- function(x) {
 glance_custom_internal.fixest <- function(x, vcov_type = NULL, ...) {
   insight::check_if_installed("fixest", minimum_version = "0.10.4")
 
+  # fixed effects
   out <- data.frame(row.names = "firstrow")
   for (n in x$fixef_vars) {
     out[[paste('FE:', n)]] <- 'X'
   }
-    browser()
-  if (is.null(vcov_type) || !vcov_type %in% c("vector", "matrix", "function")) {
+
+  # standard errors
+  if (is.null(vcov_type) ||
+      vcov_type %in% c("", "Default", "Constant", "IID") ||
+      !vcov_type %in% c("vector", "matrix", "function")) {
     fvcov_type <- attr(summary(x)[["se"]], "type")
     if (isTRUE(grepl("^Clustered", fvcov_type))) {
       fvcov_type <- gsub("^Clustered \\((.*)\\)$", "by: \\1", fvcov_type)

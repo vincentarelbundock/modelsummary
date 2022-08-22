@@ -542,7 +542,7 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, sh
         }
 
         # don't waste time if we are going to exclude all gof anyway
-        gla <- get_gof(models[[j]], names(vcov)[i], gof_map = gof_map, ...)
+        gla <- get_gof(models[[j]], vcov_type = names(vcov)[i], gof_map = gof_map, ...)
 
         tid <- get_estimates(
             models[[j]],

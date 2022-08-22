@@ -52,7 +52,6 @@ test_that("fixest std.error labels", {
   tab <- modelsummary(mod, vcov = list(NULL), output = "data.frame")
   expect_equal(tab[tab$term == "Std.Errors", "Model 1"], "by: vs")
   tab <- modelsummary(mod, vcov = list(NULL, "iid"), output = "data.frame")
-
   expect_equal(tab[tab$term == "Std.Errors", "Model 1"], "by: vs")
   expect_equal(tab[tab$term == "Std.Errors", "Model 2"], "by: vs")
   # unnamed function includes no label
@@ -74,6 +73,8 @@ test_that("fixest std.error labels", {
 test_that("regression: issue #450", {
     requiet("sandwich")
     mod <- feols(mpg ~ wt, data = mtcars)
+
+    insight::get_varcov(mod, vcov = "HC1")
 
     se1 <- sqrt(diag(vcovHC(mod, type = "HC3")))
     se2 <- get_estimates(mod, vcov = "HC3")$std.error

@@ -90,26 +90,15 @@ sanitize_vcov <- function(vcov, models, ...) {
 
     j <- ifelse(length(models) == 1, 1, i)
     # fixest support other strings
-    if (inherits(models[[j]], "fixest")) {
-        checkmate::assert(
-            checkmate::check_null(vcov[[i]]),
-            checkmate::check_formula(vcov[[i]]),
-            checkmate::check_function(vcov[[i]]),
-            checkmate::check_matrix(vcov[[i]]),
-            checkmate::check_numeric(vcov[[i]]),
-            checkmate::check_character(vcov[[i]], min.len = 1),
-            combine = "or")
-    } else {
-        checkmate::assert(
-            checkmate::check_null(vcov[[i]]),
-            checkmate::check_formula(vcov[[i]]),
-            checkmate::check_function(vcov[[i]]),
-            checkmate::check_matrix(vcov[[i]]),
-            checkmate::check_numeric(vcov[[i]]),
-            checkmate::check_character(vcov[[i]], min.len = 2),
-            checkmate::check_choice(tolower(vcov[[i]]), choices = tolower(sandwich_types)),
-            combine = "or")
-    }
+    checkmate::assert(
+        checkmate::check_null(vcov[[i]]),
+        checkmate::check_formula(vcov[[i]]),
+        checkmate::check_function(vcov[[i]]),
+        checkmate::check_matrix(vcov[[i]]),
+        checkmate::check_numeric(vcov[[i]]),
+        checkmate::check_character(vcov[[i]], min.len = 2),
+        checkmate::check_choice(tolower(vcov[[i]]), choices = tolower(sandwich_types)),
+        combine = "or")
 
     if (isTRUE(checkmate::check_formula(vcov[[i]]))) {
       names(vcov)[i] <- paste("by:", gsub("\\+", "\\&", gsub(":", "\\ & ", as.character(vcov[[i]])[2])))
