@@ -21,10 +21,6 @@ sections below):
 \item a named list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, \code{modelsummary} cannot automatically calculate p values. The \code{stars} argument may thus use incorrect significance thresholds when \code{vcov} is a list of vectors.
 }}
 
-\item{conf_level}{numeric value between 0 and 1. confidence level to use for
-confidence intervals. Setting this argument to \code{NULL} does not extract
-confidence intervals, which can be faster for some models.}
-
 \item{...}{all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.
 \itemize{
 \item \link[parameters:model_parameters]{parameters::model_parameters} extracts parameter estimates.

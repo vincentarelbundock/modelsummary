@@ -61,7 +61,6 @@ test_that("tidy_custom.glm partial term names", {
     output = "data.frame", 
     gof_omit = "",
     statistic = NULL)
-  out
   expect_equal(unname(out[["Model 1"]]), c("3.142", "0.307"))
   rm("tidy_custom.glm", envir=.GlobalEnv)
 })

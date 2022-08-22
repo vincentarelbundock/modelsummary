@@ -52,6 +52,7 @@ test_that("fixest std.error labels", {
   tab <- modelsummary(mod, vcov = list(NULL), output = "data.frame")
   expect_equal(tab[tab$term == "Std.Errors", "Model 1"], "by: vs")
   tab <- modelsummary(mod, vcov = list(NULL, "iid"), output = "data.frame")
+
   expect_equal(tab[tab$term == "Std.Errors", "Model 1"], "by: vs")
   expect_equal(tab[tab$term == "Std.Errors", "Model 2"], "by: vs")
   # unnamed function includes no label

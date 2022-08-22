@@ -13,6 +13,36 @@ models[['Poisson 2']] <- glm(Desertion ~ Crime_prop + Donations, dat, family = p
 models[['Logit 1']] <- glm(Clergy ~ Crime_prop + Infants, dat, family = binomial())
 
 
+test_that("manual sandwich", {
+    # HC1
+    for (m in models) {
+        tab <- modelsummary(m,
+            output = "dataframe",
+            vcov = "stata",
+            estimate = "std.error",
+            fmt = NULL,
+            statistic = NULL,
+            gof_map = NA)
+        tab <- as.numeric(tab[["Model 1"]])
+        man <- sqrt(diag(sandwich::vcovHC(m, type = "HC1")))
+        expect_equal(tab, man, ignore_attr = TRUE)
+    }
+    # HC4
+    for (m in models) {
+        tab <- modelsummary(m,
+            output = "dataframe",
+            vcov = "HC4",
+            estimate = "std.error",
+            fmt = NULL,
+            statistic = NULL,
+            gof_map = NA)
+        tab <- as.numeric(tab[["Model 1"]])
+        man <- sqrt(diag(sandwich::vcovHC(m, type = "HC4")))
+        expect_equal(tab, man, ignore_attr = TRUE)
+    }
+})
+
+
 test_that("user-supplied vcov_type in gof section", {
     mod <- lm(hp ~ mpg, data = mtcars)
     vc <- list("Rob" = "robust",
@@ -303,5 +333,6 @@ test_that("hardcoded numerical", {
             "(Intercept)" = 9,
             "drat" = 3,
             "hp" = 2))
-    expect_equivalent(tab[["Model 1"]], c("9.000", "2.000", "3.000"))
+    expect_equal(tab[["Model 1"]], c("9.000", "2.000", "3.000"))
 })
+

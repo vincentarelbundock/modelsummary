@@ -88,16 +88,28 @@ sanitize_vcov <- function(vcov, models, ...) {
       vcov[[i]] <- as.matrix(vcov[[i]])
     }
 
-    checkmate::assert(
-      checkmate::check_null(vcov[[i]]),
-      checkmate::check_formula(vcov[[i]]),
-      checkmate::check_function(vcov[[i]]),
-      checkmate::check_matrix(vcov[[i]]),
-      checkmate::check_numeric(vcov[[i]]),
-      checkmate::check_character(vcov[[i]], min.len = 2),
-      checkmate::check_choice(tolower(vcov[[i]]), choices = tolower(sandwich_types)),
-      combine = "or"
-    )
+    j <- ifelse(length(models) == 1, 1, i)
+    # fixest support other strings
+    if (inherits(models[[j]], "fixest")) {
+        checkmate::assert(
+            checkmate::check_null(vcov[[i]]),
+            checkmate::check_formula(vcov[[i]]),
+            checkmate::check_function(vcov[[i]]),
+            checkmate::check_matrix(vcov[[i]]),
+            checkmate::check_numeric(vcov[[i]]),
+            checkmate::check_character(vcov[[i]], min.len = 1),
+            combine = "or")
+    } else {
+        checkmate::assert(
+            checkmate::check_null(vcov[[i]]),
+            checkmate::check_formula(vcov[[i]]),
+            checkmate::check_function(vcov[[i]]),
+            checkmate::check_matrix(vcov[[i]]),
+            checkmate::check_numeric(vcov[[i]]),
+            checkmate::check_character(vcov[[i]], min.len = 2),
+            checkmate::check_choice(tolower(vcov[[i]]), choices = tolower(sandwich_types)),
+            combine = "or")
+    }
 
     if (isTRUE(checkmate::check_formula(vcov[[i]]))) {
       names(vcov)[i] <- paste("by:", gsub("\\+", "\\&", gsub(":", "\\ & ", as.character(vcov[[i]])[2])))
@@ -113,7 +125,6 @@ sanitize_vcov <- function(vcov, models, ...) {
     # case-insensitive sandwich types
     if (isTRUE(checkmate::check_character(vcov[[i]], len = 1))) {
 
-      cl <- 
       # modelsummary-specific shortcuts
       vcov[[i]] <- switch(tolower(vcov[[i]]),
         "stata" = "hc1",
@@ -126,7 +137,11 @@ sanitize_vcov <- function(vcov, models, ...) {
 
       if (isTRUE(tolower(vcov[[i]]) %in% c("classical", "constant", "iid", "default"))) {
         vcov[i] <- list(NULL)
-        names(vcov)[i] <- ""
+        if (isTRUE(tolower(vcov[[i]]) %in% c("classical", "constant", "default"))) {
+          names(vcov)[i] <- tools::toTitleCase("vcov[[i]]")
+        } else {
+          names(vcov)[i] <- "IID"
+        }
         j <- ifelse(length(models) == 1, 1, i)
         if (inherits(models[[j]], c("lm_robust", "iv_robust", "felm"))) {
           msg <- insight::format_message(sprintf('When the `vcov` argument is set to "iid", "classical", or "constant", `modelsummary` extracts the default variance-covariance matrix from the model object. For objects of class `%s`, the default vcov is not always IID. Please make sure that the standard error label matches the numeric results in the table. Note that the `vcov` argument accepts a named list for users who want to customize the standard error labels in their regression tables.', class(models[[j]])[1]))

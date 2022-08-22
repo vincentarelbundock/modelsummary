@@ -64,3 +64,46 @@ get_vcov.default <- function(model, vcov = NULL, ...) {
     stop(msg, call. = FALSE)
   }
 }
+
+
+
+#' internal function
+#'
+#' @param v a string or formula describing the standard error type
+#' @keywords internal
+get_vcov_type <- function(vcov) {
+
+  # user-supplied std.error names
+  if (!is.null(names(vcov))) return(names(vcov))
+
+  get_vcov_type_inner <- function(v) {
+
+    if (is.character(v)) {
+      if (v %in% c("robust", "classical", "stata", "classical", "constant", "panel-corrected", "Andrews", "outer-product")) {
+         out <- tools::toTitleCase(v)
+       } else if (v == "NeweyWest") {
+         out <- "Newey-West"
+       } else {
+         out <- toupper(v)
+       }
+    } else if (inherits(v, "formula")) {
+      out <- paste("by:", gsub("\\+", "\\&", gsub(":", "\\ & ", as.character(v)[2])))
+    } else if (is.null(v)) {
+      out <- NULL
+    } else if (is.function(v)) {
+      out <- "function"
+    } else if (is.matrix(v)) {
+      out <- "matrix"
+    } else if (checkmate::test_atomic_vector(v)) {
+      out <- "vector"
+    } else {
+      out <- NULL
+    }
+    return(out)
+  }
+
+  vcov_type <- sapply(vcov, get_vcov_type_inner)
+
+  return(vcov_type)
+}
+

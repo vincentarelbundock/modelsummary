@@ -92,9 +92,14 @@ These errors messages were generated during extraction:
             def <- paste(old[["term"]], old[[shape$group_name]])
             cus <- paste(new[["term"]], new[[shape$group_name]])
         }
-        idx <- match(cus, def)
+        idx <- match(def, cus)
+        if (all(is.na(idx))) {
+            warning(insight::format_message("Term name mismatch. Make sure all `tidy_custom` method returns a data frame with proper and matching term names."),
+                    call. = FALSE)
+            return(old)
+        }
         for (n in columns) {
-            old[[n]][idx] <- new[[n]]
+            old[[n]] <- ifelse(is.na(idx), old[[n]], new[[n]][idx])
         }
         return(old)
     }

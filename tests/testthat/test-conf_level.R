@@ -27,7 +27,7 @@ test_that("Issue 513", {
 
 
 
-ci_funs <- paste0(c("ci\\.glm", "confint\\.glm", "stats::confint"), collapse = "|")
+ci_funs <- paste0(c("^ci$", "ci\\.glm", "confint\\.glm", "stats::confint"), collapse = "|")
 mod <- list()
 mod$Poisson <- glm(am ~ drat, data = mtcars, family = poisson())
 mod$Logit <- glm(am ~ qsec, data = mtcars, family = poisson())

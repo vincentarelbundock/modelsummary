@@ -7,11 +7,9 @@ fixest::setFixest_nthreads(1) # avoids warning pollution
 test_that("automatic standard errors labelling", {
     mod <- lm(hp ~ mpg, mtcars)
     vcov <- list("iid", "robust", "stata", ~cyl, ~vs + am, ~vs:am)
-    tab <- modelsummary(mod, vcov = vcov, output = "dataframe")
-    expect_true("Std.Errors" %in% tab[[2]])
     expect_true("IID" %in% tab[[4]])
-    expect_true("Robust" %in% tab[[5]])
-    expect_true("Stata" %in% tab[[6]])
+    expect_true("HC3" %in% tab[[5]])
+    expect_true("HC1" %in% tab[[6]])
     expect_true("by: cyl" %in% tab[[7]])
     expect_true("by: vs & am" %in% tab[[8]])
     expect_true("by: vs & am" %in% tab[[9]])
@@ -19,7 +17,7 @@ test_that("automatic standard errors labelling", {
     tab <- modelsummary(mod, vcov = vcov, output = "dataframe")
     expect_true("Std.Errors" %in% tab[[2]])
     expect_true("IID" %in% tab[[4]])
-    expect_true("Robust" %in% tab[[5]])
+    expect_true("HC3" %in% tab[[5]])
 })
 
 
