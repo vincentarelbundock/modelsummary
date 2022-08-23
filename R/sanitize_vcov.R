@@ -89,25 +89,44 @@ sanitize_vcov <- function(vcov, models, ...) {
     }
 
     j <- ifelse(length(models) == 1, 1, i)
-    # fixest support other strings
-    checkmate::assert(
-        checkmate::check_null(vcov[[i]]),
-        checkmate::check_formula(vcov[[i]]),
-        checkmate::check_function(vcov[[i]]),
-        checkmate::check_matrix(vcov[[i]]),
-        checkmate::check_numeric(vcov[[i]]),
-        checkmate::check_character(vcov[[i]], min.len = 2),
-        checkmate::check_choice(tolower(vcov[[i]]), choices = tolower(sandwich_types)),
-        combine = "or")
+    # fixest does its own checks
+
+    if (!inherits(models[[j]], "fixest")) {
+      checkmate::assert(
+          checkmate::check_null(vcov[[i]]),
+          checkmate::check_formula(vcov[[i]]),
+          checkmate::check_function(vcov[[i]]),
+          checkmate::check_matrix(vcov[[i]]),
+          checkmate::check_numeric(vcov[[i]]),
+          checkmate::check_character(vcov[[i]], min.len = 2),
+          checkmate::check_choice(tolower(vcov[[i]]), choices = tolower(sandwich_types)),
+          combine = "or")
+
+    # fixest is weird
+    } else {
+      insight::check_if_installed("fixest")
+      if (identical(vcov[[i]], "robust")) {
+        vcov[[i]] <- "HC1"
+      } else if (identical(vcov[[i]], "HC3")) {
+        insight::check_if_installed("sandwich")
+        vcov[[i]] <- tryCatch(
+          sandwich::vcovHC(models[[j]]),
+          error = "HC1")
+        names(vcov)[i] <- "HC3"
+      } else if (isTRUE(checkmate::check_formula(vcov[[i]]))) {
+        vcov[[i]] <- stats::vcov(models[[j]], vcov = vcov[[i]])
+      }
+    }
 
     if (isTRUE(checkmate::check_formula(vcov[[i]]))) {
       names(vcov)[i] <- paste("by:", gsub("\\+", "\\&", gsub(":", "\\ & ", as.character(vcov[[i]])[2])))
     }
 
-    if (isTRUE(checkmate::check_function(vcov[[i]])) ||
+    if (is.null(names(vcov)[i]) && (
+        isTRUE(checkmate::check_function(vcov[[i]])) ||
         isTRUE(checkmate::check_matrix(vcov[[i]])) ||
         isTRUE(checkmate::check_numeric(vcov[[i]])) ||
-        isTRUE(checkmate::check_character(vcov[[i]]))) {
+        isTRUE(checkmate::check_character(vcov[[i]])))) {
       names(vcov)[i] <- "Custom"
     }
 

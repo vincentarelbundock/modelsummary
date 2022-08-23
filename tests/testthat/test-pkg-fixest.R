@@ -74,11 +74,15 @@ test_that("regression: issue #450", {
     requiet("sandwich")
     mod <- feols(mpg ~ wt, data = mtcars)
 
-    insight::get_varcov(mod, vcov = "HC1")
-
     se1 <- sqrt(diag(vcovHC(mod, type = "HC3")))
-    se2 <- get_estimates(mod, vcov = "HC3")$std.error
-    expect_equal(se2, se1, ignore_attr = TRUE)
+    tab <- modelsummary(mod,
+        vcov = "HC3",
+        gof_map = NA,
+        fmt = 10,
+        estimate = "std.error",
+        statistic = NULL,
+        output = "dataframe")
+    expect_equal(as.numeric(tab[["Model 1"]]), se1, ignore_attr = TRUE)
 
     se1 <- sqrt(diag(vcovHC(mod, type = "HC1")))
     se2 <- get_estimates(mod, vcov = "HC1")$std.error

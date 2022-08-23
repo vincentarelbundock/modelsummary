@@ -31,7 +31,15 @@ get_vcov.default <- function(model, vcov = NULL, ...) {
 
   } else if (isTRUE(checkmate::check_formula(vcov))) {
     dots[["cluster"]] <- vcov
-    out <- try(insight::get_varcov(model, vcov = "vcovCL", vcov_args = dots, component = "all"), silent = TRUE)
+    if (inherits(model, "fixest")) {
+      out <- try(
+        insight::get_varcov(model, vcov = "vcovCL", vcov_args = dots, component = "all"),
+        silent = TRUE)
+    } else {
+      out <- try(
+        insight::get_varcov(model, vcov = "vcovCL", vcov_args = dots, component = "all"),
+        silent = TRUE)
+    }
     if (inherits(out, "try-error")) {
       msg <- attr(out, "condition")$message
       if (grepl("Unable to extract", msg)) {
@@ -54,7 +62,6 @@ get_vcov.default <- function(model, vcov = NULL, ...) {
       out <- as.matrix(out)
   }
 
-    print(out)
   if (is.matrix(out)) {
     return(out)
 
