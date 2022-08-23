@@ -3,6 +3,7 @@ colnames(dat)[1] <- "under_score"
 colnames(dat)[2] <- "oh&yeah<sup>2</sup>"
 
 
+
 test_that("escaped tables", {
     # unicode minus signs break on windows
     skip_on_os("windows")
@@ -123,4 +124,14 @@ test_that("column headers are not escaped with `escape=FALSE`", {
                                  vcov = c("classical", "HC1"),
                                  escape = FALSE,
                                  output = "html"))
+})
+
+
+test_that("Issue 546: escape gof names", {
+    requiet("fixest")
+    dat <- mtcars
+    dat$cyl_new <- dat$cyl
+    mod <- feols(mpg ~ hp | cyl_new, data = dat)
+    tab <- modelsummary(mod, "latex")
+    expect_true(grepl("cyl\\_new", tab, fixed = TRUE))
 })
