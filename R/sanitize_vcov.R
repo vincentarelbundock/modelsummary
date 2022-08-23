@@ -114,7 +114,9 @@ sanitize_vcov <- function(vcov, models, ...) {
           error = "HC1")
         names(vcov)[i] <- "HC3"
       } else if (isTRUE(checkmate::check_formula(vcov[[i]]))) {
+        lab <- paste("by:", gsub("\\+", "\\&", gsub(":", "\\ & ", as.character(vcov[[i]])[2])))
         vcov[[i]] <- stats::vcov(models[[j]], vcov = vcov[[i]])
+        names(vcov)[i] <- lab
       }
     }
 

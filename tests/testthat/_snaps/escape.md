@@ -931,7 +931,7 @@
         </tr>
         <tr>
          <td style="text-align:left;"> Std.Errors </td>
-         <td style="text-align:center;"> Classical </td>
+         <td style="text-align:center;"> IID </td>
          <td style="text-align:center;"> HC1 </td>
         </tr>
       </tbody>
