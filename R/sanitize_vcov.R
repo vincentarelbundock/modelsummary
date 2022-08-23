@@ -124,7 +124,7 @@ sanitize_vcov <- function(vcov, models, ...) {
       names(vcov)[i] <- paste("by:", gsub("\\+", "\\&", gsub(":", "\\ & ", as.character(vcov[[i]])[2])))
     }
 
-    if (is.null(names(vcov)[i]) && (
+    if ((is.null(names(vcov)[i]) || is.na(names(vcov)[i])) && (
         isTRUE(checkmate::check_function(vcov[[i]])) ||
         isTRUE(checkmate::check_matrix(vcov[[i]])) ||
         isTRUE(checkmate::check_numeric(vcov[[i]])) ||

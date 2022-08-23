@@ -11,11 +11,4 @@ test_that("Issue #518", {
         gof_map = "none",
         vcov = list(NULL, ~cyl))))
     expect_true(all(tab[["Model 1"]] != tab[["Model 2"]]))
-    expect_warning(suppressMessages(modelsummary(
-        mod,
-        output = "dataframe",
-        estimate = "std.error",
-        statistic = NULL,
-        gof_map = "none",
-        vcov = list(NULL, ~cyl))))
 })
