@@ -1,3 +1,5 @@
+skip("works interactively")
+
 test_that("Issue 513", {
     # bad combination of arguments
     mod <- lm(mpg ~ hp, data = mtcars)

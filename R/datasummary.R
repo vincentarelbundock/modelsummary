@@ -167,7 +167,7 @@ datasummary <- function(formula,
   ))
   sanitize_output(output)
 
-  sanity_ds_data(formula = formula, data = data)
+  sanity_ds_data(formula = formula, data = data, internal_call = list(...)[["internal_call"]])
   sanitize_escape(escape)
 
   # convenience: transform logical and character to factor

@@ -273,12 +273,12 @@ sanity_tidy <- function(tidy_output, tidy_custom, estimate, statistic, modelclas
 }
 
 
-sanity_ds_data <- function(formula, data) {
+sanity_ds_data <- function(formula, data, internal_call = FALSE) {
   checkmate::assert_data_frame(data)
   # labelled data does not play well with All()
   is_labelled <- any(sapply(data, inherits, "haven_labelled"))
   is_all <- any(grepl("^All\\(", as.character(formula)))
-  if (is_all && is_labelled) {
+  if (is_all && is_labelled && !isTRUE(internal_call)) {
     msg <- format_msg(
     "It is not safe to use labelled data with the `All()` command in a datasummary()` formula.")
     warn_once(msg, id = "datasummary_all_labelled")

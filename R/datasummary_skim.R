@@ -157,10 +157,6 @@ datasummary_skim_numeric <- function(
   escape,
   ...) {
 
-  # fake formula to indicate that we definitely use All() eventually
-  sanity_ds_data(All(data) ~ x + y, data)
-
-
   # draw histogram?
   if (histogram) {
 
@@ -231,7 +227,11 @@ datasummary_skim_numeric <- function(
     # know the exact subset of variables kept by tabular, in the exact
     # order, to print the right histograms.
     cache <- settings_cache(c("output_format", "output_file", "output_factory"))
-    idx <- datasummary(f, data = dat_nolab, output = "data.frame")[[1]]
+    idx <- datasummary(
+        f,
+        data = dat_nolab,
+        output = "data.frame",
+        internal_call = TRUE)[[1]]
     settings_restore(cache)
 
     histogram_list <- as.list(dat_lab[, idx, drop = FALSE])
@@ -264,7 +264,8 @@ datasummary_skim_numeric <- function(
         title = title,
         align = align,
         notes = notes,
-        escape = escape)
+        escape = escape,
+        internal_call = TRUE)
     settings_restore(cache)
 
     out <- kableExtra::column_spec(out,
