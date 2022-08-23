@@ -36,7 +36,7 @@ rounding <- function(x, fmt = '%.3f', ...) {
             if (fmt == 0) {
                 out <- sprintf("%.0f", x)
             } else {
-                out <- trimws(format(round(x, fmt), nsmall = fmt, ...))
+                out <- format(round(x, fmt), nsmall = fmt, trim = TRUE, ...)
             }
         } else if (is.function(fmt)) {
             # the `format()` function does not seem to be properly vectorized
