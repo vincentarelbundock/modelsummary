@@ -39,7 +39,8 @@ rounding <- function(x, fmt = '%.3f', ...) {
                 out <- trimws(format(round(x, fmt), nsmall = fmt, ...))
             }
         } else if (is.function(fmt)) {
-            out <- fmt(x)
+            # the `format()` function does not seem to be properly vectorized
+            out <- sapply(x, fmt)
         } else {
             out <- x
         }

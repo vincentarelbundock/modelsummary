@@ -117,7 +117,7 @@ format_estimates <- function(
       } else {
         fmt1 <- fmt[["fmt"]]
       }
-      # keep as numeric foir glue functions
+      # keep as numeric for glue functions
       if (!is.null(fmt1)) {
         est[[n]] <- rounding(est[[n]], fmt1)
       }
