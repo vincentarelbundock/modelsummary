@@ -46,7 +46,10 @@ test_that("datasummary labels",{
     expect_true("Transmission" %in% colnames(tab))
 
     # datasummary_balance is not supported yet
-    expect_warning(tab <- datasummary_balance(~am, data = dat), regexp = "belled.*balance")
+    expect_warning(expect_warning(
+        tab <- datasummary_balance(~am, data = dat),
+        regexp = "belled.*balance"),
+        regexp = "It is not safe")
 })
 
 
