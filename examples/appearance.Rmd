@@ -87,3 +87,21 @@ modelsummary(models,
     row_spec(3, background = 'pink') %>%
     column_spec(1, color = 'blue')
 ```
+
+# Variable labels
+
+Some packages like `haven` can assign attributes to the columns of a dataset for use as labels. Most of the functions in `modelsummary` can display these labels automatically. For example:
+
+```{r}
+library(haven)
+dat <- mtcars
+dat$am <- haven::labelled(dat$am, label = "Transmission")
+dat$mpg <- haven::labelled(dat$mpg, label = "Miles per Gallon")
+mod <- lm(hp ~ mpg + am, dat = dat)
+
+modelsummary(mod)
+
+datasummary_skim(dat[, c("mpg", "am", "drat")])
+```
+
+Warning: The labelling system in `haven` does not appear to fully support factor variables. If you want to use factors, it is often best to convert the variable in question to a labelled character vector instead.
