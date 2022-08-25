@@ -241,7 +241,9 @@ modelsummary <- function(
   ###################
   coef_rename_user <- coef_rename
   if (is.null(coef_rename) && is.null(coef_map)) {
-    coef_rename <- get_variable_labels_models(models)
+    lab <- get_variable_labels_models(models)
+    fun <- function(x) coef_rename_labels(x, lab)
+    coef_rename <- fun
   }
 
 

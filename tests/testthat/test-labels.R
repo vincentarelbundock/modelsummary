@@ -144,3 +144,16 @@ test_that("formatting + labels", {
 })
 
 
+test_that("factor labels", {
+    dat <- mtcars
+    dat$mpg <- haven::labelled(
+        dat$mpg,
+        label = "Miles per Gallon")
+    dat$cyl <- haven::labelled(
+        as.character(dat$cyl),
+        label = "Cylinders")
+    mod <- lm(hp ~ mpg + cyl, data = dat)
+    tab <- modelsummary(mod, output = "dataframe")
+    expect_true("Cylinders 6" %in% trimws(tab$term))
+    expect_true("Miles per Gallon" %in% trimws(tab$term))
+})

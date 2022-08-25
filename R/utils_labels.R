@@ -36,6 +36,18 @@ get_variable_labels_data <- function(data) {
 }
 
 
+coef_rename_labels <- function(x, dict) {
+    out <- x
+    for (i in seq_along(dict)) {
+        # `fixed=TRUE` because user-supplied labels could include special regex characters like parentheses.
+        # This will be very problematic if one label is a substring of another
+        # pad otherwise we get ugly labels like "Cylinders6"
+        out <- gsub(names(dict)[i], paste0(dict[i], " "), out, fixed = TRUE)
+    }
+    return(out)
+}
+
+
 strip_labels <- function(data) {
     for (x in colnames(data)) {
         class(data[[x]]) <- setdiff(class(data[[x]]), c("haven_labelled", "vctrs_vctr"))
