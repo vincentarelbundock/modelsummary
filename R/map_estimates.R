@@ -61,7 +61,9 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
             dict <- stats::setNames(coef_rename(estimates$term), estimates$term)
         }
         check_dups(dict)
-        estimates$term <- replace_dict(estimates$term, dict, interaction = TRUE)
+        # if coef_rename is a function, then we trust the user to do interaction
+        # replacement. Otherwise, we can get duplicate replacements: "Height (in feet) (in feet)".
+        estimates$term <- replace_dict(estimates$term, dict, interaction = !isTRUE(is.function(coef_rename)))
     }
 
     # coef_map

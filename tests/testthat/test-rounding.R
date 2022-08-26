@@ -45,11 +45,11 @@ test_that("glue function", {
 })
 
 
-test_that("bugfix: format() is not vectorized", {
+test_that("bugfix: format() is not vectorized (in fact, it is vectorized and vincent just didn't understand the function)", {
     mod <- lm(mpg ~ I(hp * 1000) + drat, data = mtcars)
     f <- function(x) format(x, digits = 3, nsmall = 2, scientific = FALSE)
     tab <- modelsummary(mod, fmt = f, statistic = NULL, gof_map = NA, output = "data.frame")
-    expect_equal(tab[["Model 1"]], c("10.79", "-0.0000518", "4.70"))
+    expect_equal(tab[["Model 1"]], c("10.7898612", "-0.0000518", "4.6981578"))
 })
 
 

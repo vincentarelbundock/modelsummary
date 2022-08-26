@@ -22,6 +22,7 @@ get_variable_labels_data <- function(data) {
     # global variables: sjlabelled-style
     lab <- attr(data, "label", exact = TRUE)
 
+
     # variable attributes: haven-style
     if (is.null(lab)) {
         lab <- Filter(
@@ -39,11 +40,21 @@ get_variable_labels_data <- function(data) {
 coef_rename_labels <- function(x, dict) {
     out <- x
     for (i in seq_along(dict)) {
-        # `fixed=TRUE` because user-supplied labels could include special regex characters like parentheses.
-        # This will be very problematic if one label is a substring of another
+        # escape because user-supplied labels could include special regex characters like parentheses.
+        # substrings are dangerous because they could be subbed twice. We
+        # probably can't format `cyl4`, `cyl6` because those could be
+        # user-supplied variable names.
         # pad otherwise we get ugly labels like "Cylinders6"
-        out <- gsub(names(dict)[i], paste0(dict[i], " "), out, fixed = TRUE)
+        tar <- dict[i]
+        src <- names(dict)[i]
+        src <- gsub("(\\W)", "\\\\\\1", src) # escape parentheses so they don't catch in regex
+        out <- gsub(sprintf("^%s$", src), tar, out, perl = TRUE)
+        out <- gsub(sprintf("^%s:", src), paste0(tar, ":"), out, perl = TRUE)
+        out <- gsub(sprintf(":%s$", src), paste0(":", tar), out, perl = TRUE)
+        out <- gsub(sprintf(":%s:", src), paste0(":", tar, ":"), out, perl = TRUE)
+        out <- gsub(sprintf("factor\\(%s\\)", src), paste0(tar, " "), out, perl = TRUE)
     }
+    out <- trimws(out)
     return(out)
 }
 

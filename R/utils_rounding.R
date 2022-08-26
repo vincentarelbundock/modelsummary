@@ -29,22 +29,30 @@ rounding <- function(x, fmt = '%.3f', ...) {
 
                                         # numeric
     } else {
+
         if (is.character(fmt)) {
             out <- sprintf(fmt, x, ...)
+
         } else if (is.numeric(fmt)) {
                                         # R >4.1.0 will make 0 invalid in format()
             if (fmt == 0) {
                 out <- sprintf("%.0f", x)
+
             } else {
-                # apply `format()` individually to each cell, otherwise if one 
-                # entry requires a lot of digits, then all the entries will be 
-                # stretched to match.
-                fun <- function(x) format(
-                    x, digits = 1, nsmall = fmt, trim = TRUE, scientific = 4, ...)
+                # apply `format()` individually to each cell, otherwise if one
+                # entry requires a lot of digits, then all the entries will be
+                # padded to match.  scientific = 4 means that this converts to
+                # scientific if the fixed version is 4 characters longer than
+                # the scientific.
+                fun <- function(x) {
+                    format(x, digits = 1, nsmall = fmt, trim = TRUE, scientific = 4, ...)
+                }
                 out <- sapply(x, fun)
             }
+
         } else if (is.function(fmt)) {
             out <- fmt(x)
+
         } else {
             out <- x
         }

@@ -114,46 +114,50 @@ test_that("modelsummary: also applies variable labels for depvar", {
 
 
 
-test_that("formatting + labels", {
-  dat <- mtcars
-  dat$mpg <- haven::labelled(dat$mpg, label = "Miles per gallon")
-  dat$mpg2 <- haven::labelled(dat$mpg, label = "Miles per gallon")
-  dat$cyl <- as.factor(dat$cyl)
-  dat$cyl <- haven::labelled(dat$cyl, label = "Number of cylinders")
-
-  mod <- list(
-    lm(hp ~ mpg + drat:mpg + cyl, data = dat),
-    lm(hp ~ mpg2 * drat + cyl, data = dat)
-  )
-  out1 <- modelsummary(mod, "dataframe")
-  out2 <- modelsummary(mod, "dataframe", fmt = 1,
-                       estimate  = "{estimate} [{conf.low}, {conf.high}]",
-                       statistic = NULL,
-                       coef_omit = "Intercept")
-
-  expect_equal(
-    unique(out1[1:10, "term"]),
-    c("(Intercept)", "Miles per gallon", "Number of cylinders",
-      "Miles per gallon × drat", "drat")
-  )
-  expect_equal(
-    unique(out2[1:4, "term"]),
-    c("Miles per gallon", "Number of cylinders",
-      "Miles per gallon × drat", "drat")
-  )
-})
+# VAB: at the moment, I don't think there's a good way to format character
+# factors, because `cyl4` could be automatic or user-supplied. At least
+# `factor()` gives us a clue, but most regex we can cook up for the other case
+# will necessarily be dangerous for substring replacements.
 
 
-test_that("factor labels", {
-    dat <- mtcars
-    dat$mpg <- haven::labelled(
-        dat$mpg,
-        label = "Miles per Gallon")
-    dat$cyl <- haven::labelled(
-        as.character(dat$cyl),
-        label = "Cylinders")
-    mod <- lm(hp ~ mpg + cyl, data = dat)
-    tab <- modelsummary(mod, output = "dataframe")
-    expect_true("Cylinders 6" %in% trimws(tab$term))
-    expect_true("Miles per Gallon" %in% trimws(tab$term))
-})
+# test_that("formatting + labels", {
+#   dat <- mtcars
+#   dat$mpg <- haven::labelled(dat$mpg, label = "Miles per gallon")
+#   dat$mpg2 <- haven::labelled(dat$mpg, label = "Miles per gallon")
+#   dat$cyl <- haven::labelled(as.character(dat$cyl), label = "Number of cylinders")
+
+#   mod <- list(
+#     lm(hp ~ mpg + drat:mpg + cyl, data = dat),
+#     lm(hp ~ mpg2 * drat + cyl, data = dat)
+#   )
+#   out1 <- modelsummary(mod, "dataframe")
+#   out2 <- modelsummary(mod, "dataframe", fmt = 1,
+#                        estimate  = "{estimate} [{conf.low}, {conf.high}]",
+#                        statistic = NULL,
+#                        coef_omit = "Intercept")
+
+#   expect_equal(
+#     unique(out1[1:10, "term"]),
+#     c("(Intercept)", "Miles per gallon", "Number of cylinders",
+#       "Miles per gallon × drat", "drat")
+#   )
+#   expect_equal(
+#     unique(out2[1:4, "term"]),
+#     c("Miles per gallon", "Number of cylinders",
+#       "Miles per gallon × drat", "drat")
+#   )
+# })
+#
+# test_that("factor labels", {
+#     dat <- mtcars
+#     dat$mpg <- haven::labelled(
+#         dat$mpg,
+#         label = "Miles per Gallon")
+#     dat$cyl <- haven::labelled(
+#         as.character(dat$cyl),
+#         label = "Cylinders")
+#     mod <- lm(hp ~ mpg + cyl, data = dat)
+#     tab <- modelsummary(mod, output = "dataframe")
+#     expect_true("Cylinders 6" %in% trimws(tab$term))
+#     expect_true("Miles per Gallon" %in% trimws(tab$term))
+# })
