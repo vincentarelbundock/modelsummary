@@ -5,7 +5,10 @@ mod <- list(
 
 test_that("function inside glue string", {
     st <- "{ifelse(p.value <0.001, 'Significant', 'Not significant')}"
-    tab <- modelsummary(mod, statistic = st, output = "dataframe")
+    tab <- modelsummary(mod,
+      statistic = st,
+      fmt = NULL,
+      output = "dataframe")
     expect_equal(tab[[4]][2], "Significant")
     expect_equal(tab[[5]][2], "Not significant")
 })
