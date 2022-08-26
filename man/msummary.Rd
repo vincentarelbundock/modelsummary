@@ -44,8 +44,8 @@ msummary(
 \item{fmt}{determines how to format numeric values
 \itemize{
 \item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
+\item function: returns a formatted character string. For example, the \code{format()} function can be used in combination with the \code{fmt} argument for full control of number formatting: number of digits, number of digits after the decimal, scientific notation, etc. See the Examples section below.
 \item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
-\item function: returns a formatted character string.
 \item NULL: does not format numbers, which allows users to include function in the "glue" strings in the \code{estimate} and \code{statistic} arguments.
 \item A named list to format distinct elements of the table differently. Names correspond to column names produced by \code{get_estimates(model)} or \code{get_gof(model)}. Values are integers, characters, or functions, as described above. The \code{fmt} element is used as default for unspecified elements Ex: \code{fmt=list("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)}
 \item LaTeX output: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command, which requires the \code{siunitx} package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
@@ -398,6 +398,16 @@ modelsummary(
   vcov = list("Stata Corp" = "stata",
               "Newey Lewis & the News" = "NeweyWest"))
 
+# fmt: function to keep 3 digits including at least 2 after the decimal
+m <- lm(mpg ~ I(hp * 1000) + drat, data = mtcars)
+f <- function(x) format(x, digits = 3, nsmall = 2, scientific = FALSE)
+modelsummary(m, fmt = f, gof_map = NA)
+
+# fmt: same as above but using scientific notation
+m <- lm(mpg ~ I(hp * 1000) + drat, data = mtcars)
+f <- function(x) format(x, digits = 3, nsmall = 2)
+modelsummary(m, fmt = f, gof_map = NA)
+
 # coef_rename
 modelsummary(models, coef_rename = c('Volume' = 'Large', 'Height' = 'Tall'))
 modelsummary(models, coef_rename = toupper)
@@ -411,7 +421,7 @@ modelsummary(models, coef_map = c('Volume', 'Height'))
 modelsummary(models, coef_omit = "ei", omit = ".*")
 
 # coef_omit: omit a specific coefficient
-modelsummary(models, coef_omit = "^Volume$", gof_omit = ".*", output = "markdown")
+modelsummary(models, coef_omit = "^Volume$", gof_omit = ".*")
 
 # coef_omit: omit coefficients matching either one of two substring
 modelsummary(models, coef_omit = "ei|rc", omit = ".*")
