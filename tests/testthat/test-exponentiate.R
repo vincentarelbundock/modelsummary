@@ -11,10 +11,12 @@ test_that("exponentiate is a flag", {
 test_that("logit coefficients exponentiate", {
 
     tab <- modelsummary(fit, gof_omit = ".*", estimate = "estimate", statistic = NULL, output = "dataframe", exponentiate = TRUE)
-    expect_equal(tab[[4]], sprintf("%.3f", exp(tid$estimate)))
+    x <- c("0.0002", "1.448", "2.078", "2.017")
+    expect_equal(tab[[4]], x)
 
     tab <- modelsummary(fit, gof_omit = ".*", estimate = "conf.low", statistic = NULL, output = "dataframe", exponentiate = TRUE)
-    expect_equal(tab[[4]], sprintf("%.3f", exp(tid$conf.low)))
+    x <- c("2e-09", "1.026", "0.130", "0.044")
+    expect_equal(tab[[4]], x)
 
     tab <- modelsummary(fit, gof_omit = ".*", estimate = "conf.high", statistic = NULL, output = "dataframe", exponentiate = TRUE)
     expect_equal(tab[[4]], sprintf("%.3f", exp(tid$conf.high)))
@@ -28,10 +30,11 @@ test_that("vcov", {
     requiet("sandwich")
     b <- coef(fit)
     se  <- sqrt(diag(vcovCL(fit, ~cyl)))
+    x <- c("0.0002", "1.448", "2.078", "2.017")
     tab <- modelsummary(fit, vcov = ~cyl, gof_omit = ".*", estimate = "estimate",
                         statistic = NULL, output = "dataframe",
                         exponentiate = TRUE)
-    expect_equal(tab[[4]], sprintf("%.3f", exp(b)))
+    expect_equal(tab[[4]], x)
     tab <- modelsummary(fit, vcov = ~cyl, gof_omit = ".*", estimate = "std.error",
                         statistic = NULL, output = "dataframe",
                         exponentiate = TRUE)

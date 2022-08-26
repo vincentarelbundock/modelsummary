@@ -36,13 +36,15 @@ rounding <- function(x, fmt = '%.3f', ...) {
             if (fmt == 0) {
                 out <- sprintf("%.0f", x)
             } else {
-                # format does not seem to be properly vectorized
-                out <- sapply(x, format, digits = 1, nsmall = fmt, trim = TRUE, scientific = FALSE)
-                # out <- format(round(x, fmt), nsmall = fmt, trim = TRUE, ...)
+                # apply `format()` individually to each cell, otherwise if one 
+                # entry requires a lot of digits, then all the entries will be 
+                # stretched to match.
+                fun <- function(x) format(
+                    x, digits = 1, nsmall = fmt, trim = TRUE, scientific = 4, ...)
+                out <- sapply(x, fun)
             }
         } else if (is.function(fmt)) {
-            # the `format()` function does not seem to be properly vectorized
-            out <- sapply(x, fmt)
+            out <- fmt(x)
         } else {
             out <- x
         }

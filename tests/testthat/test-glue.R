@@ -18,7 +18,7 @@ test_that("glue + no statistic",{
     statistic = NULL,
     output = "data.frame",
     gof_omit  = ".*")
-  truth4 <- c("**30.099** [26.762, 33.436] (0.000)", "**-0.068** [-0.089, -0.048] (0.000)", "")
+  truth4 <- c("**30.099** [26.762, 33.436] (<0.001)", "**-0.068** [-0.089, -0.048] (<0.001)", "")
   truth5 <-  c("**9.089** [4.102, 18.413] (0.006)", "**-0.041** [-0.139, 0.013] (0.255)", 
                "**-0.690** [-2.499, 0.795] (0.382)")
   expect_equal(tab[[4]], truth4)
@@ -28,6 +28,7 @@ test_that("glue + no statistic",{
 test_that("glue + multi statistics",{
   tab <- modelsummary(
     mod, 
+    fmt = "%.3f",
     estimate  = "**{estimate}** [{conf.low}, {conf.high}]",
     statistic = c("t={statistic}", 
                   "p={p.value}"),

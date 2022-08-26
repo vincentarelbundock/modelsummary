@@ -129,10 +129,6 @@ format_estimates <- function(
     }
   }
 
-format.pval(0.000000123, digits = 1, nsmall = 3, eps = 1e-5, scientific = FALSE)
-format.pval(0.01023, digits = 1, nsmall = 3, eps = 1e-5, scientific = FALSE)
-
-
   # extract estimates (there can be several)
   for (i in seq_along(estimate_glue)) {
     s <- estimate_glue[i]
