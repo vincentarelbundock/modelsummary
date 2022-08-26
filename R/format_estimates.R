@@ -115,7 +115,12 @@ format_estimates <- function(
       if (n %in% names(fmt)) {
         fmt1 <- fmt[[n]]
       } else {
-        fmt1 <- fmt[["fmt"]]
+        if (n == "p.value" && is.numeric(fmt[["fmt"]])) {
+          pdigits <- -max(fmt[["fmt"]], 3)
+          fmt1 <- function(x) format.pval(x, digits = 1, nsmall = fmt[["fmt"]], eps = 10^pdigits, scientific = FALSE)
+        } else {
+          fmt1 <- fmt[["fmt"]]
+        }
       }
       # keep as numeric for glue functions
       if (!is.null(fmt1)) {
@@ -123,6 +128,10 @@ format_estimates <- function(
       }
     }
   }
+
+format.pval(0.000000123, digits = 1, nsmall = 3, eps = 1e-5, scientific = FALSE)
+format.pval(0.01023, digits = 1, nsmall = 3, eps = 1e-5, scientific = FALSE)
+
 
   # extract estimates (there can be several)
   for (i in seq_along(estimate_glue)) {

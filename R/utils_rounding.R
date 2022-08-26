@@ -36,7 +36,9 @@ rounding <- function(x, fmt = '%.3f', ...) {
             if (fmt == 0) {
                 out <- sprintf("%.0f", x)
             } else {
-                out <- format(round(x, fmt), nsmall = fmt, trim = TRUE, ...)
+                # format does not seem to be properly vectorized
+                out <- sapply(x, format, digits = 1, nsmall = fmt, trim = TRUE, scientific = FALSE)
+                # out <- format(round(x, fmt), nsmall = fmt, trim = TRUE, ...)
             }
         } else if (is.function(fmt)) {
             # the `format()` function does not seem to be properly vectorized

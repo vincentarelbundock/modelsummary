@@ -43,7 +43,7 @@ modelsummary(
 
 \item{fmt}{determines how to format numeric values
 \itemize{
-\item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
+\item integer: the number of digits to keep after the decimal: \code{format(x, digits = 1, nsmall = fmt, scientific = FALSE)}
 \item function: returns a formatted character string. For example, the \code{format()} function can be used in combination with the \code{fmt} argument for full control of number formatting: number of digits, number of digits after the decimal, scientific notation, etc. See the Examples section below.
 \item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
 \item NULL: does not format numbers, which allows users to include function in the "glue" strings in the \code{estimate} and \code{statistic} arguments.

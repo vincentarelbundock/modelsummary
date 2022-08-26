@@ -53,19 +53,6 @@ test_that("bugfix: format() is not vectorized", {
 })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 test_that("siunitx works with empty cells", {
   skip("obsolete")
   # new versions of parameters return CI, so this is no longer a useful test
@@ -77,4 +64,12 @@ test_that("siunitx works with empty cells", {
       mod,
       output = "latex",
       estimate = "{estimate} [{conf.low}, {conf.high}]"))
+})
+
+
+test_that("very small numbers", {
+    mod <- lm(mpg ~ I(hp * 1000) + drat, data = mtcars)
+    tab <- modelsummary(mod, fmt = 2, output = "dataframe")
+    expect_true("10.79" %in% tab[["Model 1"]])
+    expect_true("-0.00005" %in% tab[["Model 1"]])
 })
