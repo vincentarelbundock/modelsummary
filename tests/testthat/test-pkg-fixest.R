@@ -88,3 +88,19 @@ test_that("regression: issue #450", {
     se2 <- get_estimates(mod, vcov = "HC1")$std.error
     expect_equal(se2, se1, ignore_attr = TRUE)
 })
+
+
+test_that("Issue #551", {
+    mod <- suppressMessages(feols(mpg ~ hp * i(cyl), data = mtcars))
+    cm <- c(
+      "cyl::6" = "Cylinders 6",
+      "cyl::8" = "Cylinders 8",
+      "hp:cyl::4" = "HP x Cylinders 4",
+      "hp:cyl::6" = "HP x Cylinders 6")
+    tab <- modelsummary(mod, coef_map = cm, output = "dataframe")
+    expect_true("HP x Cylinders 4" %in% tab$term)
+})
+
+
+
+

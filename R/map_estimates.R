@@ -63,7 +63,10 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
         check_dups(dict)
         # if coef_rename is a function, then we trust the user to do interaction
         # replacement. Otherwise, we can get duplicate replacements: "Height (in feet) (in feet)".
-        estimates$term <- replace_dict(estimates$term, dict, interaction = !isTRUE(is.function(coef_rename)))
+        estimates$term <- replace_dict(
+            estimates$term,
+            dict,
+            interaction = !isTRUE(is.function(coef_rename)))
     }
 
     # coef_map
@@ -77,7 +80,10 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
             stop("At least one of the term names in each model must appear in `coef_map`.")
         }
         estimates <- estimates[idx, , drop = FALSE]
-        estimates$term <- replace_dict(estimates$term, coef_map, interaction = TRUE)
+        estimates$term <- replace_dict(
+            estimates$term,
+            coef_map,
+            interaction = !isTRUE(is.function(coef_rename)))
     }
 
     # group_map
@@ -86,7 +92,9 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
             group_map <- stats::setNames(group_map, group_map)
         }
         estimates <- estimates[estimates$group %in% names(group_map), , drop = FALSE]
-        estimates$group <- replace_dict(estimates$group, group_map)
+        estimates$group <- replace_dict(
+            estimates$group,
+            group_map)
     }
 
     ## escape if needed
