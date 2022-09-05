@@ -1,6 +1,7 @@
 # modelsummary 1.0.2.9000
 
 * Automatic renaming of `haven` labels in `modelsummary()`, `datasummary()`, `datasummary_skim()`
+* Rounding: display at least one significant digit by default.
 
 # modelsummary 1.0.2
 

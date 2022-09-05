@@ -60,24 +60,19 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, ..
     }
 
     if (!inherits(out, "data.frame")) {
-      stop(sprintf(
-        '`modelsummary could not extract the required information from a model
-of class "%s". The package tried a sequence of 2 helper functions to extract
-estimates:
-
-parameters::parameters(model)
-broom::tidy(model)
-
-To draw a table, one of these commands must return a `data.frame` with a
-column named "term". The `modelsummary` website explains how to summarize
-unsupported models or add support for new models yourself:
-
-https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html
-
-These errors messages were generated during extraction:
-%s',
-        class(model)[1], paste(warning_msg, collapse = "\n")
-      ))
+      msg <- c(
+        sprintf('`modelsummary could not extract the required information from a model of class "%s". The package tried a sequence of 2 helper functions to extract estimates:', class(model)[1]),
+        '',
+        'parameters::parameters(model)',
+        'broom::tidy(model)',
+        '',
+        'To draw a table, one of these commands must return a `data.frame` with a column named "term". The `modelsummary` website explains how to summarize unsupported models or add support for new models yourself: https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html',
+        '',
+        'These errors messages were generated during extraction:',
+        '', '')
+      msg <- insight::format_message(msg)
+      msg <- paste0(msg, paste(warning_msg, collapse = "\n"))
+      stop(msg, call. = FALSE)
     }
 
     override <- function(old, new, columns) {
