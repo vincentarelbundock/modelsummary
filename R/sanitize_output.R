@@ -15,7 +15,7 @@ sanitize_output <- function(output) {
                     'html', 'jupyter', 'latex', 'latex_tabular', 'markdown',
                     'dataframe', 'data.frame', 'modelsummary_list')
   extension_types <- c('html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf',
-                       'jpg', 'png')
+                       'jpg', 'png', 'csv', 'xlsx')
 
   checkmate::assert_string(output)
 
@@ -37,6 +37,8 @@ sanitize_output <- function(output) {
 
 
   extension_dict <- c(
+    "csv"  = "dataframe",
+    "xlsx"  = "dataframe",
     "md"   = "markdown",
     "Rmd"  = "markdown",
     "txt"  = "markdown",
