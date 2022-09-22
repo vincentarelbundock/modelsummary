@@ -180,6 +180,7 @@ get_estimates_parameters <- function(model,
     if (isTRUE(mi[["is_bayesian"]])) {
         if (!"test" %in% names(dots)) args <- c(args, list("test" = NULL))
         if (!"diagnostic" %in% names(dots)) args <- c(args, list("diagnostic" = NULL))
+        if (!"dispersion" %in% names(dots)) args <- c(args, list("dispersion" = TRUE))
     }
 
     # main call
