@@ -510,6 +510,7 @@ modelsummary <- function(
     output   = output,
     title    = title,
     add_rows = add_rows,
+    escape = escape,
     ...
   )
 

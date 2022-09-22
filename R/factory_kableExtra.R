@@ -30,6 +30,12 @@ factory_kableExtra <- function(tab,
              "position", "centering", "vline", "toprule", "bottomrule",
              "midrule", "caption.short", "table.envir", "col.names")
 
+  # kableExtra::kbl and knitr::kable do not respect the `escape` argument for captions.
+  # this will never be fixed upstream because of backward compatibility
+  if (isTRUE(escape)) {
+    title <- escape_string(title)
+  }
+
   arguments <- c(
     list(...),
     "caption"   = title,
@@ -38,7 +44,6 @@ factory_kableExtra <- function(tab,
     "linesep"   = "",
     "row.names" = NULL
   )
-
 
   ## never use `kableExtra`'s default escape
   arguments$escape <- FALSE

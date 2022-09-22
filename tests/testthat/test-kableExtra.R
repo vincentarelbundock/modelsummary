@@ -10,6 +10,7 @@ test_that("knitr::kable_latex ignores bad arguments passed through ...", {
 })
 
 
+
 test_that('output="html" returns raw html', {
     tab <- modelsummary(models, output = "html")
     expect_identical(class(tab), c("modelsummary_string", "kableExtra", "knitr_kable"))
@@ -45,4 +46,14 @@ test_that("kable markdown: rouding + custom stars", {
       stars = c('+' = .1, '*' = .01),
       fmt = '%.8f',
       output = 'markdown'))
+})
+
+
+
+test_that("Issue #548: titles escaped in kableExtra", {
+  mod <- lm(mpg ~ hp, mtcars)
+  tab <- modelsummary(mod, "latex", title = "blah_cyl", escape = TRUE)
+  expect_true(grepl("blah\\\\_cyl", tab))
+  tab <- modelsummary(mod, "latex", title = "blah_cyl", escape = FALSE)
+  expect_false(grepl("blah\\\\_cyl", tab))
 })
