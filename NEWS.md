@@ -1,7 +1,20 @@
 # modelsummary 1.0.2.9000
 
-* Automatic renaming of `haven` labels in `modelsummary()`, `datasummary()`, `datasummary_skim()`
+Breaking change:
+
+* The `title` is now respects the `escape` argument for all `kableExtra` output formats. This can break tables in which users manually escaped titles.
+
+New features:
+
 * Rounding: display at least one significant digit by default.
+* Automatic renaming of `haven` labels in `modelsummary()`, `datasummary()`, `datasummary_skim()`
+* Allow `output = "filename.csv"`
+* Allow `output = "filename.xlsx"`
+
+Bug fixes:
+
+* In some locales, the HTML minus sign created problems in the output. We only use it in "known" locales.
+* Many minor bug fixes
 
 # modelsummary 1.0.2
 
