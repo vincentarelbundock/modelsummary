@@ -21,10 +21,18 @@ settings_init <- function(settings = NULL) {
 
     default_settings <- list(
         "format_numeric_latex" = getOption("modelsummary_format_numeric_latex", default = "siunitx"),
-        "format_numeric_html" = getOption("modelsummary_format_numeric_html", default = "minus"),
+        "modelsummary_format_numeric_html" = getOption("modelsummary_format_numeric_html", default = "minus"),
         "siunitx_scolumns" = FALSE,
         "output_default" = getOption("modelsummary_factory_default", default = "kableExtra"),
         "stars_note" = getOption("modelsummary_stars_note", default = TRUE))
+
+
+    # in hebrew or chinese locales, the html minus signs does not appear and it underlines the whole number.
+    # https://github.com/vincentarelbundock/modelsummary/issues/552
+    regex_locale <- c("be", "ca", "de", "en", "et", "eu", "fi", "fr", "hu", "it", "nl")
+    regex_locale <- paste(sprintf("^%s", regex_locale), collapse = "|")
+    regex_locale <- paste0("(?i)", regex_locale, "|^C$|^POSIX$")
+    settings_set("known_locale", isTRUE(grepl(regex_locale, Sys.getlocale(category = "LC_CTYPE"))))
 
     checkmate::assert_list(settings, null.ok = TRUE, names = "unique")
 
