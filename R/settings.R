@@ -31,7 +31,7 @@ settings_init <- function(settings = NULL) {
     # https://github.com/vincentarelbundock/modelsummary/issues/552
     regex_locale <- c("be", "ca", "de", "en", "et", "eu", "fi", "fr", "hu", "it", "nl")
     regex_locale <- paste(sprintf("^%s", regex_locale), collapse = "|")
-    regex_locale <- paste0("(?i)", regex_locale, "|^C$|^POSIX$")
+    regex_locale <- paste0("(?i)", regex_locale, "|^C|^POSIX")
     settings_set("known_locale", isTRUE(grepl(regex_locale, Sys.getlocale(category = "LC_CTYPE"))))
 
     checkmate::assert_list(settings, null.ok = TRUE, names = "unique")
