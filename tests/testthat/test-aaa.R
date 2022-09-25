@@ -1,3 +1,4 @@
+cat("\n", Sys.getlocale(category = "LC_CTYPE"), "\n")
 # we no longer raise this warning
 # test_that("first time stars=TRUE produces a warning (run first)", {
 #   mod <- lm(mpg ~ hp, mtcars)
