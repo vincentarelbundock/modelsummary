@@ -16,7 +16,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' Excel, RTF, JPG, or PNG. The appearance of the tables can be customized
 #' extensively by specifying the `output` argument, and by using functions from
 #' one of the supported table customization packages: `kableExtra`, `gt`,
-#' `flextable`, `huxtable`. For more information, see the Details and Examples
+#' `flextable`, `huxtable`, `DT`. For more information, see the Details and Examples
 #' sections below, and the vignettes on the `modelsummary` website:
 #' https://vincentarelbundock.github.io/modelsummary/
 #' * [The `modelsummary` Vignette includes dozens of examples of tables with extensive customizations.](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html)
@@ -34,8 +34,8 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'
 #' @param models a model or (optionally named) list of models
 #' @param output filename or object type (character string)
-#' * Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg, .csv, .xlsx.
-#' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the `modelsummary` function.
+#' * Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg.
+#' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the `modelsummary` function.
 #' * Warning: Users should not supply a file name to the `output` argument if they intend to customize the table with external packages. See the 'Details' section.
 #' * LaTeX compilation requires the `booktabs` and `siunitx` packages, but `siunitx` can be disabled or replaced with global options. See the 'Details' section.
 #' * The default output formats and table-making packages can be modified with global options. See the 'Details' section.

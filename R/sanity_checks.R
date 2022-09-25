@@ -190,6 +190,7 @@ sanity_factory <- function(factory_dict) {
   modelsummary_default <- getOption("modelsummary_factory_default", default = "kableExtra")
   checkmate::assert_true(modelsummary_default %in% c("gt", "kableExtra",
                                                      "flextable", "huxtable",
+                                                     "DT", 
                                                      "jupyter", "markdown",
                                                      "html", "data.frame",
                                                      "dataframe", "latex",

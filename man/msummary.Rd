@@ -36,6 +36,8 @@ msummary(
 \itemize{
 \item Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg, .csv, .xlsx.
 \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
+\item Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg.
+\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
 \item Warning: Users should not supply a file name to the \code{output} argument if they intend to customize the table with external packages. See the 'Details' section.
 \item LaTeX compilation requires the \code{booktabs} and \code{siunitx} packages, but \code{siunitx} can be disabled or replaced with global options. See the 'Details' section.
 \item The default output formats and table-making packages can be modified with global options. See the 'Details' section.
@@ -213,7 +215,7 @@ and it can produce tables in HTML, LaTeX, Word, Markdown, PDF, PowerPoint,
 Excel, RTF, JPG, or PNG. The appearance of the tables can be customized
 extensively by specifying the \code{output} argument, and by using functions from
 one of the supported table customization packages: \code{kableExtra}, \code{gt},
-\code{flextable}, \code{huxtable}. For more information, see the Details and Examples
+\code{flextable}, \code{huxtable}, \code{DT}. For more information, see the Details and Examples
 sections below, and the vignettes on the \code{modelsummary} website:
 https://vincentarelbundock.github.io/modelsummary/
 \itemize{
@@ -282,7 +284,7 @@ The behavior of \code{modelsummary} can be affected by setting global options:
 \subsection{Table-making packages}{
 
 \code{modelsummary} supports 4 table-making packages: \code{kableExtra}, \code{gt},
-\code{flextable}, and \code{huxtable}. Some of these packages have overlapping
+\code{flextable}, \code{huxtable}, and \code{DT}. Some of these packages have overlapping
 functionalities. For example, 3 of those packages can export to LaTeX. To
 change the default backend used for a specific file format, you can use
 the \code{options} function:

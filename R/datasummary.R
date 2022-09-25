@@ -31,7 +31,7 @@
 #' `x~mean*z` will print the `mean`-related header above the `z`-related
 #' header.`
 #' @param ... all other arguments are passed through to the table-making
-#' functions [kableExtra::kbl] or [gt::gt], depending on the `output` argument.
+#' functions [kableExtra::kbl], [gt::gt], [DT::datatable], etc. depending on the `output` argument.
 #' This allows users to pass arguments directly to `datasummary` in order to
 #' affect the behavior of other functions behind the scenes.
 #' @template citation

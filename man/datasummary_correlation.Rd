@@ -107,7 +107,7 @@ The behavior of \code{modelsummary} can be affected by setting global options:
 \subsection{Table-making packages}{
 
 \code{modelsummary} supports 4 table-making packages: \code{kableExtra}, \code{gt},
-\code{flextable}, and \code{huxtable}. Some of these packages have overlapping
+\code{flextable}, \code{huxtable}, and \code{DT}. Some of these packages have overlapping
 functionalities. For example, 3 of those packages can export to LaTeX. To
 change the default backend used for a specific file format, you can use
 the \code{options} function:
