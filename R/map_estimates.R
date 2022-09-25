@@ -54,7 +54,9 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
     }
 
     # coef_rename
-    if (!is.null(coef_rename)) {
+    # TRUE: done in `get_estimates()` straight from the parameters() attribute
+    # FALSE: do nothing
+    if (!is.null(coef_rename) && !is.logical(coef_rename)) {
         if (is.character(coef_rename)) {
             dict <- coef_rename
         } else if (is.function(coef_rename)) {

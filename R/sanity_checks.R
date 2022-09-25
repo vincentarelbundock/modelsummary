@@ -149,11 +149,12 @@ sanity_coef <- function(coef_map, coef_rename, coef_omit) {
     }
   }
 
-  if (is.character(coef_rename)) {
-    checkmate::assert_character(coef_rename, null.ok = TRUE, names = "unique")
-  } else {
-    checkmate::assert_function(coef_rename, null.ok = TRUE)
-  }
+  checkmate::assert(
+    checkmate::check_character(coef_rename, null.ok = TRUE, names = "unique"),
+    checkmate::check_function(coef_rename),
+    checkmate::check_flag(coef_rename),
+    combine = "or"
+  )
 }
 
 
