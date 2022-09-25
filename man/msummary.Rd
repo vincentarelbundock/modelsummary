@@ -21,6 +21,7 @@ msummary(
   gof_map = NULL,
   gof_omit = NULL,
   group_map = NULL,
+  add_columns = NULL,
   add_rows = NULL,
   align = NULL,
   notes = NULL,
@@ -169,6 +170,11 @@ model information. This argument accepts 4 types of values:
 \item{group_map}{named or unnamed character vector. Subset, rename, and
 reorder coefficient groups specified a grouping variable specified in the
 \code{shape} argument formula. This argument behaves like \code{coef_map}.}
+
+\item{add_columns}{a data.frame (or tibble) with the same number of rows as
+#' your main table. By default, rows are appended to the bottom of the table.
+You can define a "position" attribute of integers to set the columns positions.
+See Examples section below.}
 
 \item{add_rows}{a data.frame (or tibble) with the same number of columns as
 your main table. By default, rows are appended to the bottom of the table.

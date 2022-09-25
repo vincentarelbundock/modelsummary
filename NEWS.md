@@ -10,6 +10,7 @@ New features:
 * Automatic renaming of `haven` labels in `modelsummary()`, `datasummary()`, `datasummary_skim()`
 * Allow `output = "filename.csv"`
 * Allow `output = "filename.xlsx"`
+* `add_columns` argument supported in `modelsummary()`
 
 Bug fixes:
 

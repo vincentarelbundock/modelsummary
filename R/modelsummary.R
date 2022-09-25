@@ -126,6 +126,10 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `term + response + statistic ~ model`: term and group id in separate columns
 #' * `term : response + statistic ~ model`: term and group id in a single column
 #' * `term ~ response`
+#' @param add_columns a data.frame (or tibble) with the same number of rows as
+#' #' your main table. By default, rows are appended to the bottom of the table.
+#' You can define a "position" attribute of integers to set the columns positions.
+#' See Examples section below.
 #' @param add_rows a data.frame (or tibble) with the same number of columns as
 #' your main table. By default, rows are appended to the bottom of the table.
 #' You can define a "position" attribute of integers to set the row positions.
@@ -173,6 +177,7 @@ modelsummary <- function(
   gof_map     = NULL,
   gof_omit    = NULL,
   group_map   = NULL,
+  add_columns = NULL,
   add_rows    = NULL,
   align       = NULL,
   notes       = NULL,
@@ -486,6 +491,9 @@ modelsummary <- function(
   if (is.null(align)) {
     n_stub <- sum(grepl("^ *$", colnames(tab)))
     align <- paste0(strrep("l", n_stub), strrep("c", ncol(tab) - n_stub))
+    if (isTRUE(checkmate::check_data_frame(add_columns))) {
+      align <- paste0(align, strrep("c", ncol(add_columns)))
+    }
   }
 
   # HACK: remove "empty" confidence intervals or standard errors and omit empty rows
@@ -510,6 +518,7 @@ modelsummary <- function(
     output   = output,
     title    = title,
     add_rows = add_rows,
+    add_columns = add_columns,
     escape = escape,
     ...
   )
