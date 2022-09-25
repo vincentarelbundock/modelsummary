@@ -7,10 +7,23 @@
 #'
 #' @return a rounded number as character
 #' @noRd
-rounding <- function(x, fmt = '%.3f', ...) {
+rounding <- function(x, fmt = '%.3f', pval = FALSE, ...) {
 
     ## NA should return empty
     idx_na <- is.na(x)
+
+    if (is.numeric(fmt) && isTRUE(pval)) {
+        pdigits <- -max(fmt, 3)
+        fmt1 <- function(x) format.pval(
+            x,
+            digits = 1,
+            nsmall = fmt,
+            eps = 10^pdigits,
+            scientific = FALSE)
+        out <- fmt1(x)
+        out[idx_na] <- ""
+        return(out)
+    }
 
     ## character, factor, logical
     if (is.factor(x) || is.logical(x) || is.character(x)) {

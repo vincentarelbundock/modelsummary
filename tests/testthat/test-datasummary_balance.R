@@ -328,3 +328,16 @@ test_that('datasummary_balance: various datasets', {
 
 
 
+
+
+
+Q
+pkgload::load_all()
+datasummary_balance(
+  ~am,
+  dinm_statistic = "p.value",
+  data = mtcars,
+  stars = TRUE,
+  fmt = 3)
+
+

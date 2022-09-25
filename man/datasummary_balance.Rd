@@ -13,6 +13,7 @@ datasummary_balance(
   title = NULL,
   notes = NULL,
   align = NULL,
+  stars = FALSE,
   add_columns = NULL,
   add_rows = NULL,
   dinm = TRUE,
@@ -64,6 +65,14 @@ the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, d.
 \item \verb{\\usepackage\{siunitx\}}
 \item \verb{\\newcolumntype\{d\}\{S[input-symbols = ()]\}}
 }
+}}
+
+\item{stars}{to indicate statistical significance
+\itemize{
+\item FALSE (default): no significance stars.
+\item TRUE: +=.1, *=.05, **=.01, ***=0.001
+\item Named numeric vector for custom stars such as \code{c('*' = .1, '+' = .05)}
+\item Note: a legend will not be inserted at the bottom of the table when the \code{estimate} or \code{statistic} arguments use "glue strings" with \code{{stars}}.
 }}
 
 \item{add_columns}{a data.frame (or tibble) with the same number of rows as

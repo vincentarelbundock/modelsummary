@@ -11,6 +11,7 @@ New features:
 * Allow `output = "filename.csv"`
 * Allow `output = "filename.xlsx"`
 * `add_columns` argument supported in `modelsummary()`
+* `datasummary_balance` supports the `stars` argument.
 
 Bug fixes:
 

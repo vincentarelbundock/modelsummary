@@ -37,6 +37,7 @@ datasummary_balance <- function(formula,
                                 title = NULL,
                                 notes = NULL,
                                 align = NULL,
+                                stars = FALSE,
                                 add_columns = NULL,
                                 add_rows = NULL,
                                 dinm = TRUE,
@@ -55,6 +56,7 @@ datasummary_balance <- function(formula,
     sanitize_escape(escape)
     sanitize_output(output)
     sanity_ds_right_handed_formula(formula)
+    sanity_stars(stars)
     checkmate::assert_formula(formula)
     checkmate::assert_data_frame(data, min.rows = 1, min.cols = 1)
     checkmate::assert_flag(dinm)
@@ -226,7 +228,9 @@ datasummary_balance <- function(formula,
                                          rhs = rhs,
                                          data = data,
                                          fmt = fmt,
-                                         statistic = dinm_statistic))
+                                         statistic = dinm_statistic,
+                                         stars = stars,
+                                         escape = escape))
         tmp <- do.call("rbind", tmp)
 
         ## use poorman's left_join because merge breaks the order, even with sort=FALSE
@@ -294,7 +298,7 @@ datasummary_balance <- function(formula,
 #' Difference in means using `estimatr`
 #'
 #' @noRd
-DinM <- function(lhs, rhs, data, fmt, statistic) {
+DinM <- function(lhs, rhs, data, fmt, statistic, stars = TRUE, escape = TRUE) {
 
   insight::check_if_installed("estimatr")
 
@@ -318,9 +322,25 @@ DinM <- function(lhs, rhs, data, fmt, statistic) {
 
   out <- estimatr::tidy(out)
 
+  out[["estimate"]] <- rounding(out[["estimate"]], fmt)
+
+  if (!isFALSE(stars) && "p.value" %in% colnames(out)) {
+    out$estimate <- paste0(
+      out$estimate,
+      make_stars(out$p.value, stars))
+  }
+
+  if (identical(statistic, "p.value")) {
+    out[[statistic]] <- rounding(out[[statistic]], fmt, pval = TRUE)
+    if (isTRUE(escape)) {
+      out[[statistic]] <- escape_string(out[[statistic]]) # <0.001 interpreted as html tag
+    }
+  } else {
+    out[[statistic]] <- rounding(out[[statistic]], fmt)
+  }
+
   out <- out[, c("estimate", statistic), drop = FALSE]
-  out[[1]] <- rounding(out[[1]], fmt)
-  out[[2]] <- rounding(out[[2]], fmt)
+
   out$variable <- lhs
 
   if (statistic == "std.error") {
@@ -330,6 +350,7 @@ DinM <- function(lhs, rhs, data, fmt, statistic) {
   } else {
     colnames(out) <- c("Diff. in Means", statistic, " ")
   }
+
   out
 
 }
