@@ -11,5 +11,11 @@ rename_statistics <- function(x, conf_level = 0.95) {
         "p.value" = "p",
         "statistic" = "t")
     out <- replace_dict(x, dict)
+    # glue string
+    out <- gsub("\\{estimate\\}", "Est. ", out)
+    out <- gsub("\\{std.error\\}", "S.E. ", out)
+    out <- gsub("\\{p.value\\}", "p ", out)
+    out <- gsub("\\{statistic\\}", "t", out)
+    out <- gsub("\\{stars\\}", "", out)
     return(out)
 }
