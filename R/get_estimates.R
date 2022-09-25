@@ -10,7 +10,7 @@
 #' @param model a single model object
 #' 
 #' @export
-get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, ...) {
+get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, coef_rename = FALSE, ...) {
 
     if (is.null(conf_level)) {
         conf_int <- FALSE
@@ -52,6 +52,7 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, ..
                 conf_int = conf_int,
                 conf_level = conf_level,
                 vcov = V,
+                coef_rename = coef_rename,
                 ...)
             if (is.character(out)) {
                 warning_msg <- c(warning_msg, out)
@@ -154,6 +155,7 @@ get_estimates_parameters <- function(model,
                                      conf_int,
                                      conf_level,
                                      vcov,
+                                     coef_rename,
                                      ...) {
 
     dots <- list(...)
@@ -187,6 +189,7 @@ get_estimates_parameters <- function(model,
     tidy_easystats <- function(...) {
         dots <- list(...)
         # bug in `parameters`
+        dots[["pretty_names"]] <- "labels"
         inner <- parameters::parameters
         out <- do.call("inner", dots)
         out <- parameters::standardize_names(out, style = "broom")
@@ -197,6 +200,13 @@ get_estimates_parameters <- function(model,
       args[["vcov"]] <- vcov
     }
     out <- hush(tryCatch(do.call("tidy_easystats", args), error = function(e) NULL))
+
+    if (isTRUE(coef_rename)) {
+        labs <- attr(out, "pretty_labels")
+        if (isTRUE(length(labs) == nrow(out))) {
+            out$term <- labs
+        }
+    }
 
     # errors and warnings: before processing the data frame term names
     if (!inherits(out, "data.frame") || nrow(out) < 1) {

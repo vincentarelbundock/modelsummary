@@ -243,17 +243,6 @@ modelsummary <- function(
   }
 
 
-  ###################
-  #  labelled data  #
-  ###################
-  coef_rename_user <- coef_rename
-  if (is.null(coef_rename) && is.null(coef_map)) {
-    lab <- get_variable_labels_models(models)
-    fun <- function(x) coef_rename_labels(x, lab)
-    coef_rename <- fun
-  }
-
-
   #######################
   #  modelsummary_list  #
   #######################
@@ -262,6 +251,7 @@ modelsummary <- function(
                                         vcov = vcov,
                                         gof_map = gof_map, # check if we can skip all gof computation
                                         shape = shape,
+                                        coef_rename = coef_rename,
                                         ...)
   names(msl) <- model_names
 
@@ -425,7 +415,7 @@ modelsummary <- function(
 
   # interaction : becomes ×
   if (is.null(coef_map) &&
-      is.null(coef_rename_user) &&
+      is.null(coef_rename) &&
       "term" %in% colnames(tab) &&
       !settings_equal("output_format", "rtf")) {
     idx <- tab$part != 'gof'
@@ -540,7 +530,7 @@ modelsummary <- function(
 }
 
 
-get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, shape, ...) {
+get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, shape, coef_rename, ...) {
 
     number_of_models <- max(length(models), length(vcov))
 
@@ -563,6 +553,7 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, sh
             conf_level = conf_level,
             vcov = vcov[[i]],
             shape = shape,
+            coef_rename = coef_rename,
             ...)
 
         out <- list("tidy" = tid, "glance" = gla)
