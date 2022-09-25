@@ -65,18 +65,23 @@ format_estimates <- function(
   is_star <- !isFALSE(stars) || isTRUE(any(grepl("\\{stars\\}", estimate_glue)))
   is_glue <- grepl("\\{", estimate)
   if (is_star) {
-    # glue string can include stars even if stars=FALSE
-    if (isFALSE(stars)) {
-      stars <- TRUE
-    }
     if (!'p.value' %in% colnames(est)) {
       stop('To use the `stars` argument, the `tidy` function must produce a column called "p.value"',
            call. = FALSE)
     }
-    est$stars <- make_stars(est$p.value, stars)
+    # we always want stars, regardless of argument value, in case there is a glue {stars}
+    if (is.logical(stars)) {
+      stars_tmp <- TRUE
+    } else {
+      # custom stars user input
+      stars_tmp <- stars
+    }
+    est$stars <- make_stars(est$p.value, stars_tmp)
     est$stars[is.na(est$stars)] <- ""
   }
-  if (isTRUE(is_star) && isFALSE(is_glue)) {
+  # otherwise we get stars in `estimate` even when stars=FALSE and another glue
+  # string includes {stars}`
+  if (isTRUE(is_star) && isFALSE(is_glue) && !isFALSE(stars)) {
       estimate_glue[1] <- paste0(estimate_glue[1], "{stars}")
   }
 
@@ -92,7 +97,6 @@ format_estimates <- function(
 
   # exponentiate
   if (isTRUE(exponentiate)) {
-
     # standard error before transforming estimate
     cols <- c("std.error", "estimate", "conf.low", "conf.high")
     cols <- intersect(cols, colnames(est))

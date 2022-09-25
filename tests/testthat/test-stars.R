@@ -113,14 +113,23 @@ test_that("stars = TRUE", {
 })
 
 test_that("custom stars", {
-
   raw <- modelsummary(mod, stars = c('+' = .8, '*' = .1), output="dataframe")
-
   truth <- c("-1.986*", "(0.434)", "0.665*", "(0.120)")
   expect_equal(truth, unname(raw[[4]][1:4]))
-
   truth <- c("4.739+", "(4.045)", "", "", "-0.288+", "(0.228)")
   expect_equal(truth, unname(raw[[5]][1:6]))
-
 })
 
+
+
+test_that("Issue #532: extraneous stars", {
+  mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
+  tab <- modelsummary(
+    mod,
+    output = "dataframe",
+    shape = term + model ~ statistic,
+    statistic = c("std.error", "{p.value}{stars}"),
+    fmt = list(estimate = 3, p.value = 2))
+  expect_false(any(grepl("\\*", tab[["Est."]])))
+  expect_true(any(grepl("\\*", tab[[6]])))
+})
