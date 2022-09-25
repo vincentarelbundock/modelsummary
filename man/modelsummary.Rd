@@ -34,8 +34,6 @@ modelsummary(
 
 \item{output}{filename or object type (character string)
 \itemize{
-\item Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg, .csv, .xlsx.
-\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
 \item Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg.
 \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
 \item Warning: Users should not supply a file name to the \code{output} argument if they intend to customize the table with external packages. See the 'Details' section.
@@ -333,11 +331,15 @@ process. Since parallelization occurs at the model level, no speedup is
 available for tables with a single model. Users on mac or linux can launch
 parallel computation using the built-in \code{parallel} package. All they need to
 do is supply a \code{mc.cores} argument which will be pushed forward to the
-\code{parallel::mclapply} function:\if{html}{\out{<div class="sourceCode r">}}\preformatted{modelsummary(model_list, mc.cores = 5)
+\code{parallel::mclapply} function:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{modelsummary(model_list, mc.cores = 5)
 }\if{html}{\out{</div>}}
 
 All users can also use the \code{future.apply} package to parallelize model summaries.
-For example, to use 4 cores to extract results:\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(future.apply)
+For example, to use 4 cores to extract results:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(future.apply)
 plan(multicore, workers = 4)
 modelsummary(model_list)
 }\if{html}{\out{</div>}}

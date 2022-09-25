@@ -30,8 +30,6 @@ formula, but all summary functions must be on one side.}
 
 \item{output}{filename or object type (character string)
 \itemize{
-\item Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg, .csv, .xlsx.
-\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
 \item Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg.
 \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
 \item Warning: Users should not supply a file name to the \code{output} argument if they intend to customize the table with external packages. See the 'Details' section.
