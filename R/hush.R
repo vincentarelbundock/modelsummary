@@ -1,6 +1,5 @@
 #' Execute code silently
 #'
-#' @export
 #' @keywords internal
 hush <- function(code) {
     void <- utils::capture.output({
