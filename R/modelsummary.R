@@ -154,8 +154,10 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @param escape boolean TRUE escapes or substitutes LaTeX/HTML characters which could
 #' prevent the file from compiling/displaying. This setting does not affect captions or notes.
 #' @param ... all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.
-#' + [parameters::model_parameters] extracts parameter estimates.
-#' + [performance::model_performance] extracts goodness-of-fit statistics.
+#' + [parameters::model_parameters] extracts parameter estimates. Available arguments depend on model type, but include:
+#'     - `standardize`, `centrality`, `dispersion`, `test`, `ci_method`, `prior`, `diagnostic`, `rope_range`, `power`, `cluster`, etc. 
+#' + [performance::model_performance] extracts goodness-of-fit statistics. Available arguments depend on model type, but include:
+#'     - `metrics`, `estimator`, etc.
 #' + [kableExtra::kbl] or [gt::gt] draw tables, depending on the value of the `output` argument.
 #' @return a regression table in a format determined by the `output` argument.
 #' @importFrom generics glance tidy

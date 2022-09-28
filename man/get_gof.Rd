@@ -14,8 +14,14 @@ get_gof(model, vcov_type = NULL, ...)
 
 \item{...}{all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.
 \itemize{
-\item \link[parameters:model_parameters]{parameters::model_parameters} extracts parameter estimates.
-\item \link[performance:model_performance]{performance::model_performance} extracts goodness-of-fit statistics.
+\item \link[parameters:model_parameters]{parameters::model_parameters} extracts parameter estimates. Available arguments depend on model type, but include:
+\itemize{
+\item \code{standardize}, \code{centrality}, \code{dispersion}, \code{test}, \code{ci_method}, \code{prior}, \code{diagnostic}, \code{rope_range}, \code{power}, \code{cluster}, etc.
+}
+\item \link[performance:model_performance]{performance::model_performance} extracts goodness-of-fit statistics. Available arguments depend on model type, but include:
+\itemize{
+\item \code{metrics}, \code{estimator}, etc.
+}
 \item \link[kableExtra:kbl]{kableExtra::kbl} or \link[gt:gt]{gt::gt} draw tables, depending on the value of the \code{output} argument.
 }}
 }
