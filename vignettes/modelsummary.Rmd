@@ -1342,3 +1342,30 @@ The source of the problem is that `kableExtra`, default table-making package in 
 ```{r, eval=FALSE}
 modelsummary(mod, escape = FALSE)
 ```
+
+## Bayesian models
+
+Many bayesian models are supported out-of-the-box, including those produced by the `rstanarm` and `brms` packages. The statistics available for bayesian models are slightly different than those available for most frequentist models. Users can call `get_estimates` to see what is available:
+
+```{r, results = "hide"}
+library(rstanarm)
+mod <- stan_glm(am ~ hp + drat, data = mtcars)
+```
+
+```{r}
+get_estimates(mod)
+```
+
+This shows that there is no `std.error` column, but that there is a `mad` statistic (mean absolute deviation). So we can do:
+
+```{r}
+modelsummary(mod, statistic = "mad")
+```
+
+As noted in [the `modelsummary()` documentation](https://vincentarelbundock.github.io/modelsummary/reference/modelsummary.html), model results are extracted using the `parameters` package. Users can pass additional arguments to `modelsummary()`, which will then push forward those arguments to the `parameters::parameters` function to change the results. For example, [the `parameters` documentation](https://easystats.github.io/parameters/reference/model_parameters.html) for bayesian models shows that there is a `centrality` argument, which allows users to report the mean and standard deviation of the posterior distribution, instead of the median and MAD:
+
+```{r}
+get_estimates(mod, centrality = "mean")
+
+modelsummary(mod, statistic = "std.dev", centrality = "mean")
+```
