@@ -121,7 +121,7 @@ format_estimates <- function(
       } else {
         if (n == "p.value" && is.numeric(fmt[["fmt"]])) {
           pdigits <- -max(fmt[["fmt"]], 3)
-          fmt1 <- function(x) format.pval(x, digits = 1, nsmall = fmt[["fmt"]], eps = 10^pdigits, scientific = FALSE)
+          fmt1 <- function(k) rounding(k, fmt = fmt$fmt, pval = TRUE)
         } else {
           fmt1 <- fmt[["fmt"]]
         }

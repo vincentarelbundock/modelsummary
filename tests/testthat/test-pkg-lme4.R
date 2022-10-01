@@ -26,7 +26,7 @@ test_that("Issue #501", {
 
 test_that("Issue #494 comment", {
     skip_if_not_installed("parameters", minimum_version = "0.18.1.7")
-    models <- hush(list(
+    models <- modelsummary:::hush(list(
         lme4::lmer(Sepal.Width ~ Petal.Length + (1|Species), data = iris),
         lme4::lmer(Sepal.Width ~ Petal.Length + (1 + Petal.Length |Species), data = iris),
         lme4::lmer(Sepal.Width ~ Petal.Length + Petal.Width + (1 + Petal.Length |Species), data = iris)
@@ -43,7 +43,7 @@ test_that("Issue #494 comment", {
 
 
 test_that("Issue #496: multiple models keeps random/fixed grouped together", {
-    models <- hush(list(
+    models <- modelsummary:::hush(list(
         lm(Sepal.Width ~ Petal.Length, data = iris),
         lmer(Sepal.Width ~ Petal.Length + (1|Species), data = iris),
         lmer(Sepal.Width ~ Petal.Length + (1 + Petal.Length |Species), data = iris),
@@ -83,7 +83,7 @@ test_that("better lme4 printout", {
     expect_warning(tab <- msummary(mod, "dataframe"), NA)
     expect_true("SD (Days grp)" %in% tab$term)
 
-    mod <- modelsummary::hush(lmer(
+    mod <- modelsummary:::hush(lmer(
       Reaction ~ Days + (1 | grp ) + (1 + Days | Subject),
       data = sleepstudy))
     expect_warning(modelsummary(mod, "dataframe"), NA)

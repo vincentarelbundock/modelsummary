@@ -582,16 +582,19 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, sh
 
 
 redundant_labels <- function(dat, column) {
-    if (!column %in% colnames(dat)) {
-        return(dat)
-    }
+  if (!column %in% colnames(dat)) {
+    return(dat)
+  }
+  # Issue #558: 1-row estimates table with no gof
+  if (nrow(dat) > 1) { 
     for (i in nrow(dat):2) {
-        if (dat$part[i] == "estimates" &&
+      if (dat$part[i] == "estimates" &&
         dat[[column]][i - 1] == dat[[column]][i]) {
         dat[[column]][i] <- ""
-        }
+      }
     }
-    return(dat)
+  }
+  return(dat)
 }
 
 #' `msummary()` is a shortcut to `modelsummary()`

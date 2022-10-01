@@ -12,21 +12,20 @@ rounding <- function(x, fmt = '%.3f', pval = FALSE, ...) {
     ## NA should return empty
     idx_na <- is.na(x)
 
+    # p values
     if (is.numeric(fmt) && isTRUE(pval)) {
         pdigits <- -max(fmt, 3)
-        fmt1 <- function(x) format.pval(
+        x <- format.pval(
             x,
             digits = 1,
             nsmall = fmt,
             eps = 10^pdigits,
             scientific = FALSE)
-        out <- fmt1(x)
-        out[idx_na] <- ""
-        return(out)
     }
 
-    ## character, factor, logical
+    # input: character, factor, logical
     if (is.factor(x) || is.logical(x) || is.character(x)) {
+
         out <- as.character(x)
 
         ## escape
@@ -40,14 +39,14 @@ rounding <- function(x, fmt = '%.3f', pval = FALSE, ...) {
             out <- sprintf("{%s}", out)
         }
 
-                                        # numeric
+    # input: numeric
     } else {
 
         if (is.character(fmt)) {
             out <- sprintf(fmt, x, ...)
 
         } else if (is.numeric(fmt)) {
-                                        # R >4.1.0 will make 0 invalid in format()
+            # R >4.1.0 will make 0 invalid in format()
             if (fmt == 0) {
                 out <- sprintf("%.0f", x)
 
@@ -69,7 +68,6 @@ rounding <- function(x, fmt = '%.3f', pval = FALSE, ...) {
         } else {
             out <- x
         }
-
 
     # Remove weird numbers before wrapping in siunitx
     out <- gsub('^NA$|^NaN$|^-Inf$|^Inf$', '', out)
@@ -97,7 +95,7 @@ rounding <- function(x, fmt = '%.3f', pval = FALSE, ...) {
     }
   }
 
-  ## NA should return empty
+  # NA should return empty
   out[idx_na] <- ""
 
   return(out)
