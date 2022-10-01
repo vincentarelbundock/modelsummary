@@ -187,11 +187,11 @@ the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, d.
 \item "l": left-aligned column
 \item "c": centered column
 \item "r": right-aligned column
-\item "d": dot-aligned column. Only supported for LaTeX/PDF tables produced by \code{kableExtra}. These commands must appear in the LaTeX preamble (they are added automatically when compiling Rmarkdown documents to PDF):
+\item "d": dot-aligned column. Only supported for LaTeX/PDF tables produced by \code{kableExtra}. Requires at least version 3.0.25 of the siunitx LaTeX package. These commands must appear in the LaTeX preamble (they are added automatically when compiling Rmarkdown documents to PDF):
 \itemize{
 \item \verb{\\usepackage\{booktabs\}}
 \item \verb{\\usepackage\{siunitx\}}
-\item \verb{\\newcolumntype\{d\}\{S[input-symbols = ()]\}}
+\item \verb{\\newcolumntype\{d\}\{S[ input-open-uncertainty=, input-close-uncertainty=, parse-numbers = false, table-align-text-pre=false, table-align-text-post=false ]\}}
 }
 }}
 

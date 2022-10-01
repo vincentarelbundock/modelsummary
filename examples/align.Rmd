@@ -1,0 +1,18 @@
+---
+output: pdf_document
+---
+
+```{r}
+library(modelsummary)
+
+mod <- list(
+    'One variable' = lm(mpg ~ hp, mtcars),
+    'Two variables' = lm(mpg ~ hp + drat, mtcars)
+)
+
+modelsummary(
+    mod,
+    statistic = c("t = {statistic}", "conf.int", "{std.error} ({p.value})"),
+    stars = TRUE,
+    align = "ldd")
+```

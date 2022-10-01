@@ -166,7 +166,13 @@ sanitize_output <- function(output) {
 
 \\usepackage{booktabs}
 \\usepackage{siunitx}
-\\newcolumntype{d}{S[input-symbols = ()]}
+\\newcolumntype{d}{S[
+    input-open-uncertainty=,
+    input-close-uncertainty=,
+    parse-numbers = false,
+    table-align-text-pre=false,
+    table-align-text-post=false
+ ]}
 
 To disable `siunitx` and prevent `modelsummary` from wrapping numeric entries in `\\num{}`, call:
 

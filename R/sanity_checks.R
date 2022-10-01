@@ -69,20 +69,12 @@ sanity_model_names <- function(modelnames) {
 sanity_align <- function(align, estimate = NULL, statistic = NULL, stars = FALSE) {
     checkmate::assert_string(align, null.ok = TRUE)
     if (!is.null(align) && any(grepl("[^lcrd]", align))) {
-        stop('The `align` argument must be a character string which only includes the letters l, c, r, or d. Example: "lcdd"')
+        insight::format_error('The `align` argument must be a character string which only includes the letters l, c, r, or d. Example: "lcdd"')
     }
 
+    # the d-column siunitx LaTeX preamble doesn't play well with stars, so we need to wrap them in \\mbox{}
     if (any(grepl("d", align))) {
-        if (!settings_equal("output_factory", "kableExtra") ||
-            !settings_equal("output_format", c("latex", "latex_tabular")) ||
-            (!is.null(estimate) && any(grepl("\\{", estimate))) ||
-            (!is.null(estimate) && "conf.int" %in% estimate) ||
-            (!is.null(statistic) && any(grepl("\\{", statistic))) ||
-            (!is.null(statistic) && "conf.int" %in% statistic) ||
-            !isFALSE(stars)) {
-            stop('The "d" character is only supported in the `align` argument for LaTeX/PDF tables produced by the `kableExtra` package. It is not supported when the `estimate` or `statistic` arguments include glue strings or confidence intervals. It is only supported when the `stars` argument is `FALSE`. These constraints should be relaxed in the near future. See here to follow progress: https://github.com/vincentarelbundock/modelsummary/issues/354')
-        }
-        settings_set("siunitx_scolumns", TRUE)
+      settings_set("dcolumn_stars_mbox", TRUE)
     }
 }
 

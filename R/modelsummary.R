@@ -147,10 +147,10 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * "l": left-aligned column
 #' * "c": centered column
 #' * "r": right-aligned column
-#' * "d": dot-aligned column. Only supported for LaTeX/PDF tables produced by `kableExtra`. These commands must appear in the LaTeX preamble (they are added automatically when compiling Rmarkdown documents to PDF):
+#' * "d": dot-aligned column. Only supported for LaTeX/PDF tables produced by `kableExtra`. Requires at least version 3.0.25 of the siunitx LaTeX package. These commands must appear in the LaTeX preamble (they are added automatically when compiling Rmarkdown documents to PDF):
 #'   - `\usepackage{booktabs}`
 #'   - `\usepackage{siunitx}`
-#'   - `\newcolumntype{d}{S[input-symbols = ()]}`
+#'   - `\newcolumntype{d}{S[ input-open-uncertainty=, input-close-uncertainty=, parse-numbers = false, table-align-text-pre=false, table-align-text-post=false ]}`
 #' @param escape boolean TRUE escapes or substitutes LaTeX/HTML characters which could
 #' prevent the file from compiling/displaying. This setting does not affect captions or notes.
 #' @param ... all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.

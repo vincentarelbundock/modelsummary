@@ -75,7 +75,7 @@ rounding <- function(x, fmt = '%.3f', pval = FALSE, ...) {
     ## LaTeX siunitx \num{}
     if (settings_equal("output_format", c("latex", "latex_tabular"))) {
         if (!isTRUE(settings_get("siunitx_scolumns"))) {
-            if (settings_equal("format_numeric_latex", "siunitx")) {
+            if (settings_equal("format_numeric_latex", "siunitx") && !settings_equal("dcolumn_stars_mbox", TRUE)) {
                 out <- sprintf("\\num{%s}", out)
             } else if (settings_equal("format_numeric_latex", c("dollars", "mathmode"))) {
                 out <- sprintf("$%s$", out)

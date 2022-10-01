@@ -49,12 +49,21 @@ factory_kableExtra <- function(tab,
   arguments$escape <- FALSE
 
   ## siunitx in preamble
+  extra_siunitx <- "
+  \\newcolumntype{d}{S[
+    input-open-uncertainty=,
+    input-close-uncertainty=,
+    parse-numbers = false,
+    table-align-text-pre=false,
+    table-align-text-post=false
+  ]}
+  "
   if (settings_equal("output_format", c("latex", "latex_tabular")) &&
       settings_equal("format_numeric_latex", "siunitx")) {
     invisible(knitr::knit_meta_add(list(
       rmarkdown::latex_dependency("booktabs"))))
     invisible(knitr::knit_meta_add(list(
-      rmarkdown::latex_dependency("siunitx", extra_lines = "\\newcolumntype{d}{S[input-symbols = ()]}"))))
+      rmarkdown::latex_dependency("siunitx", extra_lines = extra_siunitx))))
   }
 
   ## align

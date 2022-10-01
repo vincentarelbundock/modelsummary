@@ -22,6 +22,11 @@ make_stars <- function(pvalues, stars) {
   for (n in names(stars)) {
     tmp <- ifelse(pvalues <= stars[n], n, tmp)
   }
+
+  if (settings_equal("output_format", "latex") && settings_equal("dcolumn_stars_mbox", TRUE)) {
+    tmp <- sprintf(" \\mbox{%s}", tmp)
+  }
+
   tmp
 }
 
