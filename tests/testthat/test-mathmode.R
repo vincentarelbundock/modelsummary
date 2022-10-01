@@ -15,19 +15,6 @@ test_that("d-column: supported outputs", {
 })
 
 
-test_that("d-column: unsupported arguments", {
-    expect_error(modelsummary(mod, align = "ldd", output = "latex", stars = TRUE),
-                 regexp = "align.*supported")
-    expect_error(modelsummary(mod, align = "ldd", output = "latex", statistic = "conf.int"),
-                 regexp = "align.*supported")
-    expect_error(modelsummary(mod, align = "ldd", output = "latex", estimate = "conf.int"),
-                 regexp = "align.*supported")
-    expect_error(modelsummary(mod, align = "ldd", output = "latex", statistic = "p = {p.value}"),
-                 regexp = "align.*supported")
-    expect_error(modelsummary(mod, align = "ldd", output = "latex", estimate = "p = {p.value}"),
-                 regexp = "align.*supported")
-})
-
 
 test_that("d-column: known output", {
     expect_snapshot(modelsummary(mod, align = "ldd", output = "latex"))
