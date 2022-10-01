@@ -2,7 +2,6 @@ mod <- list(
     lm(mpg ~ hp, mtcars),
     lm(mpg ~ hp + drat, mtcars))
 
-
 test_that("d-column: supported outputs", {
     expect_error(modelsummary(mod, output = "latex", align = "ldd"), NA)
     expect_error(modelsummary(mod, output = "latex_tabular", align = "ldd"), NA)
