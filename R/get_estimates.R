@@ -203,6 +203,7 @@ get_estimates_parameters <- function(model,
 
     if (isTRUE(coef_rename)) {
         labs <- attr(out, "pretty_labels")
+        labs <- gsub("\\*", "×", labs)
         if (isTRUE(length(labs) == nrow(out))) {
             out$term <- labs
         }

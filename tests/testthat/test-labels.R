@@ -1,9 +1,8 @@
-skip("manual labels do not all work upstream in parameters")
+skip_if_not_installed("parameters", minimum_version = "0.18.2.9")
 
 requiet("haven")
 
 test_that("datasummary labels",{
-
     # datasummary()
     dat <- mtcars
     dat$am <- haven::labelled(
@@ -72,7 +71,8 @@ test_that("modelsummary: use variable labels by default", {
   mod <- list(
     "Bivariate" = lm(Girth ~ Height, data = dat),
     "Multivariate" = lm(Girth ~ Height + Volume, data = dat))
-  tab <- modelsummary(mod, "dataframe")
+    parameters(mod[[1]])
+  tab <- modelsummary(mod, "dataframe", coef_rename = TRUE)
   expect_true(all(c("Height (in feet)", "Volume (in liters)") %in% tab$term))
 })
 
@@ -83,7 +83,7 @@ test_that("interaction", {
   dat$Height <- haven::labelled(dat$Height, label = "Height (in feet)")
   dat$Volume <- haven::labelled(dat$Volume, label = "Volume (in liters)")
   mod <- lm(Girth ~ Height*Volume, data = dat)
-  tab <- modelsummary(mod, "dataframe")
+  tab <- modelsummary(mod, output = "dataframe", coef_rename = TRUE)
   expect_true("Height (in feet) × Volume (in liters)" %in% tab$term)
 })
 
@@ -109,7 +109,7 @@ test_that("modelsummary: also applies variable labels for depvar", {
   mod <- list(
     lm(mpg ~ cyl + drat + disp, data = dat),
     lm(hp ~ cyl + drat + disp, data = dat))
-  tab <- modelsummary(dvnames(mod), "dataframe")
+  tab <- modelsummary(dvnames(mod), "dataframe", coef_rename = TRUE)
   expect_equal(names(tab)[4:5], c("Miles per gallon", "hp"))
   expect_true("Number of cylinders" %in% tab$term)
 })

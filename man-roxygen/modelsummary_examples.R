@@ -63,6 +63,14 @@
 #' modelsummary(models, coef_rename = c('Volume' = 'Large', 'Height' = 'Tall'))
 #' modelsummary(models, coef_rename = toupper)
 #' modelsummary(models, coef_rename = coef_rename)
+#' 
+#' # coef_rename = TRUE for variable labels
+#' datlab <- mtcars
+#' datlab$cyl <- factor(datlab$cyl)
+#' attr(datlab$hp, "label") <- "Horsepower"
+#' attr(datlab$cyl, "label") <- "Cylinders"
+#' modlab <- lm(mpg ~ hp * drat + cyl, data = datlab)
+#' modelsummary(modlab, coef_rename = TRUE)
 #'
 #' # coef_map
 #' modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
