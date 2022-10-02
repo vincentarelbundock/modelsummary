@@ -132,7 +132,7 @@ sanity_coef <- function(coef_map, coef_rename, coef_omit) {
 
   checkmate::assert_string(coef_omit, null.ok = TRUE)
 
-  if (!is.null(coef_rename) & !is.null(coef_map)) {
+  if ((!isFALSE(coef_rename) && !is.null(coef_rename)) && !is.null(coef_map)) {
     stop("coef_map and coef_rename cannot be used together.")
   }
 
