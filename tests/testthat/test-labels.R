@@ -71,7 +71,6 @@ test_that("modelsummary: use variable labels by default", {
   mod <- list(
     "Bivariate" = lm(Girth ~ Height, data = dat),
     "Multivariate" = lm(Girth ~ Height + Volume, data = dat))
-    parameters(mod[[1]])
   tab <- modelsummary(mod, "dataframe", coef_rename = TRUE)
   expect_true(all(c("Height (in feet)", "Volume (in liters)") %in% tab$term))
 })
