@@ -335,6 +335,17 @@ modelsummary(y, coef_rename = rename_explanator)
 
 Beware of inadvertently replacing parts of other variable names! Making your regex pattern as specific as possible (e.g., by adding word boundaries) is likely a good idea. The custom rename function is also a good place to re-introduce the replacement of ":" with "×" if you are dealing with interaction terms -- `modelsummary` makes this replacement for you only when the `coef_rename` argument is not specified.
 
+Another possibility is to assign variable labels to attributes in the data used to fit the model. Then, we can automatically rename them:
+
+```{r}
+datlab <- mtcars
+datlab$cyl <- factor(datlab$cyl)
+attr(datlab$cyl, "label") <- "Cylinders"
+attr(datlab$am, "label") <- "Transmission"
+modlab <- lm(mpg ~ cyl + am, data = datlab)
+modelsummary(modlab, coef_rename = TRUE)
+```
+
 ### coef_map
 
 The `coef_map` argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the "clean" variable name. Names of this vector correspond to the "raw" variable name. The table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.

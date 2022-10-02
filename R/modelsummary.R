@@ -94,7 +94,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `"^(?!.*ei|.*pt)"`: keep coefficients matching either the "ei" or the "pt" substrings.
 #' * See the Examples section below for complete code.
 #' @param coef_rename logical, named character, or function
-#' * Logical: TRUE tries to rename variables based on the "label" attribute of each column. See examples below.
+#' * Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below.
 #' * Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg") 
 #' * Function: Accepts a character vector of the model's term names and returns a named vector like the one described above. The `modelsummary` package supplies a `coef_rename()` function which can do common cleaning tasks: `modelsummary(model, coef_rename = coef_rename)`
 #' @param gof_map rename, reorder, and omit goodness-of-fit statistics and other
@@ -176,7 +176,7 @@ modelsummary <- function(
   shape       = term + statistic ~ model,
   coef_map    = NULL,
   coef_omit   = NULL,
-  coef_rename = NULL,
+  coef_rename = FALSE,
   gof_map     = NULL,
   gof_omit    = NULL,
   group_map   = NULL,

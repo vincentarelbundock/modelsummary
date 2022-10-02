@@ -17,7 +17,7 @@ msummary(
   shape = term + statistic ~ model,
   coef_map = NULL,
   coef_omit = NULL,
-  coef_rename = NULL,
+  coef_rename = FALSE,
   gof_map = NULL,
   gof_omit = NULL,
   group_map = NULL,
@@ -146,7 +146,7 @@ Examples section below.}
 
 \item{coef_rename}{logical, named character, or function
 \itemize{
-\item Logical: TRUE tries to rename variables based on the "label" attribute of each column. See examples below.
+\item Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below.
 \item Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg")
 \item Function: Accepts a character vector of the model's term names and returns a named vector like the one described above. The \code{modelsummary} package supplies a \code{coef_rename()} function which can do common cleaning tasks: \code{modelsummary(model, coef_rename = coef_rename)}
 }}
