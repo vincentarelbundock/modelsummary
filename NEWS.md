@@ -6,6 +6,7 @@ Breaking change:
 
 New features:
 
+* New `update_modelsummary()` function makes it easy to install the dev versions of `modelsummary` and its dependencies (mostly useful for Vincent and people who report bugs).
 * Rounding: display at least one significant digit by default.
 * Automatic renaming of `haven` labels in `modelsummary()`, `datasummary()`, `datasummary_skim()`
 * Allow `output = "filename.csv"`
