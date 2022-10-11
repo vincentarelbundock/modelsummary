@@ -4,7 +4,14 @@
 \alias{get_estimates}
 \title{Extract model estimates in a tidy format.}
 \usage{
-get_estimates(model, conf_level = 0.95, vcov = NULL, shape = NULL, ...)
+get_estimates(
+  model,
+  conf_level = 0.95,
+  vcov = NULL,
+  shape = NULL,
+  coef_rename = FALSE,
+  ...
+)
 }
 \arguments{
 \item{model}{a single model object}
@@ -44,10 +51,23 @@ automatically. Potential \code{shape} values include:
 \item \code{term ~ response}
 }}
 
+\item{coef_rename}{logical, named character, or function
+\itemize{
+\item Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below.
+\item Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg")
+\item Function: Accepts a character vector of the model's term names and returns a named vector like the one described above. The \code{modelsummary} package supplies a \code{coef_rename()} function which can do common cleaning tasks: \code{modelsummary(model, coef_rename = coef_rename)}
+}}
+
 \item{...}{all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.
 \itemize{
-\item \link[parameters:model_parameters]{parameters::model_parameters} extracts parameter estimates.
-\item \link[performance:model_performance]{performance::model_performance} extracts goodness-of-fit statistics.
+\item \link[parameters:model_parameters]{parameters::model_parameters} extracts parameter estimates. Available arguments depend on model type, but include:
+\itemize{
+\item \code{standardize}, \code{centrality}, \code{dispersion}, \code{test}, \code{ci_method}, \code{prior}, \code{diagnostic}, \code{rope_range}, \code{power}, \code{cluster}, etc.
+}
+\item \link[performance:model_performance]{performance::model_performance} extracts goodness-of-fit statistics. Available arguments depend on model type, but include:
+\itemize{
+\item \code{metrics}, \code{estimator}, etc.
+}
 \item \link[kableExtra:kbl]{kableExtra::kbl} or \link[gt:gt]{gt::gt} draw tables, depending on the value of the \code{output} argument.
 }}
 }

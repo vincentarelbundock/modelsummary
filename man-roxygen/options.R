@@ -14,7 +14,7 @@
 #' ### Table-making packages
 #'
 #' `modelsummary` supports 4 table-making packages: `kableExtra`, `gt`,
-#' `flextable`, and `huxtable`. Some of these packages have overlapping
+#' `flextable`, `huxtable`, and `DT`. Some of these packages have overlapping
 #' functionalities. For example, 3 of those packages can export to LaTeX. To
 #' change the default backend used for a specific file format, you can use
 #' the `options` function:

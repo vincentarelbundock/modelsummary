@@ -2,6 +2,7 @@
 
 Breaking change:
 
+* Requires `siunitx` version 3.0.25 LaTeX package.
 * The `title` is now respects the `escape` argument for all `kableExtra` output formats. This can break tables in which users manually escaped titles.
 
 New features:
@@ -11,6 +12,9 @@ New features:
 * Automatic renaming of `haven` labels in `modelsummary()`, `datasummary()`, `datasummary_skim()`
 * Allow `output = "filename.csv"`
 * Allow `output = "filename.xlsx"`
+* `add_columns` argument supported in `modelsummary()`
+* `datasummary_balance` supports the `stars` argument.
+* Allow stars and confidence intervals with `align = "d"` column.
 
 Bug fixes:
 

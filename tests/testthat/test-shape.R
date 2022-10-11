@@ -280,3 +280,18 @@ test_that("group_map reorder rename", {
     expect_equal(tab$group[1], "Zero")
 })
 
+
+
+
+test_that("Issue #531", {
+    mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
+    tab <- modelsummary(
+        mod,
+        output = "dataframe",
+        shape = term + model ~ statistic,
+        statistic = c("std.error", "{p.value}{stars}", "{estimate} ({statistic})"),
+        fmt = list(estimate = 3, p.value = 2))
+    expect_equal(
+        colnames(tab),
+        c("part", "term", "model", "Est.", "S.E.", "p", "Est.  (t)"))
+})

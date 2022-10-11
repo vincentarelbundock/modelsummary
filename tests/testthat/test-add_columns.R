@@ -28,3 +28,13 @@ test_that("too many rows in add_columns", {
   expect_error(datasummary(mpg + hp ~ mean + sd, data = mtcars, add_columns = ac))
 
 })
+
+
+test_that("add_columns support in modelsummary.", {
+  mod <- lm(mpg ~ hp, mtcars)
+  ac <- data.frame(X = letters[1:4])
+  attr(ac, "position") <- 2
+  tab <- modelsummary(mod, output = "dataframe", gof_map = NA, add_columns = ac)
+  expect_equal("X", colnames(tab)[2])
+  expect_equal(ncol(tab), 5)
+})

@@ -335,6 +335,17 @@ modelsummary(y, coef_rename = rename_explanator)
 
 Beware of inadvertently replacing parts of other variable names! Making your regex pattern as specific as possible (e.g., by adding word boundaries) is likely a good idea. The custom rename function is also a good place to re-introduce the replacement of ":" with "×" if you are dealing with interaction terms -- `modelsummary` makes this replacement for you only when the `coef_rename` argument is not specified.
 
+Another possibility is to assign variable labels to attributes in the data used to fit the model. Then, we can automatically rename them:
+
+```{r}
+datlab <- mtcars
+datlab$cyl <- factor(datlab$cyl)
+attr(datlab$cyl, "label") <- "Cylinders"
+attr(datlab$am, "label") <- "Transmission"
+modlab <- lm(mpg ~ cyl + am, data = datlab)
+modelsummary(modlab, coef_rename = TRUE)
+```
+
 ### coef_map
 
 The `coef_map` argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the "clean" variable name. Names of this vector correspond to the "raw" variable name. The table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.
@@ -603,12 +614,13 @@ All arguments passed supported by these functions are thus automatically availab
 
 # Custom appearance
 
-To customize the appearance of tables, `modelsummary` supports four popular and extremely powerful table-making packages: 
+To customize the appearance of tables, `modelsummary` supports five popular and extremely powerful table-making packages: 
 
 1. [`gt`: https://gt.rstudio.com](https://gt.rstudio.com)
 2. [`kableExtra`: http://haozhu233.github.io/kableExtra](http://haozhu233.github.io/kableExtra)
 3. [`huxtable`: https://hughjonesd.github.io/huxtable/](https://hughjonesd.github.io/huxtable/)
 4. [`flextable`: https://davidgohel.github.io/flextable/](https://davidgohel.github.io/flextable/)
+5. [`DT`: https://rstudio.github.io/DT](https://rstudio.github.io/DT)
 
 The ["customizing the look of your tables" vignette](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html) shows examples for all 4 packages.
 
@@ -689,9 +701,13 @@ model <- MCMCglmm(PO ~ 1 + plate, random = ~ FSfamily, data = PlodiaPO, verbose=
 modelsummary(model, statistic = 'conf.int')
 ```
 
-Two important things to note. First, the methods are named `tidy.MCMCglmm` and `glance.MCMCglmm` because the model object I am trying to summarize is of class `MCMCglmm`. You can find the class of a model by running: `class(model)`.
+Three important things to note. 
 
-Second, in the example above, we used the `statistic = 'conf.int'` argument. This is because the `tidy` method produces `conf.low` and `conf.high` columns. In most cases, users will define `std.error` column in their custom `tidy` methods, so the `statistic` argument will need to be adjusted.
+First, the methods are named `tidy.MCMCglmm` and `glance.MCMCglmm` because the model object I am trying to summarize is of class `MCMCglmm`. You can find the class of a model by running: `class(model)`.
+
+Second, both of the methods include the ellipsis `...` argument.
+
+Third, in the example above we used the `statistic = 'conf.int'` argument. This is because the `tidy` method produces `conf.low` and `conf.high` columns. In most cases, users will define `std.error` column in their custom `tidy` methods, so the `statistic` argument will need to be adjusted.
 
 If you create new `tidy` and `glance` methods, please consider contributing them to `broom` so that the rest of the community can benefit from your work: https://github.com/tidymodels/broom
 
@@ -1340,4 +1356,37 @@ The source of the problem is that `kableExtra`, default table-making package in 
 
 ```{r, eval=FALSE}
 modelsummary(mod, escape = FALSE)
+```
+
+## Bayesian models
+
+Many bayesian models are supported out-of-the-box, including those produced by the `rstanarm` and `brms` packages. The statistics available for bayesian models are slightly different than those available for most frequentist models. Users can call `get_estimates` to see what is available:
+
+```{r, results = "hide"}
+library(rstanarm)
+mod <- stan_glm(am ~ hp + drat, data = mtcars)
+```
+
+```{r}
+get_estimates(mod)
+```
+
+This shows that there is no `std.error` column, but that there is a `mad` statistic (mean absolute deviation). So we can do:
+
+```{r}
+modelsummary(mod, statistic = "mad")
+```
+
+As noted in [the `modelsummary()` documentation](https://vincentarelbundock.github.io/modelsummary/reference/modelsummary.html), model results are extracted using the `parameters` package. Users can pass additional arguments to `modelsummary()`, which will then push forward those arguments to the `parameters::parameters` function to change the results. For example, [the `parameters` documentation](https://easystats.github.io/parameters/reference/model_parameters.html) for bayesian models shows that there is a `centrality` argument, which allows users to report the mean and standard deviation of the posterior distribution, instead of the median and MAD:
+
+```{r}
+get_estimates(mod, centrality = "mean")
+
+modelsummary(mod, statistic = "std.dev", centrality = "mean")
+```
+
+We can also get additional test statistics using the `test` argument:
+
+```{r}
+get_estimates(mod, test = c("pd", "rope"))
 ```

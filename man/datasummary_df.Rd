@@ -23,8 +23,8 @@ datasummary_df(
 
 \item{output}{filename or object type (character string)
 \itemize{
-\item Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg, .csv, .xlsx.
-\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
+\item Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg.
+\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
 \item Warning: Users should not supply a file name to the \code{output} argument if they intend to customize the table with external packages. See the 'Details' section.
 \item LaTeX compilation requires the \code{booktabs} and \code{siunitx} packages, but \code{siunitx} can be disabled or replaced with global options. See the 'Details' section.
 \item The default output formats and table-making packages can be modified with global options. See the 'Details' section.
@@ -44,11 +44,11 @@ the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, d.
 \item "l": left-aligned column
 \item "c": centered column
 \item "r": right-aligned column
-\item "d": dot-aligned column. Only supported for LaTeX/PDF tables produced by \code{kableExtra}. These commands must appear in the LaTeX preamble (they are added automatically when compiling Rmarkdown documents to PDF):
+\item "d": dot-aligned column. Only supported for LaTeX/PDF tables produced by \code{kableExtra}. Requires at least version 3.0.25 of the siunitx LaTeX package. These commands must appear in the LaTeX preamble (they are added automatically when compiling Rmarkdown documents to PDF):
 \itemize{
 \item \verb{\\usepackage\{booktabs\}}
 \item \verb{\\usepackage\{siunitx\}}
-\item \verb{\\newcolumntype\{d\}\{S[input-symbols = ()]\}}
+\item \verb{\\newcolumntype\{d\}\{S[ input-open-uncertainty=, input-close-uncertainty=, parse-numbers = false, table-align-text-pre=false, table-align-text-post=false ]\}}
 }
 }}
 
@@ -70,7 +70,7 @@ your main table.}
 prevent the file from compiling/displaying. This setting does not affect captions or notes.}
 
 \item{...}{all other arguments are passed through to the table-making
-functions \link[kableExtra:kbl]{kableExtra::kbl} or \link[gt:gt]{gt::gt}, depending on the \code{output} argument.
+functions \link[kableExtra:kbl]{kableExtra::kbl}, \link[gt:gt]{gt::gt}, \link[DT:datatable]{DT::datatable}, etc. depending on the \code{output} argument.
 This allows users to pass arguments directly to \code{datasummary} in order to
 affect the behavior of other functions behind the scenes.}
 }

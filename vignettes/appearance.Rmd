@@ -9,12 +9,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-To customize the appearance of tables, `modelsummary` supports four of the most popular table-making packages: 
+To customize the appearance of tables, `modelsummary` supports five of the most popular table-making packages: 
 
 1. [`gt`: https://gt.rstudio.com](https://gt.rstudio.com)
 2. [`kableExtra`: http://haozhu233.github.io/kableExtra](http://haozhu233.github.io/kableExtra)
 3. [`huxtable`: https://hughjonesd.github.io/huxtable/](https://hughjonesd.github.io/huxtable/)
 4. [`flextable`: https://davidgohel.github.io/flextable/](https://davidgohel.github.io/flextable/)
+5. [`DT`: https://rstudio.github.io/DT](https://rstudio.github.io/DT)
 
 Users are encouraged to visit these websites to determine which package suits their needs best. Each of them has different strengths and weaknesses. For instance, `gt` allows seamless integration with the RStudio IDE, but `kableExtra`'s LaTeX (and PDF) output is far more mature.
 
@@ -36,7 +37,7 @@ models[['Poisson 2']] <- glm(Crime_pers ~ Literacy + Clergy, family = poisson, d
 models[['OLS 3']] <- lm(Crime_prop ~ Literacy + Clergy, data = dat)
 ```
 
-In the rest of this vignette, we will customize tables using tools supplied by the `gt`, `kableExtra`, `flextable`, and `huxtable` packages. In each case, the pattern will be similar. First, we create a table by calling `modelsummary` and by specifying the output format with the `output` parameter. Then, we will use functions from the four packages to customize the appearance of our tables.
+In the rest of this vignette, we will customize tables using tools supplied by the `gt`, `kableExtra`, `flextable`, `huxtable`, and `DT` packages. In each case, the pattern will be similar. First, we create a table by calling `modelsummary` and by specifying the output format with the `output` parameter. Then, we will use functions from the five packages to customize the appearance of our tables.
 
 # `gt`
 
@@ -311,6 +312,26 @@ tab <- modelsummary(models, output = 'latex') %>%
   add_header_above(c(" " = 1, "Donations" = 2, "Crimes (person)" = 2, "Crimes (property)" = 1))
 
 kableExtra::save_kable(tab, file = "table.tex")
+```
+
+
+# `DT`
+
+[The `DT` package](https://rstudio.github.io/DT/) is an interface to [the JavasScript DataTables library.](https://datatables.net/) We can create a `DT` table by using the `output` argument, and pass arguments to `modelsummary()` which will be passed forward to the `DT::datatable` to customize the output of the table. For example, let's use the `fixest` package to estimate multiple linear regression models, and the `DT` package to create a table with a "frozen" first column:
+
+```{r, message = FALSE}
+library(fixest)
+
+models <- feols(c(mpg, hp) ~ csw0(cyl, drat, am, vs, wt, carb, qsec, gear), data = mtcars)
+
+modelsummary(
+    models,
+    output = "DT",
+    extensions = "FixedColumns",
+    height = 50,
+    options = list(pageLength = 50,
+                   scrollX = TRUE,
+                   fixedColumns = list(leftColumns = 1)))
 ```
 
 

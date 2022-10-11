@@ -10,7 +10,7 @@
 
 `modelsummary` creates tables and plots to summarize statistical models and data in `R`. 
 
-The tables and plots produced by `modelsummary` are beautiful and highly customizable. They can be echoed to the `R` console or displayed in the `RStudio` Viewer. They can be saved to a wide variety of formats, including HTML, PDF, Text/Markdown, LaTeX, MS Word, RTF, JPG, and PNG. Tables can easily be embedded in dynamic documents with `Rmarkdown`, `knitr`, or `Sweave`. `modelsummary` supports *hundreds* of model types out-of-the-box. The look of your tables is infinitely customizable using external package such as `kableExtra`, `gt`, `flextable`, or `huxtable`.
+The tables and plots produced by `modelsummary` are beautiful and highly customizable. They can be echoed to the `R` console or displayed in the `RStudio` Viewer. They can be saved to a wide variety of formats, including HTML, PDF, Text/Markdown, LaTeX, MS Word, RTF, JPG, and PNG. Tables can easily be embedded in dynamic documents with `Rmarkdown`, `knitr`, or `Sweave`. `modelsummary` supports *hundreds* of model types out-of-the-box. The look of your tables is infinitely customizable using external package such as `kableExtra`, `gt`, `flextable`, `huxtable`, or `DT`.
 
 `modelsummary` includes two families of functions:
 
@@ -68,7 +68,7 @@ modelsummary(mod, output = "table.tex")
 
 *Information*: The package offers many intuitive and powerful utilities to [customize the information](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html) reported in a summary table. You can rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to include; display various “robust” standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.
 
-*Appearance*: Thanks to the [`gt`](https://gt.rstudio.com), [`kableExtra`](https://haozhu233.github.io/kableExtra/), [`huxtable`](https://hughjonesd.github.io/huxtable/), and [`flextable`](https://davidgohel.github.io/flextable/) packages, the appearance of `modelsummary` tables is endlessly customizable. The [appearance customization page](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html) shows tables with colored cells, weird text, spanning column labels, row groups, titles, source notes, footnotes, significance stars, and more.  This only scratches the surface of possibilities.
+*Appearance*: Thanks to the [`gt`](https://gt.rstudio.com), [`kableExtra`](https://haozhu233.github.io/kableExtra/), [`huxtable`](https://hughjonesd.github.io/huxtable/), [`flextable`](https://davidgohel.github.io/flextable/), and [`DT`](https://rstudio.github.io/DT/) packages, the appearance of `modelsummary` tables is endlessly customizable. The [appearance customization page](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html) shows tables with colored cells, weird text, spanning column labels, row groups, titles, source notes, footnotes, significance stars, and more.  This only scratches the surface of possibilities.
 
 *Supported models*: Thanks to the [`broom`](https://broom.tidymodels.org/) and [`parameters`](https://easystats.github.io/parameters/), `modelsummary` supports *hundreds* of statistical models out-of-the-box. Installing other packages can extend the capabilities further (e.g., [`broom.mixed`](https://CRAN.R-project.org/package=broom.mixed)). It is also very easy to [add or customize your own models.](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html#adding-new-models-1)
 
@@ -88,7 +88,7 @@ modelsummary(mod, output = "table.tex")
 
 #### Community
 
-`modelsummary` does not try to do everything. Instead, it leverages the incredible work of the `R` community. By building on top of the `broom` and `parameters` packages, `modelsummary` already supports hundreds of model types out-of-the-box. `modelsummary` also supports four of the most popular table-building and customization packages: `gt`, `kableExtra`, `huxtable`, and `flextable`. packages. By using those packages, `modelsummary` allows users to produce beautiful, endlessly customizable tables in a wide variety of formats, including HTML, PDF, LaTeX, Markdown, and MS Word.
+`modelsummary` does not try to do everything. Instead, it leverages the incredible work of the `R` community. By building on top of the `broom` and `parameters` packages, `modelsummary` already supports hundreds of model types out-of-the-box. `modelsummary` also supports five of the most popular table-building and customization packages: `gt`, `kableExtra`, `huxtable`, `flextable`, and `DT` packages. By using those packages, `modelsummary` allows users to produce beautiful, endlessly customizable tables in a wide variety of formats, including HTML, PDF, LaTeX, Markdown, and MS Word.
 
 One benefit of this community-focused approach is that when external packages improve, `modelsummary` improves as well. Another benefit is that leveraging external packages allows `modelsummary` to have a massively simplified codebase (relative to other similar packages). This should improve long term code maintainability, and allow contributors to participate through GitHub.
 

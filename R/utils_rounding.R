@@ -7,13 +7,25 @@
 #'
 #' @return a rounded number as character
 #' @noRd
-rounding <- function(x, fmt = '%.3f', ...) {
+rounding <- function(x, fmt = '%.3f', pval = FALSE, ...) {
 
     ## NA should return empty
     idx_na <- is.na(x)
 
-    ## character, factor, logical
+    # p values
+    if (is.numeric(fmt) && isTRUE(pval)) {
+        pdigits <- -max(fmt, 3)
+        x <- format.pval(
+            x,
+            digits = 1,
+            nsmall = fmt,
+            eps = 10^pdigits,
+            scientific = FALSE)
+    }
+
+    # input: character, factor, logical
     if (is.factor(x) || is.logical(x) || is.character(x)) {
+
         out <- as.character(x)
 
         ## escape
@@ -27,14 +39,14 @@ rounding <- function(x, fmt = '%.3f', ...) {
             out <- sprintf("{%s}", out)
         }
 
-                                        # numeric
+    # input: numeric
     } else {
 
         if (is.character(fmt)) {
             out <- sprintf(fmt, x, ...)
 
         } else if (is.numeric(fmt)) {
-                                        # R >4.1.0 will make 0 invalid in format()
+            # R >4.1.0 will make 0 invalid in format()
             if (fmt == 0) {
                 out <- sprintf("%.0f", x)
 
@@ -57,14 +69,13 @@ rounding <- function(x, fmt = '%.3f', ...) {
             out <- x
         }
 
-
     # Remove weird numbers before wrapping in siunitx
     out <- gsub('^NA$|^NaN$|^-Inf$|^Inf$', '', out)
 
     ## LaTeX siunitx \num{}
     if (settings_equal("output_format", c("latex", "latex_tabular"))) {
         if (!isTRUE(settings_get("siunitx_scolumns"))) {
-            if (settings_equal("format_numeric_latex", "siunitx")) {
+            if (settings_equal("format_numeric_latex", "siunitx") && !settings_equal("dcolumn_stars_mbox", TRUE)) {
                 out <- sprintf("\\num{%s}", out)
             } else if (settings_equal("format_numeric_latex", c("dollars", "mathmode"))) {
                 out <- sprintf("$%s$", out)
@@ -84,7 +95,7 @@ rounding <- function(x, fmt = '%.3f', ...) {
     }
   }
 
-  ## NA should return empty
+  # NA should return empty
   out[idx_na] <- ""
 
   return(out)

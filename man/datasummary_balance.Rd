@@ -13,6 +13,7 @@ datasummary_balance(
   title = NULL,
   notes = NULL,
   align = NULL,
+  stars = FALSE,
   add_columns = NULL,
   add_rows = NULL,
   dinm = TRUE,
@@ -33,8 +34,8 @@ column, the reported mean and standard errors will also be weighted.}
 
 \item{output}{filename or object type (character string)
 \itemize{
-\item Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg, .csv, .xlsx.
-\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
+\item Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg.
+\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
 \item Warning: Users should not supply a file name to the \code{output} argument if they intend to customize the table with external packages. See the 'Details' section.
 \item LaTeX compilation requires the \code{booktabs} and \code{siunitx} packages, but \code{siunitx} can be disabled or replaced with global options. See the 'Details' section.
 \item The default output formats and table-making packages can be modified with global options. See the 'Details' section.
@@ -58,12 +59,20 @@ the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, d.
 \item "l": left-aligned column
 \item "c": centered column
 \item "r": right-aligned column
-\item "d": dot-aligned column. Only supported for LaTeX/PDF tables produced by \code{kableExtra}. These commands must appear in the LaTeX preamble (they are added automatically when compiling Rmarkdown documents to PDF):
+\item "d": dot-aligned column. Only supported for LaTeX/PDF tables produced by \code{kableExtra}. Requires at least version 3.0.25 of the siunitx LaTeX package. These commands must appear in the LaTeX preamble (they are added automatically when compiling Rmarkdown documents to PDF):
 \itemize{
 \item \verb{\\usepackage\{booktabs\}}
 \item \verb{\\usepackage\{siunitx\}}
-\item \verb{\\newcolumntype\{d\}\{S[input-symbols = ()]\}}
+\item \verb{\\newcolumntype\{d\}\{S[ input-open-uncertainty=, input-close-uncertainty=, parse-numbers = false, table-align-text-pre=false, table-align-text-post=false ]\}}
 }
+}}
+
+\item{stars}{to indicate statistical significance
+\itemize{
+\item FALSE (default): no significance stars.
+\item TRUE: +=.1, *=.05, **=.01, ***=0.001
+\item Named numeric vector for custom stars such as \code{c('*' = .1, '+' = .05)}
+\item Note: a legend will not be inserted at the bottom of the table when the \code{estimate} or \code{statistic} arguments use "glue strings" with \code{{stars}}.
 }}
 
 \item{add_columns}{a data.frame (or tibble) with the same number of rows as
@@ -86,7 +95,7 @@ installed. If \code{data} includes columns named "blocks", "clusters", or
 prevent the file from compiling/displaying. This setting does not affect captions or notes.}
 
 \item{...}{all other arguments are passed through to the table-making
-functions \link[kableExtra:kbl]{kableExtra::kbl} or \link[gt:gt]{gt::gt}, depending on the \code{output} argument.
+functions \link[kableExtra:kbl]{kableExtra::kbl}, \link[gt:gt]{gt::gt}, \link[DT:datatable]{DT::datatable}, etc. depending on the \code{output} argument.
 This allows users to pass arguments directly to \code{datasummary} in order to
 affect the behavior of other functions behind the scenes.}
 }
@@ -116,7 +125,7 @@ The behavior of \code{modelsummary} can be affected by setting global options:
 \subsection{Table-making packages}{
 
 \code{modelsummary} supports 4 table-making packages: \code{kableExtra}, \code{gt},
-\code{flextable}, and \code{huxtable}. Some of these packages have overlapping
+\code{flextable}, \code{huxtable}, and \code{DT}. Some of these packages have overlapping
 functionalities. For example, 3 of those packages can export to LaTeX. To
 change the default backend used for a specific file format, you can use
 the \code{options} function:

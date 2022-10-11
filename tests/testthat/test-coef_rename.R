@@ -33,3 +33,38 @@ test_that("regression test: coef_rename() function", {
       lm(hp ~ factor(cyl) + drat + disp, data = mtcars))
     expect_error(modelsummary(dvnames(x), coef_rename = coef_rename), NA)
 })
+
+
+
+# Q
+# pkgload::load_all()
+# mod <- lm(mpg ~ factor(cyl), mtcars)
+# msummary(mod, coef_rename = TRUE)
+
+
+# library(modelsummary)
+
+# dat1 <- mtcars
+# dat1$mpg <- haven::labelled(dat1$mpg, label = "Miles per gallon")
+
+# dat2 <- mtcars
+# dat2$mpg2 <- haven::labelled(dat2$mpg, label = "Miles per gallon")
+
+# # mpg and mpg2 have the same label
+# should_warn_across <- list(
+#   lm(hp ~ mpg + drat, dat = dat1),
+#   lm(hp ~ mpg2 + wt, dat = dat2)
+# )
+
+# modelsummary(should_warn_across, output = "markdown", coef_rename = TRUE)
+
+# parameters(should_warn_across[[2]], pretty_names = "labels")
+
+# library(parameters)
+# data(efc, package = "datawizard")
+
+# # simple model
+# m <- lm(neg_c_7 ~ e42dep + c172code, data = efc)
+# modelsummary(m, coef_rename = TRUE)
+# mp <- model_parameters(m, pretty_names = "labels")
+# print(mp, pretty_names = "labels")

@@ -33,6 +33,8 @@ factory <- function(tab,
     factory_fun <- factory_flextable
   } else if (settings_equal("output_factory", "huxtable")) {
     factory_fun <- factory_huxtable
+  } else if (settings_equal("output_factory", "DT")) {
+    factory_fun <- factory_DT
   } else if (settings_equal("output_factory", "dataframe")) {
     factory_fun <- factory_dataframe
   }

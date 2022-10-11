@@ -2,7 +2,6 @@ mod <- list(
     lm(mpg ~ hp, mtcars),
     lm(mpg ~ hp + drat, mtcars))
 
-
 test_that("d-column: supported outputs", {
     expect_error(modelsummary(mod, output = "latex", align = "ldd"), NA)
     expect_error(modelsummary(mod, output = "latex_tabular", align = "ldd"), NA)
@@ -14,19 +13,6 @@ test_that("d-column: supported outputs", {
     expect_error(modelsummary(mod, output = "markdown", align = "ldd"), regexp = "only supported")
 })
 
-
-test_that("d-column: unsupported arguments", {
-    expect_error(modelsummary(mod, align = "ldd", output = "latex", stars = TRUE),
-                 regexp = "align.*supported")
-    expect_error(modelsummary(mod, align = "ldd", output = "latex", statistic = "conf.int"),
-                 regexp = "align.*supported")
-    expect_error(modelsummary(mod, align = "ldd", output = "latex", estimate = "conf.int"),
-                 regexp = "align.*supported")
-    expect_error(modelsummary(mod, align = "ldd", output = "latex", statistic = "p = {p.value}"),
-                 regexp = "align.*supported")
-    expect_error(modelsummary(mod, align = "ldd", output = "latex", estimate = "p = {p.value}"),
-                 regexp = "align.*supported")
-})
 
 
 test_that("d-column: known output", {

@@ -16,7 +16,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' Excel, RTF, JPG, or PNG. The appearance of the tables can be customized
 #' extensively by specifying the `output` argument, and by using functions from
 #' one of the supported table customization packages: `kableExtra`, `gt`,
-#' `flextable`, `huxtable`. For more information, see the Details and Examples
+#' `flextable`, `huxtable`, `DT`. For more information, see the Details and Examples
 #' sections below, and the vignettes on the `modelsummary` website:
 #' https://vincentarelbundock.github.io/modelsummary/
 #' * [The `modelsummary` Vignette includes dozens of examples of tables with extensive customizations.](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html)
@@ -34,8 +34,8 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'
 #' @param models a model or (optionally named) list of models
 #' @param output filename or object type (character string)
-#' * Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg, .csv, .xlsx.
-#' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the `modelsummary` function.
+#' * Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg.
+#' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the `modelsummary` function.
 #' * Warning: Users should not supply a file name to the `output` argument if they intend to customize the table with external packages. See the 'Details' section.
 #' * LaTeX compilation requires the `booktabs` and `siunitx` packages, but `siunitx` can be disabled or replaced with global options. See the 'Details' section.
 #' * The default output formats and table-making packages can be modified with global options. See the 'Details' section.
@@ -93,7 +93,8 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `"^(?!.*ei)"`: keep coefficients matching the "ei" substring.
 #' * `"^(?!.*ei|.*pt)"`: keep coefficients matching either the "ei" or the "pt" substrings.
 #' * See the Examples section below for complete code.
-#' @param coef_rename named character vector or function
+#' @param coef_rename logical, named character, or function
+#' * Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below.
 #' * Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg") 
 #' * Function: Accepts a character vector of the model's term names and returns a named vector like the one described above. The `modelsummary` package supplies a `coef_rename()` function which can do common cleaning tasks: `modelsummary(model, coef_rename = coef_rename)`
 #' @param gof_map rename, reorder, and omit goodness-of-fit statistics and other
@@ -126,6 +127,10 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `term + response + statistic ~ model`: term and group id in separate columns
 #' * `term : response + statistic ~ model`: term and group id in a single column
 #' * `term ~ response`
+#' @param add_columns a data.frame (or tibble) with the same number of rows as
+#' #' your main table. By default, rows are appended to the bottom of the table.
+#' You can define a "position" attribute of integers to set the columns positions.
+#' See Examples section below.
 #' @param add_rows a data.frame (or tibble) with the same number of columns as
 #' your main table. By default, rows are appended to the bottom of the table.
 #' You can define a "position" attribute of integers to set the row positions.
@@ -143,15 +148,17 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * "l": left-aligned column
 #' * "c": centered column
 #' * "r": right-aligned column
-#' * "d": dot-aligned column. Only supported for LaTeX/PDF tables produced by `kableExtra`. These commands must appear in the LaTeX preamble (they are added automatically when compiling Rmarkdown documents to PDF):
+#' * "d": dot-aligned column. Only supported for LaTeX/PDF tables produced by `kableExtra`. Requires at least version 3.0.25 of the siunitx LaTeX package. These commands must appear in the LaTeX preamble (they are added automatically when compiling Rmarkdown documents to PDF):
 #'   - `\usepackage{booktabs}`
 #'   - `\usepackage{siunitx}`
-#'   - `\newcolumntype{d}{S[input-symbols = ()]}`
+#'   - `\newcolumntype{d}{S[ input-open-uncertainty=, input-close-uncertainty=, parse-numbers = false, table-align-text-pre=false, table-align-text-post=false ]}`
 #' @param escape boolean TRUE escapes or substitutes LaTeX/HTML characters which could
 #' prevent the file from compiling/displaying. This setting does not affect captions or notes.
 #' @param ... all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.
-#' + [parameters::model_parameters] extracts parameter estimates.
-#' + [performance::model_performance] extracts goodness-of-fit statistics.
+#' + [parameters::model_parameters] extracts parameter estimates. Available arguments depend on model type, but include:
+#'     - `standardize`, `centrality`, `dispersion`, `test`, `ci_method`, `prior`, `diagnostic`, `rope_range`, `power`, `cluster`, etc. 
+#' + [performance::model_performance] extracts goodness-of-fit statistics. Available arguments depend on model type, but include:
+#'     - `metrics`, `estimator`, etc.
 #' + [kableExtra::kbl] or [gt::gt] draw tables, depending on the value of the `output` argument.
 #' @return a regression table in a format determined by the `output` argument.
 #' @importFrom generics glance tidy
@@ -169,10 +176,11 @@ modelsummary <- function(
   shape       = term + statistic ~ model,
   coef_map    = NULL,
   coef_omit   = NULL,
-  coef_rename = NULL,
+  coef_rename = FALSE,
   gof_map     = NULL,
   gof_omit    = NULL,
   group_map   = NULL,
+  add_columns = NULL,
   add_rows    = NULL,
   align       = NULL,
   notes       = NULL,
@@ -236,17 +244,6 @@ modelsummary <- function(
   }
 
 
-  ###################
-  #  labelled data  #
-  ###################
-  coef_rename_user <- coef_rename
-  if (is.null(coef_rename) && is.null(coef_map)) {
-    lab <- get_variable_labels_models(models)
-    fun <- function(x) coef_rename_labels(x, lab)
-    coef_rename <- fun
-  }
-
-
   #######################
   #  modelsummary_list  #
   #######################
@@ -255,6 +252,7 @@ modelsummary <- function(
                                         vcov = vcov,
                                         gof_map = gof_map, # check if we can skip all gof computation
                                         shape = shape,
+                                        coef_rename = coef_rename,
                                         ...)
   names(msl) <- model_names
 
@@ -418,7 +416,7 @@ modelsummary <- function(
 
   # interaction : becomes ×
   if (is.null(coef_map) &&
-      is.null(coef_rename_user) &&
+      isFALSE(coef_rename) &&
       "term" %in% colnames(tab) &&
       !settings_equal("output_format", "rtf")) {
     idx <- tab$part != 'gof'
@@ -486,6 +484,9 @@ modelsummary <- function(
   if (is.null(align)) {
     n_stub <- sum(grepl("^ *$", colnames(tab)))
     align <- paste0(strrep("l", n_stub), strrep("c", ncol(tab) - n_stub))
+    if (isTRUE(checkmate::check_data_frame(add_columns))) {
+      align <- paste0(align, strrep("c", ncol(add_columns)))
+    }
   }
 
   # HACK: remove "empty" confidence intervals or standard errors and omit empty rows
@@ -510,6 +511,7 @@ modelsummary <- function(
     output   = output,
     title    = title,
     add_rows = add_rows,
+    add_columns = add_columns,
     escape = escape,
     ...
   )
@@ -529,7 +531,7 @@ modelsummary <- function(
 }
 
 
-get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, shape, ...) {
+get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, shape, coef_rename, ...) {
 
     number_of_models <- max(length(models), length(vcov))
 
@@ -552,6 +554,7 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, sh
             conf_level = conf_level,
             vcov = vcov[[i]],
             shape = shape,
+            coef_rename = coef_rename,
             ...)
 
         out <- list("tidy" = tid, "glance" = gla)
@@ -580,16 +583,19 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, sh
 
 
 redundant_labels <- function(dat, column) {
-    if (!column %in% colnames(dat)) {
-        return(dat)
-    }
+  if (!column %in% colnames(dat)) {
+    return(dat)
+  }
+  # Issue #558: 1-row estimates table with no gof
+  if (nrow(dat) > 1) { 
     for (i in nrow(dat):2) {
-        if (dat$part[i] == "estimates" &&
+      if (dat$part[i] == "estimates" &&
         dat[[column]][i - 1] == dat[[column]][i]) {
         dat[[column]][i] <- ""
-        }
+      }
     }
-    return(dat)
+  }
+  return(dat)
 }
 
 #' `msummary()` is a shortcut to `modelsummary()`

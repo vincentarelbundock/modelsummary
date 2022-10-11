@@ -51,7 +51,7 @@ factory_dataframe <- function(tab,
   # write spreadsheet to file
   output_file <- settings_get("output_file")
   if (isTRUE(tools::file_ext(output_file) == "csv")) {
-    write.csv(out, file = output_file, row.names = FALSE)
+    utils::write.csv(out, file = output_file, row.names = FALSE)
   } else if (isTRUE(tools::file_ext(output_file) == "xlsx")) {
     insight::check_if_installed("openxlsx")
     openxlsx::write.xlsx(out, file = output_file)
