@@ -13,7 +13,7 @@ update_modelsummary <- function(source = "development") {
         remotes::install_github("easystats/performance")
         remotes::install_github("vincentarelbundock/modelsummary")
     } else {
-        update.packages(c("insight", "parameters", "performance", "modelsummary"))
+        utils::update.packages(c("insight", "parameters", "performance", "modelsummary"))
     }
     insight::format_alert("Please restart your R session for the changes to take effect.")
 }
