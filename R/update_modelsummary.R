@@ -1,19 +1,22 @@
 #' Update `modelsummary` and its dependencies
 #'
-#' Update `modelsummary` and its dependencies to the latest development or CRAN versions. The R session needs to be restarted after install.
-#' 
+#' Update `modelsummary` and its dependencies to the latest R-Universe or CRAN versions. The R session needs to be restarted after install.
+#'
 #' @param source one of two strings: "development" or "cran"
 #' @export
 update_modelsummary <- function(source = "development") {
     checkmate::assert_choice(source, choices = c("development", "cran"))
-    insight::check_if_installed("remotes")
     if (source == "development") {
-        remotes::install_github("easystats/insight")
-        remotes::install_github("easystats/parameters")
-        remotes::install_github("easystats/performance")
-        remotes::install_github("vincentarelbundock/modelsummary")
+        repo_easystats <- "https://easystats.r-universe.dev"
+        repo_vab <- "https://vincentarelbundock.r-universe.dev"
     } else {
-        utils::update.packages(c("insight", "parameters", "performance", "modelsummary"))
+        repo_vab <- repo_easystats <- getOption("repos")["CRAN"]
     }
-    insight::format_alert("Please restart your R session for the changes to take effect.")
+    utils::install.packages("insight", repos = repo_easystats)
+    utils::install.packages("parameters", repos = repo_easystats)
+    utils::install.packages("performance", repos = repo_easystats)
+    utils::install.packages("modelsummary", repos = repo_vab)
+    msg <- "Please restart your R session"
+    msg <- c("", strrep("#", nchar(msg)), msg, strrep("#", nchar(msg)))
+    insight::format_alert(msg)
 }
