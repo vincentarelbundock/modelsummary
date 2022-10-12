@@ -471,6 +471,7 @@ modelsummary <- function(
     tab$group <- NULL
   }
 
+
   # only show group label if it is a row-property (lhs of the group formula)
   tmp <- setdiff(shape$lhs, c("model", "term"))
   if (length(tmp) == 0) {
@@ -495,7 +496,8 @@ modelsummary <- function(
     tab[[i]] <- gsub("\\(\\\\num\\{NA\\}\\)", "", tab[[i]])
     tab[[i]] <- gsub("\\[,\\s*\\]", "", tab[[i]])
     tab[[i]] <- gsub("\\[\\\\num\\{NA\\}, \\\\num\\{NA\\}\\]", "", tab[[i]])
-    tab[[i]] <- gsub("\\{\\}", "", tab[[i]])
+    # Issue #560 don't replace fe1^fe2 -> fe1\textasciicircum{}fe2 -> fe1\textasciicircumfe2
+    tab[[i]] <- gsub("^\\S*\\{\\}\\S*", "", tab[[i]])
   }
   idx <- apply(tab, 1, function(x) any(x != ""))
   tab <- tab[idx, ]

@@ -41,3 +41,15 @@ test_that("stars_note < are protected by $ in latex", {
 test_that("output = latex_tabular", {
     expect_snapshot(modelsummary(models, output = "latex_tabular"))
 })
+
+
+test_that("Issue #560: circum escape", {
+  requiet("fixest")
+  base = iris
+  names(base) = c("y", paste0("x", 1:3), "fe1")
+  base$fe2 = rep(letters[1:5], 30)
+  base$fe3 = rep(letters[1:5], 30)
+  est_comb = feols(y ~ x1 | fe1 +fe2 +fe3, data = base, cluster= "fe1^fe2")
+  tab <- modelsummary(est_comb, output = "latex")
+  expect_true(grepl("circum\\{\\}", tab))
+})
