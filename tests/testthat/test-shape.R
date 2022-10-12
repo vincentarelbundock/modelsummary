@@ -2,6 +2,7 @@ requiet("gamlss")
 requiet("nnet")
 
 test_that("combine columns with :", {
+    skip_if_not_installed("parameters", minimum_version = "0.19.0.10")
     requiet("marginaleffects")
     mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
     mfx <- suppressWarnings(marginaleffects(mod))
