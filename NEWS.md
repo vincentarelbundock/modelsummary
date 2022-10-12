@@ -7,6 +7,7 @@ Breaking change:
 
 New features:
 
+* "d" is accepted for decimal-alignment in the `align` argument for all `output` formats. `modelsummary(mod, align = "ld")`
 * New `update_modelsummary()` function makes it easy to install the dev versions of `modelsummary` and its dependencies (mostly useful for Vincent and people who report bugs).
 * Rounding: display at least one significant digit by default.
 * Automatic renaming of `haven` labels in `modelsummary()`, `datasummary()`, `datasummary_skim()`

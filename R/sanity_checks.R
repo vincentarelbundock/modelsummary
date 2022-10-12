@@ -74,9 +74,6 @@ sanity_align <- function(align, estimate = NULL, statistic = NULL, stars = FALSE
 
     # the d-column siunitx LaTeX preamble doesn't play well with stars, so we need to wrap them in \\mbox{}
     if (any(grepl("d", align))) {
-      if (!settings_equal("output_format", c("latex", "latex_tabular"))) {
-        insight::format_error('Using d in the `align` argument is only supported when `output="latex"` or in Rmarkdown documents compiled to PDF format.')
-      }
       settings_set("dcolumn_stars_mbox", TRUE)
     }
 }

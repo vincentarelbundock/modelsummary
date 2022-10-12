@@ -10,5 +10,5 @@ update_modelsummary(source = "development")
 \item{source}{one of two strings: "development" or "cran"}
 }
 \description{
-Update \code{modelsummary} and its dependencies to the latest development or CRAN versions. The R session needs to be restarted after install.
+Update \code{modelsummary} and its dependencies to the latest R-Universe or CRAN versions. The R session needs to be restarted after install.
 }
