@@ -15,7 +15,6 @@ test_that("gof_omit='.*' used to produce an error", {
 
 test_that("complex html table", {
 
-
   cm <- c(
     'hp' = 'Horsepower',
     'mpg' = 'Miles/Gallon',
@@ -35,9 +34,9 @@ test_that("complex html table", {
         notes = c('First custom note to contain text.',
             'Second custom note with different content.')
         ) %>%
-        gt::tab_spanner(label = 'Horsepower', columns = c('OLS 1', 'Poisson 1')) %>%
-        gt::tab_spanner(label = 'V-Shape', columns = c('OLS 2', 'Logit 1')) %>%
-        gt::tab_spanner(label = 'Transmission', columns = 'Logit 2') %>%
+        gt::tab_spanner(label = 'Horsepower', columns = c(`OLS 1`, `Poisson 1`)) %>%
+        gt::tab_spanner(label = 'V-Shape', columns = c(`OLS 2`, `Logit 1`)) %>%
+        gt::tab_spanner(label = 'Transmission', columns = `Logit 2`) %>%
         gt::tab_header(title = 'Summarizing 5 statistical models using the `modelsummary` package for `R`.',
         subtitle = 'Models estimated using the mtcars dataset.') %>%
         gt::as_raw_html()
@@ -57,13 +56,13 @@ test_that("title", {
 test_that("background color", {
   raw <- modelsummary(models, output = "gt", title = 'colors') %>%
     tab_style(style = cell_text(weight = "bold"),
-      locations = cells_body(columns = c("OLS 1"))) %>%
+      locations = cells_body(columns = c(`OLS 1`))) %>%
     tab_style(style = cell_text(style = "italic"),
-      locations = cells_body(columns = c("Poisson 1"), rows = 2:6)) %>%
+      locations = cells_body(columns = c(`Poisson 1`), rows = 2:6)) %>%
     tab_style(style = cell_fill(color = "lightcyan"),
-      locations = cells_body(columns = c("OLS 1"))) %>%
+      locations = cells_body(columns = c(`OLS 1`))) %>%
     tab_style(style = cell_fill(color = "#F9E3D6"),
-      locations = cells_body(columns = c("Logit 2"), rows = 2:6)) %>%
+      locations = cells_body(columns = c(`Logit 2`), rows = 2:6)) %>%
     as_raw_html()
   expect_snapshot(cat(raw))
 })
