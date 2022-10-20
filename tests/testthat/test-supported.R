@@ -166,7 +166,7 @@ test_that("sandwich vignette", {
 
 
 test_that("consistent gof std error display did", {
-  skip("`did` does nto have tidy and glance methods and cannot be installed on R<4.0.0")
+  skip("`did` has no tidy or glance methods and cannot be installed on R<4.0.0")
   requiet("did")
   data(mpdta, package = 'did')
   mpdta$newvar <- substr(mpdta$countyreal, 1, 2)

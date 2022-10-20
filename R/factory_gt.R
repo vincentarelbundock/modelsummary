@@ -45,7 +45,7 @@ factory_gt <- function(tab,
     for (s in span_list) {
       out <- gt::tab_spanner(out,
                              label = s$label,
-                             columns = s$columns,
+                             columns = tidyselect::all_of(s$columns),
                              level = s$level)
     }
   }
@@ -55,10 +55,12 @@ factory_gt <- function(tab,
     left <- grep('l', align)
     center <- grep('c', align)
     right <- grep('r', align)
-    out <-
-    out <- gt::cols_align(out, align = 'center', columns = center)
-    out <- gt::cols_align(out, align = 'left', columns = left)
-    out <- gt::cols_align(out, align = 'right', column = right)
+    out <- gt::cols_align(
+      out, align = 'center', columns = tidyselect::all_of(center))
+    out <- gt::cols_align(
+      out, align = 'left', columns = tidyselect::all_of(left))
+    out <- gt::cols_align(
+      out, align = 'right', column = tidyselect::all_of(right))
   }
 
   # output

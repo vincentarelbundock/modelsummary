@@ -1,4 +1,5 @@
 requiet("gt")
+skip_on_ci()
 
 models <- list()
 models[['OLS 1']] <- lm(hp ~ mpg + wt, mtcars)
