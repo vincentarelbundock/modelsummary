@@ -34,7 +34,7 @@ The Appearance Vignette shows how to modify the look of tables.
     
     <a class="navbar-brand me-2" href="../index.html">modelsummary</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -109,10 +109,11 @@ https://vincentarelbundock.github.io/modelsummary/</p><ul><li><p><a href="https:
 <span>  shape <span class="op">=</span> <span class="va">term</span> <span class="op">+</span> <span class="va">statistic</span> <span class="op">~</span> <span class="va">model</span>,</span>
 <span>  coef_map <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  coef_omit <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  coef_rename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  coef_rename <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  gof_map <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  gof_omit <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  group_map <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  add_columns <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  add_rows <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  align <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  notes <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -244,7 +245,8 @@ Examples section below.</p></dd>
 
 
 <dt>coef_rename</dt>
-<dd><p>named character vector or function</p><ul><li><p>Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg")</p></li>
+<dd><p>logical, named character, or function</p><ul><li><p>Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below.</p></li>
+<li><p>Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg")</p></li>
 <li><p>Function: Accepts a character vector of the model's term names and returns a named vector like the one described above. The <code>modelsummary</code> package supplies a <code><a href="coef_rename.html">coef_rename()</a></code> function which can do common cleaning tasks: <code>modelsummary(model, coef_rename = coef_rename)</code></p></li>
 </ul></dd>
 
@@ -272,6 +274,13 @@ reorder coefficient groups specified a grouping variable specified in the
 <code>shape</code> argument formula. This argument behaves like <code>coef_map</code>.</p></dd>
 
 
+<dt>add_columns</dt>
+<dd><p>a data.frame (or tibble) with the same number of rows as
+#' your main table. By default, rows are appended to the bottom of the table.
+You can define a "position" attribute of integers to set the columns positions.
+See Examples section below.</p></dd>
+
+
 <dt>add_rows</dt>
 <dd><p>a data.frame (or tibble) with the same number of columns as
 your main table. By default, rows are appended to the bottom of the table.
@@ -284,9 +293,9 @@ See Examples section below.</p></dd>
 the table (e.g., <code>align = "lcc"</code>).  Valid characters: l, c, r, d.</p><ul><li><p>"l": left-aligned column</p></li>
 <li><p>"c": centered column</p></li>
 <li><p>"r": right-aligned column</p></li>
-<li><p>"d": dot-aligned column. Only supported for LaTeX/PDF tables produced by <code>kableExtra</code>. These commands must appear in the LaTeX preamble (they are added automatically when compiling Rmarkdown documents to PDF):</p><ul><li><p><code>\usepackage{booktabs}</code></p></li>
+<li><p>"d": dot-aligned column. For LaTeX/PDF output, this option requires at least version 3.0.25 of the siunitx LaTeX package. These commands must appear in the LaTeX preamble (they are added automatically when compiling Rmarkdown documents to PDF):</p><ul><li><p><code>\usepackage{booktabs}</code></p></li>
 <li><p><code>\usepackage{siunitx}</code></p></li>
-<li><p><code>\newcolumntype{d}{S[input-symbols = ()]}</code></p></li>
+<li><p><code>\newcolumntype{d}{S[ input-open-uncertainty=, input-close-uncertainty=, parse-numbers = false, table-align-text-pre=false, table-align-text-post=false ]}</code></p></li>
 </ul></li>
 </ul></dd>
 
@@ -305,8 +314,10 @@ prevent the file from compiling/displaying. This setting does not affect caption
 
 
 <dt>...</dt>
-<dd><p>all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.</p><ul><li><p><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters</a> extracts parameter estimates.</p></li>
-<li><p><a href="https://easystats.github.io/performance/reference/model_performance.html" class="external-link">performance::model_performance</a> extracts goodness-of-fit statistics.</p></li>
+<dd><p>all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.</p><ul><li><p><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters</a> extracts parameter estimates. Available arguments depend on model type, but include:</p><ul><li><p><code>standardize</code>, <code>centrality</code>, <code>dispersion</code>, <code>test</code>, <code>ci_method</code>, <code>prior</code>, <code>diagnostic</code>, <code>rope_range</code>, <code>power</code>, <code>cluster</code>, etc.</p></li>
+</ul></li>
+<li><p><a href="https://easystats.github.io/performance/reference/model_performance.html" class="external-link">performance::model_performance</a> extracts goodness-of-fit statistics. Available arguments depend on model type, but include:</p><ul><li><p><code>metrics</code>, <code>estimator</code>, etc.</p></li>
+</ul></li>
 <li><p><a href="https://rdrr.io/pkg/kableExtra/man/kbl.html" class="external-link">kableExtra::kbl</a> or <a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt</a> draw tables, depending on the value of the <code>output</code> argument.</p></li>
 </ul></dd>
 
@@ -508,6 +519,14 @@ users can use <code>plan(multisession)' instead. However, note that the first ti
 <span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_rename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Volume'</span> <span class="op">=</span> <span class="st">'Large'</span>, <span class="st">'Height'</span> <span class="op">=</span> <span class="st">'Tall'</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_rename <span class="op">=</span> <span class="va">toupper</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_rename <span class="op">=</span> <span class="va">coef_rename</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># coef_rename = TRUE for variable labels</span></span></span>
+<span class="r-in"><span><span class="va">datlab</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span></span>
+<span class="r-in"><span><span class="va">datlab</span><span class="op">$</span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">datlab</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">datlab</span><span class="op">$</span><span class="va">hp</span>, <span class="st">"label"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Horsepower"</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">datlab</span><span class="op">$</span><span class="va">cyl</span>, <span class="st">"label"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Cylinders"</span></span></span>
+<span class="r-in"><span><span class="va">modlab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">datlab</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">modlab</span>, coef_rename <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># coef_map</span></span></span>
 <span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Volume'</span> <span class="op">=</span> <span class="st">'Large'</span>, <span class="st">'Height'</span> <span class="op">=</span> <span class="st">'Tall'</span><span class="op">)</span><span class="op">)</span></span></span>

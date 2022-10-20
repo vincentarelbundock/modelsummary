@@ -18,7 +18,7 @@ attributes(get_estimates(model))"><!-- mathjax --><script src="https://cdnjs.clo
     
     <a class="navbar-brand me-2" href="../index.html">modelsummary</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,7 +75,14 @@ can access this information by calling the <code>attributes</code> function:
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_estimates</span><span class="op">(</span><span class="va">model</span>, conf_level <span class="op">=</span> <span class="fl">0.95</span>, vcov <span class="op">=</span> <span class="cn">NULL</span>, shape <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_estimates</span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  conf_level <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  vcov <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  shape <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  coef_rename <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -121,9 +128,18 @@ automatically. Potential <code>shape</code> values include:</p><ul><li><p><code>
 </ul></dd>
 
 
+<dt>coef_rename</dt>
+<dd><p>logical, named character, or function</p><ul><li><p>Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below.</p></li>
+<li><p>Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg")</p></li>
+<li><p>Function: Accepts a character vector of the model's term names and returns a named vector like the one described above. The <code>modelsummary</code> package supplies a <code><a href="coef_rename.html">coef_rename()</a></code> function which can do common cleaning tasks: <code>modelsummary(model, coef_rename = coef_rename)</code></p></li>
+</ul></dd>
+
+
 <dt>...</dt>
-<dd><p>all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.</p><ul><li><p><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters</a> extracts parameter estimates.</p></li>
-<li><p><a href="https://easystats.github.io/performance/reference/model_performance.html" class="external-link">performance::model_performance</a> extracts goodness-of-fit statistics.</p></li>
+<dd><p>all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.</p><ul><li><p><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters</a> extracts parameter estimates. Available arguments depend on model type, but include:</p><ul><li><p><code>standardize</code>, <code>centrality</code>, <code>dispersion</code>, <code>test</code>, <code>ci_method</code>, <code>prior</code>, <code>diagnostic</code>, <code>rope_range</code>, <code>power</code>, <code>cluster</code>, etc.</p></li>
+</ul></li>
+<li><p><a href="https://easystats.github.io/performance/reference/model_performance.html" class="external-link">performance::model_performance</a> extracts goodness-of-fit statistics. Available arguments depend on model type, but include:</p><ul><li><p><code>metrics</code>, <code>estimator</code>, etc.</p></li>
+</ul></li>
 <li><p><a href="https://rdrr.io/pkg/kableExtra/man/kbl.html" class="external-link">kableExtra::kbl</a> or <a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt</a> draw tables, depending on the value of the <code>output</code> argument.</p></li>
 </ul></dd>
 
