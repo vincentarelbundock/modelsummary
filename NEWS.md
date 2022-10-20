@@ -1,9 +1,9 @@
-# modelsummary 1.0.2.9000
+# modelsummary 1.1.0
 
 Breaking change:
 
 * Requires `siunitx` version 3.0.25 LaTeX package.
-* The `title` is now respects the `escape` argument for all `kableExtra` output formats. This can break tables in which users manually escaped titles.
+* The `title` argument now respects the `escape` argument for all `kableExtra` output formats. This can break tables in which users manually escaped titles.
 
 New features:
 
