@@ -1,4 +1,4 @@
-sanitize_models <- function(models) {
+sanitize_models <- function(models, ...) {
 
     # fixest::fixest_multi
     # handles cases with `split` or with both `fsplit` and ` do this before
@@ -20,6 +20,10 @@ sanitize_models <- function(models) {
     # models inherit from list
     if (class(models)[1] != "list") {
         models <- list(models)
+    }
+
+    for (m in models) {
+        sanity_dots(m, ...)
     }
 
     return(models)

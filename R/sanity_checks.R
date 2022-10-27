@@ -310,3 +310,18 @@ sanity_ds_right_handed_formula <- function(formula) {
     stop("The 'datasummary_table' function only accepts a single right-hand side variable of type factor, character, or logical. If you do not want to transform your variable in the original data, you can wrap it in a Factor() call: datasummary_balance(~Factor(x), data). the name of your variablePlease visit the `modelsummary` website to learn how to build your own, more complex, Table 1. It's easy, I promise! https://vincentarelbundock.github.io/modelsummary/datasummary.html")
   }
 }
+
+
+#' sanity dots
+#' @noRd
+sanity_dots <- function(model, ...) {
+  dots <- list(...)
+
+  # R2 can be misleading when standardizing without an intercept
+  if (identical(dots[["standardize"]], "refit") && identical(class(model), "lm")) {
+    if (!"(Intercept)" %in% names(coef(model))) {
+      msg <- "The goodness-of-fit statistics were calculated using the original model rather than the standardized model." 
+      insight::format_warning(msg)
+    }
+  }
+}

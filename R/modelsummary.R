@@ -212,7 +212,7 @@ modelsummary <- function(
   sanitize_output(output)           # early
   sanitize_escape(escape)
   sanity_ellipsis(vcov, ...)        # before sanitize_vcov
-  models <- sanitize_models(models) # before sanitize_vcov
+  models <- sanitize_models(models, ...) # before sanitize_vcov
   vcov <- sanitize_vcov(vcov, models, ...)
   number_of_models <- max(length(models), length(vcov))
   estimate <- sanitize_estimate(estimate, number_of_models)
