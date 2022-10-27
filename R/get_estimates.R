@@ -206,6 +206,8 @@ get_estimates_parameters <- function(model,
         labs <- gsub("\\*", "\u00d7", labs)
         if (isTRUE(length(labs) == nrow(out))) {
             out$term <- labs
+        } else {
+            out$term <- gsub("\\*", "\u00d7", out$term)
         }
     }
 
@@ -236,7 +238,7 @@ get_estimates_parameters <- function(model,
             sprintf("%s: %s)", gsub("\\)$", "", out$term), out$group),
             out$term)
         # otherwise gets converted to x
-        out$term <- gsub(":", "", out$term)
+        out$term <- ifelse(idx, gsub(":", "", out$term), out$term)
     }
 
     # "group" column is required to merge lm() and lme4::lmer(), and other grouped and non-grouped models.

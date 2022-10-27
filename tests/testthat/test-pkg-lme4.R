@@ -173,3 +173,13 @@ test_that("lme4 with parameter's effects argument", {
   tab <- tab[tab$part == "estimates",]
   expect_equal(nrow(tab), 4)
 })
+
+
+test_that("Issue #566", {
+  data(Orthodont, package = "nlme")
+  Orthodont$nsex <- as.numeric(Orthodont$Sex == "Male")
+  m1 <- lm(distance ~ age * nsex, data = Orthodont)
+  m2 <- lmer(distance ~ age * nsex + (1 | Subject), data = Orthodont)
+  tab <- modelsummary(list(m1, m2), output = "dataframe")
+  expect_false("agensex" %in% tab$term)
+})
