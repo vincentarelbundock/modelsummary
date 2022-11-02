@@ -192,13 +192,9 @@
 <p>You can install <code>modelsummary</code> from CRAN:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'modelsummary'</span><span class="op">)</span></span></code></pre></div>
-<p>If you want the very latest version, install it from Github:</p>
-<pre class="{r}"><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"modelsummary"</span>, <span class="st">"insight"</span>, <span class="st">"parmaeters"</span>, <span class="st">"performance"</span><span class="op">)</span>,</span>
-<span>    repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>        <span class="st">"https://vincentarelbundock.r-universe.dev"</span>,</span>
-<span>        <span class="st">"https://easystats.r-universe.dev"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
-<p>Restart <code>R</code> completely to make sure the installation is complete.</p>
+<p>You can install the development version of <code>modelsummary</code> (and its dependency <code>insight</code>) from R-Universe:</p>
+<p><code>{r, eval=FALSE} install.packages(     c("modelsummary", "insight", "performance", "parameters"),     repos = c(         "https://vincentarelbundock.r-universe.dev",         "https://easystats.r-universe.dev"))</code></p>
+<p><strong>Restart <code>R</code> completely before moving on.</strong></p>
 </div>
 <div class="section level1">
 <h1 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
@@ -218,31 +214,31 @@
 </li>
 </ul>
 <p>To begin, load the <code>modelsummary</code> package and download data from the <a href="https://vincentarelbundock.github.io/Rdatasets/" class="external-link">Rdatasets archive</a>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/" class="external-link">modelsummary</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> </span>
 <span><span class="va">dat</span><span class="op">$</span><span class="va">Small</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">Pop1831</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">Pop1831</span><span class="op">)</span></span></code></pre></div>
 <p>Quick overview of the data:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/datasummary_skim.html">datasummary_skim</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code></pre></div>
 <p>Balance table (aka “Table 1”) with differences in means by subgroups:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/datasummary_balance.html">datasummary_balance</a></span><span class="op">(</span><span class="op">~</span><span class="va">Small</span>, <span class="va">dat</span><span class="op">)</span></span></code></pre></div>
 <p>Correlation table:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/datasummary_correlation.html">datasummary_correlation</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code></pre></div>
 <p>Two variables and two statistics, nested in subgroups:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">Literacy</span> <span class="op">+</span> <span class="va">Commerce</span> <span class="op">~</span> <span class="va">Small</span> <span class="op">*</span> <span class="op">(</span><span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span><span class="op">)</span>, <span class="va">dat</span><span class="op">)</span></span></code></pre></div>
 <p>Estimate a linear model and display the results:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Donations</span> <span class="op">~</span> <span class="va">Crime_prop</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code></pre></div>
 <p>Estimate five regression models, display the results side-by-side, and save them to a Microsoft Word document:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="st">"OLS 1"</span>     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Donations</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Clergy</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,</span>
 <span>  <span class="st">"Poisson 1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">Donations</span> <span class="op">~</span> <span class="va">Literacy</span> <span class="op">+</span> <span class="va">Commerce</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,</span>
