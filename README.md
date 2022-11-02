@@ -103,7 +103,7 @@ install.packages('modelsummary')
 
 You can install the development version of `modelsummary` (and its dependency `insight`) from R-Universe:
 
-```{r, eval=FALSE}
+```r
 install.packages(
     c("modelsummary", "insight", "performance", "parameters"),
     repos = c(
