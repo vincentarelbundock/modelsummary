@@ -92,6 +92,7 @@ modelsummary(mod, output = "table.tex")
 
 One benefit of this community-focused approach is that when external packages improve, `modelsummary` improves as well. Another benefit is that leveraging external packages allows `modelsummary` to have a massively simplified codebase (relative to other similar packages). This should improve long term code maintainability, and allow contributors to participate through GitHub.
 
+
 # Installation
 
 You can install `modelsummary` from CRAN:
@@ -100,17 +101,17 @@ You can install `modelsummary` from CRAN:
 install.packages('modelsummary')
 ```
 
-If you want the very latest version, install it from Github:
+You can install the development version of `modelsummary` (and its dependency `insight`) from R-Universe:
 
-```{r}
+```{r, eval=FALSE}
 install.packages(
-    c("modelsummary", "insight", "parmaeters", "performance"),
+    c("modelsummary", "insight", "performance", "parameters"),
     repos = c(
         "https://vincentarelbundock.r-universe.dev",
         "https://easystats.r-universe.dev"))
 ```
 
-Restart `R` completely to make sure the installation is complete.
+**Restart `R` completely before moving on.** 
 
 # Getting started
 

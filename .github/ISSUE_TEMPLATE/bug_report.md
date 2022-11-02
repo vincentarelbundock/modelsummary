@@ -4,29 +4,13 @@ about: Create a report to help us improve
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
-Before reporting a bug, please make sure the bug is not already fixed in the development version. To do so, install all the dependencies:
+Bug reports must include:
 
-```r
-library(remotes)
-install_github("easystats/parameters")
-install_github("easystats/performance")
-install_github("easystats/insight")
-install_github("vincentarelbundock/modelsummary")
-```
+1. *Concise* description of the bug
+2. *Minimal* reproducible example using publicly available data and the bare minimum code and libraries needed to reproduce the bug.
+    - Consider using the `mtcars` dataset which is distributed by default with `R`, or one of the [CSV files from the RDatasets archive.](https://vincentarelbundock.github.io/Rdatasets/articles/data.html)
+3. `sessionInfo()` output
 
-Restart `R` completely. Then try again.
-
-If your problem persists, please:
-
-1. Give a *concise* description of the bug
-2. A *minimal* working code example, loading only the bare minimum libraries needed to reproduce.
-3. Using *publicly* available data like the `mtcars` dataset which comes bundled with `R`.
-
-Finally, please include the output of this command:
-
-```r
-sessionInfo()
-```
+Make sure you are running the *latest development version* of `modelsummary` and its dependencies: https://vincentarelbundock.github.io/modelsummary/#installation
