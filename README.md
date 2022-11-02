@@ -102,10 +102,15 @@ install.packages('modelsummary')
 
 If you want the very latest version, install it from Github:
 
-```r
-library(remotes)
-remotes::install_github('vincentarelbundock/modelsummary')
+```{r}
+install.packages(
+    c("modelsummary", "insight", "parmaeters", "performance"),
+    repos = c(
+        "https://vincentarelbundock.r-universe.dev",
+        "https://easystats.r-universe.dev"))
 ```
+
+Restart `R` completely to make sure the installation is complete.
 
 # Getting started
 
