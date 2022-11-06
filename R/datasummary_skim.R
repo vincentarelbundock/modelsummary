@@ -238,8 +238,8 @@ datasummary_skim_numeric <- function(
     histogram_list <- lapply(histogram_list, stats::na.omit)
 
     # too large
-    if (ncol(dat_lab) > 50) {
-      stop("Cannot summarize more than 50 variables at a time.")
+    if (ncol(dat_lab) > 250) {
+      stop("Cannot summarize more than 250 variables at a time.")
     }
 
     # don't use output=filepath.html when post-processing

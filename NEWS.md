@@ -1,3 +1,7 @@
+# modelsummary 1.1.0.9000
+
+* `datasummary_skim`: Increased maximum number of variables to 250.
+
 # modelsummary 1.1.0
 
 Breaking change:
