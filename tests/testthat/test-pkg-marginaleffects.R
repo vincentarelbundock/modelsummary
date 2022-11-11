@@ -15,11 +15,11 @@ test_that("no error", {
                               output = "data.frame"),
                  NA)
     expect_error(modelsummary(mfx,
-                              shape = term + contrast ~ model,
+                              shape = term + comparison ~ model,
                               output = "data.frame"),
                  NA)
     expect_error(modelsummary(cmp,
-                              shape = term + contrast ~ model,
+                              shape = term + comparison ~ model,
                               output = "data.frame"),
                  NA)
 })
