@@ -2,7 +2,7 @@ dat <<- mtcars
 dat$vs <- as.logical(dat$vs)
 dat$gear <- as.factor(dat$gear)
 
-penguins <<- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
+# penguins <<- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
 
 test_that("basic", {
   expect_warning(datasummary_skim(dat, output="data.frame"))
@@ -53,9 +53,9 @@ test_that("errors and warnings: numeric", {
                regexp="missing")
 
   # too many columns
-  tmp <- data.frame(matrix(rnorm(52*3), ncol = 52))
+  tmp <- data.frame(matrix(rnorm(252*3), ncol = 252))
   expect_error(datasummary_skim(tmp),
-               regexp = "more than 50 variables")
+               regexp = "more than 250 variables")
 })
 
 test_that("errors and warnings: categorical", {
