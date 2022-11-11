@@ -319,7 +319,7 @@ sanity_dots <- function(model, ...) {
 
   # R2 can be misleading when standardizing without an intercept
   if (identical(dots[["standardize"]], "refit") && identical(class(model), "lm")) {
-    if (!"(Intercept)" %in% names(coef(model))) {
+    if (!"(Intercept)" %in% names(stats::coef(model))) {
       msg <- "The goodness-of-fit statistics were calculated using the original model rather than the standardized model." 
       insight::format_warning(msg)
     }

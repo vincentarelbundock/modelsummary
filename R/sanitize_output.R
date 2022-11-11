@@ -132,7 +132,7 @@ sanitize_output <- function(output) {
     ## various strategies to guess the knitr output format
     fmt <- c(
       hush(knitr::pandoc_to()),
-      hush(names(knitr::metadata[["format"]])),
+      hush(names(rmarkdown::metadata[["format"]])),
       hush(rmarkdown::default_output_format(knitr::current_input())$name))
 
     word_fmt <- c(
@@ -143,6 +143,7 @@ sanitize_output <- function(output) {
       "officedown::rdocx_document",
       "word_document2",
       "bookdown::word_document2")
+
     markdown_fmt <- c(
       "gfm",
       "commonmark",
@@ -166,10 +167,12 @@ sanitize_output <- function(output) {
   output_factory <- factory_dict[[output_format]]
 
   # kableExtra must specify output_format ex ante (but after factory choice)
-  if (output_factory == 'kableExtra' &&
-      output_format %in% c('default', 'kableExtra') &&
-      knitr::is_latex_output()) {
-    output_format <- "latex"
+  if (output_factory == 'kableExtra' && output_format %in% c('default', 'kableExtra')) {
+    if (isTRUE(check_dependency("knitr"))) {
+      if (knitr::is_latex_output()) {
+        output_format <- "latex"
+      }
+    }
   }
 
   ## warning siunitx & booktabs in preamble
