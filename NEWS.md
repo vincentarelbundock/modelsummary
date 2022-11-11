@@ -1,6 +1,7 @@
 # modelsummary 1.1.0.9000
 
 * `datasummary_skim`: Increased maximum number of variables to 250.
+* Quarto notebooks compile to Word and Markdown automatically.
 
 # modelsummary 1.1.0
 

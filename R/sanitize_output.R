@@ -127,27 +127,39 @@ sanitize_output <- function(output) {
     output_file <- output
   }
 
-  # knit to word using flextable
   if (isTRUE(check_dependency("knitr")) && isTRUE(check_dependency("rmarkdown"))) {
-    ## try to guess the knitr output format
-    fmt <- try(rmarkdown::default_output_format(knitr::current_input())$name, silent = TRUE)
-    if (!inherits(fmt, "try-error")) {
-      word_fmt <- c("word_document",
-                    "rdocx_document", "officedown::rdocx_document",
-                    "word_document2", "bookdown::word_document2")
-      # unfortunately, `rmarkdown::default_output_format` only detects
-      # `html_document` on reprex, so this will only work in `github_document`
-      markdown_fmt <- c("github_document",
-                        "reprex_render",
-                        "reprex::reprex_render")
-      ## change to word output format only if `output` is "default" or "flextable"
-      if (any(word_fmt %in% fmt) && output_user %in% c("flextable", "default")) {
-        output_format <- "word"
-      ## reprex and github: change to markdown output format only if `output` is "default"
-      } else if (any(markdown_fmt %in% fmt) && (output_user == "default")) {
-        output_format <- "markdown"
-      }
+
+    ## various strategies to guess the knitr output format
+    fmt <- c(
+      hush(knitr::pandoc_to()),
+      hush(names(knitr::metadata[["format"]])),
+      hush(rmarkdown::default_output_format(knitr::current_input())$name))
+
+    word_fmt <- c(
+      "docx",
+      "word",
+      "word_document",
+      "rdocx_document",
+      "officedown::rdocx_document",
+      "word_document2",
+      "bookdown::word_document2")
+    markdown_fmt <- c(
+      "gfm",
+      "commonmark",
+      "github_document",
+      "reprex_render",
+      "reprex::reprex_render")
+
+    if (any(word_fmt %in% fmt) && output_user %in% c("flextable", "default")) {
+      output_format <- "word"
+
+    # unfortunately, `rmarkdown::default_output_format` only detects
+    # `html_document` on reprex, so this will only work in `github_document`
+    ## reprex and github: change to markdown output format only if `output` is "default"
+    } else if (any(markdown_fmt %in% fmt) && (output_user == "default")) {
+      output_format <- "markdown"
     }
+
   }
 
   # choose factory based on output_format
