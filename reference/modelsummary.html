@@ -234,7 +234,8 @@ Examples section below.</p></dd>
 
 
 <dt>coef_omit</dt>
-<dd><p>string regular expression (perl-compatible) used to determine which coefficients to omit from the table. A "negative lookahead" can be used to specify which coefficients to <em>keep</em> in the table. Examples:</p><ul><li><p><code>"ei"</code>: omit coefficients matching the "ei" substring.</p></li>
+<dd><p>integer vector or string regular expression (perl-compatible) used to determine which coefficients to omit from the table. Note: A "negative lookahead" can be used to specify which coefficients to <em>keep</em> in the table. Examples:</p><ul><li><p>c(2, 3, 5): omits the second, third, and fifth coefficients.</p></li>
+<li><p><code>"ei"</code>: omit coefficients matching the "ei" substring.</p></li>
 <li><p><code>"^Volume$"</code>: omit the "Volume" coefficient.</p></li>
 <li><p><code>"ei|rc"</code>: omit coefficients matching either the "ei" or the "rc" substrings.</p></li>
 <li><p><code>"^(?!Vol)"</code>: keep coefficients starting with "Vol" (inverse match using a negative lookahead).</p></li>
@@ -532,20 +533,23 @@ users can use <code>plan(multisession)' instead. However, note that the first ti
 <span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Volume'</span> <span class="op">=</span> <span class="st">'Large'</span>, <span class="st">'Height'</span> <span class="op">=</span> <span class="st">'Tall'</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Volume'</span>, <span class="st">'Height'</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># coef_omit: omit the first and second coefficients</span></span></span>
+<span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># coef_omit: omit coefficients matching one substring</span></span></span>
-<span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"ei"</span>, omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"ei"</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># coef_omit: omit a specific coefficient</span></span></span>
 <span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^Volume$"</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># coef_omit: omit coefficients matching either one of two substring</span></span></span>
-<span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"ei|rc"</span>, omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"ei|rc"</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># coef_omit: keep coefficients starting with a substring (using a negative lookahead)</span></span></span>
-<span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^(?!Vol)"</span>, omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^(?!Vol)"</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># coef_omit: keep coefficients matching a substring</span></span></span>
-<span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^(?!.*ei|.*pt)"</span>, omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^(?!.*ei|.*pt)"</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># shape: multinomial model</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">nnet</a></span><span class="op">)</span></span></span>
