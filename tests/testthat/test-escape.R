@@ -20,8 +20,8 @@ test_that("escaped tables", {
 
 
 test_that("manual escape", {
-    expect_equal(escape_latex("$&_"), "\\$\\&\\_")
-    expect_equal(escape_html("<&"), "&lt;&amp;")
+    expect_equal(modelsummary:::escape_latex("$&_"), "\\$\\&\\_")
+    expect_equal(modelsummary:::escape_html("<&"), "&lt;&amp;")
 })
 
 

@@ -21,7 +21,6 @@ escape_string <- function(x) {
 #' @param newlines boolean
 #' @param spaces boolean
 #' @keywords internal
-#' @export
 escape_latex <- function (x, newlines = FALSE, spaces = FALSE) {
     x <- gsub("\\\\", "\\\\textbackslash", x)
     x <- gsub("([#$%&_{}])", "\\\\\\1", x)
@@ -41,7 +40,6 @@ escape_latex <- function (x, newlines = FALSE, spaces = FALSE) {
 #' rejects :::
 #' @param x a character string to escape
 #' @keywords internal
-#' @export
 escape_html <- function (x) {
     x <- gsub("&", "&amp;", x)
     x <- gsub("<", "&lt;", x)
