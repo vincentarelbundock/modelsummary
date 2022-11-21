@@ -85,8 +85,9 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' define the labels that must appear in the table, and its names identify the
 #' original term names stored in the model object: `c("hp:mpg"="HPxM/G")`. See
 #' Examples section below.
-#' @param coef_omit integer vector or string regular expression (perl-compatible) used to determine which coefficients to omit from the table. Note: A "negative lookahead" can be used to specify which coefficients to *keep* in the table. Examples:
+#' @param coef_omit integer vector or regular expression to identify which coefficients to omit (or keep) from the table. Positive integers determine which coefficients to omit. Negative integers determine which coefficients to keep. A regular expression can be used to omit coefficients, and perl-compatible "negative lookaheads" can be used to specify which coefficients to *keep* in the table. Examples:
 #' * c(2, 3, 5): omits the second, third, and fifth coefficients.
+#' * c(-2, -3, -5): negative values keep the second, third, and fifth coefficients.
 #' * `"ei"`: omit coefficients matching the "ei" substring.
 #' * `"^Volume$"`: omit the "Volume" coefficient.
 #' * `"ei|rc"`: omit coefficients matching either the "ei" or the "rc" substrings.
@@ -372,19 +373,32 @@ modelsummary <- function(
 
   est <- est[do.call(order, as.list(est)), ]
 
+  # coef_omit is numeric
   if (is.numeric(coef_omit)) {
     coef_omit <- unique(round(coef_omit))
+
+    if (length(unique(sign(coef_omit))) != 1) {
+      insight::format_error("All elements of `coef_omit` must have the same sign.")
+    }
+
     if (!"term" %in% shape$lhs) {
       msg <- "`term` must be on the left-hand side of the `shape` formula when `coef_omit` is a numeric vector."
       insight::format_error(msg)
     }
+
     term_idx <- paste(est$group, est$term)
-    if (max(coef_omit) > length(unique(term_idx))) {
+    if (max(abs(coef_omit)) > length(unique(term_idx))) {
       msg <- sprintf("There are %s unique terms, but `coef_omit` tried to omit more than that.", length(term_idx))
       insight::format_error(msg)
     }
-    idx <- !term_idx %in% unique(term_idx)[coef_omit]
-    est <- est[idx, , drop = FALSE]
+
+    idx <- !term_idx %in% unique(term_idx)[abs(coef_omit)]
+
+    if (any(coef_omit > 0)) {
+      est <- est[idx, , drop = FALSE]
+    } else {
+      est <- est[!idx, , drop = FALSE]
+    }
   }
 
   # we kept the group column until here for sorting of mixed-effects by group

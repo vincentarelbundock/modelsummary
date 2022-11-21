@@ -34,9 +34,10 @@ define the labels that must appear in the table, and its names identify the
 original term names stored in the model object: \code{c("hp:mpg"="HPxM/G")}. See
 Examples section below.}
 
-\item{coef_omit}{integer vector or string regular expression (perl-compatible) used to determine which coefficients to omit from the table. Note: A "negative lookahead" can be used to specify which coefficients to \emph{keep} in the table. Examples:
+\item{coef_omit}{integer vector or regular expression to identify which coefficients to omit (or keep) from the table. Positive integers determine which coefficients to omit. Negative integers determine which coefficients to keep. A regular expression can be used to omit coefficients, and perl-compatible "negative lookaheads" can be used to specify which coefficients to \emph{keep} in the table. Examples:
 \itemize{
 \item c(2, 3, 5): omits the second, third, and fifth coefficients.
+\item c(-2, -3, -5): negative values keep the second, third, and fifth coefficients.
 \item \code{"ei"}: omit coefficients matching the "ei" substring.
 \item \code{"^Volume$"}: omit the "Volume" coefficient.
 \item \code{"ei|rc"}: omit coefficients matching either the "ei" or the "rc" substrings.

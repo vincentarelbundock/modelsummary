@@ -38,4 +38,11 @@ test_that("numeric indices", {
   expect_error(
     modelsummary(mod, shape = model ~ term, coef_omit = 3),
     regexp = "shape")
+  tab <- modelsummary(mod, "data.frame", coef_omit = -1, gof_map = NA)
+  expect_equal(nrow(tab), 2)
+  tab <- modelsummary(mod, "data.frame", coef_omit = -c(1, 3), gof_map = NA)
+  expect_equal(nrow(tab), 4)
+  expect_error(
+    modelsummary(mod, "data.frame", coef_omit = -1:3, gof_map = NA),
+    regexp = "sign")
 })

@@ -129,7 +129,7 @@ sanity_coef <- function(coef_map, coef_rename, coef_omit) {
 
   checkmate::assert(
     checkmate::check_string(coef_omit, null.ok = TRUE),
-    checkmate::check_numeric(coef_omit, min.len = 1, lower = 1)
+    checkmate::check_numeric(coef_omit)
   )
 
   if ((!isFALSE(coef_rename) && !is.null(coef_rename)) && !is.null(coef_map)) {
