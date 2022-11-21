@@ -127,7 +127,10 @@ sanity_title <- function(title) checkmate::assert_character(title, len = 1, null
 #' @noRd
 sanity_coef <- function(coef_map, coef_rename, coef_omit) {
 
-  checkmate::assert_string(coef_omit, null.ok = TRUE)
+  checkmate::assert(
+    checkmate::check_string(coef_omit, null.ok = TRUE),
+    checkmate::check_numeric(coef_omit, min.len = 1, lower = 1)
+  )
 
   if ((!isFALSE(coef_rename) && !is.null(coef_rename)) && !is.null(coef_map)) {
     stop("coef_map and coef_rename cannot be used together.")

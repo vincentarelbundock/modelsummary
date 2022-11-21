@@ -359,7 +359,13 @@ modelsummary(models, coef_map = cm)
 
 ### coef_omit
 
-An alternative mechanism to subset coefficients is to use the `coef_omit` argument. This string is a regular expression which will be fed to `grepl(x,perl=TRUE)` to detect the variable names which should be excluded from the table.
+An alternative mechanism to subset coefficients is to use the `coef_omit` argument, which accepts a vector of integer or a regular expression. For example, we can omit the first and second coefficients as follows:
+
+```{r}
+modelsummary(models, coef_omit = 1:2, gof_map = NA)
+```
+
+When `coef_omit` is a string, it is fed to `grepl(x,perl=TRUE)` to detect the variable names which should be excluded from the table.
 
 ```{r}
 modelsummary(models, coef_omit = "Intercept|.*merce", gof_map = NA)

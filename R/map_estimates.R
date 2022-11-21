@@ -23,7 +23,7 @@ map_estimates <- function(estimates,
     }
 
     # coef_omit
-    if (!is.null(coef_omit)) {
+    if (is.character(coef_omit)) {
         idx <- !grepl(coef_omit, estimates$term, perl = TRUE)
         if (sum(idx) > 0) {
             estimates <- estimates[idx, , drop = FALSE]

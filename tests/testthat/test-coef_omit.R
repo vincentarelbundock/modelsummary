@@ -22,3 +22,20 @@ test_that("omit coefficients using regular expressions", {
   expect_equal(unname(raw[[2]][1:3]), truth)
 
 })
+
+
+# numeric indices
+test_that("numeric indices", {
+  mod <- list(
+    lm(mpg ~ hp + factor(cyl) + drat + factor(am), mtcars),
+    lm(mpg ~ factor(cyl) + drat, mtcars))
+  tab <- modelsummary(mod, "data.frame", coef_omit = 1:2)
+  expect_false("(Intercept)" %in% tab$term)
+  tab <- modelsummary(mod, "data.frame", gof_map = NA, coef_omit = 3)
+  expect_equal(nrow(tab), 10)
+  tab <- modelsummary(mod, "data.frame", gof_map = NA, coef_omit = 2:3)
+  expect_equal(nrow(tab), 8)
+  expect_error(
+    modelsummary(mod, shape = model ~ term, coef_omit = 3),
+    regexp = "shape")
+})

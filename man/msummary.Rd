@@ -133,8 +133,9 @@ define the labels that must appear in the table, and its names identify the
 original term names stored in the model object: \code{c("hp:mpg"="HPxM/G")}. See
 Examples section below.}
 
-\item{coef_omit}{string regular expression (perl-compatible) used to determine which coefficients to omit from the table. A "negative lookahead" can be used to specify which coefficients to \emph{keep} in the table. Examples:
+\item{coef_omit}{integer vector or string regular expression (perl-compatible) used to determine which coefficients to omit from the table. Note: A "negative lookahead" can be used to specify which coefficients to \emph{keep} in the table. Examples:
 \itemize{
+\item c(2, 3, 5): omits the second, third, and fifth coefficients.
 \item \code{"ei"}: omit coefficients matching the "ei" substring.
 \item \code{"^Volume$"}: omit the "Volume" coefficient.
 \item \code{"ei|rc"}: omit coefficients matching either the "ei" or the "rc" substrings.
@@ -438,20 +439,23 @@ modelsummary(modlab, coef_rename = TRUE)
 modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 modelsummary(models, coef_map = c('Volume', 'Height'))
 
+# coef_omit: omit the first and second coefficients
+modelsummary(models, coef_omit = 1:2)
+
 # coef_omit: omit coefficients matching one substring
-modelsummary(models, coef_omit = "ei", omit = ".*")
+modelsummary(models, coef_omit = "ei", gof_omit = ".*")
 
 # coef_omit: omit a specific coefficient
 modelsummary(models, coef_omit = "^Volume$", gof_omit = ".*")
 
 # coef_omit: omit coefficients matching either one of two substring
-modelsummary(models, coef_omit = "ei|rc", omit = ".*")
+modelsummary(models, coef_omit = "ei|rc", gof_omit = ".*")
 
 # coef_omit: keep coefficients starting with a substring (using a negative lookahead)
-modelsummary(models, coef_omit = "^(?!Vol)", omit = ".*")
+modelsummary(models, coef_omit = "^(?!Vol)", gof_omit = ".*")
 
 # coef_omit: keep coefficients matching a substring
-modelsummary(models, coef_omit = "^(?!.*ei|.*pt)", omit = ".*")
+modelsummary(models, coef_omit = "^(?!.*ei|.*pt)", gof_omit = ".*")
 
 # shape: multinomial model
 library(nnet)
