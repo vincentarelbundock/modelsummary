@@ -149,6 +149,7 @@ Examples section below.}
 \item{coef_rename}{logical, named character, or function
 \itemize{
 \item Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below.
+\item Unnamed character vector of length equal to the number of coefficients in the final table, after \code{coef_omit} is applied.
 \item Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg")
 \item Function: Accepts a character vector of the model's term names and returns a named vector like the one described above. The \code{modelsummary} package supplies a \code{coef_rename()} function which can do common cleaning tasks: \code{modelsummary(model, coef_rename = coef_rename)}
 }}
@@ -435,6 +436,10 @@ attr(datlab$hp, "label") <- "Horsepower"
 attr(datlab$cyl, "label") <- "Cylinders"
 modlab <- lm(mpg ~ hp * drat + cyl, data = datlab)
 modelsummary(modlab, coef_rename = TRUE)
+
+# coef_rename: unnamed vector of length equal to the number of terms in the final table
+m <- lm(hp ~ mpg + factor(cyl), data = mtcars)
+modelsummary(m, coef_omit = -(3:4), coef_rename = c("Cyl 6", "Cyl 8"))
 
 # coef_map
 modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))

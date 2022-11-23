@@ -97,6 +97,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * See the Examples section below for complete code.
 #' @param coef_rename logical, named character, or function
 #' * Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below.
+#' * Unnamed character vector of length equal to the number of coefficients in the final table, after `coef_omit` is applied.
 #' * Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg") 
 #' * Function: Accepts a character vector of the model's term names and returns a named vector like the one described above. The `modelsummary` package supplies a `coef_rename()` function which can do common cleaning tasks: `modelsummary(model, coef_rename = coef_rename)`
 #' @param gof_map rename, reorder, and omit goodness-of-fit statistics and other
@@ -399,6 +400,18 @@ modelsummary <- function(
     } else {
       est <- est[!idx, , drop = FALSE]
     }
+  }
+
+  # coef_rename is an unnamed vector: by position in the final table, not before merging
+  if (isTRUE(checkmate::check_character(coef_rename, names = "unnamed"))) {
+    nterms <- length(unique(est$term))
+    if (length(coef_rename) != nterms) {
+      msg <- "`coef_rename` must be a named character vector or an unnamed vector of length %s"
+      insight::format_error(sprintf(msg, nterms))
+    }
+    dict <- stats::setNames(coef_rename, as.character(unique(est$term)))
+    tmp <- replace_dict(as.character(est$term), dict)
+    est$term <- factor(tmp, unique(tmp))
   }
 
   # we kept the group column until here for sorting of mixed-effects by group

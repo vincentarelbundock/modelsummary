@@ -72,6 +72,10 @@
 #' modlab <- lm(mpg ~ hp * drat + cyl, data = datlab)
 #' modelsummary(modlab, coef_rename = TRUE)
 #'
+#' # coef_rename: unnamed vector of length equal to the number of terms in the final table
+#' m <- lm(hp ~ mpg + factor(cyl), data = mtcars)
+#' modelsummary(m, coef_omit = -(3:4), coef_rename = c("Cyl 6", "Cyl 8"))
+#'
 #' # coef_map
 #' modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
 #' modelsummary(models, coef_map = c('Volume', 'Height'))
@@ -103,7 +107,7 @@
 #'
 #' # term names and group ids in rows in a single column
 #' modelsummary(multi, shape = term : response ~ model)
-#'
+#' 
 #' # term names in rows and group ids in columns
 #' modelsummary(multi, shape = term ~ response:model)
 #'

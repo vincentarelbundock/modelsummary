@@ -56,8 +56,9 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
     # coef_rename
     # TRUE: done in `get_estimates()` straight from the parameters() attribute
     # FALSE: do nothing
-    if (!is.null(coef_rename) && !is.logical(coef_rename)) {
-        if (is.character(coef_rename)) {
+    if (!is.null(coef_rename) && !is.logical(coef_rename) && !isTRUE(checkmate::check_character(coef_rename, names = "unnamed"))) {
+        # unnamed vectors are processed in `modelsummary` directly because we rely on the order in the final table
+        if (isTRUE(checkmate::check_character(coef_rename, names = "unique"))) {
             dict <- coef_rename
         } else if (is.function(coef_rename)) {
             dict <- stats::setNames(coef_rename(estimates$term), estimates$term)

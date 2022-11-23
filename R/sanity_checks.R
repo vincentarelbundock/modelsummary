@@ -146,8 +146,9 @@ sanity_coef <- function(coef_map, coef_rename, coef_omit) {
 
   checkmate::assert(
     checkmate::check_flag(coef_rename),
-    checkmate::check_character(coef_rename, names = "unique"),
     checkmate::check_function(coef_rename, null.ok = TRUE),
+    checkmate::check_character(coef_rename, names = "unique"),
+    checkmate::check_character(coef_rename, names = "unnamed"),
     combine = "or"
   )
 }
