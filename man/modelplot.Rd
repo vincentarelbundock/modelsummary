@@ -47,7 +47,7 @@ Examples section below.}
 \item See the Examples section below for complete code.
 }}
 
-\item{coef_rename}{logical, named character, or function
+\item{coef_rename}{logical, named or unnamed character vector, or function
 \itemize{
 \item Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below.
 \item Unnamed character vector of length equal to the number of coefficients in the final table, after \code{coef_omit} is applied.

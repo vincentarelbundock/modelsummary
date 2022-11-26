@@ -95,7 +95,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `"^(?!.*ei)"`: keep coefficients matching the "ei" substring.
 #' * `"^(?!.*ei|.*pt)"`: keep coefficients matching either the "ei" or the "pt" substrings.
 #' * See the Examples section below for complete code.
-#' @param coef_rename logical, named character, or function
+#' @param coef_rename logical, named or unnamed character vector, or function
 #' * Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below.
 #' * Unnamed character vector of length equal to the number of coefficients in the final table, after `coef_omit` is applied.
 #' * Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg") 
