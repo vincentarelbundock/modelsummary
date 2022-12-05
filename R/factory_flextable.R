@@ -27,7 +27,7 @@ factory_flextable <- function(tab,
 
   # user-supplied notes at the bottom of table
   if (!is.null(notes)) {
-    for (i in seq_along(notes)) {
+    for (i in rev(seq_along(notes))) {
       out <- flextable::add_footer_row(out,
         values = notes[[i]],
         colwidths = table_width)

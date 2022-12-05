@@ -4,6 +4,7 @@
 * `coef_omit` accepts numeric indices. Positive values: coefficients to omit. Negative values: coefficients to keep.
 * `datasummary_skim`: Increased maximum number of variables to 250.
 * Quarto notebooks compile to Word and Markdown automatically.
+* Bug fix: order of notes in some output format (Issue #577)
 
 # modelsummary 1.1.0
 
