@@ -296,15 +296,14 @@ modelsummary <- function(
         coef_omit = coef_omit,
         group_map = group_map)
 
-    colnames(tmp)[ncol(tmp)] <- model_names[i]
+    colnames(tmp)[match("modelsummary_value", colnames(tmp))] <- model_names[i]
 
     est[[model_names[i]]] <- tmp
-
   }
 
   term_order <- unique(unlist(lapply(est, function(x) x$term)))
-  group_order <- unique(unlist(lapply(est, function(x) x$group)))
   statistic_order <- unique(unlist(lapply(est, function(x) x$statistic)))
+
 
   f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE,
                             by = c(shape$group_name, "term", "statistic"))
@@ -419,10 +418,11 @@ modelsummary <- function(
   }
 
   # character for binding
-  for (col in c("term", shape$group_name, "model", "statistic")) {
-    if (col %in% colnames(est)) {
-      est[[col]] <- as.character(est[[col]])
-    }
+  cols <- intersect(
+    colnames(est),
+    c("group", "term", shape$group_name, "model", "statistic"))
+  for (col in cols) {
+    est[[col]] <- as.character(est[[col]])
   }
 
   # in {marginaleffects} objects, `term` is sometimes unique and useless

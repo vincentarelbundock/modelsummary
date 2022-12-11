@@ -96,7 +96,7 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
             group_map <- stats::setNames(group_map, group_map)
         }
         estimates <- estimates[estimates[[group_name]] %in% names(group_map), , drop = FALSE]
-        estimates$group <- replace_dict(
+        estimates[[group_name]] <- replace_dict(
             estimates[[group_name]],
             group_map)
     }
@@ -104,13 +104,13 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
     ## escape if needed
     ## (must be done after rename/map, otherwise all rows are dropped)
     if (settings_equal("escape", TRUE)) {
-        for (i in c("group", "term", "model")) {
-            if (i %in% colnames(estimates)) {
-                estimates[[i]] <- escape_string(estimates[[i]])
-            }
+        cols <- intersect(
+            colnames(estimates),
+            c("group", "term", "model", group_name))
+        for (col in cols) {
+            estimates[[col]] <- escape_string(estimates[[col]])
         }
     }
 
     return(estimates)
 }
-

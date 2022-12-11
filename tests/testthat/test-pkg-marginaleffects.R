@@ -11,15 +11,16 @@ test_that("no error", {
     mm <- marginalmeans(mod)
 
     expect_error(modelsummary(mm,
-                              shape = term + value ~ model,
+                              shape = term + statistic + value ~ model,
                               output = "data.frame"),
                  NA)
+
     expect_error(modelsummary(mfx,
-                              shape = term + comparison ~ model,
+                              shape = term + contrast ~ model,
                               output = "data.frame"),
                  NA)
     expect_error(modelsummary(cmp,
-                              shape = term + comparison ~ model,
+                              shape = term + contrast ~ model,
                               output = "data.frame"),
                  NA)
 })

@@ -6,14 +6,14 @@ test_that("combine columns with :", {
     requiet("marginaleffects")
     mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
     mfx <- suppressWarnings(marginaleffects(mod))
-    tab1 <- modelsummary(mfx, output = "dataframe", shape = term:comparison ~ model)
-    tab2 <- modelsummary(mfx, output = "dataframe", shape = term:comparison + statistic ~ model)
-    tab3 <- modelsummary(mfx, output = "dataframe", shape = term + comparison + statistic ~ model)
+    tab1 <- modelsummary(mfx, output = "dataframe", shape = term:contrast ~ model)
+    tab2 <- modelsummary(mfx, output = "dataframe", shape = term:contrast + statistic ~ model)
+    tab3 <- modelsummary(mfx, output = "dataframe", shape = term + contrast + statistic ~ model)
     tab4 <- modelsummary(
         mfx,
         output = "dataframe",
         coef_rename = function(x) gsub(" dY/dX", " (Slope)", x),
-        shape = term : comparison ~ model)
+        shape = term : contrast ~ model)
     expect_equal(tab1, tab2)
     expect_equal(nrow(tab1), nrow(tab3))
     expect_equal(ncol(tab1) + 1, ncol(tab3))
@@ -132,7 +132,7 @@ test_that("nnet::multinom: order of rows determined by formula terms", {
     expect_equal(colnames(tab),
                  c("part", "response", "term", "statistic", "Model 1", "Model 2"))
     expect_equal(tab$term[1:4], c("(Intercept)", "(Intercept)", "mpg", "mpg"))
-    expect_equal(tab$group[1:12], c(rep("6", 6), rep("8", 6)))
+    expect_equal(tab$response[1:12], c(rep("6", 6), rep("8", 6)))
 
     ## order of rows determined by order of formula terms
     trash <- capture.output(tab <- modelsummary(mod, "data.frame", shape = term + response ~ model))
@@ -140,7 +140,7 @@ test_that("nnet::multinom: order of rows determined by formula terms", {
     expect_equal(colnames(tab),
                  c("part", "term", "response", "statistic", "Model 1", "Model 2"))
     expect_equal(tab$term[1:4], rep("(Intercept)", 4))
-    expect_equal(tab$group[1:4], c("6", "6", "8", "8"))
+    expect_equal(tab$response[1:4], c("6", "6", "8", "8"))
 
     ## order of rows determined by order of formula terms
     trash <- capture.output(tab <- modelsummary(mod, "data.frame", shape = model + term ~ response))
@@ -274,11 +274,14 @@ test_that("group_map reorder rename", {
     requiet("pscl")
     data("bioChemists", package = "pscl")
     mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
+
+
     tab <- modelsummary(mod,
                         shape = component + term ~ model,
                         group_map = c("zero_inflated" = "Zero", "conditional" = "Count"),
                         output = "data.frame")
-    expect_equal(tab$group[1], "Zero")
+
+    expect_equal(tab$component[1], "Zero")
 })
 
 
