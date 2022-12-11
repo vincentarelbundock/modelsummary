@@ -89,6 +89,7 @@ test_that("horizontal statistics: dim only", {
 
 
 test_that("Michael E Flynn ultra-niche bug check", {
+    options(modelsummary_get = "easystats")
     requiet("nnet")
     dat_multinom <- mtcars
     dat_multinom$cyl <- as.factor(dat_multinom$cyl)
