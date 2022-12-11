@@ -115,6 +115,12 @@ format_estimates <- function(
   ## exclude factors and characters, otherwise `rounding` will escape them
   ## which is premature since we then call coef_map
   for (n in colnames(est)) {
+
+    ## group names should be raw characters; we don't want to round cyl=4 as 4.000
+    if (n %in% shape$group_name) {
+      est[[n]] <- as.character(est[[n]])
+    }
+
     if (!is.character(est[[n]]) && !is.factor(est[[n]])) {
       if (n %in% names(fmt)) {
         fmt1 <- fmt[[n]]
@@ -153,23 +159,21 @@ format_estimates <- function(
     est[[paste0("modelsummary_tmp", i)]][est[[s]] == ""] <- ""
   }
 
-
-  if (!is.null(group_name) && group_name %in% colnames(est)) {
-    est[["group"]] <- est[[group_name]]
-
-  } else if (!is.null(group_name)) {
-    est[["group"]] <- ""
-    warning(sprintf('Group name "%s" was not found in the extracted data. The "group" argument must be a column name in the data.frame produced by `get_estimates(model)`.  If you wish to combine models with and without grouped estimates, you will find examples on the modelsummary website:
-https://vincentarelbundock.github.io/modelsummary', group_name),
-            call. = FALSE)
-
-  } else if (!"group" %in% colnames(est)) {
+  if (!is.null(group_name)) {
+    miss <- setdiff(shape$group_name, colnames(est))
+    if (length(miss) > 0) {
+      msg <- sprintf('Group columns (%s) were not found in the extracted data. The "group" argument must be a column name in the data.frame produced by `get_estimates(model)`.  If you wish to combine models with and without grouped estimates, you will find examples on the modelsummary website:', paste(miss, collapse = ", "))
+      msg <- c(msg, "https://vincentarelbundock.github.io/modelsummary")
+      insight::format_error(msg)
+    }
+  } else if (is.null(group_name) && !"group" %in% colnames(est)) {
     # cannot be NA because we need to merge
     est[["group"]] <- ""
+    group_name <- "group"
   }
 
   # subset columns
-  cols <- c('group', 'term', paste0('modelsummary_tmp', seq_along(estimate_glue)))
+  cols <- c(group_name, 'term', paste0('modelsummary_tmp', seq_along(estimate_glue)))
   cols <- intersect(cols, colnames(est))
   est <- est[, cols, drop = FALSE]
 
@@ -177,7 +181,11 @@ https://vincentarelbundock.github.io/modelsummary', group_name),
   # sort by statistic to have se below coef, but don't sort terms
   # use factor hack to preserve order with weird names like cor__(Inter.)
   # especially important for broom.mixed models
-  est$term <- factor(est$term, unique(est$term))
+  for (col in c(group_name, "term")) {
+    est[[col]] <- as.character(est[[col]]) # otherwise weird rounding
+    est[[col]] <- factor(est[[col]], unique(est[[col]]))
+  }
+
   est <- stats::reshape(
     data.frame(est),
     varying       = grep("modelsummary_tmp\\d+$", colnames(est), value = TRUE),
@@ -188,8 +196,10 @@ https://vincentarelbundock.github.io/modelsummary', group_name),
   est$id <- NULL
 
   # sort then convert back to character
-  est <- est[order(est$term, est$statistic), ]
-  est$term <- as.character(est$term)
+  est <- est[do.call("order", as.list(est[, c(group_name, "term", "statistic")])), ]
+  for (col in c(group_name, "term")) {
+    est[[col]] <- as.character(est[[col]])
+  }
 
   # statistics need informative names
   idx <- as.numeric(factor(est$statistic))

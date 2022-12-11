@@ -18,7 +18,7 @@ sanitize_shape <- function(shape) {
     combine <- unlist(regmatches(shape_cha, gregexpr(regex, shape_cha)))
 
     # remove interactions from the formula since we are going to combine them in get_estimates
-    for (com in combine) { 
+    for (com in combine) {
         shape_cha <- gsub(com, gsub(":.*", "", com), shape_cha, fixed = TRUE)
     }
     shape <- stats::as.formula(shape_cha)
@@ -34,14 +34,6 @@ sanitize_shape <- function(shape) {
 
     if (length(group_name) == 0) {
         group_name <- NULL
-    } else if (length(group_name) == 1) {
-        lhs[lhs == group_name] <- "group"
-        rhs[rhs == group_name] <- "group"
-    } else {
-        msg <- format_msg(
-        'The `shape` formula can only include one group name. The other terms must be:
-        "term", "model", or "statistic".')
-        stop(msg, call. = FALSE)
     }
 
     # partial formulas

@@ -130,7 +130,7 @@ test_that("nnet::multinom: order of rows determined by formula terms", {
     trash <- capture.output(tab <- modelsummary(mod, "data.frame", shape = response + term ~ model))
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
-                 c("part", "group", "term", "statistic", "Model 1", "Model 2"))
+                 c("part", "response", "term", "statistic", "Model 1", "Model 2"))
     expect_equal(tab$term[1:4], c("(Intercept)", "(Intercept)", "mpg", "mpg"))
     expect_equal(tab$group[1:12], c(rep("6", 6), rep("8", 6)))
 
@@ -138,7 +138,7 @@ test_that("nnet::multinom: order of rows determined by formula terms", {
     trash <- capture.output(tab <- modelsummary(mod, "data.frame", shape = term + response ~ model))
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
-                 c("part", "term", "group", "statistic", "Model 1", "Model 2"))
+                 c("part", "term", "response", "statistic", "Model 1", "Model 2"))
     expect_equal(tab$term[1:4], rep("(Intercept)", 4))
     expect_equal(tab$group[1:4], c("6", "6", "8", "8"))
 
@@ -169,7 +169,7 @@ test_that("group ~ model + term", {
                         output = "data.frame",
                         shape = response ~ model + term,
                         metrics = "RMSE")
-    known <- c("part", "group", "statistic", "Model 1 / (Intercept)", "Model 1 / mpg",
+    known <- c("part", "response", "statistic", "Model 1 / (Intercept)", "Model 1 / mpg",
 "Model 2 / (Intercept)", "Model 2 / mpg", "Model 2 / drat")
     expect_equal(colnames(tab), known)
     expect_equal(dim(tab), c(6, 8))
@@ -178,7 +178,7 @@ test_that("group ~ model + term", {
                         output = "data.frame",
                         shape = response ~ term + model,
                         metrics = "RMSE")
-    known <- c("part", "group", "statistic", "(Intercept) / Model 1", "(Intercept) / Model 2",
+    known <- c("part", "response", "statistic", "(Intercept) / Model 1", "(Intercept) / Model 2",
 "mpg / Model 1", "mpg / Model 2", "drat / Model 2")
     expect_equal(colnames(tab), known)
     expect_equal(dim(tab), c(6, 8))
@@ -237,12 +237,12 @@ test_that("grouped coefficients: gamlss", {
     tab <- modelsummary(mod, "data.frame", shape = term + component ~ model)
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
-                 c("part", "term", "group", "statistic", "Model 1", "Model 2"))
+                 c("part", "term", "component", "statistic", "Model 1", "Model 2"))
 
     tab <- modelsummary(mod, "data.frame", shape = component + term ~ model)
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
-                 c("part", "group", "term", "statistic", "Model 1", "Model 2"))
+                 c("part", "component", "term", "statistic", "Model 1", "Model 2"))
 
     tab <- modelsummary(mod, "data.frame", shape = term ~ model + component)
     expect_s3_class(tab, "data.frame")

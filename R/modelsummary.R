@@ -296,7 +296,7 @@ modelsummary <- function(
         coef_omit = coef_omit,
         group_map = group_map)
 
-    colnames(tmp)[4] <- model_names[i]
+    colnames(tmp)[ncol(tmp)] <- model_names[i]
 
     est[[model_names[i]]] <- tmp
 
@@ -307,7 +307,7 @@ modelsummary <- function(
   statistic_order <- unique(unlist(lapply(est, function(x) x$statistic)))
 
   f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE,
-                            by = c("group", "term", "statistic"))
+                            by = c(shape$group_name, "term", "statistic"))
   est <- Reduce(f, est)
 
   # warn that `shape` might be needed
@@ -334,7 +334,6 @@ modelsummary <- function(
       warning(msg, call. = FALSE)
     }
   }
-
 
   est <- shape_estimates(est, shape, conf_level = conf_level)
 
@@ -420,10 +419,15 @@ modelsummary <- function(
   }
 
   # character for binding
-  for (col in c("term", "group", "model", "statistic")) {
+  for (col in c("term", shape$group_name, "model", "statistic")) {
     if (col %in% colnames(est)) {
       est[[col]] <- as.character(est[[col]])
     }
+  }
+
+  # in {marginaleffects} objects, `term` is sometimes unique and useless
+  if (all(est[["term"]] == "cross")) {
+    est[["term"]] <- NULL
   }
 
 
@@ -446,7 +450,6 @@ modelsummary <- function(
   gof <- Reduce(f, gof)
 
   gof <- map_gof(gof, gof_omit, gof_map)
-
 
   # combine estimates and gof
   tab <- bind_est_gof(est, gof)
@@ -527,7 +530,8 @@ modelsummary <- function(
 
   # align
   if (is.null(align)) {
-    n_stub <- sum(grepl("^ *$", colnames(tab)))
+    n_stub <- sum(grepl("^ *$", colnames(tab))) +
+              sum(colnames(tab) %in% c(" ", shape$group_name))
     align <- paste0(strrep("l", n_stub), strrep("c", ncol(tab) - n_stub))
     if (isTRUE(checkmate::check_data_frame(add_columns))) {
       align <- paste0(align, strrep("c", ncol(add_columns)))

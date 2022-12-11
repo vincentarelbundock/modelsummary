@@ -25,16 +25,19 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, co
     args <- append(list(model, "vcov" = vcov), list(...))
     vcov <- do.call("get_vcov", args)
 
-    # priority
-    get_priority <- getOption("modelsummary_get", default = "easystats")
-    checkmate::assert_choice(
-      get_priority,
-      choices = c("broom", "easystats", "parameters", "performance", "all"))
-
-    if (get_priority %in% c("easystats", "parameters", "performance")) {
-        funs <- list(get_estimates_parameters, get_estimates_broom)
+    # priority: {parameters} messes up {marginaleffects}, whereas VAB controls `tidy()` exactly
+    if (inherits(model, c("comparisons", "marginaleffects", "predictions", "marginalmeans"))) {
+        funs <- list(get_estimates_broom)
     } else {
-        funs <- list(get_estimates_broom, get_estimates_parameters)
+        get_priority <- getOption("modelsummary_get", default = "easystats")
+        checkmate::assert_choice(
+            get_priority,
+            choices = c("broom", "easystats", "parameters", "performance", "all"))
+        if (get_priority %in% c("easystats", "parameters", "performance")) {
+            funs <- list(get_estimates_parameters, get_estimates_broom)
+        } else {
+            funs <- list(get_estimates_broom, get_estimates_parameters)
+        }
     }
 
     warning_msg <- NULL
@@ -85,8 +88,8 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, co
             def <- old[["term"]]
             cus <- new[["term"]]
         } else {
-            def <- paste(old[["term"]], old[[shape$group_name]])
-            cus <- paste(new[["term"]], new[[shape$group_name]])
+            def <- do.call("paste", as.list(old[, c("term", shape$group_name)]))
+            cus <- do.call("paste", as.list(new[, c("term", shape$group_name)]))
         }
         idx <- match(def, cus)
         if (all(is.na(idx))) {
@@ -189,7 +192,9 @@ get_estimates_parameters <- function(model,
     tidy_easystats <- function(...) {
         dots <- list(...)
         # bug in `parameters`
-        dots[["pretty_names"]] <- "labels"
+        if (isTRUE(dots$coef_rename)) {
+            dots[["pretty_names"]] <- "labels"
+        }
         inner <- parameters::parameters
         out <- do.call("inner", dots)
         out <- parameters::standardize_names(out, style = "broom")

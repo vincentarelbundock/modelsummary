@@ -7,8 +7,9 @@ bind_est_gof <- function(est, gof) {
     return(est)
   }
 
-  if (!"term" %in% colnames(est) && "group" %in% colnames(est)) {
-    data.table::setnames(gof, old = "term", new = "group")
+  if (!"term" %in% colnames(est)) {
+    termcol <- setdiff(colnames(est), "part")[1]
+    data.table::setnames(gof, old = "term", new = termcol)
   }
 
   if (all(colnames(gof) %in% colnames(est))) {

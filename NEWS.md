@@ -1,5 +1,6 @@
 # modelsummary 1.2.0
 
+* `shape` can include multiple groups.
 * `coef_rename` can be an unnamed vector of length equal to the number of terms in the final table, obtained after `coef_map` and `coef_omit` are applied and models are merged.
 * `coef_omit` accepts numeric indices. Positive values: coefficients to omit. Negative values: coefficients to keep.
 * `datasummary_skim`: Increased maximum number of variables to 250.

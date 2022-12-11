@@ -11,7 +11,7 @@ shape_estimates <- function(estimates, shape, conf_level) {
 
     shape_formula <- shape$shape_formula
 
-    idx <- intersect(colnames(estimates), c("term", "statistic", "group"))
+    idx <- intersect(colnames(estimates), c("term", "statistic", shape$group_name))
 
     # long
     out <- data.table::melt(data.table::data.table(estimates),
@@ -24,7 +24,7 @@ shape_estimates <- function(estimates, shape, conf_level) {
     }
 
     # use factors to preserve order in `dcast`
-    for (col in c("part", "model", "term", "group", "statistic")) {
+    for (col in c("part", "model", "term", shape$group_name, "statistic")) {
       if (col %in% colnames(out)) {
         out[[col]] <- factor(out[[col]], unique(out[[col]]))
       }
