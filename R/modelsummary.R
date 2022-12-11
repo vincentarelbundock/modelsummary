@@ -304,7 +304,6 @@ modelsummary <- function(
   term_order <- unique(unlist(lapply(est, function(x) x$term)))
   statistic_order <- unique(unlist(lapply(est, function(x) x$statistic)))
 
-
   f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE,
                             by = c(shape$group_name, "term", "statistic"))
   est <- Reduce(f, est)

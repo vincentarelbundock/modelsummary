@@ -44,7 +44,7 @@ test_that("Issue #494 comment", {
 
 test_that("Issue #496: multiple models keeps random/fixed grouped together", {
     models <- modelsummary:::hush(list(
-        lm(Sepal.Width ~ Petal.Length, data = iris),
+        lm(Sepal.Width ~ Petal.Length + Petal.Width, data = iris),
         lmer(Sepal.Width ~ Petal.Length + (1|Species), data = iris),
         lmer(Sepal.Width ~ Petal.Length + (1 + Petal.Length |Species), data = iris),
         lmer(Sepal.Width ~ Petal.Length + Petal.Width + (1 + Petal.Length | Species), data = iris)
@@ -56,7 +56,7 @@ test_that("Issue #496: multiple models keeps random/fixed grouped together", {
     expect_equal(
         tab$term[1:7],
         c("(Intercept)", "Petal.Length", "Petal.Width", "SD (Intercept Species)",
-        "SD (Petal.Length Species)", "Cor (Intercept~Petal.Length Species)", "SD (Observations)"))
+        "SD (Observations)", "SD (Petal.Length Species)", "Cor (Intercept~Petal.Length Species)"))
 })
 
 

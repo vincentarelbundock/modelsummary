@@ -95,7 +95,13 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
         if (is.null(names(group_map))) {
             group_map <- stats::setNames(group_map, group_map)
         }
+        # subset
         estimates <- estimates[estimates[[group_name]] %in% names(group_map), , drop = FALSE]
+        # reorder
+        tmp <- split(estimates, estimates[[group_name]])
+        tmp <- tmp[match(names(group_map), names(tmp))]
+        estimates <- data.table::rbindlist(tmp)
+        # rename
         estimates[[group_name]] <- replace_dict(
             estimates[[group_name]],
             group_map)

@@ -79,6 +79,7 @@ format_estimates <- function(
     est$stars <- make_stars(est$p.value, stars_tmp)
     est$stars[is.na(est$stars)] <- ""
   }
+
   # otherwise we get stars in `estimate` even when stars=FALSE and another glue
   # string includes {stars}`
   if (isTRUE(is_star) && isFALSE(is_glue) && !isFALSE(stars)) {
@@ -108,7 +109,6 @@ format_estimates <- function(
       }
     }
   }
-
 
   ## round all
   ## ensures that the reshape doesn't produce incompatible types
@@ -190,7 +190,7 @@ format_estimates <- function(
     data.frame(est),
     varying       = grep("modelsummary_tmp\\d+$", colnames(est), value = TRUE),
     times         = grep("modelsummary_tmp\\d+$", colnames(est), value = TRUE),
-    v.names       = "value",
+    v.names       = "modelsummary_value",
     timevar       = "statistic",
     direction     = "long")
   est$id <- NULL
@@ -210,7 +210,7 @@ format_estimates <- function(
 
   # drop empty rows (important for broom.mixed which produces group
   # estimates without standard errors)
-  est <- est[!est$value %in% c("", "()", "(NA)"), ]
+  est <- est[!est$modelsummary_value %in% c("", "()", "(NA)"), ]
 
   # output
   return(est)

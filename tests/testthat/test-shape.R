@@ -17,8 +17,8 @@ test_that("combine columns with :", {
     expect_equal(tab1, tab2)
     expect_equal(nrow(tab1), nrow(tab3))
     expect_equal(ncol(tab1) + 1, ncol(tab3))
-    expect_error(modelsummary(mfx, shape = term * comparison + statistic ~ model), regexp = "character")
-    expect_error(modelsummary(mfx, output = "dataframe", shape = term:comparison + statistic ~ model), NA)
+    expect_error(modelsummary(mfx, shape = term * contrast + statistic ~ model), regexp = "character")
+    expect_error(modelsummary(mfx, output = "dataframe", shape = term:contrast + statistic ~ model), NA)
 })
 
 test_that("gof merge on partial column match", {
@@ -27,6 +27,7 @@ test_that("gof merge on partial column match", {
     tab <- modelsummary(list(mod, mod), shape = ~ model + statistic)
     expect_equal(dim(tab), c(12, 6))
     expect_true("gof" %in% tab$part)
+    options(modelsummary_factory_default = NULL)
 })
 
 test_that("partial formulas", {
@@ -255,7 +256,6 @@ test_that("grouped coefficients: gamlss", {
 
     tab <- modelsummary(mod, "data.frame", shape = model + term ~ component)
     expect_s3_class(tab, "data.frame")
-
 })
 
 
@@ -274,17 +274,12 @@ test_that("group_map reorder rename", {
     requiet("pscl")
     data("bioChemists", package = "pscl")
     mod <- hurdle(art ~ phd + fem | ment, data = bioChemists, dist = "negbin")
-
-
     tab <- modelsummary(mod,
                         shape = component + term ~ model,
                         group_map = c("zero_inflated" = "Zero", "conditional" = "Count"),
                         output = "data.frame")
-
     expect_equal(tab$component[1], "Zero")
 })
-
-
 
 
 test_that("Issue #531", {
