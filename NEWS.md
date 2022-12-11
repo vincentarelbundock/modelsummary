@@ -1,11 +1,20 @@
 # modelsummary 1.2.0
 
+Breaking change:
+
+* With the `shape` and `output="dataframe"` arguments, there always used to be a `group` column. Now, this column has the same name as the variable in the `shape` formula ("response", "component", etc.).
+
+New features:
+
 * `shape` can include multiple groups.
 * `coef_rename` can be an unnamed vector of length equal to the number of terms in the final table, obtained after `coef_map` and `coef_omit` are applied and models are merged.
 * `coef_omit` accepts numeric indices. Positive values: coefficients to omit. Negative values: coefficients to keep.
 * `datasummary_skim`: Increased maximum number of variables to 250.
 * Quarto notebooks compile to Word and Markdown automatically.
-* Bug fix: order of notes in some output format (Issue #577)
+
+Bug fixes:
+
+* Order of notes preserved in some output format (Issue #577)
 
 # modelsummary 1.1.0
 
