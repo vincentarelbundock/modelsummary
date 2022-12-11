@@ -108,11 +108,11 @@ statistics are exponentiated, and the \code{std.error} is transformed to
 
 \item{shape}{formula which determines the shape of the table. The left side
 determines what appears on rows, and the right side determines what appears
-on columns. The formula can include a group identifier to display related terms
+on columns. The formula can include one or more group identifier(s) to display related terms
 together, which can be useful for models with multivariate outcomes or
-grouped coefficients (See examples section below). This identifier must be
-one of the column names produced by: \code{get_estimates(model)}. The group
-identifier can be combined with the term identifier in a single column by
+grouped coefficients (See examples section below). The group identifier(s) must be
+column names produced by: \code{get_estimates(model)}. The group
+identifier(s) can be combined with the term identifier in a single column by
 using the colon to represent an interaction. If an incomplete formula is
 supplied (e.g., \code{~statistic}), \code{modelsummary} tries to complete it
 automatically. Potential \code{shape} values include:
