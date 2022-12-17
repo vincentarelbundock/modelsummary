@@ -102,6 +102,22 @@ modelplot(mod, size = 1, fatten = .7, color = 'darkgreen', linetype = 'dotted') 
     theme_classic()
 ```
 
+## Conditional colors and shape
+
+Note: This section requires a version of `modelsummary` greater than 1.2.0 [or the development version.](https://github.com/vincentarelbundock/modelsummary#installation)
+
+In a [very nice Stack Overflow answer](https://stackoverflow.com/a/74835661/342331), Allan Cameron shows how we can use the `aes()` function from `ggplot2` to add conditional aesthetics. For example, if we want to display statistically significant coefficients in a different color:
+
+```{r}
+#| fig.asp = .3
+library(ggplot2)
+mod <- lm(hp ~ factor(gear) + factor(cyl), data = mtcars)
+
+modelplot(mod, coef_rename = TRUE) +
+  aes(color = ifelse(p.value < 0.001, "Significant", "Not significant")) +
+  scale_color_manual(values = c("grey", "black"))
+```
+
 ## Example: Using facets to compare models
 
 Customizing plots with `ggplot2` makes `modelplot` very flexible. For example, imagine you want to compare the coefficients of three models with different dependent variables. First, we load the packages and estimate our models:

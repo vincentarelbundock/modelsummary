@@ -1,3 +1,8 @@
+# modelsummary 1.2.0.9000
+
+* `modelplot(draw = FALSE)` now returns a `p.value` column. This allows conditional aesthetics (see the `modelplot` vignette).
+* Better integration with the `marginaleffects` package.
+
 # modelsummary 1.2.0
 
 Breaking change:
