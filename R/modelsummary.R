@@ -537,6 +537,15 @@ modelsummary <- function(
     }
   }
 
+
+  # {marginaleffects} hack
+  flag <- any(sapply(models, inherits, c("marginaleffects", "comparisons", "marginalmeans")))
+  if (isTRUE(flag)) {
+    colnames(tab) <- gsub("^value$", " ", colnames(tab)) # marginalmeans()
+    colnames(tab) <- gsub("^contrast_", "", colnames(tab)) # comparisons() and marginaleffects()
+  }
+
+
   # HACK: remove "empty" confidence intervals or standard errors and omit empty rows
   for (i in seq_along(tab)) {
     tab[[i]] <- gsub("\\(\\s*\\)", "", tab[[i]])
