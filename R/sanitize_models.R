@@ -7,6 +7,7 @@ sanitize_models <- function(models, ...) {
 
     if (inherits(x = models, "fixest_multi")) {
         # no names or default names
+
         if (is.null(names(models)) || all(grepl("^lhs|^sample.var", names(models)))) {
             nam <- fixest_multi_names(models)
         } else {

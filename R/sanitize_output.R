@@ -4,6 +4,10 @@
 #' @noRd
 sanitize_output <- function(output) {
 
+  # useful in panelsummary()
+  if (is.null(output)) {
+    return(NULL)
+  }
 
   flag <- checkmate::check_string(output)
   fun <- settings_get("function_called")

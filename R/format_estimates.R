@@ -16,6 +16,7 @@ format_estimates <- function(
   exponentiate,
   ...) {
 
+
   # conf.int to glue
   estimate_glue <- ifelse(
     estimate == "conf.int",
@@ -66,7 +67,7 @@ format_estimates <- function(
   is_glue <- grepl("\\{", estimate)
   if (is_star) {
     if (!'p.value' %in% colnames(est)) {
-      stop('To use the `stars` argument, the `tidy` function must produce a column called "p.value"',
+      stop('To use the `stars` argument, the `get_estimates(model)` function must produce a column called "p.value"',
            call. = FALSE)
     }
     # we always want stars, regardless of argument value, in case there is a glue {stars}
@@ -165,7 +166,8 @@ format_estimates <- function(
   }
 
   # subset columns
-  cols <- c(group_name, 'term', paste0('modelsummary_tmp', seq_along(estimate_glue)))
+  # "group" is used by parameters() to keep lme4::lmer() types of coefficients together
+  cols <- c(group_name, 'group', 'term', paste0('modelsummary_tmp', seq_along(estimate_glue)))
   cols <- intersect(cols, colnames(est))
   est <- est[, cols, drop = FALSE]
 

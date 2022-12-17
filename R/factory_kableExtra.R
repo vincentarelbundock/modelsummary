@@ -6,6 +6,8 @@
 factory_kableExtra <- function(tab,
                                align = NULL,
                                hrule = NULL,
+                               hgroup = NULL,
+                               hindent = FALSE,
                                notes = NULL,
                                title = NULL,
                                escape = TRUE,
@@ -56,13 +58,13 @@ factory_kableExtra <- function(tab,
     table-align-text-post=false
   ]}
   "
-  if (settings_equal("output_format", c("latex", "latex_tabular")) &&
-      settings_equal("format_numeric_latex", "siunitx")) {
+  # if (settings_equal("output_format", c("latex", "latex_tabular")) &&
+  #     settings_equal("format_numeric_latex", "siunitx")) {
     invisible(knitr::knit_meta_add(list(
       rmarkdown::latex_dependency("booktabs"))))
     invisible(knitr::knit_meta_add(list(
       rmarkdown::latex_dependency("siunitx", extra_lines = extra_siunitx))))
-  }
+  # }
 
   ## align
   if (!is.null(align)) {
@@ -95,7 +97,8 @@ factory_kableExtra <- function(tab,
       colnames(tab) <- gsub("\\|{4}", " / ", colnames(tab))
   }
 
-  # combine arguments
+
+  # create tables with combined arguments
   arguments <- arguments[base::intersect(names(arguments), valid)]
   arguments <- c(list(tab), arguments)
   out <- do.call(kableExtra::kbl, arguments)
@@ -140,9 +143,13 @@ factory_kableExtra <- function(tab,
   # theme
   theme_ms <- getOption("modelsummary_theme_kableExtra",
                         default = theme_ms_kableExtra)
-  out <- theme_ms(out,
-                  output_format = settings_get("output_format"),
-                  hrule = hrule)
+  out <- theme_ms(
+    out,
+    output_format = settings_get("output_format"),
+    hrule = hrule,
+    hgroup = hgroup,
+    hindent = hindent,
+    ...)
 
   # span: apply (not supported in markdown)
   if (!is.null(span_list) && settings_equal("output_format", c("kableExtra", "latex", "html"))) {
@@ -150,7 +157,7 @@ factory_kableExtra <- function(tab,
       out <- kableExtra::add_header_above(out, span_list[[i]], escape = escape)
     }
   }
-  
+
   # html & latex get a new class to use print.modelsummary_string
   if (settings_equal("output_format", c("latex", "latex_tabular", "html"))) {
     class(out) <- c("modelsummary_string", class(out))

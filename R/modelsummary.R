@@ -202,10 +202,14 @@ modelsummary <- function(
   escape      = TRUE,
   ...) {
 
+  dots <- list(...)
+
   ## settings
-  settings_init(settings = list(
-     "function_called" = "modelsummary"
-  ))
+  if (!settings_equal("function_called", "panelsummary")) {
+    settings_init(settings = list(
+      "function_called" = "modelsummary"
+    ))
+  }
 
   # bug: deprecated `group` argument gets partial matched
   scall <- sys.call()
@@ -223,8 +227,10 @@ modelsummary <- function(
   ## sanity functions validate variables/settings
   ## sanitize functions validate & modify & initialize
   checkmate::assert_string(gof_omit, null.ok = TRUE)
-  sanitize_output(output)           # early
-  sanitize_escape(escape)
+  if (settings_equal("function_called", "panelsummary")) {
+    sanitize_output(output)           # early
+    sanitize_escape(escape)
+  }
   sanity_ellipsis(vcov, ...)        # before sanitize_vcov
   models <- sanitize_models(models, ...) # before sanitize_vcov
   vcov <- sanitize_vcov(vcov, models, ...)
@@ -337,26 +343,19 @@ modelsummary <- function(
 
   # warn that `shape` might be needed
   if (is.null(shape$group_name)) {
-    # est[["group"]] <- NULL
     idx <- paste(est$term, est$statistic)
     if (anyDuplicated(idx) > 0) {
       candidate_groups <- sapply(msl, function(x) colnames(x[["tidy"]]))
       candidate_groups <- unlist(candidate_groups)
       candidate_groups <- setdiff(
         candidate_groups,
-        c("term", "type", "estimate", "std.error", "conf.level", "conf.low", "conf.high",
-          "statistic", "df.error", "p.value"))
-      msg <- format_msg(
-      "There are duplicate term names in the table.
-
-      The `shape` argument of the `modelsummary` function can be used to print
-      related terms together. The `group_map` argument can be used to reorder,
-      subset, and rename group identifiers. See `?modelsummary` for details.
-
-      You can find the group identifier to use in the `shape` argument by calling
-      `get_estimates()` on one of your models. Candidates include: %s ")
-      msg <- sprintf(msg, paste(candidate_groups, collapse = ", "))
-      warning(msg, call. = FALSE)
+        c("term", "type", "estimate", "std.error", "conf.level", "conf.low", "conf.high", "statistic", "df.error", "p.value"))
+      msg <- c(
+        "There are duplicate term names in the table.",
+        "The `shape` argument of the `modelsummary` function can be used to print related terms together. The `group_map` argument can be used to reorder, subset, and rename group identifiers. See `?modelsummary` for details.",
+        "You can find the group identifier to use in the `shape` argument by calling `get_estimates()` on one of your models. Candidates include:",
+        paste(candidate_groups, collapse = ", "))
+      insight::format_warning(msg)
     }
   }
 
@@ -396,7 +395,7 @@ modelsummary <- function(
 
   est <- est[do.call(order, as.list(est)), ]
 
-  # coef_omit is numeric
+  # coef_omit is numeric: by position in the final table, not before merging
   if (is.numeric(coef_omit)) {
     coef_omit <- unique(round(coef_omit))
 
@@ -444,7 +443,7 @@ modelsummary <- function(
   # character for binding
   cols <- intersect(
     colnames(est),
-    c("group", "term", shape$group_name, "model", "statistic"))
+    c("term", shape$group_name, "model", "statistic"))
   for (col in cols) {
     est[[col]] <- as.character(est[[col]])
   }
@@ -522,7 +521,11 @@ modelsummary <- function(
   }
 
   # data.frame output keeps redundant info
-  if (!settings_equal("output_format", "dataframe")) {
+  if (settings_equal("function_called", "panelsummary")) {
+    tab <- redundant_labels(tab, "term")
+  }
+
+  if (!settings_equal("output_format", "dataframe") && !settings_equal("function_called", "panelsummary")) {
 
     tab <- redundant_labels(tab, "model")
     tab <- redundant_labels(tab, "group")
@@ -601,8 +604,8 @@ modelsummary <- function(
 
   # invisible return
   if (!is.null(settings_get("output_file")) ||
-      output == "jupyter" ||
-      (output == "default" && settings_equal("output_default", "jupyter"))) {
+      isTRUE(output == "jupyter") ||
+      (isTRUE(output == "default") && settings_equal("output_default", "jupyter"))) {
     settings_rm()
     return(invisible(out))
   # visible return

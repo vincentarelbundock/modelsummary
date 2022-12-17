@@ -1,6 +1,8 @@
 theme_ms_kableExtra <- function(tab,
                                 output_format,
-                                hrule,
+                                hrule = NULL,
+                                hgroup = NULL,
+                                hindent = NULL,
                                 ...) {
 
   if (!output_format %in% c("markdown", "latex_tabular")) {
@@ -9,24 +11,64 @@ theme_ms_kableExtra <- function(tab,
     out <- tab
   }
 
-  # horizontal rule to separate coef/gof
-  # not supported in markdown, and omitted from latex_tabular
-  if (!is.null(hrule)) {
-    if (output_format %in% c("latex", "latex_tabular")) {
-      for (pos in hrule) {
-        out <- kableExtra::row_spec(out,
-          row = pos - 1,
-          extra_latex_after = "\\midrule"
-        )
-      }
-    } else if (output_format %in% c("kableExtra", "html")) {
-      for (pos in hrule) {
-        out <- kableExtra::row_spec(out,
-          row = pos - 1,
-          extra_css = "box-shadow: 0px 1px"
-        )
-      }
+  # kableExtra quirk: latex hrule before hgroup
+  if (!is.null(hrule) && output_format %in% c("latex", "latex_tabular")) {
+    for (pos in hrule) {
+      out <- kableExtra::row_spec(out,
+        row = pos - 1,
+        extra_latex_after = "\\midrule"
+      )
     }
+  }
+
+
+  # groups are not supported by kableExtra in markdown output
+  if (!is.null(hgroup) && !output_format %in% "markdown") {
+    for (i in seq_along(hgroup)) {
+      args <- list(
+        kable_input = out,
+        bold = FALSE,
+        italic = TRUE,
+        indent = TRUE,
+        hline_after = FALSE,
+        extra_latex_after = "\\midrule ",
+        latex_gap_space = "0.5em",
+        group_label = names(hgroup[i]),
+        start_row = hgroup[[i]][1],
+        end_row = hgroup[[i]][2])
+
+      # \\midrule only works in LaTeX tables, but we don't want to double
+      if (!output_format %in% c("latex", "latex_tabular")) {
+        args[["hline_after"]] <- TRUE
+      }
+
+      # user-specified arguments override default themes
+      dots <- list(...)
+      for (n in names(dots)) {
+        args[[n]] <- dots[[n]]
+      }
+      valid <- names(formals(kableExtra::group_rows))
+      args <- args[names(args) %in% valid]
+
+      out <- do.call(kableExtra::group_rows, args)
+    }
+  }
+
+  # kableExtra quirk: latex hrule before hgroup
+  if (!is.null(hrule) && output_format %in% c("kableExtra", "html")) {
+    for (pos in hrule) {
+      out <- kableExtra::row_spec(out,
+        row = pos - 1,
+        extra_css = "box-shadow: 0px 1px"
+      )
+    }
+  }
+
+  # indent to match group indents
+  if (!isTRUE(dots[["indent"]]) && length(hindent) > 1) {
+    fun <- utils::getFromNamespace("add_indent", "kableExtra")
+    idx <- unlist(lapply(hindent, function(x) x[1]:x[2]))
+    out <- fun(out, positions = idx)
   }
 
   return(out)
@@ -35,7 +77,8 @@ theme_ms_kableExtra <- function(tab,
 
 theme_ms_gt <- function(tab,
                         output_format,
-                        hrule,
+                        hrule = NULL,
+                        hgroup = NULL,
                         ...) {
   out <- tab
   if (!is.null(hrule)) { # check if there are >0 GOF
@@ -47,6 +90,21 @@ theme_ms_gt <- function(tab,
       )
     }
   }
+
+  if (!is.null(hgroup)) {
+
+  }
+
+    # group rows by panel: gt
+    hgroup <- rev(hgroup)
+    for (i in seq_along(hgroup)) {
+      out <- gt::tab_row_group(
+        out,
+        label = names(hgroup)[i],
+        id = names(hgroup)[i],
+        rows = hgroup[[i]][1]:hgroup[[i]][2])
+    }
+
   return(out)
 }
 

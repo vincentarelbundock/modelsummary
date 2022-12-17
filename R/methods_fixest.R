@@ -1,18 +1,41 @@
 fixest_multi_names <- function(x) {
-    if (requireNamespace("fixest", quietly = TRUE) &&
-        utils::packageVersion("fixest") >= "0.10.5") {
-        fun <- utils::getFromNamespace("models", "fixest")
-        tree <- fun(x)
-        if ("lhs" %in% names(tree)) {
-            out <- tree$lhs
-        } else if ("sample" %in% names(tree)) {
-            out <- sprintf("%s: %s", tree$sample.var, tree$sample)
+    if (requireNamespace("fixest", quietly = TRUE) && utils::packageVersion("fixest") >= "0.10.5") {
+
+        if (settings_equal("function_called", "panelsummary")) {
+
+          if (!is.null(names(x)) && all(grepl(";", names(x)))) {
+            nam <- do.call("rbind", strsplit(names(x), ";"))
+            for (i in 1:ncol(nam)) {
+              if (anyDuplicated(nam[, i]) == nrow(nam) - 1) {
+                nam[, i] <- NA
+              }
+            }
+            out <- na.omit(t(nam))
+            out <- apply(out, 2, paste, collapse = "; ")
+            out <- trimws(out)
+          } else {
+            out <- names(x)
+          }
+
         } else {
-            out <- paste("Model", seq_along(x))
+
+          fun <- utils::getFromNamespace("models", "fixest")
+          tree <- fun(x)
+          tree$id <- NULL
+          for (i in rev(seq_along(tree))) {
+            if (length(unique(tree[[i]])) == 1) {
+              tree[[i]] <- NULL
+            } else {
+              tree[[i]] <- sprintf("%s: %s", names(tree)[i], tree[[i]])
+            }
+          }
+          out <- apply(tree, 1, paste, collapse = "; ")
         }
+
     } else {
-        out <- paste("Model", seq_along(x))
+        out <- sprintf("(%s)", seq_along(x))
     }
+
     return(out)
 }
 
