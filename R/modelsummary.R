@@ -543,6 +543,7 @@ modelsummary <- function(
   if (isTRUE(flag)) {
     colnames(tab) <- gsub("^value$", " ", colnames(tab)) # marginalmeans()
     colnames(tab) <- gsub("^contrast_", "", colnames(tab)) # comparisons() and marginaleffects()
+    colnames(tab) <- gsub("^contrast$", " ", colnames(tab)) # comparisons() and marginaleffects()
   }
 
 
