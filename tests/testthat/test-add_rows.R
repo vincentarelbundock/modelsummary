@@ -1,11 +1,11 @@
 mod <- list()
-dat <<- mtcars # otherwise lmtest::waldtest breaks
+dat <- mtcars 
 dat$cyl <- factor(dat$cyl)
+dat <<- dat # otherwise lmtest::waldtest breaks
 mod$OLS <- lm(am ~ cyl, data = dat)
 mod$Logit <- glm(am ~ cyl, data = dat, family = binomial())
 
 test_that("data.frame", {
-
   rows = read.csv(text = 
     "term      , OLS , Logit
      cyl4      , -   , - 

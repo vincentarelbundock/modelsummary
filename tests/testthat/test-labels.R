@@ -105,6 +105,7 @@ test_that("modelsummary: also applies variable labels for depvar", {
   dat$mpg <- haven::labelled(dat$mpg, label = "Miles per gallon")
   dat$cyl <- as.factor(dat$cyl)
   dat$cyl <- haven::labelled(dat$cyl, label = "Number of cylinders")
+  dat <<- dat
   mod <- list(
     lm(mpg ~ cyl + drat + disp, data = dat),
     lm(hp ~ cyl + drat + disp, data = dat))
