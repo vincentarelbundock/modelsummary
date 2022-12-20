@@ -49,6 +49,7 @@ msummary(
 \item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
 \item NULL: does not format numbers, which allows users to include function in the "glue" strings in the \code{estimate} and \code{statistic} arguments.
 \item A named list to format distinct elements of the table differently. Names correspond to column names produced by \code{get_estimates(model)} or \code{get_gof(model)}. Values are integers, characters, or functions, as described above. The \code{fmt} element is used as default for unspecified elements Ex: \code{fmt=list("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)}
+\item A named list to format distinct parameters of the table differently. Names correspond to values in the \code{term} column of the \code{get_estimates(model)} output. The \code{fmt} element is used as default for unspecified elements Ex: \verb{fmt=list("(Intercept)"=2, "hp""=1, "fmt"=3)}
 \item LaTeX output: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command, which requires the \code{siunitx} package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 }}
 
@@ -423,6 +424,13 @@ modelsummary(m, fmt = f, gof_map = NA)
 m <- lm(mpg ~ I(hp * 1000) + drat, data = mtcars)
 f <- function(x) format(x, digits = 3, nsmall = 2)
 modelsummary(m, fmt = f, gof_map = NA)
+
+# fmt: different terms are formatted differently
+m <- lm(mpg ~ qsec + factor(cyl), data = mtcars)
+modelsummary(
+    m,
+    fmt = list("(Intercept)" = 0, "qsec" = 2, "fmt" = 4)
+)
 
 # coef_rename
 modelsummary(models, coef_rename = c('Volume' = 'Large', 'Height' = 'Tall'))

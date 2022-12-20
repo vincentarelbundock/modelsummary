@@ -122,8 +122,26 @@ format_estimates <- function(
     }
 
     if (!is.character(est[[n]]) && !is.factor(est[[n]])) {
-      if (n %in% names(fmt)) {
+      # per term rounding
+      flag <- setdiff(names(fmt), "fmt")
+      flag <- length(flag) > 0 && all(flag %in% est$term)
+      if (isTRUE(flag)) {
+        tmp <- as.list(est[[n]])
+        idx <- match(est$term, names(fmt))
+        for (i in seq_along(idx))
+          if (!is.na(idx[i])) {
+            tmp[[i]] <- rounding(tmp[[i]], fmt[[i]])
+          } else {
+            tmp[[i]] <- rounding(tmp[[i]], fmt[["fmt"]])
+          }
+          est[[n]] <- as.vector(tmp)
+          fmt1 <- fmt[["fmt"]]
+
+      # per statistic rounding
+      } else if (n %in% names(fmt)) {
         fmt1 <- fmt[[n]]
+
+      # normal rounding
       } else {
         if (n == "p.value" && is.numeric(fmt[["fmt"]])) {
           pdigits <- -max(fmt[["fmt"]], 3)
@@ -132,6 +150,7 @@ format_estimates <- function(
           fmt1 <- fmt[["fmt"]]
         }
       }
+
       # keep as numeric for glue functions
       if (!is.null(fmt1)) {
         est[[n]] <- rounding(est[[n]], fmt1)

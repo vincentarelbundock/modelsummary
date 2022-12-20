@@ -2,6 +2,7 @@
 
 * `modelplot(draw = FALSE)` now returns a `p.value` column. This allows conditional aesthetics (see the `modelplot` vignette).
 * Better integration with the `marginaleffects` package.
+* `fmt` can format different parameters differently with a named list.
 
 # modelsummary 1.2.0
 

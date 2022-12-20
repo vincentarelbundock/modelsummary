@@ -59,6 +59,13 @@
 #' f <- function(x) format(x, digits = 3, nsmall = 2)
 #' modelsummary(m, fmt = f, gof_map = NA)
 #' 
+#' # fmt: different terms are formatted differently
+#' m <- lm(mpg ~ qsec + factor(cyl), data = mtcars)
+#' modelsummary(
+#'     m,
+#'     fmt = list("(Intercept)" = 0, "qsec" = 2, "fmt" = 4)
+#' )
+#' 
 #' # coef_rename
 #' modelsummary(models, coef_rename = c('Volume' = 'Large', 'Height' = 'Tall'))
 #' modelsummary(models, coef_rename = toupper)

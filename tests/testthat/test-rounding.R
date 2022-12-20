@@ -73,3 +73,16 @@ test_that("very small numbers", {
     expect_true("10.79" %in% tab[["Model 1"]])
     expect_true("-0.00005" %in% tab[["Model 1"]])
 })
+
+
+test_that("per term rounding", {
+    mod <- lm(mpg ~ qsec + factor(cyl), data = mtcars)
+    tab <- modelsummary(
+        mod,
+        output = "dataframe",
+        statistic = NULL,
+        gof_map = NA,
+        fmt = list("(Intercept)" = 0, "qsec" = 2)
+    )
+    expect_equal(c("35", "-0.44", "-7.431", "-12.603"), tab[["Model 1"]])
+})

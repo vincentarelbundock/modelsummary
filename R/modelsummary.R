@@ -45,6 +45,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * character: passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`
 #' * NULL: does not format numbers, which allows users to include function in the "glue" strings in the `estimate` and `statistic` arguments. 
 #' * A named list to format distinct elements of the table differently. Names correspond to column names produced by `get_estimates(model)` or `get_gof(model)`. Values are integers, characters, or functions, as described above. The `fmt` element is used as default for unspecified elements Ex: `fmt=list("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)`
+#' * A named list to format distinct parameters of the table differently. Names correspond to values in the `term` column of the `get_estimates(model)` output. The `fmt` element is used as default for unspecified elements Ex: `fmt=list("(Intercept)"=2, "hp""=1, "fmt"=3)`
 #' * LaTeX output: To ensure proper typography, all numeric entries are enclosed in the `\num{}` command, which requires the `siunitx` package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 #' @param stars to indicate statistical significance
 #' * FALSE (default): no significance stars.
