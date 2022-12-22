@@ -192,6 +192,8 @@ modelsummary <- function(
   escape      = TRUE,
   ...) {
 
+  dots <- list(...)
+
   ## settings
   settings_init(settings = list(
      "function_called" = "modelsummary"
@@ -305,32 +307,24 @@ modelsummary <- function(
   term_order <- unique(unlist(lapply(est, function(x) x$term)))
   statistic_order <- unique(unlist(lapply(est, function(x) x$statistic)))
 
-  f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE,
-                            by = c(shape$group_name, "term", "statistic"))
+  f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE, by = c(shape$group_name, "term", "statistic"))
   est <- Reduce(f, est)
 
   # warn that `shape` might be needed
   if (is.null(shape$group_name)) {
-    # est[["group"]] <- NULL
     idx <- paste(est$term, est$statistic)
     if (anyDuplicated(idx) > 0) {
       candidate_groups <- sapply(msl, function(x) colnames(x[["tidy"]]))
       candidate_groups <- unlist(candidate_groups)
       candidate_groups <- setdiff(
         candidate_groups,
-        c("term", "type", "estimate", "std.error", "conf.level", "conf.low", "conf.high",
-          "statistic", "df.error", "p.value"))
-      msg <- format_msg(
-      "There are duplicate term names in the table.
-
-      The `shape` argument of the `modelsummary` function can be used to print
-      related terms together. The `group_map` argument can be used to reorder,
-      subset, and rename group identifiers. See `?modelsummary` for details.
-
-      You can find the group identifier to use in the `shape` argument by calling
-      `get_estimates()` on one of your models. Candidates include: %s ")
-      msg <- sprintf(msg, paste(candidate_groups, collapse = ", "))
-      warning(msg, call. = FALSE)
+        c("term", "type", "estimate", "std.error", "conf.level", "conf.low", "conf.high", "statistic", "df.error", "p.value"))
+      msg <- c(
+        "There are duplicate term names in the table.",
+        "The `shape` argument of the `modelsummary` function can be used to print related terms together. The `group_map` argument can be used to reorder, subset, and rename group identifiers. See `?modelsummary` for details.",
+        "You can find the group identifier to use in the `shape` argument by calling `get_estimates()` on one of your models. Candidates include:",
+        paste(candidate_groups, collapse = ", "))
+      insight::format_warning(msg)
     }
   }
 
@@ -372,7 +366,7 @@ modelsummary <- function(
 
   est <- est[do.call(order, as.list(est)), ]
 
-  # coef_omit is numeric
+  # coef_omit is numeric: by position in the final table, not before merging
   if (is.numeric(coef_omit)) {
     coef_omit <- unique(round(coef_omit))
 
@@ -498,6 +492,10 @@ modelsummary <- function(
   }
 
   # data.frame output keeps redundant info
+  if (isTRUE(dots$modelsummary_panel)) {
+    tab <- redundant_labels(tab, "term")
+  }
+
   if (!settings_equal("output_format", "dataframe")) {
 
     tab <- redundant_labels(tab, "model")
