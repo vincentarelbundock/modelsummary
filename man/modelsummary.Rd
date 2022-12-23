@@ -44,17 +44,21 @@ modelsummary(
 
 \item{fmt}{determines how to format numeric values
 \itemize{
-\item integer: the number of digits to keep after the decimal: \code{format(x, digits = 1, nsmall = fmt, scientific = FALSE)}
-\item function: returns a formatted character string. For example, the \code{format()} function can be used in combination with the \code{fmt} argument for full control of number formatting: number of digits, number of digits after the decimal, scientific notation, etc. See the Examples section below.
-\item character:
+\item integer: Number of decimal digits
+\item string:
 \itemize{
-\item "sig2" rounds to the 2nd significant digit, on a per-term basis, "sig3" to the 3rd, etc.
-\item Other strings are passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
+\item "s#": Number of significant digits. "s2" rounds to the 2nd significant digit, etc.
+\item All other strings are passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
+}
+\item function: returns a formatted character string. For example, the \code{format()} function can be used in combination with the \code{fmt} argument for full control of number formatting: number of digits, number of digits after the decimal, scientific notation, etc. See the Examples section below.
+\item Named list:
+\itemize{
+\item Per-statistic rounding: Names correspond to column names produced by \code{get_estimates(model)} or \code{get_gof(model)}. Ex: \code{fmt=list("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)}
+\item Per-terms rounding: Names correspond to values in the \code{term} column of the \code{get_estimates(model)} output. Ex: \code{fmt=list("(Intercept)"=2, "hp"=1, "fmt"=3)}
+\item The \code{fmt} element of the list is used as default for unspecified elements
 }
 \item NULL: does not format numbers, which allows users to include function in the "glue" strings in the \code{estimate} and \code{statistic} arguments.
-\item A named list to format distinct elements of the table differently. Names correspond to column names produced by \code{get_estimates(model)} or \code{get_gof(model)}. Values are integers, characters, or functions, as described above. The \code{fmt} element is used as default for unspecified elements Ex: \code{fmt=list("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)}
-\item A named list to format distinct parameters of the table differently. Names correspond to values in the \code{term} column of the \code{get_estimates(model)} output. The \code{fmt} element is used as default for unspecified elements Ex: \verb{fmt=list("(Intercept)"=2, "hp""=1, "fmt"=3)}
-\item LaTeX output: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command, which requires the \code{siunitx} package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
+\item Note on LaTeX output: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command, which requires the \code{siunitx} package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 }}
 
 \item{estimate}{a single string or a character vector of length equal to the

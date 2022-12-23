@@ -125,7 +125,7 @@ format_estimates <- function(
     # significant digits per term
     autoci <-
       isTRUE(checkmate::check_list(fmt, len = 1)) &&
-      isTRUE(checkmate::check_string(fmt[["fmt"]], pattern = "^sig\\d+")) &&
+      isTRUE(checkmate::check_string(fmt[["fmt"]], pattern = "^s\\d+$")) &&
       !isTRUE(checkmate::check_string(fmt[["fmt"]], pattern = "%"))
     cols <- c(estimate, statistic)
     supported <- c("estimate", "std.error", "conf.int")
@@ -140,7 +140,7 @@ format_estimates <- function(
     }
 
     if (isTRUE(autoci)) {
-      fmt$fmt <- as.numeric(gsub("sig", "", fmt$fmt))
+      fmt$fmt <- as.numeric(gsub("^s", "", fmt$fmt))
       fmt1 <- fmt$fmt
       fun <- function(x) format(x, digits = fmt1)
       tmp <- lapply(data.frame(t(est[, cols, drop = FALSE])), fun)
