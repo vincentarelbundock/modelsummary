@@ -171,8 +171,8 @@ test_that("group ~ model + term", {
                         output = "data.frame",
                         shape = response ~ model + term,
                         metrics = "RMSE")
-    known <- c("part", "response", "statistic", "Model 1 / (Intercept)", "Model 1 / mpg",
-"Model 2 / (Intercept)", "Model 2 / mpg", "Model 2 / drat")
+    known <- c("part", "response", "statistic", "(1) / (Intercept)", "(1) / mpg",
+"(2) / (Intercept)", "(2) / mpg", "(2) / drat")
     expect_equal(colnames(tab), known)
     expect_equal(dim(tab), c(6, 8))
 
@@ -180,8 +180,8 @@ test_that("group ~ model + term", {
                         output = "data.frame",
                         shape = response ~ term + model,
                         metrics = "RMSE")
-    known <- c("part", "response", "statistic", "(Intercept) / Model 1", "(Intercept) / Model 2",
-"mpg / Model 1", "mpg / Model 2", "drat / Model 2")
+    known <- c("part", "response", "statistic", "(Intercept) / (1)", "(Intercept) / (2)",
+"mpg / (1)", "mpg / (2)", "drat / (2)")
     expect_equal(colnames(tab), known)
     expect_equal(dim(tab), c(6, 8))
 })
@@ -200,13 +200,13 @@ test_that("nnet::multinom: order of columns determined by formula terms", {
         tab <- modelsummary(mod, "data.frame", shape = term ~ model + response))
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
-                 c("part", "term", "statistic", "Model 1 / 6", "Model 1 / 8", "Model 2 / 6", "Model 2 / 8"))
+                 c("part", "term", "statistic", "(1) / 6", "(1) / 8", "(2) / 6", "(2) / 8"))
 
     ## term ~ response + model
     trash <- capture.output(tab <- modelsummary(mod, "data.frame", shape = term ~ response + model))
     expect_s3_class(tab, "data.frame")
     expect_equal(colnames(tab),
-                 c("part", "term", "statistic", "6 / Model 1", "6 / Model 2", "8 / Model 1", "8 / Model 2"))
+                 c("part", "term", "statistic", "6 / (1)", "6 / (2)", "8 / (1)", "8 / (2)"))
 
     ## model ~ term + response
     trash <- capture.output(tab <- modelsummary(mod, "data.frame", shape = model ~ term + response))
