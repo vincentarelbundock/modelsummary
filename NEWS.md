@@ -1,8 +1,11 @@
 # modelsummary 1.2.0.9000
 
-* `modelplot(draw = FALSE)` now returns a `p.value` column. This allows conditional aesthetics (see the `modelplot` vignette).
+* Global option to change the default model labels (column headers):
+  - options(modelsummary_model_labels = "roman")
+  - The supported styles are: "model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""
 * Better integration with the `marginaleffects` package.
 * `fmt` can format different parameters differently with a named list.
+* `modelplot(draw = FALSE)` now returns a `p.value` column. This allows conditional aesthetics (see the `modelplot` vignette).
 
 # modelsummary 1.2.0
 

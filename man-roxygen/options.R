@@ -1,8 +1,13 @@
 #'
 #' @section Global Options:
 #'
-#' The behavior of `modelsummary` can be affected by setting global options:
+#' The behavior of `modelsummary` can be modified by setting global options. For example:
+#' 
+#' `options(modelsummary_model_labels = "roman")`
 #'
+#' The available global options are:
+#' 
+#' + `modelsummary_model_labels`
 #' + `modelsummary_factory_default`
 #' + `modelsummary_factory_latex`
 #' + `modelsummary_factory_html`
@@ -10,6 +15,17 @@
 #' + `modelsummary_get`
 #' + `modelsummary_format_numeric_latex`
 #' + `modelsummary_format_numeric_html`
+#' 
+#' The rest of this section describes each of the options above.
+#' 
+#' ### Model labels: default column names
+#' 
+#' This global option changes the style of the default column headers:
+#' 
+#' `options(modelsummary_model_labels = "roman")`
+#' 
+#' The supported styles are: "model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""
+#' 
 #' 
 #' ### Table-making packages
 #'
@@ -20,8 +36,11 @@
 #' the `options` function:
 #'
 #' `options(modelsummary_factory_html = 'kableExtra')`
+#' 
 #' `options(modelsummary_factory_latex = 'gt')`
+#' 
 #' `options(modelsummary_factory_word = 'huxtable')`
+#' 
 #' `options(modelsummary_factory_png = 'gt')`
 #'
 #' ### Model extraction functions
@@ -33,7 +52,9 @@
 #' goodness-of-fit extracted by *both* packages by setting:
 #'
 #' `options(modelsummary_get = "broom")`
+#' 
 #' `options(modelsummary_get = "easystats")`
+#' 
 #' `options(modelsummary_get = "all")`
 #'
 #' ### Formatting numeric entries
@@ -43,6 +64,7 @@
 #' in dollar signs (for LaTeX math mode), users can call:
 #'
 #' `options(modelsummary_format_numeric_latex = "plain")`
+#' 
 #' `options(modelsummary_format_numeric_latex = "mathmode")`
 #'
 #' A similar option can be used to display numerical entries using MathJax in
