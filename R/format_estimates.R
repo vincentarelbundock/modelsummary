@@ -16,6 +16,7 @@ format_estimates <- function(
   exponentiate,
   ...) {
 
+
   # conf.int to glue
   estimate_glue <- ifelse(
     estimate == "conf.int",
@@ -192,7 +193,8 @@ format_estimates <- function(
   }
 
   # subset columns
-  cols <- c(group_name, 'term', paste0('modelsummary_tmp', seq_along(estimate_glue)))
+  # "group" is used by parameters() to keep lme4::lmer() types of coefficients together
+  cols <- c(group_name, 'group', 'term', paste0('modelsummary_tmp', seq_along(estimate_glue)))
   cols <- intersect(cols, colnames(est))
   est <- est[, cols, drop = FALSE]
 

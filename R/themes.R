@@ -1,6 +1,7 @@
 theme_ms_kableExtra <- function(tab,
                                 output_format,
-                                hrule,
+                                hrule = NULL,
+                                hgroup = NULL,
                                 ...) {
 
   if (!output_format %in% c("markdown", "latex_tabular")) {
@@ -11,7 +12,8 @@ theme_ms_kableExtra <- function(tab,
 
   # horizontal rule to separate coef/gof
   # not supported in markdown, and omitted from latex_tabular
-  if (!is.null(hrule)) {
+  # row_spec does not play well with group_rows
+  if (!is.null(hrule) && is.null(hgroup)) {
     if (output_format %in% c("latex", "latex_tabular")) {
       for (pos in hrule) {
         out <- kableExtra::row_spec(out,
@@ -29,13 +31,24 @@ theme_ms_kableExtra <- function(tab,
     }
   }
 
+  if (!is.null(hgroup)) {
+    for (i in seq_along(hgroup)) {
+      out <- kableExtra::group_rows(
+                out,
+                group_label = names(hgroup)[i],
+                start_row = hgroup[[i]][1],
+                end_row = hgroup[[i]][2] )
+    }
+  }
+
   return(out)
 }
 
 
 theme_ms_gt <- function(tab,
                         output_format,
-                        hrule,
+                        hrule = NULL,
+                        hgroup = NULL,
                         ...) {
   out <- tab
   if (!is.null(hrule)) { # check if there are >0 GOF
@@ -47,6 +60,21 @@ theme_ms_gt <- function(tab,
       )
     }
   }
+
+  if (!is.null(hgroup)) {
+
+  }
+
+    # group rows by panel: gt
+    hgroup <- rev(hgroup)
+    for (i in seq_along(hgroup)) {
+      out <- gt::tab_row_group(
+        out,
+        label = names(hgroup)[i],
+        id = names(hgroup)[i],
+        rows = hgroup[[i]][1]:hgroup[[i]][2])
+    }
+
   return(out)
 }
 

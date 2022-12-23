@@ -1,5 +1,14 @@
 requiet("lme4")
 
+test_that("random components are displayed together", {
+    mod <- lmer(Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width + (1 | Species), data = iris)
+    tab <- modelsummary(mod, output = "data.frame", gof_map = NA)
+    expect_equal(
+        tab$term,
+        c("(Intercept)", "(Intercept)", "Sepal.Width", "Sepal.Width", "Petal.Length", "Petal.Length", "Petal.Width", "Petal.Width", "SD (Intercept Species)", "SD (Observations)")
+    )
+})
+
 
 test_that("Issue #505", {
     skip_if_not_installed("parameters", minimum_version = "0.18.2")
@@ -55,8 +64,7 @@ test_that("Issue #496: multiple models keeps random/fixed grouped together", {
         statistic = NULL)
     expect_equal(
         tab$term[1:7],
-        c("(Intercept)", "Petal.Length", "Petal.Width", "SD (Intercept Species)",
-        "SD (Observations)", "SD (Petal.Length Species)", "Cor (Intercept~Petal.Length Species)"))
+        c("(Intercept)", "Petal.Length", "Petal.Width", "SD (Intercept Species)", "SD (Petal.Length Species)", "Cor (Intercept~Petal.Length Species)", "SD (Observations)"))
 })
 
 

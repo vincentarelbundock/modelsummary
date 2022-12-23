@@ -1,0 +1,103 @@
+---
+title: "panelsummary: regression tables with stacked models"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+#| message = FALSE
+library(kableExtra)
+library(modelsummary)
+library(fixest)
+library(lme4)
+```
+
+```{css, echo=FALSE}
+tbody {
+  font-size: .8em;
+}
+thead {
+  font-size: .8em;
+}
+```
+
+# Replicating a `panelsummary` package example
+
+```{r}
+glance_custom.fixest <- function(x, ...) {
+    data.table::data.table(`Mean of DV` = mean(insight::get_response(x)))
+}
+
+panels <- list(
+    "Panel A: MPG" = list(
+        feols(mpg ~  cyl | gear + carb, cluster = ~hp, data = mtcars),
+        feols(mpg ~  cyl | gear + carb + am, cluster = ~hp, data = mtcars)),
+    "Panel B: Displacement" = list(
+        feols(disp ~ cyl | gear + carb, cluster = ~hp, data = mtcars),
+        feols(disp ~ cyl | gear + carb + am, cluster = ~hp, data = mtcars))
+)
+
+panelsummary(
+    panels,
+    title = "Automated Mean of Dependent Variable",
+    gof_map = c("nobs", "Mean of DV"),
+    align = "lcc",
+    output = "kableExtra")
+
+```
+
+# {fixest} + {gt} + align
+
+```{r}
+f <- Sepal.Length ~ csw(Sepal.Width, Petal.Width)
+panels <- list(
+    Setosa = feols(f, data = subset(iris, Species == "setosa")),
+    Virginica = feols(f, data = subset(iris, Species == "virginica")),
+    Versicolor = feols(f, data = subset(iris, Species == "versicolor"))
+)
+gm <- c("vcov.type", "r.squared", "nobs", "FE: cyl")
+panelsummary(
+    panels,
+    output = "gt",
+    gof_map = gm,
+    align = "ldd")
+```
+
+# lm() + lmer() + {kableExtra}
+
+```{r}
+panels <- list(
+    "Ordinary Least Squares" = list(
+        lm(Sepal.Length ~ Sepal.Width, data = iris),
+        lm(Sepal.Length ~ Sepal.Width + Petal.Width, data = iris)),
+    "Mixed Effects" = list(
+        lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris),
+        lmer(Sepal.Length ~ Sepal.Width + Petal.Width + (1 | Species), data = iris))
+)
+panelsummary(panels, output = "kableExtra", gof_map = c("aic", "nobs"))
+```
+
+# Non-matching model names
+
+```{r}
+panels <- list(
+    "Ordinary Least Squares" = list(
+        "A" = lm(Sepal.Length ~ Sepal.Width, data = iris),
+        "B" = lm(Sepal.Length ~ Sepal.Width + Petal.Width, data = iris)),
+    "Mixed Effects" = list(
+        "A" = lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris),
+        "C" = lmer(Sepal.Length ~ Sepal.Width + Petal.Width + (1 | Species), data = iris))
+)
+panelsummary(panels, gof_map = c("aic", "nobs"))
+```
+
+# No GOF at all
+
+```{r}
+panelsummary(panels, gof_map = NA)
+```

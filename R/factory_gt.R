@@ -8,6 +8,7 @@
 factory_gt <- function(tab,
                        align = NULL,
                        hrule = NULL,
+                       hgroup = NULL,
                        notes = NULL,
                        title = NULL,
                        escape = TRUE,
@@ -26,13 +27,13 @@ factory_gt <- function(tab,
   idx_col <- ncol(tab)
   out <- gt::gt(tab, caption = title)
 
-
   # theme
   theme_ms <- getOption("modelsummary_theme_gt",
                         default = theme_ms_gt)
   out <- theme_ms(out,
                   output_format = settings_get("output_format"),
-                  hrule = hrule)
+                  hrule = hrule,
+                  hgroup = hgroup)
 
   # user-supplied notes at the bottom of table
   if (!is.null(notes)) {

@@ -195,9 +195,11 @@ modelsummary <- function(
   dots <- list(...)
 
   ## settings
-  settings_init(settings = list(
-     "function_called" = "modelsummary"
-  ))
+  if (!settings_equal("function_called", "panelsummary")) {
+    settings_init(settings = list(
+      "function_called" = "modelsummary"
+    ))
+  }
 
   # bug: deprecated `group` argument gets partial matched
   scall <- sys.call()
@@ -307,8 +309,12 @@ modelsummary <- function(
   term_order <- unique(unlist(lapply(est, function(x) x$term)))
   statistic_order <- unique(unlist(lapply(est, function(x) x$statistic)))
 
-  f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE, by = c(shape$group_name, "term", "statistic"))
-  est <- Reduce(f, est)
+  # "group" is from parameters
+  fun <- function(x, y) {
+    bycols <- intersect(colnames(x), colnames(y))
+    merge(x, y, all = TRUE, sort = FALSE, by = bycols)
+  }
+  est <- Reduce(fun, est)
 
   # warn that `shape` might be needed
   if (is.null(shape$group_name)) {
@@ -414,7 +420,7 @@ modelsummary <- function(
   # character for binding
   cols <- intersect(
     colnames(est),
-    c("group", "term", shape$group_name, "model", "statistic"))
+    c("term", shape$group_name, "model", "statistic"))
   for (col in cols) {
     est[[col]] <- as.character(est[[col]])
   }
@@ -492,7 +498,7 @@ modelsummary <- function(
   }
 
   # data.frame output keeps redundant info
-  if (isTRUE(dots$modelsummary_panel)) {
+  if (settings_equal("function_called", "panelsummary")) {
     tab <- redundant_labels(tab, "term")
   }
 
@@ -576,8 +582,8 @@ modelsummary <- function(
 
   # invisible return
   if (!is.null(settings_get("output_file")) ||
-      output == "jupyter" ||
-      (output == "default" && settings_equal("output_default", "jupyter"))) {
+      isTRUE(output == "jupyter") ||
+      (isTRUE(output == "default") && settings_equal("output_default", "jupyter"))) {
     settings_rm()
     return(invisible(out))
   # visible return

@@ -6,6 +6,7 @@
 factory_kableExtra <- function(tab,
                                align = NULL,
                                hrule = NULL,
+                               hgroup = NULL,
                                notes = NULL,
                                title = NULL,
                                escape = TRUE,
@@ -142,9 +143,11 @@ factory_kableExtra <- function(tab,
   # theme
   theme_ms <- getOption("modelsummary_theme_kableExtra",
                         default = theme_ms_kableExtra)
-  out <- theme_ms(out,
-                  output_format = settings_get("output_format"),
-                  hrule = hrule)
+  out <- theme_ms(
+    out,
+    output_format = settings_get("output_format"),
+    hrule = hrule,
+    hgroup = hgroup)
 
   # span: apply (not supported in markdown)
   if (!is.null(span_list) && settings_equal("output_format", c("kableExtra", "latex", "html"))) {
