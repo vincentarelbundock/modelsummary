@@ -161,7 +161,7 @@ test_that("sandwich vignette", {
     statistic_override = vc["Clustered"],
     stars = TRUE)
   expect_s3_class(tab, "data.frame")
-  expect_true("Clustered" %in% tab[["Model 1"]])
+  expect_true("Clustered" %in% tab[["(1)"]])
 })
 
 

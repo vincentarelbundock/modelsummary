@@ -6,7 +6,7 @@ requiet("fixest")
 test_that("fixest built in SE label", {
     mod <- feols(Euros ~ dist_km | Product + Destination + Origin, data = trade)
     tab <- modelsummary(mod, "data.frame")
-    expect_true("by: Product" %in% tab[["Model 1"]])
+    expect_true("by: Product" %in% tab[["(1)"]])
 })
 
 
@@ -28,7 +28,7 @@ test_that("simple model", {
   raw <- modelsummary(mod, "data.frame")
   expect_s3_class(raw, "data.frame")
   expect_equal(ncol(raw), 4)
-  expect_true("by: Species" %in% raw[["Model 1"]])
+  expect_true("by: Species" %in% raw[["(1)"]])
 })
 
 
@@ -48,12 +48,12 @@ test_that("gof_map standard errors with `vcov.type`", {
 test_that("fixest std.error labels", {
   mod <- feols(hp ~ mpg + drat, mtcars, cluster = "vs")
   tab <- modelsummary(mod, output = "data.frame")
-  expect_equal(tab[tab$term == "Std.Errors", "Model 1"], "by: vs")
+  expect_equal(tab[tab$term == "Std.Errors", "(1)"], "by: vs")
   tab <- modelsummary(mod, vcov = list(NULL), output = "data.frame")
-  expect_equal(tab[tab$term == "Std.Errors", "Model 1"], "by: vs")
+  expect_equal(tab[tab$term == "Std.Errors", "(1)"], "by: vs")
   tab <- modelsummary(mod, vcov = list(NULL, "iid"), output = "data.frame")
-  expect_equal(tab[tab$term == "Std.Errors", "Model 1"], "by: vs")
-  expect_equal(tab[tab$term == "Std.Errors", "Model 2"], "by: vs")
+  expect_equal(tab[tab$term == "Std.Errors", "(1)"], "by: vs")
+  expect_equal(tab[tab$term == "Std.Errors", "(2)"], "by: vs")
   # unnamed function includes no label
   tab1 <- modelsummary(mod,
                        vcov = vcov(mod, se = "standard"),
@@ -64,9 +64,9 @@ test_that("fixest std.error labels", {
   tab3 <- modelsummary(mod,
                        output = "data.frame",
                        vcov = list("test " = stats::vcov(mod, se = "standard")))
-  expect_true("Custom" %in% tab1[["Model 1"]])
-  expect_true("Custom" %in% tab2[["Model 1"]])
-  expect_true("test " %in% tab3[["Model 1"]])
+  expect_true("Custom" %in% tab1[["(1)"]])
+  expect_true("Custom" %in% tab2[["(1)"]])
+  expect_true("test " %in% tab3[["(1)"]])
 })
 
 
@@ -82,7 +82,7 @@ test_that("regression: issue #450", {
         estimate = "std.error",
         statistic = NULL,
         output = "dataframe")
-    expect_equal(as.numeric(tab[["Model 1"]]), se1, ignore_attr = TRUE)
+    expect_equal(as.numeric(tab[["(1)"]]), se1, ignore_attr = TRUE)
 
     se1 <- sqrt(diag(vcovHC(mod, type = "HC1")))
     se2 <- get_estimates(mod, vcov = "HC1")$std.error

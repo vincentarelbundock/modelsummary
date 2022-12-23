@@ -247,7 +247,7 @@ modelsummary <- function(
 
   # model names dictionary: use unique names for manipulation
   if (is.null(names(models))) {
-    modelsummary_model_labels <- getOption("modelsummary_model_labels", default = "model")
+    modelsummary_model_labels <- getOption("modelsummary_model_labels", default = "(arabic)")
     checkmate::assert_choice(
       modelsummary_model_labels,
       choices = c("model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)"))

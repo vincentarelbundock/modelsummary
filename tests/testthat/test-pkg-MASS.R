@@ -10,5 +10,5 @@ test_that("Issue #518", {
         statistic = NULL,
         gof_map = "none",
         vcov = list(NULL, ~cyl))))
-    expect_true(all(tab[["Model 1"]] != tab[["Model 2"]]))
+    expect_true(all(tab[["(1)"]] != tab[["(2)"]]))
 })
