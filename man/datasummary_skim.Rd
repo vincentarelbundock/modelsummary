@@ -86,8 +86,13 @@ See the Details and Examples sections below, and the vignettes on the
 \section{Global Options}{
 
 
-The behavior of \code{modelsummary} can be affected by setting global options:
+The behavior of \code{modelsummary} can be modified by setting global options. For example:
+
+\code{options(modelsummary_model_labels = "roman")}
+
+The available global options are:
 \itemize{
+\item \code{modelsummary_model_labels}
 \item \code{modelsummary_factory_default}
 \item \code{modelsummary_factory_latex}
 \item \code{modelsummary_factory_html}
@@ -96,6 +101,17 @@ The behavior of \code{modelsummary} can be affected by setting global options:
 \item \code{modelsummary_format_numeric_latex}
 \item \code{modelsummary_format_numeric_html}
 }
+
+The rest of this section describes each of the options above.
+\subsection{Model labels: default column names}{
+
+This global option changes the style of the default column headers:
+
+\code{options(modelsummary_model_labels = "roman")}
+
+The supported styles are: "model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""
+}
+
 \subsection{Table-making packages}{
 
 \code{modelsummary} supports 4 table-making packages: \code{kableExtra}, \code{gt},
@@ -105,8 +121,11 @@ change the default backend used for a specific file format, you can use
 the \code{options} function:
 
 \code{options(modelsummary_factory_html = 'kableExtra')}
+
 \code{options(modelsummary_factory_latex = 'gt')}
+
 \code{options(modelsummary_factory_word = 'huxtable')}
+
 \code{options(modelsummary_factory_png = 'gt')}
 }
 
@@ -119,7 +138,9 @@ and \code{broom}. By default, it uses \code{easystats} first and then falls back
 goodness-of-fit extracted by \emph{both} packages by setting:
 
 \code{options(modelsummary_get = "broom")}
+
 \code{options(modelsummary_get = "easystats")}
+
 \code{options(modelsummary_get = "all")}
 }
 
@@ -130,6 +151,7 @@ from the siunitx package. To prevent this behavior, or to enclose numbers
 in dollar signs (for LaTeX math mode), users can call:
 
 \code{options(modelsummary_format_numeric_latex = "plain")}
+
 \code{options(modelsummary_format_numeric_latex = "mathmode")}
 
 A similar option can be used to display numerical entries using MathJax in

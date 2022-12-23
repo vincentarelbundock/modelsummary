@@ -242,7 +242,23 @@ modelsummary <- function(
 
   # model names dictionary: use unique names for manipulation
   if (is.null(names(models))) {
-    model_names <- paste("Model", 1:number_of_models)
+    modelsummary_model_labels <- getOption("modelsummary_model_labels", default = "model")
+    checkmate::assert_choice(
+      modelsummary_model_labels,
+      choices = c("model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)"))
+    if (modelsummary_model_labels == "model") {
+      model_names <- paste("Model", 1:number_of_models)
+    } else if (grepl("arabic", modelsummary_model_labels)) {
+      model_names <- as.character(1:number_of_models)
+    } else if (grepl("letters", modelsummary_model_labels)) {
+      model_names <- LETTERS[1:number_of_models]
+    } else if (grepl("roman", modelsummary_model_labels)) {
+      model_names <- as.character(as.roman(1:number_of_models))
+    }
+    if (grepl("\\(", modelsummary_model_labels)) {
+      model_names <- sprintf("( %s )", model_names)
+    }
+
   } else {
     model_names <- names(models)
   }
