@@ -256,7 +256,7 @@ modelsummary <- function(
       model_names <- as.character(as.roman(1:number_of_models))
     }
     if (grepl("\\(", modelsummary_model_labels)) {
-      model_names <- sprintf("( %s )", model_names)
+      model_names <- sprintf("(%s)", model_names)
     }
 
   } else {
