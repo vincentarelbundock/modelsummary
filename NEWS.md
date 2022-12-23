@@ -1,5 +1,6 @@
 # modelsummary 1.2.0.9000
 
+* Round to significant digits on a per-term basis with "sig1", "sig2", "sig3", "sig4", etc.
 * Global option to change the default model labels (column headers):
   - options(modelsummary_model_labels = "roman")
   - The supported styles are: "model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""

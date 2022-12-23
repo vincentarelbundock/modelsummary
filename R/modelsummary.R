@@ -42,7 +42,9 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @param fmt determines how to format numeric values
 #' * integer: the number of digits to keep after the decimal: `format(x, digits = 1, nsmall = fmt, scientific = FALSE)`
 #' * function: returns a formatted character string. For example, the `format()` function can be used in combination with the `fmt` argument for full control of number formatting: number of digits, number of digits after the decimal, scientific notation, etc. See the Examples section below.
-#' * character: passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`
+#' * character: 
+#'   - "sig2" rounds to the 2nd significant digit, on a per-term basis, "sig3" to the 3rd, etc.
+#'   - Other strings are passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`
 #' * NULL: does not format numbers, which allows users to include function in the "glue" strings in the `estimate` and `statistic` arguments. 
 #' * A named list to format distinct elements of the table differently. Names correspond to column names produced by `get_estimates(model)` or `get_gof(model)`. Values are integers, characters, or functions, as described above. The `fmt` element is used as default for unspecified elements Ex: `fmt=list("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)`
 #' * A named list to format distinct parameters of the table differently. Names correspond to values in the `term` column of the `get_estimates(model)` output. The `fmt` element is used as default for unspecified elements Ex: `fmt=list("(Intercept)"=2, "hp""=1, "fmt"=3)`

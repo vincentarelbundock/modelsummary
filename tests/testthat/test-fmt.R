@@ -35,3 +35,12 @@ test_that("fmt function", {
   z <- modelsummary(mod, fmt=function(x) sprintf("%.4f", x), output="data.frame")
   expect_equal(known, z$OLS)
 })
+
+test_that("significant digits per term", {
+  mod <- lm(mpg ~ hp + drat + qsec, data = mtcars)
+  tab <- modelsummary(mod, output = "dataframe", fmt = "sig2", statistic = "conf.int", gof_map = NA)
+  expect_equal(tab[["Model 1"]], c("17.7", "[-8.9, 44.4]", "-0.058", "[-0.087, -0.029]", "4.4", "[1.8, 7.1]", "-0.28", "[-1.29,  0.72]"))
+  expect_error(
+    modelsummary(mod, fmt = "sig2", statistic = "statistic"),
+    regexp = "conf.int")
+})

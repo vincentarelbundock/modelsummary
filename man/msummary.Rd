@@ -46,7 +46,11 @@ msummary(
 \itemize{
 \item integer: the number of digits to keep after the decimal: \code{format(x, digits = 1, nsmall = fmt, scientific = FALSE)}
 \item function: returns a formatted character string. For example, the \code{format()} function can be used in combination with the \code{fmt} argument for full control of number formatting: number of digits, number of digits after the decimal, scientific notation, etc. See the Examples section below.
-\item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
+\item character:
+\itemize{
+\item "sig2" rounds to the 2nd significant digit, on a per-term basis, "sig3" to the 3rd, etc.
+\item Other strings are passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
+}
 \item NULL: does not format numbers, which allows users to include function in the "glue" strings in the \code{estimate} and \code{statistic} arguments.
 \item A named list to format distinct elements of the table differently. Names correspond to column names produced by \code{get_estimates(model)} or \code{get_gof(model)}. Values are integers, characters, or functions, as described above. The \code{fmt} element is used as default for unspecified elements Ex: \code{fmt=list("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)}
 \item A named list to format distinct parameters of the table differently. Names correspond to values in the \code{term} column of the \code{get_estimates(model)} output. The \code{fmt} element is used as default for unspecified elements Ex: \verb{fmt=list("(Intercept)"=2, "hp""=1, "fmt"=3)}
