@@ -253,7 +253,7 @@ modelsummary <- function(
     } else if (grepl("letters", modelsummary_model_labels)) {
       model_names <- LETTERS[1:number_of_models]
     } else if (grepl("roman", modelsummary_model_labels)) {
-      model_names <- as.character(as.roman(1:number_of_models))
+      model_names <- as.character(utils::as.roman(1:number_of_models))
     }
     if (grepl("\\(", modelsummary_model_labels)) {
       model_names <- sprintf("(%s)", model_names)
