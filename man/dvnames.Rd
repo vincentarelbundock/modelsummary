@@ -21,7 +21,7 @@ A convenience function for use with a regression model or list of regression mod
 m1 <- lm(mpg ~ hp, data = mtcars)
 m2 <- lm(mpg ~ hp + wt, data = mtcars)
 
-# Without dvnames, column names are Model 1 and Model 2
+# Without dvnames, column names are (1) and (2)
 modelsummary(list(m1, m2))
 
 # With dvnames, they are "mpg" and "mpg"

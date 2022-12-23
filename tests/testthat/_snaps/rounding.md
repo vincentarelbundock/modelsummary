@@ -26,7 +26,7 @@
       \centering
       \begin{tabular}[t]{lc}
       \toprule
-        & Model 1\\
+        & (1)\\
       \midrule
       (Intercept) & \num{24.708} [\num{18.292}, \num{31.124}]\\
        & (\num{3.132})\\

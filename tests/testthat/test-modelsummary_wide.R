@@ -52,7 +52,7 @@
 #   expect_s3_class(tmp, "data.frame")
 #   expect_equal(dim(tmp), c(6, 5))
 #   # no model label in gof for single model
-#   truth <- c("Model 1 (Intercept)", "Model 1 (Intercept)", "Model 1 var2", "Model 1 var2", "Num.Obs.", "AIC")
+#   truth <- c("(1) (Intercept)", "(1) (Intercept)", "(1) var2", "(1) var2", "Num.Obs.", "AIC")
 #   expect_equal(tmp$term, truth)
 # })
 
