@@ -31,6 +31,7 @@ panelsummary <- function(
     dots <- list(...)
 
     # sanity
+    sanity_stars(stars)
     checkmate::assert_list(panels, min.len = 2)
     if (any(c("shape", "group_map") %in% names(dots))) {
         msg <- "The `shape` and `group_map` arguments are not supported by `panelsummary()`."
@@ -123,6 +124,18 @@ panelsummary <- function(
         hgroup[[panel_names[i]]] <- c(sta[i], end[i])
     }
 
+    # stars
+    sanitize_output(output)
+    if (!isFALSE(stars) && !any(grepl("\\{stars\\}", c(estimate, statistic)))) {
+        stars_note <- make_stars_note(stars)
+        if (is.null(notes)) {
+            notes <- stars_note
+        } else {
+            notes <- c(stars_note, notes)
+        }
+        notes <- escape_string(notes)
+    }
+
     args <- modifyList(
         dots,
         list(
@@ -135,6 +148,7 @@ panelsummary <- function(
             align = align,
             notes = notes,
             title = title,
+            stars = stars,
             escape = escape,
             ...
     ))

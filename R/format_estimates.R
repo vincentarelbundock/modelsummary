@@ -67,7 +67,7 @@ format_estimates <- function(
   is_glue <- grepl("\\{", estimate)
   if (is_star) {
     if (!'p.value' %in% colnames(est)) {
-      stop('To use the `stars` argument, the `tidy` function must produce a column called "p.value"',
+      stop('To use the `stars` argument, the `get_estimates(model)` function must produce a column called "p.value"',
            call. = FALSE)
     }
     # we always want stars, regardless of argument value, in case there is a glue {stars}

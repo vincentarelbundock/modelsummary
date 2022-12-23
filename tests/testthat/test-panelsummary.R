@@ -15,6 +15,12 @@ test_that("informative errors", {
 })
 
 
+test_that("stars note", {
+    p <- suppressWarnings(panelsummary(panels, output = "markdown", stars = TRUE))
+    expect_true(any(grepl("Note", p)))
+})
+
+
 test_that("output formats: no validity", {
     p <- panelsummary(panels, output = "gt")
     expect_s3_class(p, "gt_tbl")
