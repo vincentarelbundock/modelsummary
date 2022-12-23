@@ -238,7 +238,7 @@ modelsummary <- function(
 
   # model names dictionary: use unique names for manipulation
   if (is.null(names(models))) {
-    model_names <- paste("Model", 1:number_of_models)
+    model_names <- as.character(as.roman(1:number_of_models))
   } else {
     model_names <- names(models)
   }

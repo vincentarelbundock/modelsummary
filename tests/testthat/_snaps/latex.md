@@ -6,7 +6,7 @@
       
       \begin{tabular}[t]{lcc}
       \toprule
-        & Model 1 & Model 2\\
+        & I & II\\
       \midrule
       (Intercept) & \num{324.082} & \num{278.515}\\
        & (\num{27.433}) & (\num{55.415})\\

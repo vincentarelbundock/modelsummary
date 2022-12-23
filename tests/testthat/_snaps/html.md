@@ -7,7 +7,7 @@
        <thead>
         <tr>
          <th style="text-align:left;">   </th>
-         <th style="text-align:center;"> Model 1 </th>
+         <th style="text-align:center;"> I </th>
         </tr>
        </thead>
       <tbody>

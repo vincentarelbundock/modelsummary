@@ -15,7 +15,7 @@ test_that("tidy.custom", {
     output = "data.frame",
     gof_omit = ".*",
     statistic = NULL)
-   expect_equal(tab[["Model 1"]], c("a", "b"))
+   expect_equal(tab[["I"]], c("a", "b"))
   rm("tidy.custom")
   rm("tidy_custom.custom")
 })

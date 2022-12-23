@@ -46,7 +46,7 @@
 #'
 #' add_rows = data.frame(
 #'   term = "factory(cyl)4",
-#'   model = "Model 1",
+#'   model = "I",
 #'   estimate = NA)
 #' attr(add_rows, "position") = 3
 #' modelplot(mod, add_rows = add_rows)

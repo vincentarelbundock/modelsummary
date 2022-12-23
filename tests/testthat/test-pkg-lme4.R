@@ -12,7 +12,7 @@ test_that("Issue #505", {
 
     skip("TODO: not sure why this doesn't work on some platforms")
     # 4 confidence intervals includes the random terms
-    expect_equal(sum(grepl("\\[", tab[["Model 1"]])), 4)
+    expect_equal(sum(grepl("\\[", tab[["I"]])), 4)
 })
 
 
