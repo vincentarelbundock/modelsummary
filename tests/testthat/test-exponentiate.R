@@ -51,23 +51,23 @@ test_that("exponentiate vector", {
     # coefficients
     tab <- modelsummary(mod, exponentiate = FALSE,
                         output = "data.frame", statistic = NULL, fmt = identity)
-    expect_equal(b, as.numeric(tab[["Model 1"]][1:2]), ignore_attr = TRUE)
-    expect_equal(b, as.numeric(tab[["Model 2"]][1:2]), ignore_attr = TRUE)
+    expect_equal(b, as.numeric(tab[["(1)"]][1:2]), ignore_attr = TRUE)
+    expect_equal(b, as.numeric(tab[["(2)"]][1:2]), ignore_attr = TRUE)
 
     tab <- modelsummary(mod, exponentiate = TRUE,
                         output = "data.frame", statistic = NULL, fmt = identity)
-    expect_equal(exp(b), as.numeric(tab[["Model 1"]][1:2]), ignore_attr = TRUE)
-    expect_equal(exp(b), as.numeric(tab[["Model 2"]][1:2]), ignore_attr = TRUE)
+    expect_equal(exp(b), as.numeric(tab[["(1)"]][1:2]), ignore_attr = TRUE)
+    expect_equal(exp(b), as.numeric(tab[["(2)"]][1:2]), ignore_attr = TRUE)
 
     # standard error
     tab <- modelsummary(mod, exponentiate = TRUE, output = "data.frame",
                         estimate = "std.error", statistic = NULL, fmt = identity)
-    expect_equal(exp(b) * se, as.numeric(tab[["Model 1"]][1:2]), ignore_attr = TRUE)
-    expect_equal(exp(b) * se, as.numeric(tab[["Model 2"]][1:2]), ignore_attr = TRUE)
+    expect_equal(exp(b) * se, as.numeric(tab[["(1)"]][1:2]), ignore_attr = TRUE)
+    expect_equal(exp(b) * se, as.numeric(tab[["(2)"]][1:2]), ignore_attr = TRUE)
 
     # vector
     tab <- modelsummary(mod, exponentiate = c(TRUE, FALSE),
                         output = "data.frame", statistic = NULL, fmt = identity)
-    expect_equal(exp(b), as.numeric(tab[["Model 1"]][1:2]), ignore_attr = TRUE)
-    expect_equal(b, as.numeric(tab[["Model 2"]][1:2]), ignore_attr = TRUE)
+    expect_equal(exp(b), as.numeric(tab[["(1)"]][1:2]), ignore_attr = TRUE)
+    expect_equal(b, as.numeric(tab[["(2)"]][1:2]), ignore_attr = TRUE)
 })
