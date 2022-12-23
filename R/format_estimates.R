@@ -122,7 +122,34 @@ format_estimates <- function(
       est[[n]] <- as.character(est[[n]])
     }
 
-    if (!is.character(est[[n]]) && !is.factor(est[[n]])) {
+    # significant digits per term
+    autoci <-
+      isTRUE(checkmate::check_list(fmt, len = 1)) &&
+      isTRUE(checkmate::check_string(fmt[["fmt"]], pattern = "^sig\\d+")) &&
+      !isTRUE(checkmate::check_string(fmt[["fmt"]], pattern = "%"))
+    cols <- c(estimate, statistic)
+    supported <- c("estimate", "std.error", "conf.int")
+    if (autoci && !all(cols %in% supported)) {
+      msg <- c(
+        'The `fmt` argument only supports `sig#` values when the `estimate` and `statistic` arguments are elements of:',
+        paste(supported, collapse = ", "))
+      insight::format_error(msg)
+    }
+    if ("conf.int" %in% cols) {
+      cols <- c(setdiff(cols, "conf.int"), "conf.low", "conf.high")
+    }
+
+    if (isTRUE(autoci)) {
+      fmt$fmt <- as.numeric(gsub("sig", "", fmt$fmt))
+      fmt1 <- fmt$fmt
+      fun <- function(x) format(x, digits = fmt1)
+      tmp <- lapply(data.frame(t(est[, cols, drop = FALSE])), fun)
+      tmp <- stats::setNames(as.data.frame(do.call("rbind", tmp)), cols)
+      for (col in colnames(tmp)) {
+        est[[col]] <- tmp[[col]]
+      }
+
+    } else if (!is.character(est[[n]]) && !is.factor(est[[n]])) {
       # per term rounding
       flag <- setdiff(names(fmt), "fmt")
       flag <- length(flag) > 0 && all(flag %in% est$term)
