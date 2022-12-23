@@ -6,5 +6,5 @@ test_that("Issue #547", {
       cluster = id, bladder1, robust = TRUE)
   tab <- modelsummary(mod, estimate = "p.value", fmt = 10, statistic = NULL, gof_map = NA, output = "dataframe")
   p <- coef(summary(mod))[, "Pr(>|z|)"]
-  expect_equal(as.numeric(tab[["Model 1"]]), p, ignore_attr = TRUE)
+  expect_equal(as.numeric(tab[["(1)"]]), p, ignore_attr = TRUE)
 })

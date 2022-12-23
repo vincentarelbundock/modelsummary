@@ -7,7 +7,7 @@
       \centering
       \begin{tabular}[t]{ldd}
       \toprule
-        & {Model 1} & {Model 2}\\
+        & {(1)} & {(2)}\\
       \midrule
       (Intercept) & 30.099 & 10.790\\
        & (1.634) & (5.078)\\
@@ -37,8 +37,8 @@
        <thead>
         <tr>
          <th style="text-align:left;">   </th>
-         <th style="text-align:center;"> Model 1 </th>
-         <th style="text-align:center;"> Model 2 </th>
+         <th style="text-align:center;"> (1) </th>
+         <th style="text-align:center;"> (2) </th>
         </tr>
        </thead>
       <tbody>
@@ -124,8 +124,8 @@
        <thead>
         <tr>
          <th style="text-align:left;">   </th>
-         <th style="text-align:center;"> Model 1 </th>
-         <th style="text-align:center;"> Model 2 </th>
+         <th style="text-align:center;"> (1) </th>
+         <th style="text-align:center;"> (2) </th>
         </tr>
        </thead>
       <tbody>
@@ -211,8 +211,8 @@
        <thead>
         <tr>
          <th style="text-align:left;">   </th>
-         <th style="text-align:center;"> Model 1 </th>
-         <th style="text-align:center;"> Model 2 </th>
+         <th style="text-align:center;"> (1) </th>
+         <th style="text-align:center;"> (2) </th>
         </tr>
        </thead>
       <tbody>
@@ -298,7 +298,7 @@
       \centering
       \begin{tabular}[t]{lcc}
       \toprule
-        & Model 1 & Model 2\\
+        & (1) & (2)\\
       \midrule
       (Intercept) & \num{30.099} & \num{10.790}\\
        & (\num{1.634}) & (\num{5.078})\\
@@ -328,7 +328,7 @@
       \centering
       \begin{tabular}[t]{lcc}
       \toprule
-        & Model 1 & Model 2\\
+        & (1) & (2)\\
       \midrule
       (Intercept) & $30.099$ & $10.790$\\
        & ($1.634$) & ($5.078$)\\
@@ -358,7 +358,7 @@
       \centering
       \begin{tabular}[t]{lcc}
       \toprule
-        & Model 1 & Model 2\\
+        & (1) & (2)\\
       \midrule
       (Intercept) & 30.099 & 10.790\\
        & (1.634) & (5.078)\\

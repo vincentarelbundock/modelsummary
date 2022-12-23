@@ -43,7 +43,7 @@ test_that("tidy_custom.glm", {
     output = "data.frame", 
     gof_omit = "",
     statistic = NULL)
-  expect_equal(unname(out[["Model 1"]]), c("-", "+"))
+  expect_equal(unname(out[["(1)"]]), c("-", "+"))
   rm("tidy_custom.glm", envir=.GlobalEnv)
 })
 
@@ -61,7 +61,7 @@ test_that("tidy_custom.glm partial term names", {
     output = "data.frame", 
     gof_omit = "",
     statistic = NULL)
-  expect_equal(unname(out[["Model 1"]]), c("3.142", "0.307"))
+  expect_equal(unname(out[["(1)"]]), c("3.142", "0.307"))
   rm("tidy_custom.glm", envir=.GlobalEnv)
 })
 

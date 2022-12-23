@@ -17,7 +17,7 @@ test_that("Issue 513", {
             output = "data.frame",
             statistic = "conf.int",
             conf_level = .9)
-    expect_true(any(grepl("\\[", tab[["Model 1"]])))
+    expect_true(any(grepl("\\[", tab[["(1)"]])))
 
     # faster
     est <- get_estimates(mod, conf_level = NULL)

@@ -773,7 +773,7 @@
       \centering
       \begin{tabular}[t]{lccc}
       \toprule
-        & Model 1 & Model 2 & Model 3\\
+        & (1) & (2) & (3)\\
       \midrule
       disp\_x & \num{-0.041} & \num{-0.018} & \num{-0.018}\\
        & (\num{0.005}) & (\num{0.009}) & (\num{0.009})\\
@@ -800,7 +800,7 @@
       \centering
       \begin{tabular}[t]{lccc}
       \toprule
-        & Model 1 & Model 2 & Model 3\\
+        & (1) & (2) & (3)\\
       \midrule
       disp\_x & \num{-0.041} & \num{-0.018} & \num{-0.018}\\
        & (\num{0.005}) & (\num{0.009}) & (\num{0.009})\\
