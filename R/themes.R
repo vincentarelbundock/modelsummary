@@ -35,10 +35,18 @@ theme_ms_kableExtra <- function(tab,
     for (i in seq_along(hgroup)) {
       out <- kableExtra::group_rows(
                 out,
+                bold = FALSE,
+                italic = TRUE,
                 group_label = names(hgroup)[i],
                 start_row = hgroup[[i]][1],
-                end_row = hgroup[[i]][2] )
+                end_row = hgroup[[i]][2],
+                latex_gap_space = "0.3cm",
+                hline_after = FALSE)
     }
+    out <- kableExtra::row_spec(
+      out,
+      row = hgroup[[length(hgroup)]][2],
+      hline_after = TRUE)
   }
 
   return(out)

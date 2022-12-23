@@ -120,7 +120,7 @@ panelsummary <- function(
     end <- cumsum(panels_nrow)
     sta <- c(0, head(end, -1)) + 1
     hgroup <- list()
-    for (i in seq_along(panel_names)) {
+    for (i in head(seq_along(panel_names), -1)) {
         hgroup[[panel_names[i]]] <- c(sta[i], end[i])
     }
 

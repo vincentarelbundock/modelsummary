@@ -64,6 +64,7 @@ gm <- c("vcov.type", "r.squared", "nobs", "FE: cyl")
 panelsummary(
     panels,
     output = "gt",
+    stars = TRUE,
     gof_map = gm,
     align = "ldd")
 ```
@@ -101,3 +102,25 @@ panelsummary(panels, gof_map = c("aic", "nobs"))
 ```{r}
 panelsummary(panels, gof_map = NA)
 ```
+
+# Rmarkdown example
+
+````
+---
+output: pdf_document
+---
+
+```{r}
+library("fixest")
+library("modelsummary")
+panels <- list(
+    "Panel A: MPG" = list(
+        feols(mpg ~  cyl | gear + carb, cluster = ~hp, data = mtcars),
+        feols(mpg ~  cyl | gear + carb + am, cluster = ~hp, data = mtcars)),
+    "Panel B: Displacement" = list(
+        feols(disp ~ cyl | gear + carb, cluster = ~hp, data = mtcars),
+        feols(disp ~ cyl | gear + carb + am, cluster = ~hp, data = mtcars))
+)
+panelsummary(panels, gof_map = c("nobs", "r.squared"))
+```
+````
