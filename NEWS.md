@@ -1,12 +1,20 @@
 # modelsummary 1.2.0.9000
 
-* Round to significant digits on a per-term basis with "s1", "s2", "s3", etc.
-* Global option to change the default model labels (column headers):
-  - options(modelsummary_model_labels = "roman")
-  - The supported styles are: "model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""
-* Better integration with the `marginaleffects` package.
-* `fmt` can format different parameters differently with a named list.
+Breaking change:
+
+* The default column label style in `modelsummary()` has changed from "Model 1" to "(1)". The benefits are: labels are no longer in English by default; use less horizontal space; eliminate the "Model" redundancy. Unfortunately, this could break code in some edge cases where users rely on column names to manipulate tables. The old behavior can be restored by calling: `options(modelsummary_model_labels="model")`
+
+New features:
+
+* `fmt` can round to significant digits on a per-term basis with `fmt="s1"`, `fmt="s2"`, etc.
+* `fmt` can format different parameters differently with a named list:
+  - `fmt=list("(Intercept)" = 2, "hp" = 3)`
+  - `fmt=list("estimate" = 2, "std.error" = 3)`
+* New styles for default column labels in `modelsummary`, such as Roman Numerals or letters in parentheses.
+  - Set the style with a global option: `options(modelsummary_model_labels = "roman")`
+  - Supported styles: "model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""
 * `modelplot(draw = FALSE)` now returns a `p.value` column. This allows conditional aesthetics (see the `modelplot` vignette).
+* Better integration with the `marginaleffects` package.
 
 # modelsummary 1.2.0
 
