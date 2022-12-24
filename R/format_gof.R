@@ -17,16 +17,13 @@ format_gof <- function(gof, fmt, gof_map, ...) {
   # formating arguments priority: `fmt` > `gof_map` > 3
   # rounding() escapes the GOF values. we escape the GOF names at the end
   for (g in gof_map) {
-    if (!g$raw %in% names(fmt)) {
-      fmt[[g$raw]] <- g$fmt
-    }
-  }
-  for (g in colnames(gof)) {
-    if (g %in% names(fmt)) {
-      gof[[g]] <- rounding(gof[[g]], fmt[[g]])
-    } else {
-      # set by default in `sanitize_fmt()`
-      gof[[g]] <- rounding(gof[[g]], fmt[["fmt"]])
+    if (is.numeric(gof[[g$raw]])) {
+      if (g$raw %in% colnames(gof)) {
+        fun <- fmt_decimal(digits = g$fmt)
+        gof[[g$raw]] <- fun(gof[[g$raw]])
+      } else {
+        gof[[g$raw]] <- fmt(gof[[g$raw]])
+      }
     }
   }
 
