@@ -267,11 +267,11 @@ modelsummary <- function(
     if (grepl("\\(", modelsummary_model_labels)) {
       model_names <- sprintf("(%s)", model_names)
     }
-
   } else {
     model_names <- names(models)
   }
   model_names <- pad(model_names)
+
   if (isTRUE(escape)) {
      model_names <- escape_string(model_names)
   }

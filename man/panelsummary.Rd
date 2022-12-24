@@ -2,7 +2,7 @@
 % Please edit documentation in R/panelsummary.R
 \name{panelsummary}
 \alias{panelsummary}
-\title{panelsummary}
+\title{Model summary tables, stacked in panels}
 \usage{
 panelsummary(
   panels,
@@ -29,7 +29,11 @@ panelsummary(
 )
 }
 \arguments{
-\item{panels}{list of lists of lists of lists}
+\item{panels}{a nested list of models
+\itemize{
+\item Unnamed nested list with 2 panels: \code{list(list(model1, model2), list(model3, model4))}
+\item Named nested list with 2 panels: \code{list("Panel A" = list(model1, model2), "Panel B" = list(model3, model4))}
+}}
 
 \item{output}{filename or object type (character string)
 \itemize{
@@ -42,13 +46,21 @@ panelsummary(
 
 \item{fmt}{determines how to format numeric values
 \itemize{
-\item integer: the number of digits to keep after the decimal: \code{format(x, digits = 1, nsmall = fmt, scientific = FALSE)}
+\item integer: Number of decimal digits
+\item string:
+\itemize{
+\item "s#": Number of significant digits. "s2" rounds to the 2nd significant digit, etc.
+\item All other strings are passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
+}
 \item function: returns a formatted character string. For example, the \code{format()} function can be used in combination with the \code{fmt} argument for full control of number formatting: number of digits, number of digits after the decimal, scientific notation, etc. See the Examples section below.
-\item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
+\item Named list:
+\itemize{
+\item Per-statistic rounding: Names correspond to column names produced by \code{get_estimates(model)} or \code{get_gof(model)}. Ex: \code{fmt=list("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)}
+\item Per-terms rounding: Names correspond to values in the \code{term} column of the \code{get_estimates(model)} output. Ex: \code{fmt=list("(Intercept)"=2, "hp"=1, "fmt"=3)}
+\item The \code{fmt} element of the list is used as default for unspecified elements
+}
 \item NULL: does not format numbers, which allows users to include function in the "glue" strings in the \code{estimate} and \code{statistic} arguments.
-\item A named list to format distinct elements of the table differently. Names correspond to column names produced by \code{get_estimates(model)} or \code{get_gof(model)}. Values are integers, characters, or functions, as described above. The \code{fmt} element is used as default for unspecified elements Ex: \code{fmt=list("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)}
-\item A named list to format distinct parameters of the table differently. Names correspond to values in the \code{term} column of the \code{get_estimates(model)} output. The \code{fmt} element is used as default for unspecified elements Ex: \verb{fmt=list("(Intercept)"=2, "hp""=1, "fmt"=3)}
-\item LaTeX output: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command, which requires the \code{siunitx} package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
+\item Note on LaTeX output: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command, which requires the \code{siunitx} package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 }}
 
 \item{estimate}{a single string or a character vector of length equal to the
@@ -196,5 +208,18 @@ prevent the file from compiling/displaying. This setting does not affect caption
 }}
 }
 \description{
-panelsummary
+Display the results from several statistical models in "panels": side-by-side
+and stacked on top of each other. This function supports dozens of statistical
+models, and it can produce tables in HTML, LaTeX, Word, Markdown, PDF,
+PowerPoint, Excel, RTF, JPG, or PNG. The appearance of the tables can be
+customized extensively by specifying the \code{output} argument, and by using
+functions from one of the supported table customization packages:
+\code{kableExtra}, \code{gt}, \code{flextable}, \code{huxtable}, \code{DT}. For more information, see
+the Details and Examples sections below, and the vignettes on the
+\code{modelsummary} website:
+https://vincentarelbundock.github.io/modelsummary/
+\itemize{
+\item \href{https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html}{The \code{modelsummary} Vignette includes dozens of examples of tables with extensive customizations.}
+\item \href{https://vincentarelbundock.github.io/modelsummary/articles/appearance.html}{The Appearance Vignette shows how to modify the look of tables.}
+}
 }

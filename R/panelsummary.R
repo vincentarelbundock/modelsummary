@@ -1,10 +1,25 @@
-#' panelsummary
+#' Model summary tables, stacked in panels
 #' 
+#' Display the results from several statistical models in "panels": side-by-side
+#' and stacked on top of each other. This function supports dozens of statistical
+#' models, and it can produce tables in HTML, LaTeX, Word, Markdown, PDF,
+#' PowerPoint, Excel, RTF, JPG, or PNG. The appearance of the tables can be
+#' customized extensively by specifying the `output` argument, and by using
+#' functions from one of the supported table customization packages:
+#' `kableExtra`, `gt`, `flextable`, `huxtable`, `DT`. For more information, see
+#' the Details and Examples sections below, and the vignettes on the
+#' `modelsummary` website:
+#' https://vincentarelbundock.github.io/modelsummary/
+#' * [The `modelsummary` Vignette includes dozens of examples of tables with extensive customizations.](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html)
+#' * [The Appearance Vignette shows how to modify the look of tables.](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html)
+#'
+#' @param panels a nested list of models
+#' * Unnamed nested list with 2 panels: `list(list(model1, model2), list(model3, model4))`
+#' * Named nested list with 2 panels: `list("Panel A" = list(model1, model2), "Panel B" = list(model3, model4))`
 #' @inheritParams modelsummary
-#' @param panels list of lists of lists of lists
 #' @export
 panelsummary <- function(
-    panels, 
+    panels,
     output      = "default",
     fmt         = 3,
     estimate    = "estimate",
@@ -38,11 +53,31 @@ panelsummary <- function(
         insight::format_error(msg)
     }
 
+    number_of_panels <- length(panels)
+
     # panel names
-    panel_names <- names(panels)
-    if (is.null(panel_names)) {
-        panel_names <- paste("Panel", seq_along(panels))
+    # model names dictionary: use unique names for manipulation
+    if (is.null(names(panels))) {
+        modelsummary_panel_labels <- getOption("modelsummary_panel_labels", default = "panel")
+        checkmate::assert_choice(
+            modelsummary_panel_labels,
+            choices = c("panel", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)"))
+        if (modelsummary_panel_labels == "panel") {
+            panel_names <- paste("Panel", LETTERS[1:number_of_panels])
+        } else if (grepl("arabic", modelsummary_panel_labels)) {
+            panel_names <- as.character(1:number_of_panels)
+        } else if (grepl("letters", modelsummary_panel_labels)) {
+            panel_names <- LETTERS[1:number_of_panels]
+        } else if (grepl("roman", modelsummary_panel_labels)) {
+            panel_names <- as.character(utils::as.roman(1:number_of_panels))
+        }
+        if (grepl("\\(", modelsummary_panel_labels)) {
+            panel_names <- sprintf("(%s)", panel_names)
+        }
+    } else {
+        panel_names <- names(panels)
     }
+    panel_names <- pad(panel_names)
 
     # panel lists to tables
     panels_list <- list()
