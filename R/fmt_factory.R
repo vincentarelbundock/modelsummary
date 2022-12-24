@@ -110,9 +110,9 @@ fmt_decimal <- function(digits = 3) {
                 if (n == "p.value") {
                     pdigits <- max(digits, 3)
                     # TODO: round p values
-                    x[[n]] <- format(x[[n]], nsmall = digits, drop0trailing = FALSE)
+                    x[[n]] <- format(round(x[[n]], digits), nsmall = digits, drop0trailing = FALSE)
                 } else if (is.numeric(x[[n]])) {
-                    x[[n]] <- format(x[[n]], nsmall = digits, drop0trailing = FALSE)
+                    x[[n]] <- format(round(x[[n]], digits), nsmall = digits, drop0trailing = FALSE)
                 }
                 x[[n]] <- rounding_clean(x[[n]])
             }
@@ -120,7 +120,7 @@ fmt_decimal <- function(digits = 3) {
         # numeric vector
         } else if (isTRUE(checkmate::check_numeric(x))) {
             # TODO: check this
-             x <- format(x, nsmall = digits, drop0trailing = FALSE)
+             x <- format(round(x, digits), nsmall = digits, drop0trailing = FALSE)
              x <- rounding_clean(x)
 
         # unsupported
