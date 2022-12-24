@@ -31,7 +31,18 @@ msummary(
 )
 }
 \arguments{
-\item{models}{a model or (optionally named) list of models}
+\item{models}{a model or a (named) list of models
+\itemize{
+\item Single model: \code{modelsummary(model)}
+\item Unnamed list: \code{modelsummary(list(model1, model2))}
+\itemize{
+\item Models are labelled automatically. The default label style can be altered by setting a global option. See below.
+}
+\item Named list: \code{modelsummary(list("A"=model1, "B"=model2))}
+\itemize{
+\item Models are labelled using the list names.
+}
+}}
 
 \item{output}{filename or object type (character string)
 \itemize{

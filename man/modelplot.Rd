@@ -20,7 +20,18 @@ modelplot(
 )
 }
 \arguments{
-\item{models}{a model or (optionally named) list of models}
+\item{models}{a model or a (named) list of models
+\itemize{
+\item Single model: \code{modelsummary(model)}
+\item Unnamed list: \code{modelsummary(list(model1, model2))}
+\itemize{
+\item Models are labelled automatically. The default label style can be altered by setting a global option. See below.
+}
+\item Named list: \code{modelsummary(list("A"=model1, "B"=model2))}
+\itemize{
+\item Models are labelled using the list names.
+}
+}}
 
 \item{conf_level}{numeric value between 0 and 1. confidence level to use for
 confidence intervals. Setting this argument to \code{NULL} does not extract
