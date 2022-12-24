@@ -110,79 +110,22 @@ format_estimates <- function(
     }
   }
 
+  ## group names should be raw characters; we don't want to round cyl=4 as 4.000
+  for (n in colnames(est)) {
+    if (n %in% shape$group_name) {
+      est[[n]] <- as.character(est[[n]])
+    }
+  }
+
   ## round all
   ## ensures that the reshape doesn't produce incompatible types
   ## exclude factors and characters, otherwise `rounding` will escape them
   ## which is premature since we then call coef_map
-  for (n in colnames(est)) {
 
-    ## group names should be raw characters; we don't want to round cyl=4 as 4.000
-    if (n %in% shape$group_name) {
-      est[[n]] <- as.character(est[[n]])
-    }
-
-    # significant digits per term
-    autoci <-
-      isTRUE(checkmate::check_list(fmt, len = 1)) &&
-      isTRUE(checkmate::check_string(fmt[["fmt"]], pattern = "^s\\d+$")) &&
-      !isTRUE(checkmate::check_string(fmt[["fmt"]], pattern = "%"))
-    cols <- c(estimate, statistic)
-    supported <- c("estimate", "std.error", "conf.int")
-    if (autoci && !all(cols %in% supported)) {
-      msg <- c(
-        'The `fmt` argument only supports `sig#` values when the `estimate` and `statistic` arguments are elements of:',
-        paste(supported, collapse = ", "))
-      insight::format_error(msg)
-    }
-    if ("conf.int" %in% cols) {
-      cols <- c(setdiff(cols, "conf.int"), "conf.low", "conf.high")
-    }
-
-    if (isTRUE(autoci)) {
-      fmt$fmt <- as.numeric(gsub("^s", "", fmt$fmt))
-      fmt1 <- fmt$fmt
-      fun <- function(x) format(x, digits = fmt1)
-      tmp <- lapply(data.frame(t(est[, cols, drop = FALSE])), fun)
-      tmp <- stats::setNames(as.data.frame(do.call("rbind", tmp)), cols)
-      for (col in colnames(tmp)) {
-        est[[col]] <- tmp[[col]]
-      }
-
-    } else if (!is.character(est[[n]]) && !is.factor(est[[n]])) {
-      # per term rounding
-      flag <- setdiff(names(fmt), "fmt")
-      flag <- length(flag) > 0 && all(flag %in% est$term)
-      if (isTRUE(flag)) {
-        tmp <- as.list(est[[n]])
-        idx <- match(est$term, names(fmt))
-        for (i in seq_along(idx))
-          if (!is.na(idx[i])) {
-            tmp[[i]] <- rounding(tmp[[i]], fmt[[i]])
-          } else {
-            tmp[[i]] <- rounding(tmp[[i]], fmt[["fmt"]])
-          }
-          est[[n]] <- as.vector(tmp)
-          fmt1 <- fmt[["fmt"]]
-
-      # per statistic rounding
-      } else if (n %in% names(fmt)) {
-        fmt1 <- fmt[[n]]
-
-      # normal rounding
-      } else {
-        if (n == "p.value" && is.numeric(fmt[["fmt"]])) {
-          pdigits <- -max(fmt[["fmt"]], 3)
-          fmt1 <- function(k) rounding(k, fmt = fmt$fmt, pval = TRUE)
-        } else {
-          fmt1 <- fmt[["fmt"]]
-        }
-      }
-
-      # keep as numeric for glue functions
-      if (!is.null(fmt1)) {
-        est[[n]] <- rounding(est[[n]], fmt1)
-      }
-    }
+  if (inherits(fmt, "fmt_factory")) {
+    est <- fmt(est)
+  } else {
+    stop("must use fmt_factory")
   }
 
   # extract estimates (there can be several)
