@@ -119,7 +119,7 @@ datasummary_skim_dataset <- function(
   out <- c(
     Rows = rounding(nrow(data)),
     Columns = rounding(ncol(data)),
-    # `# Binary` = rounding(sum(sapply(data, is.binary)), 0),
+    # `# Binary` = rounding(sum(sapply(data, is.binary))),
     `# Character` = rounding(sum(sapply(data, is.character))),
     `# Factor` = rounding(sum(sapply(data, is.factor))),
     `# Logical` = rounding(sum(sapply(data, is.logical))),
@@ -384,7 +384,7 @@ datasummary_skim_categorical <- function(
             call. = FALSE)
   }
 
-  pctformat <- function(x) rounding(x, fmt)
+  pctformat <- sanitize_fmt(fmt)
   f <- All(dat_new, numeric = FALSE, factor = TRUE, logical = TRUE, character = TRUE) ~
        (N = 1) * Format() + (`%` = Percent()) * Format(pctformat())
 

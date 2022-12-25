@@ -11,11 +11,12 @@ test_that("exponentiate is a flag", {
 test_that("logit coefficients exponentiate", {
 
     tab <- modelsummary(fit, gof_omit = ".*", estimate = "estimate", statistic = NULL, output = "dataframe", exponentiate = TRUE)
-    x <- c("0.0002", "1.448", "2.078", "2.017")
+    x <- c("0.000", "1.448", "2.078", "2.017")
     expect_equal(tab[[4]], x)
+    tab <- modelsummary(fit, gof_omit = ".*", estimate = "estimate", statistic = NULL, output = "dataframe", exponentiate = TRUE)
 
     tab <- modelsummary(fit, gof_omit = ".*", estimate = "conf.low", statistic = NULL, output = "dataframe", exponentiate = TRUE)
-    x <- c("2e-09", "1.026", "0.130", "0.044")
+    x <- c("0.000", "1.026", "0.130", "0.044")
     expect_equal(tab[[4]], x)
 
     tab <- modelsummary(fit, gof_omit = ".*", estimate = "conf.high", statistic = NULL, output = "dataframe", exponentiate = TRUE)
@@ -30,7 +31,7 @@ test_that("vcov", {
     requiet("sandwich")
     b <- coef(fit)
     se  <- sqrt(diag(vcovCL(fit, ~cyl)))
-    x <- c("0.0002", "1.448", "2.078", "2.017")
+    x <- c("0.000", "1.448", "2.078", "2.017")
     tab <- modelsummary(fit, vcov = ~cyl, gof_omit = ".*", estimate = "estimate",
                         statistic = NULL, output = "dataframe",
                         exponentiate = TRUE)

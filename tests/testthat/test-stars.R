@@ -129,7 +129,7 @@ test_that("Issue #532: extraneous stars", {
     output = "dataframe",
     shape = term + model ~ statistic,
     statistic = c("std.error", "{p.value}{stars}"),
-    fmt = list(estimate = 3, p.value = 2))
+    fmt = fmt_statistic(estimate = 3, p.value = 2))
   expect_false(any(grepl("\\*", tab[["Est."]])))
   expect_true(any(grepl("\\*", tab[[6]])))
 })

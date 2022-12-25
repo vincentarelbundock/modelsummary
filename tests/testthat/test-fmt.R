@@ -38,9 +38,9 @@ test_that("fmt function", {
 
 test_that("significant digits per term", {
   mod <- lm(mpg ~ hp + drat + qsec, data = mtcars)
-  tab <- modelsummary(mod, output = "dataframe", fmt = "s2", statistic = "conf.int", gof_map = NA)
-  expect_equal(tab[["(1)"]], c("17.7", "[-8.9, 44.4]", "-0.058", "[-0.087, -0.029]", "4.4", "[1.8, 7.1]", "-0.28", "[-1.29,  0.72]"))
+  tab <- modelsummary(mod, output = "dataframe", fmt = fmt_significant(2), statistic = "conf.int", gof_map = NA)
+  expect_equal(tab[["(1)"]], c("17.7", "[-8.9, 44.4]", "-0.058", "[-0.087, -0.029]", "4.4", "[1.8, 7.1]", "-0.28", "[-1.29, 0.72]"))
   expect_error(
-    modelsummary(mod, fmt = "s2", statistic = "statistic"),
+    modelsummary(mod, fmt = fmt_significant(2), statistic = "statistic"),
     regexp = "conf.int")
 })

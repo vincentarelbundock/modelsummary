@@ -1,8 +1,5 @@
-## always exclude factors and characters, otherwise `rounding` will escape them
-## which is premature since we then call coef_map
-
-# TODO: fmt_string
-# TODO: fmt_factor
+# TODO: p values
+# TODO: fmt_significant should still work for DF where there is no "term" column
 
 fmt_statistic <- function(..., default = 3) {
 
@@ -101,18 +98,30 @@ fmt_identity <- function(...) {
 }
 
 
-fmt_decimal <- function(digits = 3) {
+fmt_decimal <- function(digits = 3, pdigits = NULL) {
+    if (is.null(pdigits)) {
+        pdigits <- digits
+    }
     out <- function(x) {
-
         # data frame
         if (isTRUE(checkmate::check_data_frame(x))) {
             for (n in colnames(x)) {
-                if (n == "p.value") {
-                    pdigits <- max(digits, 3)
-                    # TODO: round p values
-                    x[[n]] <- format(round(x[[n]], digits), nsmall = digits, drop0trailing = FALSE)
-                } else if (is.numeric(x[[n]])) {
-                    x[[n]] <- format(round(x[[n]], digits), nsmall = digits, drop0trailing = FALSE)
+                if (is.numeric(x[[n]])) {
+                    if (n == "p.value") {
+                        th <- 10^-pdigits
+                        x[[n]] <- ifelse(
+                            x[[n]] < th,
+                            paste0("<", format(round(th, pdigits), trim = TRUE)),
+                            format(round(x[[n]], pdigits), nsmall = pdigits, trim = TRUE))
+                    } else {
+                        x[[n]] <- format(round(x[[n]], digits), nsmall = digits, drop0trailing = FALSE, trim = TRUE)
+                    }
+                } else {
+                    x[[n]] <- as.character(x[[n]])
+                    ## e scape
+                    if (settings_equal("escape", TRUE)) {
+                        x[[n]] <- escape_string(x[[n]])
+                    }
                 }
                 x[[n]] <- fmt_clean(x[[n]])
             }
@@ -120,13 +129,8 @@ fmt_decimal <- function(digits = 3) {
         # numeric vector
         } else if (isTRUE(checkmate::check_numeric(x))) {
             # TODO: check this
-             x <- format(round(x, digits), nsmall = digits, drop0trailing = FALSE)
-             x <- fmt_clean(x)
-
-        # unsupported
-        } else {
-            msg <- "`fmt_decimal()` only supports numeric vectors and data frames."
-            insight::format_error(msg)
+            x <- format(round(x, digits), nsmall = digits, drop0trailing = FALSE, trim = TRUE)
+            x <- fmt_clean(x)
         }
 
         return(x)
@@ -152,11 +156,6 @@ fmt_sprintf <- function(fmt) {
         } else if (isTRUE(checkmate::check_numeric(x))) {
             x <- sprintf(fmt, x)
             x <- fmt_clean(x)
-
-        # unsupported
-        } else {
-            msg <- "`fmt_sprintf()` only supports numeric vectors and data frames."
-            insight::format_error(msg)
         }
 
         return(x)
@@ -182,10 +181,6 @@ fmt_function <- function(fun) {
             x <- fun(x)
             x <- fmt_clean(x)
 
-        # unsupported
-        } else {
-            msg <- "`fmt_function()` only supports numeric vectors and data frames."
-            insight::format_error(msg)
         }
 
         return(x)
@@ -210,7 +205,7 @@ fmt_significant <- function(digits = 2) {
         cols <- c("estimate", "std.error", "conf.low", "conf.high")
         cols <- intersect(colnames(x), cols)
         tmp <- x[, cols, drop = FALSE]
-        tmp <- apply(tmp, 1, FUN = function(x) format(x, digits = digits))
+        tmp <- apply(tmp, 1, FUN = function(x) format(x, digits = digits, trim = TRUE))
         tmp <- as.data.frame(t(tmp), col.names = cols)
         for (n in colnames(tmp)) {
             z[[n]] <- tmp[[n]]
@@ -223,6 +218,10 @@ fmt_significant <- function(digits = 2) {
 
 
 fmt_clean <- function(x) {
+    if (is.factor(x) || is.logical(x) || is.character(x)) {
+        x <- as.character(x)
+    }
+
     # Remove weird numbers before wrapping in siunitx
     out <- gsub("^NA$|^NaN$|^-Inf$|^Inf$", "", x)
 
@@ -247,5 +246,9 @@ fmt_clean <- function(x) {
             out <- sprintf("$%s$", out)
         }
     }
+
+    # empty siunitx
+    out <- gsub("\\\\num\\{\\}", "", out)
+
     return(out)
 }

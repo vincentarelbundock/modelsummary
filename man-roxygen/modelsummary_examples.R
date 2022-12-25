@@ -63,7 +63,7 @@
 #' m <- lm(mpg ~ qsec + factor(cyl), data = mtcars)
 #' modelsummary(
 #'     m,
-#'     fmt = list("(Intercept)" = 0, "qsec" = 2, "fmt" = 4)
+#'     fmt = fmt_term("(Intercept)" = 0, "qsec" = 2, "default" = 4)
 #' )
 #' 
 #' # coef_rename

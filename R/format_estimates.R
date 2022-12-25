@@ -129,6 +129,7 @@ format_estimates <- function(
     stop("must use fmt_factory")
   }
 
+
   # extract estimates (there can be several)
   for (i in seq_along(estimate_glue)) {
     s <- estimate_glue[i]
@@ -202,6 +203,7 @@ format_estimates <- function(
   # drop empty rows (important for broom.mixed which produces group
   # estimates without standard errors)
   est <- est[!est$modelsummary_value %in% c("", "()", "(NA)"), ]
+
 
   # output
   return(est)

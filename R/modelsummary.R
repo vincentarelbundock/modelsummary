@@ -51,8 +51,8 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   - All other strings are passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`
 #' * function: returns a formatted character string. For example, the `format()` function can be used in combination with the `fmt` argument for full control of number formatting: number of digits, number of digits after the decimal, scientific notation, etc. See the Examples section below.
 #' * Named list:
-#'   - Per-statistic rounding: Names correspond to column names produced by `get_estimates(model)` or `get_gof(model)`. Ex: `fmt=list("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)`
-#'   - Per-terms rounding: Names correspond to values in the `term` column of the `get_estimates(model)` output. Ex: `fmt=list("(Intercept)"=2, "hp"=1, "fmt"=3)`
+#'   - Per-statistic rounding: Names correspond to column names produced by `get_estimates(model)` or `get_gof(model)`. Ex: `fmt=fmt_statistic("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)`
+#'   - Per-terms rounding: Names correspond to values in the `term` column of the `get_estimates(model)` output. Ex: `fmt=fmt_term("(Intercept)"=2, "hp"=1, "fmt"=3)`
 #'   - The `fmt` element of the list is used as default for unspecified elements
 #' * NULL: does not format numbers, which allows users to include function in the "glue" strings in the `estimate` and `statistic` arguments. 
 #' * Note on LaTeX output: To ensure proper typography, all numeric entries are enclosed in the `\num{}` command, which requires the `siunitx` package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
@@ -588,7 +588,6 @@ modelsummary <- function(
   }
   idx <- apply(tab, 1, function(x) any(x != ""))
   tab <- tab[idx, ]
-
 
   ## build table
   out <- factory(
