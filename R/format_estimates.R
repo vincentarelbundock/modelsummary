@@ -202,7 +202,6 @@ format_estimates <- function(
   # estimates without standard errors)
   est <- est[!est$modelsummary_value %in% c("", "()", "(NA)"), ]
 
-
   # output
   return(est)
 }

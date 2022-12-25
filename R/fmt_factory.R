@@ -31,6 +31,7 @@ fmt_statistic <- function(..., default = 3) {
                 } else {
                     x[[n]] <- args[["default"]](x[[n]])
                 }
+                x[[n]] <- fmt_mathmode(x[[n]])
                 x[[n]] <- fmt_clean(x[[n]])
             }
         }
@@ -98,11 +99,11 @@ fmt_identity <- function(...) {
 }
 
 
-fmt_decimal <- function(digits = 3, pdigits = NULL) {
+fmt_decimal <- function(digits = 3, pdigits = NULL, ...) {
     if (is.null(pdigits)) {
         pdigits <- digits
     }
-    out <- function(x) {
+    out <- function(x, pval = FALSE) {
         # data frame
         if (isTRUE(checkmate::check_data_frame(x))) {
             for (n in colnames(x)) {
@@ -116,20 +117,25 @@ fmt_decimal <- function(digits = 3, pdigits = NULL) {
                     } else {
                         x[[n]] <- format(round(x[[n]], digits), nsmall = digits, drop0trailing = FALSE, trim = TRUE)
                     }
+                    x[[n]] <- fmt_mathmode(x[[n]])
                 } else {
                     x[[n]] <- as.character(x[[n]])
-                    ## e scape
-                    if (settings_equal("escape", TRUE)) {
-                        x[[n]] <- escape_string(x[[n]])
-                    }
                 }
                 x[[n]] <- fmt_clean(x[[n]])
             }
 
         # numeric vector
         } else if (isTRUE(checkmate::check_numeric(x))) {
-            # TODO: check this
-            x <- format(round(x, digits), nsmall = digits, drop0trailing = FALSE, trim = TRUE)
+            if (isTRUE(pval)) {
+                th <- 10^-pdigits
+                x <- ifelse(
+                    x < th,
+                    paste0("<", format(round(th, pdigits), trim = TRUE)),
+                    format(round(x, pdigits), nsmall = pdigits, trim = TRUE))
+            } else {
+                x <- format(round(x, digits), nsmall = digits, drop0trailing = FALSE, trim = TRUE)
+            }
+            x <- fmt_mathmode(x)
             x <- fmt_clean(x)
         }
 
@@ -148,6 +154,7 @@ fmt_sprintf <- function(fmt) {
             for (n in colnames(x)) {
                 if (is.numeric(x[[n]])) {
                     x[[n]] <- sprintf(fmt, x[[n]])
+                    x[[n]] <- fmt_mathmode(x[[n]])
                     x[[n]] <- fmt_clean(x[[n]])
                 }
             }
@@ -155,6 +162,7 @@ fmt_sprintf <- function(fmt) {
         # numeric vector
         } else if (isTRUE(checkmate::check_numeric(x))) {
             x <- sprintf(fmt, x)
+            x <- fmt_mathmode(x)
             x <- fmt_clean(x)
         }
 
@@ -217,12 +225,7 @@ fmt_significant <- function(digits = 2) {
 }
 
 
-fmt_clean <- function(x) {
-    if (is.factor(x) || is.logical(x) || is.character(x)) {
-        x <- as.character(x)
-    }
-
-    # Remove weird numbers before wrapping in siunitx
+fmt_mathmode <- function(x) {
     out <- gsub("^NA$|^NaN$|^-Inf$|^Inf$", "", x)
 
     ## LaTeX siunitx \num{}
@@ -246,6 +249,17 @@ fmt_clean <- function(x) {
             out <- sprintf("$%s$", out)
         }
     }
+    return(out)
+}
+
+
+fmt_clean <- function(x) {
+    if (is.factor(x) || is.logical(x) || is.character(x)) {
+        x <- as.character(x)
+    }
+
+    # Remove weird numbers before wrapping in siunitx
+    out <- gsub("^NA$|^NaN$|^-Inf$|^Inf$", "", x)
 
     # empty siunitx
     out <- gsub("\\\\num\\{\\}", "", out)

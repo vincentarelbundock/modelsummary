@@ -64,8 +64,8 @@ msummary(
 \item function: returns a formatted character string. For example, the \code{format()} function can be used in combination with the \code{fmt} argument for full control of number formatting: number of digits, number of digits after the decimal, scientific notation, etc. See the Examples section below.
 \item Named list:
 \itemize{
-\item Per-statistic rounding: Names correspond to column names produced by \code{get_estimates(model)} or \code{get_gof(model)}. Ex: \code{fmt=list("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)}
-\item Per-terms rounding: Names correspond to values in the \code{term} column of the \code{get_estimates(model)} output. Ex: \code{fmt=list("(Intercept)"=2, "hp"=1, "fmt"=3)}
+\item Per-statistic rounding: Names correspond to column names produced by \code{get_estimates(model)} or \code{get_gof(model)}. Ex: \code{fmt=fmt_statistic("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)}
+\item Per-terms rounding: Names correspond to values in the \code{term} column of the \code{get_estimates(model)} output. Ex: \code{fmt=fmt_term("(Intercept)"=2, "hp"=1, "fmt"=3)}
 \item The \code{fmt} element of the list is used as default for unspecified elements
 }
 \item NULL: does not format numbers, which allows users to include function in the "glue" strings in the \code{estimate} and \code{statistic} arguments.
@@ -470,7 +470,7 @@ modelsummary(m, fmt = f, gof_map = NA)
 m <- lm(mpg ~ qsec + factor(cyl), data = mtcars)
 modelsummary(
     m,
-    fmt = list("(Intercept)" = 0, "qsec" = 2, "fmt" = 4)
+    fmt = fmt_term("(Intercept)" = 0, "qsec" = 2, "default" = 4)
 )
 
 # coef_rename
