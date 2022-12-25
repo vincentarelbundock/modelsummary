@@ -280,7 +280,8 @@ datasummary_correlation_format <- function(
   out <- data.frame(x, check.names = FALSE)
 
   for (i in seq_along(out)) {
-    out[[i]] <- rounding(out[[i]], fmt)
+    fmt <- sanitize_fmt(fmt)
+    out[[i]] <- fmt(out[[i]])
     if (leading_zero == FALSE) {
       out[[i]] <- gsub('0\\.', '\\.', out[[i]])
     }

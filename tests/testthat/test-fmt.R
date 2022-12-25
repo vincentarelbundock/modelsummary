@@ -11,8 +11,8 @@ test_that("rounding 5 decimals", {
 })
 
 test_that("rounding internal function", {
-  expect_equal(modelsummary:::rounding(2), "2.000")
-  expect_equal(modelsummary:::rounding("2"), "2")
+  fun <- fmt_decimal(3)
+  expect_equal(fun(2), "2.000")
 })
 
 test_that("fmt integer respects options(OutDec)", {

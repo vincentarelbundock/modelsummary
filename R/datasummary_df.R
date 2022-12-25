@@ -23,7 +23,8 @@ datasummary_df <- function(data,
   checkmate::assert_data_frame(data)
 
   for (n in colnames(data)) {
-    data[[n]] <- rounding(data[[n]], fmt)
+    fmt <- sanitize_fmt(fmt)
+    data[[n]] <- fmt(data[[n]])
   }
 
   factory(data,

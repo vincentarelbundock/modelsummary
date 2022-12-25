@@ -72,9 +72,10 @@ factory <- function(tab,
       fmt <- fmt[["fmt"]]
     }
 
+    fun <- sanitize_fmt(fmt)
     for (i in seq_along(add_columns)) {
       if (is.numeric(add_columns[[i]])) {
-        add_columns[[i]] <- rounding(add_columns[[i]], fmt)
+        add_columns[[i]] <- fun(add_columns[[i]])
       } else {
         add_columns[[i]] <- as.character(add_columns[[i]])
       }
@@ -133,9 +134,10 @@ factory <- function(tab,
     pos <- attr(add_rows, 'position')
 
     # convert to character
+    fun <- sanitize_fmt(fmt)
     for (i in 1:ncol(add_rows)) {
       if (is.numeric(add_rows[[i]])) {
-        add_rows[[i]] <- rounding(add_rows[[i]], fmt)
+        add_rows[[i]] <- fun(add_rows[[i]])
       } else {
         add_rows[[i]] <- as.character(add_rows[[i]])
       }
