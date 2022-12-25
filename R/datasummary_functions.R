@@ -67,7 +67,6 @@ Median <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 Min <- function(x, fmt = NULL, na.rm = TRUE, ...) {
   out <- min(x, na.rm = na.rm)
   out <- sanitize_fmt(fmt)(out, ...)
-  }
   return(out)
 }
 
