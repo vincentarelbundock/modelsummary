@@ -7,7 +7,7 @@ fixest::setFixest_nthreads(1) # avoids warning pollution
 test_that("automatic standard errors labelling", {
     mod <- lm(hp ~ mpg, mtcars)
     vcov <- list("iid", "robust", "stata", ~cyl, ~vs + am, ~vs:am)
-    tab <- modelsummary(mod, vcov = vcov, output = "dataframe")
+    tab <- suppressMessages(modelsummary(mod, vcov = vcov, output = "dataframe"))
     expect_true("IID" %in% tab[[4]])
     expect_true("HC3" %in% tab[[5]])
     expect_true("HC1" %in% tab[[6]])

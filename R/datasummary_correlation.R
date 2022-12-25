@@ -115,8 +115,8 @@ datasummary_correlation <- function(data,
   ))
 
   # sanity checks
-  sanitize_output(output)
-  sanitize_escape(escape)
+  sanitize_output(output) # before sanitize_escape
+  sanitize_escape(escape) # after sanitize_output
   sanity_add_columns(add_columns)
 
   any_numeric <- any(sapply(data, is.numeric) == TRUE)

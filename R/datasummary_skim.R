@@ -56,8 +56,8 @@ datasummary_skim <- function(data,
   settings_init(settings = list(
      "function_called" = "datasummary_skim"
   ))
-  sanitize_output(output)
-  sanitize_escape(escape)
+  sanitize_output(output) # before sanitize_escape
+  sanitize_escape(escape) # after sanitize_output
 
 
   checkmate::assert_true(type %in% c("numeric", "categorical", "dataset"))

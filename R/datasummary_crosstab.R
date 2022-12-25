@@ -74,8 +74,8 @@ datasummary_crosstab <- function(formula,
 
 
     # argument checking
-    sanitize_output(output)
-    sanitize_escape(escape)
+    sanitize_output(output) # before sanitize_escape
+    sanitize_escape(escape) # after sanitize_output
 
     checkmate::assert_formula(formula)
     checkmate::assert_formula(statistic, null.ok = TRUE)

@@ -165,10 +165,12 @@ datasummary <- function(formula,
   settings_init(settings = list(
      "function_called" = "datasummary"
   ))
-  sanitize_output(output)
+
+  sanitize_output(output) # before sanitize_escape
+  sanitize_escape(escape) # after sanitize_output
 
   sanity_ds_data(formula = formula, data = data, internal_call = list(...)[["internal_call"]])
-  sanitize_escape(escape)
+
 
   # convenience: transform logical and character to factor
   # are there use-cases for character variables?
