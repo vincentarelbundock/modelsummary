@@ -17,8 +17,8 @@ datasummary_df <- function(data,
                            escape = TRUE,
                            ...) {
 
-  sanitize_output(output)
-  sanitize_escape(escape)
+  sanitize_output(output) # before sanitize_escape
+  sanitize_escape(escape) # after sanitize_output
 
   checkmate::assert_data_frame(data)
 
