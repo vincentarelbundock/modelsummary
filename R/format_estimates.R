@@ -129,6 +129,8 @@ format_estimates <- function(
     stop("must use fmt_factory")
   }
 
+  # needed to avoid empty glues "p =""
+  est[is.na(est)] <- ""
 
   # extract estimates (there can be several)
   for (i in seq_along(estimate_glue)) {

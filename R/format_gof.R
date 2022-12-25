@@ -10,6 +10,17 @@ format_gof <- function(gof, fmt, gof_map, ...) {
     return(NULL)
   }
 
+  # factor to character (otherwise gof_map breaks under R < 4.0.0)
+  for (i in seq_along(gof)) {
+    if (is.factor(gof[[i]])) {
+      gof[[i]] <- as.character(gof[[i]])
+    }
+    if (is.character(gof[[i]])) {
+      gof[[i]] <- escape_string(gof[[i]])
+    }
+  }
+
+
   # `as.character` is needed for R-devel changes to `intersect` with empty sets
   gm_raw <- as.character(sapply(gof_map, function(x) x$raw))
   gm_clean <- as.character(sapply(gof_map, function(x) x$clean))
@@ -41,15 +52,6 @@ format_gof <- function(gof, fmt, gof_map, ...) {
     out <- data.frame(term = NA_character_, value = NA_character_)
     out <- stats::na.omit(out)
   }
-
-  # factor to character (otherwise gof_map breaks under R < 4.0.0)
-  for (i in seq_along(out)) {
-    if (is.factor(out[[i]])) {
-      out[[i]] <- as.character(out[[i]])
-    }
-  }
-
-  out$term <- escape_string(out$term)
 
   # output
   row.names(out) <- NULL
