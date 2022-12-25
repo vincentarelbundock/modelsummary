@@ -39,20 +39,6 @@ test_that("bugfix: format() is not vectorized (in fact, it is vectorized and vin
 })
 
 
-test_that("siunitx works with empty cells", {
-  skip("obsolete")
-  # new versions of parameters return CI, so this is no longer a useful test
-  requiet("lme4")
-  dat <- mtcars
-  dat$cyl <- factor(dat$cyl)
-  mod <- lme4::lmer(mpg ~ hp + (1 | cyl), data = dat)
-  expect_snapshot(modelsummary(
-      mod,
-      output = "latex",
-      estimate = "{estimate} [{conf.low}, {conf.high}]"))
-})
-
-
 test_that("very small numbers", {
     mod <- lm(mpg ~ I(hp * 1000) + drat, data = mtcars)
     tab <- modelsummary(mod, fmt = 2, output = "dataframe")
