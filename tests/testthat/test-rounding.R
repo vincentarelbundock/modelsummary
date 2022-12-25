@@ -10,7 +10,7 @@ test_that("named list", {
     tab <- modelsummary(
         mod,
         statistic = c("SE: {std.error}", "conf.int"),
-        fmt = list(estimate = 0, std.error = 4, r.squared = 7, rmse = 5),
+        fmt = fmt_statistic(estimate = 0, std.error = 4, r.squared = 7, rmse = 5),
         output = "data.frame")
     expect_equal(
         tab[["(1)"]][1:3],
@@ -74,7 +74,7 @@ test_that("per term rounding", {
         output = "dataframe",
         statistic = NULL,
         gof_map = NA,
-        fmt = list("(Intercept)" = 0, "qsec" = 2)
+        fmt = fmt_term("(Intercept)" = 0, "qsec" = 2)
     )
     expect_equal(c("35", "-0.44", "-7.431", "-12.603"), tab[["(1)"]])
 })

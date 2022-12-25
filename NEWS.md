@@ -8,8 +8,8 @@ New features:
 
 * `fmt` can round to significant digits on a per-term basis with `fmt="s1"`, `fmt="s2"`, etc.
 * `fmt` can format different parameters differently with a named list:
-  - `fmt=list("(Intercept)" = 2, "hp" = 3)`
-  - `fmt=list("estimate" = 2, "std.error" = 3)`
+  - `fmt = fmt_term("(Intercept)" = 2, "hp" = 3)`
+  - `fmt = fmt_statistic("estimate" = 2, "std.error" = 3)`
 * New styles for default column labels in `modelsummary`, such as Roman Numerals or letters in parentheses.
   - Set the style with a global option: `options(modelsummary_model_labels = "roman")`
   - Supported styles: "model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""

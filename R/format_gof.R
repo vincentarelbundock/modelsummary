@@ -17,10 +17,12 @@ format_gof <- function(gof, fmt, gof_map, ...) {
   # formating arguments priority: `fmt` > `gof_map` > 3
   for (g in gof_map) {
     if (is.numeric(gof[[g$raw]])) {
+      if (g$raw == "rmse") browser()
       if (g$raw %in% colnames(gof)) {
-        fun <- fmt_decimal(digits = g$fmt)
+        fun <- sanitize_fmt(g$fmt)
         gof[[g$raw]] <- fun(gof[[g$raw]])
       } else {
+        fun <- sanitize_fmt(fmt)
         gof[[g$raw]] <- fmt(gof[[g$raw]])
       }
     }

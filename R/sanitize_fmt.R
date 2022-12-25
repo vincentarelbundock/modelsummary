@@ -3,12 +3,12 @@
 #' @noRd
 sanitize_fmt <- function(fmt, ...) {
     checkmate::assert(
-        checkmate::check_string(fmt, pattern = "%"),
         checkmate::check_numeric(fmt, len = 1, lower = 0),
-        checkmate::check_function(fmt),
-        checkmate::check_list(fmt, names = "unique"),
         checkmate::check_class(fmt, "fmt_factory"),
-        checkmate::check_null(x))
+        checkmate::check_function(fmt),
+        checkmate::check_string(fmt, pattern = "%"),
+        # checkmate::check_list(fmt, names = "unique"),
+        checkmate::check_null(fmt))
 
     if (inherits(fmt, "fmt_factory")) {
         out <- fmt

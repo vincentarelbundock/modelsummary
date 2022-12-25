@@ -290,7 +290,7 @@ test_that("Issue #531", {
         output = "dataframe",
         shape = term + model ~ statistic,
         statistic = c("std.error", "{p.value}{stars}", "{estimate} ({statistic})"),
-        fmt = list(estimate = 3, p.value = 2))
+        fmt = fmt_statistic(estimate = 3, p.value = 2))
     expect_equal(
         colnames(tab),
         c("part", "term", "model", "Est.", "S.E.", "p", "Est.  (t)"))
