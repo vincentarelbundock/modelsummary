@@ -15,7 +15,6 @@ format_gof <- function(gof, fmt, gof_map, ...) {
   gm_clean <- as.character(sapply(gof_map, function(x) x$clean))
 
   # formating arguments priority: `fmt` > `gof_map` > 3
-  # rounding() escapes the GOF values. we escape the GOF names at the end
   for (g in gof_map) {
     if (is.numeric(gof[[g$raw]])) {
       if (g$raw %in% colnames(gof)) {

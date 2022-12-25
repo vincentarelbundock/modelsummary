@@ -34,7 +34,7 @@ fmt_statistic <- function(..., default = 3) {
                 } else {
                     x[[n]] <- args[["default"]](x[[n]])
                 }
-                x[[n]] <- rounding_clean(x[[n]])
+                x[[n]] <- fmt_clean(x[[n]])
             }
         }
         return(x)
@@ -80,7 +80,7 @@ fmt_term <- function(..., default = 3) {
         x <- do.call("cbind", lapply(atomic, as.vector))
         x <- data.frame(x)
         for (n in colnames(x)) {
-            x[[n]] <- rounding_clean(x[[n]])
+            x[[n]] <- fmt_clean(x[[n]])
         }
 
         return(x)
@@ -114,14 +114,14 @@ fmt_decimal <- function(digits = 3) {
                 } else if (is.numeric(x[[n]])) {
                     x[[n]] <- format(round(x[[n]], digits), nsmall = digits, drop0trailing = FALSE)
                 }
-                x[[n]] <- rounding_clean(x[[n]])
+                x[[n]] <- fmt_clean(x[[n]])
             }
 
         # numeric vector
         } else if (isTRUE(checkmate::check_numeric(x))) {
             # TODO: check this
              x <- format(round(x, digits), nsmall = digits, drop0trailing = FALSE)
-             x <- rounding_clean(x)
+             x <- fmt_clean(x)
 
         # unsupported
         } else {
@@ -144,14 +144,14 @@ fmt_sprintf <- function(fmt) {
             for (n in colnames(x)) {
                 if (is.numeric(x[[n]])) {
                     x[[n]] <- sprintf(fmt, x[[n]])
-                    x[[n]] <- rounding_clean(x[[n]])
+                    x[[n]] <- fmt_clean(x[[n]])
                 }
             }
 
         # numeric vector
         } else if (isTRUE(checkmate::check_numeric(x))) {
             x <- sprintf(fmt, x)
-            x <- rounding_clean(x)
+            x <- fmt_clean(x)
 
         # unsupported
         } else {
@@ -173,14 +173,14 @@ fmt_function <- function(fun) {
             for (n in colnames(x)) {
                 if (is.numeric(x[[n]])) {
                     x[[n]] <- fun(x[[n]])
-                    x[[n]] <- rounding_clean(x[[n]])
+                    x[[n]] <- fmt_clean(x[[n]])
                 }
             }
 
         # numeric vector
         } else if (isTRUE(checkmate::check_numeric(x))) {
             x <- fun(x)
-            x <- rounding_clean(x)
+            x <- fmt_clean(x)
 
         # unsupported
         } else {
@@ -218,5 +218,34 @@ fmt_significant <- function(digits = 2) {
         return(z)
     }
     class(out) <- c("fmt_factory", class(out))
+    return(out)
+}
+
+
+fmt_clean <- function(x) {
+    # Remove weird numbers before wrapping in siunitx
+    out <- gsub("^NA$|^NaN$|^-Inf$|^Inf$", "", x)
+
+    ## LaTeX siunitx \num{}
+    if (settings_equal("output_format", c("latex", "latex_tabular"))) {
+        if (!isTRUE(settings_get("siunitx_scolumns"))) {
+            if (settings_equal("format_numeric_latex", "siunitx") && !settings_equal("dcolumn_stars_mbox", TRUE)) {
+                out <- sprintf("\\num{%s}", out)
+            } else if (settings_equal("format_numeric_latex", c("dollars", "mathmode"))) {
+                out <- sprintf("$%s$", out)
+            }
+        }
+    }
+
+    ## HTML: convert hyphen-minus to minus
+    if (settings_equal("output_format", c("html", "kableExtra"))) {
+        # in hebrew or chinese locales, the html minus signs does not appear and it underlines the whole number.
+        # https://github.com/vincentarelbundock/modelsummary/issues/552
+        if (settings_equal("modelsummary_format_numeric_html", "minus") && settings_equal("known_locale", TRUE)) {
+            out <- gsub("\\-", "\u2212", out)
+        } else if (settings_equal("modelsummary_format_numeric_html", c("mathjax", "dollars"))) {
+            out <- sprintf("$%s$", out)
+        }
+    }
     return(out)
 }

@@ -322,7 +322,9 @@ DinM <- function(lhs, rhs, data, fmt, statistic, stars = TRUE, escape = TRUE) {
 
   out <- estimatr::tidy(out)
 
-  out[["estimate"]] <- rounding(out[["estimate"]], fmt)
+  rounding <- sanitize_fmt(fmt)
+
+  out[["estimate"]] <- rounding(out[["estimate"]])
 
   if (!isFALSE(stars) && "p.value" %in% colnames(out)) {
     out$estimate <- paste0(
@@ -331,12 +333,12 @@ DinM <- function(lhs, rhs, data, fmt, statistic, stars = TRUE, escape = TRUE) {
   }
 
   if (identical(statistic, "p.value")) {
-    out[[statistic]] <- rounding(out[[statistic]], fmt, pval = TRUE)
+    out[[statistic]] <- rounding(out[[statistic]], pval = TRUE)
     if (isTRUE(escape)) {
       out[[statistic]] <- escape_string(out[[statistic]]) # <0.001 interpreted as html tag
     }
   } else {
-    out[[statistic]] <- rounding(out[[statistic]], fmt)
+    out[[statistic]] <- rounding(out[[statistic]])
   }
 
   out <- out[, c("estimate", statistic), drop = FALSE]

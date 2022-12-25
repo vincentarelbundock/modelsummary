@@ -66,7 +66,8 @@ test_that("sandwich arguments in ellipsis", {
                       vcov = "panel-corrected",
                       cluster = "firm")
   v <- vcovPC(mod, cluster = "firm")
-  v <- modelsummary:::rounding(sqrt(diag(v)), 7)
+  fun <- fmt_decimal(7)
+  v <- fun(sqrt(diag(v)))
   expect_equal(unname(v), tab[["(1)"]])
 })
 
