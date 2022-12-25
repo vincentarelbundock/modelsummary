@@ -10,17 +10,11 @@ test_that("named list", {
     tab <- modelsummary(
         mod,
         statistic = c("SE: {std.error}", "conf.int"),
-        fmt = fmt_statistic(estimate = 0, std.error = 4, r.squared = 7, rmse = 5),
+        fmt = fmt_statistic(estimate = 0, std.error = 4),
         output = "data.frame")
     expect_equal(
         tab[["(1)"]][1:3],
         c("29", "SE: 1.5878", "[25.398, 31.903]"))
-    expect_equal(
-        tab[["(1)"]][tab$term == "R2"],
-        "0.7538578")
-    expect_equal(
-        tab[["(1)"]][tab$term == "RMSE"],
-        "2.94304")
 })
 
 

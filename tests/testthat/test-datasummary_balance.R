@@ -192,7 +192,10 @@ test_that('dinm=FALSE', {
 
 
 test_that('dinm_statistic = "p.value"', {
-  tab <- datasummary_balance(~vs, mtcars, dinm_statistic = 'p.value',
+  tab <- datasummary_balance(
+    ~vs,
+    data = mtcars,
+    dinm_statistic = 'p.value',
     output = 'dataframe')
   expect_s3_class(tab, 'data.frame')
   expect_equal(dim(tab), c(10, 7))
