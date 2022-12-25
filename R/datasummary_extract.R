@@ -66,10 +66,7 @@ datasummary_extract <- function(tab,
   attr(main, 'stub_width') <- stub_width
 
   # escape latex column names
-  if (settings_equal("escape", TRUE) &&
-      settings_equal("output_format", c("latex", "latex_tabular", "html"))) {
-    colnames(main) <- escape_string(colnames(main))
-  }
+  colnames(main) <- escape_string(colnames(main))
 
   # 1 header level means colnames are sufficient. return output immediately.
   # this needs to go before definition of header_nocolnames

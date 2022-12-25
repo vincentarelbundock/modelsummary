@@ -1,11 +1,15 @@
 #' Make sure LaTeX and HTML are safe to compile
-#' 
+#'
 #' @keywords internal
 escape_string <- function(x) {
-    if (settings_equal("output_format", c("html", "kableExtra"))) {
-        out <- escape_html(x)
-    } else if (settings_equal("output_format", c("latex", "latex_tabular"))) {
-        out <- escape_latex(x)
+    if (settings_equal("escape", TRUE)) {
+        if (settings_equal("output_format", c("html", "kableExtra"))) {
+            out <- escape_html(x)
+        } else if (settings_equal("output_format", c("latex", "latex_tabular"))) {
+            out <- escape_latex(x)
+        } else {
+            out <- x
+        }
     } else {
         out <- x
     }

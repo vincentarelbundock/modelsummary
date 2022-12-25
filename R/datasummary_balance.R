@@ -254,10 +254,8 @@ datasummary_balance <- function(formula,
     }
 
     ## escape stub
-    if (isTRUE(escape)) {
-        for (i in 1:attr(tab, "stub_width")) {
-            tab[[i]] <- escape_string(tab[[i]])
-        }
+    for (i in 1:attr(tab, "stub_width")) {
+      tab[[i]] <- escape_string(tab[[i]])
     }
 
     ## weights warning
@@ -334,9 +332,7 @@ DinM <- function(lhs, rhs, data, fmt, statistic, stars = TRUE, escape = TRUE) {
 
   if (identical(statistic, "p.value")) {
     out[[statistic]] <- rounding(out[[statistic]], pval = TRUE)
-    if (isTRUE(escape)) {
-      out[[statistic]] <- escape_string(out[[statistic]]) # <0.001 interpreted as html tag
-    }
+    out[[statistic]] <- escape_string(out[[statistic]]) # <0.001 interpreted as html tag
   } else {
     out[[statistic]] <- rounding(out[[statistic]])
   }

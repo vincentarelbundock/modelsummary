@@ -49,9 +49,7 @@ format_gof <- function(gof, fmt, gof_map, ...) {
     }
   }
 
-  if (settings_get("escape")) {
-    out$term <- escape_string(out$term)
-  }
+  out$term <- escape_string(out$term)
 
   # output
   row.names(out) <- NULL

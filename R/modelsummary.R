@@ -271,10 +271,7 @@ modelsummary <- function(
     model_names <- names(models)
   }
   model_names <- pad(model_names)
-
-  if (isTRUE(escape)) {
-     model_names <- escape_string(model_names)
-  }
+  model_names <- escape_string(model_names)
 
 
   #######################
@@ -372,9 +369,7 @@ modelsummary <- function(
   if ("term" %in% colnames(est)) {
     if (!is.null(coef_map)) {
         term_order <- coef_map
-        if (isTRUE(escape)) {
-            term_order <- escape_string(term_order)
-        }
+        term_order <- escape_string(term_order)
     }
     est$term <- factor(est$term, unique(term_order))
 
