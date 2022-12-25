@@ -103,7 +103,7 @@ fmt_decimal <- function(digits = 3, pdigits = NULL, ...) {
     if (is.null(pdigits)) {
         pdigits <- digits
     }
-    out <- function(x, pval = FALSE) {
+    out <- function(x, pval = FALSE, ...) {
         # data frame
         if (isTRUE(checkmate::check_data_frame(x))) {
             for (n in colnames(x)) {
@@ -113,9 +113,9 @@ fmt_decimal <- function(digits = 3, pdigits = NULL, ...) {
                         x[[n]] <- ifelse(
                             x[[n]] < th,
                             paste0("<", format(round(th, pdigits), trim = TRUE)),
-                            format(round(x[[n]], pdigits), nsmall = pdigits, trim = TRUE))
+                            format(round(x[[n]], pdigits), nsmall = pdigits, trim = TRUE), ...)
                     } else {
-                        x[[n]] <- format(round(x[[n]], digits), nsmall = digits, drop0trailing = FALSE, trim = TRUE)
+                        x[[n]] <- format(round(x[[n]], digits), nsmall = digits, drop0trailing = FALSE, trim = TRUE, ...)
                     }
                     x[[n]] <- fmt_mathmode(x[[n]])
                 } else {
@@ -131,9 +131,9 @@ fmt_decimal <- function(digits = 3, pdigits = NULL, ...) {
                 x <- ifelse(
                     x < th,
                     paste0("<", format(round(th, pdigits), trim = TRUE)),
-                    format(round(x, pdigits), nsmall = pdigits, trim = TRUE))
+                    format(round(x, pdigits), nsmall = pdigits, trim = TRUE), ...)
             } else {
-                x <- format(round(x, digits), nsmall = digits, drop0trailing = FALSE, trim = TRUE)
+                x <- format(round(x, digits), nsmall = digits, drop0trailing = FALSE, trim = TRUE, ...)
             }
             x <- fmt_mathmode(x)
             x <- fmt_clean(x)
@@ -148,7 +148,7 @@ fmt_decimal <- function(digits = 3, pdigits = NULL, ...) {
 
 
 fmt_sprintf <- function(fmt) {
-    out <- function(x) {
+    out <- function(x, ...) {
         # data frame
         if (isTRUE(checkmate::check_data_frame(x))) {
             for (n in colnames(x)) {
@@ -174,7 +174,7 @@ fmt_sprintf <- function(fmt) {
 
 
 fmt_function <- function(fun) {
-    out <- function(x) {
+    out <- function(x, ...) {
         # data frame
         if (isTRUE(checkmate::check_data_frame(x))) {
             for (n in colnames(x)) {
