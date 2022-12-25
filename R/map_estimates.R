@@ -109,13 +109,11 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
 
     ## escape if needed
     ## (must be done after rename/map, otherwise all rows are dropped)
-    if (settings_equal("escape", TRUE)) {
-        cols <- intersect(
-            colnames(estimates),
-            c("group", "term", "model", group_name))
-        for (col in cols) {
-            estimates[[col]] <- escape_string(estimates[[col]])
-        }
+    cols <- intersect(
+        colnames(estimates),
+        c("group", "term", "model", group_name))
+    for (col in cols) {
+        estimates[[col]] <- escape_string(estimates[[col]])
     }
 
     return(estimates)

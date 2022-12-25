@@ -57,7 +57,8 @@ test_that("very small numbers", {
     mod <- lm(mpg ~ I(hp * 1000) + drat, data = mtcars)
     tab <- modelsummary(mod, fmt = 2, output = "dataframe")
     expect_true("10.79" %in% tab[["(1)"]])
-    expect_true("-0.00005" %in% tab[["(1)"]])
+    tab <- modelsummary(mod, fmt = fmt_significant(2), output = "dataframe")
+    expect_true("-5.2e-05" %in% tab[["(1)"]])
 })
 
 

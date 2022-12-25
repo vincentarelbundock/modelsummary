@@ -184,10 +184,8 @@ datasummary_correlation <- function(data,
       align <- paste0('l', strrep('r', ncols - 1))
   }
 
-  if (settings_equal("escape", TRUE)) {
-    out[, 1] <- escape_string(out[, 1])
-    colnames(out) <- escape_string(colnames(out))
-  }
+  out[, 1] <- escape_string(out[, 1])
+  colnames(out) <- escape_string(colnames(out))
 
   # labelled data
   dict <- get_variable_labels_data(data)

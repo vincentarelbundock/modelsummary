@@ -32,9 +32,7 @@ factory_kableExtra <- function(tab,
 
   # kableExtra::kbl and knitr::kable do not respect the `escape` argument for captions.
   # this will never be fixed upstream because of backward compatibility
-  if (isTRUE(escape)) {
-    title <- escape_string(title)
-  }
+  title <- escape_string(title)
 
   arguments <- c(
     list(...),
