@@ -17,7 +17,6 @@ panels <- list("am = 0" = mod[1:3], "am = 1" = mod[4:6])
 # TODO: weird significance mismatch in intercept for different models
 pkgload::load_all()
 panelsummary(
-    output = "gt",
     panels,
     fmt = fmt_significant(2),
     gof_map = c("nobs", "r.squared"))
