@@ -110,7 +110,7 @@ install.packages(
         "https://vincentarelbundock.r-universe.dev",
         "https://easystats.r-universe.dev"))
 ```
-
+****
 **Restart `R` completely before moving on.** 
 
 # Getting started
