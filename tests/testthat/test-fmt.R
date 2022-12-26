@@ -41,3 +41,64 @@ test_that("significant digits per term", {
   tab <- modelsummary(mod, output = "dataframe", fmt = fmt_significant(2), statistic = "conf.int", gof_map = NA)
   expect_equal(tab[["(1)"]], c("17.7", "[-8.9, 44.4]", "-0.058", "[-0.087, -0.029]", "4.4", "[1.8, 7.1]", "-0.28", "[-1.29, 0.72]"))
 })
+
+
+
+
+
+### FUNCTION FACTORY REFACTOR
+mod <- lm(mpg ~ hp + drat + qsec, data = mtcars)
+
+test_that("backward compatibility", {
+    tab <- modelsummary(mod, fmt = 3, output = "dataframe")
+    expect_equal(tab[["(1)"]][1], "17.737")
+    tab <- modelsummary(mod, fmt = "%.5f", output = "dataframe")
+    expect_equal(tab[["(1)"]][1], "17.73662")
+    tab <- modelsummary(mod, fmt = function(x) round(x, 2), output = "dataframe")
+    expect_equal(tab[["(1)"]][1], "17.74")
+    tab <- modelsummary(mod, fmt = NULL, output = "dataframe")
+    expect_equal(tab[["(1)"]][1], "17.7366200480466")
+})
+
+
+test_that("function factories", {
+    tab <- modelsummary(mod, fmt = fmt_decimal(4), output = "dataframe")
+    expect_equal(tab[["(1)"]][1], "17.7366")
+    tab <- modelsummary(mod, fmt = fmt_significant(3), output = "dataframe")
+    expect_equal(tab[["(1)"]][1], "17.7")
+    expect_equal(tab[["(1)"]][3], "-0.0580")
+    tab <- modelsummary(mod, fmt = fmt_sprintf("%.5f"), output = "dataframe")
+    expect_equal(tab[["(1)"]][1], "17.73662")
+    tab <- modelsummary(mod, fmt = fmt_function(function(x) round(x, 2)), output = "dataframe")
+    expect_equal(tab[["(1)"]][1], "17.74")
+    tab <- modelsummary(mod, fmt = fmt_statistic(estimate = 4, conf.int = 1), statistic = "conf.int", output = "dataframe")
+    expect_equal(tab[["(1)"]][1], "17.7366")
+    expect_equal(tab[["(1)"]][2], "[-8.9, 44.4]")
+    tab <- modelsummary(mod, fmt = fmt_term(hp = 4, drat = 1, default = 2), output = "dataframe")
+    expect_equal(tab[["(1)"]][1], "17.74")
+    expect_equal(tab[["(1)"]][3], "-0.0580")
+})
+
+
+test_that("complicated", {
+    tab <- modelsummary(
+        mod,
+        output = "data.frame",
+        statistic = c("std.error", "statistic", "conf.int"),
+        fmt = fmt_statistic(
+            estimate = 5,
+            std.error = \(x) sprintf("%.3f", x),
+            default = fmt_significant(1)),
+        gof_map = NA)
+    expect_equal(tab[["(1)"]], c("17.73662", "(13.020)", "(1.4)", "[-8.93, 44.41]", "-0.05797", "(0.014)", "(-4.1)", "[-0.09, -0.03]", "4.42875", "(1.292)", "(3.4)", "[1.78, 7.07]", "-0.28407", "(0.489)", "(-0.6)", "[-1.29, 0.72]"))
+
+    tab <- modelsummary(
+        mod,
+        output = "data.frame",
+        fmt = fmt_term(
+            "(Intercept)" = 5,
+            "hp" = 3,
+            default = fmt_sprintf("%.1f")),
+        gof_map = NA)
+    expect_equal(tab[["(1)"]], c("17.73662", "(13.01979)", "-0.058", "(0.014)", "4.4", "(1.3)", "-0.3", "(0.5)"))
+})

@@ -32,12 +32,6 @@ test_that("unnamed coef_rename + coef_omit numeric", {
 })
 
 
-# Q
-# pkgload::load_all()
-# mod <- lm(mpg ~ factor(cyl), mtcars)
-# msummary(mod, coef_rename = TRUE)
-
-
 # library(modelsummary)
 
 # dat1 <- mtcars

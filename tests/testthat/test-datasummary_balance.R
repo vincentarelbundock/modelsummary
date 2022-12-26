@@ -15,7 +15,6 @@ test_that("stub is escaped in latex", {
   tmp <- data.frame(
     under_score = rnorm(100),
     X = sample(0:1, 100, replace = TRUE))
-    pkgload::load_all()
   tab <- datasummary_balance(~X, data = tmp, output = "latex")
   expect_true(grepl("under\\\\_score", tab))
 })

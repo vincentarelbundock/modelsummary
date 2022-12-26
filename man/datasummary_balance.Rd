@@ -9,7 +9,7 @@ datasummary_balance(
   formula,
   data,
   output = "default",
-  fmt = 1,
+  fmt = fmt_decimal(digits = 1, pdigits = 3),
   title = NULL,
   notes = NULL,
   align = NULL,
