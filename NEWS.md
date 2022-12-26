@@ -6,10 +6,15 @@ Breaking change:
 
 New features:
 
-* `fmt` can round to significant digits on a per-term basis with `fmt="s1"`, `fmt="s2"`, etc.
-* `fmt` can format parameters differently with a named list:
-  - `fmt=list("(Intercept)" = 2, "hp" = 3)`
-  - `fmt=list("estimate" = 2, "std.error" = 3)`
+* `fmt`: new helper functions for different formatting styles
+  - `fmt = fmt_decimal(2)`: decimal digits
+  - `fmt = fmt_decimal(digits = 2, pdigits = 4)`: decimal digits with p value-specific setting
+  - `fmt = fmt_sprintf("%.3f")`: `sprintf()` decimal
+  - `fmt = fmt_sprintf("%.3e")`: `sprintf()` scientific
+  - `fmt = fmt_significant(3)`: significant digits
+  - `fmt = fmt_statistic("estimate" = 2, "std.error" = 3)`: statistic-specific formatting
+  - `fmt = fmt_term("(Intercept)" = 2, "hp" = 3)`: term-specific formatting
+  - `fmt = fmt_identity()`: raw values
 * New styles for default column labels in `modelsummary`, such as Roman Numerals or letters in parentheses.
   - Set the style with a global option: `options(modelsummary_model_labels = "roman")`
   - Supported styles: "model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""

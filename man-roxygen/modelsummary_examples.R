@@ -49,22 +49,19 @@
 #'   vcov = list("Stata Corp" = "stata",
 #'               "Newey Lewis & the News" = "NeweyWest"))
 #'
-#' # fmt: function to keep 3 digits including at least 2 after the decimal
-#' m <- lm(mpg ~ I(hp * 1000) + drat, data = mtcars)
-#' f <- function(x) format(x, digits = 3, nsmall = 2, scientific = FALSE)
-#' modelsummary(m, fmt = f, gof_map = NA)
+#' # fmt
+#' mod <- lm(mpg ~ hp + drat + qsec, data = mtcars)
+#' modelsummary(mod, fmt = 3)
+#' modelsummary(mod, fmt = fmt_significant(3))
+#' modelsummary(mod, fmt = NULL)
+#' modelsummary(mod, fmt = fmt_decimal(4))
+#' modelsummary(mod, fmt = fmt_sprintf("%.5f"))
+#' modelsummary(mod, fmt = fmt_statistic(estimate = 4, conf.int = 1), statistic = "conf.int")
+#' modelsummary(mod, fmt = fmt_term(hp = 4, drat = 1, default = 2))
 #' 
-#' # fmt: same as above but using scientific notation
 #' m <- lm(mpg ~ I(hp * 1000) + drat, data = mtcars)
-#' f <- function(x) format(x, digits = 3, nsmall = 2)
+#' f <- function(x) format(x, digits = 3, nsmall = 2, scientific = FALSE, trim = TRUE)
 #' modelsummary(m, fmt = f, gof_map = NA)
-#' 
-#' # fmt: different terms are formatted differently
-#' m <- lm(mpg ~ qsec + factor(cyl), data = mtcars)
-#' modelsummary(
-#'     m,
-#'     fmt = fmt_term("(Intercept)" = 0, "qsec" = 2, "default" = 4)
-#' )
 #' 
 #' # coef_rename
 #' modelsummary(models, coef_rename = c('Volume' = 'Large', 'Height' = 'Tall'))

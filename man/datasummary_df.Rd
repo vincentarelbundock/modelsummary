@@ -30,12 +30,19 @@ datasummary_df(
 \item The default output formats and table-making packages can be modified with global options. See the 'Details' section.
 }}
 
-\item{fmt}{determines how to format numeric values
+\item{fmt}{how to format numeric values: integer, user-supplied function, or \code{modelsummary} function.
 \itemize{
-\item integer: the number of digits to keep after the period \code{format(round(x, fmt), nsmall=fmt)}
-\item character: passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
-\item function: returns a formatted character string.
-\item NULL: does not format numbers, which allows users to include function in the "glue" strings in the \code{estimate} and \code{statistic} arguments.
+\item Integer: Number of decimal digits
+\item User-supplied functions:
+\itemize{
+\item Any function which accepts a numeric vector and returns a character vector of the same length.
+}
+\item \code{modelsummary} functions:
+\itemize{
+\item \code{fmt = fmt_significant(2)}: Two significant digits (at the term-level)
+\item \code{fmt = fmt_sprintf("\%.3f")}: See \code{?sprintf}
+\item \code{fmt = fmt_identity()}: unformatted raw values
+}
 }}
 
 \item{align}{A string with a number of characters equal to the number of columns in
