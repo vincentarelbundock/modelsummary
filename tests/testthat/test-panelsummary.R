@@ -1,25 +1,12 @@
+# TODO: kableExtra group indent breaks with (Intercept)
+
 requiet("fixest")
 
-panels <- list(
-    "Panel A: MPG" = list(
-        lm(mpg ~  hp, data = mtcars),
-        lm(mpg ~  hp + factor(gear), data = mtcars)),
-    "Panel B: Displacement" = list(
-        lm(disp ~ hp, data = mtcars),
-        lm(disp ~ hp + factor(gear), data = mtcars))
-)
-panelsummary(panels, gof_map = "nobs")
+
 
 
 mod <- feols(mpg ~ csw(hp, vs, drat), data = mtcars, split = ~am)
 panels <- list("am = 0" = mod[1:3], "am = 1" = mod[4:6])
-
-# TODO: weird significance mismatch in intercept for different models
-pkgload::load_all()
-panelsummary(
-    panels,
-    fmt = fmt_significant(2),
-    gof_map = c("nobs", "r.squared"))
 
 
 
@@ -31,26 +18,43 @@ mod <- feols(
     data = dat)
 panels <- list(
     "Adelie" = mod[1:3],
-    "Chinstrap" = mod[1:3],
-    "Gentoo" = mod[1:3]
+    "Chinstrap" = mod[4:6],
+    "Gentoo" = mod[7:9]
 )
-panelsummary(panels, gof_map = c("nobs", "r.squared"))
 
-panels <- list()
-for (s in c("Adelie", "Gentoo", "Chinstrap")) {
-    panels[[s]][[1]] <- lm(
-        flipper_length_mm ~ body_mass_g,
-        data = subset(dat, species == s))
-    panels[[s]][[2]] <- lm(
-        flipper_length_mm ~ body_mass_g + bill_depth_mm,
-        data = subset(dat, species == s))
-update_modelsummary()
 
-pkgload::load_all()
-panelsummary(
-    panels,
-    align = "ldd",
-    gof_map = c("nobs", "r.squared"))
+# Q
+# pkgload::load_all()
+# panelsummary(panels, gof_map = c("nobs", "r.squared"), output = "latex")
+
+
+
+test_that("(non-)matching models", {
+    panels <- list(
+        "Panel A: MPG" = list(
+            lm(mpg ~ hp, data = mtcars),
+            lm(mpg ~ hp + factor(gear), data = mtcars)),
+        "Panel B: Displacement" = list(
+            lm(disp ~ hp, data = mtcars),
+            lm(disp ~ hp + factor(gear), data = mtcars))
+    )
+    tab1 <- panelsummary(panels, gof_map = "nobs", output = "dataframe")
+    expect_equal(colnames(tab1), c(" ", "(1)", "(2)"))
+
+
+    panels <- list(
+        "Panel A: MPG" = list(
+            "A" = lm(mpg ~ hp, data = mtcars),
+            "B" = lm(mpg ~ hp + factor(gear), data = mtcars)),
+        "Panel B: Displacement" = list(
+            "A" = lm(disp ~ hp, data = mtcars),
+            "C" = lm(disp ~ hp + factor(gear), data = mtcars))
+    )
+    tab2 <- panelsummary(panels, gof_map = "nobs", output = "dataframe")
+    expect_equal(colnames(tab2), c(" ", "A", "B", "C"))
+})
+
+
 
 test_that("informative errors", {
     expect_error(panelsummary(panels, shape = term ~ model), regexp = "shape.*not supported")
@@ -100,3 +104,4 @@ test_that("output formats: no validity", {
 #     title = "Four regression models in two panels.",
 #     coef_rename = TRUE,
 #     gof_map = c("nobs", "r.squared"))
+

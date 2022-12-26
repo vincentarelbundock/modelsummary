@@ -227,8 +227,10 @@ modelsummary <- function(
   ## sanity functions validate variables/settings
   ## sanitize functions validate & modify & initialize
   checkmate::assert_string(gof_omit, null.ok = TRUE)
-  sanitize_output(output)           # early
-  sanitize_escape(escape)
+  if (!settings_equal("function_called", "panelsummary")) {
+    sanitize_output(output)           # early
+    sanitize_escape(escape)
+  }
   sanity_ellipsis(vcov, ...)        # before sanitize_vcov
   models <- sanitize_models(models, ...) # before sanitize_vcov
   vcov <- sanitize_vcov(vcov, models, ...)
@@ -523,7 +525,7 @@ modelsummary <- function(
     tab <- redundant_labels(tab, "term")
   }
 
-  if (!settings_equal("output_format", "dataframe")) {
+  if (!settings_equal("output_format", "dataframe") && !settings_equal("function_called", "panelsummary")) {
 
     tab <- redundant_labels(tab, "model")
     tab <- redundant_labels(tab, "group")

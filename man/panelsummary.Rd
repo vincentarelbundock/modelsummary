@@ -44,22 +44,23 @@ panelsummary(
 \item The default output formats and table-making packages can be modified with global options. See the 'Details' section.
 }}
 
-\item{fmt}{determines how to format numeric values
+\item{fmt}{how to format numeric values: integer, user-supplied function, or \code{modelsummary} function.
 \itemize{
-\item integer: Number of decimal digits
+\item Integer: Number of decimal digits
+\item User-supplied functions:
+\itemize{
+\item Any function which accepts a numeric vector and returns a character vector of the same length.
+}
+\item \code{modelsummary} functions:
+\itemize{
+\item \code{fmt = fmt_significant(2)}: Two significant digits (at the term-level)
+\item \code{fmt = fmt_decimal(digits = 2, pdigits = 3)}: Decimal digits for estimate and p values
+\item \code{fmt = fmt_sprintf("\%.3f")}: See \code{?sprintf}
+\item \code{fmt = fmt_term("(Intercept)" = 1, "X" = 2)}: Format terms differently
+\item \code{fmt = fmt_statistic("estimate" = 1, "std.error" = 2)}: Format statistics differently.
+\item \code{fmt = fmt_identity()}: unformatted raw values
+}
 \item string:
-\itemize{
-\item "s#": Number of significant digits. "s2" rounds to the 2nd significant digit, etc.
-\item All other strings are passed to the \code{sprintf} function (e.g., '\%.3f' keeps 3 digits with trailing zero). See \code{?sprintf}
-}
-\item function: returns a formatted character string. For example, the \code{format()} function can be used in combination with the \code{fmt} argument for full control of number formatting: number of digits, number of digits after the decimal, scientific notation, etc. See the Examples section below.
-\item Named list:
-\itemize{
-\item Per-statistic rounding: Names correspond to column names produced by \code{get_estimates(model)} or \code{get_gof(model)}. Ex: \code{fmt=list("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)}
-\item Per-terms rounding: Names correspond to values in the \code{term} column of the \code{get_estimates(model)} output. Ex: \code{fmt=list("(Intercept)"=2, "hp"=1, "fmt"=3)}
-\item The \code{fmt} element of the list is used as default for unspecified elements
-}
-\item NULL: does not format numbers, which allows users to include function in the "glue" strings in the \code{estimate} and \code{statistic} arguments.
 \item Note on LaTeX output: To ensure proper typography, all numeric entries are enclosed in the \verb{\\num\{\}} command, which requires the \code{siunitx} package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 }}
 

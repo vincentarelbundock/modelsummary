@@ -100,6 +100,7 @@ panelsummary <- function(
         # reset for every call
         settings_init(settings = list("function_called" = "panelsummary"))
         sanitize_output(output)
+        sanitize_escape(escape)
         args <- modifyList(
             dots,
             list(
@@ -116,8 +117,7 @@ panelsummary <- function(
                 coef_omit = coef_omit,
                 coef_rename = coef_rename,
                 gof_map = gof_map,
-                gof_omit = gof_omit,
-                escape = FALSE
+                gof_omit = gof_omit
         ))
         tab <- do.call("modelsummary", args)
         panels_list[[i]] <- tab

@@ -40,8 +40,8 @@ theme_ms_kableExtra <- function(tab,
                 group_label = names(hgroup)[i],
                 start_row = hgroup[[i]][1],
                 end_row = hgroup[[i]][2],
-                latex_gap_space = "0.3cm",
-                hline_after = FALSE)
+                latex_gap_space = "0.5cm",
+                ...)
     }
     out <- kableExtra::row_spec(
       out,
