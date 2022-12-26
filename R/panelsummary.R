@@ -79,6 +79,20 @@ panelsummary <- function(
     }
     panel_names <- pad(panel_names)
 
+    # If there are no common model names but all the panels have the same number
+    # of models, we make assumptions.
+    len <- sapply(panels, length)
+    if (isTRUE(length(unique(len)) == 1)) {
+        int <- intersect(names(panels[[1]]), names(panels[[2]]))
+        for (i in seq_along(panels)) {
+            flag1 <- isTRUE(length(int) == 0)
+            flag2 <- length(names(panels[[i]])) != length(names(panels[[i]]))
+            if (flag1 || flag2) {
+                names(panels[[i]]) <- sprintf("(%s)", seq_along(panels[[i]]))
+            }
+        }
+    }
+
     # panel lists to tables
     panels_list <- list()
     for (i in seq_along(panels)) {
@@ -110,14 +124,19 @@ panelsummary <- function(
     }
 
 
+
     # identical GOF rows should be combined and reported at the bottom
     # do not combine GOF if the model names are different in the different panels
     flag <- TRUE
-    for (i in 2:length(panels)) {
-        if (!identical(names(panels[[i - 1]]), names(panels[[i]]))) {
-            flag <- FALSE
+    # panels are not all the same length
+    if (length(unique(sapply(panels, length))) > 1) {
+        for (i in 2:length(panels)) {
+            if (!identical(names(panels[[i - 1]]), names(panels[[i]]))) {
+                flag <- FALSE
+            }
         }
     }
+
     if (flag) {
         est <- lapply(panels_list, subset, part != "gof")
         gof <- lapply(panels_list, subset, part == "gof")
@@ -135,6 +154,8 @@ panelsummary <- function(
     } else {
         gof_same <- NULL
     }
+
+    panels_list <- Filter(function(x) !is.null(x), panels_list)
 
     panels_nrow <- sapply(panels_list, nrow)
 
@@ -155,8 +176,14 @@ panelsummary <- function(
     end <- cumsum(panels_nrow)
     sta <- c(0, head(end, -1)) + 1
     hgroup <- list()
-    for (i in head(seq_along(panel_names), -1)) {
-        hgroup[[panel_names[i]]] <- c(sta[i], end[i])
+    if (isTRUE(nrow(gof_same) > 0)) {
+        for (i in head(seq_along(panel_names), -1)) {
+            hgroup[[panel_names[i]]] <- c(sta[i], end[i])
+        }
+    } else {
+        for (i in seq_along(panel_names)) {
+            hgroup[[panel_names[i]]] <- c(sta[i], end[i])
+        }
     }
 
     # stars

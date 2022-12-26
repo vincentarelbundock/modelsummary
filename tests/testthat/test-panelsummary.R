@@ -1,13 +1,57 @@
 requiet("fixest")
+
 panels <- list(
     "Panel A: MPG" = list(
-        feols(mpg ~  cyl | gear + carb, data = mtcars),
-        feols(mpg ~  cyl | gear + carb + am, data = mtcars)),
+        lm(mpg ~  hp, data = mtcars),
+        lm(mpg ~  hp + factor(gear), data = mtcars)),
     "Panel B: Displacement" = list(
-        feols(disp ~ cyl | gear + carb, data = mtcars),
-        feols(disp ~ cyl | gear + carb + am, data = mtcars))
+        lm(disp ~ hp, data = mtcars),
+        lm(disp ~ hp + factor(gear), data = mtcars))
 )
+panelsummary(panels, gof_map = "nobs")
 
+
+mod <- feols(mpg ~ csw(hp, vs, drat), data = mtcars, split = ~am)
+panels <- list("am = 0" = mod[1:3], "am = 1" = mod[4:6])
+
+# TODO: weird significance mismatch in intercept for different models
+pkgload::load_all()
+panelsummary(
+    output = "gt",
+    panels,
+    fmt = fmt_significant(2),
+    gof_map = c("nobs", "r.squared"))
+
+
+
+dat <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
+
+mod <- feols(
+    flipper_length_mm ~ csw0(body_mass_g, bill_depth_mm),
+    split = ~species,
+    data = dat)
+panels <- list(
+    "Adelie" = mod[1:3],
+    "Chinstrap" = mod[1:3],
+    "Gentoo" = mod[1:3]
+)
+panelsummary(panels, gof_map = c("nobs", "r.squared"))
+
+panels <- list()
+for (s in c("Adelie", "Gentoo", "Chinstrap")) {
+    panels[[s]][[1]] <- lm(
+        flipper_length_mm ~ body_mass_g,
+        data = subset(dat, species == s))
+    panels[[s]][[2]] <- lm(
+        flipper_length_mm ~ body_mass_g + bill_depth_mm,
+        data = subset(dat, species == s))
+update_modelsummary()
+
+pkgload::load_all()
+panelsummary(
+    panels,
+    align = "ldd",
+    gof_map = c("nobs", "r.squared"))
 
 test_that("informative errors", {
     expect_error(panelsummary(panels, shape = term ~ model), regexp = "shape.*not supported")
