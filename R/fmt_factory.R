@@ -1,7 +1,7 @@
 #' Rounding with a user-supplied function in the `fmt` argument
 #' 
+#' @noRd
 #' @param fun A function which accepts a numeric vector and returns a numeric vector of the same length.
-#' @export
 fmt_function <- function(fun) {
     out <- function(x, ...) {
         if (isTRUE(checkmate::check_data_frame(x))) {
