@@ -82,21 +82,40 @@ Warning: When a file name is supplied to the `output` argument, the table is wri
 
 The `fmt` argument defines how numeric values are rounded and presented in the table. This argument accepts three types of input:
 
-* Integer: Number of digits to keep after the period, including trailing zeros.
-* String: Formatting string passed to the `sprintf` function. See `?sprintf` 
-* Function: Returns a character string in the custom format you want.
+* Integer: Number of decimal digits
+* User-supplied function: Accepts a numeric vector and returns a character vector of the same length.
+* `modelsummary` function: `fmt_decimal()`, `fmt_significant()`, `fmt_sprintf()`, `fmt_term()`, `fmt_statistic`, `fmt_identity()`
 
-For example:
+Examples:
 
 ```{r, eval=FALSE}
-# 4 digits and trailing zero
-modelsummary(models, fmt = 4)
+mod <- lm(mpg ~ hp + drat + qsec, data = mtcars)
 
-# 4 digits and trailing zero: using sprintf()
-modelsummary(models, fmt = "%.4f")
+# decimal digits
+modelsummary(mod, fmt = 3)
 
-# scientific notation
-modelsummary(models, fmt = "%.4e")
+# user-supplied function
+modelsummary(mod, fmt = function(x) round(x, 2))
+
+# p values with differnet number of digits
+modelsummary(mod, fmt = fmt_decimal(1, 3), statistic = c("std.error", "p.value"))
+
+# significant digit
+modelsummary(mod, fmt = fmt_significant(3))
+
+# sprintf: decimal digits
+modelsummary(mod, fmt = fmt_sprintf("%.5f"))
+
+# sprintf: scientific notation 
+modelsummary(mod, fmt = fmt_sprintf("%.5e"))
+
+# statistic-specific formatting
+modelsummary(mod, fmt = fmt_statistic(estimate = 4, conf.int = 1), statistic = "conf.int")
+
+# term-specific formatting
+modelsummary(mod, fmt = fmt_term(hp = 4, drat = 1, default = fmt_significant(2)))
+
+modelsummary(mod, fmt = NULL)
 ```
 
 Custom formatting function with big mark commas:
@@ -104,14 +123,6 @@ Custom formatting function with big mark commas:
 ```{r}
 modf <- lm(I(mpg * 100) ~ hp, mtcars)
 f <- function(x) formatC(x, digits = 2, big.mark = ",", format = "f")
-modelsummary(modf, fmt = f, gof_map = NA)
-```
-
-Keep 3 digits, including at least two after the decimal (with optional scientific notation):
-
-```{r}
-modf <- lm(mpg ~ I(hp * 1000) + drat, data = mtcars)
-f <- function(x) format(x, digits = 3, nsmall = 2, scientific = FALSE)
 modelsummary(modf, fmt = f, gof_map = NA)
 ```
 

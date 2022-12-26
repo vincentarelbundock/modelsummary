@@ -44,17 +44,18 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * Warning: Users should not supply a file name to the `output` argument if they intend to customize the table with external packages. See the 'Details' section.
 #' * LaTeX compilation requires the `booktabs` and `siunitx` packages, but `siunitx` can be disabled or replaced with global options. See the 'Details' section.
 #' * The default output formats and table-making packages can be modified with global options. See the 'Details' section.
-#' @param fmt determines how to format numeric values
-#' * integer: Number of decimal digits
+#' @param fmt how to format numeric values: integer, user-supplied function, or `modelsummary` function.
+#' * Integer: Number of decimal digits
+#' * User-supplied functions: 
+#'   - Any function which accepts a numeric vector and returns a character vector of the same length.
+#' * `modelsummary` functions:
+#'   - `fmt = fmt_significant(2)`: Two significant digits (at the term-level)
+#'   - `fmt = fmt_decimal(digits = 2, pdigits = 3)`: Decimal digits for estimate and p values
+#'   - `fmt = fmt_sprintf("%.3f")`: See `?sprintf`
+#'   - `fmt = fmt_term("(Intercept)" = 1, "X" = 2)`: Format terms differently
+#'   - `fmt = fmt_statistic("estimate" = 1, "std.error" = 2)`: Format statistics differently.
+#'   - `fmt = fmt_identity()`: unformatted raw values
 #' * string: 
-#'   - "s#": Number of significant digits. "s2" rounds to the 2nd significant digit, etc.
-#'   - All other strings are passed to the `sprintf` function (e.g., '%.3f' keeps 3 digits with trailing zero). See `?sprintf`
-#' * function: returns a formatted character string. For example, the `format()` function can be used in combination with the `fmt` argument for full control of number formatting: number of digits, number of digits after the decimal, scientific notation, etc. See the Examples section below.
-#' * Named list:
-#'   - Per-statistic rounding: Names correspond to column names produced by `get_estimates(model)` or `get_gof(model)`. Ex: `fmt=fmt_statistic("estimate"=2, "std.error"=1, "r.squared"=4, "fmt"=3)`
-#'   - Per-terms rounding: Names correspond to values in the `term` column of the `get_estimates(model)` output. Ex: `fmt=fmt_term("(Intercept)"=2, "hp"=1, "fmt"=3)`
-#'   - The `fmt` element of the list is used as default for unspecified elements
-#' * NULL: does not format numbers, which allows users to include function in the "glue" strings in the `estimate` and `statistic` arguments. 
 #' * Note on LaTeX output: To ensure proper typography, all numeric entries are enclosed in the `\num{}` command, which requires the `siunitx` package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 #' @param stars to indicate statistical significance
 #' * FALSE (default): no significance stars.
