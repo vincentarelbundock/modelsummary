@@ -1,9 +1,151 @@
-# TODO: p values
-# TODO: fmt_significant should still work for DF where there is no "term" column
+#' Rounding with a user-supplied function in the `fmt` argument
+#' 
+#' @param fun A function which accepts a numeric vector and returns a numeric vector of the same length.
+#' @export
+fmt_function <- function(fun) {
+    out <- function(x, ...) {
+        if (isTRUE(checkmate::check_data_frame(x))) {
+            for (n in colnames(x)) {
+                if (is.numeric(x[[n]])) {
+                    x[[n]] <- fun(x[[n]])
+                    x[[n]] <- fmt_nainf(x[[n]])
+                    x[[n]] <- fmt_mathmode(x[[n]])
+                }
+            }
+        } else if (isTRUE(checkmate::check_numeric(x))) {
+            x <- fun(x)
+            x <- fmt_nainf(x)
+            x <- fmt_mathmode(x)
+        }
+        return(x)
+    }
+    class(out) <- c("fmt_factory", class(out))
+    return(out)
+}
 
+
+#' Rounding with the `sprintf()` function in the `fmt` argument
+#' 
+#' @param fmt A string to control `sprintf()`, such as `"%.3f"` to keep 3 decimal digits. See `?sprintf`
+#' @export
+fmt_sprintf <- function(fmt) {
+    fun <- function(k) sprintf(fmt, k)
+    out <- function(x, ...) {
+        fmt_function(fun)(x)
+    }
+    class(out) <- c("fmt_factory", class(out))
+    return(out)
+}
+
+
+fmt_identity <- function(...) {
+    out <- function(x) return(x)
+    class(out) <- c("fmt_factory", class(out))
+    return(out)
+}
+
+
+#' Rounding with decimal digits in the `fmt` argument
+#' 
+#' @param digits Number of decimal digits to keep, including trailing zeros.
+#' @param pdigits Number of decimal digits to keep for p values. If `NULL`, the value of `digits` is used.
+#' @param ... Additional arguments are passed to the `format()` function (e.g., `big.marks`, `scientific`). See `?format`
+#' @export
+fmt_decimal <- function(digits = 3, pdigits = NULL, ...) {
+
+    if (is.null(pdigits)) {
+        pdigits <- digits
+    }
+
+    out <- function(x, pval = FALSE, ...) {
+        fun <- function(z, ...) {
+            format(round(z, digits), nsmall = digits, drop0trailing = FALSE, trim = TRUE, ...)
+        }
+        pfun <- function(z, ...) {
+            threshold <- 10^-pdigits
+            ifelse(z < threshold,
+                   paste0("<", format(round(threshold, pdigits), trim = TRUE)),
+                   format(round(z, pdigits), nsmall = pdigits, trim = TRUE), ...)
+        }
+
+        if (isTRUE(checkmate::check_data_frame(x))) {
+            for (n in colnames(x)) {
+                if (is.numeric(x[[n]])) {
+                    if (n == "p.value") {
+                        x[[n]] <- pfun(x[[n]], ...)
+                    } else {
+                        x[[n]] <- fun(x[[n]], ...)
+                    }
+                    x[[n]] <- fmt_nainf(x[[n]])
+                    x[[n]] <- fmt_mathmode(x[[n]])
+                } else {
+                    x[[n]] <- as.character(x[[n]])
+                    x[[n]] <- fmt_nainf(x[[n]])
+                }
+            }
+
+        } else if (isTRUE(checkmate::check_numeric(x))) {
+            if (isTRUE(pval)) {
+                x <- pfun(x, ...)
+            } else {
+                x <- fun(x, ...)
+            }
+            x <- fmt_nainf(x)
+            x <- fmt_mathmode(x)
+        }
+
+        return(x)
+    }
+    class(out) <- c("fmt_factory", class(out))
+    return(out)
+}
+
+
+#' Rounding with significant digits in the `fmt` argument
+#' 
+#' The number of decimal digits to keep after the decimal is assessed 
+#' @param digits Number of significant digits to keep.
+#' @param ... Additional arguments are passed to the `format()` function (e.g., `big.marks`, `scientific`). See `?format`
+#' @export
+fmt_significant <- function(digits = 3, ...) {
+    fun <- function(x) format(x, digits = digits, trim = TRUE, ...)
+    out <- function(x) {
+        if (isTRUE(checkmate::check_data_frame(x))) {
+            # unsupported columns/statistics: decimal rounding
+            z <- fmt_decimal(digits = digits)(x)
+            # supported columns/statistics: significant rounding
+            cols <- c("estimate", "std.error", "conf.low", "conf.high")
+            cols <- intersect(colnames(x), cols)
+            tmp <- x[, cols, drop = FALSE]
+            tmp <- apply(tmp, 1, FUN = fun)
+            tmp <- as.data.frame(t(tmp), col.names = cols)
+            for (n in colnames(tmp)) {
+                z[[n]] <- tmp[[n]]
+                z[[n]] <- fmt_nainf(z[[n]])
+                z[[n]] <- fmt_mathmode(z[[n]])
+            }
+            x <- z
+        } else if (isTRUE(checkmate::check_numeric(x))) {
+            x <- fun(x)
+            x <- fmt_nainf(x)
+            x <- fmt_mathmode(x)
+        }
+        return(x)
+    }
+    class(out) <- c("fmt_factory", class(out))
+    return(out)
+}
+
+
+
+#' Rounding with decimal digits on a per-statistic basis in the `fmt` argument for `modelsummary()`
+#' 
+#' @param ... Statistic names and `fmt` value
+#' @param default Number of decimal digits to keep for unspecified terms
+#' @export
 fmt_statistic <- function(..., default = 3) {
 
-    args <- modifyList(list(...), list("default" = default))
+    args <- utils::modifyList(list(...), list("default" = default))
     if (!isTRUE(checkmate::check_list(args, names = "named"))) {
         msg <- "All arguments of the `fmt_statistic()` function must be named."
         insight::format_error(msg)
@@ -31,8 +173,8 @@ fmt_statistic <- function(..., default = 3) {
                 } else {
                     x[[n]] <- args[["default"]](x[[n]])
                 }
+                x[[n]] <- fmt_nainf(x[[n]])
                 x[[n]] <- fmt_mathmode(x[[n]])
-                x[[n]] <- fmt_clean(x[[n]])
             }
         }
         return(x)
@@ -43,9 +185,14 @@ fmt_statistic <- function(..., default = 3) {
 }
 
 
+#' Rounding with decimal digits on a per-term basis in the `fmt` argument for `modelsummary()`
+#' 
+#' @param ... Term names and `fmt` value
+#' @param default Number of decimal digits to keep for unspecified terms
+#' @export
 fmt_term <- function(..., default = 3) {
 
-    args <- modifyList(list(...), list("default" = default))
+    args <- utils::modifyList(list(...), list("default" = default))
     if (!isTRUE(checkmate::check_list(args, names = "named"))) {
         msg <- "All arguments of the `fmt_statistic()` function must be named."
         insight::format_error(msg)
@@ -71,162 +218,25 @@ fmt_term <- function(..., default = 3) {
                     } else {
                         atomic[[col]][[row]] <- args[["default"]](atomic[[col]][[row]])
                     }
+                    atomic[[col]][[row]] <- fmt_nainf(atomic[[col]][[row]])
+                    atomic[[col]][[row]] <- fmt_mathmode(atomic[[col]][[row]])
                 }
             }
         }
 
         x <- do.call("cbind", lapply(atomic, as.vector))
         x <- data.frame(x)
-        for (n in colnames(x)) {
-            x[[n]] <- fmt_clean(x[[n]])
-        }
 
         return(x)
     }
 
-    class(out) <- c("fmt_factory", class(out))
-    return(out)
-}
-
-
-
-fmt_identity <- function(...) {
-    out <- function(x) {
-        return(x)
-    }
-    class(out) <- c("fmt_factory", class(out))
-    return(out)
-}
-
-
-fmt_decimal <- function(digits = 3, pdigits = NULL, ...) {
-    if (is.null(pdigits)) {
-        pdigits <- digits
-    }
-    out <- function(x, pval = FALSE, ...) {
-        # data frame
-        if (isTRUE(checkmate::check_data_frame(x))) {
-            for (n in colnames(x)) {
-                if (is.numeric(x[[n]])) {
-                    if (n == "p.value") {
-                        th <- 10^-pdigits
-                        x[[n]] <- ifelse(
-                            x[[n]] < th,
-                            paste0("<", format(round(th, pdigits), trim = TRUE)),
-                            format(round(x[[n]], pdigits), nsmall = pdigits, trim = TRUE), ...)
-                    } else {
-                        x[[n]] <- format(round(x[[n]], digits), nsmall = digits, drop0trailing = FALSE, trim = TRUE, ...)
-                    }
-                    x[[n]] <- fmt_mathmode(x[[n]])
-                } else {
-                    x[[n]] <- as.character(x[[n]])
-                }
-                x[[n]] <- fmt_clean(x[[n]])
-            }
-
-        # numeric vector
-        } else if (isTRUE(checkmate::check_numeric(x))) {
-            if (isTRUE(pval)) {
-                th <- 10^-pdigits
-                x <- ifelse(
-                    x < th,
-                    paste0("<", format(round(th, pdigits), trim = TRUE)),
-                    format(round(x, pdigits), nsmall = pdigits, trim = TRUE), ...)
-            } else {
-                x <- format(round(x, digits), nsmall = digits, drop0trailing = FALSE, trim = TRUE, ...)
-            }
-            x <- fmt_mathmode(x)
-            x <- fmt_clean(x)
-        }
-
-        return(x)
-    }
-
-    class(out) <- c("fmt_factory", class(out))
-    return(out)
-}
-
-
-fmt_sprintf <- function(fmt) {
-    out <- function(x, ...) {
-        # data frame
-        if (isTRUE(checkmate::check_data_frame(x))) {
-            for (n in colnames(x)) {
-                if (is.numeric(x[[n]])) {
-                    x[[n]] <- sprintf(fmt, x[[n]])
-                    x[[n]] <- fmt_mathmode(x[[n]])
-                    x[[n]] <- fmt_clean(x[[n]])
-                }
-            }
-
-        # numeric vector
-        } else if (isTRUE(checkmate::check_numeric(x))) {
-            x <- sprintf(fmt, x)
-            x <- fmt_mathmode(x)
-            x <- fmt_clean(x)
-        }
-
-        return(x)
-    }
-    class(out) <- c("fmt_factory", class(out))
-    return(out)
-}
-
-
-fmt_function <- function(fun) {
-    out <- function(x, ...) {
-        # data frame
-        if (isTRUE(checkmate::check_data_frame(x))) {
-            for (n in colnames(x)) {
-                if (is.numeric(x[[n]])) {
-                    x[[n]] <- fun(x[[n]])
-                    x[[n]] <- fmt_clean(x[[n]])
-                }
-            }
-
-        # numeric vector
-        } else if (isTRUE(checkmate::check_numeric(x))) {
-            x <- fun(x)
-            x <- fmt_clean(x)
-
-        }
-
-        return(x)
-    }
-    class(out) <- c("fmt_factory", class(out))
-    return(out)
-}
-
-
-fmt_significant <- function(digits = 2) {
-    out <- function(x) {
-        if (!isTRUE(checkmate::check_data_frame(x))) {
-            msg <- "`fmt_significant` only supports data frames."
-            insight::format_error(msg)
-        }
-
-        # unsupported: decimal rounding
-        dec <- fmt_decimal(digits = digits)
-        z <- dec(x)
-
-        # supported: significant rounding
-        cols <- c("estimate", "std.error", "conf.low", "conf.high")
-        cols <- intersect(colnames(x), cols)
-        tmp <- x[, cols, drop = FALSE]
-        tmp <- apply(tmp, 1, FUN = function(x) format(x, digits = digits, trim = TRUE))
-        tmp <- as.data.frame(t(tmp), col.names = cols)
-        for (n in colnames(tmp)) {
-            z[[n]] <- tmp[[n]]
-        }
-        return(z)
-    }
     class(out) <- c("fmt_factory", class(out))
     return(out)
 }
 
 
 fmt_mathmode <- function(x) {
-    out <- gsub("^NA$|^NaN$|^-Inf$|^Inf$", "", x)
+    out <- x
 
     ## LaTeX siunitx \num{}
     if (settings_equal("output_format", c("latex", "latex_tabular"))) {
@@ -249,11 +259,15 @@ fmt_mathmode <- function(x) {
             out <- sprintf("$%s$", out)
         }
     }
+
+    # we usually run fmt_mathmode before this
+    out <- gsub("\\\\num\\{\\}", "", out)
+
     return(out)
 }
 
 
-fmt_clean <- function(x) {
+fmt_nainf <- function(x) {
     if (is.factor(x) || is.logical(x) || is.character(x)) {
         x <- as.character(x)
     }
