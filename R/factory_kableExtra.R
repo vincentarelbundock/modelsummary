@@ -146,7 +146,8 @@ factory_kableExtra <- function(tab,
     out,
     output_format = settings_get("output_format"),
     hrule = hrule,
-    hgroup = hgroup)
+    hgroup = hgroup,
+    ...)
 
   # span: apply (not supported in markdown)
   if (!is.null(span_list) && settings_equal("output_format", c("kableExtra", "latex", "html"))) {

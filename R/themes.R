@@ -33,15 +33,38 @@ theme_ms_kableExtra <- function(tab,
 
   if (!is.null(hgroup)) {
     for (i in seq_along(hgroup)) {
-      out <- kableExtra::group_rows(
-                out,
-                bold = FALSE,
-                italic = TRUE,
-                group_label = names(hgroup)[i],
-                start_row = hgroup[[i]][1],
-                end_row = hgroup[[i]][2],
-                latex_gap_space = "0.5cm",
-                ...)
+      args <- list(
+        kable_input = out,
+        bold = FALSE,
+        italic = TRUE,
+        indent = FALSE,
+        hline_after = FALSE,
+        extra_latex_after = "\\midrule ",
+        latex_gap_space = "0.5em",
+        group_label = names(hgroup[i]),
+        start_row = hgroup[[i]][1],
+        end_row = hgroup[[i]][2])
+
+      # \\midrule only works in LaTeX tables, but we don't want to double
+      if (!output_format %in% c("latex", "latex_tabular")) {
+        args[["hline_after"]] <- TRUE
+      }
+
+      # user-specified arguments override default themes
+      dots <- list(...)
+      for (n in names(dots)) {
+        args[[n]] <- dots[[n]]
+      }
+      valid <- names(formals(kableExtra::group_rows))
+      args <- args[names(args) %in% valid]
+
+      out <- do.call(kableExtra::group_rows, args)
+
+      # indentation breaks when parameter name starts with parenthesis: "(Intercept)"
+      if (output_format %in% c("latex", "latex_tabular")) {
+        out <- gsub("\\\\hspace\\{1em\\}", "\\\\hspace\\{1em\\} ", out)
+      }
+
     }
     out <- kableExtra::row_spec(
       out,
