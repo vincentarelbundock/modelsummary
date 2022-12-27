@@ -227,7 +227,7 @@ modelsummary <- function(
   ## sanity functions validate variables/settings
   ## sanitize functions validate & modify & initialize
   checkmate::assert_string(gof_omit, null.ok = TRUE)
-  if (!settings_equal("function_called", "panelsummary")) {
+  if (settings_equal("function_called", "panelsummary")) {
     sanitize_output(output)           # early
     sanitize_escape(escape)
   }

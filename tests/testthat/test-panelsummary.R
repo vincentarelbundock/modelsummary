@@ -2,6 +2,7 @@ requiet("fixest")
 
 
 test_that("(non-)matching models", {
+    pkgload::load_all()
     panels <- list(
         "Panel A: MPG" = list(
             lm(mpg ~ hp, data = mtcars),
@@ -13,6 +14,7 @@ test_that("(non-)matching models", {
     tab1 <- panelsummary(panels, gof_map = "nobs", output = "dataframe")
     expect_equal(colnames(tab1), c(" ", "(1)", "(2)"))
 
+    panelsummary(panels, gof_map = "nobs")
 
     panels <- list(
         "Panel A: MPG" = list(

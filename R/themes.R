@@ -10,6 +10,16 @@ theme_ms_kableExtra <- function(tab,
     out <- tab
   }
 
+  # kableExtra quirk: latex hrule before hgroup
+  if (!is.null(hrule) && output_format %in% c("latex", "latex_tabular")) {
+    for (pos in hrule) {
+      out <- kableExtra::row_spec(out,
+        row = pos - 1,
+        extra_latex_after = "\\midrule"
+      )
+    }
+  }
+
   # groups are not supported by kableExtra in markdown output
   if (!is.null(hgroup) && !output_format %in% "markdown") {
     for (i in seq_along(hgroup)) {
@@ -40,38 +50,22 @@ theme_ms_kableExtra <- function(tab,
 
       out <- do.call(kableExtra::group_rows, args)
 
-      # indentation breaks when parameter name starts with parenthesis: "(Intercept)"
+      # indentation breaks when param name starts with parenthesis: "(Intercept)"
       if (output_format %in% c("latex", "latex_tabular")) {
         out <- gsub("\\\\hspace\\{1em\\}", "\\\\hspace\\{1em\\} ", out)
       }
-
-    }
-    out <- kableExtra::row_spec(
-      out,
-      row = hgroup[[length(hgroup)]][2],
-      hline_after = TRUE)
-  }
-
-  # horizontal rule to separate coef/gof
-  # row_spec must be called after pack_group
-  if (!is.null(hrule)) {
-    if (output_format %in% c("latex", "latex_tabular")) {
-      for (pos in hrule) {
-        out <- kableExtra::row_spec(out,
-          row = pos - 1,
-          extra_latex_after = "\\midrule"
-        )
-      }
-    } else if (output_format %in% c("kableExtra", "html")) {
-      for (pos in hrule) {
-        out <- kableExtra::row_spec(out,
-          row = pos - 1,
-          extra_css = "box-shadow: 0px 1px"
-        )
-      }
     }
   }
 
+  # kableExtra quirk: latex hrule before hgroup
+  if (!is.null(hrule) && output_format %in% c("kableExtra", "html")) {
+    for (pos in hrule) {
+      out <- kableExtra::row_spec(out,
+        row = pos - 1,
+        extra_css = "box-shadow: 0px 1px"
+      )
+    }
+  }
 
   return(out)
 }

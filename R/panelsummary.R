@@ -97,6 +97,7 @@ panelsummary <- function(
         }
     }
 
+
     # panel lists to tables
     panels_list <- list()
     for (i in seq_along(panels)) {
@@ -127,7 +128,9 @@ panelsummary <- function(
         panels_list[[i]] <- tab
     }
 
-
+    # need the settings for later
+    sanitize_output(output)
+    sanitize_escape(escape)
 
     # identical GOF rows should be combined and reported at the bottom
     # do not combine GOF if the model names are different in the different panels
@@ -154,7 +157,17 @@ panelsummary <- function(
                 panels_list[[i]] <- rbind(est[[i]], gof[[i]])
             }
         }
+
+        # TODO: this should go in factory_kableExtra
+        # indentation of consolidated GOF
+        if (isTRUE(dots[["indent"]]) &&
+            isTRUE(nrow(gof_same) > 0) &&
+            settings_equal("output_format", c("latex", "latex_tabular"))) {
+            gof_same$term <- paste("\\hspace{1em}", gof_same$term)
+        }
+
         panels_list <- c(panels_list, list(gof_same))
+
     } else {
         gof_same <- NULL
     }
@@ -163,8 +176,12 @@ panelsummary <- function(
 
     panels_nrow <- sapply(panels_list, nrow)
 
-    # only a hrule after the last data, before gof_same
-    hrule <- tail(head(cumsum(panels_nrow) + 1, -1), 1)
+    # only one hrule after the last data, before gof_same
+    if (isTRUE(nrow(gof_same) == 0)) {
+        hrule <- NULL
+    } else {
+        hrule <- sum(head(panels_nrow, -1)) + 1
+    }
 
     tab <- data.table::rbindlist(panels_list, fill = TRUE)
 
@@ -192,8 +209,6 @@ panelsummary <- function(
     }
 
     # stars
-    sanitize_output(output)
-    sanitize_escape(escape)
     if (!isFALSE(stars) && !any(grepl("\\{stars\\}", c(estimate, statistic)))) {
         stars_note <- make_stars_note(stars)
         if (is.null(notes)) {
