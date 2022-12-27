@@ -57,13 +57,13 @@ factory_kableExtra <- function(tab,
     table-align-text-post=false
   ]}
   "
-  if (settings_equal("output_format", c("latex", "latex_tabular")) &&
-      settings_equal("format_numeric_latex", "siunitx")) {
+  # if (settings_equal("output_format", c("latex", "latex_tabular")) &&
+  #     settings_equal("format_numeric_latex", "siunitx")) {
     invisible(knitr::knit_meta_add(list(
       rmarkdown::latex_dependency("booktabs"))))
     invisible(knitr::knit_meta_add(list(
       rmarkdown::latex_dependency("siunitx", extra_lines = extra_siunitx))))
-  }
+  # }
 
   ## align
   if (!is.null(align)) {

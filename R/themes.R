@@ -10,28 +10,8 @@ theme_ms_kableExtra <- function(tab,
     out <- tab
   }
 
-  # horizontal rule to separate coef/gof
-  # not supported in markdown, and omitted from latex_tabular
-  # row_spec does not play well with group_rows
-  if (!is.null(hrule) && is.null(hgroup)) {
-    if (output_format %in% c("latex", "latex_tabular")) {
-      for (pos in hrule) {
-        out <- kableExtra::row_spec(out,
-          row = pos - 1,
-          extra_latex_after = "\\midrule"
-        )
-      }
-    } else if (output_format %in% c("kableExtra", "html")) {
-      for (pos in hrule) {
-        out <- kableExtra::row_spec(out,
-          row = pos - 1,
-          extra_css = "box-shadow: 0px 1px"
-        )
-      }
-    }
-  }
-
-  if (!is.null(hgroup)) {
+  # groups are not supported by kableExtra in markdown output
+  if (!is.null(hgroup) && !output_format %in% "markdown") {
     for (i in seq_along(hgroup)) {
       args <- list(
         kable_input = out,
@@ -71,6 +51,27 @@ theme_ms_kableExtra <- function(tab,
       row = hgroup[[length(hgroup)]][2],
       hline_after = TRUE)
   }
+
+  # horizontal rule to separate coef/gof
+  # row_spec must be called after pack_group
+  if (!is.null(hrule)) {
+    if (output_format %in% c("latex", "latex_tabular")) {
+      for (pos in hrule) {
+        out <- kableExtra::row_spec(out,
+          row = pos - 1,
+          extra_latex_after = "\\midrule"
+        )
+      }
+    } else if (output_format %in% c("kableExtra", "html")) {
+      for (pos in hrule) {
+        out <- kableExtra::row_spec(out,
+          row = pos - 1,
+          extra_css = "box-shadow: 0px 1px"
+        )
+      }
+    }
+  }
+
 
   return(out)
 }

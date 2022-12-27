@@ -55,6 +55,10 @@ panelsummary <- function(
 
     number_of_panels <- length(panels)
 
+    for (i in seq_along(panels)) {
+        panels[[i]] <- sanitize_models(panels[[i]], ...)
+    }
+
     # panel names
     # model names dictionary: use unique names for manipulation
     if (is.null(names(panels))) {
@@ -98,9 +102,9 @@ panelsummary <- function(
     for (i in seq_along(panels)) {
         # modelsummary(output="dataframe") changes the output format
         # reset for every call
-        settings_init(settings = list("function_called" = "panelsummary"))
         sanitize_output(output)
         sanitize_escape(escape)
+        settings_set("function_called", "panelsummary")
         args <- modifyList(
             dots,
             list(
@@ -159,7 +163,8 @@ panelsummary <- function(
 
     panels_nrow <- sapply(panels_list, nrow)
 
-    hrule <- head(cumsum(panels_nrow) + 1, -1)
+    # only a hrule after the last data, before gof_same
+    hrule <- tail(head(cumsum(panels_nrow) + 1, -1), 1)
 
     tab <- data.table::rbindlist(panels_list, fill = TRUE)
 
@@ -188,6 +193,7 @@ panelsummary <- function(
 
     # stars
     sanitize_output(output)
+    sanitize_escape(escape)
     if (!isFALSE(stars) && !any(grepl("\\{stars\\}", c(estimate, statistic)))) {
         stars_note <- make_stars_note(stars)
         if (is.null(notes)) {
@@ -196,6 +202,15 @@ panelsummary <- function(
             notes <- c(stars_note, notes)
         }
         notes <- escape_string(notes)
+    }
+
+    # align
+    if (is.null(align)) {
+        n_stub <- sum(grepl("^ *$", colnames(tab)))
+        align <- paste0(strrep("l", n_stub), strrep("c", ncol(tab) - n_stub))
+        if (isTRUE(checkmate::check_data_frame(add_columns))) {
+            align <- paste0(align, strrep("c", ncol(add_columns)))
+        }
     }
 
     args <- modifyList(

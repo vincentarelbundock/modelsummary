@@ -1,6 +1,10 @@
 ---
 title: "panelsummary: regression tables with stacked models"
+output: pdf_document
 ---
+
+
+# `panelsummary`
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -26,7 +30,76 @@ thead {
 }
 ```
 
-# Replicating a `panelsummary` package example
+
+## Simple example examples
+
+We want to present 4 different models, half of which are estimated using a different outcome variable. When using `modelsummary`, we store models in a list. When useing `panelsummary`, we store models in a list of lists:
+
+```{r}
+library(modelsummary)
+
+panels <- list(
+    list(
+        lm(mpg ~ drat, data = mtcars),
+        lm(mpg ~ drat + qsec, data = mtcars)
+    ),
+    list(
+        lm(hp ~ drat, data = mtcars),
+        lm(hp ~ drat + qsec, data = mtcars)
+    )
+)
+
+panelsummary(panels, gof_map = "nobs")
+```
+
+We can can name the models and the panels by supplying a named nested list:
+
+```{r}
+panels <- list(
+    "Outcome: mpg" = list(
+        "One" = lm(mpg ~ drat, data = mtcars),
+        "Two" = lm(mpg ~ drat + qsec, data = mtcars)
+    ),
+    "Outcome: hp" = list(
+        "One" = lm(hp ~ drat, data = mtcars),
+        "Two" = lm(hp ~ drat + qsec, data = mtcars)
+    )
+)
+pkgload::load_all()
+panelsummary(panels, gof_map = c("r.squared", "nobs"))
+```
+
+
+## Non-matching names
+
+```{r}
+panels <- list(
+    "Outcome: mpg" = list(
+        "One" = lm(mpg ~ drat, data = mtcars),
+        "Two" = lm(mpg ~ drat + qsec, data = mtcars)
+    ),
+    "Outcome: hp" = list(
+        "One" = lm(hp ~ drat, data = mtcars),
+        "Three" = lm(hp ~ drat + qsec, data = mtcars)
+    )
+)
+panelsummary(panels, gof_map = "nobs")
+```
+
+
+
+```{r}
+panels <- list(
+    "Panel A: MPG" = list(
+        feols(mpg ~  cyl | gear + carb, cluster = ~hp, data = mtcars),
+        feols(mpg ~  cyl | gear + carb + am, cluster = ~hp, data = mtcars)),
+    "Panel B: Displacement" = list(
+        feols(disp ~ cyl | gear + carb, cluster = ~hp, data = mtcars),
+        feols(disp ~ cyl | gear + carb + am, cluster = ~hp, data = mtcars))
+)
+```
+
+    
 
 ```{r}
 glance_custom.fixest <- function(x, ...) {
@@ -45,13 +118,10 @@ panels <- list(
 panelsummary(
     panels,
     title = "Automated Mean of Dependent Variable",
-    gof_map = c("nobs", "Mean of DV"),
-    align = "lcc",
-    output = "kableExtra")
-
+    gof_map = c("nobs", "Mean of DV"))
 ```
 
-# {fixest} + {gt} + align
+# {fixest} + align
 
 ```{r}
 f <- Sepal.Length ~ csw(Sepal.Width, Petal.Width)
@@ -63,10 +133,8 @@ panels <- list(
 gm <- c("vcov.type", "r.squared", "nobs", "FE: cyl")
 panelsummary(
     panels,
-    output = "gt",
     stars = TRUE,
-    gof_map = gm,
-    align = "ldd")
+    gof_map = gm)
 ```
 
 # lm() + lmer() + {kableExtra}
@@ -80,7 +148,7 @@ panels <- list(
         lmer(Sepal.Length ~ Sepal.Width + (1 | Species), data = iris),
         lmer(Sepal.Length ~ Sepal.Width + Petal.Width + (1 | Species), data = iris))
 )
-panelsummary(panels, output = "kableExtra", gof_map = c("aic", "nobs"))
+panelsummary(panels, gof_map = c("aic", "nobs"))
 ```
 
 # Non-matching model names
@@ -111,15 +179,20 @@ output: pdf_document
 ---
 
 ```{r}
+#| eval = FALSE
+
 library("fixest")
 library("modelsummary")
+pkgload::load_all()
+
+
 panels <- list(
     "Panel A: MPG" = list(
-        feols(mpg ~  cyl | gear + carb, cluster = ~hp, data = mtcars),
-        feols(mpg ~  cyl | gear + carb + am, cluster = ~hp, data = mtcars)),
+        feols(mpg ~  cyl | gear, cluster = ~hp, data = mtcars),
+        feols(mpg ~  cyl + am | gear, cluster = ~hp, data = mtcars)),
     "Panel B: Displacement" = list(
-        feols(disp ~ cyl | gear + carb, cluster = ~hp, data = mtcars),
-        feols(disp ~ cyl | gear + carb + am, cluster = ~hp, data = mtcars))
+        feols(disp ~ cyl | gear, cluster = ~hp, data = mtcars),
+        feols(disp ~ cyl + am | gear, cluster = ~hp, data = mtcars))
 )
 panelsummary(panels, gof_map = c("nobs", "r.squared"))
 ```
