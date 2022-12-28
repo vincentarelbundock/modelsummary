@@ -226,7 +226,7 @@ reference <- readRDS(file = "known_output/statistic-override.rds")
 
 
 test_that("bad function", {
-  expect_error(modelsummary(models, vcov = na.omit))
+  expect_error(modelsummary(models, vcov = stats::na.omit))
 })
 
 test_that("bad formula", {

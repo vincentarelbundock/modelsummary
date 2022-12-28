@@ -10,7 +10,7 @@ fixest_multi_names <- function(x) {
                 nam[, i] <- NA
               }
             }
-            out <- na.omit(t(nam))
+            out <- stats::na.omit(t(nam))
             out <- apply(out, 2, paste, collapse = "; ")
             out <- trimws(out)
           } else {

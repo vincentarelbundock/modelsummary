@@ -106,7 +106,7 @@ panelsummary <- function(
         sanitize_output(output)
         sanitize_escape(escape)
         settings_set("function_called", "panelsummary")
-        args <- modifyList(
+        args <- utils::modifyList(
             dots,
             list(
                 models = panels[[i]],
@@ -222,7 +222,7 @@ panelsummary <- function(
         }
     }
 
-    args <- modifyList(
+    args <- utils::modifyList(
         dots,
         list(
             data = tab,
