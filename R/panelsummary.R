@@ -82,6 +82,7 @@ panelsummary <- function(
         panel_names <- names(panels)
     }
     panel_names <- pad(panel_names)
+    panel_names <- escape_string(panel_names)
 
     # If there are no common model names but all the panels have the same number
     # of models, we make assumptions.
@@ -182,6 +183,10 @@ panelsummary <- function(
     colnames(tab)[1] <- " "
     tab[is.na(tab)] <- ""
 
+    # pad and escape column names
+    colnames(tab) <- pad(colnames(tab)) 
+    colnames(tab) <- escape_string(colnames(tab))
+
     # group rows by panel: kableExtra
     if (isTRUE(nrow(gof_same) > 0)) {
         panel_names <- c(panel_names, "Combined GOF")
@@ -210,7 +215,6 @@ panelsummary <- function(
         } else {
             notes <- c(stars_note, notes)
         }
-        notes <- escape_string(notes)
     }
 
     # align

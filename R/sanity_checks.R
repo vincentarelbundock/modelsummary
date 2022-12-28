@@ -115,11 +115,12 @@ sanitize_estimate <- function(estimate, number_of_models) {
 
 
 
+# TODO: sanity tite
 
 #' sanity check
 #'
 #' @noRd
-sanity_title <- function(title) checkmate::assert_character(title, len = 1, null.ok = TRUE)
+sanity_title <- function(title) TRUE #checkmate::assert_character(title, len = 1, null.ok = TRUE)
 
 
 #' sanity check
