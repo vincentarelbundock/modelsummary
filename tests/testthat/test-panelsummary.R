@@ -1,5 +1,14 @@
 requiet("fixest")
 
+panels <- list(
+    "Panel A: MPG" = list(
+        "A" = lm(mpg ~ hp, data = mtcars),
+        "B" = lm(mpg ~ hp + factor(gear), data = mtcars)),
+    "Panel B: Displacement" = list(
+        "A" = lm(disp ~ hp, data = mtcars),
+        "C" = lm(disp ~ hp + factor(gear), data = mtcars))
+)
+
 
 test_that("(non-)matching models", {
     panels <- list(
@@ -44,3 +53,5 @@ test_that("output formats: no validity", {
     p <- panelsummary(panels, output = "latex")
     expect_s3_class(p, "knitr_kable")
 })
+
+
