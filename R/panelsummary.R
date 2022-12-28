@@ -183,9 +183,9 @@ panelsummary <- function(
     colnames(tab)[1] <- " "
     tab[is.na(tab)] <- ""
 
-    # pad and escape column names
-    colnames(tab) <- pad(colnames(tab)) 
-    colnames(tab) <- escape_string(colnames(tab))
+    # pad
+    colnames(tab) <- pad(colnames(tab))
+
 
     # group rows by panel: kableExtra
     if (isTRUE(nrow(gof_same) > 0)) {

@@ -916,22 +916,6 @@ modelsummary(list("Wald" = mod_list, "Kenward" = mod_list_kenward),
 
 We want to present 4 different models, half of which are estimated using a different outcome variable. When using `modelsummary`, we store models in a list. When useing `panelsummary`, we store models in a list of lists:
 
-Like with `modelsummary()`, we can can name models and panels by using named (nested) lists:
-
-```{r}
-panels <- list(
-    "Outcome: mpg" = list(
-        "(I)" = lm(mpg ~ 1, data = mtcars),
-        "(II)" = lm(mpg ~ qsec, data = mtcars)
-    ),
-    "Outcome: hp" = list(
-        "(I)" = lm(hp ~ 1, data = mtcars),
-        "(II)" = lm(hp ~ qsec, data = mtcars)
-    )
-)
-
-panelsummary(panels)
-```
 
 ```{r}
 gm <- c("r.squared", "nobs", "rmse")
@@ -950,12 +934,29 @@ panels <- list(
 panelsummary(panels, gof_map = gm)
 ```
 
+Like with `modelsummary()`, we can can name models and panels by using named (nested) lists:
+
+```{r}
+panels <- list(
+    "Outcome: mpg" = list(
+        "(I)" = lm(mpg ~ 1, data = mtcars),
+        "(II)" = lm(mpg ~ qsec, data = mtcars)
+    ),
+    "Outcome: hp" = list(
+        "(I)" = lm(hp ~ 1, data = mtcars),
+        "(II)" = lm(hp ~ qsec, data = mtcars)
+    )
+)
+
+panelsummary(panels)
+```
 
 ## `fixest`
 
 The `fixest` package offers powerful tools to estimate multiple models using a concise syntax. For example, to introduce regressors in stepwise fashion, and to estimate models on different subsets of the data, we can do:
 
 ```{r}
+#| message = FALSE
 library(fixest)
 mod <- feols(
     c(hp, mpg) ~ csw(qsec, drat) | gear,

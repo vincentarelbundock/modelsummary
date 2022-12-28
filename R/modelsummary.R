@@ -253,8 +253,8 @@ modelsummary <- function(
   }
 
   # model names dictionary: use unique names for manipulation
+  modelsummary_model_labels <- getOption("modelsummary_model_labels", default = "(arabic)")
   if (is.null(names(models))) {
-    modelsummary_model_labels <- getOption("modelsummary_model_labels", default = "(arabic)")
     checkmate::assert_choice(
       modelsummary_model_labels,
       choices = c("model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)"))
@@ -276,6 +276,16 @@ modelsummary <- function(
   }
   model_names <- pad(model_names)
   model_names <- escape_string(model_names)
+
+  # kableExtra sometimes converts (1), (2) to list items, which breaks formatting
+  # insert think white non-breaking space
+  # don't do this now when called from panelsummary() or there are escape issues
+  if (!settings_equal("function_called", "panelsummary") &&
+      all(grepl("^\\(\\d+\\)$", model_names)) &&
+      settings_equal("output_format", c("html", "kableExtra"))) {
+    model_names <- paste0("&nbsp;", model_names)
+  }
+
 
 
   #######################

@@ -25,6 +25,13 @@ datasummary_df <- function(data,
   notes <- escape_string(notes)
   title <- escape_string(title)
 
+  # kableExtra sometimes converts (1), (2) to list items, which breaks formatting
+  # insert think white non-breaking space
+  if (settings_equal("output_format", c("html", "kableExtra"))) {
+      idx <- grepl("^\\(\\d+\\)$", colnames(data))
+      colnames(data)[idx] <- paste0("&nbsp;", colnames(data)[idx])
+  }
+
   for (n in colnames(data)) {
     fmt <- sanitize_fmt(fmt)
     data[[n]] <- fmt(data[[n]])
