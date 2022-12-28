@@ -67,7 +67,7 @@ theme_ms_kableExtra <- function(tab,
   }
 
   # indent to match group indents
-  if (!isTRUE(dots[["indent"]]) && length(hindent) > 1) {
+  if (!isTRUE(dots[["indent"]]) && length(hindent) > 0) {
     fun <- utils::getFromNamespace("add_indent", "kableExtra")
     idx <- unlist(lapply(hindent, function(x) x[1]:x[2]))
     out <- fun(out, positions = idx)
