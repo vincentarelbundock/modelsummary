@@ -25,12 +25,12 @@ test_that("multi: after 0.10.5", {
   skip_if_not_installed("fixest", "0.10.5")
   mod <- feols(mpg ~ hp, split = ~cyl, data = mtcars)
   tab <- modelsummary(mod, "data.frame")
-  expect_true(all(c("cyl: 4", "cyl: 6", "cyl: 8") %in% colnames(tab)))
+  expect_true(all(c("sample: 4", "sample: 6", "sample: 8") %in% colnames(tab)))
 
   v <- c("mpg", "wt", "drat")
   mod <- feols(.[v] ~ hp, data = mtcars)
   tab <- modelsummary(mod, "data.frame")
-  expect_true(all(c("mpg", "wt", "drat") %in% colnames(tab)))
+  expect_true(all(c("lhs: mpg", "lhs: wt", "lhs: drat") %in% colnames(tab)))
 })
 
 
@@ -111,7 +111,3 @@ test_that("Issue #551", {
     tab <- modelsummary(mod, coef_map = cm, output = "dataframe")
     expect_true("HP x Cylinders 4" %in% tab$term)
 })
-
-
-
-
