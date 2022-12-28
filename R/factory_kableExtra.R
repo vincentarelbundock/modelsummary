@@ -97,6 +97,14 @@ factory_kableExtra <- function(tab,
       colnames(tab) <- gsub("\\|{4}", " / ", colnames(tab))
   }
 
+  # kableExtra sometimes converts (1), (2) to list items, which breaks formatting
+  # insert think white non-breaking space
+  if (settings_equal("output_format", c("html", "kableExtra"))) {
+      regex <- paste0(paste(1:12, collapse = "|"), "|", paste(as.roman(1:12), collapse = "|"))
+      regex <- paste0("^\\(", regex, "\\)$")
+      idx <- grepl(regex, colnames(tab))
+      colnames(tab)[idx] <- paste0("&nbsp;", colnames(tab)[idx])
+  }
 
   # create tables with combined arguments
   arguments <- arguments[base::intersect(names(arguments), valid)]

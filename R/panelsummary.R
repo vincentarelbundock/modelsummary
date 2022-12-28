@@ -226,24 +226,22 @@ panelsummary <- function(
         }
     }
 
-    args <- utils::modifyList(
-        dots,
-        list(
-            data = tab,
-            hrule = hrule,
-            hgroup = hgroup,
-            hindent = hindent,
-            output = output,
-            add_columns = add_columns,
-            add_rows = add_rows,
-            align = align,
-            notes = notes,
-            title = title,
-            stars = stars,
-            escape = escape,
-            ...
-    ))
-    out <- do.call(datasummary_df, args)
+    ## build table
+    out <- factory(
+        tab,
+        align    = align,
+        fmt      = fmt,
+        hrule    = hrule,
+        hgroup = hgroup,
+        hindent = hindent,
+        notes    = notes,
+        output   = output,
+        title    = title,
+        add_rows = add_rows,
+        add_columns = add_columns,
+        escape = escape,
+        ...
+    )
 
     # invisible return
     if (!is.null(settings_get("output_file")) ||
