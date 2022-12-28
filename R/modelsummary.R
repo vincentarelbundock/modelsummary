@@ -329,8 +329,10 @@ modelsummary <- function(
   term_order <- unique(unlist(lapply(est, function(x) x$term)))
   statistic_order <- unique(unlist(lapply(est, function(x) x$statistic)))
 
+  bycols <- c(list(c(shape$group_name, "group", "term", "statistic")), lapply(est, colnames))
+  bycols <- Reduce(intersect, bycols)
   f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE,
-                            by = c(shape$group_name, "term", "statistic"))
+                            by = bycols)
   est <- Reduce(f, est)
 
   # warn that `shape` might be needed

@@ -21,6 +21,10 @@ New features:
 * `modelplot(draw = FALSE)` now returns a `p.value` column. This allows conditional aesthetics (see the `modelplot` vignette).
 * Better integration with the `marginaleffects` package.
 
+Bugs:
+
+* Some `fixest` models returns useless "group.x" and "group.y" columns. Isse #591. Thanks to Adam Altmejd for the report.
+
 # modelsummary 1.2.0
 
 Breaking change:
