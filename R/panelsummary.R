@@ -158,14 +158,6 @@ panelsummary <- function(
             }
         }
 
-        # TODO: this should go in factory_kableExtra
-        # indentation of consolidated GOF
-        if (isTRUE(dots[["indent"]]) &&
-            isTRUE(nrow(gof_same) > 0) &&
-            settings_equal("output_format", c("latex", "latex_tabular"))) {
-            gof_same$term <- paste("\\hspace{1em}", gof_same$term)
-        }
-
         panels_list <- c(panels_list, list(gof_same))
 
     } else {
@@ -198,14 +190,16 @@ panelsummary <- function(
     end <- cumsum(panels_nrow)
     sta <- c(0, head(end, -1)) + 1
     hgroup <- list()
+    for (i in seq_along(panel_names)) {
+        hgroup[[panel_names[i]]] <- c(sta[i], end[i])
+    }
+
+    # indent
     if (isTRUE(nrow(gof_same) > 0)) {
-        for (i in head(seq_along(panel_names), -1)) {
-            hgroup[[panel_names[i]]] <- c(sta[i], end[i])
-        }
+        hindent <- tail(hgroup, 1)
+        hgroup <- head(hgroup, -1)
     } else {
-        for (i in seq_along(panel_names)) {
-            hgroup[[panel_names[i]]] <- c(sta[i], end[i])
-        }
+        hindent <- NULL
     }
 
     # stars
@@ -234,6 +228,7 @@ panelsummary <- function(
             data = tab,
             hrule = hrule,
             hgroup = hgroup,
+            hindent = hindent,
             output = output,
             add_columns = add_columns,
             add_rows = add_rows,

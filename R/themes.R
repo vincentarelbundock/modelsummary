@@ -2,6 +2,7 @@ theme_ms_kableExtra <- function(tab,
                                 output_format,
                                 hrule = NULL,
                                 hgroup = NULL,
+                                hindent = NULL,
                                 ...) {
 
   if (!output_format %in% c("markdown", "latex_tabular")) {
@@ -20,6 +21,7 @@ theme_ms_kableExtra <- function(tab,
     }
   }
 
+
   # groups are not supported by kableExtra in markdown output
   if (!is.null(hgroup) && !output_format %in% "markdown") {
     for (i in seq_along(hgroup)) {
@@ -27,7 +29,7 @@ theme_ms_kableExtra <- function(tab,
         kable_input = out,
         bold = FALSE,
         italic = TRUE,
-        indent = FALSE,
+        indent = TRUE,
         hline_after = FALSE,
         extra_latex_after = "\\midrule ",
         latex_gap_space = "0.5em",
@@ -49,11 +51,6 @@ theme_ms_kableExtra <- function(tab,
       args <- args[names(args) %in% valid]
 
       out <- do.call(kableExtra::group_rows, args)
-
-      # indentation breaks when param name starts with parenthesis: "(Intercept)"
-      if (output_format %in% c("latex", "latex_tabular")) {
-        out <- gsub("\\\\hspace\\{1em\\}", "\\\\hspace\\{1em\\} ", out)
-      }
     }
   }
 
@@ -65,6 +62,13 @@ theme_ms_kableExtra <- function(tab,
         extra_css = "box-shadow: 0px 1px"
       )
     }
+  }
+
+  # indent to match group indents
+  if (!isTRUE(dots[["indent"]]) && length(hindent) > 1) {
+    fun <- utils::getFromNamespace("add_indent", "kableExtra")
+    idx <- unlist(lapply(hindent, function(x) x[1]:x[2]))
+    out <- fun(out, positions = idx)
   }
 
   return(out)

@@ -7,6 +7,7 @@ factory_kableExtra <- function(tab,
                                align = NULL,
                                hrule = NULL,
                                hgroup = NULL,
+                               hindent = FALSE,
                                notes = NULL,
                                title = NULL,
                                escape = TRUE,
@@ -97,7 +98,7 @@ factory_kableExtra <- function(tab,
   }
 
 
-  # combine arguments
+  # create tables with combined arguments
   arguments <- arguments[base::intersect(names(arguments), valid)]
   arguments <- c(list(tab), arguments)
   out <- do.call(kableExtra::kbl, arguments)
@@ -147,6 +148,7 @@ factory_kableExtra <- function(tab,
     output_format = settings_get("output_format"),
     hrule = hrule,
     hgroup = hgroup,
+    hindent = hindent,
     ...)
 
   # span: apply (not supported in markdown)
