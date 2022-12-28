@@ -23,7 +23,6 @@ theme_ms_kableExtra <- function(tab,
     }
   }
 
-
   # groups are not supported by kableExtra in markdown output
   if (!is.null(hgroup) && !output_format %in% "markdown") {
     for (i in seq_along(hgroup)) {
@@ -38,11 +37,6 @@ theme_ms_kableExtra <- function(tab,
         group_label = names(hgroup[i]),
         start_row = hgroup[[i]][1],
         end_row = hgroup[[i]][2])
-
-      # \\midrule only works in LaTeX tables, but we don't want to double
-      if (!output_format %in% c("latex", "latex_tabular")) {
-        args[["hline_after"]] <- TRUE
-      }
 
       # user-specified arguments override default themes
       dots <- list(...)
@@ -67,7 +61,7 @@ theme_ms_kableExtra <- function(tab,
   }
 
   # indent to match group indents
-  if (!isTRUE(dots[["indent"]]) && length(hindent) > 0) {
+  if (isTRUE(checkmate::check_list(hindent, min.len = 1))) {
     fun <- utils::getFromNamespace("add_indent", "kableExtra")
     idx <- unlist(lapply(hindent, function(x) x[1]:x[2]))
     out <- fun(out, positions = idx)

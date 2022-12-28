@@ -169,7 +169,7 @@ panelsummary <- function(
     panels_nrow <- sapply(panels_list, nrow)
 
     # only one hrule after the last data, before gof_same
-    if (isTRUE(nrow(gof_same) == 0)) {
+    if (is.null(gof_same) || isTRUE(nrow(gof_same) == 0)) {
         hrule <- NULL
     } else {
         hrule <- sum(head(panels_nrow, -1)) + 1
