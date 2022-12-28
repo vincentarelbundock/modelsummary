@@ -5,6 +5,8 @@ theme_ms_kableExtra <- function(tab,
                                 hindent = NULL,
                                 ...) {
 
+  dots <- list(...)
+
   if (!output_format %in% c("markdown", "latex_tabular")) {
     out <- kableExtra::kable_styling(tab, full_width = FALSE)
   } else {
