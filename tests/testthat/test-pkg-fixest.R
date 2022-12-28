@@ -6,7 +6,7 @@ requiet("fixest")
 
 test_that("issue 591", {
   requiet("data.table")
-  dt <- as.data.table(mtcars)
+  dt <<- data.table::as.data.table(mtcars)
   mod1 <- feols(c(mpg, disp) ~ hp + drat + qsec, data = mtcars, subset = mtcars$gear > 3)
   mod2 <- feols(c(mpg, disp) ~ hp + drat + qsec, data = dt, subset = dt[, gear > 3])
   expect_equal(ncol(modelsummary(mod1, "dataframe")), 5)
