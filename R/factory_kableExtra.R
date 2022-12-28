@@ -132,7 +132,9 @@ factory_kableExtra <- function(tab,
       arguments[["general_title"]] <- ""
       arguments[["kable_input"]] <- out
       arguments[["escape"]] <- FALSE
-      out <- do.call(kableExtra::footnote, arguments)
+      if (isTRUE(any(nchar(arguments$general) > 0))) {
+        out <- do.call(kableExtra::footnote, arguments)
+      }
     } else if (settings_equal("output_format", "markdown")) {
       for (n in notes) {
         out <- kableExtra::add_footnote(out, label = n, notation = "none", escape = FALSE)

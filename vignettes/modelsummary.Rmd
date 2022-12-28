@@ -18,6 +18,8 @@ thead {
 }
 ```
 
+
+
 `modelsummary` includes a powerful set of utilities to customize the information displayed in your model summary tables. You can easily rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to display; display various "robust" standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.
 
 ```{r, message = FALSE}
@@ -909,6 +911,80 @@ modelsummary(list("Wald" = mod_list, "Kenward" = mod_list_kenward),
             statistic = "{std.error} ({p.value}) {stars}")
 ```
 
+
+# `panelsummary`: Models side-by-side and top-to-bottom
+
+We want to present 4 different models, half of which are estimated using a different outcome variable. When using `modelsummary`, we store models in a list. When useing `panelsummary`, we store models in a list of lists:
+
+Like with `modelsummary()`, we can can name models and panels by using named (nested) lists:
+
+```{r}
+panels <- list(
+    "Outcome: mpg" = list(
+        "(I)" = lm(mpg ~ 1, data = mtcars),
+        "(II)" = lm(mpg ~ qsec, data = mtcars)
+    ),
+    "Outcome: hp" = list(
+        "(I)" = lm(hp ~ 1, data = mtcars),
+        "(II)" = lm(hp ~ qsec, data = mtcars)
+    )
+)
+
+panelsummary(panels)
+```
+
+```{r}
+gm <- c("r.squared", "nobs", "rmse")
+
+panels <- list(
+    list(
+        lm(mpg ~ 1, data = mtcars),
+        lm(mpg ~ qsec, data = mtcars)
+    ),
+    list(
+        lm(hp ~ 1, data = mtcars),
+        lm(hp ~ qsec, data = mtcars)
+    )
+)
+
+panelsummary(panels, gof_map = gm)
+```
+
+
+## `fixest`
+
+The `fixest` package offers powerful tools to estimate multiple models using a concise syntax. For example, to introduce regressors in stepwise fashion, and to estimate models on different subsets of the data, we can do:
+
+```{r}
+library(fixest)
+mod <- feols(
+    c(hp, mpg) ~ csw(qsec, drat) | gear,
+    data = mtcars)
+
+panels <- list(
+    "mpg" = mod[grepl("mpg", names(mod))],
+    "hp" = mod[grepl("hp", names(mod))]
+)
+
+panelsummary(panels, gof_omit = "IC|R2")
+```
+    
+We can use all the typical extension systems to add information, such as the mean of the dependent variable:
+
+```{r}
+glance_custom.fixest <- function(x, ...) {
+    dv <- insight::get_response(x)
+    dv <- sprintf("%.2f", mean(dv, na.rm = TRUE))
+    data.table::data.table(`Mean of DV` = dv)
+}
+
+panelsummary(panels, gof_omit = "IC|R2")
+
+rm("glance_custom.fixest")
+```
+
+
+
 # Rmarkdown
 
 You can use `modelsummary` to insert tables into dynamic documents with `knitr` or `Rmarkdown`. This minimal .Rmd file can produce tables in PDF, HTML, or RTF documents:
@@ -1398,73 +1474,4 @@ We can also get additional test statistics using the `test` argument:
 
 ```{r}
 get_estimates(mod, test = c("pd", "rope"))
-```
-
-# `panelsummary`: Models side-by-side and top-to-bottom
-
-We want to present 4 different models, half of which are estimated using a different outcome variable. When using `modelsummary`, we store models in a list. When useing `panelsummary`, we store models in a list of lists:
-
-```{r}
-gm <- c("r.squared", "nobs", "rmse")
-
-panels <- list(
-    list(
-        lm(mpg ~ 1, data = mtcars),
-        lm(mpg ~ qsec, data = mtcars)
-    ),
-    list(
-        lm(hp ~ 1, data = mtcars),
-        lm(hp ~ qsec, data = mtcars)
-    )
-)
-
-panelsummary(panels, gof_map = gm)
-```
-
-Like with `modelsummary()`, we can can name models and panels by using named (nested) lists:
-
-```{r}
-panels <- list(
-    "Outcome: mpg" = list(
-        "(I)" = lm(mpg ~ 1, data = mtcars),
-        "(II)" = lm(mpg ~ qsec, data = mtcars)
-    ),
-    "Outcome: hp" = list(
-        "(I)" = lm(hp ~ 1, data = mtcars),
-        "(II)" = lm(hp ~ qsec, data = mtcars)
-    )
-)
-
-panelsummary(panels, gof_map = gm)
-```
-
-
-## `fixest`
-
-The `fixest` package offers powerful tools to estimate multiple models using a concise syntax. For example, to introduce regressors in stepwise fashion, and to estimate models on different subsets of the data, we can do:
-
-```{r}
-library(fixest)
-mod <- feols(
-    c(hp, mpg) ~ csw(qsec, drat) | gear,
-    data = mtcars)
-
-panels <- list(
-    "mpg" = mod[grepl("mpg", names(mod))],
-    "hp" = mod[grepl("hp", names(mod))]
-)
-
-panelsummary(panels, gof_omit = "IC|R2")
-```
-    
-We can use all the typical extension systems to add information, such as the mean of the dependent variable:
-
-```{r}
-glance_custom.fixest <- function(x, ...) {
-    dv <- insight::get_response(x)
-    dv <- sprintf("%.2f", mean(dv, na.rm = TRUE))
-    data.table::data.table(`Mean of DV` = dv)
-}
-
-panelsummary(panels, gof_omit = "IC|R2")
 ```

@@ -690,6 +690,3 @@ redundant_labels <- function(dat, column) {
 #' @keywords internal
 #' @export
 msummary <- modelsummary
-
-
-
