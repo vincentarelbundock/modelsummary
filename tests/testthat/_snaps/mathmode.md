@@ -37,8 +37,8 @@
        <thead>
         <tr>
          <th style="text-align:left;">   </th>
-         <th style="text-align:center;"> (1) </th>
-         <th style="text-align:center;"> (2) </th>
+         <th style="text-align:center;">  (1) </th>
+         <th style="text-align:center;">   (2) </th>
         </tr>
        </thead>
       <tbody>
@@ -124,8 +124,8 @@
        <thead>
         <tr>
          <th style="text-align:left;">   </th>
-         <th style="text-align:center;"> (1) </th>
-         <th style="text-align:center;"> (2) </th>
+         <th style="text-align:center;">  (1) </th>
+         <th style="text-align:center;">   (2) </th>
         </tr>
        </thead>
       <tbody>
@@ -211,8 +211,8 @@
        <thead>
         <tr>
          <th style="text-align:left;">   </th>
-         <th style="text-align:center;"> (1) </th>
-         <th style="text-align:center;"> (2) </th>
+         <th style="text-align:center;">  (1) </th>
+         <th style="text-align:center;">   (2) </th>
         </tr>
        </thead>
       <tbody>

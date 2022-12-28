@@ -2,6 +2,23 @@
 
     Code
       modelsummary(mod, output = "latex")
+    Warning <simpleWarning>
+      To compile a LaTeX document with this table, the following commands must be placed in the document preamble:
+      
+      \usepackage{booktabs}
+      \usepackage{siunitx}
+      \newcolumntype{d}{S[
+          input-open-uncertainty=,
+          input-close-uncertainty=,
+          parse-numbers = false,
+          table-align-text-pre=false,
+          table-align-text-post=false
+       ]}
+      
+      To disable `siunitx` and prevent `modelsummary` from wrapping numeric entries in `\num{}`, call:
+      
+      options("modelsummary_format_numeric_latex" = "plain")
+       This warning appears once per session.
     Output
       \begin{table}
       \centering
@@ -414,7 +431,7 @@
         <tr>
          <th style="text-align:left;">   </th>
          <th style="text-align:right;"> under_score </th>
-         <th style="text-align:right;"> oh&amp;yeah&lt;sup&gt;2&lt;/sup&gt; </th>
+         <th style="text-align:right;">  oh&amp;yeah&lt;sup&gt;2&lt;/sup&gt; </th>
          <th style="text-align:right;"> disp </th>
          <th style="text-align:right;"> hp </th>
          <th style="text-align:right;"> drat </th>
@@ -594,7 +611,7 @@
         <tr>
          <th style="text-align:left;">   </th>
          <th style="text-align:right;"> under_score </th>
-         <th style="text-align:right;"> oh&amp;yeah<sup>2</sup> </th>
+         <th style="text-align:right;">  oh&amp;yeah<sup>2</sup> </th>
          <th style="text-align:right;"> disp </th>
          <th style="text-align:right;"> hp </th>
          <th style="text-align:right;"> drat </th>

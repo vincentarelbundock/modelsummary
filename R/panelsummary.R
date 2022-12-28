@@ -173,7 +173,7 @@ panelsummary <- function(
     if (is.null(gof_same) || isTRUE(nrow(gof_same) == 0)) {
         hrule <- NULL
     } else {
-        hrule <- sum(head(panels_nrow, -1)) + 1
+        hrule <- sum(utils::head(panels_nrow, -1)) + 1
     }
 
     tab <- data.table::rbindlist(panels_list, fill = TRUE)
@@ -193,7 +193,7 @@ panelsummary <- function(
     }
 
     end <- cumsum(panels_nrow)
-    sta <- c(0, head(end, -1)) + 1
+    sta <- c(0, utils::head(end, -1)) + 1
     hgroup <- list()
     for (i in seq_along(panel_names)) {
         hgroup[[panel_names[i]]] <- c(sta[i], end[i])
@@ -201,8 +201,8 @@ panelsummary <- function(
 
     # indent
     if (isTRUE(nrow(gof_same) > 0)) {
-        hindent <- tail(hgroup, 1)
-        hgroup <- head(hgroup, -1)
+        hindent <- utils::tail(hgroup, 1)
+        hgroup <- utils::head(hgroup, -1)
     } else {
         hindent <- NULL
     }
