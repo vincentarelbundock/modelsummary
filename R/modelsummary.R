@@ -253,10 +253,8 @@ modelsummary <- function(
   ## sanity functions validate variables/settings
   ## sanitize functions validate & modify & initialize
   checkmate::assert_string(gof_omit, null.ok = TRUE)
-  if (!settings_equal("function_called", "modelsummary_rbind")) {
-    sanitize_output(output)           # early
-    sanitize_escape(escape)
-  }
+  sanitize_output(output)           # early
+  sanitize_escape(escape)
   sanity_ellipsis(vcov, ...)        # before sanitize_vcov
   models <- sanitize_models(models, ...) # before sanitize_vcov
   vcov <- sanitize_vcov(vcov, models, ...)
