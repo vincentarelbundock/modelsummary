@@ -467,9 +467,14 @@ modelsummary(
 
 ## shape
 
-The `shape` argument accepts a formula which determines the structure of the table, and can display "grouped" coefficients together (e.g., multivariate outcome or mixed-effects models). The left side of the formula represents the rows and the right side represents the columns. 
+The `shape` argument accepts:
 
-The default formula is `term + statistic ~ model`:
+1. A formula which determines the structure of the table, and can display "grouped" coefficients together (e.g., multivariate outcome or mixed-effects models). 
+2. The string "rbind" to stack multiple tables on top of each other and present models in distinct "panels".
+
+### Formula
+
+The left side of the formula represents the rows and the right side represents the columns. The default formula is `term + statistic ~ model`:
 
 ```{r}
 m <- list(
@@ -530,7 +535,6 @@ The terms of the `shape` formula above can of course be rearranged to reshape th
 modelsummary(mod, shape = model + term ~ response)
 ```
 
-
 In version 1.0.1 of the package and later, we can combine the `term` and group identifier columns by inserting an interaction colon `:` instead of the `+` in the formula:
 
 ```{r, warning = FALSE, message = FALSE}
@@ -544,6 +548,92 @@ modelsummary(mfx, shape = term + contrast ~ model)
 ```{r}
 modelsummary(mfx, shape = term : contrast ~ model)
 ```
+
+### "rbind": Panels of models in stacked regression tables
+
+Note: The code in this section requires version 1.3.0 or the development version of `modelsummary`. See [the website](https://vincentarelbundock.github.io/modelsummary/index.html) for installation instructions.
+
+This section shows how to  "stack/bind" multiple regression tables on top of one another, to display the results several models side-by-side and top-to-bottom. For example, imagine that we want to present 4 different models, half of which are estimated using a different outcome variable. When using `modelsummary`, we store models in a list. When using `modelsummary` with `shape="rbind", we store models in a list of lists:
+
+```{r}
+gm <- c("r.squared", "nobs", "rmse")
+
+panels <- list(
+    list(
+        lm(mpg ~ 1, data = mtcars),
+        lm(mpg ~ qsec, data = mtcars)
+    ),
+    list(
+        lm(hp ~ 1, data = mtcars),
+        lm(hp ~ qsec, data = mtcars)
+    )
+)
+
+modelsummary(
+  panels,
+  shape = "rbind",
+  gof_map = gm)
+```
+
+Like with `modelsummary()`, we can can name models and panels by using named (nested) lists:
+
+```{r}
+panels <- list(
+    "Outcome: mpg" = list(
+        "(I)" = lm(mpg ~ 1, data = mtcars),
+        "(II)" = lm(mpg ~ qsec, data = mtcars)
+    ),
+    "Outcome: hp" = list(
+        "(I)" = lm(hp ~ 1, data = mtcars),
+        "(II)" = lm(hp ~ qsec, data = mtcars)
+    )
+)
+
+modelsummary(
+  panels,
+  shape = "rbind",
+  gof_map = gm)
+```
+
+#### `fixest`
+
+The `fixest` package offers powerful tools to estimate multiple models using a concise syntax. For example, to introduce regressors in stepwise fashion, and to estimate models on different subsets of the data, we can do:
+
+```{r}
+#| message = FALSE
+library(fixest)
+mod <- feols(
+    c(hp, mpg) ~ csw(qsec, drat) | gear,
+    data = mtcars)
+
+panels <- list(
+    "mpg" = mod[grepl("mpg", names(mod))],
+    "hp" = mod[grepl("hp", names(mod))]
+)
+
+modelsummary(
+  panels,
+  shape = "rbind",
+  gof_omit = "IC|R2")
+```
+    
+We can use all the typical extension systems to add information, such as the mean of the dependent variable:
+
+```{r}
+glance_custom.fixest <- function(x, ...) {
+    dv <- insight::get_response(x)
+    dv <- sprintf("%.2f", mean(dv, na.rm = TRUE))
+    data.table::data.table(`Mean of DV` = dv)
+}
+
+modelsummary(
+  panels,
+  shape = "rbind",
+  gof_omit = "IC|R2")
+
+rm("glance_custom.fixest")
+```
+
 
 ## align
 
@@ -911,86 +1001,6 @@ modelsummary(list("Wald" = mod_list, "Kenward" = mod_list_kenward),
             statistic = "{std.error} ({p.value}) {stars}")
 ```
 
-
-# Panels / Stacks: Models side-by-side and top-to-bottom
-
-We want to present 4 different models, half of which are estimated using a different outcome variable. When using `modelsummary`, we store models in a list. When useing `modelsummary_rbind`, we store models in a list of lists:
-
-
-```{r}
-gm <- c("r.squared", "nobs", "rmse")
-
-panels <- list(
-    list(
-        lm(mpg ~ 1, data = mtcars),
-        lm(mpg ~ qsec, data = mtcars)
-    ),
-    list(
-        lm(hp ~ 1, data = mtcars),
-        lm(hp ~ qsec, data = mtcars)
-    )
-)
-
-modelsummary(
-  panels,
-  gof_map = gm,
-  shape = "rbind")
-```
-
-Like with `modelsummary()`, we can can name models and panels by using named (nested) lists:
-
-```{r}
-panels <- list(
-    "Outcome: mpg" = list(
-        "(I)" = lm(mpg ~ 1, data = mtcars),
-        "(II)" = lm(mpg ~ qsec, data = mtcars)
-    ),
-    "Outcome: hp" = list(
-        "(I)" = lm(hp ~ 1, data = mtcars),
-        "(II)" = lm(hp ~ qsec, data = mtcars)
-    )
-)
-
-modelsummary(
-  panels,
-  shape = "rbind")
-```
-
-## `fixest`
-
-The `fixest` package offers powerful tools to estimate multiple models using a concise syntax. For example, to introduce regressors in stepwise fashion, and to estimate models on different subsets of the data, we can do:
-
-```{r}
-#| message = FALSE
-library(fixest)
-mod <- feols(
-    c(hp, mpg) ~ csw(qsec, drat) | gear,
-    data = mtcars)
-
-panels <- list(
-    "mpg" = mod[grepl("mpg", names(mod))],
-    "hp" = mod[grepl("hp", names(mod))]
-)
-
-modelsummary(
-  panels,
-  gof_omit = "IC|R2",
-  shape = "rbind")
-```
-    
-We can use all the typical extension systems to add information, such as the mean of the dependent variable:
-
-```{r}
-glance_custom.fixest <- function(x, ...) {
-    dv <- insight::get_response(x)
-    dv <- sprintf("%.2f", mean(dv, na.rm = TRUE))
-    data.table::data.table(`Mean of DV` = dv)
-}
-
-modelsummary_rbind(panels, gof_omit = "IC|R2")
-
-rm("glance_custom.fixest")
-```
 
 
 
@@ -1485,73 +1495,3 @@ We can also get additional test statistics using the `test` argument:
 get_estimates(mod, test = c("pd", "rope"))
 ```
 
-# `modelsummary_rbind`: Models side-by-side and top-to-bottom
-
-Note: The code in this section requires version 1.3.0 or the development version of `modelsummary`. See [the website](https://vincentarelbundock.github.io/modelsummary/index.html) for installation instructions.
-
-This section introduces the `modelsummary_rbind` function, which "stacks" regression tables on top of one another, to display the results several models side-by-side and top-to-bottom. For example, imagine that we want to present 4 different models, half of which are estimated using a different outcome variable. When using `modelsummary`, we store models in a list. When using `modelsummary_rbind`, we store models in a list of lists:
-
-```{r}
-gm <- c("r.squared", "nobs", "rmse")
-
-panels <- list(
-    list(
-        lm(mpg ~ 1, data = mtcars),
-        lm(mpg ~ qsec, data = mtcars)
-    ),
-    list(
-        lm(hp ~ 1, data = mtcars),
-        lm(hp ~ qsec, data = mtcars)
-    )
-)
-
-modelsummary_rbind(panels, gof_map = gm)
-```
-
-Like with `modelsummary()`, we can can name models and panels by using named (nested) lists:
-
-```{r}
-panels <- list(
-    "Outcome: mpg" = list(
-        "(I)" = lm(mpg ~ 1, data = mtcars),
-        "(II)" = lm(mpg ~ qsec, data = mtcars)
-    ),
-    "Outcome: hp" = list(
-        "(I)" = lm(hp ~ 1, data = mtcars),
-        "(II)" = lm(hp ~ qsec, data = mtcars)
-    )
-)
-
-modelsummary_rbind(panels, gof_map = gm)
-```
-
-
-## `fixest`
-
-The `fixest` package offers powerful tools to estimate multiple models using a concise syntax. For example, to introduce regressors in stepwise fashion, and to estimate models on different subsets of the data, we can do:
-
-```{r}
-library(fixest)
-mod <- feols(
-    c(hp, mpg) ~ csw(qsec, drat) | gear,
-    data = mtcars)
-
-panels <- list(
-    "mpg" = mod[grepl("mpg", names(mod))],
-    "hp" = mod[grepl("hp", names(mod))]
-)
-
-modelsummary_rbind(panels, gof_omit = "IC|R2")
-```
-    
-We can use all the typical extension systems to add information, such as the mean of the dependent variable:
-
-```{r}
-glance_custom.fixest <- function(x, ...) {
-    dv <- insight::get_response(x)
-    dv <- sprintf("%.2f", mean(dv, na.rm = TRUE))
-    data.table::data.table(`Mean of DV` = dv)
-}
-
-modelsummary_rbind(panels, gof_omit = "IC|R2")
-```

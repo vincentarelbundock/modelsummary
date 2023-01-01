@@ -18,6 +18,7 @@
 #' * Named nested list with 2 panels: `list("Panel A" = list(model1, model2), "Panel B" = list(model3, model4))`
 #' @inheritParams modelsummary
 #' @keywords internal
+#' @noRd
 modelsummary_rbind <- function(
     panels,
     output      = "default",
