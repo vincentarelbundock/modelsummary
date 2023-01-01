@@ -20,17 +20,18 @@ modelplot(
 )
 }
 \arguments{
-\item{models}{a model or a (named) list of models
+\item{models}{a model, (named) list of models, or nested list of models.
 \itemize{
 \item Single model: \code{modelsummary(model)}
-\item Unnamed list: \code{modelsummary(list(model1, model2))}
+\item Unnamed list of models: \code{modelsummary(list(model1, model2))}
 \itemize{
 \item Models are labelled automatically. The default label style can be altered by setting a global option. See below.
 }
-\item Named list: \code{modelsummary(list("A"=model1, "B"=model2))}
+\item Named list of models: \code{modelsummary(list("A"=model1, "B"=model2))}
 \itemize{
 \item Models are labelled using the list names.
 }
+\item Nested list of models: When using the \code{shape="rbind"} argument, \code{models} can be a nested list of models to display "panels" or "stacks" of regression models. See the \code{shape} argument documentation and examples below.
 }}
 
 \item{conf_level}{numeric value between 0 and 1. confidence level to use for

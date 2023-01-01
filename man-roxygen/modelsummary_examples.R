@@ -106,14 +106,28 @@
 #' library(nnet)
 #' multi <- multinom(factor(cyl) ~ mpg + hp, data = mtcars, trace = FALSE) 
 #'
-#' # term names and group ids in rows, models in columns
+#' # shape: term names and group ids in rows, models in columns
 #' modelsummary(multi, shape = response ~ model)
 #'
-#' # term names and group ids in rows in a single column
+#' # shape: term names and group ids in rows in a single column
 #' modelsummary(multi, shape = term : response ~ model)
 #' 
-#' # term names in rows and group ids in columns
+#' # shape: term names in rows and group ids in columns
 #' modelsummary(multi, shape = term ~ response:model)
+#' 
+#' # shape = "rbind"
+#' panels <- list(
+#'     "Panel A: MPG" = list(
+#'         "A" = lm(mpg ~ hp, data = mtcars),
+#'         "B" = lm(mpg ~ hp + factor(gear), data = mtcars)),
+#'     "Panel B: Displacement" = list(
+#'         "A" = lm(disp ~ hp, data = mtcars),
+#'         "C" = lm(disp ~ hp + factor(gear), data = mtcars))
+#' )
+#' modelsummary(
+#'     panels,
+#'     shape = "rbind",
+#'     gof_map = c("nobs", "r.squared"))
 #'
 #' # title
 #' modelsummary(models, title = 'This is the title')

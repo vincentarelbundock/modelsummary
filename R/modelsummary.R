@@ -32,12 +32,13 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' 
 #' @template modelsummary_examples
 #'
-#' @param models a model or a (named) list of models
+#' @param models a model, (named) list of models, or nested list of models.
 #' * Single model: `modelsummary(model)`
-#' * Unnamed list: `modelsummary(list(model1, model2))`
+#' * Unnamed list of models: `modelsummary(list(model1, model2))`
 #'   - Models are labelled automatically. The default label style can be altered by setting a global option. See below.
-#' * Named list: `modelsummary(list("A"=model1, "B"=model2))`
+#' * Named list of models: `modelsummary(list("A"=model1, "B"=model2))`
 #'   - Models are labelled using the list names.
+#' * Nested list of models: When using the `shape="rbind"` argument, `models` can be a nested list of models to display "panels" or "stacks" of regression models. See the `shape` argument documentation and examples below.
 #' @param output filename or object type (character string)
 #' * Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg.
 #' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the `modelsummary` function.
@@ -125,22 +126,19 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @param group_map named or unnamed character vector. Subset, rename, and
 #' reorder coefficient groups specified a grouping variable specified in the
 #' `shape` argument formula. This argument behaves like `coef_map`.
-#' @param shape formula which determines the shape of the table. The left side
-#' determines what appears on rows, and the right side determines what appears
-#' on columns. The formula can include one or more group identifier(s) to display related terms
-#' together, which can be useful for models with multivariate outcomes or
-#' grouped coefficients (See examples section below). The group identifier(s) must be
-#' column names produced by: `get_estimates(model)`. The group
-#' identifier(s) can be combined with the term identifier in a single column by
-#' using the colon to represent an interaction. If an incomplete formula is
-#' supplied (e.g., `~statistic`), `modelsummary` tries to complete it
-#' automatically. Potential `shape` values include:
-#' * `term + statistic ~ model`: default
-#' * `term ~ model + statistic`: statistics in separate columns
-#' * `model + statistic ~ term`: models in rows and terms in columns
-#' * `term + response + statistic ~ model`: term and group id in separate columns
-#' * `term : response + statistic ~ model`: term and group id in a single column
-#' * `term ~ response`
+#' @param shape `NULL`, formula, or "rbind" string which determines the shape of a table.
+#' * `NULL`: Default shape with terms in rows and models in columns.
+#' * Formula: The left side determines what appears on rows, and the right side determines what appears on columns. The formula can include one or more group identifier(s) to display related terms together, which can be useful for models with multivariate outcomes or grouped coefficients (See examples section below). The group identifier(s) must be column names produced by: `get_estimates(model)`. The group identifier(s) can be combined with the term identifier in a single column by using the colon to represent an interaction. If an incomplete formula is supplied (e.g., `~statistic`), `modelsummary` tries to complete it automatically. Potential `shape` values include:
+#'   - `term + statistic ~ model`: default
+#'   - `term ~ model + statistic`: statistics in separate columns
+#'   - `model + statistic ~ term`: models in rows and terms in columns
+#'   - `term + response + statistic ~ model`: term and group id in separate columns
+#'   - `term : response + statistic ~ model`: term and group id in a single column
+#'   - `term ~ response`
+#' * "rbind": bind rows of two or more regression tables to create "panels" or "stacks" of regression models. When `shape="rbind"`, the `models` argument must be a (potentially named) nested list of models.
+#'   - Unnamed nested list with 2 panels: `list(list(model1, model2), list(model3, model4))`
+#'   - Named nested list with 2 panels: `list("Panel A" = list(model1, model2), "Panel B" = list(model3, model4))`
+#'   - Named panels and named models: `list("Panel A" = list("(I)" = model1, "(II)" = model2), "Panel B" = list("(I)" = model3, "(II)" = model4))`
 #' @param add_columns a data.frame (or tibble) with the same number of rows as
 #' #' your main table. By default, rows are appended to the bottom of the table.
 #' You can define a "position" attribute of integers to set the columns positions.
@@ -202,10 +200,38 @@ modelsummary <- function(
   escape      = TRUE,
   ...) {
 
+  # panel summary shape: dispatch to other function
+  if (isTRUE(checkmate::check_choice(shape, "rbind"))) {
+    out <- modelsummary_rbind(models,
+      output = output,
+      fmt = fmt,
+      estimate = estimate,
+      statistic = statistic,
+      vcov = vcov,
+      conf_level = conf_level,
+      exponentiate = exponentiate,
+      stars = stars,
+      coef_map = coef_map,
+      coef_omit = coef_omit,
+      coef_rename = coef_rename,
+      gof_map = gof_map,
+      gof_omit = gof_omit,
+      add_columns = add_columns,
+      add_rows = add_rows,
+      align = align,
+      shape = term + statistic ~ model,
+      group_map = NULL,
+      notes = notes,
+      title = title,
+      escape = escape,
+      ...)
+      return(out)
+  }
+
   dots <- list(...)
 
   ## settings
-  if (!settings_equal("function_called", "panelsummary")) {
+  if (!settings_equal("function_called", "modelsummary_rbind")) {
     settings_init(settings = list(
       "function_called" = "modelsummary"
     ))
@@ -227,7 +253,7 @@ modelsummary <- function(
   ## sanity functions validate variables/settings
   ## sanitize functions validate & modify & initialize
   checkmate::assert_string(gof_omit, null.ok = TRUE)
-  if (!settings_equal("function_called", "panelsummary")) {
+  if (!settings_equal("function_called", "modelsummary_rbind")) {
     sanitize_output(output)           # early
     sanitize_escape(escape)
   }
@@ -279,8 +305,8 @@ modelsummary <- function(
 
   # kableExtra sometimes converts (1), (2) to list items, which breaks formatting
   # insert think white non-breaking space
-  # don't do this now when called from panelsummary() or there are escape issues
-  if (!settings_equal("function_called", "panelsummary") &&
+  # don't do this now when called from modelsummary_rbind() or there are escape issues
+  if (!settings_equal("function_called", "modelsummary_rbind") &&
       all(grepl("^\\(\\d+\\)$", model_names)) &&
       settings_equal("output_format", c("html", "kableExtra"))) {
     model_names <- paste0("&nbsp;", model_names)
@@ -531,11 +557,11 @@ modelsummary <- function(
   }
 
   # data.frame output keeps redundant info
-  if (settings_equal("function_called", "panelsummary")) {
+  if (settings_equal("function_called", "modelsummary_rbind")) {
     tab <- redundant_labels(tab, "term")
   }
 
-  if (!settings_equal("output_format", "dataframe") && !settings_equal("function_called", "panelsummary")) {
+  if (!settings_equal("output_format", "dataframe") && !settings_equal("function_called", "modelsummary_rbind")) {
 
     tab <- redundant_labels(tab, "model")
     tab <- redundant_labels(tab, "group")

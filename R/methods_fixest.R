@@ -1,7 +1,7 @@
 fixest_multi_names <- function(x) {
     if (requireNamespace("fixest", quietly = TRUE) && utils::packageVersion("fixest") >= "0.10.5") {
 
-        if (settings_equal("function_called", "panelsummary")) {
+        if (settings_equal("function_called", "modelsummary_rbind")) {
 
           if (!is.null(names(x)) && all(grepl(";", names(x)))) {
             nam <- do.call("rbind", strsplit(names(x), ";"))

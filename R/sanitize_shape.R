@@ -7,7 +7,11 @@ sanitize_shape <- function(shape) {
         return(term + statistic ~ model)
     }
 
-    checkmate::assert_formula(shape, null.ok = TRUE)
+    checkmate::assert(
+        checkmate::check_null(shape),
+        checkmate::check_formula(shape),
+        checkmate::check_choice(shape, choices = "rbind")
+    )
 
     # interactions with ":" are used to combine columns
     shape_cha <- deparse(shape)

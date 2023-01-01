@@ -4,7 +4,7 @@
 #' @noRd
 sanitize_output <- function(output) {
 
-  # useful in panelsummary()
+  # useful in modelsummary_rbind()
   if (is.null(output)) {
     return(NULL)
   }

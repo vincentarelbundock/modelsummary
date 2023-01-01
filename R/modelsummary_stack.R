@@ -17,8 +17,8 @@
 #' * Unnamed nested list with 2 panels: `list(list(model1, model2), list(model3, model4))`
 #' * Named nested list with 2 panels: `list("Panel A" = list(model1, model2), "Panel B" = list(model3, model4))`
 #' @inheritParams modelsummary
-#' @export
-panelsummary <- function(
+#' @keywords internal
+modelsummary_rbind <- function(
     panels,
     output      = "default",
     fmt         = 3,
@@ -36,22 +36,20 @@ panelsummary <- function(
     add_columns = NULL,
     add_rows    = NULL,
     align       = NULL,
+    shape       = NULL,
+    group_map   = NULL,
     notes       = NULL,
     title       = NULL,
     escape      = TRUE,
     ...) {
 
-    settings_init(settings = list("function_called" = "panelsummary"))
+    settings_init(settings = list("function_called" = "modelsummary_rbind"))
 
     dots <- list(...)
 
     # sanity
     sanity_stars(stars)
     checkmate::assert_list(panels, min.len = 2)
-    if (any(c("shape", "group_map") %in% names(dots))) {
-        msg <- "The `shape` and `group_map` arguments are not supported by `panelsummary()`."
-        insight::format_error(msg)
-    }
 
     number_of_panels <- length(panels)
 
@@ -106,7 +104,7 @@ panelsummary <- function(
         # reset for every call
         sanitize_output(output)
         sanitize_escape(escape)
-        settings_set("function_called", "panelsummary")
+        settings_set("function_called", "modelsummary_rbind")
         args <- utils::modifyList(
             dots,
             list(
@@ -122,6 +120,8 @@ panelsummary <- function(
                 coef_map = coef_map,
                 coef_omit = coef_omit,
                 coef_rename = coef_rename,
+                shape = NULL,
+                group_map = NULL,
                 gof_map = gof_map,
                 gof_omit = gof_omit
         ))

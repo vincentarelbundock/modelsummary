@@ -13,8 +13,8 @@ settings_restore <- function(cache) {
         settings_set(n, cache[[n]])
     }
 }
-        
-        
+
+
 
 settings_init <- function(settings = NULL) {
     settings_rm()

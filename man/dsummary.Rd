@@ -120,29 +120,22 @@ formats, nested labels will be combined to a "flat" header.
 
 
 The behavior of \code{modelsummary} can be modified by setting global options. For example:
-
-\code{options(modelsummary_model_labels = "roman")}
-
-The available global options are:
 \itemize{
-\item \code{modelsummary_model_labels}
-\item \code{modelsummary_factory_default}
-\item \code{modelsummary_factory_latex}
-\item \code{modelsummary_factory_html}
-\item \code{modelsummary_factory_png}
-\item \code{modelsummary_get}
-\item \code{modelsummary_format_numeric_latex}
-\item \code{modelsummary_format_numeric_html}
+\item \code{options(modelsummary_model_labels = "roman")}
 }
 
 The rest of this section describes each of the options above.
 \subsection{Model labels: default column names}{
 
-This global option changes the style of the default column headers:
+These global option changes the style of the default column headers:
+\itemize{
+\item \code{options(modelsummary_model_labels = "roman")}
+\item \code{options(modelsummary_panel_labels = "roman")}
+}
 
-\code{options(modelsummary_model_labels = "roman")}
+The supported styles are: "model", "panel", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""
 
-The supported styles are: "model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""
+The panel-specific option is only used when \code{shape="rbind"}
 }
 
 \subsection{Table-making packages}{
@@ -160,6 +153,18 @@ the \code{options} function:
 \code{options(modelsummary_factory_word = 'huxtable')}
 
 \code{options(modelsummary_factory_png = 'gt')}
+}
+
+\subsection{Table themes}{
+
+Change the look of tables in an automated and replicable way, using the \code{modelsummary} theming functionality. See the vignette: https://vincentarelbundock.github.io/modelsummary/articles/appearance.html
+\itemize{
+\item \code{modelsummary_theme_gt}
+\item \code{modelsummary_theme_kableExtra}
+\item \code{modelsummary_theme_huxtable}
+\item \code{modelsummary_theme_flextable}
+\item \code{modelsummary_theme_dataframe}
+}
 }
 
 \subsection{Model extraction functions}{

@@ -3,29 +3,20 @@
 #'
 #' The behavior of `modelsummary` can be modified by setting global options. For example:
 #' 
-#' `options(modelsummary_model_labels = "roman")`
-#'
-#' The available global options are:
-#' 
-#' + `modelsummary_model_labels`
-#' + `modelsummary_factory_default`
-#' + `modelsummary_factory_latex`
-#' + `modelsummary_factory_html`
-#' + `modelsummary_factory_png`
-#' + `modelsummary_get`
-#' + `modelsummary_format_numeric_latex`
-#' + `modelsummary_format_numeric_html`
+#' * `options(modelsummary_model_labels = "roman")`
 #' 
 #' The rest of this section describes each of the options above.
 #' 
 #' ### Model labels: default column names
 #' 
-#' This global option changes the style of the default column headers:
+#' These global option changes the style of the default column headers:
 #' 
-#' `options(modelsummary_model_labels = "roman")`
+#' * `options(modelsummary_model_labels = "roman")`
+#' * `options(modelsummary_panel_labels = "roman")`
 #' 
-#' The supported styles are: "model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""
+#' The supported styles are: "model", "panel", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""
 #' 
+#' The panel-specific option is only used when `shape="rbind"`
 #' 
 #' ### Table-making packages
 #'
@@ -43,6 +34,16 @@
 #' 
 #' `options(modelsummary_factory_png = 'gt')`
 #'
+#' ### Table themes
+#' 
+#' Change the look of tables in an automated and replicable way, using the `modelsummary` theming functionality. See the vignette: https://vincentarelbundock.github.io/modelsummary/articles/appearance.html
+#' 
+#' * `modelsummary_theme_gt`
+#' * `modelsummary_theme_kableExtra`
+#' * `modelsummary_theme_huxtable`
+#' * `modelsummary_theme_flextable`
+#' * `modelsummary_theme_dataframe`
+#' 
 #' ### Model extraction functions
 #' 
 #' `modelsummary` can use two sets of packages to extract information from

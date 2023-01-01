@@ -912,9 +912,9 @@ modelsummary(list("Wald" = mod_list, "Kenward" = mod_list_kenward),
 ```
 
 
-# `panelsummary`: Models side-by-side and top-to-bottom
+# Panels / Stacks: Models side-by-side and top-to-bottom
 
-We want to present 4 different models, half of which are estimated using a different outcome variable. When using `modelsummary`, we store models in a list. When useing `panelsummary`, we store models in a list of lists:
+We want to present 4 different models, half of which are estimated using a different outcome variable. When using `modelsummary`, we store models in a list. When useing `modelsummary_rbind`, we store models in a list of lists:
 
 
 ```{r}
@@ -931,7 +931,10 @@ panels <- list(
     )
 )
 
-panelsummary(panels, gof_map = gm)
+modelsummary(
+  panels,
+  gof_map = gm,
+  shape = "rbind")
 ```
 
 Like with `modelsummary()`, we can can name models and panels by using named (nested) lists:
@@ -948,7 +951,9 @@ panels <- list(
     )
 )
 
-panelsummary(panels)
+modelsummary(
+  panels,
+  shape = "rbind")
 ```
 
 ## `fixest`
@@ -967,7 +972,10 @@ panels <- list(
     "hp" = mod[grepl("hp", names(mod))]
 )
 
-panelsummary(panels, gof_omit = "IC|R2")
+modelsummary(
+  panels,
+  gof_omit = "IC|R2",
+  shape = "rbind")
 ```
     
 We can use all the typical extension systems to add information, such as the mean of the dependent variable:
@@ -979,7 +987,7 @@ glance_custom.fixest <- function(x, ...) {
     data.table::data.table(`Mean of DV` = dv)
 }
 
-panelsummary(panels, gof_omit = "IC|R2")
+modelsummary_rbind(panels, gof_omit = "IC|R2")
 
 rm("glance_custom.fixest")
 ```
@@ -1477,11 +1485,11 @@ We can also get additional test statistics using the `test` argument:
 get_estimates(mod, test = c("pd", "rope"))
 ```
 
-# `panelsummary`: Models side-by-side and top-to-bottom
+# `modelsummary_rbind`: Models side-by-side and top-to-bottom
 
 Note: The code in this section requires version 1.3.0 or the development version of `modelsummary`. See [the website](https://vincentarelbundock.github.io/modelsummary/index.html) for installation instructions.
 
-This section introduces the `panelsummary` function, which "stacks" regression tables on top of one another, to display the results several models side-by-side and top-to-bottom. For example, imagine that we want to present 4 different models, half of which are estimated using a different outcome variable. When using `modelsummary`, we store models in a list. When using `panelsummary`, we store models in a list of lists:
+This section introduces the `modelsummary_rbind` function, which "stacks" regression tables on top of one another, to display the results several models side-by-side and top-to-bottom. For example, imagine that we want to present 4 different models, half of which are estimated using a different outcome variable. When using `modelsummary`, we store models in a list. When using `modelsummary_rbind`, we store models in a list of lists:
 
 ```{r}
 gm <- c("r.squared", "nobs", "rmse")
@@ -1497,7 +1505,7 @@ panels <- list(
     )
 )
 
-panelsummary(panels, gof_map = gm)
+modelsummary_rbind(panels, gof_map = gm)
 ```
 
 Like with `modelsummary()`, we can can name models and panels by using named (nested) lists:
@@ -1514,7 +1522,7 @@ panels <- list(
     )
 )
 
-panelsummary(panels, gof_map = gm)
+modelsummary_rbind(panels, gof_map = gm)
 ```
 
 
@@ -1533,7 +1541,7 @@ panels <- list(
     "hp" = mod[grepl("hp", names(mod))]
 )
 
-panelsummary(panels, gof_omit = "IC|R2")
+modelsummary_rbind(panels, gof_omit = "IC|R2")
 ```
     
 We can use all the typical extension systems to add information, such as the mean of the dependent variable:
@@ -1545,5 +1553,5 @@ glance_custom.fixest <- function(x, ...) {
     data.table::data.table(`Mean of DV` = dv)
 }
 
-panelsummary(panels, gof_omit = "IC|R2")
+modelsummary_rbind(panels, gof_omit = "IC|R2")
 ```

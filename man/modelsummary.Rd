@@ -31,17 +31,18 @@ modelsummary(
 )
 }
 \arguments{
-\item{models}{a model or a (named) list of models
+\item{models}{a model, (named) list of models, or nested list of models.
 \itemize{
 \item Single model: \code{modelsummary(model)}
-\item Unnamed list: \code{modelsummary(list(model1, model2))}
+\item Unnamed list of models: \code{modelsummary(list(model1, model2))}
 \itemize{
 \item Models are labelled automatically. The default label style can be altered by setting a global option. See below.
 }
-\item Named list: \code{modelsummary(list("A"=model1, "B"=model2))}
+\item Named list of models: \code{modelsummary(list("A"=model1, "B"=model2))}
 \itemize{
 \item Models are labelled using the list names.
 }
+\item Nested list of models: When using the \code{shape="rbind"} argument, \code{models} can be a nested list of models to display "panels" or "stacks" of regression models. See the \code{shape} argument documentation and examples below.
 }}
 
 \item{output}{filename or object type (character string)
@@ -127,16 +128,10 @@ statistics are exponentiated, and the \code{std.error} is transformed to
 \item Note: a legend will not be inserted at the bottom of the table when the \code{estimate} or \code{statistic} arguments use "glue strings" with \code{{stars}}.
 }}
 
-\item{shape}{formula which determines the shape of the table. The left side
-determines what appears on rows, and the right side determines what appears
-on columns. The formula can include one or more group identifier(s) to display related terms
-together, which can be useful for models with multivariate outcomes or
-grouped coefficients (See examples section below). The group identifier(s) must be
-column names produced by: \code{get_estimates(model)}. The group
-identifier(s) can be combined with the term identifier in a single column by
-using the colon to represent an interaction. If an incomplete formula is
-supplied (e.g., \code{~statistic}), \code{modelsummary} tries to complete it
-automatically. Potential \code{shape} values include:
+\item{shape}{\code{NULL}, formula, or "rbind" string which determines the shape of a table.
+\itemize{
+\item \code{NULL}: Default shape with terms in rows and models in columns.
+\item Formula: The left side determines what appears on rows, and the right side determines what appears on columns. The formula can include one or more group identifier(s) to display related terms together, which can be useful for models with multivariate outcomes or grouped coefficients (See examples section below). The group identifier(s) must be column names produced by: \code{get_estimates(model)}. The group identifier(s) can be combined with the term identifier in a single column by using the colon to represent an interaction. If an incomplete formula is supplied (e.g., \code{~statistic}), \code{modelsummary} tries to complete it automatically. Potential \code{shape} values include:
 \itemize{
 \item \code{term + statistic ~ model}: default
 \item \code{term ~ model + statistic}: statistics in separate columns
@@ -144,6 +139,13 @@ automatically. Potential \code{shape} values include:
 \item \code{term + response + statistic ~ model}: term and group id in separate columns
 \item \code{term : response + statistic ~ model}: term and group id in a single column
 \item \code{term ~ response}
+}
+\item "rbind": bind rows of two or more regression tables to create "panels" or "stacks" of regression models. When \code{shape="rbind"}, the \code{models} argument must be a (potentially named) nested list of models.
+\itemize{
+\item Unnamed nested list with 2 panels: \code{list(list(model1, model2), list(model3, model4))}
+\item Named nested list with 2 panels: \code{list("Panel A" = list(model1, model2), "Panel B" = list(model3, model4))}
+\item Named panels and named models: \code{list("Panel A" = list("(I)" = model1, "(II)" = model2), "Panel B" = list("(I)" = model3, "(II)" = model4))}
+}
 }}
 
 \item{coef_map}{character vector. Subset, rename, and reorder coefficients.
@@ -307,29 +309,22 @@ diagonal.
 
 
 The behavior of \code{modelsummary} can be modified by setting global options. For example:
-
-\code{options(modelsummary_model_labels = "roman")}
-
-The available global options are:
 \itemize{
-\item \code{modelsummary_model_labels}
-\item \code{modelsummary_factory_default}
-\item \code{modelsummary_factory_latex}
-\item \code{modelsummary_factory_html}
-\item \code{modelsummary_factory_png}
-\item \code{modelsummary_get}
-\item \code{modelsummary_format_numeric_latex}
-\item \code{modelsummary_format_numeric_html}
+\item \code{options(modelsummary_model_labels = "roman")}
 }
 
 The rest of this section describes each of the options above.
 \subsection{Model labels: default column names}{
 
-This global option changes the style of the default column headers:
+These global option changes the style of the default column headers:
+\itemize{
+\item \code{options(modelsummary_model_labels = "roman")}
+\item \code{options(modelsummary_panel_labels = "roman")}
+}
 
-\code{options(modelsummary_model_labels = "roman")}
+The supported styles are: "model", "panel", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""
 
-The supported styles are: "model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""
+The panel-specific option is only used when \code{shape="rbind"}
 }
 
 \subsection{Table-making packages}{
@@ -347,6 +342,18 @@ the \code{options} function:
 \code{options(modelsummary_factory_word = 'huxtable')}
 
 \code{options(modelsummary_factory_png = 'gt')}
+}
+
+\subsection{Table themes}{
+
+Change the look of tables in an automated and replicable way, using the \code{modelsummary} theming functionality. See the vignette: https://vincentarelbundock.github.io/modelsummary/articles/appearance.html
+\itemize{
+\item \code{modelsummary_theme_gt}
+\item \code{modelsummary_theme_kableExtra}
+\item \code{modelsummary_theme_huxtable}
+\item \code{modelsummary_theme_flextable}
+\item \code{modelsummary_theme_dataframe}
+}
 }
 
 \subsection{Model extraction functions}{
@@ -514,14 +521,28 @@ modelsummary(models, coef_omit = "^(?!.*ei|.*pt)", gof_omit = ".*")
 library(nnet)
 multi <- multinom(factor(cyl) ~ mpg + hp, data = mtcars, trace = FALSE) 
 
-# term names and group ids in rows, models in columns
+# shape: term names and group ids in rows, models in columns
 modelsummary(multi, shape = response ~ model)
 
-# term names and group ids in rows in a single column
+# shape: term names and group ids in rows in a single column
 modelsummary(multi, shape = term : response ~ model)
 
-# term names in rows and group ids in columns
+# shape: term names in rows and group ids in columns
 modelsummary(multi, shape = term ~ response:model)
+
+# shape = "rbind"
+panels <- list(
+    "Panel A: MPG" = list(
+        "A" = lm(mpg ~ hp, data = mtcars),
+        "B" = lm(mpg ~ hp + factor(gear), data = mtcars)),
+    "Panel B: Displacement" = list(
+        "A" = lm(disp ~ hp, data = mtcars),
+        "C" = lm(disp ~ hp + factor(gear), data = mtcars))
+)
+modelsummary(
+    panels,
+    shape = "rbind",
+    gof_map = c("nobs", "r.squared"))
 
 # title
 modelsummary(models, title = 'This is the title')
