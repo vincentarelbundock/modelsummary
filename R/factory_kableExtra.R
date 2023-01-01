@@ -164,7 +164,8 @@ factory_kableExtra <- function(tab,
   # span: apply (not supported in markdown)
   if (!is.null(span_list) && settings_equal("output_format", c("kableExtra", "latex", "html"))) {
     for (i in 1:length(span_list)) {
-      out <- kableExtra::add_header_above(out, span_list[[i]], escape = escape)
+      names(span_list[[i]]) <- gsub("&nbsp;", " ", names(span_list[[i]]))
+      out <- kableExtra::add_header_above(out, span_list[[i]], escape = TRUE)
     }
   }
 
