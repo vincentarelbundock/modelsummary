@@ -6,6 +6,7 @@ Breaking change:
 
 New features:
 
+* `shape="rbind"` to stack multiple regression tables and create "panels" with labelled groups of models.
 * `fmt`: new helper functions for different formatting styles
   - `fmt = fmt_decimal(2)`: decimal digits
   - `fmt = fmt_decimal(digits = 2, pdigits = 4)`: decimal digits with p value-specific setting
