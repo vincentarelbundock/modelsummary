@@ -4,6 +4,7 @@ test_that("no error", {
     dat <- mtcars
     dat$cyl <- as.factor(dat$cyl)
     dat$am <- as.logical(dat$am)
+    dat <<- dat
     mod <- lm(mpg ~ am + cyl + hp, data = dat)
 
     mfx <- marginaleffects(mod)

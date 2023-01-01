@@ -27,7 +27,21 @@ pad <- function(x, style = "unique", sep = ".") {
     }
 
   } else if (style == "character") {
+    # split at character or last digit
+    nosep <- !grepl(sep, x, fixed = TRUE)
+    x <- ifelse(
+      nosep,
+      gsub("(.*)([0-9])([^0-9]*)", paste0("\\1\\2", sep, "\\3"), x),
+      x)
+
+    # split but make sure there are two elements
     x_split <- strsplit(x, sep, fixed = TRUE)
+    for (i in seq_along(x_split)) {
+      if (length(x_split[[i]]) == 1) {
+        x_split[[i]] <- c(x_split[[i]], "")
+      }
+    }
+
     left_long <- max(sapply(x_split, function(i) ifelse(length(i) == 2, nchar(i[[1]], type = "width"), 0)))
     right_long <- max(sapply(x_split, function(i) ifelse(length(i) == 2, nchar(i[[2]], type = "width"), 0)))
     left_long <- max(ceiling((nchar(x, type = "width") - 1) / 2), left_long)
@@ -63,6 +77,7 @@ pad <- function(x, style = "unique", sep = ".") {
       }
     }
     out <- unlist(x_split)
+    out <- ifelse(nosep, gsub(sep, "", out, fixed = TRUE), out)
   }
 
   return(out)
