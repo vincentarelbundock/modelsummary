@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelsummary</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9011</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9012</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -4534,10 +4534,18 @@ R<sup>2</sup>
 </table>
 </div>
 <div class="section level3">
-<h3 id="shape">shape<a class="anchor" aria-label="anchor" href="#shape"></a>
+<h3 id="shape">
+<code>shape</code><a class="anchor" aria-label="anchor" href="#shape"></a>
 </h3>
-<p>The <code>shape</code> argument accepts a formula which determines the structure of the table, and can display “grouped” coefficients together (e.g., multivariate outcome or mixed-effects models). The left side of the formula represents the rows and the right side represents the columns.</p>
-<p>The default formula is <code>term + statistic ~ model</code>:</p>
+<p>The <code>shape</code> argument accepts:</p>
+<ol style="list-style-type: decimal">
+<li>A formula which determines the structure of the table, and can display “grouped” coefficients together (e.g., multivariate outcome or mixed-effects models).</li>
+<li>The string “rbind” to stack multiple tables on top of each other and present models in distinct “panels”.</li>
+</ol>
+<div class="section level4">
+<h4 id="formula">Formula<a class="anchor" aria-label="anchor" href="#formula"></a>
+</h4>
+<p>The left side of the formula represents the rows and the right side represents the columns. The default formula is <code>term + statistic ~ model</code>:</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
@@ -4632,12 +4640,12 @@ drat
 </th>
 <th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3">
 <div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-&amp;nbsp;(1)
+(1)
 </div>
 </th>
 <th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3">
 <div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-&amp;nbsp;(2)
+(2)
 </div>
 </th>
 </tr>
@@ -4887,12 +4895,12 @@ drat
 </th>
 <th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
 <div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-&amp;nbsp;(1)
+(1)
 </div>
 </th>
 <th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
 <div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-&amp;nbsp;(2)
+(2)
 </div>
 </th>
 </tr>
@@ -5427,25 +5435,761 @@ RMSE
 </tbody>
 </table>
 </div>
+<div class="section level4">
+<h4 id="rbind-panels-of-models-in-stacked-regression-tables">“rbind”: Panels of models in stacked regression tables<a class="anchor" aria-label="anchor" href="#rbind-panels-of-models-in-stacked-regression-tables"></a>
+</h4>
+<p>Note: The code in this section requires version 1.3.0 or the development version of <code>modelsummary</code>. See <a href="https://vincentarelbundock.github.io/modelsummary/index.html">the website</a> for installation instructions.</p>
+<p>This section shows how to “stack/bind” multiple regression tables on top of one another, to display the results several models side-by-side and top-to-bottom. For example, imagine that we want to present 4 different models, half of which are estimated using a different outcome variable. When using <code>modelsummary</code>, we store models in a list. When using <code>modelsummary</code> with `shape=“rbind”, we store models in a list of lists:</p>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"r.squared"</span>, <span class="st">"nobs"</span>, <span class="st">"rmse"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">panels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span></span>
+<span>  <span class="va">panels</span>,</span>
+<span>  shape <span class="op">=</span> <span class="st">"rbind"</span>,</span>
+<span>  gof_map <span class="op">=</span> <span class="va">gm</span><span class="op">)</span></span></code></pre></div>
+<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+ (1)
+</th>
+<th style="text-align:center;">
+ (2)
+</th>
+</tr></thead>
+<tbody>
+<tr grouplength="6">
+<td colspan="3" style="border-bottom: 1px solid;">
+<em>Panel A</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+(Intercept)
+</td>
+<td style="text-align:center;">
+20.091
+</td>
+<td style="text-align:center;">
+−5.114
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+(1.065)
+</td>
+<td style="text-align:center;">
+(10.030)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+qsec
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+1.412
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+(0.559)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+R2
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+0.175
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+RMSE
+</td>
+<td style="text-align:center;">
+5.93
+</td>
+<td style="text-align:center;">
+5.39
+</td>
+</tr>
+<tr grouplength="6">
+<td colspan="3" style="border-bottom: 1px solid;">
+<em>Panel B</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+(Intercept)
+</td>
+<td style="text-align:center;">
+146.688
+</td>
+<td style="text-align:center;">
+631.704
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+(12.120)
+</td>
+<td style="text-align:center;">
+(88.700)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+qsec
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+-27.174
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+(4.946)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+R2
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+0.502
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1px" indentlevel="1">
+RMSE
+</td>
+<td style="text-align:center;box-shadow: 0px 1px">
+67.48
+</td>
+<td style="text-align:center;box-shadow: 0px 1px">
+47.64
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+Num.Obs.
+</td>
+<td style="text-align:center;">
+32
+</td>
+<td style="text-align:center;">
+32
+</td>
+</tr>
+</tbody>
+</table>
+<p>Like with <code><a href="../reference/modelsummary.html">modelsummary()</a></code>, we can can name models and panels by using named (nested) lists:</p>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">panels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Outcome: mpg"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        <span class="st">"(I)"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
+<span>        <span class="st">"(II)"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="st">"Outcome: hp"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        <span class="st">"(I)"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
+<span>        <span class="st">"(II)"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span></span>
+<span>  <span class="va">panels</span>,</span>
+<span>  shape <span class="op">=</span> <span class="st">"rbind"</span>,</span>
+<span>  gof_map <span class="op">=</span> <span class="va">gm</span><span class="op">)</span></span></code></pre></div>
+<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+ (I)
+</th>
+<th style="text-align:center;">
+ (II)
+</th>
+</tr></thead>
+<tbody>
+<tr grouplength="6">
+<td colspan="3" style="border-bottom: 1px solid;">
+<em>Outcome: mpg</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+(Intercept)
+</td>
+<td style="text-align:center;">
+20.091
+</td>
+<td style="text-align:center;">
+−5.114
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+(1.065)
+</td>
+<td style="text-align:center;">
+(10.030)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+qsec
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+1.412
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+(0.559)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+R2
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+0.175
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+RMSE
+</td>
+<td style="text-align:center;">
+5.93
+</td>
+<td style="text-align:center;">
+5.39
+</td>
+</tr>
+<tr grouplength="6">
+<td colspan="3" style="border-bottom: 1px solid;">
+<em>Outcome: hp</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+(Intercept)
+</td>
+<td style="text-align:center;">
+146.688
+</td>
+<td style="text-align:center;">
+631.704
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+(12.120)
+</td>
+<td style="text-align:center;">
+(88.700)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+qsec
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+-27.174
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+(4.946)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+R2
+</td>
+<td style="text-align:center;">
+0.000
+</td>
+<td style="text-align:center;">
+0.502
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1px" indentlevel="1">
+RMSE
+</td>
+<td style="text-align:center;box-shadow: 0px 1px">
+67.48
+</td>
+<td style="text-align:center;box-shadow: 0px 1px">
+47.64
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+Num.Obs.
+</td>
+<td style="text-align:center;">
+32
+</td>
+<td style="text-align:center;">
+32
+</td>
+</tr>
+</tbody>
+</table>
+<div class="section level5">
+<h5 id="fixest">
+<code>fixest</code><a class="anchor" aria-label="anchor" href="#fixest"></a>
+</h5>
+<p>The <code>fixest</code> package offers powerful tools to estimate multiple models using a concise syntax. For example, to introduce regressors in stepwise fashion, and to estimate models on different subsets of the data, we can do:</p>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lrberge.github.io/fixest/" class="external-link">fixest</a></span><span class="op">)</span></span>
+<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://lrberge.github.io/fixest/reference/feols.html" class="external-link">feols</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">hp</span>, <span class="va">mpg</span><span class="op">)</span> <span class="op">~</span> <span class="fu">csw</span><span class="op">(</span><span class="va">qsec</span>, <span class="va">drat</span><span class="op">)</span> <span class="op">|</span> <span class="va">gear</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">panels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"mpg"</span> <span class="op">=</span> <span class="va">mod</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>    <span class="st">"hp"</span> <span class="op">=</span> <span class="va">mod</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"hp"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span></span>
+<span>  <span class="va">panels</span>,</span>
+<span>  shape <span class="op">=</span> <span class="st">"rbind"</span>,</span>
+<span>  gof_omit <span class="op">=</span> <span class="st">"IC|R2"</span><span class="op">)</span></span></code></pre></div>
+<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+ (1)
+</th>
+<th style="text-align:center;">
+ (2)
+</th>
+</tr></thead>
+<tbody>
+<tr grouplength="5">
+<td colspan="3" style="border-bottom: 1px solid;">
+<em>mpg</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+qsec
+</td>
+<td style="text-align:center;">
+1.436
+</td>
+<td style="text-align:center;">
+1.519
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+(0.594)
+</td>
+<td style="text-align:center;">
+(0.529)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+drat
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+5.765
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+(2.381)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+RMSE
+</td>
+<td style="text-align:center;">
+4.03
+</td>
+<td style="text-align:center;">
+3.67
+</td>
+</tr>
+<tr grouplength="5">
+<td colspan="3" style="border-bottom: 1px solid;">
+<em>hp</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+qsec
+</td>
+<td style="text-align:center;">
+-22.175
+</td>
+<td style="text-align:center;">
+-22.676
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+(12.762)
+</td>
+<td style="text-align:center;">
+(13.004)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+drat
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+-35.106
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+(28.509)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1px" indentlevel="1">
+RMSE
+</td>
+<td style="text-align:center;box-shadow: 0px 1px">
+40.45
+</td>
+<td style="text-align:center;box-shadow: 0px 1px">
+39.14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+Num.Obs.
+</td>
+<td style="text-align:center;">
+32
+</td>
+<td style="text-align:center;">
+32
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+Std.Errors
+</td>
+<td style="text-align:center;">
+by: gear
+</td>
+<td style="text-align:center;">
+by: gear
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+FE: gear
+</td>
+<td style="text-align:center;">
+X
+</td>
+<td style="text-align:center;">
+X
+</td>
+</tr>
+</tbody>
+</table>
+<p>We can use all the typical extension systems to add information, such as the mean of the dependent variable:</p>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">glance_custom.fixest</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu">insight</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/insight/reference/get_response.html" class="external-link">get_response</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>    <span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%.2f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dv</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>`Mean of DV` <span class="op">=</span> <span class="va">dv</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span></span>
+<span>  <span class="va">panels</span>,</span>
+<span>  shape <span class="op">=</span> <span class="st">"rbind"</span>,</span>
+<span>  gof_omit <span class="op">=</span> <span class="st">"IC|R2"</span><span class="op">)</span></span></code></pre></div>
+<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+ (1)
+</th>
+<th style="text-align:center;">
+ (2)
+</th>
+</tr></thead>
+<tbody>
+<tr grouplength="6">
+<td colspan="3" style="border-bottom: 1px solid;">
+<em>mpg</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+qsec
+</td>
+<td style="text-align:center;">
+1.436
+</td>
+<td style="text-align:center;">
+1.519
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+(0.594)
+</td>
+<td style="text-align:center;">
+(0.529)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+drat
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+5.765
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+(2.381)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+RMSE
+</td>
+<td style="text-align:center;">
+4.03
+</td>
+<td style="text-align:center;">
+3.67
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+Mean of DV
+</td>
+<td style="text-align:center;">
+20.09
+</td>
+<td style="text-align:center;">
+20.09
+</td>
+</tr>
+<tr grouplength="6">
+<td colspan="3" style="border-bottom: 1px solid;">
+<em>hp</em>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+qsec
+</td>
+<td style="text-align:center;">
+-22.175
+</td>
+<td style="text-align:center;">
+-22.676
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+(12.762)
+</td>
+<td style="text-align:center;">
+(13.004)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+drat
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+-35.106
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+(28.509)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+RMSE
+</td>
+<td style="text-align:center;">
+40.45
+</td>
+<td style="text-align:center;">
+39.14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1px" indentlevel="1">
+Mean of DV
+</td>
+<td style="text-align:center;box-shadow: 0px 1px">
+146.69
+</td>
+<td style="text-align:center;box-shadow: 0px 1px">
+146.69
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+Num.Obs.
+</td>
+<td style="text-align:center;">
+32
+</td>
+<td style="text-align:center;">
+32
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+Std.Errors
+</td>
+<td style="text-align:center;">
+by: gear
+</td>
+<td style="text-align:center;">
+by: gear
+</td>
+</tr>
+<tr>
+<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+FE: gear
+</td>
+<td style="text-align:center;">
+X
+</td>
+<td style="text-align:center;">
+X
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="st">"glance_custom.fixest"</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+</div>
 <div class="section level3">
 <h3 id="align">align<a class="anchor" aria-label="anchor" href="#align"></a>
 </h3>
 <p>By default, <code>modelsummary</code> will align the first column (with coefficient names) to the left, and will center the results columns. To change this default, you can use the align argument, which accepts a string of the same length as the number of columns:</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, align<span class="op">=</span><span class="st">"lrrrrr"</span><span class="op">)</span></span></code></pre></div>
 <p>Users who produce PDF documents using Rmarkdown or LaTeX can also align values on the decimal dot by using the character “d” in the <code>align</code> argument:</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, align<span class="op">=</span><span class="st">"lddddd"</span><span class="op">)</span></span></code></pre></div>
 <p>For the table produced by this code to compile, users must include the following code in their LaTeX preamble:</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode latex"><code class="sourceCode latex"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true"></a><span class="bu">\usepackage</span>{<span class="ex">booktabs</span>}</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true"></a><span class="bu">\usepackage</span>{<span class="ex">siunitx</span>}</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true"></a><span class="fu">\newcolumntype</span>{d}{S[input-symbols = ()]}</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode latex"><code class="sourceCode latex"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true"></a><span class="bu">\usepackage</span>{<span class="ex">booktabs</span>}</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true"></a><span class="bu">\usepackage</span>{<span class="ex">siunitx</span>}</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true"></a><span class="fu">\newcolumntype</span>{d}{S[input-symbols = ()]}</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="notes">notes<a class="anchor" aria-label="anchor" href="#notes"></a>
 </h3>
 <p>Add notes to the bottom of your table:</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, </span>
 <span>   notes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">'Text of the first note.'</span>, </span>
 <span>                <span class="st">'Text of the second note.'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -5454,7 +6198,7 @@ RMSE
 <h3 id="title">title<a class="anchor" aria-label="anchor" href="#title"></a>
 </h3>
 <p>You can add a title to your table as follows:</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, title <span class="op">=</span> <span class="st">'This is a title for my table.'</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -5462,12 +6206,12 @@ RMSE
 <code>add_rows</code><a class="anchor" aria-label="anchor" href="#add_rows"></a>
 </h3>
 <p>Use the <code>add_rows</code> argument to add rows manually to a table. For example, let’s say you estimate two models with a factor variables and you want to insert (a) an empty line to identify the category of reference, and (b) customized information at the bottom of the table:</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">models</span><span class="op">[[</span><span class="st">'OLS'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="va">models</span><span class="op">[[</span><span class="st">'Logit'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, <span class="va">mtcars</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></span></code></pre></div>
 <p>We create a data.frame with the same number of columns as the summary table. Then, we define a “position” attribute to specify where the new rows should be inserted in the table. Finally, we pass this data.frame to the <code>add_rows</code> argument:</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
 <span><span class="va">rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span><span class="op">~</span><span class="va">term</span>,          <span class="op">~</span><span class="va">OLS</span>,  <span class="op">~</span><span class="va">Logit</span>,</span>
 <span>                <span class="st">'factor(cyl)4'</span>, <span class="st">'-'</span>,   <span class="st">'-'</span>,</span>
@@ -5666,7 +6410,7 @@ RMSE
 <code>exponentiate</code><a class="anchor" aria-label="anchor" href="#exponentiate"></a>
 </h3>
 <p>We can exponentiate their estimates using the <code>exponentiate</code> argument:</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod_logit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod_logit</span>, exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -5759,7 +6503,7 @@ RMSE
 </tbody>
 </table>
 <p>We can also present exponentiated and standard models side by side by using a logical vector:</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod_logit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">mod_logit</span>, <span class="va">mod_logit</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod_logit</span>, exponentiate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -5923,7 +6667,7 @@ RMSE
 <h2 id="supported-models">Supported models<a class="anchor" aria-label="anchor" href="#supported-models"></a>
 </h2>
 <p><code>modelsummary</code> automatically supports all the models supported by the <code>tidy</code> function of the <a href="broom.tidymodels.org">broom package</a> or the <code>parameters</code> function of the <a href="https://easystats.github.io/parameters/" class="external-link">parameters package</a>. The list of supported models is rapidly expanding. At the moment, it covers the following model classes:</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/supported_models.html">supported_models</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   [1] "aareg"                    "acf"                     </span></span>
 <span><span class="co">#&gt;   [3] "afex_aov"                 "AKP"                     </span></span>
@@ -6054,7 +6798,7 @@ RMSE
 <span><span class="co">#&gt; [253] "zcpglm"                   "zerocount"               </span></span>
 <span><span class="co">#&gt; [255] "zeroinfl"                 "zoo"</span></span></code></pre></div>
 <p>To see if a given model is supported, you can fit it, and then call this function:</p>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_estimates.html">get_estimates</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
 <p>If this function does not return a valid output, you can easily (really!!) add your own support. See the next section for a tutorial. If you do this, you may consider opening an issue on the Github website of the <code>broom</code> package: <a href="https://github.com/tidymodels/broom/issues" class="external-link uri">https://github.com/tidymodels/broom/issues</a></p>
 </div>
@@ -6063,7 +6807,7 @@ RMSE
 </h2>
 <p>The simplest way to summarize an unsupported model is to create a <code>modelsummary_list</code> object. This approach is super flexible, but it requires manual intervention, and it can become tedious if you need to summarize many models. The next section shows how to add formal support for an unsupported model type.</p>
 <p>A <code>modelsummary_list</code> is a list with two element that conform to the <code>broom</code> package specification: <code>tidy</code> and <code>glance</code>. <code>tidy</code> is a data.frame with at least three columns: <code>term</code>, <code>estimate</code>, and <code>std.error</code>. <code>glance</code> is a data.frame with only a single row, and where each column will be displayed at the bottom of the table in the goodness-of-fit section. Finally, we wrap those two elements in a list and assign it a <code>modelsummary_list</code> class:</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ti</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"coef1"</span>, <span class="st">"coef2"</span>, <span class="st">"coef3"</span><span class="op">)</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
@@ -6157,7 +6901,7 @@ blah blah
 </h2>
 <p><code>modelsummary</code> relies on two functions from the <code>broom</code> package to extract model information: <code>tidy</code> and <code>glance</code>. If <code>broom</code> doesn’t support the type of model you are trying to summarize, <code>modelsummary</code> won’t support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.</p>
 <p>For example, models produced by the <code>MCMCglmm</code> package are not currently supported by <code>broom</code>. To add support, you simply need to create a <code>tidy</code> and a <code>glance</code> method:</p>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load packages and data</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">MCMCglmm</span><span class="op">)</span></span>
@@ -6197,7 +6941,7 @@ blah blah
 </h2>
 <p>Users may want to include more information than is made available by the default extractor function. For example, models produced by the <code><a href="https://rdrr.io/pkg/MASS/man/polr.html" class="external-link">MASS::polr</a></code> do not produce p values by default, which means that we cannot use the <code>stars=TRUE</code> argument in <code>modelsummary</code>. However, it is possible to extract this information by using the <code><a href="https://rdrr.io/pkg/lmtest/man/coeftest.html" class="external-link">lmtest::coeftest</a></code> function. To include such custom information, we will define new <code>glance_custom</code> and <code>tidy_custom</code> methods.</p>
 <p>We begin by estimating a model with the <code><a href="https://rdrr.io/pkg/MASS/man/polr.html" class="external-link">MASS::polr</a></code>:</p>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">MASS</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">mod_ordinal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/polr.html" class="external-link">polr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.ordered</a></span><span class="op">(</span><span class="va">gear</span><span class="op">)</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
@@ -6215,11 +6959,11 @@ blah blah
 <span><span class="co">#&gt; 4       28 0.0053120619      beta</span></span></code></pre></div>
 <p>The <code>get_estimates</code> function shows that our default extractor does <em>not</em> produce a <code>p.value</code> column. As a result, setting <code>stars=TRUE</code> in <code>modelsummary</code> will produce an error.</p>
 <p>We know that the <code><a href="https://rdrr.io/pkg/MASS/man/polr.html" class="external-link">MASS::polr</a></code> produces an object of class <code>polr</code>:</p>
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">mod_ordinal</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "polr"</span></span></code></pre></div>
 <p>To extract more (custom) information from a model of this class, we thus define a method called <code>tidy_custom.polr</code> which returns a data.frame with two columns: <code>term</code> and <code>p.value</code>:</p>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tidy_custom.polr</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/coeftest.html" class="external-link">coeftest</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -6228,7 +6972,7 @@ blah blah
 <span>  <span class="va">out</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>When this method is defined, <code>modelsummary</code> can automatically extract p values from all models of this class, and will now work properly with <code>stars=TRUE</code>:</p>
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod_ordinal</span>, stars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <table style="NAborder-bottom: 0; width: auto !important; margin-left: auto; margin-right: auto;" class="table table">
 <thead><tr>
@@ -6343,18 +7087,18 @@ RMSE
 <h2 id="customizing-existing-models-part-i">Customizing existing models (part I)<a class="anchor" aria-label="anchor" href="#customizing-existing-models-part-i"></a>
 </h2>
 <p>Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new <code>glance_custom</code> and <code>tidy_custom</code> methods. To illustrate, we estimate two linear regression models using the <code>lm</code> function:</p>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">mod</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="va">mod</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">wt</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">am</span>, <span class="va">mtcars</span><span class="op">)</span></span></code></pre></div>
 <p>In <code>R</code>, the <code>lm</code> function produces models of class “lm”:</p>
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "lm"</span></span></code></pre></div>
 <p>Let’s say you would like to print the dependent variable for each model of this particular class. All you need to do is define a new method called <code>glance_custom.lm</code>. This method should return a data.frame (or tibble) with 1 row, and 1 column per piece of information you want to display. For example:</p>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">glance_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">formula</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="st">"DV"</span> <span class="op">=</span> <span class="va">dv</span><span class="op">)</span></span>
@@ -6362,7 +7106,7 @@ RMSE
 <span><span class="op">}</span></span></code></pre></div>
 <p>Now, let’s customize the body of the table. The <code>vcov</code> argument already allows users to customize uncertainty estimates. But imagine you want to override the <em>coefficient estimates</em> of your “lm” models. Easy! All you need to do is define a <code>tidy_custom.lm</code> method which returns a data.frame (or tibble) with one column called “term” and one column called “estimate”.</p>
 <p>Here, we’ll substitute estimates by an up/down-pointing triangles which represents their signs:</p>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tidy_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span></span>
 <span>    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -6371,7 +7115,7 @@ RMSE
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>After you define the <code>glance_custom</code> and <code>tidy_custom</code> methods, <code>modelsummary</code> will automatically display your customized model information:</p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code></pre></div>
 <table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -6574,7 +7318,7 @@ wt
 <h2 id="customizing-existing-models-part-ii">Customizing existing models (part II)<a class="anchor" aria-label="anchor" href="#customizing-existing-models-part-ii"></a>
 </h2>
 <p>An even more fundamental way to customize the output would be to completely bypass <code>modelsummary</code>’s extractor functions by assigning a new class name to your model. For example,</p>
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># estimate a linear model</span></span>
 <span><span class="va">mod_custom</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span></span>
@@ -6674,7 +7418,7 @@ Custom
 <p>Warning: When defining new <code>tidy</code> and <code>glance</code> methods, it is important to include an ellipsis argument (<code>...</code>).</p>
 <p>Note that in the <code>glance.custom()</code> method, we called <code>stats:::nobs.lm()</code> instead of the default <code><a href="https://rdrr.io/r/stats/nobs.html" class="external-link">stats::nobs()</a></code> method, because the latter know does not know where to dispatch models of our new “custom” class. Being more explicit solves the problem.</p>
 <p>An alternative would be to set a new class that inherits from the previous one, and to use a global option to set <code>broom</code> as the default extractor function (otherwise <code>modelsummary</code> will use its standard <code>lm</code> extractors by inheritance):</p>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>modelsummary_get <span class="op">=</span> <span class="st">"broom"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">mod_custom</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"custom"</span>, <span class="st">"lm"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -6682,7 +7426,7 @@ Custom
 <h2 id="customizing-existing-models-part-iii">Customizing existing models (part III)<a class="anchor" aria-label="anchor" href="#customizing-existing-models-part-iii"></a>
 </h2>
 <p>Another flexible way to customize model output is to use <code>output = "modelsummary_list"</code>. With this output option, <code><a href="../reference/modelsummary.html">modelsummary()</a></code> returns a list with two elements: <code>tidy</code> contains parameter estimates, standard errors, etc., and <code>glance</code> contains model statistics such as the AIC. For example,</p>
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="va">mod_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, output <span class="op">=</span> <span class="st">"modelsummary_list"</span><span class="op">)</span></span>
 <span><span class="va">mod_list</span><span class="op">$</span><span class="va">tidy</span></span>
@@ -6695,7 +7439,7 @@ Custom
 <span><span class="co">#&gt; 1 337.8809 343.7438 0.6143611     0.5877653 41.90687   32 23.09994 -164.9404</span></span></code></pre></div>
 <p>Both <code>tidy</code> and <code>glance</code> can now be customized, and the updated model can be passed back to modelsummary using <code>modelsummary(mod_list)</code>. All information that is displayed in the table is contained in <code>mod_list</code>, so this pattern allows for very flexible adjustments of output tables.</p>
 <p>A useful example for this pattern concerns mixed models using <code>lme4</code>. Assume we want to compare the effect of using different degrees-of-freedom adjustments on the significance of the coefficients. The models have identical parameter estimates, standard errors, and model fit statistics - we only want to change the p-values. We use the <code>parameters</code> package to compute the adjusted p-values.</p>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">drat</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">am</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="va">mod_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, output <span class="op">=</span> <span class="st">"modelsummary_list"</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span>
@@ -6838,837 +7582,6 @@ RMSE
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section level2">
-<h2 id="panelsummary-models-side-by-side-and-top-to-bottom">
-<code>panelsummary</code>: Models side-by-side and top-to-bottom<a class="anchor" aria-label="anchor" href="#panelsummary-models-side-by-side-and-top-to-bottom"></a>
-</h2>
-<p>We want to present 4 different models, half of which are estimated using a different outcome variable. When using <code>modelsummary</code>, we store models in a list. When useing <code>panelsummary</code>, we store models in a list of lists:</p>
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"r.squared"</span>, <span class="st">"nobs"</span>, <span class="st">"rmse"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">panels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/panelsummary.html">panelsummary</a></span><span class="op">(</span><span class="va">panels</span>, gof_map <span class="op">=</span> <span class="va">gm</span><span class="op">)</span></span></code></pre></div>
-<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead><tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:center;">
- (1)
-</th>
-<th style="text-align:center;">
- (2)
-</th>
-</tr></thead>
-<tbody>
-<tr grouplength="6">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>Panel A</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-(Intercept)
-</td>
-<td style="text-align:center;">
-20.091
-</td>
-<td style="text-align:center;">
-−5.114
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(1.065)
-</td>
-<td style="text-align:center;">
-(10.030)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-1.412
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(0.559)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-R2
-</td>
-<td style="text-align:center;">
-0.000
-</td>
-<td style="text-align:center;">
-0.175
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;">
-5.93
-</td>
-<td style="text-align:center;">
-5.39
-</td>
-</tr>
-<tr grouplength="6">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>Panel B</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-(Intercept)
-</td>
-<td style="text-align:center;">
-146.688
-</td>
-<td style="text-align:center;">
-631.704
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(12.120)
-</td>
-<td style="text-align:center;">
-(88.700)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
--27.174
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(4.946)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-R2
-</td>
-<td style="text-align:center;">
-0.000
-</td>
-<td style="text-align:center;">
-0.502
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1px" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-67.48
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-47.64
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Num.Obs.
-</td>
-<td style="text-align:center;">
-32
-</td>
-<td style="text-align:center;">
-32
-</td>
-</tr>
-</tbody>
-</table>
-<p>Like with <code><a href="../reference/modelsummary.html">modelsummary()</a></code>, we can can name models and panels by using named (nested) lists:</p>
-<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">panels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Outcome: mpg"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>        <span class="st">"(I)"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
-<span>        <span class="st">"(II)"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    <span class="st">"Outcome: hp"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>        <span class="st">"(I)"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
-<span>        <span class="st">"(II)"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/panelsummary.html">panelsummary</a></span><span class="op">(</span><span class="va">panels</span><span class="op">)</span></span></code></pre></div>
-<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead><tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:center;">
- (I)
-</th>
-<th style="text-align:center;">
- (II)
-</th>
-</tr></thead>
-<tbody>
-<tr grouplength="11">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>Outcome: mpg</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-(Intercept)
-</td>
-<td style="text-align:center;">
-20.091
-</td>
-<td style="text-align:center;">
-−5.114
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(1.065)
-</td>
-<td style="text-align:center;">
-(10.030)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-1.412
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(0.559)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-R2
-</td>
-<td style="text-align:center;">
-0.000
-</td>
-<td style="text-align:center;">
-0.175
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-R2 Adj.
-</td>
-<td style="text-align:center;">
-0.000
-</td>
-<td style="text-align:center;">
-0.148
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-AIC
-</td>
-<td style="text-align:center;">
-208.8
-</td>
-<td style="text-align:center;">
-204.6
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-BIC
-</td>
-<td style="text-align:center;">
-211.7
-</td>
-<td style="text-align:center;">
-209.0
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Log.Lik.
-</td>
-<td style="text-align:center;">
-−102.378
-</td>
-<td style="text-align:center;">
-−99.294
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-F
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-6.377
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;">
-5.93
-</td>
-<td style="text-align:center;">
-5.39
-</td>
-</tr>
-<tr grouplength="11">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>Outcome: hp</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-(Intercept)
-</td>
-<td style="text-align:center;">
-146.688
-</td>
-<td style="text-align:center;">
-631.704
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(12.120)
-</td>
-<td style="text-align:center;">
-(88.700)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
--27.174
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(4.946)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-R2
-</td>
-<td style="text-align:center;">
-0.000
-</td>
-<td style="text-align:center;">
-0.502
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-R2 Adj.
-</td>
-<td style="text-align:center;">
-0.000
-</td>
-<td style="text-align:center;">
-0.485
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-AIC
-</td>
-<td style="text-align:center;">
-364.4
-</td>
-<td style="text-align:center;">
-344.1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-BIC
-</td>
-<td style="text-align:center;">
-367.3
-</td>
-<td style="text-align:center;">
-348.5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Log.Lik.
-</td>
-<td style="text-align:center;">
--180.186
-</td>
-<td style="text-align:center;">
--169.045
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-F
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-30.190
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1px" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-67.48
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-47.64
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Num.Obs.
-</td>
-<td style="text-align:center;">
-32
-</td>
-<td style="text-align:center;">
-32
-</td>
-</tr>
-</tbody>
-</table>
-<div class="section level3">
-<h3 id="fixest">
-<code>fixest</code><a class="anchor" aria-label="anchor" href="#fixest"></a>
-</h3>
-<p>The <code>fixest</code> package offers powerful tools to estimate multiple models using a concise syntax. For example, to introduce regressors in stepwise fashion, and to estimate models on different subsets of the data, we can do:</p>
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lrberge.github.io/fixest/" class="external-link">fixest</a></span><span class="op">)</span></span>
-<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://lrberge.github.io/fixest/reference/feols.html" class="external-link">feols</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">hp</span>, <span class="va">mpg</span><span class="op">)</span> <span class="op">~</span> <span class="fu">csw</span><span class="op">(</span><span class="va">qsec</span>, <span class="va">drat</span><span class="op">)</span> <span class="op">|</span> <span class="va">gear</span>,</span>
-<span>    data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">panels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    <span class="st">"mpg"</span> <span class="op">=</span> <span class="va">mod</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>    <span class="st">"hp"</span> <span class="op">=</span> <span class="va">mod</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"hp"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/panelsummary.html">panelsummary</a></span><span class="op">(</span><span class="va">panels</span>, gof_omit <span class="op">=</span> <span class="st">"IC|R2"</span><span class="op">)</span></span></code></pre></div>
-<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead><tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:center;">
- (1)
-</th>
-<th style="text-align:center;">
- (2)
-</th>
-</tr></thead>
-<tbody>
-<tr grouplength="5">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>mpg</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
-1.436
-</td>
-<td style="text-align:center;">
-1.519
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(0.594)
-</td>
-<td style="text-align:center;">
-(0.529)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-drat
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-5.765
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(2.381)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;">
-4.03
-</td>
-<td style="text-align:center;">
-3.67
-</td>
-</tr>
-<tr grouplength="5">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>hp</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
--22.175
-</td>
-<td style="text-align:center;">
--22.676
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(12.762)
-</td>
-<td style="text-align:center;">
-(13.004)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-drat
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
--35.106
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(28.509)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1px" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-40.45
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-39.14
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Num.Obs.
-</td>
-<td style="text-align:center;">
-32
-</td>
-<td style="text-align:center;">
-32
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Std.Errors
-</td>
-<td style="text-align:center;">
-by: gear
-</td>
-<td style="text-align:center;">
-by: gear
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-FE: gear
-</td>
-<td style="text-align:center;">
-X
-</td>
-<td style="text-align:center;">
-X
-</td>
-</tr>
-</tbody>
-</table>
-<p>We can use all the typical extension systems to add information, such as the mean of the dependent variable:</p>
-<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">glance_custom.fixest</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu">insight</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/insight/reference/get_response.html" class="external-link">get_response</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span>    <span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%.2f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dv</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>`Mean of DV` <span class="op">=</span> <span class="va">dv</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/panelsummary.html">panelsummary</a></span><span class="op">(</span><span class="va">panels</span>, gof_omit <span class="op">=</span> <span class="st">"IC|R2"</span><span class="op">)</span></span></code></pre></div>
-<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead><tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:center;">
- (1)
-</th>
-<th style="text-align:center;">
- (2)
-</th>
-</tr></thead>
-<tbody>
-<tr grouplength="6">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>mpg</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
-1.436
-</td>
-<td style="text-align:center;">
-1.519
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(0.594)
-</td>
-<td style="text-align:center;">
-(0.529)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-drat
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-5.765
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(2.381)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;">
-4.03
-</td>
-<td style="text-align:center;">
-3.67
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Mean of DV
-</td>
-<td style="text-align:center;">
-20.09
-</td>
-<td style="text-align:center;">
-20.09
-</td>
-</tr>
-<tr grouplength="6">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>hp</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
--22.175
-</td>
-<td style="text-align:center;">
--22.676
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(12.762)
-</td>
-<td style="text-align:center;">
-(13.004)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-drat
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
--35.106
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(28.509)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;">
-40.45
-</td>
-<td style="text-align:center;">
-39.14
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1px" indentlevel="1">
-Mean of DV
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-146.69
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-146.69
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Num.Obs.
-</td>
-<td style="text-align:center;">
-32
-</td>
-<td style="text-align:center;">
-32
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Std.Errors
-</td>
-<td style="text-align:center;">
-by: gear
-</td>
-<td style="text-align:center;">
-by: gear
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-FE: gear
-</td>
-<td style="text-align:center;">
-X
-</td>
-<td style="text-align:center;">
-X
-</td>
-</tr>
-</tbody>
-</table>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="st">"glance_custom.fixest"</span><span class="op">)</span></span></code></pre></div>
-</div>
 </div>
 <div class="section level2">
 <h2 id="rmarkdown">Rmarkdown<a class="anchor" aria-label="anchor" href="#rmarkdown"></a>
@@ -8205,20 +8118,20 @@ drat
 (Intercept)
 </td>
 <td style="text-align:center;">
-326.279
+326.152
 </td>
 <td style="text-align:center;">
-284.005
+285.286
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(29.082)
+(31.872)
 </td>
 <td style="text-align:center;">
-(43.601)
+(44.634)
 </td>
 </tr>
 <tr>
@@ -8226,20 +8139,20 @@ drat
 mpg
 </td>
 <td style="text-align:center;">
-−8.959
+−8.962
 </td>
 <td style="text-align:center;">
-−10.084
+−10.100
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(1.309)
+(1.418)
 </td>
 <td style="text-align:center;">
-(2.324)
+(2.444)
 </td>
 </tr>
 <tr>
@@ -8249,7 +8162,7 @@ drat
 <td style="text-align:center;">
 </td>
 <td style="text-align:center;">
-18.063
+17.676
 </td>
 </tr>
 <tr>
@@ -8258,7 +8171,7 @@ drat
 <td style="text-align:center;box-shadow: 0px 1px">
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(21.737)
+(22.131)
 </td>
 </tr>
 <tr>
@@ -8394,14 +8307,14 @@ RMSE
 fit_x_endo_1
 </td>
 <td style="text-align:center;">
-0.512
+0.537
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.243)
+(0.142)
 </td>
 </tr>
 <tr>
@@ -8409,14 +8322,14 @@ fit_x_endo_1
 fit_x_endo_2
 </td>
 <td style="text-align:center;">
-1.457
+0.320
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.518)
+(0.113)
 </td>
 </tr>
 <tr>
@@ -8424,14 +8337,14 @@ fit_x_endo_2
 x1
 </td>
 <td style="text-align:center;">
-0.376
+0.542
 </td>
 </tr>
 <tr>
 <td style="text-align:left;box-shadow: 0px 1px">
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.076)
+(0.141)
 </td>
 </tr>
 <tr>
@@ -8447,7 +8360,7 @@ Num.Obs.
 R2
 </td>
 <td style="text-align:center;">
-0.272
+0.828
 </td>
 </tr>
 <tr>
@@ -8455,7 +8368,7 @@ R2
 R2 Adj.
 </td>
 <td style="text-align:center;">
-0.247
+0.822
 </td>
 </tr>
 <tr>
@@ -8463,7 +8376,7 @@ R2 Adj.
 R2 Within
 </td>
 <td style="text-align:center;">
-−0.909
+0.549
 </td>
 </tr>
 <tr>
@@ -8471,7 +8384,7 @@ R2 Within
 R2 Within Adj.
 </td>
 <td style="text-align:center;">
-−0.949
+0.539
 </td>
 </tr>
 <tr>
@@ -8479,7 +8392,7 @@ R2 Within Adj.
 AIC
 </td>
 <td style="text-align:center;">
-332.5
+116.1
 </td>
 </tr>
 <tr>
@@ -8487,7 +8400,7 @@ AIC
 BIC
 </td>
 <td style="text-align:center;">
-350.5
+134.2
 </td>
 </tr>
 <tr>
@@ -8495,7 +8408,7 @@ BIC
 RMSE
 </td>
 <td style="text-align:center;">
-0.70
+0.34
 </td>
 </tr>
 <tr>
@@ -8519,7 +8432,7 @@ X
 Wald (x_endo_1)
 </td>
 <td style="text-align:center;">
-79.0176655282407
+7.30186600884656
 </td>
 </tr>
 <tr>
@@ -8527,7 +8440,7 @@ Wald (x_endo_1)
 Wald (x_endo_2)
 </td>
 <td style="text-align:center;">
-4.10802076082788
+1.48061298992108
 </td>
 </tr>
 </tbody>
@@ -8589,26 +8502,26 @@ Amelia
 (Intercept)
 </td>
 <td style="text-align:center;">
-76.330
+77.031
 </td>
 <td style="text-align:center;">
-73.682
+71.366
 </td>
 <td style="text-align:center;">
-78.165
+76.997
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(14.148)
+(13.582)
 </td>
 <td style="text-align:center;">
-(13.825)
+(15.845)
 </td>
 <td style="text-align:center;">
-(12.695)
+(13.764)
 </td>
 </tr>
 <tr>
@@ -8616,26 +8529,26 @@ Amelia
 Literacy
 </td>
 <td style="text-align:center;">
-−0.505
+−0.510
 </td>
 <td style="text-align:center;">
-−0.464
+−0.383
 </td>
 <td style="text-align:center;">
-−0.526
+−0.491
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
+(0.229)
+</td>
+<td style="text-align:center;">
+(0.243)
+</td>
+<td style="text-align:center;">
 (0.218)
-</td>
-<td style="text-align:center;">
-(0.203)
-</td>
-<td style="text-align:center;">
-(0.196)
 </td>
 </tr>
 <tr>
@@ -8643,26 +8556,26 @@ Literacy
 Commerce
 </td>
 <td style="text-align:center;">
-−0.353
+−0.315
 </td>
 <td style="text-align:center;">
-−0.303
+−0.238
 </td>
 <td style="text-align:center;">
-−0.365
+−0.310
 </td>
 </tr>
 <tr>
 <td style="text-align:left;box-shadow: 0px 1px">
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.162)
+(0.150)
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.155)
+(0.192)
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.147)
+(0.146)
 </td>
 </tr>
 <tr>
@@ -8670,7 +8583,7 @@ Commerce
 Num.Obs.
 </td>
 <td style="text-align:center;">
-58
+62
 </td>
 <td style="text-align:center;">
 86
@@ -8697,13 +8610,13 @@ Num.Imp.
 R2
 </td>
 <td style="text-align:center;">
-0.104
+0.091
 </td>
 <td style="text-align:center;">
-0.077
+0.057
 </td>
 <td style="text-align:center;">
-0.108
+0.087
 </td>
 </tr>
 <tr>
@@ -8711,13 +8624,12 @@ R2
 R2 Adj.
 </td>
 <td style="text-align:center;">
-0.071
+0.060
 </td>
 <td style="text-align:center;">
-0.054
 </td>
 <td style="text-align:center;">
-0.086
+0.064
 </td>
 </tr>
 <tr>
@@ -8725,7 +8637,7 @@ R2 Adj.
 AIC
 </td>
 <td style="text-align:center;">
-541.2
+575.8
 </td>
 <td style="text-align:center;">
 </td>
@@ -8737,7 +8649,7 @@ AIC
 BIC
 </td>
 <td style="text-align:center;">
-549.5
+584.3
 </td>
 <td style="text-align:center;">
 </td>
@@ -8749,7 +8661,7 @@ BIC
 Log.Lik.
 </td>
 <td style="text-align:center;">
-−266.610
+−283.888
 </td>
 <td style="text-align:center;">
 </td>
@@ -8761,7 +8673,7 @@ Log.Lik.
 RMSE
 </td>
 <td style="text-align:center;">
-23.99
+23.57
 </td>
 <td style="text-align:center;">
 </td>
@@ -8884,22 +8796,22 @@ RMSE
 <span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">tic</a></span><span class="op">(</span><span class="st">"tidy"</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">toc</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; tidy: 0.007 sec elapsed</span></span>
+<span><span class="co">#&gt; tidy: 0.004 sec elapsed</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">tic</a></span><span class="op">(</span><span class="st">"glance"</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">glance</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">toc</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; glance: 0.009 sec elapsed</span></span>
+<span><span class="co">#&gt; glance: 0.007 sec elapsed</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">tic</a></span><span class="op">(</span><span class="st">"parameters"</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">toc</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; parameters: 0.054 sec elapsed</span></span>
+<span><span class="co">#&gt; parameters: 0.035 sec elapsed</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">tic</a></span><span class="op">(</span><span class="st">"performance"</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/model_performance.html" class="external-link">performance</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">toc</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; performance: 0.029 sec elapsed</span></span></code></pre></div>
+<span><span class="co">#&gt; performance: 0.018 sec elapsed</span></span></code></pre></div>
 <p>In my experience, the main bottleneck tends to be computing goodness-of-fit statistics. The <code>performance</code> extractor allows users to specify a <code>metrics</code> argument to select a subset of GOF to include. Using this can speedup things considerably.</p>
 <p>We call <code>modelsummary</code> with the <code>metrics</code> argument:</p>
 <div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
@@ -9045,9 +8957,9 @@ F
 <div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_estimates.html">get_estimates</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          term      estimate         mad conf.level     conf.low    conf.high</span></span>
-<span><span class="co">#&gt; 1 (Intercept) -2.2467416852 0.588227559       0.95 -3.437475929 -1.084673279</span></span>
-<span><span class="co">#&gt; 2          hp  0.0007004307 0.001083543       0.95 -0.001440833  0.002937506</span></span>
-<span><span class="co">#&gt; 3        drat  0.7068770705 0.134165013       0.95  0.435888781  0.985768348</span></span>
+<span><span class="co">#&gt; 1 (Intercept) -2.2255922501 0.585770864       0.95 -3.406264173 -1.072069242</span></span>
+<span><span class="co">#&gt; 2          hp  0.0006729673 0.001055846       0.95 -0.001369753  0.002885906</span></span>
+<span><span class="co">#&gt; 3        drat  0.7029968024 0.137083432       0.95  0.430792321  0.975137444</span></span>
 <span><span class="co">#&gt;   prior.distribution prior.location prior.scale group</span></span>
 <span><span class="co">#&gt; 1             normal        0.40625  1.24747729      </span></span>
 <span><span class="co">#&gt; 2             normal        0.00000  0.01819465      </span></span>
@@ -9078,14 +8990,14 @@ F
 (Intercept)
 </td>
 <td style="text-align:center;">
-−2.247
+−2.226
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.588)
+(0.586)
 </td>
 </tr>
 <tr>
@@ -9108,14 +9020,14 @@ hp
 drat
 </td>
 <td style="text-align:center;">
-0.707
+0.703
 </td>
 </tr>
 <tr>
 <td style="text-align:left;box-shadow: 0px 1px">
 </td>
 <td style="text-align:center;box-shadow: 0px 1px">
-(0.134)
+(0.137)
 </td>
 </tr>
 <tr>
@@ -9131,7 +9043,7 @@ Num.Obs.
 R2
 </td>
 <td style="text-align:center;">
-0.501
+0.499
 </td>
 </tr>
 <tr>
@@ -9139,7 +9051,7 @@ R2
 R2 Adj.
 </td>
 <td style="text-align:center;">
-0.432
+0.442
 </td>
 </tr>
 <tr>
@@ -9147,7 +9059,7 @@ R2 Adj.
 Log.Lik.
 </td>
 <td style="text-align:center;">
-−12.092
+−12.059
 </td>
 </tr>
 <tr>
@@ -9155,7 +9067,7 @@ Log.Lik.
 ELPD
 </td>
 <td style="text-align:center;">
-−15.1
+−14.9
 </td>
 </tr>
 <tr>
@@ -9171,7 +9083,7 @@ ELPD s.e.
 LOOIC
 </td>
 <td style="text-align:center;">
-30.3
+29.9
 </td>
 </tr>
 <tr>
@@ -9179,7 +9091,7 @@ LOOIC
 LOOIC s.e.
 </td>
 <td style="text-align:center;">
-6.2
+6.1
 </td>
 </tr>
 <tr>
@@ -9187,7 +9099,7 @@ LOOIC s.e.
 WAIC
 </td>
 <td style="text-align:center;">
-30.1
+29.8
 </td>
 </tr>
 <tr>
@@ -9203,10 +9115,10 @@ RMSE
 <p>As noted in <a href="https://vincentarelbundock.github.io/modelsummary/reference/modelsummary.html">the <code>modelsummary()</code> documentation</a>, model results are extracted using the <code>parameters</code> package. Users can pass additional arguments to <code><a href="../reference/modelsummary.html">modelsummary()</a></code>, which will then push forward those arguments to the <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::parameters</a></code> function to change the results. For example, <a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">the <code>parameters</code> documentation</a> for bayesian models shows that there is a <code>centrality</code> argument, which allows users to report the mean and standard deviation of the posterior distribution, instead of the median and MAD:</p>
 <div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_estimates.html">get_estimates</a></span><span class="op">(</span><span class="va">mod</span>, centrality <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          term      estimate     std.dev conf.level     conf.low    conf.high</span></span>
-<span><span class="co">#&gt; 1 (Intercept) -2.2442837048 0.596267146       0.95 -3.437475929 -1.084673279</span></span>
-<span><span class="co">#&gt; 2          hp  0.0007110042 0.001106974       0.95 -0.001440833  0.002937506</span></span>
-<span><span class="co">#&gt; 3        drat  0.7080811861 0.139057867       0.95  0.435888781  0.985768348</span></span>
+<span><span class="co">#&gt;          term      estimate    std.dev conf.level     conf.low    conf.high</span></span>
+<span><span class="co">#&gt; 1 (Intercept) -2.2205791086 0.59539970       0.95 -3.406264173 -1.072069242</span></span>
+<span><span class="co">#&gt; 2          hp  0.0007004657 0.00108751       0.95 -0.001369753  0.002885906</span></span>
+<span><span class="co">#&gt; 3        drat  0.7019689216 0.13880324       0.95  0.430792321  0.975137444</span></span>
 <span><span class="co">#&gt;   prior.distribution prior.location prior.scale group</span></span>
 <span><span class="co">#&gt; 1             normal        0.40625  1.24747729      </span></span>
 <span><span class="co">#&gt; 2             normal        0.00000  0.01819465      </span></span>
@@ -9227,14 +9139,14 @@ RMSE
 (Intercept)
 </td>
 <td style="text-align:center;">
-−2.244
+−2.221
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 </td>
 <td style="text-align:center;">
-(0.596)
+(0.595)
 </td>
 </tr>
 <tr>
@@ -9257,7 +9169,7 @@ hp
 drat
 </td>
 <td style="text-align:center;">
-0.708
+0.702
 </td>
 </tr>
 <tr>
@@ -9280,7 +9192,7 @@ Num.Obs.
 R2
 </td>
 <td style="text-align:center;">
-0.501
+0.499
 </td>
 </tr>
 <tr>
@@ -9288,7 +9200,7 @@ R2
 R2 Adj.
 </td>
 <td style="text-align:center;">
-0.432
+0.442
 </td>
 </tr>
 <tr>
@@ -9296,7 +9208,7 @@ R2 Adj.
 Log.Lik.
 </td>
 <td style="text-align:center;">
-−12.092
+−12.059
 </td>
 </tr>
 <tr>
@@ -9304,7 +9216,7 @@ Log.Lik.
 ELPD
 </td>
 <td style="text-align:center;">
-−15.1
+−14.9
 </td>
 </tr>
 <tr>
@@ -9320,7 +9232,7 @@ ELPD s.e.
 LOOIC
 </td>
 <td style="text-align:center;">
-30.3
+29.9
 </td>
 </tr>
 <tr>
@@ -9328,7 +9240,7 @@ LOOIC
 LOOIC s.e.
 </td>
 <td style="text-align:center;">
-6.2
+6.1
 </td>
 </tr>
 <tr>
@@ -9336,7 +9248,7 @@ LOOIC s.e.
 WAIC
 </td>
 <td style="text-align:center;">
-30.1
+29.8
 </td>
 </tr>
 <tr>
@@ -9353,734 +9265,13 @@ RMSE
 <div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_estimates.html">get_estimates</a></span><span class="op">(</span><span class="va">mod</span>, test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pd"</span>, <span class="st">"rope"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          term      estimate         mad conf.level     conf.low    conf.high</span></span>
-<span><span class="co">#&gt; 1 (Intercept) -2.2467416852 0.588227559       0.95 -3.437475929 -1.084673279</span></span>
-<span><span class="co">#&gt; 2          hp  0.0007004307 0.001083543       0.95 -0.001440833  0.002937506</span></span>
-<span><span class="co">#&gt; 3        drat  0.7068770705 0.134165013       0.95  0.435888781  0.985768348</span></span>
+<span><span class="co">#&gt; 1 (Intercept) -2.2255922501 0.585770864       0.95 -3.406264173 -1.072069242</span></span>
+<span><span class="co">#&gt; 2          hp  0.0006729673 0.001055846       0.95 -0.001369753  0.002885906</span></span>
+<span><span class="co">#&gt; 3        drat  0.7029968024 0.137083432       0.95  0.430792321  0.975137444</span></span>
 <span><span class="co">#&gt;        pd rope.percentage prior.distribution prior.location prior.scale group</span></span>
-<span><span class="co">#&gt; 1 1.00000               0             normal        0.40625  1.24747729      </span></span>
-<span><span class="co">#&gt; 2 0.74425               1             normal        0.00000  0.01819465      </span></span>
-<span><span class="co">#&gt; 3 1.00000               0             normal        0.00000  2.33313429</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="panelsummary-models-side-by-side-and-top-to-bottom-1">
-<code>panelsummary</code>: Models side-by-side and top-to-bottom<a class="anchor" aria-label="anchor" href="#panelsummary-models-side-by-side-and-top-to-bottom-1"></a>
-</h2>
-<p>Note: The code in this section requires version 1.3.0 or the development version of <code>modelsummary</code>. See <a href="https://vincentarelbundock.github.io/modelsummary/index.html">the website</a> for installation instructions.</p>
-<p>This section introduces the <code>panelsummary</code> function, which “stacks” regression tables on top of one another, to display the results several models side-by-side and top-to-bottom. For example, imagine that we want to present 4 different models, half of which are estimated using a different outcome variable. When using <code>modelsummary</code>, we store models in a list. When using <code>panelsummary</code>, we store models in a list of lists:</p>
-<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"r.squared"</span>, <span class="st">"nobs"</span>, <span class="st">"rmse"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">panels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/panelsummary.html">panelsummary</a></span><span class="op">(</span><span class="va">panels</span>, gof_map <span class="op">=</span> <span class="va">gm</span><span class="op">)</span></span></code></pre></div>
-<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead><tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:center;">
- (1)
-</th>
-<th style="text-align:center;">
- (2)
-</th>
-</tr></thead>
-<tbody>
-<tr grouplength="6">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>Panel A</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-(Intercept)
-</td>
-<td style="text-align:center;">
-20.091
-</td>
-<td style="text-align:center;">
-−5.114
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(1.065)
-</td>
-<td style="text-align:center;">
-(10.030)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-1.412
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(0.559)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-R2
-</td>
-<td style="text-align:center;">
-0.000
-</td>
-<td style="text-align:center;">
-0.175
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;">
-5.93
-</td>
-<td style="text-align:center;">
-5.39
-</td>
-</tr>
-<tr grouplength="6">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>Panel B</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-(Intercept)
-</td>
-<td style="text-align:center;">
-146.688
-</td>
-<td style="text-align:center;">
-631.704
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(12.120)
-</td>
-<td style="text-align:center;">
-(88.700)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
--27.174
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(4.946)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-R2
-</td>
-<td style="text-align:center;">
-0.000
-</td>
-<td style="text-align:center;">
-0.502
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1px" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-67.48
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-47.64
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Num.Obs.
-</td>
-<td style="text-align:center;">
-32
-</td>
-<td style="text-align:center;">
-32
-</td>
-</tr>
-</tbody>
-</table>
-<p>Like with <code><a href="../reference/modelsummary.html">modelsummary()</a></code>, we can can name models and panels by using named (nested) lists:</p>
-<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">panels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Outcome: mpg"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>        <span class="st">"(I)"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
-<span>        <span class="st">"(II)"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    <span class="st">"Outcome: hp"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>        <span class="st">"(I)"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
-<span>        <span class="st">"(II)"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/panelsummary.html">panelsummary</a></span><span class="op">(</span><span class="va">panels</span>, gof_map <span class="op">=</span> <span class="va">gm</span><span class="op">)</span></span></code></pre></div>
-<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead><tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:center;">
- (I)
-</th>
-<th style="text-align:center;">
- (II)
-</th>
-</tr></thead>
-<tbody>
-<tr grouplength="6">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>Outcome: mpg</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-(Intercept)
-</td>
-<td style="text-align:center;">
-20.091
-</td>
-<td style="text-align:center;">
-−5.114
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(1.065)
-</td>
-<td style="text-align:center;">
-(10.030)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-1.412
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(0.559)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-R2
-</td>
-<td style="text-align:center;">
-0.000
-</td>
-<td style="text-align:center;">
-0.175
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;">
-5.93
-</td>
-<td style="text-align:center;">
-5.39
-</td>
-</tr>
-<tr grouplength="6">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>Outcome: hp</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-(Intercept)
-</td>
-<td style="text-align:center;">
-146.688
-</td>
-<td style="text-align:center;">
-631.704
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(12.120)
-</td>
-<td style="text-align:center;">
-(88.700)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
--27.174
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(4.946)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-R2
-</td>
-<td style="text-align:center;">
-0.000
-</td>
-<td style="text-align:center;">
-0.502
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1px" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-67.48
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-47.64
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Num.Obs.
-</td>
-<td style="text-align:center;">
-32
-</td>
-<td style="text-align:center;">
-32
-</td>
-</tr>
-</tbody>
-</table>
-<div class="section level3">
-<h3 id="fixest-1">
-<code>fixest</code><a class="anchor" aria-label="anchor" href="#fixest-1"></a>
-</h3>
-<p>The <code>fixest</code> package offers powerful tools to estimate multiple models using a concise syntax. For example, to introduce regressors in stepwise fashion, and to estimate models on different subsets of the data, we can do:</p>
-<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lrberge.github.io/fixest/" class="external-link">fixest</a></span><span class="op">)</span></span>
-<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://lrberge.github.io/fixest/reference/feols.html" class="external-link">feols</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">hp</span>, <span class="va">mpg</span><span class="op">)</span> <span class="op">~</span> <span class="fu">csw</span><span class="op">(</span><span class="va">qsec</span>, <span class="va">drat</span><span class="op">)</span> <span class="op">|</span> <span class="va">gear</span>,</span>
-<span>    data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">panels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    <span class="st">"mpg"</span> <span class="op">=</span> <span class="va">mod</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>    <span class="st">"hp"</span> <span class="op">=</span> <span class="va">mod</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"hp"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/panelsummary.html">panelsummary</a></span><span class="op">(</span><span class="va">panels</span>, gof_omit <span class="op">=</span> <span class="st">"IC|R2"</span><span class="op">)</span></span></code></pre></div>
-<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead><tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:center;">
- (1)
-</th>
-<th style="text-align:center;">
- (2)
-</th>
-</tr></thead>
-<tbody>
-<tr grouplength="5">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>mpg</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
-1.436
-</td>
-<td style="text-align:center;">
-1.519
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(0.594)
-</td>
-<td style="text-align:center;">
-(0.529)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-drat
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-5.765
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(2.381)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;">
-4.03
-</td>
-<td style="text-align:center;">
-3.67
-</td>
-</tr>
-<tr grouplength="5">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>hp</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
--22.175
-</td>
-<td style="text-align:center;">
--22.676
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(12.762)
-</td>
-<td style="text-align:center;">
-(13.004)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-drat
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
--35.106
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(28.509)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1px" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-40.45
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-39.14
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Num.Obs.
-</td>
-<td style="text-align:center;">
-32
-</td>
-<td style="text-align:center;">
-32
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Std.Errors
-</td>
-<td style="text-align:center;">
-by: gear
-</td>
-<td style="text-align:center;">
-by: gear
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-FE: gear
-</td>
-<td style="text-align:center;">
-X
-</td>
-<td style="text-align:center;">
-X
-</td>
-</tr>
-</tbody>
-</table>
-<p>We can use all the typical extension systems to add information, such as the mean of the dependent variable:</p>
-<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">glance_custom.fixest</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu">insight</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/insight/reference/get_response.html" class="external-link">get_response</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span>    <span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%.2f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dv</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>`Mean of DV` <span class="op">=</span> <span class="va">dv</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/panelsummary.html">panelsummary</a></span><span class="op">(</span><span class="va">panels</span>, gof_omit <span class="op">=</span> <span class="st">"IC|R2"</span><span class="op">)</span></span></code></pre></div>
-<table class="table table" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead><tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:center;">
- (1)
-</th>
-<th style="text-align:center;">
- (2)
-</th>
-</tr></thead>
-<tbody>
-<tr grouplength="6">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>mpg</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
-1.436
-</td>
-<td style="text-align:center;">
-1.519
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(0.594)
-</td>
-<td style="text-align:center;">
-(0.529)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-drat
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-5.765
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(2.381)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;">
-4.03
-</td>
-<td style="text-align:center;">
-3.67
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Mean of DV
-</td>
-<td style="text-align:center;">
-20.09
-</td>
-<td style="text-align:center;">
-20.09
-</td>
-</tr>
-<tr grouplength="6">
-<td colspan="3" style="border-bottom: 1px solid;">
-<em>hp</em>
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-qsec
-</td>
-<td style="text-align:center;">
--22.175
-</td>
-<td style="text-align:center;">
--22.676
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-(12.762)
-</td>
-<td style="text-align:center;">
-(13.004)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-drat
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
--35.106
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-</td>
-<td style="text-align:center;">
-</td>
-<td style="text-align:center;">
-(28.509)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-RMSE
-</td>
-<td style="text-align:center;">
-40.45
-</td>
-<td style="text-align:center;">
-39.14
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;box-shadow: 0px 1px" indentlevel="1">
-Mean of DV
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-146.69
-</td>
-<td style="text-align:center;box-shadow: 0px 1px">
-146.69
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Num.Obs.
-</td>
-<td style="text-align:center;">
-32
-</td>
-<td style="text-align:center;">
-32
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-Std.Errors
-</td>
-<td style="text-align:center;">
-by: gear
-</td>
-<td style="text-align:center;">
-by: gear
-</td>
-</tr>
-<tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
-FE: gear
-</td>
-<td style="text-align:center;">
-X
-</td>
-<td style="text-align:center;">
-X
-</td>
-</tr>
-</tbody>
-</table>
+<span><span class="co">#&gt; 1 0.99875               0             normal        0.40625  1.24747729      </span></span>
+<span><span class="co">#&gt; 2 0.74500               1             normal        0.00000  0.01819465      </span></span>
+<span><span class="co">#&gt; 3 0.99950               0             normal        0.00000  2.33313429</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

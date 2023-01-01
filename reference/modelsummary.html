@@ -34,7 +34,7 @@ The Appearance Vignette shows how to modify the look of tables.
     
     <a class="navbar-brand me-2" href="../index.html">modelsummary</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9011</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9012</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -126,11 +126,12 @@ https://vincentarelbundock.github.io/modelsummary/</p><ul><li><p><a href="https:
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>models</dt>
-<dd><p>a model or a (named) list of models</p><ul><li><p>Single model: <code>modelsummary(model)</code></p></li>
-<li><p>Unnamed list: <code>modelsummary(list(model1, model2))</code></p><ul><li><p>Models are labelled automatically. The default label style can be altered by setting a global option. See below.</p></li>
+<dd><p>a model, (named) list of models, or nested list of models.</p><ul><li><p>Single model: <code>modelsummary(model)</code></p></li>
+<li><p>Unnamed list of models: <code>modelsummary(list(model1, model2))</code></p><ul><li><p>Models are labelled automatically. The default label style can be altered by setting a global option. See below.</p></li>
 </ul></li>
-<li><p>Named list: <code>modelsummary(list("A"=model1, "B"=model2))</code></p><ul><li><p>Models are labelled using the list names.</p></li>
+<li><p>Named list of models: <code>modelsummary(list("A"=model1, "B"=model2))</code></p><ul><li><p>Models are labelled using the list names.</p></li>
 </ul></li>
+<li><p>Nested list of models: When using the <code>shape="rbind"</code> argument, <code>models</code> can be a nested list of models to display "panels" or "stacks" of regression models. See the <code>shape</code> argument documentation and examples below.</p></li>
 </ul></dd>
 
 
@@ -216,21 +217,18 @@ statistics are exponentiated, and the <code>std.error</code> is transformed to
 
 
 <dt>shape</dt>
-<dd><p>formula which determines the shape of the table. The left side
-determines what appears on rows, and the right side determines what appears
-on columns. The formula can include one or more group identifier(s) to display related terms
-together, which can be useful for models with multivariate outcomes or
-grouped coefficients (See examples section below). The group identifier(s) must be
-column names produced by: <code>get_estimates(model)</code>. The group
-identifier(s) can be combined with the term identifier in a single column by
-using the colon to represent an interaction. If an incomplete formula is
-supplied (e.g., <code>~statistic</code>), <code>modelsummary</code> tries to complete it
-automatically. Potential <code>shape</code> values include:</p><ul><li><p><code>term + statistic ~ model</code>: default</p></li>
+<dd><p><code>NULL</code>, formula, or "rbind" string which determines the shape of a table.</p><ul><li><p><code>NULL</code>: Default shape with terms in rows and models in columns.</p></li>
+<li><p>Formula: The left side determines what appears on rows, and the right side determines what appears on columns. The formula can include one or more group identifier(s) to display related terms together, which can be useful for models with multivariate outcomes or grouped coefficients (See examples section below). The group identifier(s) must be column names produced by: <code>get_estimates(model)</code>. The group identifier(s) can be combined with the term identifier in a single column by using the colon to represent an interaction. If an incomplete formula is supplied (e.g., <code>~statistic</code>), <code>modelsummary</code> tries to complete it automatically. Potential <code>shape</code> values include:</p><ul><li><p><code>term + statistic ~ model</code>: default</p></li>
 <li><p><code>term ~ model + statistic</code>: statistics in separate columns</p></li>
 <li><p><code>model + statistic ~ term</code>: models in rows and terms in columns</p></li>
 <li><p><code>term + response + statistic ~ model</code>: term and group id in separate columns</p></li>
 <li><p><code>term : response + statistic ~ model</code>: term and group id in a single column</p></li>
 <li><p><code>term ~ response</code></p></li>
+</ul></li>
+<li><p>"rbind": bind rows of two or more regression tables to create "panels" or "stacks" of regression models. When <code>shape="rbind"</code>, the <code>models</code> argument must be a (potentially named) nested list of models.</p><ul><li><p>Unnamed nested list with 2 panels: <code>list(list(model1, model2), list(model3, model4))</code></p></li>
+<li><p>Named nested list with 2 panels: <code>list("Panel A" = list(model1, model2), "Panel B" = list(model3, model4))</code></p></li>
+<li><p>Named panels and named models: <code>list("Panel A" = list("(I)" = model1, "(II)" = model2), "Panel B" = list("(I)" = model3, "(II)" = model4))</code></p></li>
+</ul></li>
 </ul></dd>
 
 
@@ -390,23 +388,15 @@ diagonal.</p>
     
 
 
-<p>The behavior of <code>modelsummary</code> can be modified by setting global options. For example:</p>
-<p><code>options(modelsummary_model_labels = "roman")</code></p>
-<p>The available global options are:</p><ul><li><p><code>modelsummary_model_labels</code></p></li>
-<li><p><code>modelsummary_factory_default</code></p></li>
-<li><p><code>modelsummary_factory_latex</code></p></li>
-<li><p><code>modelsummary_factory_html</code></p></li>
-<li><p><code>modelsummary_factory_png</code></p></li>
-<li><p><code>modelsummary_get</code></p></li>
-<li><p><code>modelsummary_format_numeric_latex</code></p></li>
-<li><p><code>modelsummary_format_numeric_html</code></p></li>
+<p>The behavior of <code>modelsummary</code> can be modified by setting global options. For example:</p><ul><li><p><code>options(modelsummary_model_labels = "roman")</code></p></li>
 </ul><p>The rest of this section describes each of the options above.</p><div class="section">
 <h3 id="model-labels-default-column-names">Model labels: default column names<a class="anchor" aria-label="anchor" href="#model-labels-default-column-names"></a></h3>
 
 
-<p>This global option changes the style of the default column headers:</p>
-<p><code>options(modelsummary_model_labels = "roman")</code></p>
-<p>The supported styles are: "model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""</p>
+<p>These global option changes the style of the default column headers:</p><ul><li><p><code>options(modelsummary_model_labels = "roman")</code></p></li>
+<li><p><code>options(modelsummary_panel_labels = "roman")</code></p></li>
+</ul><p>The supported styles are: "model", "panel", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""</p>
+<p>The panel-specific option is only used when <code>shape="rbind"</code></p>
 </div>
 
 <div class="section">
@@ -423,6 +413,17 @@ the <code>options</code> function:</p>
 <p><code>options(modelsummary_factory_word = 'huxtable')</code></p>
 <p><code>options(modelsummary_factory_png = 'gt')</code></p>
 </div>
+
+<div class="section">
+<h3 id="table-themes">Table themes<a class="anchor" aria-label="anchor" href="#table-themes"></a></h3>
+
+
+<p>Change the look of tables in an automated and replicable way, using the <code>modelsummary</code> theming functionality. See the vignette: https://vincentarelbundock.github.io/modelsummary/articles/appearance.html</p><ul><li><p><code>modelsummary_theme_gt</code></p></li>
+<li><p><code>modelsummary_theme_kableExtra</code></p></li>
+<li><p><code>modelsummary_theme_huxtable</code></p></li>
+<li><p><code>modelsummary_theme_flextable</code></p></li>
+<li><p><code>modelsummary_theme_dataframe</code></p></li>
+</ul></div>
 
 <div class="section">
 <h3 id="model-extraction-functions">Model extraction functions<a class="anchor" aria-label="anchor" href="#model-extraction-functions"></a></h3>
@@ -588,14 +589,28 @@ users can use <code>plan(multisession)' instead. However, note that the first ti
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">nnet</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">multinom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># term names and group ids in rows, models in columns</span></span></span>
+<span class="r-in"><span><span class="co"># shape: term names and group ids in rows, models in columns</span></span></span>
 <span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">response</span> <span class="op">~</span> <span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># term names and group ids in rows in a single column</span></span></span>
+<span class="r-in"><span><span class="co"># shape: term names and group ids in rows in a single column</span></span></span>
 <span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">term</span> <span class="op">:</span> <span class="va">response</span> <span class="op">~</span> <span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># term names in rows and group ids in columns</span></span></span>
+<span class="r-in"><span><span class="co"># shape: term names in rows and group ids in columns</span></span></span>
 <span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">term</span> <span class="op">~</span> <span class="va">response</span><span class="op">:</span><span class="va">model</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># shape = "rbind"</span></span></span>
+<span class="r-in"><span><span class="va">panels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"Panel A: MPG"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="st">"A"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        <span class="st">"B"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">gear</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"Panel B: Displacement"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="st">"A"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        <span class="st">"C"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">gear</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">panels</span>,</span></span>
+<span class="r-in"><span>    shape <span class="op">=</span> <span class="st">"rbind"</span>,</span></span>
+<span class="r-in"><span>    gof_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nobs"</span>, <span class="st">"r.squared"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># title</span></span></span>
 <span class="r-in"><span><span class="fu">modelsummary</span><span class="op">(</span><span class="va">models</span>, title <span class="op">=</span> <span class="st">'This is the title'</span><span class="op">)</span></span></span>
