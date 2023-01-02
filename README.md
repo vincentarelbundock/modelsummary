@@ -32,7 +32,7 @@ The following tables and plots were created using `modelsummary`, without any ma
 | | |
 |:-------------------------:|:-------------------------:|
 |<img width="2406" src="https://user-images.githubusercontent.com/987057/82855711-0a3c3b00-9eda-11ea-8a81-1eebfbb7cb73.png">|<img width="2406" src="https://user-images.githubusercontent.com/987057/85772292-b1cfa780-b6ea-11ea-8ae1-b95c6ddbf0a9.png">
-|<img width="203" src="https://user-images.githubusercontent.com/987057/210188882-8f2c83d6-18d3-46c6-b640-a446f0474b8a.png">|<img width="2406" src="https://user-images.githubusercontent.com/987057/86512021-50839480-bdcc-11ea-893c-8c1e7a277895.png">
+|<img width="1203" src="https://user-images.githubusercontent.com/987057/210188882-8f2c83d6-18d3-46c6-b640-a446f0474b8a.png">|<img width="2406" src="https://user-images.githubusercontent.com/987057/86512021-50839480-bdcc-11ea-893c-8c1e7a277895.png">
 |<img width="2406" src="https://user-images.githubusercontent.com/987057/86502482-9eb77a00-bd71-11ea-80da-dc935c1fbd90.jpeg">|<img width="2406" src="https://user-images.githubusercontent.com/987057/86511490-cb967c00-bdc7-11ea-9d9b-0ef188840faf.png">
 |<img width="2406" src="https://user-images.githubusercontent.com/987057/95397127-6d9a9880-08d0-11eb-8ee4-3cd181d55b32.png">
 
