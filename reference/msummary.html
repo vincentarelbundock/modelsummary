@@ -34,7 +34,7 @@ The Appearance Vignette shows how to modify the look of tables.
     
     <a class="navbar-brand me-2" href="../index.html">modelsummary</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9013</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9014</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -217,7 +217,7 @@ statistics are exponentiated, and the <code>std.error</code> is transformed to
 
 
 <dt>shape</dt>
-<dd><p><code>NULL</code>, formula, or "rbind" string which determines the shape of a table.</p><ul><li><p><code>NULL</code>: Default shape with terms in rows and models in columns.</p></li>
+<dd><p><code>NULL</code>, formula, or string which determines the shape of a table.</p><ul><li><p><code>NULL</code>: Default shape with terms in rows and models in columns.</p></li>
 <li><p>Formula: The left side determines what appears on rows, and the right side determines what appears on columns. The formula can include one or more group identifier(s) to display related terms together, which can be useful for models with multivariate outcomes or grouped coefficients (See examples section below). The group identifier(s) must be column names produced by: <code>get_estimates(model)</code>. The group identifier(s) can be combined with the term identifier in a single column by using the colon to represent an interaction. If an incomplete formula is supplied (e.g., <code>~statistic</code>), <code>modelsummary</code> tries to complete it automatically. Potential <code>shape</code> values include:</p><ul><li><p><code>term + statistic ~ model</code>: default</p></li>
 <li><p><code>term ~ model + statistic</code>: statistics in separate columns</p></li>
 <li><p><code>model + statistic ~ term</code>: models in rows and terms in columns</p></li>
@@ -225,9 +225,12 @@ statistics are exponentiated, and the <code>std.error</code> is transformed to
 <li><p><code>term : response + statistic ~ model</code>: term and group id in a single column</p></li>
 <li><p><code>term ~ response</code></p></li>
 </ul></li>
-<li><p>"rbind": bind rows of two or more regression tables to create "panels" or "stacks" of regression models. When <code>shape="rbind"</code>, the <code>models</code> argument must be a (potentially named) nested list of models.</p><ul><li><p>Unnamed nested list with 2 panels: <code>list(list(model1, model2), list(model3, model4))</code></p></li>
+<li><p>String: "rbind" or "rcollapse" to bind rows of two or more regression tables to create "panels" or "stacks" of regression models.</p><ul><li><p>the <code>models</code> argument must be a (potentially named) nested list of models.</p></li>
+</ul><ul><li><p>Unnamed nested list with 2 panels: <code>list(list(model1, model2), list(model3, model4))</code></p></li>
 <li><p>Named nested list with 2 panels: <code>list("Panel A" = list(model1, model2), "Panel B" = list(model3, model4))</code></p></li>
 <li><p>Named panels and named models: <code>list("Panel A" = list("(I)" = model1, "(II)" = model2), "Panel B" = list("(I)" = model3, "(II)" = model4))</code></p></li>
+</ul><ul><li><p>"rbind": Bind the rows of independent regression tables</p></li>
+<li><p>"rcollapse": Bind the rows of regression tables and create a panel at the bottom where we "collapse" goodness-of-fit statistics which are identical across models.</p></li>
 </ul></li>
 </ul></dd>
 
@@ -598,7 +601,7 @@ users can use <code>plan(multisession)' instead. However, note that the first ti
 <span class="r-in"><span><span class="co"># shape: term names in rows and group ids in columns</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">term</span> <span class="op">~</span> <span class="va">response</span><span class="op">:</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># shape = "rbind"</span></span></span>
+<span class="r-in"><span><span class="co"># shape = "rcollapse"</span></span></span>
 <span class="r-in"><span><span class="va">panels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="st">"Panel A: MPG"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>        <span class="st">"A"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span></span>
@@ -607,6 +610,7 @@ users can use <code>plan(multisession)' instead. However, note that the first ti
 <span class="r-in"><span>        <span class="st">"A"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>        <span class="st">"C"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">gear</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="va">panels</span>,</span></span>
 <span class="r-in"><span>    shape <span class="op">=</span> <span class="st">"rbind"</span>,</span></span>

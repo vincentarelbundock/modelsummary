@@ -18,7 +18,7 @@ attributes(get_estimates(model))"><!-- mathjax --><script src="https://cdnjs.clo
     
     <a class="navbar-brand me-2" href="../index.html">modelsummary</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9013</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9014</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,7 +110,7 @@ sections below):</p><ul><li><p>NULL returns the default uncertainty estimates of
 
 
 <dt>shape</dt>
-<dd><p><code>NULL</code>, formula, or "rbind" string which determines the shape of a table.</p><ul><li><p><code>NULL</code>: Default shape with terms in rows and models in columns.</p></li>
+<dd><p><code>NULL</code>, formula, or string which determines the shape of a table.</p><ul><li><p><code>NULL</code>: Default shape with terms in rows and models in columns.</p></li>
 <li><p>Formula: The left side determines what appears on rows, and the right side determines what appears on columns. The formula can include one or more group identifier(s) to display related terms together, which can be useful for models with multivariate outcomes or grouped coefficients (See examples section below). The group identifier(s) must be column names produced by: <code>get_estimates(model)</code>. The group identifier(s) can be combined with the term identifier in a single column by using the colon to represent an interaction. If an incomplete formula is supplied (e.g., <code>~statistic</code>), <code>modelsummary</code> tries to complete it automatically. Potential <code>shape</code> values include:</p><ul><li><p><code>term + statistic ~ model</code>: default</p></li>
 <li><p><code>term ~ model + statistic</code>: statistics in separate columns</p></li>
 <li><p><code>model + statistic ~ term</code>: models in rows and terms in columns</p></li>
@@ -118,9 +118,12 @@ sections below):</p><ul><li><p>NULL returns the default uncertainty estimates of
 <li><p><code>term : response + statistic ~ model</code>: term and group id in a single column</p></li>
 <li><p><code>term ~ response</code></p></li>
 </ul></li>
-<li><p>"rbind": bind rows of two or more regression tables to create "panels" or "stacks" of regression models. When <code>shape="rbind"</code>, the <code>models</code> argument must be a (potentially named) nested list of models.</p><ul><li><p>Unnamed nested list with 2 panels: <code>list(list(model1, model2), list(model3, model4))</code></p></li>
+<li><p>String: "rbind" or "rcollapse" to bind rows of two or more regression tables to create "panels" or "stacks" of regression models.</p><ul><li><p>the <code>models</code> argument must be a (potentially named) nested list of models.</p></li>
+</ul><ul><li><p>Unnamed nested list with 2 panels: <code>list(list(model1, model2), list(model3, model4))</code></p></li>
 <li><p>Named nested list with 2 panels: <code>list("Panel A" = list(model1, model2), "Panel B" = list(model3, model4))</code></p></li>
 <li><p>Named panels and named models: <code>list("Panel A" = list("(I)" = model1, "(II)" = model2), "Panel B" = list("(I)" = model3, "(II)" = model4))</code></p></li>
+</ul><ul><li><p>"rbind": Bind the rows of independent regression tables</p></li>
+<li><p>"rcollapse": Bind the rows of regression tables and create a panel at the bottom where we "collapse" goodness-of-fit statistics which are identical across models.</p></li>
 </ul></li>
 </ul></dd>
 
