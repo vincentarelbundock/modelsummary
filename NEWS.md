@@ -1,4 +1,7 @@
-# modelsummary 1.2.0.9000
+# modelsummary 1.3.0.9000
+
+* `shape = "rcollapse"` and `shape = "rbind"`
+# modelsummary 1.3.0
 
 Breaking change:
 
