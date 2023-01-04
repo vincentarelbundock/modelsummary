@@ -55,7 +55,7 @@ theme_ms_kableExtra <- function(tab,
     for (pos in hrule) {
       out <- kableExtra::row_spec(out,
         row = pos - 1,
-        extra_css = "box-shadow: 0px 1px"
+        extra_css = "box-shadow: 0px 1.5px"
       )
     }
   }

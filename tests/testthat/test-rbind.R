@@ -47,3 +47,46 @@ test_that("output formats: no validity", {
     p <- modelsummary(panels, output = "latex", shape = "rbind")
     expect_s3_class(p, "knitr_kable")
 })
+
+
+test_that("Issue #593: rbind vs rcollapse", {
+    panels <- list(
+        list(
+            lm(mpg ~ hp, data = mtcars),
+            lm(mpg ~ hp + am, data = mtcars)),
+        list(
+            lm(qsec ~ hp, data = mtcars),
+            lm(qsec ~ hp + am, data = mtcars))
+    )
+    tab1 <- modelsummary(panels, shape = "rbind", gof_map = "nobs", output = "dataframe")
+    tab2 <- modelsummary(panels, shape = "rcollapse", gof_map = "nobs", output = "dataframe")
+    expect_true(nrow(tab1) == nrow(tab2) + 1)
+})
+
+
+test_that("Issue #593: models with different FEs do not get collapsed", {
+    panels <- list(
+        list(
+            feols(mpg ~ cyl | gear, data = mtcars, cluster = ~hp),
+            feols(mpg ~ cyl | gear + am, data = subset(mtcars, mpg > 20), cluster = ~hp)),
+        list(
+            feols(disp ~ cyl | gear, data = mtcars, cluster = ~hp),
+            feols(disp ~ cyl | gear + carb, data = mtcars, cluster = ~hp))
+    )
+    tab <- modelsummary(panels, shape = "rcollapse", output = "dataframe")
+    expect_equal(sum(tab[[1]] == "FE: gear"), 2)
+})
+
+
+test_that("Issue #593: models with identical FEs get collapsed", {
+    panels <- list(
+        list(
+            feols(mpg ~ cyl | gear, data = mtcars, cluster = ~hp),
+            feols(mpg ~ cyl | gear + carb, data = subset(mtcars, mpg > 20), cluster = ~hp)),
+        list(
+            feols(disp ~ cyl | gear, data = mtcars, cluster = ~hp),
+            feols(disp ~ cyl | gear + carb, data = mtcars, cluster = ~hp))
+    )
+    tab <- modelsummary(panels, shape = "rcollapse", output = "dataframe")
+    expect_equal(sum(tab[[1]] == "FE: gear"), 1)
+})

@@ -136,7 +136,7 @@ modelsummary_rbind <- function(
 
     # identical GOF rows should be combined and reported at the bottom
     # do not combine GOF if the model names are different in the different panels
-    flag <- TRUE
+    flag <- isTRUE(shape == "rcollapse")
     # panels are not all the same length
     if (length(unique(sapply(panels, length))) > 1) {
         for (i in 2:length(panels)) {
@@ -147,12 +147,35 @@ modelsummary_rbind <- function(
     }
 
     if (flag) {
-        est <- lapply(panels_list, subset, part != "gof")
-        gof <- lapply(panels_list, subset, part == "gof")
+
+        # fixed effects should not be collapsed unless they are exactly identical across panels
+        fe_collapse <- TRUE
+        fe <- lapply(panels_list, subset, grepl("^FE: ", term))
+        fe_n <- sapply(fe, nrow)
+        if (fe_n[1] == 0 || length(unique(fe_n)) > 1) {
+            fe_collapse <- FALSE
+        } else {
+            fe <- lapply(fe, function(x) x[order(x$term),])
+            for (i in 2:length(fe)) {
+                if (any(fe[[i]] != fe[[i - 1]])) {
+                    fe_collapse <- FALSE
+                }
+            }
+        }
+
+        if (fe_collapse) {
+            est <- lapply(panels_list, subset, part != "gof")
+            gof <- lapply(panels_list, subset, part == "gof")
+        } else {
+            est <- lapply(panels_list, subset, part != "gof" | grepl("^FE: ", term))
+            gof <- lapply(panels_list, subset, part == "gof" & !grepl("^FE: ", term))
+        }
+
         gof_same <- lapply(gof, data.table::as.data.table)
         gof_same <- tryCatch(
             Reduce(data.table::fintersect, gof_same),
             error = function(e) NULL)
+
         if (!is.null(gof_same)) {
             for (i in seq_along(gof)) {
                 gof[[i]] <- gof[[i]][!gof[[i]]$term %in% gof_same$term, , drop = FALSE]

@@ -115,7 +115,7 @@
 #' # shape: term names in rows and group ids in columns
 #' modelsummary(multi, shape = term ~ response:model)
 #' 
-#' # shape = "rbind"
+#' # shape = "rcollapse"
 #' panels <- list(
 #'     "Panel A: MPG" = list(
 #'         "A" = lm(mpg ~ hp, data = mtcars),
@@ -124,6 +124,7 @@
 #'         "A" = lm(disp ~ hp, data = mtcars),
 #'         "C" = lm(disp ~ hp + factor(gear), data = mtcars))
 #' )
+#' 
 #' modelsummary(
 #'     panels,
 #'     shape = "rbind",

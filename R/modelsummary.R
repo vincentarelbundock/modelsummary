@@ -126,7 +126,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @param group_map named or unnamed character vector. Subset, rename, and
 #' reorder coefficient groups specified a grouping variable specified in the
 #' `shape` argument formula. This argument behaves like `coef_map`.
-#' @param shape `NULL`, formula, or "rbind" string which determines the shape of a table.
+#' @param shape `NULL`, formula, or string which determines the shape of a table.
 #' * `NULL`: Default shape with terms in rows and models in columns.
 #' * Formula: The left side determines what appears on rows, and the right side determines what appears on columns. The formula can include one or more group identifier(s) to display related terms together, which can be useful for models with multivariate outcomes or grouped coefficients (See examples section below). The group identifier(s) must be column names produced by: `get_estimates(model)`. The group identifier(s) can be combined with the term identifier in a single column by using the colon to represent an interaction. If an incomplete formula is supplied (e.g., `~statistic`), `modelsummary` tries to complete it automatically. Potential `shape` values include:
 #'   - `term + statistic ~ model`: default
@@ -135,10 +135,13 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   - `term + response + statistic ~ model`: term and group id in separate columns
 #'   - `term : response + statistic ~ model`: term and group id in a single column
 #'   - `term ~ response`
-#' * "rbind": bind rows of two or more regression tables to create "panels" or "stacks" of regression models. When `shape="rbind"`, the `models` argument must be a (potentially named) nested list of models.
-#'   - Unnamed nested list with 2 panels: `list(list(model1, model2), list(model3, model4))`
-#'   - Named nested list with 2 panels: `list("Panel A" = list(model1, model2), "Panel B" = list(model3, model4))`
-#'   - Named panels and named models: `list("Panel A" = list("(I)" = model1, "(II)" = model2), "Panel B" = list("(I)" = model3, "(II)" = model4))`
+#' * String: "rbind" or "rcollapse" to bind rows of two or more regression tables to create "panels" or "stacks" of regression models.
+#'   -  the `models` argument must be a (potentially named) nested list of models.
+#'     + Unnamed nested list with 2 panels: `list(list(model1, model2), list(model3, model4))`
+#'     + Named nested list with 2 panels: `list("Panel A" = list(model1, model2), "Panel B" = list(model3, model4))`
+#'     + Named panels and named models: `list("Panel A" = list("(I)" = model1, "(II)" = model2), "Panel B" = list("(I)" = model3, "(II)" = model4))`
+#'   - "rbind": Bind the rows of independent regression tables
+#'   - "rcollapse": Bind the rows of regression tables and create a panel at the bottom where we "collapse" goodness-of-fit statistics which are identical across models.
 #' @param add_columns a data.frame (or tibble) with the same number of rows as
 #' #' your main table. By default, rows are appended to the bottom of the table.
 #' You can define a "position" attribute of integers to set the columns positions.
@@ -201,7 +204,11 @@ modelsummary <- function(
   ...) {
 
   # panel summary shape: dispatch to other function
-  if (isTRUE(checkmate::check_choice(shape, "rbind"))) {
+  checkmate::assert(
+    checkmate::check_formula(shape),
+    checkmate::check_choice(shape, c("rbind", "rcollapse")),
+    checkmate::check_null(shape))
+  if (isTRUE(checkmate::check_choice(shape, c("rbind", "rcollapse")))) {
     out <- modelsummary_rbind(models,
       output = output,
       fmt = fmt,
@@ -219,7 +226,7 @@ modelsummary <- function(
       add_columns = add_columns,
       add_rows = add_rows,
       align = align,
-      shape = term + statistic ~ model,
+      shape = shape,
       group_map = NULL,
       notes = notes,
       title = title,
