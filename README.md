@@ -35,7 +35,7 @@ The following tables and plots were created using `modelsummary`, without any ma
 |<img width="203" src="https://user-images.githubusercontent.com/987057/210188882-8f2c83d6-18d3-46c6-b640-a446f0474b8a.png">|<img width="2406" src="https://user-images.githubusercontent.com/987057/86512021-50839480-bdcc-11ea-893c-8c1e7a277895.png"><br><img width="2406" src="https://user-images.githubusercontent.com/987057/95397127-6d9a9880-08d0-11eb-8ee4-3cd181d55b32.png">
 |<img width="2406" src="https://user-images.githubusercontent.com/987057/86502482-9eb77a00-bd71-11ea-80da-dc935c1fbd90.jpeg">|<img width="2406" src="https://user-images.githubusercontent.com/987057/86511490-cb967c00-bdc7-11ea-9d9b-0ef188840faf.png">
 
-# Why should I use `modelsummary`?
+## Why should I use `modelsummary`?
 
 Here are a few benefits of `modelsummary` over some [alternative packages](#alternative-packages):
 
@@ -92,7 +92,7 @@ modelsummary(mod, output = "table.tex")
 One benefit of this community-focused approach is that when external packages improve, `modelsummary` improves as well. Another benefit is that leveraging external packages allows `modelsummary` to have a massively simplified codebase (relative to other similar packages). This should improve long term code maintainability, and allow contributors to participate through GitHub.
 
 
-# Installation
+## Installation
 
 You can install `modelsummary` from CRAN:
 
@@ -112,7 +112,7 @@ install.packages(
 ****
 **Restart `R` completely before moving on.** 
 
-# Getting started
+## Getting started
 
 There are a million ways to customize the tables and plots produced by `modelsummary`. In this Getting Started section we will only scratch the surface. For details, see the vignettes:
 
@@ -177,7 +177,7 @@ models <- list(
 modelsummary(models, output = "table.docx")
 ```
 
-# Alternative packages
+## Alternative packages
 
 There are several excellent alternatives to draw model summary tables in `R`:
 
