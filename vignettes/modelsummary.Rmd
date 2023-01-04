@@ -41,9 +41,7 @@ models <- list(
 modelsummary(models)
 ```
 
-# `modelsummary` function arguments
-
-## output
+# `output`: print and save
 
 The `output` argument determines the type of object returned by `modelsummary` and/or the file where this table should be written.
 
@@ -80,7 +78,7 @@ Warning: When a file name is supplied to the `output` argument, the table is wri
 * `gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave` function.
 * `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.
 
-## fmt
+# `fmt`: round and format
 
 The `fmt` argument defines how numeric values are rounded and presented in the table. This argument accepts three types of input:
 
@@ -134,7 +132,7 @@ In many languages the comma is used as a decimal mark instead of the period.  `m
 options(OutDec=",")
 ```
 
-## estimate
+# `estimate`
 
 By default, `modelsummary` prints each coefficient estimate on its own row. You can customize this by changing the `estimate` argument. For example, this would produce a table of p values instead of coefficient estimates:
 
@@ -180,7 +178,7 @@ modelsummary(
 ```
 
 
-## statistic
+# `statistic`: SE, t, p, CI, etc.
 
 By default, `modelsummary` prints the coefficient's standard error in parentheses below the corresponding estimate. The value of this uncertainty statistic is determined by the `statistic` argument. The `statistic` argument accepts any of the column names produced by `get_estimates(model)`. For example:
 
@@ -224,7 +222,7 @@ modelsummary(models, gof_omit = ".*",
              statistic = NULL)
 ```
 
-## vcov
+# `vcov`: robust SEs
 
 You can use clustered or robust uncertainty estimates by modifying the `vcov` parameter. This function accepts 5 different types of input.  You can use a string or a vector of strings:
 
@@ -278,7 +276,7 @@ vc <- list(
 modelsummary(models, vcov = vc)
 ```
 
-## stars
+# `stars`
 
 Some people like to add "stars" to their model summary tables to mark statistical significance. The `stars` argument can take three types of input:
 
@@ -302,7 +300,46 @@ modelsummary(models,
 
 If you want to create your own stars description, you can add custom notes with the [`notes`](https://github.com/vincentarelbundock/modelsummary#notes) argument.
 
-## coef_rename
+
+# `coef_omit`
+
+An alternative mechanism to subset coefficients is to use the `coef_omit` argument, which accepts a vector of integer or a regular expression. For example, we can omit the first and second coefficients as follows:
+
+```{r}
+modelsummary(models, coef_omit = 1:2, gof_map = NA)
+```
+
+Negative indices determine which coefficients to *keep*:
+
+```{r}
+modelsummary(models, coef_omit = c(-1, -2), gof_map = NA)
+```
+
+When `coef_omit` is a string, it is fed to `grepl(x,perl=TRUE)` to detect the variable names which should be excluded from the table.
+
+```{r}
+modelsummary(models, coef_omit = "Intercept|.*merce", gof_map = NA)
+```
+
+Since `coef_omit` accepts regexes, you can do interesting things with it, such as specifying the list of variables that `modelsummary` should *keep* instead of omit. To do this, we use [a negative lookahead.](https://www.regular-expressions.info/lookaround.html) To keep only the coefficients *starting* with "Lit", we call:
+
+```{r}
+modelsummary(models, coef_omit = "^(?!Lit)", gof_map = NA)
+```
+
+To keep all coefficients matching the "y" substring:
+
+```{r}
+modelsummary(models, coef_omit = "^(?!.*y)", gof_map = NA)
+```
+
+To keep all coefficients matching one of two substrings:
+
+```{r}
+modelsummary(models, coef_omit = "^(?!.*tercept|.*y)", gof_map = NA)
+```
+
+# `coef_rename`
 
 `modelsummary` offers powerful and innovative mechanisms to rename, reorder, and subset coefficients and goodness-of-fit statistics.
 
@@ -357,7 +394,7 @@ modlab <- lm(mpg ~ cyl + am, data = datlab)
 modelsummary(modlab, coef_rename = TRUE)
 ```
 
-## coef_map
+# `coef_map`: order, omit, rename
 
 The `coef_map` argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the "clean" variable name. Names of this vector correspond to the "raw" variable name. The table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.
 
@@ -368,45 +405,7 @@ cm <- c('Literacy'    = 'Literacy (%)',
 modelsummary(models, coef_map = cm)
 ```
 
-## coef_omit
-
-An alternative mechanism to subset coefficients is to use the `coef_omit` argument, which accepts a vector of integer or a regular expression. For example, we can omit the first and second coefficients as follows:
-
-```{r}
-modelsummary(models, coef_omit = 1:2, gof_map = NA)
-```
-
-Negative indices determine which coefficients to *keep*:
-
-```{r}
-modelsummary(models, coef_omit = c(-1, -2), gof_map = NA)
-```
-
-When `coef_omit` is a string, it is fed to `grepl(x,perl=TRUE)` to detect the variable names which should be excluded from the table.
-
-```{r}
-modelsummary(models, coef_omit = "Intercept|.*merce", gof_map = NA)
-```
-
-Since `coef_omit` accepts regexes, you can do interesting things with it, such as specifying the list of variables that `modelsummary` should *keep* instead of omit. To do this, we use [a negative lookahead.](https://www.regular-expressions.info/lookaround.html) To keep only the coefficients *starting* with "Lit", we call:
-
-```{r}
-modelsummary(models, coef_omit = "^(?!Lit)", gof_map = NA)
-```
-
-To keep all coefficients matching the "y" substring:
-
-```{r}
-modelsummary(models, coef_omit = "^(?!.*y)", gof_map = NA)
-```
-
-To keep all coefficients matching one of two substrings:
-
-```{r}
-modelsummary(models, coef_omit = "^(?!.*tercept|.*y)", gof_map = NA)
-```
-
-## gof_omit
+# `gof_omit`: goodness-of-fit and model characteristics
 
 `gof_omit` is a regular expression which will be fed to `grepl(x,perl=TRUE)` to detect the names of the statistics which should be excluded from the table.
 
@@ -414,7 +413,7 @@ modelsummary(models, coef_omit = "^(?!.*tercept|.*y)", gof_map = NA)
 modelsummary(models, gof_omit = 'DF|Deviance|R2|AIC|BIC')
 ```
 
-## gof_map
+# gof_map
 
 The `gof_map` argument can be used to rename, re-order, subset, and format the statistics displayed in the bottom section of the table ("goodness-of-fit").
 
@@ -465,14 +464,14 @@ modelsummary(
   escape = FALSE)
 ```
 
-## `shape`
+# `shape`: pivot, groups, panels, and stacks
 
 The `shape` argument accepts:
 
 1. A formula which determines the structure of the table, and can display "grouped" coefficients together (e.g., multivariate outcome or mixed-effects models). 
 2. The string "rbind" to stack multiple tables on top of each other and present models in distinct "panels".
 
-### Formula
+## Formula
 
 The left side of the formula represents the rows and the right side represents the columns. The default formula is `term + statistic ~ model`:
 
@@ -549,7 +548,7 @@ modelsummary(mfx, shape = term + contrast ~ model)
 modelsummary(mfx, shape = term : contrast ~ model)
 ```
 
-### "rbind": Panels of models in stacked regression tables
+## String ("rbind" or "rcollapse"): Panels of models in stacked regression tables
 
 Note: The code in this section requires version 1.3.0 or the development version of `modelsummary`. See [the website](https://vincentarelbundock.github.io/modelsummary/index.html) for installation instructions.
 
@@ -595,7 +594,7 @@ modelsummary(
   gof_map = gm)
 ```
 
-#### `fixest`
+### `fixest`
 
 The `fixest` package offers powerful tools to estimate multiple models using a concise syntax. `fixest` functions are also convenient because they return named lists of models which are easy to subset and manipulate using standard `R` functions like `grepl`. 
 
@@ -640,7 +639,7 @@ rm("glance_custom.fixest")
 ```
 
 
-## align
+# `align`: column alignment
 
 By default, `modelsummary` will align the first column (with coefficient names) to the left, and will center the results columns. To change this default, you can use the align argument, which accepts a string of the same length as the number of columns:
 
@@ -662,7 +661,7 @@ For the table produced by this code to compile, users must include the following
 \newcolumntype{d}{S[input-symbols = ()]}
 ```
 
-## notes
+# `notes`: footers
 
 Add notes to the bottom of your table:
 
@@ -672,7 +671,7 @@ modelsummary(models,
                 'Text of the second note.'))
 ```
 
-## title
+# `title`: captions
 
 You can add a title to your table as follows:
 
@@ -680,7 +679,7 @@ You can add a title to your table as follows:
 modelsummary(models, title = 'This is a title for my table.')
 ```
 
-## `add_rows`
+# `add_rows`
 
 Use the `add_rows` argument to add rows manually to a table. For example, let's say you estimate two models with a factor variables and you want to insert (a) an empty line to identify the category of reference, and (b) customized information at the bottom of the table:
 
@@ -702,7 +701,7 @@ attr(rows, 'position') <- c(3, 9)
 modelsummary(models, add_rows = rows)
 ```
 
-## `exponentiate`
+# `exponentiate`
 
 We can exponentiate their estimates using the `exponentiate` argument:
 
@@ -758,7 +757,9 @@ get_estimates(model)
 
 If this function does not return a valid output, you can easily (really!!) add your own support. See the next section for a tutorial. If you do this, you may consider opening an issue on the Github website of the `broom` package: https://github.com/tidymodels/broom/issues
 
-# Adding new models (part I)
+# New models and custom statistics
+
+## Adding new models (part I)
 
 The simplest way to summarize an unsupported model is to create a `modelsummary_list` object. This approach is super flexible, but it requires manual intervention, and it can become tedious if you need to summarize many models. The next section shows how to add formal support for an unsupported model type.
 
@@ -782,7 +783,7 @@ class(mod) <- "modelsummary_list"
 modelsummary(mod)
 ```
 
-# Adding new models (part II)
+## Adding new models (part II)
 
 `modelsummary` relies on two functions from the `broom` package to extract model information: `tidy` and `glance`. If `broom` doesn't support the type of model you are trying to summarize, `modelsummary` won't support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.
 
@@ -829,7 +830,7 @@ Third, in the example above we used the `statistic = 'conf.int'` argument. This 
 
 If you create new `tidy` and `glance` methods, please consider contributing them to `broom` so that the rest of the community can benefit from your work: https://github.com/tidymodels/broom
 
-# Adding new information to existing models
+## Adding new information to existing models
 
 Users may want to include more information than is made available by the default extractor function. For example, models produced by the `MASS::polr` do not produce p values by default, which means that we cannot use the `stars=TRUE` argument in `modelsummary`. However, it is possible to extract this information by using the `lmtest::coeftest` function. To include such custom information, we will define new `glance_custom` and `tidy_custom` methods. 
 
@@ -869,7 +870,7 @@ When this method is defined, `modelsummary` can automatically extract p values f
 modelsummary(mod_ordinal, stars = TRUE)
 ```
 
-# Customizing existing models (part I)
+## Customizing existing models (part I)
 
 Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new `glance_custom` and `tidy_custom` methods. To illustrate, we estimate two linear regression models using the `lm` function:
 
@@ -924,7 +925,7 @@ rm("tidy_custom.lm")
 rm("glance_custom.lm")
 ```
 
-# Customizing existing models (part II)
+## Customizing existing models (part II)
 
 An even more fundamental way to customize the output would be to completely bypass `modelsummary`'s extractor functions by assigning a new class name to your model. For example, 
 
@@ -1007,9 +1008,9 @@ modelsummary(list("Wald" = mod_list, "Kenward" = mod_list_kenward),
 ```
 
 
+# Dynamic documents
 
-
-# Rmarkdown
+## Rmarkdown
 
 You can use `modelsummary` to insert tables into dynamic documents with `knitr` or `Rmarkdown`. This minimal .Rmd file can produce tables in PDF, HTML, or RTF documents:
 
@@ -1023,7 +1024,7 @@ This .Rmd file shows how to customize tables in PDF and HTML files using `gt` an
 
 * [appearance.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/appearance.Rmd)
 
-# Quarto
+## Quarto
 
 [Quarto is an open source publishing system](https://quarto.org/) built on top of Pandoc. It was designed as a "successor" to Rmarkdown, and includes useful features for technical writing, such as built-in support for cross-references. `modelsummary` works automatically with Quarto. This is a minimal document with cross-references which should render automatically to PDF, HTML, and more:
 
@@ -1044,8 +1045,7 @@ modelsummary(mod)
 ```
 ````
 
-
-# Emacs Org-Mode
+## Emacs Org-Mode
 
 You can use `modelsummary` to insert tables into Emacs Org-Mode documents, which can be exported to a variety of formats, including HTML and PDF (via LaTeX). As with anything Emacs-related, there are many ways to achieve the outcomes you want. Here is one example of an Org-Mode document which can automatically export tables to HTML and PDF without manual tweaks:
 
