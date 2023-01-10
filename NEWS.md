@@ -1,6 +1,11 @@
-# modelsummary 1.3.0.9000
+# modelsummary 1.3.0.9001
 
 * `shape = "rcollapse"` and `shape = "rbind"`
+
+Bug fixes:
+
+* Quarto and Rmarkdown documents include `situnix` in header automatically for decimal alignement with `align="ddd"` 
+
 # modelsummary 1.3.0
 
 Breaking change:

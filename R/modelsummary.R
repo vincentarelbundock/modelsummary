@@ -340,7 +340,6 @@ modelsummary <- function(
     }
   }
 
-
   ###############
   #  estimates  #
   ###############
@@ -644,7 +643,9 @@ modelsummary <- function(
   )
 
   # invisible return
-  if (!is.null(settings_get("output_file")) ||
+  if (settings_equal("function_called", "modelsummary_rbind")) {
+    return(out)
+  } else if (!is.null(settings_get("output_file")) ||
       isTRUE(output == "jupyter") ||
       (isTRUE(output == "default") && settings_equal("output_default", "jupyter"))) {
     settings_rm()

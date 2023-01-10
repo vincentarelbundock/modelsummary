@@ -105,7 +105,6 @@ modelsummary_rbind <- function(
         # reset for every call
         sanitize_output(output)
         sanitize_escape(escape)
-        settings_set("function_called", "modelsummary_rbind")
         args <- utils::modifyList(
             dots,
             list(
@@ -129,6 +128,7 @@ modelsummary_rbind <- function(
         tab <- do.call("modelsummary", args)
         panels_list[[i]] <- tab
     }
+
 
     # need the settings for later
     sanitize_output(output)
