@@ -105,9 +105,9 @@ modelplot <- function(models,
   if (is.null(conf_level)) {
     estimate <- "estimate"
   } else {
+    # oooof, ugly hack, but we want to return all those when draw=FALSE
     estimate <- "{estimate}|{std.error}|{conf.low}|{conf.high}|{p.value}"
   }
-
 
   out <- modelsummary(
     output      = "dataframe",
@@ -150,11 +150,14 @@ modelplot <- function(models,
   }
 
   # clean and sort
-  dat <- stats::na.omit(out)
+  dat <- out[!is.na(out$term) & !is.na(out$model) & !is.na(out$estimate),]
   row.names(dat) <- dat$value <- dat$id <- NULL
   dat$term <- factor(dat$term, term_order)
   dat$model <- factor(dat$model, model_order)
   dat <- dat[order(dat$term, dat$model), ]
+
+  if (all(is.na(dat$std.error))) dat$std.error <- NULL
+  if (all(is.na(dat$p.value))) dat$p.value <- NULL
 
   # add_rows
   if (!is.null(add_rows)) {

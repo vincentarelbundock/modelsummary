@@ -132,6 +132,16 @@ format_estimates <- function(
   # needed to avoid empty glues "p =""
   est[is.na(est)] <- ""
 
+  # modelplot safety hack: statistics may not be available for some models (e.g., "brms")
+  if (identical(estimate_glue, "{estimate}|{std.error}|{conf.low}|{conf.high}|{p.value}")) {
+    if (!"std.error" %in% colnames(est)) {
+      estimate_glue <- gsub("{std.error}", " ", estimate_glue, fixed = TRUE)
+    }
+    if (!"p.value" %in% colnames(est)) {
+      estimate_glue <- gsub("{p.value}", " ", estimate_glue, fixed = TRUE)
+    }
+  }
+
   # extract estimates (there can be several)
   for (i in seq_along(estimate_glue)) {
     s <- estimate_glue[i]
