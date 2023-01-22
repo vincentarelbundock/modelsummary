@@ -63,6 +63,9 @@ datasummary_balance <- function(formula,
     checkmate::assert_choice(dinm_statistic, choices = c("std.error", "p.value"))
     data <- sanitize_datasummary_balance_data(formula, data)
 
+    if ("p.value" %in% dinm_statistic) {
+      insight::check_if_installed("estimatr")
+    }
 
     ## rhs condition variable
     rhs <- labels(stats::terms(formula))
