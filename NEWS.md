@@ -1,6 +1,7 @@
 # modelsummary 1.3.0.9001
 
 * `shape = "rcollapse"` and `shape = "rbind"`
+* `glance_custom()` can drop GOF by assigning `NA`: https://stackoverflow.com/questions/75215355/assigning-different-coefficient-names-and-goodness-of-fit-statistics-to-differen
 
 Bug fixes:
 

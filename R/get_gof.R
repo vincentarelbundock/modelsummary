@@ -82,6 +82,13 @@ get_gof <- function(model, vcov_type = NULL, ...) {
         }
     }
 
+    # drop NA gof: this allows us to drop them with glance_custom
+    for (i in rev(seq_along(gof))) {
+        if (isTRUE(is.na(gof[[i]]))) {
+            gof[[i]] <- NULL
+        }
+    }
+
     if (inherits(gof, "data.frame")) {
         return(gof)
     }
