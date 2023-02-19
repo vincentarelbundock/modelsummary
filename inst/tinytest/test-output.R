@@ -1,0 +1,261 @@
+source("helpers.R")
+exit_file("snapshot + test path + expect_error NA")
+
+exit_if_not(requiet("estimatr"))
+exit_if_not(requiet("flextable"))
+
+mod <- list(
+lm(hp ~ mpg, mtcars),
+lm(hp ~ mpg + drat, mtcars))
+
+# output='table.tex'
+fn <- test_path(paste0(random_string(), ".tex"))
+modelsummary(mod, output = fn)
+known <- readLines(test_path("known_output/output_1.tex"))
+unknown <- readLines(fn)
+expect_identical(known, unknown)
+unlink(fn)
+
+
+
+# table objects from different packages
+expect_error(modelsummary(mod), NA)
+expect_error(modelsummary(mod, 'gt'), NA)
+expect_error(modelsummary(mod, 'kableExtra'), NA)
+expect_error(modelsummary(mod, 'flextable'), NA)
+expect_error(modelsummary(mod, 'huxtable'), NA)
+
+
+# simple code
+expect_error(modelsummary(mod, 'html'), NA)
+expect_error(modelsummary(mod, 'latex'), NA)
+expect_error(modelsummary(mod, 'markdown'), NA)
+
+
+# unsupported output
+expect_error(modelsummary(mod, 'bad'))
+expect_error(modelsummary(mod, 'htm'))
+expect_error(modelsummary(mod, 't.est'))
+
+
+# supported global options
+
+random <- random_string()
+
+# RTF
+filename <- paste0(random, '.rtf')
+options(modelsummary_factory_rtf = 'gt')
+expect_error(modelsummary(mod, filename), NA)
+unlink(filename)
+
+# HTML
+filename <- paste0(random, '.html')
+options(modelsummary_factory_html = 'gt')
+expect_error(modelsummary(mod, filename), NA)
+unlink(filename)
+options(modelsummary_factory_html = 'kableExtra')
+expect_error(modelsummary(mod, filename), NA)
+unlink(filename)
+options(modelsummary_factory_html = 'flextable')
+expect_error(modelsummary(mod, filename), NA)
+unlink(filename)
+options(modelsummary_factory_html = 'huxtable')
+expect_error(modelsummary(mod, filename), NA)
+unlink(filename)
+options(modelsummary_factory_html = 'kableExtra')
+
+
+
+# unsupported global options
+
+options(modelsummary_factory_rtf = 'kableExtra')
+expect_error(modelsummary(mod, 'test.rtf'))
+options(modelsummary_factory_rtf = 'gt')
+
+options(modelsummary_factory_word = 'kableExtra')
+expect_error(modelsummary(mod, 'test.docx'))
+options(modelsummary_factory_word = 'gt')
+expect_error(modelsummary(mod, 'test.docx'))
+options(modelsummary_factory_word = 'flextable')
+
+options(modelsummary_factory_powerpoint = 'kableExtra')
+expect_error(modelsummary(mod, 'test.pptx'))
+options(modelsummary_factory_powerpoint = 'gt')
+expect_error(modelsummary(mod, 'test.pptx'))
+options(modelsummary_factory_powerpoint = 'flextable')
+
+options(modelsummary_factory_png = 'huxtable')
+expect_error(modelsummary(mod, 'test.png'))
+unlink("test.png")
+options(modelsummary_factory_png = 'kableExtra')
+
+options(modelsummary_factory_jpg = 'huxtable')
+expect_error(modelsummary(mod, 'test.jpg'))
+options(modelsummary_factory_jpg = 'gt')
+expect_error(modelsummary(mod, 'test.jpg'))
+options(modelsummary_factory_jpg = 'kableExtra')
+
+
+
+# save to file
+random <- random_string()
+
+filename <- paste0(random, '.html')
+expect_error(modelsummary(mod, filename), NA)
+unlink(filename)
+
+filename <- paste0(random, '.rtf')
+expect_error(modelsummary(mod, filename), NA)
+unlink(filename)
+
+filename <- paste0(random, '.tex')
+expect_error(modelsummary(mod, filename), NA)
+unlink(filename)
+
+filename <- paste0(random, '.md')
+expect_error(modelsummary(mod, filename), NA)
+unlink(filename)
+
+filename <- paste0(random, '.docx')
+expect_error(modelsummary(mod, filename), NA)
+unlink(filename)
+
+filename <- paste0(random, '.pptx')
+expect_error(modelsummary(mod, filename), NA)
+unlink(filename)
+
+filename <- paste0(random, '.jpg')
+expect_error(modelsummary(mod, filename), NA)
+unlink(filename)
+
+filename <- paste0(random, '.png')
+expect_error(modelsummary(mod, filename), NA)
+unlink(filename)
+
+
+
+# overwrite file
+random <- random_string()
+filename <- paste0(random, '.html')
+expect_error(modelsummary(mod, filename), NA)
+expect_error(modelsummary(mod, filename), NA)
+unlink(filename)
+
+
+
+
+######################################
+# datasummary_balance #
+######################################
+
+# output formats do not produce errors
+tmp <- mtcars
+tmp$cyl <- as.character(tmp$cyl)
+tmp$vs <- as.logical(tmp$vs)
+expect_error(datasummary_balance(~am, tmp, output = 'huxtable'), NA)
+expect_error(datasummary_balance(~am, tmp, output = 'flextable'), NA)
+expect_error(datasummary_balance(~am, tmp, output = 'kableExtra'), NA)
+expect_error(datasummary_balance(~am, tmp, output = 'huxtable'), NA)
+expect_error(datasummary_balance(~am, tmp, output = 'dataframe'), NA)
+expect_error(datasummary_balance(~am, tmp, output = 'markdown'), NA)
+expect_error(datasummary_balance(~am, tmp, output = 'latex'), NA)
+expect_error(datasummary_balance(~am, tmp, output = 'html'), NA)
+
+
+#  add_columns output formats work  #
+tmp <- mtcars
+tmp$cyl <- as.character(tmp$cyl)
+tmp$vs <- as.logical(tmp$vs)
+custom <- data.frame('a' = 1:2, 'b' = 1:2)
+output_formats <- c('gt', 'kableExtra', 'flextable', 'huxtable', 'latex',
+'markdown', 'html')
+for (o in output_formats) {
+  testname <- paste("add_columns with", o)
+  expect_warning(datasummary_balance(~am, tmp, add_columns = custom, output = o), NA)
+}
+
+#  save to file  #
+tmp <- mtcars
+tmp$cyl <- as.factor(tmp$cyl)
+tmp$vs <- as.logical(tmp$vs)
+tmp$am <- as.character(tmp$am)
+save_to_file <- function(ext) {
+  msg <- paste("save to", ext)
+  random <- random_string()
+  filename <- paste0(random, ext)
+  expect_error(datasummary_balance(~am, data = tmp, output = filename), NA)
+  unlink(filename)
+}
+
+for (ext in c('.html', '.tex', '.rtf', '.docx', '.pptx', '.jpg', '.png')) {
+save_to_file(ext)
+}
+
+
+###################################
+# "output: datasummary_skim"
+###################################
+
+dat <- mtcars
+dat$vs <- as.logical(dat$vs)
+dat$gear <- as.factor(dat$gear)
+
+# write to file
+expect_error(datasummary_skim(dat, output = "test.jpg"), NA)
+expect_error(datasummary_skim(dat, type = "categorical", output = "test.jpg"), NA)
+expect_error(datasummary_skim(dat, output = "test.png"), NA)
+expect_error(datasummary_skim(dat, type = "categorical", output = "test.png"), NA)
+expect_error(datasummary_skim(dat, output = "test.html"), NA)
+expect_error(datasummary_skim(dat, type = "categorical", output = "test.html"), NA)
+expect_warning(datasummary_skim(dat, output = "test.tex"))
+unlink("test.png")
+unlink("test.jpg")
+unlink("test.html")
+unlink("test.tex")
+
+
+# unsupported formats
+expect_warning(datasummary_skim(dat, output="flextable"))
+expect_warning(datasummary_skim(dat, output="flextable", histogram=FALSE), NA)
+expect_warning(datasummary_skim(dat, output="gt"))
+expect_warning(datasummary_skim(dat, output="gt", histogram=FALSE), NA)
+expect_warning(datasummary_skim(dat, output="huxtable"))
+expect_warning(datasummary_skim(dat, output="huxtable", histogram=FALSE), NA)
+expect_warning(datasummary_skim(dat, output="latex"))
+expect_warning(datasummary_skim(dat, output="latex", histogram=FALSE), NA)
+
+
+
+##########################################
+# "output: datasummary_correlation"
+##########################################
+
+# output format do not produce errors
+
+# output formats do not produce errors
+expect_error(datasummary_correlation(mtcars, output = 'huxtable'), NA)
+expect_error(datasummary_correlation(mtcars, output = 'flextable'), NA)
+expect_error(datasummary_correlation(mtcars, output = 'huxtable'), NA)
+expect_error(datasummary_correlation(mtcars, output = 'kableExtra'), NA)
+expect_error(datasummary_correlation(mtcars, output = 'dataframe'), NA)
+expect_error(datasummary_correlation(mtcars, output = 'markdown'), NA)
+expect_error(datasummary_correlation(mtcars, output = 'latex'), NA)
+expect_error(datasummary_correlation(mtcars, output = 'html'), NA)
+
+
+
+tmp <- mtcars
+tmp$cyl <- as.factor(tmp$cyl)
+tmp$vs <- as.logical(tmp$vs)
+tmp$am <- as.character(tmp$am)
+save_to_file <- function(ext = ".html") {
+  msg <- paste("datasummary_correlation: save to", ext)
+  random <- random_string()
+  filename <- paste0(random, ext)
+  expect_error(datasummary_correlation(tmp, output = filename), NA)
+  unlink(filename)
+}
+
+for (ext in c('.html', '.tex', '.rtf', '.docx', '.pptx', '.jpg', '.png')) {
+save_to_file(ext)
+}
