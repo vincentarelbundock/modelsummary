@@ -114,6 +114,7 @@ class(model)[1]),
 #'
 #' @keywords internal
 get_gof_broom <- function(model, ...) {
+  insight::check_if_installed("broom")
 
   out <- suppressWarnings(try(
     broom::glance(model, ...),

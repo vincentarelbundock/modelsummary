@@ -130,6 +130,7 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, co
 
 
 get_estimates_broom <- function(model, conf_int, conf_level, ...) {
+    insight::check_if_installed("broom")
 
     if (isTRUE(conf_int) && !is.null(conf_level)) {
         out <- suppressWarnings(try(
