@@ -1,6 +1,7 @@
 source("helpers.R")
-using("tinyviztest")
 exit_if_not(requiet("estimatr"))
+exit_if_not(requiet("tinyviztest"))
+using("tinyviztest")
 
 # escape group names
 dat <- mtcars
@@ -282,7 +283,7 @@ for (am in 0:1) {
 for (am in 0:1) {
   idx <- datw$am == am
   for (v in tab[[1]]) {
-    unknown <- weighted.sd(datw[[v]][idx], datw$weights[idx])
+    unknown <- modelsummary::weighted_sd(datw[[v]][idx], datw$weights[idx])
     expect_equivalent(unknown, tab[tab[[1]] == v, sprintf("%s / Std. Dev.", am)])
   }
 }

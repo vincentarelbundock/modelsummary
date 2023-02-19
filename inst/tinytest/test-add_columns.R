@@ -1,4 +1,5 @@
 source("helpers.R")
+exit_if_not(requiet("tinyviztest"))
 using("tinyviztest")
 # results is the same, but order of `str()` components is swapped
 exit_if_not(getRversion() >= '4.0.0')

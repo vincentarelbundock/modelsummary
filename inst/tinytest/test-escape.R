@@ -1,4 +1,5 @@
 source("helpers.R")
+exit_if_not(requiet("tinyviztest"))
 using("tinyviztest")
 
 dat <- mtcars

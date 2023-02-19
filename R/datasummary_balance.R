@@ -163,13 +163,13 @@ datasummary_balance <- function(formula,
             if(!is.null(rhs)) {
               f_num <- "All(data_norhs) ~ %s Factor(%s) * (
                         Heading('Mean') * weighted.mean * Arguments(w = weights, na.rm = TRUE) +
-                        Heading('Std. Dev.') * weighted.sd * Arguments(w = weights))"
+                        Heading('Std. Dev.') * modelsummary:::weighted_sd * Arguments(w = weights))"
               f_num <- stats::as.formula(sprintf(f_num, empty, rhs))
           #No groups
           } else {
               f_num <- "All(data_norhs) ~ %s (
                     Heading('Mean') * weighted.mean * Arguments(w = weights, na.rm = TRUE) +
-                    Heading('Std. Dev.') * weighted.sd * Arguments(w = weights))"
+                    Heading('Std. Dev.') * modelsummary:::weighted_sd * Arguments(w = weights))"
               f_num <- stats::as.formula(sprintf(f_num, empty))
             }
         # no weights

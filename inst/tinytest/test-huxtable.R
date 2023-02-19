@@ -1,4 +1,5 @@
 source("helpers.R")
+exit_if_not(requiet("tinyviztest"))
 using("tinyviztest")
 
 # flextable is not installed on CRAN's M1 machine

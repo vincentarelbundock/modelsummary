@@ -1,5 +1,6 @@
 # solaris failure and complaints about pandoc in "Writing R Extensions" ("annoyingly so")
 # pkgdown failure on github actions
+source("helpers.R")
 
 dangerous_document <- '
 ---
@@ -38,7 +39,7 @@ if (knitr::is_latex_output()) {
 }
 ```
 '
-rmd_file <- tempfile(fileext = ".Rmd")
+rmd_file <- paste0(random_string(), ".Rmd")
 
 # Rmarkdown to pdf_document
 ## not sure why PDF compilation doesn't work on Github actions
@@ -59,7 +60,10 @@ docx_file <- gsub("\\.Rmd$", ".docx", rmd_file )
 rmarkdown::render(rmd_file, output_file = docx_file, quiet = TRUE)
 
 
-# Rmarkdown to bookdown::word_document2
-cat(sprintf(dangerous_document, "bookdown::word_document2"), file = rmd_file)
-docx_file <- gsub("\\.Rmd$", ".docx", rmd_file )
-rmarkdown::render(rmd_file, output_file = docx_file, quiet = TRUE)
+# does not even work interactively
+# # Rmarkdown to bookdown::word_document2
+# cat(sprintf(dangerous_document, "bookdown::word_document2"), file = rmd_file)
+# docx_file <- gsub("\\.Rmd$", ".docx", rmd_file )
+# rmarkdown::render(rmd_file, output_file = docx_file, quiet = TRUE)
+
+unlink(rmd_file)
