@@ -1,11 +1,13 @@
-exit_file("<<-")
+source("helpers.R")
 requiet("marginaleffects")
 
 # no error
 dat <- mtcars
 dat$cyl <- as.factor(dat$cyl)
 dat$am <- as.logical(dat$am)
+dat <<- dat
 mod <- lm(mpg ~ am + cyl + hp, data = dat)
+rm("dat")
 
 mfx <- marginaleffects(mod)
 cmp <- comparisons(mod)

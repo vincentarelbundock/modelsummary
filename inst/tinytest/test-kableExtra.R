@@ -1,3 +1,6 @@
+source("helpers.R")
+using("tinyviztest")
+
 models <- list()
 models[["OLS 1"]] <- lm(hp ~ mpg + wt, mtcars)
 models[["Poisson 1"]] <- glm(hp ~ mpg + drat, mtcars, family = poisson())
@@ -22,8 +25,7 @@ cm <- c(
   "disp" = "Displacement",
   "(Intercept)" = "Constant")
 
-exit_file("snapshot")
-expect_snapshot(
+expect_snapshot_print(
   modelsummary(
     models,
     coef_map = cm,
@@ -33,15 +35,17 @@ expect_snapshot(
     notes = c(
       "First custom note to contain text.",
       "Second custom note with different content."),
-    output = "markdown"))
+    output = "markdown"),
+    "kableExtra-markdown_complex")
 
 # kable markdown: rouding + custom stars
-expect_snapshot(
+expect_snapshot_print(
   modelsummary(
     models,
     stars = c("+" = .1, "*" = .01),
     fmt = "%.8f",
-    output = "markdown"))
+    output = "markdown"),
+    "kableExtra-markdown_fmt")
 
 # Issue #548: titles escaped in kableExtra
 mod <- lm(mpg ~ hp, mtcars)

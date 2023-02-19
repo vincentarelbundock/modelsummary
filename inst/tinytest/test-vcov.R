@@ -1,7 +1,6 @@
-exit_file("broken")
-
-requiet("sandwich")
-requiet("lmtest")
+source("helpers.R")
+exit_if_not(requiet("sandwich"))
+exit_if_not(requiet("lmtest"))
 
 url <- "https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv"
 dat <- read.csv(url)
@@ -90,32 +89,6 @@ expect_identical(tab1, tab3)
 # bad input
 expect_error(modelsummary(models, vcov = "bad", output = "data.frame"))
 
-# clustered standard errors
-# checked manually against fixest clusters
-# testthat::skip_if_not_installed("fixest")
-# se = fixest::feols(f, mtcars) %>%
-#      fixest::se(cluster=~cyl)
-f = hp ~ mpg + drat + vs
-mod = lm(f, mtcars)
-tmp = modelsummary(mod,
-  gof_omit = ".*",
-  vcov = ~cyl,
-  output = "dataframe")
-truth = c("247.053", "(73.564)", "-7.138", "(3.162)", "18.064", "(40.237)", "-50.124", "(13.268)")
-expect_equivalent(truth, tmp[[4]])
-
-# lme4 and various warnings
-requiet("lme4")
-models = list(
-  lm(hp ~ mpg, mtcars),
-  lmer(hp ~ mpg + (1 | cyl), mtcars))
-tab = modelsummary(models, output = "dataframe", vcov = list("robust", "classical"))
-expect_inherits(tab, "data.frame")
-expect_equivalent(ncol(tab), 5)
-expect_error(modelsummary(models, output = "dataframe", vcov = "robust"), pattern = "Unable to extract")
-expect_warning(modelsummary(models, output = "dataframe", vcov = "classical"))
-expect_inherits(modelsummary(models[[2]], output = "dataframe", vcov = stats::vcov), "data.frame")
-
 # robust character shortcuts
 exit_if_not(requiet("estimatr"))
 
@@ -145,14 +118,6 @@ z <- modelsummary(mod, vcov = list(sqrt(diag(vcov(mod)))), output = "data.frame"
 expect_equivalent(x, y)
 expect_equivalent(y, z)
 
-# sublist (sandwich vignette)
-models <- lm(hp ~ mpg + drat, mtcars)
-tab <- modelsummary(
-  models,
-  output = "data.frame",
-  vcov = list(vcov))
-expect_inherits(tab, "data.frame")
-expect_equivalent(dim(tab), c(14, 4))
 
 # reference tables
 results <- list()
@@ -173,7 +138,7 @@ results[["many sandwiches"]] <- modelsummary(
 results[["list of matrices"]] <- modelsummary(
   models,
   output = "data.frame",
-  vcov = lapply(models, vcov),
+  vcov = lapply(models, stats::vcov),
   fmt = "%.7f")
 
 results[["hardcoded numerical"]] <- modelsummary(
@@ -198,6 +163,7 @@ results[["hardcoded arbitrary"]] <- modelsummary(
     `NBin 2` = c("(Intercept)" = "\U03B5", Crime_prop = "\U2135", Donations = "\U0414"),
     `Logit 1` = c("(Intercept)" = 1, Crime_prop = -5, Infants = -2)))
 
+
 # we are not interested in GOFs in this test
 for (i in seq_along(results)) {
   results[[i]] <- results[[i]][results[[i]]$part == "estimates", , drop = FALSE]
@@ -210,11 +176,12 @@ for (i in seq_along(results)) {
 # load reference values (comment out when updating)
 reference <- readRDS(file = "known_output/statistic-override.rds")
 
+# bad formula
+expect_error(modelsummary(models, vcov = ~bad))
+
 # bad function
 expect_error(modelsummary(models, vcov = stats::na.omit))
 
-# bad formula
-expect_error(modelsummary(models, vcov = ~bad))
 
 # vector must be named
 vec <- as.numeric(1:3)
@@ -301,3 +268,40 @@ tab <- modelsummary(mod,
     "drat" = 3,
     "hp" = 2))
 expect_equivalent(tab[["(1)"]], c("9.000", "2.000", "3.000"))
+
+
+# sublist (sandwich vignette)
+models <- lm(hp ~ mpg + drat, mtcars)
+tab <- modelsummary(
+  models,
+  output = "data.frame",
+  vcov = list(vcov))
+expect_inherits(tab, "data.frame")
+expect_equivalent(dim(tab), c(14, 4))
+
+
+# clustered standard errors
+# checked manually against fixest clusters
+# se = fixest::feols(f, mtcars) %>%
+#      fixest::se(cluster=~cyl)
+f = hp ~ mpg + drat + vs
+mod = lm(f, mtcars)
+tmp = modelsummary(mod,
+  gof_omit = ".*",
+  vcov = ~cyl,
+  output = "dataframe")
+truth = c("247.053", "(73.564)", "-7.138", "(3.162)", "18.064", "(40.237)", "-50.124", "(13.268)")
+expect_equivalent(truth, tmp[[4]])
+
+# lme4 and various warnings
+requiet("lme4")
+models = list(
+  lm(hp ~ mpg, mtcars),
+  lmer(hp ~ mpg + (1 | cyl), mtcars))
+tab = modelsummary(models, output = "dataframe", vcov = list("robust", "classical"))
+expect_inherits(tab, "data.frame")
+expect_equivalent(ncol(tab), 5)
+expect_error(modelsummary(models, output = "dataframe", vcov = "robust"), pattern = "Unable to extract")
+expect_warning(modelsummary(models, output = "dataframe", vcov = "classical"))
+expect_inherits(modelsummary(models[[2]], output = "dataframe", vcov = stats::vcov), "data.frame")
+

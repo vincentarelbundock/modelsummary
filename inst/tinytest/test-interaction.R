@@ -1,14 +1,18 @@
-exit_file("snapshot")
+source("helpers.R")
+using("tinyviztest")
 
 # : in interactions become x
 mod <- lm(am ~ drat * mpg * vs, mtcars)
-expect_snapshot(modelsummary(mod, "markdown"))
+expect_snapshot_print(
+  modelsummary(mod, "markdown"),
+  "interaction-markdown")
 
 # fixest i() becomes =
 requiet("fixest")
-skip_if_not_installed("fixest", minimum_version = "0.10.5")
 mod <- suppressMessages(feols(Ozone ~ Solar.R + i(Month), airquality))
-expect_snapshot(modelsummary(mod, "markdown", gof_map = list()))
+expect_snapshot_print(
+  modelsummary(mod, "markdown", gof_map = list()),
+  "interaction-markdown_no_gof")
 
 # conditional conversion of : to x
 mod <- lm(am ~ drat:mpg, mtcars)

@@ -1,8 +1,9 @@
 # several tests adapted from `parameters` package under GPL3
+source("helpers.R")
 
 # supported_models() returns a long character vector
 x <- supported_models()
-expect_gt(length(x), 100)
+expect_true(length(x) > 100)
 expect_true(is.character(x))
 
 # margins
@@ -13,22 +14,6 @@ tab = modelsummary(mfx, "data.frame")
 expect_inherits(tab, "data.frame")
 expect_equivalent(dim(tab), c(7, 4))
 
-# nnet::multinom with `response` column
-exit_if_not(requiet("nnet"))
-make_data <- function(response = c("A", "B", "C")) {
-  var1 <- sample(response, replace = T, size=100)
-  var2 <- sample(c(0,1), size=100, replace=T)
-  var3 <- rnorm(100, mean=10, sd=2)
-  var1 <- factor(var1)
-  df1 <- data.frame(var1, var2, var3)
-  df1
-}
-dat <- make_data()
-invisible(capture.output(mod <- nnet::multinom(var1 ~ var2, data = dat)))
-expect_warning(modelsummary(mod, output = "dataframe"), pattern = "duplicate")
-tab <- suppressWarnings(modelsummary(mod, group = response + term ~ model, output = "dataframe"))
-expect_inherits(tab, "data.frame")
-expect_equivalent(dim(tab), c(14, 5))
 
 # MASS
 exit_if_not(requiet("MASS"))
@@ -72,7 +57,7 @@ expect_true(nrow(tab) > 30)
 # these two packages depend on `car`, which depends on `rio`, which depends
 # on `foreign`, which cannot be installed on R<4.0.0
 exit_if_not(requiet("AER"))
-suppressMessages(requiet("ivreg"))
+exit_if_not(requiet("ivreg"))
 data(CigarettesSW, package = "AER")
 mod <- ivreg::ivreg(
   log(packs) ~ log(price) + log(income) | log(income) + I(tax / cpi),
@@ -92,7 +77,7 @@ expect_inherits(tab, "data.frame")
 expect_true(nrow(tab) > 25)
 
 # mice
-testthat::skip_if(getRversion() < '4.0.0') # change in .Rng
+exit_if_not(getRversion() >= "4.0.0")
 requiet("mice")
 
 # impute
@@ -142,17 +127,36 @@ tab <- modelsummary(
 expect_inherits(tab, "data.frame")
 expect_true("Clustered" %in% tab[["(1)"]])
 
-# consistent gof std error display did
 exit_file("broken")
+
+# consistent gof std error display did
 exit_if_not(requiet("did"))
 data(mpdta, package = 'did')
-mpdta$newvar <- substr(mpdta$countyreal, 1, 2)
+dat <<- mpdta
+dat$newvar <- substr(mpdta$countyreal, 1, 2)
 mod1 <- att_gt(yname = "lemp", gname = "first.treat", idname = "countyreal",
-               tname = "year", xformla = ~1, data = mpdta)
+               tname = "year", xformla = ~1, data = dat)
 mod2 <- att_gt(yname = "lemp", gname = "first.treat", idname = "countyreal",
-               tname = "year", xformla = ~1, data = mpdta,
+               tname = "year", xformla = ~1, data = dat,
                clustervars = c('countyreal', 'newvar'))
 mods <- list('mod1' = mod1, 'mod2' = mod2)
 tab <- msummary(mods, gof_omit = 'Num|ngroup|ntime|control|method', output = 'data.frame')
 expect_equivalent(tab$mod1[nrow(tab)], "Clustered (countyreal)")
 expect_equivalent(tab$mod2[nrow(tab)], "Clustered (countyreal & newvar)")
+
+# nnet::multinom with `response` column
+exit_if_not(requiet("nnet"))
+make_data <- function(response = c("A", "B", "C")) {
+  var1 <- sample(response, replace = T, size=100)
+  var2 <- sample(c(0,1), size=100, replace=T)
+  var3 <- rnorm(100, mean=10, sd=2)
+  var1 <- factor(var1)
+  df1 <- data.frame(var1, var2, var3)
+  df1
+}
+dat <- make_data()
+invisible(capture.output(mod <- nnet::multinom(var1 ~ var2, data = dat)))
+expect_warning(modelsummary(mod, output = "dataframe"), pattern = "duplicate")
+tab <- suppressWarnings(modelsummary(mod, group = response + term ~ model, output = "dataframe"))
+expect_inherits(tab, "data.frame")
+expect_equivalent(dim(tab), c(14, 5))

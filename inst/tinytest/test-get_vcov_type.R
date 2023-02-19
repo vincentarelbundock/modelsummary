@@ -31,7 +31,9 @@ expect_equivalent(tab1, tab2)
 expect_equivalent(tab1, tab3)
 
 # consistent gof std error display fixest/lfe/estimatr
-testthat::skip_if_not_installed(c("fixest", "lfe", "estimatr"))
+exit_if_not(requiet("fixest"))
+exit_if_not(requiet("lfe"))
+exit_if_not(requiet("estimatr"))
 fixest_mod <- fixest::feols(hp ~ mpg + drat, mtcars, vcov = ~vs)
 mod <- list(
   "feols" = fixest_mod,

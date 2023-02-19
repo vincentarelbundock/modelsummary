@@ -22,6 +22,7 @@ expect_inherits(tab, "data.frame")
 tab <- modelsummary(mod, output = "data.frame", statistic = "conf.int", ci_random = TRUE)
 
 # 4 confidence intervals includes the random terms
+# TODO: Did that change upstream?
 expect_equivalent(sum(grepl("\\[", tab[["(1)"]])), 4)
 
 # Issue #501
@@ -77,13 +78,13 @@ sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)
 mod <- lmer(
     Reaction ~ (Days + 1 | grp) + (1 | Subject),
     data = sleepstudy)
-expect_warning(tab <- msummary(mod, "dataframe"), NA)
+tab <- msummary(mod, "dataframe")
 expect_true("SD (Days grp)" %in% tab$term)
 
 mod <- modelsummary:::hush(lmer(
     Reaction ~ Days + (1 | grp) + (1 + Days | Subject),
     data = sleepstudy))
-expect_warning(modelsummary(mod, "dataframe"), NA)
+tab <- modelsummary(mod, "dataframe") # no warning
 
 # random effects variance components do not have standard errors and produce "empty"
 mod <- lmer(mpg ~ hp + (1 | gear), mtcars)
@@ -125,7 +126,7 @@ expect_error(suppressWarnings(modelsummary(mod, vcov = ~subj)), pattern = "Unabl
 
 # lme4 with 2 random effects
 mod <- lmer(mpg ~ hp + (1 | am) + (1 | cyl), data = mtcars)
-expect_warning(modelsummary(mod, output = "data.frame", gof_omit = ".*"), NA) # no longer raises warning
+tab <- modelsummary(mod, output = "data.frame", gof_omit = ".*") # no longer raises warning
 tab <- suppressWarnings(modelsummary(mod, output = "data.frame", gof_omit = ".*"))
 expect_inherits(tab, "data.frame")
 tab <- modelsummary(mod,

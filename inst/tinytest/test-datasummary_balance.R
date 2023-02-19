@@ -67,7 +67,7 @@ expect_equivalent(tab[[4]][1:2], c("5.6", "16.7"))
 penguins <- "https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv"
 penguins <- read.csv(penguins)
 raw <- datasummary_balance(~sex, penguins, output = "html")
-expect_output(cat(raw))
+expect_inherits(raw, "knitr_kable")
 
 # variable name with spaces
 tmp <- mtcars
@@ -91,7 +91,7 @@ expect_equivalent(dim(tab), c(13, 9))
 tab <- datasummary_balance(~vs, mtcars, output = 'dataframe')
 truth <- c(" ", "0 / Mean", "0 / Std. Dev.", "1 / Mean",
 "1 / Std. Dev.", "Diff. in Means", "Std. Error")
-expect_s3_class(tab, 'data.frame')
+expect_inherits(tab, 'data.frame')
 expect_equivalent(dim(tab), c(10, 7))
 expect_equivalent(colnames(tab), truth)
 
@@ -103,7 +103,7 @@ tmp$vs <- as.logical(tmp$vs)
 tmp <- tmp[, c('am', 'vs', 'cyl', 'gear')]
 tab <- datasummary_balance(~am, tmp, output = 'dataframe')
 truth <- c("", "", "0 / N", "0 / Pct.", "1 / N", "1 / Pct.")
-expect_s3_class(tab, 'data.frame')
+expect_inherits(tab, 'data.frame')
 expect_equivalent(dim(tab), c(8, 6))
 expect_equivalent(trimws(colnames(tab)), truth)
 
@@ -113,7 +113,7 @@ tmp$cyl <- factor(tmp$cyl)
 tmp$gear <- factor(tmp$gear)
 tmp$vs <- as.logical(tmp$vs)
 tab <- datasummary_balance(~am, tmp, output = 'dataframe')
-expect_s3_class(tab, 'data.frame')
+expect_inherits(tab, 'data.frame')
 expect_equivalent(dim(tab), c(16, 8))
 ## col order 
 truth <- c(" ", "  ", "0 / Mean", "0 / Std. Dev.", "1 / Mean", "1 / Std. Dev.", "Diff. in Means", "Std. Error")
@@ -127,7 +127,7 @@ tmp <- mtcars
 tmp$cyl <- factor(tmp$cyl)
 tmp$vs <- as.logical(tmp$vs)
 tab <- datasummary_balance(~gear, tmp, output = 'dataframe', dinm = FALSE)
-expect_s3_class(tab, 'data.frame')
+expect_inherits(tab, 'data.frame')
 expect_equivalent(dim(tab), c(14, 8))
 expect_warning(datasummary_balance(~gear, tmp, output = 'dataframe', dinm = TRUE))
 tab <- suppressWarnings(datasummary_balance(~gear, tmp, output = 'dataframe', dinm = TRUE))
@@ -138,7 +138,7 @@ tmp <- mtcars
 tmp$cyl <- factor(tmp$cyl)
 tmp$vs <- as.logical(tmp$vs)
 tab <- datasummary_balance(~1, tmp, output = 'dataframe', dinm = FALSE)
-expect_s3_class(tab, 'data.frame')
+expect_inherits(tab, 'data.frame')
 expect_equivalent(dim(tab), c(15, 4))
 tab <- suppressWarnings(datasummary_balance(~1, tmp, output = 'dataframe', dinm = TRUE))
 expect_equivalent(dim(tab), c(15, 4))
@@ -147,7 +147,7 @@ expect_equivalent(dim(tab), c(15, 4))
 # single numeric
 tmp <- mtcars[, c('am', 'mpg')]
 tab <- datasummary_balance(~am, data = tmp, output = 'dataframe')
-expect_s3_class(tab, 'data.frame')
+expect_inherits(tab, 'data.frame')
 expect_equivalent(dim(tab), c(1, 7))
 expect_equivalent(tab[[1]], 'mpg')
 
@@ -157,7 +157,7 @@ expect_equivalent(tab[[1]], 'mpg')
 tmp <- mtcars[, c('am', 'gear')]
 tmp$gear <- factor(tmp$gear)
 tab <- datasummary_balance(~am, data = tmp, output = 'dataframe')
-expect_s3_class(tab, 'data.frame')
+expect_inherits(tab, 'data.frame')
 expect_equivalent(dim(tab), c(3, 6))
 expect_equivalent(tab[[2]][1], '3')
 
@@ -165,7 +165,7 @@ expect_equivalent(tab[[2]][1], '3')
 
 # dinm=FALSE
 tab <- datasummary_balance(~vs, mtcars, dinm = FALSE, output = 'dataframe')
-expect_s3_class(tab, 'data.frame')
+expect_inherits(tab, 'data.frame')
 expect_equivalent(dim(tab), c(10, 5))
 expect_equivalent(tab[[1]][1], 'mpg')
 
@@ -177,7 +177,7 @@ tab <- datasummary_balance(
 data = mtcars,
 dinm_statistic = 'p.value',
 output = 'dataframe')
-expect_s3_class(tab, 'data.frame')
+expect_inherits(tab, 'data.frame')
 expect_equivalent(dim(tab), c(10, 7))
 expect_equivalent(tab[[1]][1], 'mpg')
 expect_equivalent(colnames(tab)[ncol(tab)], 'p')

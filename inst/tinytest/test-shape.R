@@ -1,11 +1,11 @@
-exit_file("broken")
+source("helpers.R")
+using("tinyviztest")
 
-requiet("gamlss")
-requiet("nnet")
+exit_if_not(requiet("gamlss"))
+exit_if_not(requiet("nnet"))
+exit_if_not(requiet("marginaleffects"))
 
 # combine columns with :
-skip_if_not_installed("parameters", minimum_version = "0.19.0.10")
-requiet("marginaleffects")
 mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
 mfx <- suppressWarnings(marginaleffects(mod))
 tab1 <- modelsummary(mfx, output = "dataframe", shape = term:contrast ~ model)
@@ -107,7 +107,7 @@ void <- capture.output(
                         coef_map = coef_list,
                         shape = term ~ model + response)
 )
-expect_snapshot(cat(tab))
+expect_snapshot_print(tab, "shape-multinom_wide")
 
 
 
@@ -291,7 +291,7 @@ tab <- modelsummary(
     mod,
     output = "dataframe",
     shape = term + model ~ statistic,
-    statistic = c("std.error", "{p.value}{stars}", "{estimate} ({statistic"),
+    statistic = c("std.error", "{p.value}{stars}", "{estimate} ({statistic})"),
     fmt = fmt_statistic(estimate = 3, p.value = 2))
 expect_equivalent(
     colnames(tab),

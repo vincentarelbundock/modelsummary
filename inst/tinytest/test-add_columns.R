@@ -1,5 +1,7 @@
+source("helpers.R")
+using("tinyviztest")
 # results is the same, but order of `str()` components is swapped
-skip_if(getRversion() < '4.0.0')
+exit_if_not(getRversion() >= '4.0.0')
 
 
 # too many rows in add_columns
@@ -19,7 +21,6 @@ expect_equivalent("X", colnames(tab)[2])
 expect_equivalent(ncol(tab), 5)
 
 
-exit_file("snapshot")
 # datasummary add_columns
 ac <- read.csv(text = 
 "first,last
@@ -31,4 +32,4 @@ tab <- datasummary(mpg + hp ~ mean + sd,
   add_columns = ac,
   fmt = '%.2f',
   output = 'dataframe')
-expect_snapshot(dput(tab))
+expect_snapshot_print(tab, "add_columns-dataframe")

@@ -1,5 +1,3 @@
-exit_file("broken")
-
 mod <- list()
 mod$OLS <- lm(am ~ drat, data = mtcars)
 mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
@@ -45,10 +43,10 @@ tab <- modelsummary(
   output = "data.frame",
   gof_omit = ".*",
   estimate = c(
-    "{estimate} ({std.error{stars}",
+    "{estimate} ({std.error}){stars}",
     "{estimate} [{conf.low}, {conf.high}]"),
   statistic = c(
-    "({std.error{stars}",
+    "({std.error}){stars}",
     "[{conf.low}, {conf.high}]"))
 truth <- c(
   "-1.986 (0.434)***", "(0.434)***", "[-2.873, -1.099]",

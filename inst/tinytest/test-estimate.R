@@ -1,5 +1,3 @@
-exit_file("broken")
-
 models <- list(
   lm(hp ~ mpg + drat, mtcars),
   lm(hp ~ mpg + drat, mtcars))
@@ -11,7 +9,7 @@ tab1 <- modelsummary(models,
   stars = TRUE,
   statistic = NULL,
   estimate = c(
-    "{estimate} ({std.error{stars}",
+    "{estimate} ({std.error}){stars}",
     "{estimate} [{conf.low}, {conf.high}]"))
 tab2 <- modelsummary(models,
   output = "data.frame",
@@ -19,7 +17,7 @@ tab2 <- modelsummary(models,
   stars = FALSE,
   statistic = NULL,
   estimate = c(
-    "{estimate} ({std.error{stars}",
+    "{estimate} ({std.error}){stars}",
     "{estimate} [{conf.low}, {conf.high}]"))
 expect_true(all(tab1 == tab2))
 
@@ -32,5 +30,5 @@ expect_error(
     statistic = NULL,
     estimate = c(
       "estimate",
-      "{estimate} ({std.error{stars}",
+      "{estimate} ({std.error}){stars}",
       "{estimate} [{conf.low}, {conf.high}]")))

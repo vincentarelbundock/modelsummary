@@ -14,7 +14,7 @@ expect_equivalent(dim(tab), c(6, 5))
 
 # custom gof_map omits everything by default
 # error about factor levels, not clear why
-skip_if(getRversion() < "4.0.0")
+exit_if_not(getRversion() >= "4.0.0")
 gm <- read.csv(
   text =
     "raw,clean,fmt

@@ -1,4 +1,5 @@
 source("helpers.R")
+using("tinyviztest")
 
 models <- list(
   lm(hp ~ mpg, mtcars),
@@ -25,10 +26,10 @@ expect_equivalent(sum(grepl("threeparttable", strsplit(tab3, "\n")[[1]])), 2)
 tab <- modelsummary(models, stars = TRUE, output = "latex")
 expect_true(grepl("p $<$ 0.1", tab, fixed = TRUE))
 
-exit_file("snapshot")
-
 # output = latex_tabular
-expect_snapshot(modelsummary(models, output = "latex_tabular"))
+expect_snapshot_print(
+  modelsummary(models, output = "latex_tabular"),
+  "latex-tabular")
 
 # Issue #560: circum escape
 requiet("fixest")

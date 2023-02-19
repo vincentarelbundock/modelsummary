@@ -2,7 +2,7 @@
 # unsupported models require `broom.mixed`
 # should no longer be a problem now that easystats is first
 # skip_on_cran()
-# skip_if(getRversion() < '4.0.0')
+exit_if_not(getRversion() >= "4.0.0")
 
 # Characters raise error
 # build issue with packages broom.mixed and TMB

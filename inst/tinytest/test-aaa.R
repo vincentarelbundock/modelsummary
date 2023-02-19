@@ -1,3 +1,5 @@
+source("helpers.R")
+
 # first time output='latex' produces a warning (run first)
 mod <- lm(mpg ~ hp, mtcars)
 expect_warning(modelsummary(mod, "latex"))

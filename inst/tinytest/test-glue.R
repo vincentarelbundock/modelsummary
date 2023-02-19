@@ -1,4 +1,3 @@
-exit_file("broken")
 mod <- list(
   lm(mpg ~ hp, data = mtcars),
   glm(vs ~ hp + cyl, data = mtcars, family = binomial))
@@ -18,7 +17,7 @@ expect_equivalent(tab[[5]][2], "Not significant")
 # glue + no statistic",{
 tab <- modelsummary(
   mod,
-  estimate = "**{estimate}** [{conf.low}, {conf.high}] ({p.value",
+  estimate = "**{estimate}** [{conf.low}, {conf.high}] ({p.value})",
   statistic = NULL,
   output = "data.frame",
   gof_omit = ".*")

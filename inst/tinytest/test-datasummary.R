@@ -1,7 +1,6 @@
 penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
 
 # regression test: gt duplicate span labels
-skip_if_not_installed("gt", minimum_version = "0.5.0")
 tab <- datasummary(
   All(mtcars) ~ Factor(vs) * (Factor(am) * (Mean + SD)),
   data = mtcars, output = "gt")

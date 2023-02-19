@@ -30,20 +30,11 @@ for (x in extensions) {
   unlink(fn1)
 }
 
-# # png hash changes from write to write
-# # output='table.png'
-#   fn1 <- paste0(random_string(), x)
-#   modelsummary(mod, output = fn1)
-#   expect_gt(file.info(fn1)$size, 10000)
-#   unlink(fn1)
-# 
-
-exit_file("broken")
 # docx hash changes from write to write
 # output='table.docx'
 fn1 <- paste0(random_string(), ".docx")
 modelsummary(mod, output = fn1)
-expect_gt(file.info(fn1)$size, 10000)
+expect_true(file.info(fn1)$size > 10000)
 unlink(fn1)
 
 
@@ -51,5 +42,5 @@ unlink(fn1)
 # output='table.pptx'
 fn1 <- paste0(random_string(), ".pptx")
 modelsummary(mod, output = fn1)
-expect_gt(file.info(fn1)$size, 10000)
+expect_true(file.info(fn1)$size > 10000)
 unlink(fn1)

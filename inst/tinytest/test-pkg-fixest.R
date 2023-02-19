@@ -16,7 +16,6 @@ tab <- modelsummary(mod, "data.frame")
 expect_true("by: Product" %in% tab[["(1)"]])
 
 # multi: after 0.10.5
-skip_if_not_installed("fixest", "0.10.5")
 mod <- feols(mpg ~ hp, split = ~cyl, data = mtcars)
 tab <- modelsummary(mod, "data.frame")
 expect_true(all(c("sample: 4", "sample: 6", "sample: 8") %in% colnames(tab)))
