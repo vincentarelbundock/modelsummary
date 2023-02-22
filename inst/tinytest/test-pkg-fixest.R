@@ -1,3 +1,4 @@
+source("helpers.R")
 exit_if_not(requiet("sandwich"))
 exit_if_not(requiet("fixest"))
 exit_if_not(requiet("data.table"))

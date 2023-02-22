@@ -1,4 +1,4 @@
-# exit("broken")
+source("helpers.R")
 exit_if_not(requiet("lme4"))
 
 # random components are displayed together

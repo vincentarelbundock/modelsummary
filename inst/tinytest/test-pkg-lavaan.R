@@ -1,3 +1,4 @@
+source("helpers.R")
 exit_if_not(requiet("lavaan"))
 
 # Issue #502

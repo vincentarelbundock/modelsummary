@@ -1,3 +1,4 @@
+source("helpers.R")
 requiet("mgcv")
 
 # Issue #558

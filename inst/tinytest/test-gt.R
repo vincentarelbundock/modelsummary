@@ -1,3 +1,4 @@
+source("helpers.R")
 exit_if_not(requiet("gt"))
 exit_file("gt html snapshot change all the time")
 

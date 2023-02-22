@@ -1,3 +1,4 @@
+source("helpers.R")
 requiet("MASS")
 
 # Issue #518

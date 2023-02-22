@@ -1,3 +1,5 @@
+source("helpers.R")
+
 exit_if_not(requiet("lfe"))
 exit_if_not(requiet("fixest"))
 exit_if_not(requiet("estimatr"))

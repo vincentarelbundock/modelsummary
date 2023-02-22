@@ -1,3 +1,4 @@
+source("helpers.R")
 exit_file("works interactively")
 
 # tidy.custom

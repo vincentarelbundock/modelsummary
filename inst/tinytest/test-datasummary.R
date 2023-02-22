@@ -1,3 +1,5 @@
+source("helpers.R")
+
 penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
 
 # regression test: gt duplicate span labels
