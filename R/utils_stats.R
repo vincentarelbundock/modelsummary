@@ -1,5 +1,5 @@
-# Adapted from `vtable` by Nick Huntington-Klein under MIT license
-weighted.sd <- function(x, w) {
+weighted_sd <- function(x, w) {
+  # Adapted from `vtable` by Nick Huntington-Klein under MIT license
   if (min(w) < 0) {
     stop('Negative weights found.')
   }

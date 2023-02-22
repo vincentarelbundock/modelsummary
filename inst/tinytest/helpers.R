@@ -1,0 +1,29 @@
+rm(list = ls())
+
+ON_CRAN <- !identical(Sys.getenv("R_NOT_CRAN"), "true")
+ON_GH <- identical(Sys.getenv("R_GH"), "true")
+ON_CI <- isTRUE(ON_CRAN) || isTRUE(ON_GH)
+ON_WINDOWS <- isTRUE(Sys.info()[['sysname']] == "Windows")
+ON_OSX <- isTRUE(Sys.info()[['sysname']] == "Darwin")
+
+require("tinytest", quietly = TRUE)
+require("tinyviztest", quietly = TRUE)
+
+options(width = 10000)
+options("tinyviztest_device" = "svglite")
+
+requiet <- function(package) {
+  suppressMessages(suppressWarnings(suppressPackageStartupMessages(
+    require(package, warn.conflicts = FALSE, character.only = TRUE)
+  )))
+}
+
+random_string <- function() {
+  paste(sample(letters, 30, replace=TRUE), collapse="")
+}
+
+compare_files <- function(x, y) {
+  known <- digest::digest(x, file = TRUE)
+  unknown <- digest::digest(y, file = TRUE)
+  expect_equivalent(known, unknown)
+}
