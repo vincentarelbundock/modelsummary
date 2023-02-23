@@ -1,5 +1,5 @@
 source("helpers.R")
-exit_if_not(requiet("tibble"))
+requiet("tibble")
 
 # gof_map = NA
 mod <- lm(mpg ~ hp, mtcars)

@@ -1,5 +1,5 @@
 source("helpers.R")
-exit_if_not(requiet("lme4"))
+requiet("lme4")
 
 # random components are displayed together
 mod <- lmer(Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width + (1 | Species), data = iris)

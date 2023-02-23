@@ -7,7 +7,7 @@ expect_true(length(x) > 100)
 expect_true(is.character(x))
 
 # margins
-exit_if_not(requiet("margins"))
+requiet("margins")
 mod = glm(vs ~ hp + drat, data = mtcars, family = binomial)
 mfx = margins(mod)
 tab = modelsummary(mfx, "data.frame")
@@ -16,14 +16,14 @@ expect_equivalent(dim(tab), c(7, 4))
 
 
 # MASS
-exit_if_not(requiet("MASS"))
+requiet("MASS")
 # broom::tidy requires p.values=TRUE, but we now use easystats, so no need to error checking
 fit <- polr(Sat ~ Freq, weights = Freq, data = housing)
 tab <- modelsummary(fit, output = 'dataframe', statistic = "p.value")
 expect_inherits(tab, "data.frame")
 
 # survival
-exit_if_not(requiet("survival"))
+requiet("survival")
 lung <- survival::lung
 lung <- subset(lung, subset = ph.ecog %in% 0:2)
 lung$sex <- factor(lung$sex, labels = c("male", "female"))
@@ -34,7 +34,7 @@ expect_inherits(tab, "data.frame")
 expect_true(nrow(tab) > 11)
 
 # mgcv::gam
-exit_if_not(requiet("mgcv"))
+requiet("mgcv")
 mod <- mgcv::gam(
   formula = mpg ~ s(hp) + s(wt) + factor(cyl) + am + qsec,
   family = stats::quasi(),
@@ -44,7 +44,7 @@ expect_inherits(tab, "data.frame")
 expect_true(nrow(tab) > 5)
 
 # betareg::betareg
-exit_if_not(requiet("betareg"))
+requiet("betareg")
 data("GasolineYield", package = "betareg")
 data("FoodExpenditure", package = "betareg")
 m1 <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
@@ -56,8 +56,8 @@ expect_true(nrow(tab) > 30)
 # ivreg::ivreg
 # these two packages depend on `car`, which depends on `rio`, which depends
 # on `foreign`, which cannot be installed on R<4.0.0
-exit_if_not(requiet("AER"))
-exit_if_not(requiet("ivreg"))
+requiet("AER")
+requiet("ivreg")
 data(CigarettesSW, package = "AER")
 mod <- ivreg::ivreg(
   log(packs) ~ log(price) + log(income) | log(income) + I(tax / cpi),
@@ -77,7 +77,7 @@ expect_inherits(tab, "data.frame")
 expect_true(nrow(tab) > 25)
 
 # mice
-exit_if_not(getRversion() >= "4.0.0")
+if (getRversion() < "4.0.0") exit_file("old R")
 requiet("mice")
 
 # impute
@@ -106,7 +106,7 @@ truth <- c("19.428", "(7.833)", "-5.986", "(2.299)", "", "", "-3.498",
 expect_equivalent(truth, unname(raw[[5]]))
 
 # sandwich vignette
-exit_if_not(requiet("sandwich"))
+requiet("sandwich")
 data("PetersenCL", package = "sandwich")
 m <- lm(y ~ x, data = PetersenCL)
 vc <- list(
@@ -130,7 +130,7 @@ expect_true("Clustered" %in% tab[["(1)"]])
 exit_file("broken")
 
 # consistent gof std error display did
-exit_if_not(requiet("did"))
+requiet("did")
 data(mpdta, package = 'did')
 dat <<- mpdta
 dat$newvar <- substr(mpdta$countyreal, 1, 2)
@@ -145,7 +145,7 @@ expect_equivalent(tab$mod1[nrow(tab)], "Clustered (countyreal)")
 expect_equivalent(tab$mod2[nrow(tab)], "Clustered (countyreal & newvar)")
 
 # nnet::multinom with `response` column
-exit_if_not(requiet("nnet"))
+requiet("nnet")
 make_data <- function(response = c("A", "B", "C")) {
   var1 <- sample(response, replace = T, size=100)
   var2 <- sample(c(0,1), size=100, replace=T)

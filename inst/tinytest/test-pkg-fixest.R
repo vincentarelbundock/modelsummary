@@ -1,7 +1,7 @@
 source("helpers.R")
-exit_if_not(requiet("sandwich"))
-exit_if_not(requiet("fixest"))
-exit_if_not(requiet("data.table"))
+requiet("sandwich")
+requiet("fixest")
+requiet("data.table")
 fixest::setFixest_nthreads(1)
 
 # issue 591

@@ -1,5 +1,5 @@
 source("helpers.R")
-exit_if_not(requiet("broom"))
+requiet("broom")
 
 
 fit <- glm(am ~ mpg + factor(cyl), data = mtcars, family = binomial)

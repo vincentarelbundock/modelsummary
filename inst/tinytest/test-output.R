@@ -1,7 +1,6 @@
 source("helpers.R")
-exit_if_not(!ON_CI)
-exit_if_not(requiet("estimatr"))
-exit_if_not(requiet("flextable"))
+requiet("estimatr")
+requiet("flextable")
 
 mod <- list(
 lm(hp ~ mpg, mtcars),

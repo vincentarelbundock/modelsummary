@@ -1,3 +1,5 @@
+#' @export
+#' @noRd
 weighted_sd <- function(x, w) {
   # Adapted from `vtable` by Nick Huntington-Klein under MIT license
   if (min(w) < 0) {

@@ -1,8 +1,8 @@
 source("helpers.R")
 
-exit_if_not(requiet("lfe"))
-exit_if_not(requiet("fixest"))
-exit_if_not(requiet("estimatr"))
+requiet("lfe")
+requiet("fixest")
+requiet("estimatr")
 fixest::setFixest_nthreads(1) # avoids warning pollution
 
 # automatic standard errors labelling
@@ -33,9 +33,9 @@ expect_equivalent(tab1, tab2)
 expect_equivalent(tab1, tab3)
 
 # consistent gof std error display fixest/lfe/estimatr
-exit_if_not(requiet("fixest"))
-exit_if_not(requiet("lfe"))
-exit_if_not(requiet("estimatr"))
+requiet("fixest")
+requiet("lfe")
+requiet("estimatr")
 fixest_mod <- fixest::feols(hp ~ mpg + drat, mtcars, vcov = ~vs)
 mod <- list(
   "feols" = fixest_mod,

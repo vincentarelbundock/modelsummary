@@ -1,5 +1,5 @@
 source("helpers.R")
-exit_if_not(requiet("fixest"))
+requiet("fixest")
 fixest::setFixest_nthreads(1)
 
 panels <- list(

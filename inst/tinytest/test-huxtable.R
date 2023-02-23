@@ -1,11 +1,11 @@
 source("helpers.R")
-exit_if_not(requiet("tinyviztest"))
+requiet("tinyviztest")
 using("tinyviztest")
 
 # flextable is not installed on CRAN's M1 machine
 # huxtable is not installed on CRAN's solaris / fedora-clang / fedora-gcc
-exit_if_not(requiet("flextable"))
-exit_if_not(requiet("huxtable"))
+requiet("flextable")
+requiet("huxtable")
 
 models <- list()
 models[["OLS 1"]] <- lm(hp ~ mpg + wt, mtcars)

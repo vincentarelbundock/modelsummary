@@ -1,10 +1,10 @@
 source("helpers.R")
-exit_if_not(requiet("tinyviztest"))
+requiet("tinyviztest")
 using("tinyviztest")
 
-exit_if_not(requiet("gamlss"))
-exit_if_not(requiet("nnet"))
-exit_if_not(requiet("marginaleffects"))
+requiet("gamlss")
+requiet("nnet")
+requiet("marginaleffects")
 
 # combine columns with :
 mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)

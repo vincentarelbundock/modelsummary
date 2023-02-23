@@ -1,5 +1,5 @@
 source("helpers.R")
-exit_if_not(requiet("tinyviztest"))
+requiet("tinyviztest")
 using("tinyviztest")
 
 models <- list(

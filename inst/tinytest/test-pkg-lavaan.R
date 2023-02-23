@@ -1,5 +1,5 @@
 source("helpers.R")
-exit_if_not(requiet("lavaan"))
+requiet("lavaan")
 
 # Issue #502
 model <- 'ind60 =~ x1 + x2 + x3'

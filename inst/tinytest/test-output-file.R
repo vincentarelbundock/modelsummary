@@ -1,8 +1,8 @@
 # CRAN fails on artefacts
 # skip_on_cran()
 source("helpers.R")
-exit_if_not(requiet("digest"))
-exit_if_not(requiet("flextable"))
+requiet("digest")
+requiet("flextable")
 
 mod <- list()
 mod[[1]] <- lm(hp ~ mpg, mtcars)

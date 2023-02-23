@@ -30,7 +30,7 @@ rm("glance_custom.glm", envir = .GlobalEnv)
 #################
 # tidy_custom.glm
 # not sure why this fails on older versions
-exit_if_not(getRversion() >= "4.0.0")
+if (getRversion() < "4.0.0") exit_file("old R")
 tidy_custom.glm <- function(x) {
   data.frame(
     term = names(stats::coef(x)),

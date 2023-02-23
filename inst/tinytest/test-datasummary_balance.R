@@ -1,6 +1,6 @@
 source("helpers.R")
-exit_if_not(requiet("estimatr"))
-exit_if_not(requiet("tinyviztest"))
+requiet("estimatr")
+requiet("tinyviztest")
 using("tinyviztest")
 
 # escape group names

@@ -1,7 +1,7 @@
 source("helpers.R")
-exit_if_not(requiet("tinyviztest"))
+requiet("tinyviztest")
 using("tinyviztest")
-exit_if_not(requiet("sandwich"))
+requiet("sandwich")
 
 # single model
 mod <- lm(hp ~ mpg + drat, data = mtcars)

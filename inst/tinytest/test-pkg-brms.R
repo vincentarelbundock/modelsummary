@@ -1,6 +1,6 @@
 source("helpers.R")
 using("checkmate")
-exit_if_not(requiet("brms"))
+requiet("brms")
 
 # brms: diagnostics and tests
 mod <- insight::download_model("brms_1")

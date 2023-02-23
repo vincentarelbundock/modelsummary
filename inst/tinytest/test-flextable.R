@@ -1,5 +1,5 @@
 source("helpers.R")
-exit_if_not(requiet("flextable"))
+requiet("flextable")
 
 models <- list()
 models[['OLS 1']] <- lm(hp ~ mpg + wt, mtcars)

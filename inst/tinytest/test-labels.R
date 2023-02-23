@@ -1,5 +1,5 @@
 source("helpers.R")
-exit_if_not(requiet("haven"))
+requiet("haven")
 
 # datasummary labels",{
 # datasummary()

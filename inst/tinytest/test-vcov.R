@@ -1,6 +1,6 @@
 source("helpers.R")
-exit_if_not(requiet("sandwich"))
-exit_if_not(requiet("lmtest"))
+requiet("sandwich")
+requiet("lmtest")
 
 url <- "https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv"
 dat <- read.csv(url)
@@ -90,7 +90,7 @@ expect_identical(tab1, tab3)
 expect_error(modelsummary(models, vcov = "bad", output = "data.frame"))
 
 # robust character shortcuts
-exit_if_not(requiet("estimatr"))
+requiet("estimatr")
 
 mod = lm(hp ~ mpg, mtcars)
 mod_estimatr = estimatr::lm_robust(hp ~ mpg, mtcars)
