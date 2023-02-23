@@ -1,6 +1,7 @@
 # solaris failure and complaints about pandoc in "Writing R Extensions" ("annoyingly so")
 # pkgdown failure on github actions
 source("helpers.R")
+if (ON_CI) exit_file("CI")
 
 dangerous_document <- '
 ---
