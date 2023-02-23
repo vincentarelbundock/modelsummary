@@ -89,7 +89,7 @@ p <- modelplot(mod, facet = FALSE, conf_level = NULL)
 # car::deltaMethod: Issue #491
 requiet("car")
 fit <- lm(mpg ~ disp + hp, mtcars)
-fit_dm <- deltaMethod(fit, "disp / hp", rhs = 1)
+fit_dm <- car::deltaMethod(fit, "disp / hp", rhs = 1)
 p <- modelplot(fit_dm)
 
 # Issue #529
