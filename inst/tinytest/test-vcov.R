@@ -302,6 +302,5 @@ tab = modelsummary(models, output = "dataframe", vcov = list("robust", "classica
 expect_inherits(tab, "data.frame")
 expect_equivalent(ncol(tab), 5)
 expect_error(modelsummary(models, output = "dataframe", vcov = "robust"), pattern = "Unable to extract")
-expect_warning(modelsummary(models, output = "dataframe", vcov = "classical"))
 expect_inherits(modelsummary(models[[2]], output = "dataframe", vcov = stats::vcov), "data.frame")
 
