@@ -159,7 +159,7 @@ fmt_statistic <- function(..., default = 3) {
         args[["conf.low"]] <- args[["conf.high"]] <- args[["conf.int"]]
     }
 
-    out <- function(x) {
+    out <- function(x, unknown = TRUE) {
 
         if (!isTRUE(checkmate::check_data_frame(x))) {
             msg <- "`fmt_statistic()` only supports data frames."
@@ -168,19 +168,24 @@ fmt_statistic <- function(..., default = 3) {
 
         for (n in colnames(x)) {
             if (is.numeric(x[[n]])) {
+                # in fmt_statistic()
                 if (n %in% names(args)) {
                     x[[n]] <- args[[n]](x[[n]])
-                } else {
+                    x[[n]] <- fmt_nainf(x[[n]])
+                    x[[n]] <- fmt_mathmode(x[[n]])
+
+                # defaults
+                } else if (isTRUE(unknown)) {
                     x[[n]] <- args[["default"]](x[[n]])
+                    x[[n]] <- fmt_nainf(x[[n]])
+                    x[[n]] <- fmt_mathmode(x[[n]])
                 }
-                x[[n]] <- fmt_nainf(x[[n]])
-                x[[n]] <- fmt_mathmode(x[[n]])
             }
         }
         return(x)
     }
 
-    class(out) <- c("fmt_factory", class(out))
+    class(out) <- c("fmt_factory", "fmt_statistic", class(out))
     return(out)
 }
 

@@ -87,3 +87,11 @@ tab <- modelsummary(
     default = fmt_sprintf("%.1f")),
   gof_map = NA)
 expect_equivalent(tab[["(1)"]], c("17.73662", "(13.01979)", "-0.058", "(0.014)", "4.4", "(1.3)", "-0.3", "(0.5)"))
+
+
+# Issue #439
+mod <- lm(mpg ~ hp, mtcars)
+tab <- modelsummary(mod,
+  output = "data.frame",
+  fmt = fmt_statistic(estimate = 3, std.error = 1, r.squared = 7))
+expect_equivalent(tab[c(1:2, 6), 4], c("30.099", "(1.6)", "0.6024373"))
