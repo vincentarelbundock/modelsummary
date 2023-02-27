@@ -16,3 +16,15 @@ p <- modelplot(mod)
 expect_inherits(p, "gg")
 p <- modelplot(mod, draw = FALSE)
 expect_data_frame(p, nrows = 3)
+
+
+# mix brms and lm 
+modglm <- glm(am ~ mpg + hp, data = mtcars, family = binomial)
+models <- list(mod, modglm)
+
+tab <- modelsummary(
+    models,
+    coef_rename = \(x) gsub("b_", "", x),
+    coef_omit = "Intercept",
+    statistic = c("std.error", "conf.int"))
+expect_inherits(tab, "kableExtra")
