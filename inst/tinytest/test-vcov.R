@@ -304,3 +304,15 @@ expect_equivalent(ncol(tab), 5)
 expect_error(modelsummary(models, output = "dataframe", vcov = "robust"), pattern = "Unable to extract")
 expect_inherits(modelsummary(models[[2]], output = "dataframe", vcov = stats::vcov), "data.frame")
 
+
+# Issue #605: get_estimates supports vcov shortcuts
+mod <- lm(mpg ~ hp, data = mtcars)
+expect_equivalent(
+  get_estimates(mod, vcov = "stata")$std.error,
+  sqrt(diag(sandwich::vcovHC(mod, "HC1"))))
+expect_equivalent(
+  get_estimates(mod, vcov = "robust")$std.error,
+  sqrt(diag(sandwich::vcovHC(mod, "HC3"))))
+expect_equivalent(
+  get_estimates(mod, vcov = ~cyl)$std.error,
+  sqrt(diag(sandwich::vcovCL(mod, ~cyl))))

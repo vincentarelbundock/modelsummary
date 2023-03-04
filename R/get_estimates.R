@@ -22,7 +22,14 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, co
         return(model[["tidy"]])
     }
 
+    # this is usually done in `modelsummary`, but some users may call
+    # `get_estimates(mod, vcov = "stata")`
+    if (isTRUE(checkmate::check_string(vcov)) || isTRUE(checkmate::check_formula(vcov))) {
+        vcov <- sanitize_vcov(list(vcov), list(model), ...)[[1]]
+    }
+
     args <- append(list(model, "vcov" = vcov), list(...))
+
     vcov <- do.call("get_vcov", args)
 
     # priority: {parameters} messes up {marginaleffects}, whereas VAB controls `tidy()` exactly
@@ -174,6 +181,7 @@ get_estimates_parameters <- function(model,
     args <- c(list("model" = model), dots)
     args[["verbose"]] <- FALSE
 
+
     mi <- tryCatch(
         suppressMessages(suppressWarnings(insight::model_info(model))),
         error = function(e) NULL,
@@ -209,6 +217,7 @@ get_estimates_parameters <- function(model,
         out <- parameters::standardize_names(out, style = "broom")
         return(out)
     }
+
 
     if (is.character(vcov) || is.matrix(vcov)) {
       args[["vcov"]] <- vcov

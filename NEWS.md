@@ -6,6 +6,7 @@
 
 Bug fixes:
 
+* `get_estimates()` supports `vcov` string shortcuts and formulas. Thanks to @ethans-carl for report #605.
 * Quarto and Rmarkdown documents include `situnix` in header automatically for decimal alignement with `align="ddd"` 
 
 # modelsummary 1.3.0
