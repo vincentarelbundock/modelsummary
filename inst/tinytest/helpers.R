@@ -24,6 +24,6 @@ compare_files <- function(x, y) {
 
 
 requiet("tinytest")
-requiet("tinyviztest")
+requiet("tinysnapshot")
 options(width = 10000)
-options("tinyviztest_device" = "svglite")
+options("tinysnapshot_device" = "svglite")

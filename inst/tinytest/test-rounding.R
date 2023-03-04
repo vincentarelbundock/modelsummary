@@ -1,6 +1,6 @@
 source("helpers.R")
-requiet("tinyviztest")
-using("tinyviztest")
+requiet("tinysnapshot")
+using("tinysnapshot")
 
 # rounding cleans up NaN inside \\num
 dat <- mtcars

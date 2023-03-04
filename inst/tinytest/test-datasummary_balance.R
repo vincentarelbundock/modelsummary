@@ -1,7 +1,7 @@
 source("helpers.R")
 requiet("estimatr")
-requiet("tinyviztest")
-using("tinyviztest")
+requiet("tinysnapshot")
+using("tinysnapshot")
 
 # escape group names
 dat <- mtcars

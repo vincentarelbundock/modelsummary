@@ -1,6 +1,6 @@
 source("helpers.R")
-requiet("tinyviztest")
-using("tinyviztest")
+requiet("tinysnapshot")
+using("tinysnapshot")
 
 # markdown d-column snapshot
 mod <- lm(mpg ~ I(hp / 1000) + am + vs + factor(cyl), mtcars)

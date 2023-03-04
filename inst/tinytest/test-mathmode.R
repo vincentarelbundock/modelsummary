@@ -1,6 +1,6 @@
 source("helpers.R")
-requiet("tinyviztest")
-using("tinyviztest")
+requiet("tinysnapshot")
+using("tinysnapshot")
 
 mod <- list(
     lm(mpg ~ hp, mtcars),

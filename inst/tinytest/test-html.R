@@ -1,6 +1,6 @@
 source("helpers.R")
-requiet("tinyviztest")
-using("tinyviztest")
+requiet("tinysnapshot")
+using("tinysnapshot")
 
 # raw html output
 mod <- lm(hp ~ mpg, data = mtcars)

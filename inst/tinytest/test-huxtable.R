@@ -1,6 +1,6 @@
 source("helpers.R")
-requiet("tinyviztest")
-using("tinyviztest")
+requiet("tinysnapshot")
+using("tinysnapshot")
 
 # flextable is not installed on CRAN's M1 machine
 # huxtable is not installed on CRAN's solaris / fedora-clang / fedora-gcc

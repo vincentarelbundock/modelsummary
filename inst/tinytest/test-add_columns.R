@@ -1,6 +1,6 @@
 source("helpers.R")
-requiet("tinyviztest")
-using("tinyviztest")
+requiet("tinysnapshot")
+using("tinysnapshot")
 # results is the same, but order of `str()` components is swapped
 if (getRversion() < "4.0.0") exit_file("old R")
 

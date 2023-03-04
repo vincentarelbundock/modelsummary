@@ -1,6 +1,6 @@
 source("helpers.R")
-requiet("tinyviztest")
-using("tinyviztest")
+requiet("tinysnapshot")
+using("tinysnapshot")
 
 # : in interactions become x
 mod <- lm(am ~ drat * mpg * vs, mtcars)

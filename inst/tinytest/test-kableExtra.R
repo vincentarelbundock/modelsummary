@@ -1,6 +1,6 @@
 source("helpers.R")
-requiet("tinyviztest")
-using("tinyviztest")
+requiet("tinysnapshot")
+using("tinysnapshot")
 
 models <- list()
 models[["OLS 1"]] <- lm(hp ~ mpg + wt, mtcars)
