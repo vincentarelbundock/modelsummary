@@ -109,9 +109,7 @@ sanitize_vcov <- function(vcov, models, ...) {
         vcov[[i]] <- "HC1"
       } else if (identical(vcov[[i]], "HC3")) {
         insight::check_if_installed("sandwich")
-        vcov[[i]] <- tryCatch(
-          sandwich::vcovHC(models[[j]]),
-          error = "HC1")
+        vcov[[i]] <- tryCatch(sandwich::vcovHC(models[[j]]), error = function(e) "HC1")
         names(vcov)[i] <- "HC3"
       } else if (isTRUE(checkmate::check_formula(vcov[[i]]))) {
         lab <- paste("by:", gsub("\\+", "\\&", gsub(":", "\\ & ", as.character(vcov[[i]])[2])))
