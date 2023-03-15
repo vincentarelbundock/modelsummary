@@ -1,6 +1,7 @@
 source("helpers.R")
 requiet("estimatr")
 requiet("flextable")
+if (ON_CI) exit_file("CI")
 
 mod <- list(
 lm(hp ~ mpg, mtcars),
