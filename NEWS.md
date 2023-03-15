@@ -3,6 +3,7 @@
 * `shape = "rcollapse"` and `shape = "rbind"`
 * `glance_custom()` can drop GOF by assigning `NA`: https://stackoverflow.com/questions/75215355/assigning-different-coefficient-names-and-goodness-of-fit-statistics-to-differen
 * When a `statistic` is not available, `modelsummary` prints an empty cell instead of returning an error.
+* GLM uses Wald CIs instead of Profile. This can be changed by passing a `ci_method` argument to `parameters::parameters` via `...`
 
 Bug fixes:
 
