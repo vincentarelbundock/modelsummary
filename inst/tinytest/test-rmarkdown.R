@@ -68,3 +68,6 @@ rmarkdown::render(rmd_file, output_file = docx_file, quiet = TRUE)
 # rmarkdown::render(rmd_file, output_file = docx_file, quiet = TRUE)
 
 unlink(rmd_file)
+unlink(pdf_file)
+unlink(docx_file)
+unlink(html_file)

@@ -181,15 +181,6 @@ get_estimates_parameters <- function(model,
     args <- c(list("model" = model), dots)
     args[["verbose"]] <- FALSE
 
-    if (!"ci_method" %in% names(args)) {
-        # "profile" is default. Can be better but is often very slow.
-        if (inherits(model, "glm")) {
-            args[["ci_method"]] <- "wald"
-        } else {
-            ci_method <- NULL
-        }
-    }
-
     mi <- tryCatch(
         suppressMessages(suppressWarnings(insight::model_info(model))),
         error = function(e) NULL,
