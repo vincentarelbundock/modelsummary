@@ -1,0 +1,24 @@
+---
+format: pdf
+---
+
+
+@tbl-quarto shows a simple model using the built-in Quarto cross-referencing system.
+
+```{r}
+#| label: tbl-quarto
+#| tbl-cap: "Blah blah"
+library(modelsummary)
+library(plm)
+
+data("Grunfeld", package = "plm")
+mod <- plm(inv ~ value + capital, data = Grunfeld, model = "within", effect = "twoways")
+
+modelsummary(mod, align = "ld")
+```
+
+Table \ref{tab:latex} shows a simple model using the LaTeX cross-referencing system.
+
+```{r}
+modelsummary(mod, align = "ld", caption = "Blah blah \\label{tab:latex}")
+```
