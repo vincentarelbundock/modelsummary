@@ -36,6 +36,11 @@ factory_kableExtra <- function(tab,
   # this will never be fixed upstream because of backward compatibility
   title <- escape_string(title)
 
+  # don't escape \\label{} calls
+  if (isTRUE(kable_format == "latex")) {
+    title <- sub("\\\\textbackslash\\{\\}label\\\\\\{(.*)\\\\}", "\\\\label{\\1}", title)
+  }
+
   arguments <- c(
     list(...),
     "caption"   = title,

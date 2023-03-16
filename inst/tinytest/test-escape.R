@@ -135,3 +135,13 @@ dat$cyl_new <- dat$cyl
 mod <- feols(mpg ~ hp | cyl_new, data = dat)
 tab <- modelsummary(mod, "latex")
 expect_true(grepl("cyl\\_new", tab, fixed = TRUE))
+
+
+
+# Issue #594: escape LaTeX label
+if (!requiet("tinysnapshot")) exit_file("tinysnapshot")
+using("tinysnapshot")
+mod <- lm(mpg ~ hp, mtcars)
+expect_snapshot_print(
+    modelsummary(mod, "latex", title = "Blah_blah \\label{tab:blah-blah}"),
+    "test-escape_label_title")
