@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelsummary</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.0.9008</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.0.9010</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,6 +65,9 @@
 <code><a href="../reference/glance_custom.html">glance_custom()</a></code> can drop GOF by assigning <code>NA</code>: <a href="https://stackoverflow.com/questions/75215355/assigning-different-coefficient-names-and-goodness-of-fit-statistics-to-differen" class="external-link uri">https://stackoverflow.com/questions/75215355/assigning-different-coefficient-names-and-goodness-of-fit-statistics-to-differen</a>
 </li>
 <li>When a <code>statistic</code> is not available, <code>modelsummary</code> prints an empty cell instead of returning an error.</li>
+<li>“\label{tab:something}” works in <code>title</code> even when <code>escape=TRUE</code>
+</li>
+<li>Multiple <code>fixest_multi</code> objects supported.</li>
 </ul><p>Bug fixes:</p>
 <ul><li>
 <code><a href="../reference/get_estimates.html">get_estimates()</a></code> supports <code>vcov</code> string shortcuts and formulas. Thanks to <a href="https://github.com/ethans-carl" class="external-link">@ethans-carl</a> for report <a href="https://github.com/vincentarelbundock/modelsummary/issues/605" class="external-link">#605</a>.</li>
@@ -75,11 +78,13 @@
 <h2 class="pkg-version" data-toc-text="1.3.0" id="modelsummary-130">modelsummary 1.3.0<a class="anchor" aria-label="anchor" href="#modelsummary-130"></a></h2><p class="text-muted">CRAN release: 2023-01-05</p>
 <p>Breaking change:</p>
 <ul><li>The default column label style in <code><a href="../reference/modelsummary.html">modelsummary()</a></code> has changed from “Model 1” to “(1)”. The benefits are: labels are no longer in English by default; use less horizontal space; eliminate the “Model” redundancy. Unfortunately, this could break code in some edge cases where users rely on column names to manipulate tables. The old behavior can be restored by calling: <code>options(modelsummary_model_labels="model")</code>
-</li></ul><p>New features:</p>
+</li>
+</ul><p>New features:</p>
 <ul><li>
 <code>shape="rbind"</code> to stack multiple regression tables and create “panels” with labelled groups of models.</li>
 <li>
-<code>fmt</code>: new helper functions for different formatting styles<ul><li>
+<code>fmt</code>: new helper functions for different formatting styles
+<ul><li>
 <code>fmt = fmt_decimal(2)</code>: decimal digits</li>
 <li>
 <code>fmt = fmt_decimal(digits = 2, pdigits = 4)</code>: decimal digits with p value-specific setting</li>
@@ -96,19 +101,22 @@
 <li>
 <code>fmt = fmt_identity()</code>: raw values</li>
 </ul></li>
-<li>New styles for default column labels in <code>modelsummary</code>, such as Roman Numerals or letters in parentheses.<ul><li>Set the style with a global option: <code>options(modelsummary_model_labels = "roman")</code>
+<li>New styles for default column labels in <code>modelsummary</code>, such as Roman Numerals or letters in parentheses.
+<ul><li>Set the style with a global option: <code>options(modelsummary_model_labels = "roman")</code>
 </li>
-<li>Supported styles: “model”, “arabic”, “letters”, “roman”, “(arabic)”, “(letters)”, “(roman)”"</li>
+<li>Supported styles: “model”, “arabic”, “letters”, “roman”, “(arabic)”, “(letters)”, “(roman)””</li>
 </ul></li>
 <li>
 <code>modelplot(draw = FALSE)</code> now returns a <code>p.value</code> column. This allows conditional aesthetics (see the <code>modelplot</code> vignette).</li>
 <li>Better integration with the <code>marginaleffects</code> package.</li>
 </ul><p>Bugs:</p>
-<ul><li>Some <code>fixest</code> models returns useless “group.x” and “group.y” columns. Isse <a href="https://github.com/vincentarelbundock/modelsummary/issues/591" class="external-link">#591</a>. Thanks to Adam Altmejd for the report.</li></ul></div>
+<ul><li>Some <code>fixest</code> models returns useless “group.x” and “group.y” columns. Isse <a href="https://github.com/vincentarelbundock/modelsummary/issues/591" class="external-link">#591</a>. Thanks to Adam Altmejd for the report.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0" id="modelsummary-120">modelsummary 1.2.0<a class="anchor" aria-label="anchor" href="#modelsummary-120"></a></h2><p class="text-muted">CRAN release: 2022-11-26</p>
 <p>Breaking change:</p>
-<ul><li>With the <code>shape</code> and <code>output="dataframe"</code> arguments, there always used to be a <code>group</code> column. Now, this column has the same name as the variable in the <code>shape</code> formula (“response”, “component”, etc.).</li></ul><p>New features:</p>
+<ul><li>With the <code>shape</code> and <code>output="dataframe"</code> arguments, there always used to be a <code>group</code> column. Now, this column has the same name as the variable in the <code>shape</code> formula (“response”, “component”, etc.).</li>
+</ul><p>New features:</p>
 <ul><li>
 <code>shape</code> can include multiple groups.</li>
 <li>
@@ -119,7 +127,8 @@
 <code>datasummary_skim</code>: Increased maximum number of variables to 250.</li>
 <li>Quarto notebooks compile to Word and Markdown automatically.</li>
 </ul><p>Bug fixes:</p>
-<ul><li>Order of notes preserved in some output format (Issue <a href="https://github.com/vincentarelbundock/modelsummary/issues/577" class="external-link">#577</a>)</li></ul></div>
+<ul><li>Order of notes preserved in some output format (Issue <a href="https://github.com/vincentarelbundock/modelsummary/issues/577" class="external-link">#577</a>)</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.0" id="modelsummary-110">modelsummary 1.1.0<a class="anchor" aria-label="anchor" href="#modelsummary-110"></a></h2><p class="text-muted">CRAN release: 2022-10-20</p>
 <p>Breaking change:</p>
@@ -148,7 +157,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.2" id="modelsummary-102">modelsummary 1.0.2<a class="anchor" aria-label="anchor" href="#modelsummary-102"></a></h2><p class="text-muted">CRAN release: 2022-07-17</p>
-<ul><li>Minor release to fix CRAN failure</li></ul></div>
+<ul><li>Minor release to fix CRAN failure</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.1" id="modelsummary-101">modelsummary 1.0.1<a class="anchor" aria-label="anchor" href="#modelsummary-101"></a></h2><p class="text-muted">CRAN release: 2022-07-13</p>
 <ul><li>
@@ -185,7 +195,8 @@
 <li>
 <code>modelsummary</code> now uses the <code>easystats</code> packages (<code>performance</code> and <code>parameters</code>) to extract estimates and goodness-of-fit statistics instead of <code>broom</code>. This can be reverted by setting a global option: <code>options(modelsummary_get="broom")</code>. This change aims to (1) increase consistency across models, (2) improve the developers’ ability to push bug fixes upstream when necessary, and (3) improve support for mixed effects, bayesian, and GAM models. The two main drawbacks are: (a) The set of printed statistics may be slightly different from previous versions of <code>modelsummary</code> (b) The group identifiers used in the <code>shape</code> formula will also be different for certain models (e.g., in <code><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">nnet::multinom</a></code>, <code>y.level</code> becomes <code>response</code>).</li>
 </ul><p>New features:</p>
-<ul><li>The <code>shape</code> argument accepts a formula and can reshape information in myriad ways. Deprecates the <code>group</code> argument. Examples:<ul><li>
+<ul><li>The <code>shape</code> argument accepts a formula and can reshape information in myriad ways. Deprecates the <code>group</code> argument. Examples:
+<ul><li>
 <code>~ statistic</code>: statistics are shown horizontally in distinct columns.</li>
 <li>
 <code>model ~ term</code>: models in rows and terms in columns.</li>
@@ -195,8 +206,12 @@
 <li>
 <code>y.level ~ model</code>: partial match is the same as the previous formula</li>
 </ul></li>
-<li>Format distinct statistics differently by passing a named list to <code>fmt</code>:<ul><li><code>modelsummary(mod, fmt = list(estimate = 2, std.error = 1, rmse = 4))</code></li></ul></li>
-<li>Use <code>glue</code> to apply functions to numeric values by setting <code>fmt = NULL</code>. Example:<ul><li><code>modelsummary(model, fmt = NULL, estimate = "{log(estimate)}")</code></li></ul></li>
+<li>Format distinct statistics differently by passing a named list to <code>fmt</code>:
+<ul><li><code>modelsummary(mod, fmt = list(estimate = 2, std.error = 1, rmse = 4))</code></li>
+</ul></li>
+<li>Use <code>glue</code> to apply functions to numeric values by setting <code>fmt = NULL</code>. Example:
+<ul><li><code>modelsummary(model, fmt = NULL, estimate = "{log(estimate)}")</code></li>
+</ul></li>
 <li>Update for breaking changes after fixest 0.10.4</li>
 </ul><p>Bug fixes:</p>
 <ul><li>
@@ -220,7 +235,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.6" id="modelsummary-096">modelsummary 0.9.6<a class="anchor" aria-label="anchor" href="#modelsummary-096"></a></h2><p class="text-muted">CRAN release: 2022-02-25</p>
 <p><code>datasummary_balance</code>:</p>
-<ul><li>Accepts <code>~ 1</code> as a formula to summarize all data.</li></ul><p>Misc:</p>
+<ul><li>Accepts <code>~ 1</code> as a formula to summarize all data.</li>
+</ul><p>Misc:</p>
 <ul><li>documentation improvements</li>
 <li>RMSE included by default in models of class <code>lm</code>
 </li>
@@ -238,21 +254,24 @@
 <ul><li>Histograms now work in Jupyter</li>
 <li>Bugfix: harmless error message is no longer printed</li>
 </ul><p><code>kableExtra</code> factory:</p>
-<ul><li>The <code>col.names</code> argument can now be passed to <code><a href="https://rdrr.io/pkg/kableExtra/man/kbl.html" class="external-link">kableExtra::kbl</a></code> through the … ellipsis.</li></ul><p>Misc:</p>
+<ul><li>The <code>col.names</code> argument can now be passed to <code><a href="https://rdrr.io/pkg/kableExtra/man/kbl.html" class="external-link">kableExtra::kbl</a></code> through the … ellipsis.</li>
+</ul><p>Misc:</p>
 <ul><li>Many small improvements to the vignettes and docs</li>
 <li>
 <code>output = "github_document"</code> is now supported</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.4" id="modelsummary-094">modelsummary 0.9.4<a class="anchor" aria-label="anchor" href="#modelsummary-094"></a></h2><p class="text-muted">CRAN release: 2021-11-05</p>
-<ul><li>Bug fix: siunitx and rounding NA</li></ul></div>
+<ul><li>Bug fix: siunitx and rounding NA</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.3" id="modelsummary-093">modelsummary 0.9.3<a class="anchor" aria-label="anchor" href="#modelsummary-093"></a></h2><p class="text-muted">CRAN release: 2021-11-02</p>
 <p><code>modelsummary</code>:</p>
 <ul><li>F statistic takes into account <code>vcov</code> argument</li>
 <li>Support group = group ~ model + term</li>
 </ul><p><code>datasummary_balance</code>:</p>
-<ul><li>Weighted means and standard deviations are now supported. Counts and percentages are not, but raise a warning.</li></ul><p>Misc:</p>
+<ul><li>Weighted means and standard deviations are now supported. Counts and percentages are not, but raise a warning.</li>
+</ul><p>Misc:</p>
 <ul><li>Bugfix: rounding in LaTeX w/ siunitx and NaN entries.</li>
 <li>output=‘jupyter’ no longer prints an extraneous TRUE to the notebook</li>
 </ul></div>
@@ -264,7 +283,8 @@
 <li>Consistent display of clustered SEs (<a href="https://github.com/vincentarelbundock/modelsummary/issues/356" class="external-link">#356</a>, <a href="https://github.com/vincentarelbundock/modelsummary/issues/363" class="external-link">#363</a> and <a href="https://github.com/vincentarelbundock/modelsummary/issues/366" class="external-link">#366</a> by <a href="https://github.com/grantmcdermott" class="external-link">@grantmcdermott</a>)</li>
 </ul><p><code>datasummary_correlation</code>:</p>
 <ul><li>
-<code>add_rows</code> and <code>add_columns</code> arguments are now available here.</li></ul><p>Misc:</p>
+<code>add_rows</code> and <code>add_columns</code> arguments are now available here.</li>
+</ul><p>Misc:</p>
 <ul><li>Global options for output factories are renamed: <code>modelsummary_factory_default</code>, <code>modelsummary_factory_html</code>, etc.</li>
 <li>Hot fix for change in R-devel behavior or <code>intersect</code>
 </li>
@@ -277,7 +297,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.1" id="modelsummary-091">modelsummary 0.9.1<a class="anchor" aria-label="anchor" href="#modelsummary-091"></a></h2><p class="text-muted">CRAN release: 2021-08-12</p>
 <p>Breaking change:</p>
-<ul><li>Support for <code>dcolumn</code> for dot-aligned columns is deprecated. Use “d” in the <code>align</code> argument instead.</li></ul><p>Other changes:</p>
+<ul><li>Support for <code>dcolumn</code> for dot-aligned columns is deprecated. Use “d” in the <code>align</code> argument instead.</li>
+</ul><p>Other changes:</p>
 <ul><li>LaTeX output: Numeric entries are wrapped in the <code>\num{}</code> function from the <code>siunitx</code> package by default. This produces much nicer formatting. This can be disabled with a global option. See <code><a href="../reference/modelsummary.html">?modelsummary</a></code>
 </li>
 <li>The <code>align</code> argument accepts a “d” column for dot-alignment using the <code>siunitx</code> LaTeX package: <code>align="ldd"</code>.</li>
@@ -289,14 +310,18 @@
 </li>
 </ul><p><code>modelsummary</code>:</p>
 <ul><li>
-<code>group</code>: The order of terms in the formula determines the order of rows/columns</li></ul><p><code>modelsummary_wide</code>:</p>
+<code>group</code>: The order of terms in the formula determines the order of rows/columns</li>
+</ul><p><code>modelsummary_wide</code>:</p>
 <ul><li>Note: This function will eventually be deprecated</li>
 <li>Bugfix with statistic=NULL.</li>
 </ul><p><code>modelplot</code>:</p>
-<ul><li>Preserves order of models in the user-supplied list</li></ul><p><code>datasummary_crosstab</code>:</p>
+<ul><li>Preserves order of models in the user-supplied list</li>
+</ul><p><code>datasummary_crosstab</code>:</p>
 <ul><li>
-<code>statistic=NULL</code> produces a very basic crosstab</li></ul><p><code>datasummary_crosstab</code>:</p>
-<ul><li>Default alignment “lrrrrr” consistent with other datasummary_* functions</li></ul></div>
+<code>statistic=NULL</code> produces a very basic crosstab</li>
+</ul><p><code>datasummary_crosstab</code>:</p>
+<ul><li>Default alignment “lrrrrr” consistent with other datasummary_* functions</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.8.1" id="modelsummary-081">modelsummary 0.8.1<a class="anchor" aria-label="anchor" href="#modelsummary-081"></a></h2><p class="text-muted">CRAN release: 2021-06-17</p>
 <p><code>modelsummary</code>:</p>
@@ -309,7 +334,8 @@
 <code>group = model ~ term + group</code> is now supported.</li>
 </ul><p><code>datasummary_skim</code>:</p>
 <ul><li>
-<code>datasummary_skim("categorical")</code> keeps <code>NA</code> by default. Users can convert variables to factors before calling <code>datasummary_skim</code> to exclude <code>NA</code>.</li></ul><p>Other:</p>
+<code>datasummary_skim("categorical")</code> keeps <code>NA</code> by default. Users can convert variables to factors before calling <code>datasummary_skim</code> to exclude <code>NA</code>.</li>
+</ul><p>Other:</p>
 <ul><li>Improved warnings for bad calls: <code>modelsummary(model1, model2)</code>
 </li>
 <li>
@@ -319,11 +345,15 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.8.0" id="modelsummary-080">modelsummary 0.8.0<a class="anchor" aria-label="anchor" href="#modelsummary-080"></a></h2><p class="text-muted">CRAN release: 2021-05-21</p>
 <p>Breaking change:</p>
-<ul><li>The default significance markers <code>stars=TRUE</code> have been updated to be consistent with the default output from base R (e.g., in summary.lm). The new significance thresholds are: “+” p &lt; 0.1, “<em>" p &lt; 0.05, "<strong>" p &lt; 0.01, "</strong></em>” p &lt; 0.001</li></ul><p><code>datasummary_crosstab</code>:</p>
-<ul><li>New function to produce cross-tabulations</li></ul><p><code>datasummary</code>:</p>
+<ul><li>The default significance markers <code>stars=TRUE</code> have been updated to be consistent with the default output from base R (e.g., in summary.lm). The new significance thresholds are: “+” p &lt; 0.1, “<em>” p &lt; 0.05, ”<strong>” p &lt; 0.01, ”</strong></em>” p &lt; 0.001</li>
+</ul><p><code>datasummary_crosstab</code>:</p>
+<ul><li>New function to produce cross-tabulations</li>
+</ul><p><code>datasummary</code>:</p>
 <ul><li>
-<code>N</code> is smart enough to return either the number of elements in a subset or the number of non-missing observations in a variable</li></ul><p><code>datasummary_balance</code>:</p>
-<ul><li>Keeps <code>NA</code>s in factor variables by default. Users can convert their variables with the <code><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor()</a></code> function to omit <code>NA</code>s automatically.</li></ul><p><code>modelsummary</code>:</p>
+<code>N</code> is smart enough to return either the number of elements in a subset or the number of non-missing observations in a variable</li>
+</ul><p><code>datasummary_balance</code>:</p>
+<ul><li>Keeps <code>NA</code>s in factor variables by default. Users can convert their variables with the <code><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor()</a></code> function to omit <code>NA</code>s automatically.</li>
+</ul><p><code>modelsummary</code>:</p>
 <ul><li>themes can be set using global options (experimental)</li>
 <li>new vcov options: “bootstrap”, “HAC”, “NeweyWest”, “Andrews”, “panel-corrected”, “weave”, “outer-product”</li>
 <li>A valid <code>get_gof</code> (<code>glance</code>) is now optional.</li>
@@ -369,7 +399,8 @@
 <code>datasummary_correlation</code>’s <code>method</code> argument accepts functions and “pearspear” (thanks to <a href="https://github.com/joachim-gassen" class="external-link">@joachim-gassen</a>)</li>
 </ul><p><code>datasummary</code>:</p>
 <ul><li>
-<code>datasummary</code> functions and <code>rounding</code> accept …, big.mark, etc.</li></ul><p><code>datasummary_skim</code>:</p>
+<code>datasummary</code> functions and <code>rounding</code> accept …, big.mark, etc.</li>
+</ul><p><code>datasummary_skim</code>:</p>
 <ul><li>now works with haven_labeled numeric</li>
 <li>faster tables with bayesian models.</li>
 </ul><p>Bug fixes and lints</p>
@@ -445,18 +476,20 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.1" id="modelsummary-061">modelsummary 0.6.1<a class="anchor" aria-label="anchor" href="#modelsummary-061"></a></h2><p class="text-muted">CRAN release: 2020-09-04</p>
-<ul><li>bug fixes</li></ul></div>
+<ul><li>bug fixes</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.0" id="modelsummary-060">modelsummary 0.6.0<a class="anchor" aria-label="anchor" href="#modelsummary-060"></a></h2><p class="text-muted">CRAN release: 2020-09-02</p>
 <ul><li>default HTML output factory is now kableExtra</li>
-<li>interaction “:” gsubbed by “”</li>
+<li>interaction “:” gsubbed by “0d7”</li>
 <li>dependencies: removed 1 depends, 3 imports, and 3 suggests</li>
 <li>word_document knitr works out-of-the-box</li>
 <li>bug fixes</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.1" id="modelsummary-051">modelsummary 0.5.1<a class="anchor" aria-label="anchor" href="#modelsummary-051"></a></h2><p class="text-muted">CRAN release: 2020-08-02</p>
-<ul><li>glance_custom.fixest ships with modelsummary</li></ul></div>
+<ul><li>glance_custom.fixest ships with modelsummary</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="modelsummary-050">modelsummary 0.5.0<a class="anchor" aria-label="anchor" href="#modelsummary-050"></a></h2><p class="text-muted">CRAN release: 2020-07-05</p>
 <ul><li>datasummary</li>
@@ -524,7 +557,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="modelsummary-010">modelsummary 0.1.0<a class="anchor" aria-label="anchor" href="#modelsummary-010"></a></h2><p class="text-muted">CRAN release: 2019-07-15</p>
-<ul><li>Initial release (gt still needs to be installed from github)</li></ul></div>
+<ul><li>Initial release (gt still needs to be installed from github)</li>
+</ul></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
