@@ -93,3 +93,24 @@ cm <- c(
   "hp:cyl::6" = "HP x Cylinders 6")
 tab <- modelsummary(mod, coef_map = cm, output = "dataframe")
 expect_true("HP x Cylinders 4" %in% tab$term)
+
+
+# Issue #608: multiple fixest_multi
+base <- iris
+names(base) <- c("y1", "y2", "y3", "x1", "species")
+mod <- list(
+  "A" = feols(c(y1,y2) ~ x1, base),
+  "B" = feols(c(y1,y2) ~ x1, base))
+tab <- modelsummary(mod, gof_map = c("r.squared", "nobs"), output = "data.frame")
+expect_equivalent(dim(tab), c(6, 7))
+expect_true("A lhs: y1" %in% colnames(tab))
+
+# model names
+if (!requiet("tinysnapshot")) exit_file("tinysnapshot")
+using("tinysnapshot")
+mod <- list(
+  "A" = feols(y1 ~ x1, base),
+  "K" = feols(y1 ~ x1, base))
+expect_snapshot_print(
+  modelsummary(mod, output = "markdown"),
+  "test-pkg-fixest_model_names_single")
