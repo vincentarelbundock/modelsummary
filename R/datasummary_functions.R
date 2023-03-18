@@ -1,5 +1,6 @@
 #' datasummary statistic shortcut
 #'
+#' @keywords internal
 #' @export
 #' @param x variable to summarize
 #' @param fmt passed to the `modelsummary:::rounding` function
@@ -20,6 +21,7 @@ Mean <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 
 
 #' datasummary statistic shortcut
+#' @keywords internal
 #' @inheritParams Mean
 #' @export
 #' @examples
@@ -38,6 +40,7 @@ N <- function(x) {
 
 
 #' datasummary statistic shortcut
+#' @keywords internal
 #' @inheritParams Mean
 #' @export
 #' @examples
@@ -56,6 +59,7 @@ Median <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @keywords internal
 #' @inheritParams Mean
 #' @export
 #' @examples
@@ -72,6 +76,7 @@ Min <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 
 
 #' datasummary statistic shortcut
+#' @keywords internal
 #' @inheritParams Mean
 #' @export
 #' @examples
@@ -87,6 +92,7 @@ Max <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @keywords internal
 #' @inheritParams Mean
 #' @export
 #' @examples
@@ -102,6 +108,7 @@ SD <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @keywords internal
 #' @inheritParams Mean
 #' @export
 #' @examples
@@ -117,12 +124,14 @@ Var <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @keywords internal
 #' @inheritParams Mean
 #' @export
 Ncol <- function(x, ...)
   paste0('(N = ', length(x), ')')
 
 #' datasummary statistic shortcut
+#' @keywords internal
 #' @inheritParams Mean
 #' @param y denominator variable
 #' @export
@@ -139,6 +148,7 @@ NPercent <- function(x, y) {
 
 
 #' datasummary statistic shortcut
+#' @keywords internal
 #' @inheritParams Mean
 #' @export
 #' @examples
@@ -149,6 +159,7 @@ NUnique <- function(x, ...) sprintf("%.0f", length(unique(x)))
 
 
 #' datasummary statistic shortcut
+#' @keywords internal
 #' @inheritParams Mean
 #' @export
 #' @examples
@@ -164,6 +175,7 @@ P0 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @keywords internal
 #' @inheritParams Mean
 #' @export
 #' @examples
@@ -179,6 +191,7 @@ P25 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @keywords internal
 #' @inheritParams Mean
 #' @export
 #' @examples
@@ -194,6 +207,7 @@ P50 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @keywords internal
 #' @inheritParams Mean
 #' @export
 #' @examples
@@ -209,6 +223,7 @@ P75 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @keywords internal
 #' @inheritParams Mean
 #' @export
 #' @examples
@@ -224,6 +239,7 @@ P100 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 }
 
 #' datasummary statistic shortcut
+#' @keywords internal
 #' @inheritParams Mean
 #' @export
 PercentMissing <- function(x) {
@@ -239,6 +255,7 @@ PercentMissing <- function(x) {
 #' vs. mac, etc.). We recommend you use the `kableExtra::spec_hist` function
 #' instead.
 #'
+#' @keywords internal
 #' @inheritParams Mean
 #' @param bins number of histogram bars
 #' @export

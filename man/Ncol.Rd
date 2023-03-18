@@ -14,3 +14,4 @@ Ncol(x, ...)
 \description{
 datasummary statistic shortcut
 }
+\keyword{internal}

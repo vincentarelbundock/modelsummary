@@ -17,3 +17,4 @@ datasummary statistic shortcut
 datasummary(Factor(cyl) ~ N, data = mtcars)
 }
 }
+\keyword{internal}

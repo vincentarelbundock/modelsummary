@@ -19,3 +19,4 @@ output is highly dependent on the platform (typeface, output type, windows
 vs. mac, etc.). We recommend you use the \code{kableExtra::spec_hist} function
 instead.
 }
+\keyword{internal}

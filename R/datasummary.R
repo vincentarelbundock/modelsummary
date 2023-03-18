@@ -1,12 +1,15 @@
 #' Summary tables using 2-sided formulae: crosstabs, frequencies, table
 #' 1s and more.
 #'
+#' @description
 #' `datasummary` can use any summary function which produces one numeric or
 #' character value per variable. The examples section of this documentation
-#' shows how to define custom summary functions. The package also ships with
-#' several shortcut summary functions: Min, Max, Mean, Median, Var, SD,
-#' NPercent, NUnique, Ncol, P0, P25, P50, P75, P100. See the Details and
-#' Examples sections below, and the vignettes on the `modelsummary` website: 
+#' shows how to define custom summary functions.
+#' 
+#' `modelsummary` also supplies several shortcut summary functions which can be used in `datasummary()` formulas: Min, Max, Mean, Median, Var, SD, NPercent, NUnique, Ncol, P0, P25, P50, P75, P100. 
+#' 
+#' See the Details and Examples sections below, and the vignettes on the `modelsummary` website: 
+#'
 #' * https://vincentarelbundock.github.io/modelsummary/ 
 #' * https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html
 #'

@@ -19,3 +19,4 @@ datasummary statistic shortcut
 datasummary(cyl + hp ~ NUnique, data = mtcars)
 }
 }
+\keyword{internal}

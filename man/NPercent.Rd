@@ -14,3 +14,4 @@ NPercent(x, y)
 \description{
 datasummary statistic shortcut
 }
+\keyword{internal}

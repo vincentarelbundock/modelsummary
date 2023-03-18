@@ -26,3 +26,4 @@ datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
             data = mtcars)
 }
 }
+\keyword{internal}
