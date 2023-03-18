@@ -166,19 +166,19 @@ sanity_coef <- function(coef_map, coef_rename, coef_omit) {
 sanity_factory <- function(factory_dict) {
   check_option <- function(output_type, valid) {
     if (!factory_dict[output_type] %in% valid) {
-      msg <- sprintf("`modelsummary` cannot write a table of type '%s' using the '%s' package. You must use one of the following options: %s. Consider setting a global option such as: option(modelsummary_%s=%s)",
+      msg <- sprintf("`modelsummary` cannot write a table of type '%s' using the '%s' package. You must use one of the following as a global option: %s. Consider setting a global option such as: options(modelsummary_factory_%s='%s')",
         output_type,
         factory_dict[output_type],
         paste(valid, collapse = ', '),
-        valid[1],
-        output_type)
+        output_type,
+        valid[1])
       stop(msg)
     }
   }
   check_option('html', c('gt', 'kableExtra', 'flextable', 'huxtable'))
   check_option('rtf', c('gt', 'huxtable'))
   check_option('latex', c('gt', 'kableExtra', 'huxtable'))
-  check_option('markdown', c('kableExtra'))
+  check_option('markdown', c('kableExtra', 'modelsummary_markdown'))
   check_option('word', c('flextable', 'huxtable'))
   check_option('powerpoint', c('flextable', 'huxtable'))
   check_option('png', c('gt', 'flextable', 'kableExtra'))

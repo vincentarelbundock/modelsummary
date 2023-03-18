@@ -38,11 +38,9 @@ sanitize_output <- function(output) {
     }
   }
 
-
-
   extension_dict <- c(
     "csv"  = "dataframe",
-    "xlsx"  = "dataframe",
+    "xlsx" = "dataframe",
     "md"   = "markdown",
     "Rmd"  = "markdown",
     "txt"  = "markdown",
@@ -58,22 +56,6 @@ sanitize_output <- function(output) {
     "htm"  = "html",
     "html" = "html")
 
-
-  ## deprecated global options
-  bad <- c("modelsummary_default", "modelsummary_html", "modelsummary_latex",
-           "modelsummary_markdown", "modelsummary_jpg", "modelsummary_png",
-           "modelsummary_rtf", "modelsummary_word", "modelsummary_powerpoint")
-  for (a in bad) {
-      b <- gsub("modelsummary_", "modelsummary_factory_", a)
-      tmp <- getOption(a, default = NULL)
-      if (!is.null(tmp)) {
-          options(b = tmp)
-          msg <- sprintf('The "%s" global option is deprecated. Please use "%s" instead.', a, b)
-          warn_once(msg, id = "deprecated_global_option")
-      }
-  }
-
-
   factory_dict <- c(
     "dataframe"      = "dataframe",
     "data.frame"     = "dataframe",
@@ -82,9 +64,9 @@ sanitize_output <- function(output) {
     "huxtable"       = "huxtable",
     "DT"             = "DT",
     "kableExtra"     = "kableExtra",
-    "markdown"       = "kableExtra",
     "latex_tabular"  = "kableExtra",
     "modelsummary_list" = "modelsummary_list",
+    "markdown"       = getOption("modelsummary_factory_markdown", default   = "modelsummary_markdown"),
     "jupyter"        = getOption("modelsummary_factory_html", default       = "kableExtra"),
     "latex"          = getOption("modelsummary_factory_latex", default      = "kableExtra"),
     "html"           = getOption("modelsummary_factory_html", default       = "kableExtra"),
@@ -102,17 +84,27 @@ sanitize_output <- function(output) {
 
   # defaults
   if (output == "default") {
-      output <- getOption("modelsummary_factory_default", default = "kableExtra")
+      output <- getOption("modelsummary_factory_default", default = NULL)
+      if (is.null(output)) {
+        output <- config_get("output")
+      }
+      if (is.null(output)) {
+        if (isTRUE(insight::check_if_installed("kableExtra"))) {
+          output <- "kableExtra"
+        } else if (isTRUE(insight::check_if_installed("gt"))) {
+          output <- "gt"
+        } else if (isTRUE(insight::check_if_installed("flextable"))) {
+          output <- "flextable"
+        } else if (isTRUE(insight::check_if_installed("huxtable"))) {
+          output <- "huxtable"
+        } else if (isTRUE(insight::check_if_installed("DT"))) {
+          output <- "DT"
+        } else {
+          output <- "markdown"
+        }
+      }
   } else if (output == "jupyter") {
       output <- "html"
-  }
-
-  # kableExtra is the only factory that I use for markdown
-  if (output == 'markdown') {
-    settings_set("output_factory", "kableExtra")
-    settings_set("output_format", "markdown")
-    settings_set("output_file", NULL)
-    return(invisible(NULL))
   }
 
   # rename otherwise an extension is wrongly detected

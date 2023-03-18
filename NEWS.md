@@ -1,5 +1,8 @@
 # modelsummary 1.3.0.9001
 
+* Built-in support for markdown tables.
+* Package no longer depends on `kableExtra`. Recommends an additional install for other formats.
+* Persistent configuration of default output format: `modelsummary_config(output = "markdown")`
 * `shape = "rcollapse"` and `shape = "rbind"`
 * `glance_custom()` can drop GOF by assigning `NA`: https://stackoverflow.com/questions/75215355/assigning-different-coefficient-names-and-goodness-of-fit-statistics-to-differen
 * When a `statistic` is not available, `modelsummary` prints an empty cell instead of returning an error.

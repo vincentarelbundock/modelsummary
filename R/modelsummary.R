@@ -42,9 +42,11 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @param output filename or object type (character string)
 #' * Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg.
 #' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the `modelsummary` function.
+#' * The "default" output format can be set to "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"
+#'   - Session-specific configuration: `options("modelsummary_factory_default" = "gt")`
+#'   - Persistent configuration: `modelsummary_config(output = "markdown")`
 #' * Warning: Users should not supply a file name to the `output` argument if they intend to customize the table with external packages. See the 'Details' section.
 #' * LaTeX compilation requires the `booktabs` and `siunitx` packages, but `siunitx` can be disabled or replaced with global options. See the 'Details' section.
-#' * The default output formats and table-making packages can be modified with global options. See the 'Details' section.
 #' @param fmt how to format numeric values: integer, user-supplied function, or `modelsummary` function.
 #' * Integer: Number of decimal digits
 #' * User-supplied functions: 

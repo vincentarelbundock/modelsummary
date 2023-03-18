@@ -26,9 +26,13 @@ datasummary_skim(
 \itemize{
 \item Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg.
 \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
+\item The "default" output format can be set to "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"
+\itemize{
+\item Session-specific configuration: \code{options("modelsummary_factory_default" = "gt")}
+\item Persistent configuration: \code{modelsummary_config(output = "markdown")}
+}
 \item Warning: Users should not supply a file name to the \code{output} argument if they intend to customize the table with external packages. See the 'Details' section.
 \item LaTeX compilation requires the \code{booktabs} and \code{siunitx} packages, but \code{siunitx} can be disabled or replaced with global options. See the 'Details' section.
-\item The default output formats and table-making packages can be modified with global options. See the 'Details' section.
 }}
 
 \item{fmt}{how to format numeric values: integer, user-supplied function, or \code{modelsummary} function.
