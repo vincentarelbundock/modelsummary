@@ -29,7 +29,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @template options
 #'
 #' @template modelsummary_parallel
-#' 
+#'
 #' @template modelsummary_examples
 #'
 #' @param models a model, (named) list of models, or nested list of models.
@@ -49,7 +49,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * LaTeX compilation requires the `booktabs` and `siunitx` packages, but `siunitx` can be disabled or replaced with global options. See the 'Details' section.
 #' @param fmt how to format numeric values: integer, user-supplied function, or `modelsummary` function.
 #' * Integer: Number of decimal digits
-#' * User-supplied functions: 
+#' * User-supplied functions:
 #'   - Any function which accepts a numeric vector and returns a character vector of the same length.
 #' * `modelsummary` functions:
 #'   - `fmt = fmt_significant(2)`: Two significant digits (at the term-level)
@@ -58,7 +58,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   - `fmt = fmt_term("(Intercept)" = 1, "X" = 2)`: Format terms differently
 #'   - `fmt = fmt_statistic("estimate" = 1, "r.sqared" = 6)`: Format statistics differently.
 #'   - `fmt = fmt_identity()`: unformatted raw values
-#' * string: 
+#' * string:
 #' * Note on LaTeX output: To ensure proper typography, all numeric entries are enclosed in the `\num{}` command, which requires the `siunitx` package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 #' @param stars to indicate statistical significance
 #' * FALSE (default): no significance stars.
@@ -68,7 +68,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @param statistic vector of strings or `glue` strings which select uncertainty
 #' statistics to report vertically below the estimate. NULL omits all
 #' uncertainty statistics.
-#' * "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", . 
+#' * "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", .
 #'    or any column name produced by `get_estimates(model)`
 #' * `glue` package strings with braces, with or without R functions, such as:
 #'   - `"{p.value} [{conf.low}, {conf.high}]"`
@@ -113,19 +113,19 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @param coef_rename logical, named or unnamed character vector, or function
 #' * Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below.
 #' * Unnamed character vector of length equal to the number of coefficients in the final table, after `coef_omit` is applied.
-#' * Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg") 
+#' * Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg")
 #' * Function: Accepts a character vector of the model's term names and returns a named vector like the one described above. The `modelsummary` package supplies a `coef_rename()` function which can do common cleaning tasks: `modelsummary(model, coef_rename = coef_rename)`
 #' @param gof_map rename, reorder, and omit goodness-of-fit statistics and other
 #'   model information. This argument accepts 4 types of values:
 #' * NULL (default): the `modelsummary::gof_map` dictionary is used for formatting, and all unknown statistic are included.
-#' * character vector: "all", "none", or a vector of statistics such as `c("rmse", "nobs", "r.squared")`. Elements correspond to colnames in the data.frame produced by `get_gof(model)`. The `modelsummary::gof_map`default dictionary is used to format and rename statistics.
+#' * character vector: "all", "none", or a vector of statistics such as `c("rmse", "nobs", "r.squared")`. Elements correspond to colnames in the data.frame produced by `get_gof(model)`. The `modelsummary::gof_map` default dictionary is used to format and rename statistics.
 #' * NA: excludes all statistics from the bottom part of the table.
 #' * data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
 #' * list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
 #' @param gof_omit string regular expression (perl-compatible) used to determine which statistics to omit from the bottom section of the table. A "negative lookahead" can be used to specify which statistics to *keep* in the table. Examples:
 #' * `"IC"`: omit statistics matching the "IC" substring.
 #' * `"BIC|AIC"`: omit statistics matching the "AIC" or "BIC" substrings.
-#' * `"^(?!.*IC)"`: keep statistics matching the "IC" substring. 
+#' * `"^(?!.*IC)"`: keep statistics matching the "IC" substring.
 #' @param group_map named or unnamed character vector. Subset, rename, and
 #' reorder coefficient groups specified a grouping variable specified in the
 #' `shape` argument formula. This argument behaves like `coef_map`.
@@ -174,7 +174,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' prevent the file from compiling/displaying. This setting does not affect captions or notes.
 #' @param ... all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.
 #' + [parameters::model_parameters] extracts parameter estimates. Available arguments depend on model type, but include:
-#'     - `standardize`, `centrality`, `dispersion`, `test`, `ci_method`, `prior`, `diagnostic`, `rope_range`, `power`, `cluster`, etc. 
+#'     - `standardize`, `centrality`, `dispersion`, `test`, `ci_method`, `prior`, `diagnostic`, `rope_range`, `power`, `cluster`, etc.
 #' + [performance::model_performance] extracts goodness-of-fit statistics. Available arguments depend on model type, but include:
 #'     - `metrics`, `estimator`, etc.
 #' + [kableExtra::kbl] or [gt::gt] draw tables, depending on the value of the `output` argument.
@@ -718,7 +718,7 @@ redundant_labels <- function(dat, column) {
     return(dat)
   }
   # Issue #558: 1-row estimates table with no gof
-  if (nrow(dat) > 1) { 
+  if (nrow(dat) > 1) {
     for (i in nrow(dat):2) {
       if (dat$part[i] == "estimates" &&
         dat[[column]][i - 1] == dat[[column]][i]) {
