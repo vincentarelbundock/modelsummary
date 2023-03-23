@@ -70,6 +70,20 @@
 #'   geom_point(aes(y = term, x = estimate), alpha = .3,
 #'     size = 10, color = 'red', shape = 'square'))
 #' modelplot(mod, background = b)
+#'
+#' # logistic regression example
+#' df <- as.data.frame(Titanic)
+#' mod_titanic <- glm(
+#'   Survived ~ Class + Sex,
+#'   family = binomial,
+#'   weight = Freq,
+#'   data = df
+#' )
+#'
+#' # displaying odds ratio using a log scale
+#' modelplot(mod_titanic, exponentiate = TRUE) +
+#'   scale_x_log10() +
+#'   xlab("Odds Ratios and 95% confidence intervals")
 #' }
 #'
 #' @export
@@ -189,7 +203,7 @@ modelplot <- function(models,
   # set a new theme only if the default is theme_grey(). this prevents user's
   # theme_set() from being overwritten
   if (identical(ggplot2::theme_get(), ggplot2::theme_grey())) {
-    p <- p + 
+    p <- p +
          ggplot2::theme_minimal() +
          ggplot2::theme(legend.title = ggplot2::element_blank())
   }

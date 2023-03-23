@@ -176,6 +176,20 @@ b <- list(geom_vline(xintercept = 0, color = 'orange'),
   geom_point(aes(y = term, x = estimate), alpha = .3,
     size = 10, color = 'red', shape = 'square'))
 modelplot(mod, background = b)
+
+# logistic regression example
+df <- as.data.frame(Titanic)
+mod_titanic <- glm(
+  Survived ~ Class + Sex,
+  family = binomial,
+  weight = Freq,
+  data = df
+)
+
+# displaying odds ratio using a log scale
+modelplot(mod_titanic, exponentiate = TRUE) +
+  scale_x_log10() +
+  xlab("Odds Ratios and 95\% confidence intervals")
 }
 
 }
