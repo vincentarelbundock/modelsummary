@@ -1,0 +1,213 @@
+# This workflow creates many jobs, run only when a branch is created
+on:
+  push:
+    branches:
+      - "revdep*" # never run automatically on main branch
+
+name: revdep
+
+jobs:
+  matrix:
+    runs-on: ubuntu-22.04
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+    name: Collect revdeps
+
+    env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      RSPM: https://packagemanager.rstudio.com/cran/__linux__/bionic/latest
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      # prevent rgl issues because no X11 display is available
+      RGL_USE_NULL: true
+      # Begin custom: env vars
+      # End custom: env vars
+
+    steps:
+      - name: Check rate limits
+        run: |
+          curl -s --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/rate_limit
+        shell: bash
+
+      - uses: actions/checkout@v3
+
+      # FIXME: Avoid reissuing succesful jobs
+      # https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#list-jobs-for-a-workflow-run
+      # https://docs.github.com/en/free-pro-team@latest/rest/reference/actions#workflow-runs
+      - id: set-matrix
+        run: |
+          package <- read.dcf("DESCRIPTION")[, "Package"][[1]]
+          deps <- tools:::package_dependencies(package, reverse = TRUE, which = c("Depends", "Imports", "LinkingTo", "Suggests"))[[1]]
+          json <- paste0(
+            '{"package":[',
+            paste0('"', deps, '"', collapse = ","),
+            ']}'
+          )
+          writeLines(json)
+          writeLines(paste0("matrix=", json), Sys.getenv("GITHUB_OUTPUT"))
+        shell: Rscript {0}
+
+  check-matrix:
+    runs-on: ubuntu-22.04
+    needs: matrix
+    steps:
+      - name: Install json2yaml
+        run: |
+          sudo npm install -g json2yaml
+
+      - name: Check matrix definition
+        run: |
+          matrix='${{ needs.matrix.outputs.matrix }}'
+          echo $matrix
+          echo $matrix | jq .
+          echo $matrix | json2yaml
+
+  R-CMD-check:
+    needs: matrix
+
+    runs-on: ubuntu-22.04
+
+    name: ${{ matrix.package }}
+
+    # Begin custom: services
+    # End custom: services
+
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJson(needs.matrix.outputs.matrix)}}
+
+    env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      RSPM: https://packagemanager.rstudio.com/cran/__linux__/bionic/latest
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      # prevent rgl issues because no X11 display is available
+      RGL_USE_NULL: true
+      # Begin custom: env vars
+      # End custom: env vars
+
+    steps:
+      - name: Check rate limits
+        run: |
+          curl -s --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/rate_limit
+        shell: bash
+
+      - uses: actions/checkout@v3
+
+      # Begin custom: before install
+      # End custom: before install
+
+      - name: Use RSPM
+        run: |
+          mkdir -p /home/runner/work/_temp/Library
+          echo 'local({release <- system2("lsb_release", "-sc", stdout = TRUE); options(repos=c(CRAN = paste0("https://packagemanager.rstudio.com/all/__linux__/", release, "/latest")), HTTPUserAgent = sprintf("R/%s R (%s)", getRversion(), paste(getRversion(), R.version$platform, R.version$arch, R.version$os)))}); .libPaths("/home/runner/work/_temp/Library")' | sudo tee /etc/R/Rprofile.site
+
+      - name: Install remotes
+        run: |
+          if (!requireNamespace("curl", quietly = TRUE)) install.packages("curl")
+          if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+        shell: Rscript {0}
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update -y
+          Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "22.04")); package <- "${{ matrix.package }}"; deps <- tools::package_dependencies(package, which = "Suggests")[[1]]; lapply(c(package, deps), function(x) { writeLines(remotes::system_requirements("ubuntu", "22.04", package = x)) })' | sort | uniq > .github/deps.sh
+          cat .github/deps.sh
+          sudo sh < .github/deps.sh
+
+      - name: Install package
+        run: |
+          package <- "${{ matrix.package }}"
+          install.packages(package, dependencies = TRUE)
+          remotes::install_cran("rcmdcheck")
+        shell: Rscript {0}
+
+      - name: Session info old
+        run: |
+          options(width = 100)
+          if (!requireNamespace("sessioninfo", quietly = TRUE)) install.packages("sessioninfo")
+          pkgs <- installed.packages()[, "Package"]
+          sessioninfo::session_info(pkgs, include_base = TRUE)
+        shell: Rscript {0}
+
+      # Begin custom: after install
+      # End custom: after install
+
+      - name: Check old
+        env:
+          _R_CHECK_CRAN_INCOMING_: false
+          _R_CHECK_SYSTEM_CLOCK_: false
+          _R_CHECK_FUTURE_FILE_TIMESTAMPS_: false
+        # Avoid downloading binary package from RSPM
+        run: |
+          package <- "${{ matrix.package }}"
+          options(HTTPUserAgent = "gha")
+          path <- download.packages(package, destdir = ".github")[, 2]
+          print(path)
+
+          dir <- file.path("revdep", package)
+          dir.create(dir, showWarnings = FALSE, recursive = TRUE)
+          check <- rcmdcheck::rcmdcheck(path, args = c("--no-manual", "--as-cran"), error_on = "never", check_dir = file.path(dir, "check"))
+          file.rename(file.path(dir, "check"), file.path(dir, "old"))
+          saveRDS(check, file.path(dir, "old.rds"))
+        shell: Rscript {0}
+
+      - name: Install local package
+        run: |
+          remotes::install_local(".", force = TRUE)
+        shell: Rscript {0}
+
+      - name: Session info new
+        run: |
+          options(width = 100)
+          pkgs <- installed.packages()[, "Package"]
+          sessioninfo::session_info(pkgs, include_base = TRUE)
+        shell: Rscript {0}
+
+      - name: Check new
+        env:
+          _R_CHECK_CRAN_INCOMING_: false
+          _R_CHECK_SYSTEM_CLOCK_: false
+          _R_CHECK_FUTURE_FILE_TIMESTAMPS_: false
+        run: |
+          package <- "${{ matrix.package }}"
+          path <- dir(".github", pattern = paste0("^", package), full.names = TRUE)[[1]]
+          print(path)
+
+          dir <- file.path("revdep", package)
+          check <- rcmdcheck::rcmdcheck(path, args = c("--no-manual", "--as-cran"), error_on = "never", check_dir = file.path(dir, "check"))
+          file.rename(file.path(dir, "check"), file.path(dir, "new"))
+          saveRDS(check, file.path(dir, "new.rds"))
+        shell: Rscript {0}
+
+      - name: Compare
+        run: |
+          package <- "${{ matrix.package }}"
+          dir <- file.path("revdep", package)
+          old <- readRDS(file.path(dir, "old.rds"))
+          new <- readRDS(file.path(dir, "new.rds"))
+          compare <- rcmdcheck::compare_checks(old, new)
+          compare
+          cmp <- compare$cmp
+          if (!identical(cmp[cmp$which == "old", "output"], cmp[cmp$which == "new", "output"])) {
+            if (!requireNamespace("waldo", quietly = TRUE)) install.packages("waldo")
+            print(waldo::compare(old, new))
+
+            stop("Check output differs.")
+          }
+        shell: Rscript {0}
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ matrix.package }}-results
+          path: revdep/${{ matrix.package }}
+
+      - name: Check rate limits
+        if: always()
+        run: |
+          curl -s --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/rate_limit
+        shell: bash
