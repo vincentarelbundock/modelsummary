@@ -1,3 +1,15 @@
+get_factory_name <- function(x, default) {
+  out <- getOption(paste0("modelsummary_factory_", x))
+  if (is.null(out)) {
+    out <- config_get(paste0("factory_", x))
+  }
+  if (is.null(out)) {
+    out <- default
+  }
+  return(out)
+}
+
+
 #' parse an `output` argument to determine which table factory and which output
 #' format to use.
 #'
@@ -57,24 +69,24 @@ sanitize_output <- function(output) {
     "html" = "html")
 
   factory_dict <- c(
-    "dataframe"      = "dataframe",
-    "data.frame"     = "dataframe",
-    "flextable"      = "flextable",
-    "gt"             = "gt",
-    "huxtable"       = "huxtable",
-    "DT"             = "DT",
-    "kableExtra"     = "kableExtra",
-    "latex_tabular"  = "kableExtra",
+    "dataframe" = "dataframe",
+    "data.frame" = "dataframe",
+    "flextable" = "flextable",
+    "gt" = "gt",
+    "huxtable" = "huxtable",
+    "DT" = "DT",
+    "kableExtra" = "kableExtra",
+    "latex_tabular" = "kableExtra",
     "modelsummary_list" = "modelsummary_list",
-    "markdown"       = getOption("modelsummary_factory_markdown", default   = "modelsummary_markdown"),
-    "jupyter"        = getOption("modelsummary_factory_html", default       = "kableExtra"),
-    "latex"          = getOption("modelsummary_factory_latex", default      = "kableExtra"),
-    "html"           = getOption("modelsummary_factory_html", default       = "kableExtra"),
-    "jpg"            = getOption("modelsummary_factory_jpg", default        = "kableExtra"),
-    "png"            = getOption("modelsummary_factory_png", default        = "kableExtra"),
-    "rtf"            = getOption("modelsummary_factory_rtf", default        = "gt"),
-    "word"           = getOption("modelsummary_factory_word", default       = "flextable"),
-    "powerpoint"     = getOption("modelsummary_factory_powerpoint", default = "flextable"))
+    "markdown" = get_factory_name("markdown", default = "modelsummary"),
+    "jupyter" = get_factory_name("html", default = "kableExtra"),
+    "latex" = get_factory_name("latex", default = "kableExtra"),
+    "html" = get_factory_name("html", default = "kableExtra"),
+    "jpg" = get_factory_name("jpg", default = "kableExtra"),
+    "png" = get_factory_name("png", default = "kableExtra"),
+    "rtf" = get_factory_name("rtf", default = "gt"),
+    "word" = get_factory_name("word", default = "flextable"),
+    "powerpoint" = get_factory_name("powerpoint", default = "flextable"))
 
   ## sanity check: are user-supplied global options ok?
   sanity_factory(factory_dict)

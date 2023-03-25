@@ -37,7 +37,7 @@ factory <- function(tab,
     factory_fun <- factory_DT
   } else if (settings_equal("output_factory", "dataframe")) {
     factory_fun <- factory_dataframe
-  } else if (settings_equal("output_factory", "modelsummary_markdown")) {
+  } else if (settings_equal("output_factory", "modelsummary")) {
     factory_fun <- factory_markdown
   }
 

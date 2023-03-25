@@ -178,7 +178,7 @@ sanity_factory <- function(factory_dict) {
   check_option('html', c('gt', 'kableExtra', 'flextable', 'huxtable'))
   check_option('rtf', c('gt', 'huxtable'))
   check_option('latex', c('gt', 'kableExtra', 'huxtable'))
-  check_option('markdown', c('kableExtra', 'modelsummary_markdown'))
+  check_option('markdown', c('kableExtra', 'modelsummary'))
   check_option('word', c('flextable', 'huxtable'))
   check_option('powerpoint', c('flextable', 'huxtable'))
   check_option('png', c('gt', 'flextable', 'kableExtra'))
