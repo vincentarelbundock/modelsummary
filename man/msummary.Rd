@@ -47,7 +47,7 @@ msummary(
 
 \item{output}{filename or object type (character string)
 \itemize{
-\item Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg.
+\item Supported filename extensions: .docx, .html, .tex, .md, .txt, .csv, .xlsx, .png, .jpg
 \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
 \item The "default" output format can be set to "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"
 \itemize{

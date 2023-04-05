@@ -40,7 +40,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   - Models are labelled using the list names.
 #' * Nested list of models: When using the `shape="rbind"` argument, `models` can be a nested list of models to display "panels" or "stacks" of regression models. See the `shape` argument documentation and examples below.
 #' @param output filename or object type (character string)
-#' * Supported filename extensions: .docx, .html, .tex, .md, .txt, .png, .jpg.
+#' * Supported filename extensions: .docx, .html, .tex, .md, .txt, .csv, .xlsx, .png, .jpg
 #' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the `modelsummary` function.
 #' * The "default" output format can be set to "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"
 #'   - Session-specific configuration: `options("modelsummary_factory_default" = "gt")`
