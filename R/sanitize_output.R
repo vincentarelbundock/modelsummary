@@ -98,7 +98,7 @@ sanitize_output <- function(output) {
   if (output == "default") {
       output <- getOption("modelsummary_factory_default", default = NULL)
       if (is.null(output)) {
-        output <- config_get("output")
+        output <- config_get("factory_default")
       }
       if (is.null(output)) {
         if (isTRUE(insight::check_if_installed("kableExtra", quietly = TRUE))) {

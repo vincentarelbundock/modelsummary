@@ -15,7 +15,7 @@ install.packages(c(
 ',
             'Alternatively, you can set markdown as the default table format to silence this alert:',
             '
-config_modelsummary(output = "markdown")
+config_modelsummary(factory_default = "markdown")
 ')
         insight::format_alert(msg)
     }

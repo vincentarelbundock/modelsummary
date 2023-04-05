@@ -7,7 +7,7 @@
 #' @param reset TRUE to return to default settings.
 #' @export
 config_modelsummary <- function(
-    output,
+    factory_default,
     factory_latex,
     factory_html,
     factory_markdown,
@@ -28,18 +28,18 @@ config_modelsummary <- function(
         insight::format_warning("`modelsummary` returned to default settings.")
     }
 
-    if (missing(output) && missing(factory_latex) && missing(factory_html) && missing(factory_markdown)) {
+    if (missing(factory_default) && missing(factory_latex) && missing(factory_html) && missing(factory_markdown)) {
         return(config)
     }
 
-    if (!missing(output)) {
-        checkmate::assert_choice(output, c("kableExtra", "gt", "huxtable", "flextable", "DT", "markdown"), null.ok = TRUE)
-        if (isTRUE(output == "kableExtra")) insight::check_if_installed("kableExtra")
-        if (isTRUE(output == "gt")) insight::check_if_installed("gt")
-        if (isTRUE(output == "huxtable")) insight::check_if_installed("huxtable")
-        if (isTRUE(output == "flextable")) insight::check_if_installed("flextable")
-        if (isTRUE(output == "DT")) insight::check_if_installed("DT")
-        config[["output"]] <- output
+    if (!missing(factory_default)) {
+        checkmate::assert_choice(factory_default, c("kableExtra", "gt", "huxtable", "flextable", "DT", "markdown"), null.ok = TRUE)
+        if (isTRUE(factory_default == "kableExtra")) insight::check_if_installed("kableExtra")
+        if (isTRUE(factory_default == "gt")) insight::check_if_installed("gt")
+        if (isTRUE(factory_default == "huxtable")) insight::check_if_installed("huxtable")
+        if (isTRUE(factory_default == "flextable")) insight::check_if_installed("flextable")
+        if (isTRUE(factory_default == "DT")) insight::check_if_installed("DT")
+        config[["factory_default"]] <- output
     }
 
     if (!missing(factory_latex)) {

@@ -5,7 +5,7 @@
 \title{Persistent user settings for the \code{modelsummary} package}
 \usage{
 config_modelsummary(
-  output,
+  factory_default,
   factory_latex,
   factory_html,
   factory_markdown,
@@ -13,8 +13,6 @@ config_modelsummary(
 )
 }
 \arguments{
-\item{output}{Default output format: "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"}
-
 \item{factory_latex}{Name of package used to generate LaTeX output when \code{output="latex"}.}
 
 \item{factory_html}{Name of package used to generate LaTeX output when \code{output="html"}.}
@@ -22,6 +20,8 @@ config_modelsummary(
 \item{factory_markdown}{Name of package used to generate LaTeX output when \code{output="markdown"}.}
 
 \item{reset}{TRUE to return to default settings.}
+
+\item{output}{Default output format: "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"}
 }
 \description{
 Persistent user settings for the \code{modelsummary} package
