@@ -51,6 +51,7 @@ msummary(
 \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
 \item The "default" output format can be set to "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"
 \itemize{
+\item If the user does not choose a default value, the packages listed above are tried in sequence.
 \item Session-specific configuration: \code{options("modelsummary_factory_default" = "gt")}
 \item Persistent configuration: \code{modelsummary_config(output = "markdown")}
 }

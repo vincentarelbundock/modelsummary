@@ -43,6 +43,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * Supported filename extensions: .docx, .html, .tex, .md, .txt, .csv, .xlsx, .png, .jpg
 #' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the `modelsummary` function.
 #' * The "default" output format can be set to "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"
+#'   - If the user does not choose a default value, the packages listed above are tried in sequence.
 #'   - Session-specific configuration: `options("modelsummary_factory_default" = "gt")`
 #'   - Persistent configuration: `modelsummary_config(output = "markdown")`
 #' * Warning: Users should not supply a file name to the `output` argument if they intend to customize the table with external packages. See the 'Details' section.

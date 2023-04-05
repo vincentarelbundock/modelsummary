@@ -101,15 +101,15 @@ sanitize_output <- function(output) {
         output <- config_get("output")
       }
       if (is.null(output)) {
-        if (isTRUE(insight::check_if_installed("kableExtra"))) {
+        if (isTRUE(insight::check_if_installed("kableExtra", quietly = TRUE))) {
           output <- "kableExtra"
-        } else if (isTRUE(insight::check_if_installed("gt"))) {
+        } else if (isTRUE(insight::check_if_installed("gt", quietly = TRUE))) {
           output <- "gt"
-        } else if (isTRUE(insight::check_if_installed("flextable"))) {
+        } else if (isTRUE(insight::check_if_installed("flextable", quietly = TRUE))) {
           output <- "flextable"
-        } else if (isTRUE(insight::check_if_installed("huxtable"))) {
+        } else if (isTRUE(insight::check_if_installed("huxtable", quietly = TRUE))) {
           output <- "huxtable"
-        } else if (isTRUE(insight::check_if_installed("DT"))) {
+        } else if (isTRUE(insight::check_if_installed("DT", quietly = TRUE))) {
           output <- "DT"
         } else {
           output <- "markdown"
