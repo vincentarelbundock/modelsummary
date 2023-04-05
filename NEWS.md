@@ -1,4 +1,4 @@
-# modelsummary 1.3.0.9001
+# modelsummary 1.4.0
 
 * Built-in support for markdown tables.
 * Package no longer depends on `kableExtra`. Recommends an additional install for other formats.
