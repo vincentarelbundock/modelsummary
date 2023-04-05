@@ -28,6 +28,7 @@ library(gt)
 library(modelsummary)
 library(kableExtra)
 options(width = 120)
+options(modelsummary_factory_default = "gt")
 ```
 
 <center>
@@ -47,6 +48,7 @@ options(width = 120)
 ```{r, echo=FALSE, message=FALSE, include=FALSE, eval=FALSE}
 library(modelsummary)
 library(tidyverse)
+library(kableExtra)
 
 cap <- 'Penguin flipper lengths (mm) by location, species, and sex. This table was created using the \\texttt{datasummary} function from the modelsummary package for R.'
 src <- 'Data source: Gorman, Williams & Fraser (2014) and  palmerpenguins package by @apreshill and @allison_horst.'
@@ -58,6 +60,7 @@ penguins <- read.csv(url) %>%
                    `Flipper length (mm)` = flipper_length_mm) %>%
             mutate(Sex = str_to_title(Sex))
 datasummary(Factor(Island) * Factor(Species) ~ Factor(Sex) * `Flipper length (mm)` * (Mean + SD) * DropEmpty(), penguins,
+           output = "kableExtra",
            title = cap,
            notes = src)
 ```
@@ -102,7 +105,7 @@ datasummary_skim(penguins)
 To summarize the categorical variables in the dataset, we type:
 
 ```{r}
-datasummary_skim(penguins, type="categorical")
+datasummary_skim(penguins, type = "categorical")
 ```
 
 Later in this tutorial, it will become clear that `datasummary_skim` is just a convenience "template" built around `datasummary`, since we can achieve identical results with the latter. For example, to produce a text-only version of the tables above, we can type:
@@ -661,7 +664,9 @@ tmp_list <- lapply(tmp_list, scale)
 # add a histogram with column_spec and spec_hist
 # add a boxplot with colun_spec and spec_box
 emptycol = function(x) " "
-datasummary(mpg + hp ~ Mean + SD + Heading("Boxplot") * emptycol + Heading("Histogram") * emptycol, data = tmp) %>%
+datasummary(mpg + hp ~ Mean + SD + Heading("Boxplot") * emptycol + Heading("Histogram") * emptycol,
+    output = "kableExtra",
+    data = tmp) %>%
     column_spec(column = 4, image = spec_boxplot(tmp_list)) %>%
     column_spec(column = 5, image = spec_hist(tmp_list))
 ```

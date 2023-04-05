@@ -25,6 +25,8 @@ factory_gt <- function(tab,
 
   # create gt table object
   idx_col <- ncol(tab)
+  colnames(tab)[is.na(colnames(tab))] <- ""
+  colnames(tab) <- pad(colnames(tab))
   out <- gt::gt(tab, caption = title)
 
   # theme
