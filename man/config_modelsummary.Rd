@@ -13,6 +13,8 @@ config_modelsummary(
 )
 }
 \arguments{
+\item{factory_default}{Default output format: "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"}
+
 \item{factory_latex}{Name of package used to generate LaTeX output when \code{output="latex"}.}
 
 \item{factory_html}{Name of package used to generate LaTeX output when \code{output="html"}.}
@@ -20,8 +22,6 @@ config_modelsummary(
 \item{factory_markdown}{Name of package used to generate LaTeX output when \code{output="markdown"}.}
 
 \item{reset}{TRUE to return to default settings.}
-
-\item{output}{Default output format: "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"}
 }
 \description{
 Persistent user settings for the \code{modelsummary} package
