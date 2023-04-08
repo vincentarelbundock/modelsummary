@@ -39,7 +39,7 @@ config_modelsummary <- function(
         if (isTRUE(factory_default == "huxtable")) insight::check_if_installed("huxtable")
         if (isTRUE(factory_default == "flextable")) insight::check_if_installed("flextable")
         if (isTRUE(factory_default == "DT")) insight::check_if_installed("DT")
-        config[["factory_default"]] <- output
+        config[["factory_default"]] <- factory_default
     }
 
     if (!missing(factory_latex)) {
