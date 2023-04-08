@@ -11,6 +11,7 @@
 
 Bug fixes:
 
+* `statistic=NULL` is now respected when `shape="rbind"`. Thanks to Panos Mavros for report #620.
 * `get_estimates()` supports `vcov` string shortcuts and formulas. Thanks to @ethans-carl for report #605.
 * Quarto and Rmarkdown documents include `situnix` in header automatically for decimal alignement with `align="ddd"` 
 
