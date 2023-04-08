@@ -120,15 +120,14 @@ modelsummary_rbind <- function(
                 coef_map = coef_map,
                 coef_omit = coef_omit,
                 coef_rename = coef_rename,
-                shape = NULL,
+                shape = term + statistic ~ model,
                 group_map = NULL,
                 gof_map = gof_map,
                 gof_omit = gof_omit
-        ))
+        ), keep.null = TRUE)
         tab <- do.call("modelsummary", args)
         panels_list[[i]] <- tab
     }
-
 
     # need the settings for later
     sanitize_output(output)

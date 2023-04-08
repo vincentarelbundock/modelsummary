@@ -78,3 +78,17 @@ panels <- list(
 )
 tab <- modelsummary(panels, shape = "rcollapse", output = "dataframe")
 expect_equivalent(sum(tab[[1]] == "FE: gear"), 1)
+
+
+
+# Issue #620
+models <- list(
+  mpg = lm(mpg ~ cyl + disp, mtcars),
+  hp = lm(hp ~ cyl + disp, mtcars))
+tab <- modelsummary(models,
+  output = "data.frame",
+  statistic = NULL,
+  estimate = "{estimate}{stars} [{conf.low}, {conf.high}] ",
+  shape = "rcollapse",
+  gof_map = c("nobs", "r.squared"))
+expect_equivalent(nrow(tab), 9)
