@@ -40,6 +40,8 @@ tab <- modelsummary(fit,
     vcov = ~cyl, gof_omit = ".*", estimate = "std.error",
     statistic = NULL, output = "dataframe",
     exponentiate = TRUE)
+
+# not sure why this no longer works. My results seem to match parameters::parameters()
 expect_equivalent(tab[[4]], sprintf("%.3f", exp(b) * se))
 
 # exponentiate vector
