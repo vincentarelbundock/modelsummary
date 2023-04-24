@@ -13,6 +13,7 @@ escape_string <- function(x) {
     } else {
         out <- x
     }
+    out = gsub("^`|`$", "", out)
     return(out)
 }
 

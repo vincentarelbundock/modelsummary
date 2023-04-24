@@ -137,6 +137,22 @@ tab <- modelsummary(mod, "latex")
 expect_true(grepl("cyl\\_new", tab, fixed = TRUE))
 
 
+# Issue #622: shape = 'rbind' with escape TRUE/FALSE
+tmp <- transform(mtcars, a_b = qsec, b_c = hp)
+panels <- list(
+    "Panel B: $\\log(3)^2$" = list(
+        "A_B" = lm(mpg ~ a_b, data = tmp),
+        "B_C" = lm(mpg ~ a_b + b_c, data = tmp)),
+    "Panel B: $\\log(3)_2$" = list(
+        "A_B" = lm(disp ~ a_b, data = tmp),
+        "B_C" = lm(disp ~ a_b + b_c, data = tmp)))
+expect_snapshot_print(
+    modelsummary(panels, output = "latex_tabular", shape = "rbind", title = "$\\beta_1$", escape = TRUE),
+    "escape-panel_escape_FALSE")
+expect_snapshot_print(
+    modelsummary(panels, output = "latex_tabular", shape = "rbind", title = "$\\beta_1$", escape = TRUE),
+    "escape-panel_escape_TRUE")
+
 
 # Issue #594: escape LaTeX label
 if (!requiet("tinysnapshot")) exit_file("tinysnapshot")
@@ -145,3 +161,4 @@ mod <- lm(mpg ~ hp, mtcars)
 expect_snapshot_print(
     modelsummary(mod, "latex", title = "Blah_blah \\label{tab:blah-blah}"),
     "test-escape_label_title")
+

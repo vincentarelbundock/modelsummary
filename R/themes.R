@@ -36,7 +36,8 @@ theme_ms_kableExtra <- function(tab,
         latex_gap_space = "0.5em",
         group_label = names(hgroup[i]),
         start_row = hgroup[[i]][1],
-        end_row = hgroup[[i]][2])
+        end_row = hgroup[[i]][2],
+        escape = FALSE)
 
       # user-specified arguments override default themes
       dots <- list(...)

@@ -58,6 +58,10 @@ modelsummary_rbind <- function(
         panels[[i]] <- sanitize_models(panels[[i]], ...)
     }
 
+    # need the settings for later -- before escape_string
+    sanitize_output(output)
+    sanitize_escape(escape)
+
     # panel names
     # model names dictionary: use unique names for manipulation
     if (is.null(names(panels))) {
@@ -97,14 +101,11 @@ modelsummary_rbind <- function(
         }
     }
 
-
     # panel lists to tables
     panels_list <- list()
     for (i in seq_along(panels)) {
         # modelsummary(output="dataframe") changes the output format
         # reset for every call
-        sanitize_output(output)
-        sanitize_escape(escape)
         args <- utils::modifyList(
             dots,
             list(
@@ -123,15 +124,16 @@ modelsummary_rbind <- function(
                 shape = term + statistic ~ model,
                 group_map = NULL,
                 gof_map = gof_map,
-                gof_omit = gof_omit
+                gof_omit = gof_omit,
+                escape = escape
         ), keep.null = TRUE)
         tab <- do.call("modelsummary", args)
         panels_list[[i]] <- tab
     }
 
-    # need the settings for later
+    # modelsummary(output="dataframe") re-inits this
     sanitize_output(output)
-    sanitize_escape(escape)
+    sanitize_output(output)
 
     # identical GOF rows should be combined and reported at the bottom
     # do not combine GOF if the model names are different in the different panels
@@ -207,8 +209,7 @@ modelsummary_rbind <- function(
     tab[is.na(tab)] <- ""
 
     # pad
-    colnames(tab) <- pad(colnames(tab))
-
+    colnames(tab) <- pad(escape_string(colnames(tab)))
 
     # group rows by panel: kableExtra
     if (isTRUE(nrow(gof_same) > 0)) {
