@@ -213,7 +213,7 @@ get_estimates_parameters <- function(model,
         }
         inner <- parameters::parameters
         out <- do.call("inner", dots)
-        out <- parameters::standardize_names(out, style = "broom")
+        out <- insight::standardize_names(out, style = "broom")
         return(out)
     }
 
