@@ -147,7 +147,7 @@ panels <- list(
         "A_B" = lm(disp ~ a_b, data = tmp),
         "B_C" = lm(disp ~ a_b + b_c, data = tmp)))
 expect_snapshot_print(
-    modelsummary(panels, output = "latex_tabular", shape = "rbind", title = "$\\beta_1$", escape = TRUE),
+    modelsummary(panels, output = "latex_tabular", shape = "rbind", title = "$\\beta_1$", escape = FALSE),
     "escape-panel_escape_FALSE")
 expect_snapshot_print(
     modelsummary(panels, output = "latex_tabular", shape = "rbind", title = "$\\beta_1$", escape = TRUE),
