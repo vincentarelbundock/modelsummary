@@ -96,7 +96,7 @@ modelsummary(mod, output = "table.tex")
 
 #### Reliable
 
-`modelsummary` is *reliably* dangerous\! The package is developed using a [suite of unit tests](https://github.com/vincentarelbundock/modelsummary/tree/master/tests/testthat) with about 95% coverage, so it (probably) won’t break.
+`modelsummary` is *reliably* dangerous\! The package is developed using a [suite of unit tests](https://github.com/vincentarelbundock/modelsummary/tree/main/inst/tinytest) with about 95% coverage, so it (probably) won’t break.
 
 #### Community
 
