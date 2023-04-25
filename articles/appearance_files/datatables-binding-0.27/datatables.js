@@ -849,7 +849,7 @@ HTMLWidgets.widget({
 
           if (immediate) $input.on('blur', function(e) {
             var valueNew = $input.val();
-            if (valueNew != value) {
+            if (valueNew !== value) {
               _cell.data(valueNew);
               if (HTMLWidgets.shinyMode) {
                 changeInput('cell_edit', [cellInfo(cell)], 'DT.cellInfo', null, {priority: 'event'});
