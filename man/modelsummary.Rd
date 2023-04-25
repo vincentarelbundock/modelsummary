@@ -420,11 +420,21 @@ For example, to use 4 cores to extract results:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(future.apply)
 plan(multicore, workers = 4)
+options("modelsummary_future" = TRUE)
 modelsummary(model_list)
 }\if{html}{\out{</div>}}
 
 Note that the "multicore" plan only parallelizes under mac or linux. Windows
-users can use \verb{plan(multisession)' instead. However, note that the first time }modelsummary()\verb{is called under multisession can be a fair bit longer, because of extra costs in passing data to and loading required packages on to workers. Subsequent calls to}modelsummary()` will often be much faster.
+users can use \code{plan(multisession)} instead. However, note that the first
+time \code{modelsummary()} is called under multisession can be a fair bit longer,
+because of extra costs in passing data to and loading required packages on
+to workers. Subsequent calls to \code{modelsummary()} will often be much faster.
+
+Some users have reported difficult to reproduce errors when using the
+\code{future} package with some packages. The \code{future} parallelization in
+\code{modelsummary} can be disabled by calling:
+
+\code{options("modelsummary_future" = FALSE)}
 }
 
 \examples{

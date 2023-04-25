@@ -18,12 +18,18 @@
 #' ```{r, eval = FALSE}
 #' library(future.apply)
 #' plan(multicore, workers = 4)
+#' options("modelsummary_future" = TRUE)
 #' modelsummary(model_list)
 #' ```
 #'
 #' Note that the "multicore" plan only parallelizes under mac or linux. Windows
-#' users can use `plan(multisession)' instead. However, note that the first
+#' users can use `plan(multisession)` instead. However, note that the first
 #' time `modelsummary()` is called under multisession can be a fair bit longer,
 #' because of extra costs in passing data to and loading required packages on
 #' to workers. Subsequent calls to `modelsummary()` will often be much faster.
 #'
+#' Some users have reported difficult to reproduce errors when using the
+#' `future` package with some packages. The `future` parallelization in
+#' `modelsummary` can be disabled by calling:
+#'
+#' `options("modelsummary_future" = FALSE)`

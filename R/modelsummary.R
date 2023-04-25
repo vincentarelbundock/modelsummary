@@ -702,7 +702,8 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, sh
     # {future}
     } else if (isTRUE(check_dependency("future.apply")) &&
                future::nbrOfWorkers() > 1 &&
-               number_of_models > 1) {
+               number_of_models > 1 &&
+               isTRUE(getOption("modelsummary_future", default = TRUE))) {
         out <- future.apply::future_lapply(seq_len(number_of_models), inner_loop, future.seed = TRUE)
 
     # sequential
