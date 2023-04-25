@@ -5,7 +5,7 @@
 \title{Avoid namespace conflict when we want to customize glance internally and
 still allow users to do the same with their own functions}
 \usage{
-\method{tidy_custom_internal}{default}(x)
+\method{tidy_custom_internal}{default}(x, ...)
 }
 \description{
 Avoid namespace conflict when we want to customize glance internally and

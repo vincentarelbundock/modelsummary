@@ -29,4 +29,4 @@ tidy_custom_internal <- function(x, ...) {
 
 #' @inherit tidy_custom_internal
 #' @keywords internal
-tidy_custom_internal.default <- function(x) NULL
+tidy_custom_internal.default <- function(x, ...) NULL
