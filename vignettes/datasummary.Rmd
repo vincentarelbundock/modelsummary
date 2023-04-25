@@ -26,7 +26,6 @@ This tutorial will show how to draw tables like these (and more!):
 library(tidyverse)
 library(gt)
 library(modelsummary)
-library(kableExtra)
 options(width = 120)
 options(modelsummary_factory_default = "gt")
 ```
@@ -168,21 +167,19 @@ datasummary_balance(~Treatment,
                     notes = reference)
 ```
 
-```{r, eval=TRUE, echo=FALSE}
+```{r, eval=FALSE, echo=FALSE}
 caption <- 'Descriptive statistics about participants in a job training experiment. Earnings are displayed in 1000s of USD. This table was created using the datasummary function from the modelsummary package for R.'
 reference <- 'Source: Lalonde (1986) American Economic Review.'
 
 library(modelsummary)
-library(kableExtra)
 datasummary_balance(~Treatment,
                     data = training,
                     title = caption,
                     notes = reference,
                     output = 'kableExtra') %>%
-  row_spec(5, bold = TRUE) %>%
-  row_spec(1, color = 'green') %>%
-  row_spec(2, color = 'red')
-
+  kableExtra::row_spec(5, bold = TRUE) %>%
+  kableExtra::row_spec(1, color = 'green') %>%
+  kableExtra::row_spec(2, color = 'red')
 ```
 
 Note that if the dataset includes columns called "blocks", "clusters", or "weights", this information will automatically be taken into consideration by `estimatr` when calculating the difference in means and the associated statistics.
@@ -650,9 +647,7 @@ The `datasummary` function is incredibly flexible, but it does not include a his
 2. Create the table with `datasummary`, making sure to include 2 "empty" columns. In the example, we use a simple function called `emptycol` to fill those columns with empty strings.
 3. Add the histograms or boxplots using functions from the `kableExtra` package.
 
-```{r}
-library(kableExtra)
-
+```{r, eval = FALSE}
 tmp <- mtcars[, c("mpg", "hp")]
 
 # create a list with individual variables
@@ -667,8 +662,8 @@ emptycol = function(x) " "
 datasummary(mpg + hp ~ Mean + SD + Heading("Boxplot") * emptycol + Heading("Histogram") * emptycol,
     output = "kableExtra",
     data = tmp) %>%
-    column_spec(column = 4, image = spec_boxplot(tmp_list)) %>%
-    column_spec(column = 5, image = spec_hist(tmp_list))
+    kableExtra::column_spec(column = 4, image = spec_boxplot(tmp_list)) %>%
+    kableExtra::column_spec(column = 5, image = spec_hist(tmp_list))
 ```
 
 If you want a simpler solution, you can try the `Histogram` function which works in `datasummary` automatically and comes bundled with `modelsummary`. The downside of this function is that it uses Unicode characters to create the histogram. This kind of histogram may not display well with certain typefaces or on some operating systems (Windows!).
@@ -718,9 +713,7 @@ In the [Appearance Vignette](https://vincentarelbundock.github.io/modelsummary/a
 penguins$sex <- str_to_title(penguins$sex)
 ```
 
-```{r}
-library(kableExtra)
-
+```{r, eval = FALSE}
 # Convert to `data.frame` to circumvent a `tibbles`-related bug in `All()`
 # https://github.com/vincentarelbundock/modelsummary/issues/395
 penguins <- data.frame(penguins)
@@ -728,7 +721,7 @@ penguins <- data.frame(penguins)
 datasummary(All(penguins) ~ sex * (Mean + SD),
             data = penguins,
             output = 'kableExtra') %>%
-  row_spec(3, background = 'cyan', color = 'red')
+  kableExtra::row_spec(3, background = 'cyan', color = 'red')
 ```
 
 To customize a table using the `gt` package, we can:
