@@ -16,9 +16,4 @@ glance_custom(x, ...)
 To customize the output of a model of class \code{lm}, you can define a new
 method called \code{glance_custom.lm} which returns a one-row data.frame.
 }
-\section{Methods}{
-
-\Sexpr[stage=render,results=rd]{generics:::methods_rd("glance")}
-}
-
 \keyword{internal}
