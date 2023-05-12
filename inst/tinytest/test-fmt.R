@@ -1,3 +1,7 @@
+source("helpers.R")
+requiet("tinysnapshot")
+using("tinysnapshot")
+
 mod <- list()
 mod$OLS <- lm(hp ~ drat, data = mtcars)
 mod$Logit <- glm(am ~ drat + hp, data = mtcars, family = binomial())
@@ -95,3 +99,18 @@ tab <- modelsummary(mod,
   output = "data.frame",
   fmt = fmt_statistic(estimate = 3, std.error = 1, r.squared = 7))
 expect_equivalent(tab[c(1:2, 6), 4], c("30.099", "(1.6)", "0.6024373"))
+
+
+
+# Issue #635
+requiet("lme4")
+set.seed(1024)
+ID <- round(runif(30, min = 1, max = 10))
+Conc <- runif(30, min = 8.050e+12, max = 8.520e+18)
+Year <- round(runif(30, min = 2000, max = 2005))
+dat <- data.frame("ID" = ID, "Conc" = Conc, "Year" = Year)
+testmod <- lmer(Conc ~ Year + (1 | ID), data = dat)
+modelsummary(testmod, output = "markdown")
+expect_snapshot_print(
+  modelsummary(testmod, fmt = fmt_scientific(digits = 2), output = "markdown"),
+  "fmt_scientific_2")

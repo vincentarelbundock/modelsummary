@@ -1,3 +1,10 @@
+fmt_identity <- function(...) {
+    out <- function(x) return(x)
+    class(out) <- c("fmt_factory", class(out))
+    return(out)
+}
+
+
 #' Rounding with a user-supplied function in the `fmt` argument
 #' 
 #' @noRd
@@ -38,8 +45,16 @@ fmt_sprintf <- function(fmt) {
 }
 
 
-fmt_identity <- function(...) {
-    out <- function(x) return(x)
+#' Rounding using scientific notation
+#' 
+#' @param digits a positive integer indicating how many significant digits are to be used for numeric and complex `x`.
+#' @param ... additional arguments passed to `format()`.
+#' @export
+fmt_scientific <- function(digits = 3, ...) {
+    fun <- function(k) format(k, digits = digits, scientific = TRUE, trim = TRUE, ...)
+    out <- function(x, ...) {
+        fmt_function(fun)(x)
+    }
     class(out) <- c("fmt_factory", class(out))
     return(out)
 }
@@ -59,7 +74,17 @@ fmt_decimal <- function(digits = 3, pdigits = NULL, ...) {
 
     out <- function(x, pval = FALSE, ...) {
         fun <- function(z, ...) {
-            format(round(z, digits), nsmall = digits, drop0trailing = FALSE, trim = TRUE, ...)
+            out <- format(
+                round(z, digits),
+                nsmall = digits,
+                drop0trailing = FALSE,
+                trim = TRUE,
+                ...)
+            # long numbers default to scientific notation with too many digits
+            if (isTRUE(grepl("e", out))) {
+                out <- format(z, digits = digits, scientific = TRUE, trim = TRUE, ...)
+            }
+            return(out)
         }
         pfun <- function(z, ...) {
             threshold <- 10^-pdigits

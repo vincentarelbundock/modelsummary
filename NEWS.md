@@ -1,3 +1,9 @@
+# modelsummary (under development)
+
+New:
+
+* `fmt_scientific()` can now be used in the `fmt` argument for rounding with scientific notation.
+
 # modelsummary 1.4.0
 
 * Built-in support for markdown tables.
