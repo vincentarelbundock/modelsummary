@@ -112,5 +112,5 @@ dat <- data.frame("ID" = ID, "Conc" = Conc, "Year" = Year)
 testmod <- lmer(Conc ~ Year + (1 | ID), data = dat)
 modelsummary(testmod, output = "markdown")
 expect_snapshot_print(
-  modelsummary(testmod, fmt = fmt_scientific(digits = 2), output = "markdown"),
-  "fmt_scientific_2")
+  modelsummary(testmod, fmt = fmt_sci(digits = 2), output = "markdown"),
+  "fmt-fmt_sci_2")

@@ -50,7 +50,7 @@ fmt_sprintf <- function(fmt) {
 #' @param digits a positive integer indicating how many significant digits are to be used for numeric and complex `x`.
 #' @param ... additional arguments passed to `format()`.
 #' @export
-fmt_scientific <- function(digits = 3, ...) {
+fmt_sci <- function(digits = 3, ...) {
     fun <- function(k) format(k, digits = digits, scientific = TRUE, trim = TRUE, ...)
     out <- function(x, ...) {
         fmt_function(fun)(x)
