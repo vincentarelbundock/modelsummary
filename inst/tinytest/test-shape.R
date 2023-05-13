@@ -298,3 +298,28 @@ expect_equivalent(
     colnames(tab),
     c("part", "term", "model", "Est.", "S.E.", "p", "Est.  (t)"))
 
+
+# Issue #631: bad group column
+requiet("nnet")
+dat_multinom <- mtcars
+dat_multinom$cyl <- sprintf("Cyl: %s", dat_multinom$cyl)
+mod <- list(
+    nnet::multinom(cyl ~ mpg, data = dat_multinom, trace = FALSE),
+    nnet::multinom(cyl ~ mpg + drat, data = dat_multinom, trace = FALSE))
+tab <- modelsummary(mod, shape = model + term + response ~ statistic, output = "dataframe")
+expect_true(all(tab$model %in% c("(1)", "(2)")))
+
+
+# Issue #631: coef_rename
+dat_multinom <- mtcars
+dat_multinom <- transform(mtcars, vs = as.factor(vs), carb = as.factor(carb))
+mod <- list(
+    nnet::multinom(cyl ~ vs, data = dat_multinom, trace = FALSE),
+    nnet::multinom(cyl ~ vs + carb, data = dat_multinom, trace = FALSE))
+
+tab <- modelsummary(
+    mod, shape = model + term + response ~ statistic,
+    output = "dataframe", coef_rename = TRUE)
+known <- sort(unique(tab$term))
+unknown <- c("(Intercept)", "carb [2]", "carb [3]", "carb [4]", "carb [6]", "carb [8]", "vs [1]")
+expect_equal(known, unknown)

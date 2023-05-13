@@ -226,11 +226,8 @@ get_estimates_parameters <- function(model,
     if (isTRUE(coef_rename)) {
         labs <- attr(out, "pretty_labels")
         labs <- gsub("\\*", "\u00d7", labs)
-        if (isTRUE(length(labs) == nrow(out))) {
-            out$term <- labs
-        } else {
-            out$term <- gsub("\\*", "\u00d7", out$term)
-        }
+        out$term <- replace_dict(out$term, labs)
+        out$term <- gsub("\\*", "\u00d7", out$term)
     }
 
     # errors and warnings: before processing the data frame term names

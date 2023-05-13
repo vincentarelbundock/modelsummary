@@ -7,6 +7,8 @@ New:
 Bugs:
 
 * Group separators respect `add_rows` with `shape="rbind"`. Thanks to @lrose1 for Report #626.
+* Bad column with horizontal models in `shape` and grouped estimates. Thanks to @iago-pssjd for Report #631.
+* `coef_rename=TRUE` bug with grouped estimates. Thanks to @iago-pssjd for Report #631.
 
 # modelsummary 1.4.0
 

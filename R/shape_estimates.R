@@ -11,7 +11,7 @@ shape_estimates <- function(estimates, shape, conf_level) {
 
     shape_formula <- shape$shape_formula
 
-    idx <- intersect(colnames(estimates), c("term", "statistic", shape$group_name))
+    idx <- intersect(colnames(estimates), c("term", "statistic", "group", shape$group_name))
 
     # long
     out <- data.table::melt(data.table::data.table(estimates),
