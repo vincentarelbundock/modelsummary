@@ -1,5 +1,7 @@
 source("helpers.R")
 requiet("fixest")
+requiet("tinysnapshot")
+using("tinysnapshot")
 fixest::setFixest_nthreads(1)
 
 panels <- list(
@@ -92,3 +94,30 @@ tab <- modelsummary(models,
   shape = "rcollapse",
   gof_map = c("nobs", "r.squared"))
 expect_equivalent(nrow(tab), 9)
+
+# Issue #626: shape="rbind" does not respect with add_rows
+rows <- tibble::tribble(
+    ~term,          ~OLS,  ~Logit,
+    'Info',         '???', 'XYZ')
+attr(rows, 'position') <- c(6)
+gm <- c("r.squared", "nobs", "rmse")
+panels <- list(
+  list(
+    lm(mpg ~ 1, data = mtcars),
+    lm(mpg ~ qsec, data = mtcars)
+  ),
+  list(
+    lm(hp ~ 1, data = mtcars),
+    lm(hp ~ qsec, data = mtcars)
+  )
+)
+
+expect_snapshot_print(
+    modelsummary(
+        panels,
+        output = "markdown",
+        shape = "rbind",
+        gof_map = gm,
+        add_rows = rows),
+    "rbind-add_rows_rbind"
+)

@@ -133,7 +133,6 @@ modelsummary_rbind <- function(
 
     # modelsummary(output="dataframe") re-inits this
     sanitize_output(output)
-    sanitize_output(output)
 
     # identical GOF rows should be combined and reported at the bottom
     # do not combine GOF if the model names are different in the different panels
@@ -218,6 +217,14 @@ modelsummary_rbind <- function(
 
     end <- cumsum(panels_nrow)
     sta <- c(0, utils::head(end, -1)) + 1
+
+    # Issue #626: add rows moves hgroup
+    pos <- rev(sort(attr(add_rows, "position")))
+    if (!is.null(pos)) {
+        sta <- sta + sapply(sta, function(x) sum(pos <= x))
+        end <- end + sapply(end, function(x) sum(pos <= x))
+    }
+
     hgroup <- list()
     for (i in seq_along(panel_names)) {
         hgroup[[panel_names[i]]] <- c(sta[i], end[i])

@@ -67,6 +67,13 @@ factory_markdown <- function(tab,
     ruler <- sub(":\\|", "-|", ruler) # all except first
     ruler <- sub("\\|-", "|:", ruler) # only first
     ruler <- gsub("-$", "", ruler) # only first
+
+    # group ruleers
+    for (i in rev(seq_along(hgroup))) {
+        tab <- append(tab, ruler, after = hgroup[[i]][2] + 1)
+    }
+
+    # horizontal rulers
     hrule <- rev(sort(c(1, hrule)))
     for (h in hrule) {
         tab <- append(tab, ruler, after = h)

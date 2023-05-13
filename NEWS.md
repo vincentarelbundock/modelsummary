@@ -4,6 +4,10 @@ New:
 
 * `fmt_sci()` can now be used in the `fmt` argument for rounding with scientific notation.
 
+Bugs:
+
+* Group separators respect `add_rows` with `shape="rbind"`. Thanks to @lrose1 for Report #626.
+
 # modelsummary 1.4.0
 
 * Built-in support for markdown tables.
