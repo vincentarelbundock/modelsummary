@@ -1,7 +1,6 @@
 #'
-#' @examples
-#' if (identical(Sys.getenv("pkgdown"),  "true")) {
-#'
+#' @section Examples:
+#' ```{r, eval = identical(Sys.getenv("pkgdown"),  "true")}
 #' # The `modelsummary` website includes \emph{many} examples and tutorials:
 #' # https://vincentarelbundock.github.io/modelsummary
 #'
@@ -169,5 +168,5 @@
 #'   fmt = f1,
 #'   gof_map = gm)
 #'
-#' }
+#' ```
 #'
