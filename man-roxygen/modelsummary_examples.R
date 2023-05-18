@@ -1,6 +1,6 @@
 #'
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #'
 #' # The `modelsummary` website includes \emph{many} examples and tutorials:
 #' # https://vincentarelbundock.github.io/modelsummary
