@@ -195,121 +195,21 @@ HTML tables:
 dat <- mtcars[, c("mpg", "hp")]
 colnames(dat) <- c("Miles / Gallon", "Horse Power")
 datasummary_correlation(dat)
-}\if{html}{\out{</div>}}\if{html}{\out{
-<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> Miles / Gallon </th>
-   <th style="text-align:right;"> Horse Power </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Miles / Gallon </td>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:right;"> . </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Horse Power </td>
-   <td style="text-align:right;"> −.78 </td>
-   <td style="text-align:right;"> 1 </td>
-  </tr>
-</tbody>
-</table>
-}}
 
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # clean variable names (tidyverse)
 library(tidyverse)
 dat <- mtcars \%>\%
   select(`Miles / Gallon` = mpg,
          `Horse Power` = hp)
 datasummary_correlation(dat)
-}\if{html}{\out{</div>}}\if{html}{\out{
-<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> Miles / Gallon </th>
-   <th style="text-align:right;"> Horse Power </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Miles / Gallon </td>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:right;"> . </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Horse Power </td>
-   <td style="text-align:right;"> −.78 </td>
-   <td style="text-align:right;"> 1 </td>
-  </tr>
-</tbody>
-</table>
-}}
 
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # alternative methods
 datasummary_correlation(dat, method = "pearspear")
-}\if{html}{\out{</div>}}\if{html}{\out{
-<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> Miles / Gallon </th>
-   <th style="text-align:right;"> Horse Power </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Miles / Gallon </td>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:right;"> −.78 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Horse Power </td>
-   <td style="text-align:right;"> −.89 </td>
-   <td style="text-align:right;"> 1 </td>
-  </tr>
-</tbody>
-</table>
-}}
 
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # custom function
 cor_fun <- function(x) cor(x, method = "kendall")
 datasummary_correlation(dat, method = cor_fun)
-}\if{html}{\out{</div>}}\if{html}{\out{
-<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> Miles / Gallon </th>
-   <th style="text-align:right;"> Horse Power </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Miles / Gallon </td>
-   <td style="text-align:right;"> 1.00 </td>
-   <td style="text-align:right;"> −.74 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Horse Power </td>
-   <td style="text-align:right;"> −.74 </td>
-   <td style="text-align:right;"> 1.00 </td>
-  </tr>
-</tbody>
-</table>
-}}
 
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # rename columns alphabetically and include a footnote for reference
 note <- sprintf("(\%s) \%s", letters[1:ncol(dat)], colnames(dat))
 note <- paste(note, collapse = "; ")
@@ -317,34 +217,7 @@ note <- paste(note, collapse = "; ")
 colnames(dat) <- sprintf("(\%s)", letters[1:ncol(dat)])
 
 datasummary_correlation(dat, notes = note)
-}\if{html}{\out{</div>}}\if{html}{\out{
-<table style="NAborder-bottom: 0; width: auto !important; margin-left: auto; margin-right: auto;" class="table">
- <thead>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> (a) </th>
-   <th style="text-align:right;"> (b) </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> (a) </td>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:right;"> . </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> (b) </td>
-   <td style="text-align:right;"> −.78 </td>
-   <td style="text-align:right;"> 1 </td>
-  </tr>
-</tbody>
-<tfoot><tr><td style="padding: 0; " colspan="100%">
-<sup></sup> (a) Miles / Gallon; (b) Horse Power</td></tr></tfoot>
-</table>
-}}
 
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # `datasummary_correlation_format`: custom function with formatting
 dat <- mtcars[, c("mpg", "hp", "disp")]
 
@@ -358,41 +231,7 @@ cor_fun <- function(x) \{
 \}
 
 datasummary_correlation(dat, method = cor_fun)
-}\if{html}{\out{</div>}}\if{html}{\out{
-<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> mpg </th>
-   <th style="text-align:right;"> hp </th>
-   <th style="text-align:right;"> disp </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> mpg </td>
-   <td style="text-align:right;"> . </td>
-   <td style="text-align:right;"> x </td>
-   <td style="text-align:right;"> x </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> hp </td>
-   <td style="text-align:right;"> −.74 </td>
-   <td style="text-align:right;"> . </td>
-   <td style="text-align:right;"> x </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> disp </td>
-   <td style="text-align:right;"> −.77 </td>
-   <td style="text-align:right;"> .67 </td>
-   <td style="text-align:right;"> . </td>
-  </tr>
-</tbody>
-</table>
-}}
 
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # use kableExtra and psych to color significant cells
 library(psych)
 library(kableExtra)
@@ -420,38 +259,7 @@ cor_fun <- function(dat) \{
 
 # The `escape=FALSE` is important here!
 datasummary_correlation(dat, method = cor_fun, escape = FALSE)
-}\if{html}{\out{</div>}}\if{html}{\out{
-<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> vs </th>
-   <th style="text-align:right;"> hp </th>
-   <th style="text-align:right;"> gear </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> vs </td>
-   <td style="text-align:right;"> 1.00 </td>
-   <td style="text-align:right;"> <span style="     border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: pink !important;">−.72</span> </td>
-   <td style="text-align:right;"> .21 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> hp </td>
-   <td style="text-align:right;"> <span style="     border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: pink !important;">−.72</span> </td>
-   <td style="text-align:right;"> 1.00 </td>
-   <td style="text-align:right;"> −.13 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> gear </td>
-   <td style="text-align:right;"> .21 </td>
-   <td style="text-align:right;"> −.13 </td>
-   <td style="text-align:right;"> 1.00 </td>
-  </tr>
-</tbody>
-</table>
-}}
+}\if{html}{\out{</div>}}
 }
 
 \references{

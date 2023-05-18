@@ -5,7 +5,7 @@ testone:
 	Rscript -e "pkgload::load_all();tinytest::run_test_file('$(testfile)')"
 
 document:
-	Rscript -e "devtools::document()"
+	Rscript -e "options('modelsummary_format_numeric_html' = 'plain');devtools::document()"
 
 check:
 	Rscript -e "devtools::check()"
@@ -13,5 +13,10 @@ check:
 install:
 	Rscript -e "devtools::install()"
 
+build:
+	make document
+	Rscript -e "pkgdown::build_site()"
+
 deploy:
+	make document
 	Rscript -e "pkgdown::deploy_to_branch()"
