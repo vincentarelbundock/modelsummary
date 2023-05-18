@@ -216,22 +216,25 @@ HTML tables:
 }
 }
 
-\examples{
-if (identical(Sys.getenv("pkgdown"),  "true")) {
-  # crosstab of two variables, showing counts, row percentages, and row/column totals
-  datasummary_crosstab(cyl ~ gear, data = mtcars)
+\section{Examples}{
 
-  # crosstab of two variables, showing counts only and no totals
-  datasummary_crosstab(cyl ~ gear, statistic = ~ N, data = mtcars)
 
-  # crosstab of three variables
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(modelsummary)
+
+# crosstab of two variables, showing counts, row percentages, and row/column totals
+datasummary_crosstab(cyl ~ gear, data = mtcars)
+
+# crosstab of two variables, showing counts only and no totals
+datasummary_crosstab(cyl ~ gear, statistic = ~ N, data = mtcars)
+
+# crosstab of three variables
   datasummary_crosstab(am * cyl ~ gear, data = mtcars)
-  
-  # crosstab with two variables and column percentages 
-  datasummary_crosstab(am ~ gear, statistic = ~ Percentage("col"), data = mtcars)
+
+# crosstab with two variables and column percentages 
+datasummary_crosstab(am ~ gear, statistic = ~ Percentage("col"), data = mtcars)
+}\if{html}{\out{</div>}}
 }
 
-}
 \references{
 Arel-Bundock V (2022). “modelsummary: Data and Model Summaries in R.” \emph{Journal of Statistical Software}, \emph{103}(1), 1-23. \doi{10.18637/jss.v103.i01}.'
 }

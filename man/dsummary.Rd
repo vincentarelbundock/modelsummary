@@ -205,47 +205,273 @@ HTML tables:
 }
 }
 
-\examples{
+\section{Examples}{
 
-if (identical(Sys.getenv("pkgdown"),  "true")) {
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(modelsummary)
 
 # The left-hand side of the formula describes rows, and the right-hand side
 # describes columns. This table uses the "mpg" variable as a row and the "mean"
 # function as a column:
 
 datasummary(mpg ~ mean, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mean </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.09 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # This table uses the "mean" function as a row and the "mpg" variable as a column:
 
 datasummary(mean ~ mpg, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mpg </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> mean </td>
+   <td style="text-align:right;"> 20.09 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # Display several variables or functions of the data using the "+"
 # concatenation operator. This table has 2 rows and 2 columns:
 
 datasummary(hp + mpg ~ mean + sd, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mean </th>
+   <th style="text-align:right;"> sd </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 146.69 </td>
+   <td style="text-align:right;"> 68.56 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.09 </td>
+   <td style="text-align:right;"> 6.03 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # Nest variables or statistics inside a "factor" variable using the "*" nesting
 # operator. This table shows the mean of "hp" and "mpg" for each value of
 # "cyl":
 
 mtcars$cyl <- as.factor(mtcars$cyl)
 datasummary(hp + mpg ~ cyl * mean, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;">  4 </th>
+   <th style="text-align:right;">  6 </th>
+   <th style="text-align:right;">  8 </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 82.64 </td>
+   <td style="text-align:right;"> 122.29 </td>
+   <td style="text-align:right;"> 209.21 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 26.66 </td>
+   <td style="text-align:right;"> 19.74 </td>
+   <td style="text-align:right;"> 15.10 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # If you don't want to convert your original data
 # to factors, you can use the 'Factor()'
 # function inside 'datasummary' to obtain an identical result:
 
 datasummary(hp + mpg ~ Factor(cyl) * mean, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;">  4 </th>
+   <th style="text-align:right;">  6 </th>
+   <th style="text-align:right;">  8 </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 82.64 </td>
+   <td style="text-align:right;"> 122.29 </td>
+   <td style="text-align:right;"> 209.21 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 26.66 </td>
+   <td style="text-align:right;"> 19.74 </td>
+   <td style="text-align:right;"> 15.10 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # You can nest several variables or statistics inside a factor by using
 # parentheses. This table shows the mean and the standard deviation for each
 # subset of "cyl":
 
 datasummary(hp + mpg ~ cyl * (mean + sd), data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1"></th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">4</div></th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">6</div></th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">8</div></th>
+</tr>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mean </th>
+   <th style="text-align:right;"> sd </th>
+   <th style="text-align:right;"> mean </th>
+   <th style="text-align:right;"> sd </th>
+   <th style="text-align:right;"> mean </th>
+   <th style="text-align:right;"> sd </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 82.64 </td>
+   <td style="text-align:right;"> 20.93 </td>
+   <td style="text-align:right;"> 122.29 </td>
+   <td style="text-align:right;"> 24.26 </td>
+   <td style="text-align:right;"> 209.21 </td>
+   <td style="text-align:right;"> 50.98 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 26.66 </td>
+   <td style="text-align:right;"> 4.51 </td>
+   <td style="text-align:right;"> 19.74 </td>
+   <td style="text-align:right;"> 1.45 </td>
+   <td style="text-align:right;"> 15.10 </td>
+   <td style="text-align:right;"> 2.56 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # Summarize all numeric variables with 'All()'
 datasummary(All(mtcars) ~ mean + sd, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mean </th>
+   <th style="text-align:right;"> sd </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.09 </td>
+   <td style="text-align:right;"> 6.03 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> disp </td>
+   <td style="text-align:right;"> 230.72 </td>
+   <td style="text-align:right;"> 123.94 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 146.69 </td>
+   <td style="text-align:right;"> 68.56 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> drat </td>
+   <td style="text-align:right;"> 3.60 </td>
+   <td style="text-align:right;"> 0.53 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> wt </td>
+   <td style="text-align:right;"> 3.22 </td>
+   <td style="text-align:right;"> 0.98 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> qsec </td>
+   <td style="text-align:right;"> 17.85 </td>
+   <td style="text-align:right;"> 1.79 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> vs </td>
+   <td style="text-align:right;"> 0.44 </td>
+   <td style="text-align:right;"> 0.50 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> am </td>
+   <td style="text-align:right;"> 0.41 </td>
+   <td style="text-align:right;"> 0.50 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> gear </td>
+   <td style="text-align:right;"> 3.69 </td>
+   <td style="text-align:right;"> 0.74 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> carb </td>
+   <td style="text-align:right;"> 2.81 </td>
+   <td style="text-align:right;"> 1.62 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # Define custom summary statistics. Your custom function should accept a vector
 # of numeric values and return a single numeric or string value:
 
@@ -253,23 +479,123 @@ minmax <- function(x) sprintf("[\%.2f, \%.2f]", min(x), max(x))
 mean_na <- function(x) mean(x, na.rm = TRUE)
 
 datasummary(hp + mpg ~ minmax + mean_na, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> minmax </th>
+   <th style="text-align:right;"> mean_na </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> [52.00, 335.00] </td>
+   <td style="text-align:right;"> 146.69 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> [10.40, 33.90] </td>
+   <td style="text-align:right;"> 20.09 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # To handle missing values, you can pass arguments to your functions using
 # '*Arguments()'
 
 datasummary(hp + mpg ~ mean * Arguments(na.rm = TRUE), data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mean </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 146.69 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.09 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # For convenience, 'modelsummary' supplies several convenience functions
 # with the argument `na.rm=TRUE` by default: Mean, Median, Min, Max, SD, Var,
 # P0, P25, P50, P75, P100, NUnique, Histogram
 
 datasummary(hp + mpg ~ Mean + SD + Histogram, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> Mean </th>
+   <th style="text-align:right;"> SD </th>
+   <th style="text-align:right;"> Histogram </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 146.69 </td>
+   <td style="text-align:right;"> 68.56 </td>
+   <td style="text-align:right;"> ▅▅▇▂▆▂▃▁▁ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.09 </td>
+   <td style="text-align:right;"> 6.03 </td>
+   <td style="text-align:right;"> ▂▅▇▇▆▃▁▁▂▂ </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # These functions also accept a 'fmt' argument which allows you to
 # round/format the results
 
 datasummary(hp + mpg ~ Mean * Arguments(fmt = "\%.3f") + SD * Arguments(fmt = "\%.1f"), data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> Mean </th>
+   <th style="text-align:right;"> SD </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 146.688 </td>
+   <td style="text-align:right;"> 68.6 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.091 </td>
+   <td style="text-align:right;"> 6.0 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # Save your tables to a variety of output formats:
 f <- hp + mpg ~ Mean + SD
 datasummary(f, data = mtcars, output = 'table.html')
@@ -282,22 +608,657 @@ datasummary(f, data = mtcars, output = 'table.png')
 
 # Display human-readable code
 datasummary(f, data = mtcars, output = 'html')
-datasummary(f, data = mtcars, output = 'markdown')
-datasummary(f, data = mtcars, output = 'latex')
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> Mean </th>
+   <th style="text-align:right;"> SD </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 146.69 </td>
+   <td style="text-align:right;"> 68.56 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.09 </td>
+   <td style="text-align:right;"> 6.03 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{datasummary(f, data = mtcars, output = 'markdown')
+}\if{html}{\out{</div>}}\tabular{lrr}{
+    \tab Mean \tab SD \cr
+   hp \tab 146.69 \tab 68.56 \cr
+   mpg \tab 20.09 \tab 6.03 \cr
+}
+
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{datasummary(f, data = mtcars, output = 'latex')
+}\if{html}{\out{</div>}}
+
+\begin{table}
+\centering
+\begin{tabular}[t]{lrr}
+\toprule
+& Mean & SD\\
+\midrule
+hp & \num{146.69} & \num{68.56}\\
+mpg & \num{20.09} & \num{6.03}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # Return a table object to customize using a table-making package
 datasummary(f, data = mtcars, output = 'gt')
-datasummary(f, data = mtcars, output = 'kableExtra')
-datasummary(f, data = mtcars, output = 'flextable')
-datasummary(f, data = mtcars, output = 'huxtable')
+}\if{html}{\out{</div>}}\if{html}{\out{
+<!--html_preserve--><div id="qgwvywweso" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+}}
+\if{html}{\out{
+<style>#qgwvywweso table \{
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+\}
 
+#qgwvywweso thead, #qgwvywweso tbody, #qgwvywweso tfoot, #qgwvywweso tr, #qgwvywweso td, #qgwvywweso th \{
+  border-style: none;
+\}
+
+#qgwvywweso p \{
+  margin: 0;
+  padding: 0;
+\}
+
+#qgwvywweso .gt_table \{
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+\}
+
+#qgwvywweso .gt_caption \{
+  padding-top: 4px;
+  padding-bottom: 4px;
+\}
+
+#qgwvywweso .gt_title \{
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+\}
+
+#qgwvywweso .gt_subtitle \{
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+\}
+
+#qgwvywweso .gt_heading \{
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+\}
+
+#qgwvywweso .gt_bottom_border \{
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+\}
+
+#qgwvywweso .gt_col_headings \{
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+\}
+
+#qgwvywweso .gt_col_heading \{
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+\}
+
+#qgwvywweso .gt_column_spanner_outer \{
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+\}
+
+#qgwvywweso .gt_column_spanner_outer:first-child \{
+  padding-left: 0;
+\}
+
+#qgwvywweso .gt_column_spanner_outer:last-child \{
+  padding-right: 0;
+\}
+
+#qgwvywweso .gt_column_spanner \{
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+\}
+
+#qgwvywweso .gt_spanner_row \{
+  border-bottom-style: hidden;
+\}
+
+#qgwvywweso .gt_group_heading \{
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+\}
+
+#qgwvywweso .gt_empty_group_heading \{
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+\}
+
+#qgwvywweso .gt_from_md > :first-child \{
+  margin-top: 0;
+\}
+
+#qgwvywweso .gt_from_md > :last-child \{
+  margin-bottom: 0;
+\}
+
+#qgwvywweso .gt_row \{
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+\}
+
+#qgwvywweso .gt_stub \{
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+\}
+
+#qgwvywweso .gt_stub_row_group \{
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+\}
+
+#qgwvywweso .gt_row_group_first td \{
+  border-top-width: 2px;
+\}
+
+#qgwvywweso .gt_row_group_first th \{
+  border-top-width: 2px;
+\}
+
+#qgwvywweso .gt_summary_row \{
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+\}
+
+#qgwvywweso .gt_first_summary_row \{
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+\}
+
+#qgwvywweso .gt_first_summary_row.thick \{
+  border-top-width: 2px;
+\}
+
+#qgwvywweso .gt_last_summary_row \{
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+\}
+
+#qgwvywweso .gt_grand_summary_row \{
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+\}
+
+#qgwvywweso .gt_first_grand_summary_row \{
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+\}
+
+#qgwvywweso .gt_last_grand_summary_row_top \{
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+\}
+
+#qgwvywweso .gt_striped \{
+  background-color: rgba(128, 128, 128, 0.05);
+\}
+
+#qgwvywweso .gt_table_body \{
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+\}
+
+#qgwvywweso .gt_footnotes \{
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+\}
+
+#qgwvywweso .gt_footnote \{
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+\}
+
+#qgwvywweso .gt_sourcenotes \{
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+\}
+
+#qgwvywweso .gt_sourcenote \{
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+\}
+
+#qgwvywweso .gt_left \{
+  text-align: left;
+\}
+
+#qgwvywweso .gt_center \{
+  text-align: center;
+\}
+
+#qgwvywweso .gt_right \{
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+\}
+
+#qgwvywweso .gt_font_normal \{
+  font-weight: normal;
+\}
+
+#qgwvywweso .gt_font_bold \{
+  font-weight: bold;
+\}
+
+#qgwvywweso .gt_font_italic \{
+  font-style: italic;
+\}
+
+#qgwvywweso .gt_super \{
+  font-size: 65%;
+\}
+
+#qgwvywweso .gt_footnote_marks \{
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+\}
+
+#qgwvywweso .gt_asterisk \{
+  font-size: 100%;
+  vertical-align: 0;
+\}
+
+#qgwvywweso .gt_indent_1 \{
+  text-indent: 5px;
+\}
+
+#qgwvywweso .gt_indent_2 \{
+  text-indent: 10px;
+\}
+
+#qgwvywweso .gt_indent_3 \{
+  text-indent: 15px;
+\}
+
+#qgwvywweso .gt_indent_4 \{
+  text-indent: 20px;
+\}
+
+#qgwvywweso .gt_indent_5 \{
+  text-indent: 25px;
+\}
+</style>
+}}
+\if{html}{\out{
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+}}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{<tr class="gt_col_headings">
+  <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=" "> </th>
+  <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean">Mean</th>
+  <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="SD">SD</th>
+</tr>
+}\if{html}{\out{</div>}}\if{html}{\out{
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="" class="gt_row gt_left">hp</td>
+<td headers="Mean" class="gt_row gt_right">146.69</td>
+<td headers="SD" class="gt_row gt_right">68.56</td></tr>
+    <tr><td headers="" class="gt_row gt_left">mpg</td>
+<td headers="Mean" class="gt_row gt_right">20.09</td>
+<td headers="SD" class="gt_row gt_right">6.03</td></tr>
+  </tbody>
+}}
+\if{html}{\out{
+</table>
+</div><!--/html_preserve-->
+}}
+
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{datasummary(f, data = mtcars, output = 'kableExtra')
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> Mean </th>
+   <th style="text-align:right;"> SD </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 146.69 </td>
+   <td style="text-align:right;"> 68.56 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.09 </td>
+   <td style="text-align:right;"> 6.03 </td>
+  </tr>
+</tbody>
+</table>
+}}
+
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{datasummary(f, data = mtcars, output = 'flextable')
+}\if{html}{\out{</div>}}\if{html}{\out{
+<div class="tabwid"><style>.cl-d152b4e6\{\}.cl-d14cb384\{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;\}.cl-d14f3e92\{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;\}.cl-d14f4da6\{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-d14f4db0\{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-d14f4dc4\{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.tabwid \{
+  font-size: initial;
+  padding-bottom: 1em;
+\}
+}}
+
+
+.tabwid table{
+border-spacing:0px !important;
+border-collapse:collapse;
+line-height:1;
+margin-left:auto;
+margin-right:auto;
+border-width: 0;
+border-color: transparent;
+caption-side: top;
+}
+.tabwid-caption-bottom table{
+caption-side: bottom;
+}
+.tabwid_left table{
+margin-left:0;
+}
+.tabwid_right table{
+margin-right:0;
+}
+.tabwid td, .tabwid th {
+padding: 0;
+}
+.tabwid a {
+text-decoration: none;
+}
+.tabwid thead {
+background-color: transparent;
+}
+.tabwid tfoot {
+background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+.katex-display {
+margin: 0 0 !important;
+}\if{html}{\out{</style>}}\if{html}{\out{<table data-quarto-disable-processing='true' class='cl-d152b4e6'>}}\if{html}{\out{<thead>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<th class="cl-d14f4da6">}}\if{html}{\out{<p class="cl-d14f3e92">}}\if{html}{\out{<span class="cl-d14cb384">}} \if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{<th class="cl-d14f4da6">}}\if{html}{\out{<p class="cl-d14f3e92">}}\if{html}{\out{<span class="cl-d14cb384">}}Mean\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{<th class="cl-d14f4da6">}}\if{html}{\out{<p class="cl-d14f3e92">}}\if{html}{\out{<span class="cl-d14cb384">}}SD\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{</tr>}}\if{html}{\out{</thead>}}\if{html}{\out{<tbody>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-d14f4db0">}}\if{html}{\out{<p class="cl-d14f3e92">}}\if{html}{\out{<span class="cl-d14cb384">}}hp\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-d14f4db0">}}\if{html}{\out{<p class="cl-d14f3e92">}}\if{html}{\out{<span class="cl-d14cb384">}}146.69\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-d14f4db0">}}\if{html}{\out{<p class="cl-d14f3e92">}}\if{html}{\out{<span class="cl-d14cb384">}}68.56\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-d14f4dc4">}}\if{html}{\out{<p class="cl-d14f3e92">}}\if{html}{\out{<span class="cl-d14cb384">}}mpg\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-d14f4dc4">}}\if{html}{\out{<p class="cl-d14f3e92">}}\if{html}{\out{<span class="cl-d14cb384">}}20.09\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-d14f4dc4">}}\if{html}{\out{<p class="cl-d14f3e92">}}\if{html}{\out{<span class="cl-d14cb384">}}6.03\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{</tbody>}}\if{html}{\out{</table>}}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{datasummary(f, data = mtcars, output = 'huxtable')
+#> Warning in knit_print.huxtable(x, ...): Unrecognized output format "". Using `to_screen` to print huxtables.
+#> Set options("huxtable.knitr_output_format") manually to "latex", "html", "rtf", "docx", "pptx", "md" or "screen".
+}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{                       ──────────────────────────
+                                 Mean     SD     
+                       ──────────────────────────
+                         hp      146.69   68.56  
+                         mpg     20.09    6.03   
+                       ──────────────────────────
+}\if{html}{\out{</div>}}
+
+Column names: , Mean, SD
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # add_rows
 new_rows <- data.frame(a = 1:2, b = 2:3, c = 4:5)
 attr(new_rows, 'position') <- c(1, 3)
 datasummary(mpg + hp ~ mean + sd, data = mtcars, add_rows = new_rows)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mean </th>
+   <th style="text-align:right;"> sd </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 1.00 </td>
+   <td style="text-align:right;"> 2.00 </td>
+   <td style="text-align:right;"> 4.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.09 </td>
+   <td style="text-align:right;"> 6.03 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2.00 </td>
+   <td style="text-align:right;"> 3.00 </td>
+   <td style="text-align:right;"> 5.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 146.69 </td>
+   <td style="text-align:right;"> 68.56 </td>
+  </tr>
+</tbody>
+</table>
+}}
 }
 
-}
 \references{
 Arel-Bundock V (2022). “modelsummary: Data and Model Summaries in R.” \emph{Journal of Statistical Software}, \emph{103}(1), 1-23. \doi{10.18637/jss.v103.i01}.'
 }

@@ -35,20 +35,22 @@
 #'   table.
 #' @template citation
 #' @template options
-#' @examples
-#' if (identical(Sys.getenv("pkgdown"),  "true")) {
-#'   # crosstab of two variables, showing counts, row percentages, and row/column totals
-#'   datasummary_crosstab(cyl ~ gear, data = mtcars)
+#' @section Examples:
+#' ```{r, eval = FALSE}
+#' library(modelsummary)
+#' 
+#' # crosstab of two variables, showing counts, row percentages, and row/column totals
+#' datasummary_crosstab(cyl ~ gear, data = mtcars)
 #'
-#'   # crosstab of two variables, showing counts only and no totals
-#'   datasummary_crosstab(cyl ~ gear, statistic = ~ N, data = mtcars)
+#' # crosstab of two variables, showing counts only and no totals
+#' datasummary_crosstab(cyl ~ gear, statistic = ~ N, data = mtcars)
 #'
-#'   # crosstab of three variables
+#' # crosstab of three variables
 #'   datasummary_crosstab(am * cyl ~ gear, data = mtcars)
-#'   
-#'   # crosstab with two variables and column percentages 
-#'   datasummary_crosstab(am ~ gear, statistic = ~ Percentage("col"), data = mtcars)
-#' }
+#'
+#' # crosstab with two variables and column percentages 
+#' datasummary_crosstab(am ~ gear, statistic = ~ Percentage("col"), data = mtcars)
+#' ```
 #'
 #' @details
 #' Variables in `formula` are automatically wrapped in `Factor()`.

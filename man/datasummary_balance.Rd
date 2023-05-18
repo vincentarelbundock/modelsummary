@@ -204,11 +204,126 @@ HTML tables:
 }
 }
 
-\examples{
-if (identical(Sys.getenv("pkgdown"),  "true")) {
+\section{Examples}{
+
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(modelsummary)
 datasummary_balance(~am, mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1"></th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">0</div></th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">1</div></th>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="2"></th>
+</tr>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> Mean </th>
+   <th style="text-align:right;"> Std. Dev. </th>
+   <th style="text-align:right;"> Mean </th>
+   <th style="text-align:right;"> Std. Dev. </th>
+   <th style="text-align:right;"> Diff. in Means </th>
+   <th style="text-align:right;"> Std. Error </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 17.1 </td>
+   <td style="text-align:right;"> 3.8 </td>
+   <td style="text-align:right;"> 24.4 </td>
+   <td style="text-align:right;"> 6.2 </td>
+   <td style="text-align:right;"> 7.2 </td>
+   <td style="text-align:right;"> 1.9 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> cyl </td>
+   <td style="text-align:right;"> 6.9 </td>
+   <td style="text-align:right;"> 1.5 </td>
+   <td style="text-align:right;"> 5.1 </td>
+   <td style="text-align:right;"> 1.6 </td>
+   <td style="text-align:right;"> -1.9 </td>
+   <td style="text-align:right;"> 0.6 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> disp </td>
+   <td style="text-align:right;"> 290.4 </td>
+   <td style="text-align:right;"> 110.2 </td>
+   <td style="text-align:right;"> 143.5 </td>
+   <td style="text-align:right;"> 87.2 </td>
+   <td style="text-align:right;"> -146.8 </td>
+   <td style="text-align:right;"> 35.0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 160.3 </td>
+   <td style="text-align:right;"> 53.9 </td>
+   <td style="text-align:right;"> 126.8 </td>
+   <td style="text-align:right;"> 84.1 </td>
+   <td style="text-align:right;"> -33.4 </td>
+   <td style="text-align:right;"> 26.4 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> drat </td>
+   <td style="text-align:right;"> 3.3 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:right;"> 4.0 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:right;"> 0.8 </td>
+   <td style="text-align:right;"> 0.1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> wt </td>
+   <td style="text-align:right;"> 3.8 </td>
+   <td style="text-align:right;"> 0.8 </td>
+   <td style="text-align:right;"> 2.4 </td>
+   <td style="text-align:right;"> 0.6 </td>
+   <td style="text-align:right;"> -1.4 </td>
+   <td style="text-align:right;"> 0.2 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> qsec </td>
+   <td style="text-align:right;"> 18.2 </td>
+   <td style="text-align:right;"> 1.8 </td>
+   <td style="text-align:right;"> 17.4 </td>
+   <td style="text-align:right;"> 1.8 </td>
+   <td style="text-align:right;"> -0.8 </td>
+   <td style="text-align:right;"> 0.6 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> vs </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:right;"> 0.5 </td>
+   <td style="text-align:right;"> 0.5 </td>
+   <td style="text-align:right;"> 0.5 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:right;"> 0.2 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> gear </td>
+   <td style="text-align:right;"> 3.2 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:right;"> 4.4 </td>
+   <td style="text-align:right;"> 0.5 </td>
+   <td style="text-align:right;"> 1.2 </td>
+   <td style="text-align:right;"> 0.2 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> carb </td>
+   <td style="text-align:right;"> 2.7 </td>
+   <td style="text-align:right;"> 1.1 </td>
+   <td style="text-align:right;"> 2.9 </td>
+   <td style="text-align:right;"> 2.2 </td>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:right;"> 0.7 </td>
+  </tr>
+</tbody>
+</table>
+}}
 }
-}
+
 \references{
 Arel-Bundock V (2022). “modelsummary: Data and Model Summaries in R.” \emph{Journal of Statistical Software}, \emph{103}(1), 1-23. \doi{10.18637/jss.v103.i01}.'
 }

@@ -26,10 +26,11 @@
 #' @template citation
 #' @template options
 #' @export
-#' @examples
-#' if (identical(Sys.getenv("pkgdown"),  "true")) {
+#' @section Examples:
+#' ```{r, eval = identical(Sys.getenv("pkgdown"), "true")}
+#' library(modelsummary)
 #' datasummary_balance(~am, mtcars)
-#' }
+#' ```
 datasummary_balance <- function(formula,
                                 data,
                                 output = "default",

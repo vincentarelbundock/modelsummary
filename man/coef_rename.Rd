@@ -34,12 +34,85 @@ variable}
 A convenience function which can be passed to the \code{coef_rename} argument of
 the \code{modelsummary} function.
 }
-\examples{
-if (identical(Sys.getenv("pkgdown"),  "true")) {
-library(modelsummary)
+\section{Examples}{
+
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(modelsummary)
 dat <- mtcars
 dat$horse_power <- dat$hp
 mod <- lm(mpg ~ horse_power + factor(cyl), dat)
 modelsummary(mod, coef_rename = coef_rename)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:center;">  (1) </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> (Intercept) </td>
+   <td style="text-align:center;"> 28.650 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:center;"> (1.588) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Horse Power </td>
+   <td style="text-align:center;"> −0.024 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:center;"> (0.015) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 6 </td>
+   <td style="text-align:center;"> −5.968 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:center;"> (1.639) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 8 </td>
+   <td style="text-align:center;"> −8.521 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;box-shadow: 0px 1.5px">  </td>
+   <td style="text-align:center;box-shadow: 0px 1.5px"> (2.326) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Num.Obs. </td>
+   <td style="text-align:center;"> 32 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> R2 </td>
+   <td style="text-align:center;"> 0.754 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> R2 Adj. </td>
+   <td style="text-align:center;"> 0.727 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> AIC </td>
+   <td style="text-align:center;"> 169.9 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BIC </td>
+   <td style="text-align:center;"> 177.2 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Log.Lik. </td>
+   <td style="text-align:center;"> −79.948 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> RMSE </td>
+   <td style="text-align:center;"> 2.94 </td>
+  </tr>
+</tbody>
+</table>
+}}
 }
-}
+

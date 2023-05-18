@@ -42,10 +42,11 @@
 #' affect the behavior of other functions behind the scenes.
 #' @template citation
 #' @template options
-#' @examples
+#' @section Examples:
 #'
-#' if (identical(Sys.getenv("pkgdown"),  "true")) {
-#'
+#' ```{r, eval = identical(Sys.getenv("pkgdown"), "true")}
+#' library(modelsummary)
+#' 
 #' # The left-hand side of the formula describes rows, and the right-hand side
 #' # describes columns. This table uses the "mpg" variable as a row and the "mean"
 #' # function as a column:
@@ -132,7 +133,7 @@
 #' new_rows <- data.frame(a = 1:2, b = 2:3, c = 4:5)
 #' attr(new_rows, 'position') <- c(1, 3)
 #' datasummary(mpg + hp ~ mean + sd, data = mtcars, add_rows = new_rows)
-#' }
+#' ```
 #'
 #' @details
 #' Visit the 'modelsummary' website for more usage examples:

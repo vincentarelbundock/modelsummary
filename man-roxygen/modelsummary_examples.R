@@ -1,13 +1,13 @@
 #'
-#' @section Examples:
-#' ```{r, eval = identical(Sys.getenv("pkgdown"),  "true")}
+#' @examples
+#' if (identical(Sys.getenv("pkgdown"), "true")) {
 #' # The `modelsummary` website includes \emph{many} examples and tutorials:
 #' # https://vincentarelbundock.github.io/modelsummary
 #'
 #' library(modelsummary)
 #'
 #' # load data and estimate models
-#' data(trees)
+#' utils::data(trees)
 #' models <- list()
 #' models[['Bivariate']] <- lm(Girth ~ Height, data = trees)
 #' models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
@@ -167,6 +167,5 @@
 #' modelsummary(models,
 #'   fmt = f1,
 #'   gof_map = gm)
-#'
-#' ```
+#' }
 #'
