@@ -217,7 +217,7 @@ HTML tables:
 }
 
 \examples{
-\dontrun{
+if (identical(Sys.getenv("pkgdown"),  "true")) {
   # crosstab of two variables, showing counts, row percentages, and row/column totals
   datasummary_crosstab(cyl ~ gear, data = mtcars)
 

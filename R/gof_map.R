@@ -98,7 +98,7 @@ gof_map_build <- function() {
 #' @name gof_map
 #' @format data.frame with 4 columns of character data: raw, clean, fmt, omit
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #'
 #' library(modelsummary)
 #' mod <- lm(wt ~ drat, data = mtcars)

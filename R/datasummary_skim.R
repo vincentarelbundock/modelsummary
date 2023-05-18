@@ -22,7 +22,7 @@
 #' @template options
 #' @examples
 #'
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' dat <- mtcars
 #' dat$vs <- as.logical(dat$vs)
 #' dat$cyl <- as.factor(dat$cyl)

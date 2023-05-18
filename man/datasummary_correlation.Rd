@@ -187,7 +187,7 @@ HTML tables:
 }
 
 \examples{
-\dontrun{
+if (identical(Sys.getenv("pkgdown"),  "true")) {
 library(modelsummary)
 
 # clean variable names (base R)

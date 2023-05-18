@@ -8,7 +8,7 @@
 #'   stripped before the computation proceeds.
 #' @param ... unused
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' datasummary(mpg + hp ~ Mean + P0 + P25 + P50 + P75 + P100 +
 #'             Min + Max + SD + Var,
 #'             data = mtcars)
@@ -25,7 +25,7 @@ Mean <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @inheritParams Mean
 #' @export
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' datasummary(Factor(cyl) ~ N, data = mtcars)
 #' }
 N <- function(x) {
@@ -44,7 +44,7 @@ N <- function(x) {
 #' @inheritParams Mean
 #' @export
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
 #'             Min + Max + SD + Var,
 #'             data = mtcars)
@@ -63,7 +63,7 @@ Median <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @inheritParams Mean
 #' @export
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
 #'             Min + Max + SD + Var,
 #'             data = mtcars)
@@ -80,7 +80,7 @@ Min <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @inheritParams Mean
 #' @export
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
 #'             Min + Max + SD + Var,
 #'             data = mtcars)
@@ -96,7 +96,7 @@ Max <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @inheritParams Mean
 #' @export
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
 #'             Min + Max + SD + Var,
 #'             data = mtcars)
@@ -112,7 +112,7 @@ SD <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @inheritParams Mean
 #' @export
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
 #'             Min + Max + SD + Var,
 #'             data = mtcars)
@@ -152,7 +152,7 @@ NPercent <- function(x, y) {
 #' @inheritParams Mean
 #' @export
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' datasummary(cyl + hp ~ NUnique, data = mtcars)
 #' }
 NUnique <- function(x, ...) sprintf("%.0f", length(unique(x)))
@@ -163,7 +163,7 @@ NUnique <- function(x, ...) sprintf("%.0f", length(unique(x)))
 #' @inheritParams Mean
 #' @export
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
 #'             Min + Max + SD + Var,
 #'             data = mtcars)
@@ -179,7 +179,7 @@ P0 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @inheritParams Mean
 #' @export
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
 #'             Min + Max + SD + Var,
 #'             data = mtcars)
@@ -195,7 +195,7 @@ P25 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @inheritParams Mean
 #' @export
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
 #'             Min + Max + SD + Var,
 #'             data = mtcars)
@@ -211,7 +211,7 @@ P50 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @inheritParams Mean
 #' @export
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
 #'             Min + Max + SD + Var,
 #'             data = mtcars)
@@ -227,7 +227,7 @@ P75 <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @inheritParams Mean
 #' @export
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' datasummary(mpg + hp ~ Mean + Median + P0 + P25 + P50 + P75 + P100 +
 #'             Min + Max + SD + Var,
 #'             data = mtcars)

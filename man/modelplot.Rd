@@ -123,7 +123,7 @@ https://vincentarelbundock.github.io/modelsummary/
 }
 }
 \examples{
-\dontrun{
+if (identical(Sys.getenv("pkgdown"),  "true")) {
 
 library(modelsummary)
 

@@ -8,7 +8,7 @@
 #' @param x a list of class `modelsummary_list` (see Examples section)
 #' @param ... other parameters are accepted by ignored
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' mod <- list(
 #'   tidy = data.frame(term = c("A", "B"),
 #'                     estimate = 1:2,

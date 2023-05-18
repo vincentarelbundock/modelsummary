@@ -17,7 +17,7 @@
 #' 'geom_pointrange' that 'modelplot' draws.
 #' @template citation
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #'
 #' library(modelsummary)
 #'

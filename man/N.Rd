@@ -13,7 +13,7 @@ N(x)
 datasummary statistic shortcut
 }
 \examples{
-\dontrun{
+if (identical(Sys.getenv("pkgdown"),  "true")) {
 datasummary(Factor(cyl) ~ N, data = mtcars)
 }
 }

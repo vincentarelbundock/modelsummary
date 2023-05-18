@@ -15,7 +15,7 @@ NUnique(x, ...)
 datasummary statistic shortcut
 }
 \examples{
-\dontrun{
+if (identical(Sys.getenv("pkgdown"),  "true")) {
 datasummary(cyl + hp ~ NUnique, data = mtcars)
 }
 }

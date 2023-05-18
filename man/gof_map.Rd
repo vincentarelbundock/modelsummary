@@ -17,7 +17,7 @@ customize the list of statistics to display and their format. See example
 below.
 }
 \examples{
-\dontrun{
+if (identical(Sys.getenv("pkgdown"),  "true")) {
 
 library(modelsummary)
 mod <- lm(wt ~ drat, data = mtcars)

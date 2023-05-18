@@ -205,7 +205,7 @@ HTML tables:
 }
 
 \examples{
-\dontrun{
+if (identical(Sys.getenv("pkgdown"),  "true")) {
 datasummary_balance(~am, mtcars)
 }
 }

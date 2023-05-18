@@ -44,7 +44,7 @@
 #' @template options
 #' @examples
 #'
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #'
 #' # The left-hand side of the formula describes rows, and the right-hand side
 #' # describes columns. This table uses the "mpg" variable as a row and the "mean"

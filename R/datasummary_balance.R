@@ -27,7 +27,7 @@
 #' @template options
 #' @export
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' datasummary_balance(~am, mtcars)
 #' }
 datasummary_balance <- function(formula,

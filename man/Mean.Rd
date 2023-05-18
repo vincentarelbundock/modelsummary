@@ -20,7 +20,7 @@ stripped before the computation proceeds.}
 datasummary statistic shortcut
 }
 \examples{
-\dontrun{
+if (identical(Sys.getenv("pkgdown"),  "true")) {
 datasummary(mpg + hp ~ Mean + P0 + P25 + P50 + P75 + P100 +
             Min + Max + SD + Var,
             data = mtcars)

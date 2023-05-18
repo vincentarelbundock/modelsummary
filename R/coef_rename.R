@@ -14,7 +14,7 @@
 #'
 #' @export
 #' @examples
-#' \dontrun{
+#' if (identical(Sys.getenv("pkgdown"),  "true")) {
 #' library(modelsummary)
 #' dat <- mtcars
 #' dat$horse_power <- dat$hp
