@@ -76,7 +76,8 @@
 
 
 
-<script src="modelplot_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>`modelplot`: Plot model coefficients with confidence intervals</h1>
             
@@ -87,8 +88,14 @@
 
     
     
-<p><code>modelplot</code> is a function from the <code>modelsummary</code> package. It allows you to plot model estimates and confidence intervals. It makes it easy to subset, rename, reorder, and customize plots using same mechanics as in <code>modelsummary</code>.</p>
-<p>To illustrate how the function works, we fit a linear model to data about the <a href="https://github.com/allisonhorst/palmerpenguins" class="external-link">Palmer Penguins</a>:</p>
+<p><code>modelplot</code> is a function from the
+<code>modelsummary</code> package. It allows you to plot model estimates
+and confidence intervals. It makes it easy to subset, rename, reorder,
+and customize plots using same mechanics as in
+<code>modelsummary</code>.</p>
+<p>To illustrate how the function works, we fit a linear model to data
+about the <a href="https://github.com/allisonhorst/palmerpenguins" class="external-link">Palmer
+Penguins</a>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv'</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
@@ -98,7 +105,8 @@
 <span><span class="va">dat</span><span class="op">$</span><span class="va">flipper_length_cm</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">flipper_length_mm</span> <span class="op">/</span> <span class="fl">10</span></span>
 <span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">bill_length_cm</span> <span class="op">~</span> <span class="va">flipper_length_cm</span> <span class="op">+</span> <span class="va">species</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span></code></pre></div>
-<p>Then, we load the <code>modelsummary</code> library and call <code>modelplot</code>:</p>
+<p>Then, we load the <code>modelsummary</code> library and call
+<code>modelplot</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span></span>
 <span></span>
@@ -107,11 +115,20 @@
 <div class="section level2">
 <h2 id="rename-reorder-subset">Rename, reorder, subset<a class="anchor" aria-label="anchor" href="#rename-reorder-subset"></a>
 </h2>
-<p><code>modelplot</code> uses the same mechanics as <code>modelsummary</code> to rename, reorder, and subset estimates. First, you can use the <code>coef_omit</code> argument. This will omit any coefficient that matches a string or regular expression. To omit the intercept, for example, we can type:</p>
+<p><code>modelplot</code> uses the same mechanics as
+<code>modelsummary</code> to rename, reorder, and subset estimates.
+First, you can use the <code>coef_omit</code> argument. This will omit
+any coefficient that matches a string or regular expression. To omit the
+intercept, for example, we can type:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span>, coef_omit <span class="op">=</span> <span class="st">'Interc'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>Second, you can use the <code>coef_map</code> argument. <code>coef_map</code> is a named character vector, where names correspond to the original term names, and values correspond the names you want to assign. Any variable that is <em>not</em> included in <code>coef_map</code> will be excluded. Variables will also be drawn in the same order as in <code>coef_map</code>:</p>
+<p>Second, you can use the <code>coef_map</code> argument.
+<code>coef_map</code> is a named character vector, where names
+correspond to the original term names, and values correspond the names
+you want to assign. Any variable that is <em>not</em> included in
+<code>coef_map</code> will be excluded. Variables will also be drawn in
+the same order as in <code>coef_map</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'speciesChinstrap'</span> <span class="op">=</span> <span class="st">'Chinstrap'</span>,</span>
 <span>        <span class="st">'speciesGentoo'</span> <span class="op">=</span> <span class="st">'Gentoo'</span>, </span>
@@ -123,7 +140,9 @@
 <div class="section level2">
 <h2 id="several-models">Several models<a class="anchor" aria-label="anchor" href="#several-models"></a>
 </h2>
-<p>The main <code>modelsummary</code> functions allows you to create a table with the results of several models side-by-side, by storing them in a (potentially named) list:</p>
+<p>The main <code>modelsummary</code> functions allows you to create a
+table with the results of several models side-by-side, by storing them
+in a (potentially named) list:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="st">"Small model"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">bill_length_cm</span> <span class="op">~</span> <span class="va">flipper_length_cm</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,</span>
@@ -131,23 +150,23 @@
 <span>  <span class="st">"Large model"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">bill_length_cm</span> <span class="op">~</span> <span class="va">flipper_length_cm</span> <span class="op">+</span> <span class="va">body_mass_g</span> <span class="op">+</span> <span class="va">species</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="st">'conf.int'</span><span class="op">)</span></span></code></pre></div>
-<div id="auvedpphio" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#auvedpphio table {
+<div id="gefxjjdnlg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gefxjjdnlg table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#auvedpphio thead, #auvedpphio tbody, #auvedpphio tfoot, #auvedpphio tr, #auvedpphio td, #auvedpphio th {
+#gefxjjdnlg thead, #gefxjjdnlg tbody, #gefxjjdnlg tfoot, #gefxjjdnlg tr, #gefxjjdnlg td, #gefxjjdnlg th {
   border-style: none;
 }
 
-#auvedpphio p {
+#gefxjjdnlg p {
   margin: 0;
   padding: 0;
 }
 
-#auvedpphio .gt_table {
+#gefxjjdnlg .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -173,12 +192,12 @@
   border-left-color: #D3D3D3;
 }
 
-#auvedpphio .gt_caption {
+#gefxjjdnlg .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#auvedpphio .gt_title {
+#gefxjjdnlg .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -190,7 +209,7 @@
   border-bottom-width: 0;
 }
 
-#auvedpphio .gt_subtitle {
+#gefxjjdnlg .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -202,7 +221,7 @@
   border-top-width: 0;
 }
 
-#auvedpphio .gt_heading {
+#gefxjjdnlg .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -214,13 +233,13 @@
   border-right-color: #D3D3D3;
 }
 
-#auvedpphio .gt_bottom_border {
+#gefxjjdnlg .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#auvedpphio .gt_col_headings {
+#gefxjjdnlg .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -235,7 +254,7 @@
   border-right-color: #D3D3D3;
 }
 
-#auvedpphio .gt_col_heading {
+#gefxjjdnlg .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -255,7 +274,7 @@
   overflow-x: hidden;
 }
 
-#auvedpphio .gt_column_spanner_outer {
+#gefxjjdnlg .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -267,15 +286,15 @@
   padding-right: 4px;
 }
 
-#auvedpphio .gt_column_spanner_outer:first-child {
+#gefxjjdnlg .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#auvedpphio .gt_column_spanner_outer:last-child {
+#gefxjjdnlg .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#auvedpphio .gt_column_spanner {
+#gefxjjdnlg .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -287,11 +306,11 @@
   width: 100%;
 }
 
-#auvedpphio .gt_spanner_row {
+#gefxjjdnlg .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#auvedpphio .gt_group_heading {
+#gefxjjdnlg .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -317,7 +336,7 @@
   text-align: left;
 }
 
-#auvedpphio .gt_empty_group_heading {
+#gefxjjdnlg .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -332,15 +351,15 @@
   vertical-align: middle;
 }
 
-#auvedpphio .gt_from_md > :first-child {
+#gefxjjdnlg .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#auvedpphio .gt_from_md > :last-child {
+#gefxjjdnlg .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#auvedpphio .gt_row {
+#gefxjjdnlg .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -359,7 +378,7 @@
   overflow-x: hidden;
 }
 
-#auvedpphio .gt_stub {
+#gefxjjdnlg .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -372,7 +391,7 @@
   padding-right: 5px;
 }
 
-#auvedpphio .gt_stub_row_group {
+#gefxjjdnlg .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -386,15 +405,15 @@
   vertical-align: top;
 }
 
-#auvedpphio .gt_row_group_first td {
+#gefxjjdnlg .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#auvedpphio .gt_row_group_first th {
+#gefxjjdnlg .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#auvedpphio .gt_summary_row {
+#gefxjjdnlg .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -404,16 +423,16 @@
   padding-right: 5px;
 }
 
-#auvedpphio .gt_first_summary_row {
+#gefxjjdnlg .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#auvedpphio .gt_first_summary_row.thick {
+#gefxjjdnlg .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#auvedpphio .gt_last_summary_row {
+#gefxjjdnlg .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -423,7 +442,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#auvedpphio .gt_grand_summary_row {
+#gefxjjdnlg .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -433,7 +452,7 @@
   padding-right: 5px;
 }
 
-#auvedpphio .gt_first_grand_summary_row {
+#gefxjjdnlg .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -443,7 +462,7 @@
   border-top-color: #D3D3D3;
 }
 
-#auvedpphio .gt_last_grand_summary_row_top {
+#gefxjjdnlg .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -453,11 +472,11 @@
   border-bottom-color: #D3D3D3;
 }
 
-#auvedpphio .gt_striped {
+#gefxjjdnlg .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#auvedpphio .gt_table_body {
+#gefxjjdnlg .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -466,7 +485,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#auvedpphio .gt_footnotes {
+#gefxjjdnlg .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -480,7 +499,7 @@
   border-right-color: #D3D3D3;
 }
 
-#auvedpphio .gt_footnote {
+#gefxjjdnlg .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -489,7 +508,7 @@
   padding-right: 5px;
 }
 
-#auvedpphio .gt_sourcenotes {
+#gefxjjdnlg .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -503,7 +522,7 @@
   border-right-color: #D3D3D3;
 }
 
-#auvedpphio .gt_sourcenote {
+#gefxjjdnlg .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -511,63 +530,63 @@
   padding-right: 5px;
 }
 
-#auvedpphio .gt_left {
+#gefxjjdnlg .gt_left {
   text-align: left;
 }
 
-#auvedpphio .gt_center {
+#gefxjjdnlg .gt_center {
   text-align: center;
 }
 
-#auvedpphio .gt_right {
+#gefxjjdnlg .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#auvedpphio .gt_font_normal {
+#gefxjjdnlg .gt_font_normal {
   font-weight: normal;
 }
 
-#auvedpphio .gt_font_bold {
+#gefxjjdnlg .gt_font_bold {
   font-weight: bold;
 }
 
-#auvedpphio .gt_font_italic {
+#gefxjjdnlg .gt_font_italic {
   font-style: italic;
 }
 
-#auvedpphio .gt_super {
+#gefxjjdnlg .gt_super {
   font-size: 65%;
 }
 
-#auvedpphio .gt_footnote_marks {
+#gefxjjdnlg .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#auvedpphio .gt_asterisk {
+#gefxjjdnlg .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#auvedpphio .gt_indent_1 {
+#gefxjjdnlg .gt_indent_1 {
   text-indent: 5px;
 }
 
-#auvedpphio .gt_indent_2 {
+#gefxjjdnlg .gt_indent_2 {
   text-indent: 10px;
 }
 
-#auvedpphio .gt_indent_3 {
+#gefxjjdnlg .gt_indent_3 {
   text-indent: 15px;
 }
 
-#auvedpphio .gt_indent_4 {
+#gefxjjdnlg .gt_indent_4 {
   text-indent: 20px;
 }
 
-#auvedpphio .gt_indent_5 {
+#gefxjjdnlg .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -694,14 +713,19 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">'Interc'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
-<p>Instead of displaying results with “dodged” side-by-side lines, you can also use <code>facet</code>:</p>
+<p>Instead of displaying results with “dodged” side-by-side lines, you
+can also use <code>facet</code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, facet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="customizing-plots">Customizing plots<a class="anchor" aria-label="anchor" href="#customizing-plots"></a>
 </h2>
-<p>The graphs produced by <code>modelplot</code> are simple <code>ggplot2</code> objects. You can thus post-process them using the normal suite of functions available for all objects of this type. Here, we change the axis labels, add a title and a caption, and use a color scheme inspired by Wes Anderson’s <em>Darjeeling Limited</em>:</p>
+<p>The graphs produced by <code>modelplot</code> are simple
+<code>ggplot2</code> objects. You can thus post-process them using the
+normal suite of functions available for all objects of this type. Here,
+we change the axis labels, add a title and a caption, and use a color
+scheme inspired by Wes Anderson’s <em>Darjeeling Limited</em>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/karthik/wesanderson" class="external-link">wesanderson</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
@@ -713,7 +737,13 @@
 <span>         caption <span class="op">=</span> <span class="st">"Data source: Gorman, Williams &amp; Fraser (2014), packaged for R by @apreshill and @allison_horst"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/wesanderson/man/wes_palette.html" class="external-link">wes_palette</a></span><span class="op">(</span><span class="st">'Darjeeling1'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
-<p>In <code>ggplot2</code>, some visual choices must be made when calling the “geom”, rather than with post-processing functions. For instance, the <code>size</code>, <code>color</code>, <code>fatten</code>, <code>linetype</code> arguments must all be specified inside the <code>geom_pointrange</code> function for them to take effect. <code>modelplot</code> will pass any unknown argument to <code>geom_pointrange</code>, so users can simply call:</p>
+<p>In <code>ggplot2</code>, some visual choices must be made when
+calling the “geom”, rather than with post-processing functions. For
+instance, the <code>size</code>, <code>color</code>,
+<code>fatten</code>, <code>linetype</code> arguments must all be
+specified inside the <code>geom_pointrange</code> function for them to
+take effect. <code>modelplot</code> will pass any unknown argument to
+<code>geom_pointrange</code>, so users can simply call:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span>, size <span class="op">=</span> <span class="fl">1</span>, fatten <span class="op">=</span> <span class="fl">.7</span>, color <span class="op">=</span> <span class="st">'darkgreen'</span>, linetype <span class="op">=</span> <span class="st">'dotted'</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -721,8 +751,14 @@
 <div class="section level3">
 <h3 id="conditional-colors-and-shape">Conditional colors and shape<a class="anchor" aria-label="anchor" href="#conditional-colors-and-shape"></a>
 </h3>
-<p>Note: This section requires a version of <code>modelsummary</code> greater than 1.2.0 <a href="https://github.com/vincentarelbundock/modelsummary#installation" class="external-link">or the development version.</a></p>
-<p>In a <a href="https://stackoverflow.com/a/74835661/342331" class="external-link">very nice Stack Overflow answer</a>, Allan Cameron shows how we can use the <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> function from <code>ggplot2</code> to add conditional aesthetics. For example, if we want to display statistically significant coefficients in a different color:</p>
+<p>Note: This section requires a version of <code>modelsummary</code>
+greater than 1.2.0 <a href="https://github.com/vincentarelbundock/modelsummary#installation" class="external-link">or
+the development version.</a></p>
+<p>In a <a href="https://stackoverflow.com/a/74835661/342331" class="external-link">very nice
+Stack Overflow answer</a>, Allan Cameron shows how we can use the
+<code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> function from <code>ggplot2</code> to add conditional
+aesthetics. For example, if we want to display statistically significant
+coefficients in a different color:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">gear</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
@@ -735,7 +771,10 @@
 <div class="section level3">
 <h3 id="example-using-facets-to-compare-models">Example: Using facets to compare models<a class="anchor" aria-label="anchor" href="#example-using-facets-to-compare-models"></a>
 </h3>
-<p>Customizing plots with <code>ggplot2</code> makes <code>modelplot</code> very flexible. For example, imagine you want to compare the coefficients of three models with different dependent variables. First, we load the packages and estimate our models:</p>
+<p>Customizing plots with <code>ggplot2</code> makes
+<code>modelplot</code> very flexible. For example, imagine you want to
+compare the coefficients of three models with different dependent
+variables. First, we load the packages and estimate our models:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span></span>
@@ -744,10 +783,13 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">carb</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">carb</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">carb</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Then, we use the <code>dvnames</code> function to rename our list with names matching the the dependent variable in each model:</p>
+<p>Then, we use the <code>dvnames</code> function to rename our list
+with names matching the the dependent variable in each model:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dvnames.html">dvnames</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span></span></code></pre></div>
-<p>By calling <code>modelplot</code> with the <code>draw=FALSE</code> argument, we see the raw data used to draw the plot. Here, we see that there is a <code>model</code> column:</p>
+<p>By calling <code>modelplot</code> with the <code>draw=FALSE</code>
+argument, we see the raw data used to draw the plot. Here, we see that
+there is a <code>model</code> column:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, draw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##           term model     estimate    std.error      conf.low    conf.high</span></span>
@@ -776,7 +818,9 @@
 <span><span class="co">## 4  2.410214e-04</span></span>
 <span><span class="co">## 8  3.111898e-05</span></span>
 <span><span class="co">## 12 1.338485e-03</span></span></code></pre>
-<p>Finally, we use the <code>model</code> column as our identifier in <code>ggplot2</code>’s <code>facet_grid</code> command to display models side by side:</p>
+<p>Finally, we use the <code>model</code> column as our identifier in
+<code>ggplot2</code>’s <code>facet_grid</code> command to display models
+side by side:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="op">~</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
@@ -785,7 +829,9 @@
 <div class="section level2">
 <h2 id="confidence-intervals-change-or-omit">Confidence intervals: change or omit<a class="anchor" aria-label="anchor" href="#confidence-intervals-change-or-omit"></a>
 </h2>
-<p>You can change the <span class="math inline">\(\alpha\)</span> level of your confidence intervals by changing the <code>conf_level</code> argument:</p>
+<p>You can change the <span class="math inline">\(\alpha\)</span> level
+of your confidence intervals by changing the <code>conf_level</code>
+argument:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">mod</span>, conf_level <span class="op">=</span> <span class="fl">.99</span><span class="op">)</span></span></code></pre></div>
 <p><img src="modelplot_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
@@ -796,8 +842,15 @@
 <div class="section level2">
 <h2 id="background-annotations">Background annotations<a class="anchor" aria-label="anchor" href="#background-annotations"></a>
 </h2>
-<p>Sometimes, you want to display annotations on a plot, but you would like to draw these annotations <em>behind</em> the <code>geom_pointrange</code> which displays the estimates. Since <code>modelplot</code> draws the <code>geom_pointrange</code> automatically, any <code>ggplot2</code> annotation you add to the plot using <code>+</code> will be added on <em>top</em> of the existing ones.</p>
-<p>To add your annotations in the background, you can pass them as a list of <code>ggplot2</code> “geoms”:</p>
+<p>Sometimes, you want to display annotations on a plot, but you would
+like to draw these annotations <em>behind</em> the
+<code>geom_pointrange</code> which displays the estimates. Since
+<code>modelplot</code> draws the <code>geom_pointrange</code>
+automatically, any <code>ggplot2</code> annotation you add to the plot
+using <code>+</code> will be added on <em>top</em> of the existing
+ones.</p>
+<p>To add your annotations in the background, you can pass them as a
+list of <code>ggplot2</code> “geoms”:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
@@ -814,7 +867,9 @@
 <div class="section level2">
 <h2 id="raw-data-more-customization">Raw data &amp; More customization<a class="anchor" aria-label="anchor" href="#raw-data-more-customization"></a>
 </h2>
-<p>If you would like to customize the plots even more than what <code>modelplot</code> allows, you can obtain the raw data used to draw the plots by setting <code>draw=FALSE</code>:</p>
+<p>If you would like to customize the plots even more than what
+<code>modelplot</code> allows, you can obtain the raw data used to draw
+the plots by setting <code>draw=FALSE</code>:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelplot.html">modelplot</a></span><span class="op">(</span><span class="va">models</span>, draw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##           term model     estimate    std.error      conf.low    conf.high</span></span>
@@ -843,7 +898,11 @@
 <span><span class="co">## 4  2.410214e-04</span></span>
 <span><span class="co">## 8  3.111898e-05</span></span>
 <span><span class="co">## 12 1.338485e-03</span></span></code></pre>
-<p>This allows users to use external tools such as <a href="https://mjskay.github.io/ggdist/" class="external-link">the powerful <code>ggdist</code> package</a>. In this example, we use the <code><a href="https://purrr.tidyverse.org/reference/map_dfr.html" class="external-link">purrr::map_dfr</a></code> function to call <code>modelplot</code> several times with different confidence levels. Then, we draw a plot where the different confidence intervals are drawn with different thicknesses:</p>
+<p>This allows users to use external tools such as <a href="https://mjskay.github.io/ggdist/" class="external-link">the powerful <code>ggdist</code>
+package</a>. In this example, we use the <code><a href="https://purrr.tidyverse.org/reference/map_dfr.html" class="external-link">purrr::map_dfr</a></code>
+function to call <code>modelplot</code> several times with different
+confidence levels. Then, we draw a plot where the different confidence
+intervals are drawn with different thicknesses:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span></span>
