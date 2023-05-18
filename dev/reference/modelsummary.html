@@ -34,7 +34,7 @@ The Appearance Vignette shows how to modify the look of tables.
     
     <a class="navbar-brand me-2" href="../index.html">modelsummary</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.0.9016</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.0.9004</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -478,9 +478,17 @@ do is supply a <code>mc.cores</code> argument which will be pushed forward to th
 For example, to use 4 cores to extract results:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.apply.futureverse.org" class="external-link">future.apply</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multicore</span>, workers <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"modelsummary_future"</span> <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">model_list</span><span class="op">)</span></span></code></pre><p></p></div>
 <p>Note that the "multicore" plan only parallelizes under mac or linux. Windows
-users can use <code>plan(multisession)' instead. However, note that the first time </code>modelsummary()<code>is called under multisession can be a fair bit longer, because of extra costs in passing data to and loading required packages on to workers. Subsequent calls to</code>modelsummary()` will often be much faster.</p>
+users can use <code>plan(multisession)</code> instead. However, note that the first
+time <code>modelsummary()</code> is called under multisession can be a fair bit longer,
+because of extra costs in passing data to and loading required packages on
+to workers. Subsequent calls to <code>modelsummary()</code> will often be much faster.</p>
+<p>Some users have reported difficult to reproduce errors when using the
+<code>future</code> package with some packages. The <code>future</code> parallelization in
+<code>modelsummary</code> can be disabled by calling:</p>
+<p><code>options("modelsummary_future" = FALSE)</code></p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
