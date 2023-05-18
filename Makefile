@@ -4,19 +4,23 @@ testall:
 testone:
 	Rscript -e "pkgload::load_all();tinytest::run_test_file('$(testfile)')"
 
-document:
-	Rscript -e "Sys.setenv('pkgdown' = 'true');options('modelsummary_format_numeric_html' = 'plain');devtools::document()"
+documentplain:
+	Rscript -e "devtools::document()"
 
-check:
+documentrich:
+	Rscript -e "Sys.setenv('pkgdown' = 'true');devtools::document()"
+
+check: documentplain
 	Rscript -e "devtools::check()"
 
-install:
+install: documentplain
 	Rscript -e "devtools::install()"
 
-build:
-	make document
+buildsite: documentrich
 	Rscript -e "pkgdown::build_site()"
 
-deploy:
-	make document
+deploysite: documentrich
 	Rscript -e "pkgdown::deploy_to_branch()"
+
+buildpdf: documentplain
+	R CMD Rd2pdf .

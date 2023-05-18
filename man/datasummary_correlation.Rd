@@ -212,7 +212,7 @@ datasummary_correlation(dat)
   </tr>
   <tr>
    <td style="text-align:left;"> Horse Power </td>
-   <td style="text-align:right;"> -.78 </td>
+   <td style="text-align:right;"> −.78 </td>
    <td style="text-align:right;"> 1 </td>
   </tr>
 </tbody>
@@ -223,13 +223,13 @@ datasummary_correlation(dat)
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # clean variable names (tidyverse)
 library(tidyverse)
-#> -- Attaching core tidyverse packages ------------------------------------------------- tidyverse 2.0.0 --
+#> -- Attaching core tidyverse packages ---------------------------------------------- tidyverse 2.0.0 --
 #> v dplyr     1.1.2     v readr     2.1.4
 #> v forcats   1.0.0     v stringr   1.5.0
 #> v ggplot2   3.4.2     v tibble    3.2.1
 #> v lubridate 1.9.2     v tidyr     1.3.0
 #> v purrr     1.0.1     
-#> -- Conflicts ------------------------------------------------------------------- tidyverse_conflicts() --
+#> -- Conflicts ---------------------------------------------------------------- tidyverse_conflicts() --
 #> x dplyr::bind_cols()  masks modelsummary::bind_cols()
 #> x dplyr::bind_rows()  masks modelsummary::bind_rows()
 #> x dplyr::filter()     masks stats::filter()
@@ -261,7 +261,7 @@ datasummary_correlation(dat)
   </tr>
   <tr>
    <td style="text-align:left;"> Horse Power </td>
-   <td style="text-align:right;"> -.78 </td>
+   <td style="text-align:right;"> −.78 </td>
    <td style="text-align:right;"> 1 </td>
   </tr>
 </tbody>
@@ -285,11 +285,11 @@ datasummary_correlation(dat, method = "pearspear")
   <tr>
    <td style="text-align:left;"> Miles / Gallon </td>
    <td style="text-align:right;"> 1 </td>
-   <td style="text-align:right;"> -.78 </td>
+   <td style="text-align:right;"> −.78 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Horse Power </td>
-   <td style="text-align:right;"> -.89 </td>
+   <td style="text-align:right;"> −.89 </td>
    <td style="text-align:right;"> 1 </td>
   </tr>
 </tbody>
@@ -314,11 +314,11 @@ datasummary_correlation(dat, method = cor_fun)
   <tr>
    <td style="text-align:left;"> Miles / Gallon </td>
    <td style="text-align:right;"> 1.00 </td>
-   <td style="text-align:right;"> -.74 </td>
+   <td style="text-align:right;"> −.74 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Horse Power </td>
-   <td style="text-align:right;"> -.74 </td>
+   <td style="text-align:right;"> −.74 </td>
    <td style="text-align:right;"> 1.00 </td>
   </tr>
 </tbody>
@@ -351,7 +351,7 @@ datasummary_correlation(dat, notes = note)
   </tr>
   <tr>
    <td style="text-align:left;"> (b) </td>
-   <td style="text-align:right;"> -.78 </td>
+   <td style="text-align:right;"> −.78 </td>
    <td style="text-align:right;"> 1 </td>
   </tr>
 </tbody>
@@ -394,13 +394,13 @@ datasummary_correlation(dat, method = cor_fun)
   </tr>
   <tr>
    <td style="text-align:left;"> hp </td>
-   <td style="text-align:right;"> -.74 </td>
+   <td style="text-align:right;"> −.74 </td>
    <td style="text-align:right;"> . </td>
    <td style="text-align:right;"> x </td>
   </tr>
   <tr>
    <td style="text-align:left;"> disp </td>
-   <td style="text-align:right;"> -.77 </td>
+   <td style="text-align:right;"> −.77 </td>
    <td style="text-align:right;"> .67 </td>
    <td style="text-align:right;"> . </td>
   </tr>
@@ -467,19 +467,19 @@ datasummary_correlation(dat, method = cor_fun, escape = FALSE)
   <tr>
    <td style="text-align:left;"> vs </td>
    <td style="text-align:right;"> 1.00 </td>
-   <td style="text-align:right;"> <span style="     border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: pink !important;">-.72</span> </td>
+   <td style="text-align:right;"> <span style="     border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: pink !important;">−.72</span> </td>
    <td style="text-align:right;"> .21 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> hp </td>
-   <td style="text-align:right;"> <span style="     border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: pink !important;">-.72</span> </td>
+   <td style="text-align:right;"> <span style="     border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: pink !important;">−.72</span> </td>
    <td style="text-align:right;"> 1.00 </td>
-   <td style="text-align:right;"> -.13 </td>
+   <td style="text-align:right;"> −.13 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> gear </td>
    <td style="text-align:right;"> .21 </td>
-   <td style="text-align:right;"> -.13 </td>
+   <td style="text-align:right;"> −.13 </td>
    <td style="text-align:right;"> 1.00 </td>
   </tr>
 </tbody>

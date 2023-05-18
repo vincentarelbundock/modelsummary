@@ -101,7 +101,7 @@
 #' # with the argument `na.rm=TRUE` by default: Mean, Median, Min, Max, SD, Var,
 #' # P0, P25, P50, P75, P100, NUnique, Histogram
 #'
-#' datasummary(hp + mpg ~ Mean + SD + Histogram, data = mtcars)
+#' #datasummary(hp + mpg ~ Mean + SD + Histogram, data = mtcars)
 #'
 #' # These functions also accept a 'fmt' argument which allows you to
 #' # round/format the results
@@ -126,10 +126,8 @@
 #' # Return a table object to customize using a table-making package
 #' #datasummary(f, data = mtcars, output = 'gt')
 #' #datasummary(f, data = mtcars, output = 'kableExtra')
-#' 
-#' datasummary(f, data = mtcars, output = 'flextable')
-#' 
-#' datasummary(f, data = mtcars, output = 'huxtable')
+#' #datasummary(f, data = mtcars, output = 'flextable')
+#' #datasummary(f, data = mtcars, output = 'huxtable')
 #'
 #' # add_rows
 #' new_rows <- data.frame(a = 1:2, b = 2:3, c = 4:5)

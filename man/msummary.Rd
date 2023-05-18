@@ -463,7 +463,7 @@ modelsummary(models)
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -474,7 +474,7 @@ modelsummary(models)
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -518,8 +518,8 @@ modelsummary(models)
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -551,13 +551,13 @@ modelsummary(models, statistic = NULL)
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;box-shadow: 0px 1.5px"> Volume </td>
@@ -591,8 +591,8 @@ modelsummary(models, statistic = NULL)
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -623,7 +623,7 @@ modelsummary(models, statistic = 'p.value')
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -635,7 +635,7 @@ modelsummary(models, statistic = 'p.value')
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -680,8 +680,8 @@ modelsummary(models, statistic = 'p.value')
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -712,23 +712,23 @@ modelsummary(models, statistic = 'statistic')
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
-   <td style="text-align:center;"> (-1.038) </td>
+   <td style="text-align:center;"> (−1.038) </td>
    <td style="text-align:center;"> (5.482) </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
    <td style="text-align:center;"> (3.272) </td>
-   <td style="text-align:center;"> (-1.609) </td>
+   <td style="text-align:center;"> (−1.609) </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Volume </td>
@@ -767,8 +767,8 @@ modelsummary(models, statistic = 'statistic')
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -799,23 +799,23 @@ modelsummary(models, statistic = 'conf.int', conf_level = 0.99)
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
-   <td style="text-align:center;"> [-22.617, 10.240] </td>
+   <td style="text-align:center;"> [−22.617, 10.240] </td>
    <td style="text-align:center;"> [5.364, 16.269] </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
    <td style="text-align:center;"> [0.040, 0.471] </td>
-   <td style="text-align:center;"> [-0.124, 0.033] </td>
+   <td style="text-align:center;"> [−0.124, 0.033] </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Volume </td>
@@ -854,8 +854,8 @@ modelsummary(models, statistic = 'conf.int', conf_level = 0.99)
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -888,12 +888,12 @@ modelsummary(models, statistic = c("t = \{statistic\}",
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
-   <td style="text-align:center;"> t = -1.038 </td>
+   <td style="text-align:center;"> t = −1.038 </td>
    <td style="text-align:center;"> t = 5.482 </td>
   </tr>
   <tr>
@@ -903,18 +903,18 @@ modelsummary(models, statistic = c("t = \{statistic\}",
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
-   <td style="text-align:center;"> [-18.378, 6.002] </td>
+   <td style="text-align:center;"> [−18.378, 6.002] </td>
    <td style="text-align:center;"> [6.774, 14.858] </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
    <td style="text-align:center;"> t = 3.272 </td>
-   <td style="text-align:center;"> t = -1.609 </td>
+   <td style="text-align:center;"> t = −1.609 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -924,7 +924,7 @@ modelsummary(models, statistic = c("t = \{statistic\}",
   <tr>
    <td style="text-align:left;">  </td>
    <td style="text-align:center;"> [0.096, 0.416] </td>
-   <td style="text-align:center;"> [-0.103, 0.012] </td>
+   <td style="text-align:center;"> [−0.103, 0.012] </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Volume </td>
@@ -973,8 +973,8 @@ modelsummary(models, statistic = c("t = \{statistic\}",
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -1008,13 +1008,13 @@ modelsummary(models,
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 [-18.378, 6.002] </td>
+   <td style="text-align:center;"> −6.188 [−18.378, 6.002] </td>
    <td style="text-align:center;"> 10.816 [6.774, 14.858] </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 [0.096, 0.416] </td>
-   <td style="text-align:center;"> -0.045 [-0.103, 0.012] </td>
+   <td style="text-align:center;"> −0.045 [−0.103, 0.012] </td>
   </tr>
   <tr>
    <td style="text-align:left;box-shadow: 0px 1.5px"> Volume </td>
@@ -1048,8 +1048,8 @@ modelsummary(models,
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -1082,7 +1082,7 @@ modelsummary(models,
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 (1.973) </td>
   </tr>
   <tr>
@@ -1093,7 +1093,7 @@ modelsummary(models,
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256** </td>
-   <td style="text-align:center;"> -0.045 (0.028) </td>
+   <td style="text-align:center;"> −0.045 (0.028) </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -1137,8 +1137,8 @@ modelsummary(models,
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -1170,7 +1170,7 @@ modelsummary(models, vcov = "robust")
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -1181,7 +1181,7 @@ modelsummary(models, vcov = "robust")
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -1225,8 +1225,8 @@ modelsummary(models, vcov = "robust")
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -1262,7 +1262,7 @@ modelsummary(models, vcov = list("classical", "stata"))
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -1273,7 +1273,7 @@ modelsummary(models, vcov = list("classical", "stata"))
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -1317,8 +1317,8 @@ modelsummary(models, vcov = list("classical", "stata"))
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -1354,7 +1354,7 @@ modelsummary(models, vcov = sandwich::vcovHC)
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -1365,7 +1365,7 @@ modelsummary(models, vcov = sandwich::vcovHC)
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -1409,8 +1409,8 @@ modelsummary(models, vcov = sandwich::vcovHC)
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> RMSE </td>
@@ -1442,7 +1442,7 @@ modelsummary(models,
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -1453,7 +1453,7 @@ modelsummary(models,
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -1497,8 +1497,8 @@ modelsummary(models,
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> RMSE </td>
@@ -1531,13 +1531,13 @@ modelsummary(models,
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -1581,8 +1581,8 @@ modelsummary(models,
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> RMSE </td>
@@ -1617,7 +1617,7 @@ modelsummary(
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -1628,7 +1628,7 @@ modelsummary(
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -1672,8 +1672,8 @@ modelsummary(
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> RMSE </td>
@@ -1714,7 +1714,7 @@ modelsummary(mod, fmt = 3)
   </tr>
   <tr>
    <td style="text-align:left;"> hp </td>
-   <td style="text-align:center;"> -0.058 </td>
+   <td style="text-align:center;"> −0.058 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -1730,7 +1730,7 @@ modelsummary(mod, fmt = 3)
   </tr>
   <tr>
    <td style="text-align:left;"> qsec </td>
-   <td style="text-align:center;"> -0.284 </td>
+   <td style="text-align:center;"> −0.284 </td>
   </tr>
   <tr>
    <td style="text-align:left;box-shadow: 0px 1.5px">  </td>
@@ -1758,7 +1758,7 @@ modelsummary(mod, fmt = 3)
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -80.561 </td>
+   <td style="text-align:center;"> −80.561 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -1794,7 +1794,7 @@ modelsummary(mod, fmt = fmt_significant(3))
   </tr>
   <tr>
    <td style="text-align:left;"> hp </td>
-   <td style="text-align:center;"> -0.0580 </td>
+   <td style="text-align:center;"> −0.0580 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -1810,7 +1810,7 @@ modelsummary(mod, fmt = fmt_significant(3))
   </tr>
   <tr>
    <td style="text-align:left;"> qsec </td>
-   <td style="text-align:center;"> -0.284 </td>
+   <td style="text-align:center;"> −0.284 </td>
   </tr>
   <tr>
    <td style="text-align:left;box-shadow: 0px 1.5px">  </td>
@@ -1838,7 +1838,7 @@ modelsummary(mod, fmt = fmt_significant(3))
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -80.561 </td>
+   <td style="text-align:center;"> −80.561 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -1918,7 +1918,7 @@ modelsummary(mod, fmt = NULL)
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -80.561 </td>
+   <td style="text-align:center;"> −80.561 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -1954,7 +1954,7 @@ modelsummary(mod, fmt = fmt_decimal(4))
   </tr>
   <tr>
    <td style="text-align:left;"> hp </td>
-   <td style="text-align:center;"> -0.0580 </td>
+   <td style="text-align:center;"> −0.0580 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -1970,7 +1970,7 @@ modelsummary(mod, fmt = fmt_decimal(4))
   </tr>
   <tr>
    <td style="text-align:left;"> qsec </td>
-   <td style="text-align:center;"> -0.2841 </td>
+   <td style="text-align:center;"> −0.2841 </td>
   </tr>
   <tr>
    <td style="text-align:left;box-shadow: 0px 1.5px">  </td>
@@ -1998,7 +1998,7 @@ modelsummary(mod, fmt = fmt_decimal(4))
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -80.561 </td>
+   <td style="text-align:center;"> −80.561 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -2034,7 +2034,7 @@ modelsummary(mod, fmt = fmt_sprintf("\%.5f"))
   </tr>
   <tr>
    <td style="text-align:left;"> hp </td>
-   <td style="text-align:center;"> -0.05797 </td>
+   <td style="text-align:center;"> −0.05797 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -2050,7 +2050,7 @@ modelsummary(mod, fmt = fmt_sprintf("\%.5f"))
   </tr>
   <tr>
    <td style="text-align:left;"> qsec </td>
-   <td style="text-align:center;"> -0.28407 </td>
+   <td style="text-align:center;"> −0.28407 </td>
   </tr>
   <tr>
    <td style="text-align:left;box-shadow: 0px 1.5px">  </td>
@@ -2078,7 +2078,7 @@ modelsummary(mod, fmt = fmt_sprintf("\%.5f"))
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -80.561 </td>
+   <td style="text-align:center;"> −80.561 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -2110,15 +2110,15 @@ modelsummary(mod, fmt = fmt_statistic(estimate = 4, conf.int = 1), statistic = "
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
-   <td style="text-align:center;"> [-8.9, 44.4] </td>
+   <td style="text-align:center;"> [−8.9, 44.4] </td>
   </tr>
   <tr>
    <td style="text-align:left;"> hp </td>
-   <td style="text-align:center;"> -0.0580 </td>
+   <td style="text-align:center;"> −0.0580 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
-   <td style="text-align:center;"> [-0.1, 0.0] </td>
+   <td style="text-align:center;"> [−0.1, 0.0] </td>
   </tr>
   <tr>
    <td style="text-align:left;"> drat </td>
@@ -2130,11 +2130,11 @@ modelsummary(mod, fmt = fmt_statistic(estimate = 4, conf.int = 1), statistic = "
   </tr>
   <tr>
    <td style="text-align:left;"> qsec </td>
-   <td style="text-align:center;"> -0.2841 </td>
+   <td style="text-align:center;"> −0.2841 </td>
   </tr>
   <tr>
    <td style="text-align:left;box-shadow: 0px 1.5px">  </td>
-   <td style="text-align:center;box-shadow: 0px 1.5px"> [-1.3, 0.7] </td>
+   <td style="text-align:center;box-shadow: 0px 1.5px"> [−1.3, 0.7] </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Num.Obs. </td>
@@ -2158,7 +2158,7 @@ modelsummary(mod, fmt = fmt_statistic(estimate = 4, conf.int = 1), statistic = "
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -80.561 </td>
+   <td style="text-align:center;"> −80.561 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -2194,7 +2194,7 @@ modelsummary(mod, fmt = fmt_term(hp = 4, drat = 1, default = 2))
   </tr>
   <tr>
    <td style="text-align:left;"> hp </td>
-   <td style="text-align:center;"> -0.0580 </td>
+   <td style="text-align:center;"> −0.0580 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -2210,7 +2210,7 @@ modelsummary(mod, fmt = fmt_term(hp = 4, drat = 1, default = 2))
   </tr>
   <tr>
    <td style="text-align:left;"> qsec </td>
-   <td style="text-align:center;"> -0.28 </td>
+   <td style="text-align:center;"> −0.28 </td>
   </tr>
   <tr>
    <td style="text-align:left;box-shadow: 0px 1.5px">  </td>
@@ -2238,7 +2238,7 @@ modelsummary(mod, fmt = fmt_term(hp = 4, drat = 1, default = 2))
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -80.561 </td>
+   <td style="text-align:center;"> −80.561 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -2276,7 +2276,7 @@ modelsummary(m, fmt = f, gof_map = NA)
   </tr>
   <tr>
    <td style="text-align:left;"> I(hp * 1000) </td>
-   <td style="text-align:center;"> -0.0000518 </td>
+   <td style="text-align:center;"> −0.0000518 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -2310,7 +2310,7 @@ modelsummary(models, coef_rename = c('Volume' = 'Large', 'Height' = 'Tall'))
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -2321,7 +2321,7 @@ modelsummary(models, coef_rename = c('Volume' = 'Large', 'Height' = 'Tall'))
   <tr>
    <td style="text-align:left;"> Tall </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -2365,8 +2365,8 @@ modelsummary(models, coef_rename = c('Volume' = 'Large', 'Height' = 'Tall'))
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -2397,7 +2397,7 @@ modelsummary(models, coef_rename = toupper)
 <tbody>
   <tr>
    <td style="text-align:left;"> (INTERCEPT) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -2408,7 +2408,7 @@ modelsummary(models, coef_rename = toupper)
   <tr>
    <td style="text-align:left;"> HEIGHT </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -2452,8 +2452,8 @@ modelsummary(models, coef_rename = toupper)
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -2484,7 +2484,7 @@ modelsummary(models, coef_rename = coef_rename)
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -2495,7 +2495,7 @@ modelsummary(models, coef_rename = coef_rename)
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -2539,8 +2539,8 @@ modelsummary(models, coef_rename = coef_rename)
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -2584,7 +2584,7 @@ modelsummary(modlab, coef_rename = TRUE)
   </tr>
   <tr>
    <td style="text-align:left;"> Horsepower </td>
-   <td style="text-align:center;"> -0.011 </td>
+   <td style="text-align:center;"> −0.011 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -2600,7 +2600,7 @@ modelsummary(modlab, coef_rename = TRUE)
   </tr>
   <tr>
    <td style="text-align:left;"> Cylinders [6] </td>
-   <td style="text-align:center;"> -4.091 </td>
+   <td style="text-align:center;"> −4.091 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -2608,7 +2608,7 @@ modelsummary(modlab, coef_rename = TRUE)
   </tr>
   <tr>
    <td style="text-align:left;"> Cylinders [8] </td>
-   <td style="text-align:center;"> -5.019 </td>
+   <td style="text-align:center;"> −5.019 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -2616,7 +2616,7 @@ modelsummary(modlab, coef_rename = TRUE)
   </tr>
   <tr>
    <td style="text-align:left;"> Horsepower × drat </td>
-   <td style="text-align:center;"> -0.006 </td>
+   <td style="text-align:center;"> −0.006 </td>
   </tr>
   <tr>
    <td style="text-align:left;box-shadow: 0px 1.5px">  </td>
@@ -2644,7 +2644,7 @@ modelsummary(modlab, coef_rename = TRUE)
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -77.860 </td>
+   <td style="text-align:center;"> −77.860 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> RMSE </td>
@@ -2706,7 +2706,7 @@ modelsummary(m, coef_omit = -(3:4), coef_rename = c("Cyl 6", "Cyl 8"))
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -158.831 </td>
+   <td style="text-align:center;"> −158.831 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -2747,7 +2747,7 @@ modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
   <tr>
    <td style="text-align:left;"> Tall </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;box-shadow: 0px 1.5px">  </td>
@@ -2781,8 +2781,8 @@ modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -2824,7 +2824,7 @@ modelsummary(models, coef_map = c('Volume', 'Height'))
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;box-shadow: 0px 1.5px">  </td>
@@ -2858,8 +2858,8 @@ modelsummary(models, coef_map = c('Volume', 'Height'))
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -2926,8 +2926,8 @@ modelsummary(models, coef_omit = 1:2)
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -2959,7 +2959,7 @@ modelsummary(models, coef_omit = "ei", gof_omit = ".*")
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -2997,7 +2997,7 @@ modelsummary(models, coef_omit = "^Volume$", gof_omit = ".*")
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -3008,7 +3008,7 @@ modelsummary(models, coef_omit = "^Volume$", gof_omit = ".*")
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -3041,7 +3041,7 @@ modelsummary(models, coef_omit = "^(?!.*ei|.*pt)", gof_omit = ".*")
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -3052,7 +3052,7 @@ modelsummary(models, coef_omit = "^(?!.*ei|.*pt)", gof_omit = ".*")
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -3104,7 +3104,7 @@ modelsummary(multi, shape = response ~ model)
   <tr>
    <td style="text-align:left;"> mpg </td>
    <td style="text-align:left;"> 6 </td>
-   <td style="text-align:center;"> -83.069 </td>
+   <td style="text-align:center;"> −83.069 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -3114,7 +3114,7 @@ modelsummary(multi, shape = response ~ model)
   <tr>
    <td style="text-align:left;">  </td>
    <td style="text-align:left;"> 8 </td>
-   <td style="text-align:center;"> -120.167 </td>
+   <td style="text-align:center;"> −120.167 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -3198,7 +3198,7 @@ modelsummary(multi, shape = term : response ~ model)
   </tr>
   <tr>
    <td style="text-align:left;"> mpg 6 </td>
-   <td style="text-align:center;"> -83.069 </td>
+   <td style="text-align:center;"> −83.069 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -3222,7 +3222,7 @@ modelsummary(multi, shape = term : response ~ model)
   </tr>
   <tr>
    <td style="text-align:left;"> mpg 8 </td>
-   <td style="text-align:center;"> -120.167 </td>
+   <td style="text-align:center;"> −120.167 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -3294,8 +3294,8 @@ modelsummary(multi, shape = term ~ response:model)
   </tr>
   <tr>
    <td style="text-align:left;"> mpg </td>
-   <td style="text-align:center;"> -83.069 </td>
-   <td style="text-align:center;"> -120.167 </td>
+   <td style="text-align:center;"> −83.069 </td>
+   <td style="text-align:center;"> −120.167 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -3486,7 +3486,7 @@ modelsummary(models, title = 'This is the title')
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -3497,7 +3497,7 @@ modelsummary(models, title = 'This is the title')
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -3541,8 +3541,8 @@ modelsummary(models, title = 'This is the title')
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -3575,7 +3575,7 @@ modelsummary(models, title = 'This is the title \\\\label\{tab:description\}')
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -3586,7 +3586,7 @@ modelsummary(models, title = 'This is the title \\\\label\{tab:description\}')
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -3630,8 +3630,8 @@ modelsummary(models, title = 'This is the title \\\\label\{tab:description\}')
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -3672,7 +3672,7 @@ modelsummary(models, add_rows = rows)
   </tr>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -3688,7 +3688,7 @@ modelsummary(models, add_rows = rows)
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -3732,8 +3732,8 @@ modelsummary(models, add_rows = rows)
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -3765,7 +3765,7 @@ modelsummary(models, notes = list('A first note', 'A second note'))
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -3776,7 +3776,7 @@ modelsummary(models, notes = list('A first note', 'A second note'))
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -3820,8 +3820,8 @@ modelsummary(models, notes = list('A first note', 'A second note'))
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -74.061 </td>
-   <td style="text-align:center;"> -35.116 </td>
+   <td style="text-align:center;"> −74.061 </td>
+   <td style="text-align:center;"> −35.116 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> F </td>
@@ -3859,7 +3859,7 @@ modelsummary(models, gof_map = gm)
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:center;"> -6.188 </td>
+   <td style="text-align:center;"> −6.188 </td>
    <td style="text-align:center;"> 10.816 </td>
   </tr>
   <tr>
@@ -3870,7 +3870,7 @@ modelsummary(models, gof_map = gm)
   <tr>
    <td style="text-align:left;"> Height </td>
    <td style="text-align:center;"> 0.256 </td>
-   <td style="text-align:center;"> -0.045 </td>
+   <td style="text-align:center;"> −0.045 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>

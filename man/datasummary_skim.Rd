@@ -478,21 +478,8 @@ datasummary_skim(dat)
 # display these unicode histograms.
 
 f <- All(mtcars) ~ Mean + SD + Min + Median + Max + Histogram
-datasummary(f, mtcars, output="markdown")
-}\if{html}{\out{</div>}}\tabular{lrrrrrr}{
-    \tab Mean \tab SD \tab Min \tab Median \tab Max \tab Histogram \cr
-   mpg \tab 20.09 \tab 6.03 \tab 10.40 \tab 19.20 \tab 33.90 \tab ▂▅▇▇▆▃▁▁▂▂ \cr
-   cyl \tab 6.19 \tab 1.79 \tab 4.00 \tab 6.00 \tab 8.00 \tab ▅▃▇ \cr
-   disp \tab 230.72 \tab 123.94 \tab 71.10 \tab 196.30 \tab 472.00 \tab ▇▇▅▁▁▆▃▂▁▃ \cr
-   hp \tab 146.69 \tab 68.56 \tab 52.00 \tab 123.00 \tab 335.00 \tab ▅▅▇▂▆▂▃▁▁ \cr
-   drat \tab 3.60 \tab 0.53 \tab 2.76 \tab 3.70 \tab 4.93 \tab ▃▇▂▂▃▅▄▁▁ \cr
-   wt \tab 3.22 \tab 0.98 \tab 1.51 \tab 3.33 \tab 5.42 \tab ▂▂▂▂▇▅▁▂ \cr
-   qsec \tab 17.85 \tab 1.79 \tab 14.50 \tab 17.71 \tab 22.90 \tab ▂▃▇▇▇▅▅▁ \cr
-   vs \tab 0.44 \tab 0.50 \tab 0.00 \tab 0.00 \tab 1.00 \tab ▇▅ \cr
-   am \tab 0.41 \tab 0.50 \tab 0.00 \tab 0.00 \tab 1.00 \tab ▇▅ \cr
-   gear \tab 3.69 \tab 0.74 \tab 3.00 \tab 4.00 \tab 5.00 \tab ▇▆▂ \cr
-   carb \tab 2.81 \tab 1.62 \tab 1.00 \tab 2.00 \tab 8.00 \tab ▅▇▂▇▁▁ \cr
-}
+# datasummary(f, mtcars, output="markdown")
+}\if{html}{\out{</div>}}
 }
 
 \references{

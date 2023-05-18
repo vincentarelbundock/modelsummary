@@ -537,36 +537,8 @@ datasummary(hp + mpg ~ mean * Arguments(na.rm = TRUE), data = mtcars)
 # with the argument `na.rm=TRUE` by default: Mean, Median, Min, Max, SD, Var,
 # P0, P25, P50, P75, P100, NUnique, Histogram
 
-datasummary(hp + mpg ~ Mean + SD + Histogram, data = mtcars)
-}\if{html}{\out{</div>}}\if{html}{\out{
-<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> Mean </th>
-   <th style="text-align:right;"> SD </th>
-   <th style="text-align:right;"> Histogram </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> hp </td>
-   <td style="text-align:right;"> 146.69 </td>
-   <td style="text-align:right;"> 68.56 </td>
-   <td style="text-align:right;"> ▅▅▇▂▆▂▃▁▁ </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> mpg </td>
-   <td style="text-align:right;"> 20.09 </td>
-   <td style="text-align:right;"> 6.03 </td>
-   <td style="text-align:right;"> ▂▅▇▇▆▃▁▁▂▂ </td>
-  </tr>
-</tbody>
-</table>
-}}
+#datasummary(hp + mpg ~ Mean + SD + Histogram, data = mtcars)
 
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # These functions also accept a 'fmt' argument which allows you to
 # round/format the results
 
@@ -615,71 +587,9 @@ f <- hp + mpg ~ Mean + SD
 # Return a table object to customize using a table-making package
 #datasummary(f, data = mtcars, output = 'gt')
 #datasummary(f, data = mtcars, output = 'kableExtra')
+#datasummary(f, data = mtcars, output = 'flextable')
+#datasummary(f, data = mtcars, output = 'huxtable')
 
-datasummary(f, data = mtcars, output = 'flextable')
-}\if{html}{\out{</div>}}\if{html}{\out{
-<div class="tabwid"><style>.cl-d443a566\{\}.cl-d440b1a8\{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;\}.cl-d4420b8e\{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;\}.cl-d4421516\{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-d4421520\{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-d4421521\{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.tabwid \{
-  font-size: initial;
-  padding-bottom: 1em;
-\}
-}}
-
-
-.tabwid table{
-border-spacing:0px !important;
-border-collapse:collapse;
-line-height:1;
-margin-left:auto;
-margin-right:auto;
-border-width: 0;
-border-color: transparent;
-caption-side: top;
-}
-.tabwid-caption-bottom table{
-caption-side: bottom;
-}
-.tabwid_left table{
-margin-left:0;
-}
-.tabwid_right table{
-margin-right:0;
-}
-.tabwid td, .tabwid th {
-padding: 0;
-}
-.tabwid a {
-text-decoration: none;
-}
-.tabwid thead {
-background-color: transparent;
-}
-.tabwid tfoot {
-background-color: transparent;
-}
-.tabwid table tr {
-background-color: transparent;
-}
-.katex-display {
-margin: 0 0 !important;
-}\if{html}{\out{</style>}}\if{html}{\out{<table data-quarto-disable-processing='true' class='cl-d443a566'>}}\if{html}{\out{<thead>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<th class="cl-d4421516">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}} \if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{<th class="cl-d4421516">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}Mean\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{<th class="cl-d4421516">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}SD\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{</tr>}}\if{html}{\out{</thead>}}\if{html}{\out{<tbody>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-d4421520">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}hp\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-d4421520">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}146.69\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-d4421520">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}68.56\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-d4421521">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}mpg\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-d4421521">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}20.09\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-d4421521">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}6.03\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{</tbody>}}\if{html}{\out{</table>}}\if{html}{\out{</div>}}
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{
-datasummary(f, data = mtcars, output = 'huxtable')
-#> Warning in knit_print.huxtable(x, ...): Unrecognized output format "". Using `to_screen` to print huxtables.
-#> Set options("huxtable.knitr_output_format") manually to "latex", "html", "rtf", "docx", "pptx", "md" or "screen".
-}\if{html}{\out{</div>}}
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{                       ──────────────────────────
-                                 Mean     SD     
-                       ──────────────────────────
-                         hp      146.69   68.56  
-                         mpg     20.09    6.03   
-                       ──────────────────────────
-}\if{html}{\out{</div>}}
-
-Column names: , Mean, SD
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # add_rows
 new_rows <- data.frame(a = 1:2, b = 2:3, c = 4:5)
 attr(new_rows, 'position') <- c(1, 3)

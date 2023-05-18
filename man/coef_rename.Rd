@@ -61,7 +61,7 @@ modelsummary(mod, coef_rename = coef_rename)
   </tr>
   <tr>
    <td style="text-align:left;"> Horse Power </td>
-   <td style="text-align:center;"> -0.024 </td>
+   <td style="text-align:center;"> −0.024 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -69,7 +69,7 @@ modelsummary(mod, coef_rename = coef_rename)
   </tr>
   <tr>
    <td style="text-align:left;"> 6 </td>
-   <td style="text-align:center;"> -5.968 </td>
+   <td style="text-align:center;"> −5.968 </td>
   </tr>
   <tr>
    <td style="text-align:left;">  </td>
@@ -77,7 +77,7 @@ modelsummary(mod, coef_rename = coef_rename)
   </tr>
   <tr>
    <td style="text-align:left;"> 8 </td>
-   <td style="text-align:center;"> -8.521 </td>
+   <td style="text-align:center;"> −8.521 </td>
   </tr>
   <tr>
    <td style="text-align:left;box-shadow: 0px 1.5px">  </td>
@@ -105,7 +105,7 @@ modelsummary(mod, coef_rename = coef_rename)
   </tr>
   <tr>
    <td style="text-align:left;"> Log.Lik. </td>
-   <td style="text-align:center;"> -79.948 </td>
+   <td style="text-align:center;"> −79.948 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> RMSE </td>
