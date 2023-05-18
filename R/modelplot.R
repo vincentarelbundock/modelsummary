@@ -17,7 +17,7 @@
 #' 'geom_pointrange' that 'modelplot' draws.
 #' @template citation
 #' @section Examples:
-#' ```{r, eval = identical(Sys.getenv("pkgdown"), "true")}
+#' ```{r, eval = identical(Sys.getenv("pkgdown"), "true"), fig.asp = .4}
 #' library(modelsummary)
 #'
 #' # single model

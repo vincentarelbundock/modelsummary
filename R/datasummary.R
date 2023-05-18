@@ -110,23 +110,25 @@
 #'
 #' # Save your tables to a variety of output formats:
 #' f <- hp + mpg ~ Mean + SD
-#' datasummary(f, data = mtcars, output = 'table.html')
-#' datasummary(f, data = mtcars, output = 'table.tex')
-#' datasummary(f, data = mtcars, output = 'table.md')
-#' datasummary(f, data = mtcars, output = 'table.docx')
-#' datasummary(f, data = mtcars, output = 'table.pptx')
-#' datasummary(f, data = mtcars, output = 'table.jpg')
-#' datasummary(f, data = mtcars, output = 'table.png')
+#' #datasummary(f, data = mtcars, output = 'table.html')
+#' #datasummary(f, data = mtcars, output = 'table.tex')
+#' #datasummary(f, data = mtcars, output = 'table.md')
+#' #datasummary(f, data = mtcars, output = 'table.docx')
+#' #datasummary(f, data = mtcars, output = 'table.pptx')
+#' #datasummary(f, data = mtcars, output = 'table.jpg')
+#' #datasummary(f, data = mtcars, output = 'table.png')
 #'
 #' # Display human-readable code
-#' datasummary(f, data = mtcars, output = 'html')
-#' datasummary(f, data = mtcars, output = 'markdown')
-#' datasummary(f, data = mtcars, output = 'latex')
+#' #datasummary(f, data = mtcars, output = 'html')
+#' #datasummary(f, data = mtcars, output = 'markdown')
+#' #datasummary(f, data = mtcars, output = 'latex')
 #'
 #' # Return a table object to customize using a table-making package
-#' datasummary(f, data = mtcars, output = 'gt')
-#' datasummary(f, data = mtcars, output = 'kableExtra')
+#' #datasummary(f, data = mtcars, output = 'gt')
+#' #datasummary(f, data = mtcars, output = 'kableExtra')
+#' 
 #' datasummary(f, data = mtcars, output = 'flextable')
+#' 
 #' datasummary(f, data = mtcars, output = 'huxtable')
 #'
 #' # add_rows
