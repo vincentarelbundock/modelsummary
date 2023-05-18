@@ -130,22 +130,38 @@ https://vincentarelbundock.github.io/modelsummary/
 # single model
 mod <- lm(hp ~ vs + drat, mtcars)
 modelplot(mod)
+}\if{html}{\out{</div>}}
 
+\figure{unnamed-chunk-1-1.png}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # omit terms with string matches or regexes
 modelplot(mod, coef_omit = 'Interc')
+}\if{html}{\out{</div>}}
 
+\figure{unnamed-chunk-1-2.png}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # rename, reorder and subset with 'coef_map'
 cm <- c('vs' = 'V-shape engine',
   'drat' = 'Rear axle ratio')
 modelplot(mod, coef_map = cm)
+}\if{html}{\out{</div>}}
 
+\figure{unnamed-chunk-1-3.png}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # several models
 models <- list()
 models[['Small model']] <- lm(hp ~ vs, mtcars)
 models[['Medium model']] <- lm(hp ~ vs + factor(cyl), mtcars)
 models[['Large model']] <- lm(hp ~ vs + drat + factor(cyl), mtcars)
 modelplot(models)
+}\if{html}{\out{</div>}}
 
+\figure{unnamed-chunk-1-4.png}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # add_rows: add an empty reference category
 
 mod <- lm(hp ~ factor(cyl), mtcars)
@@ -156,7 +172,12 @@ add_rows = data.frame(
   estimate = NA)
 attr(add_rows, "position") = 3
 modelplot(mod, add_rows = add_rows)
+#> Warning: Removed 1 rows containing missing values (`geom_pointrange()`).
+}\if{html}{\out{</div>}}
 
+\figure{unnamed-chunk-1-5.png}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 
 # customize your plots with 'ggplot2' functions
 library(ggplot2)
@@ -164,10 +185,18 @@ library(ggplot2)
 modelplot(models) +
   scale_color_brewer(type = 'qual') +
   theme_classic()
+}\if{html}{\out{</div>}}
 
+\figure{unnamed-chunk-1-6.png}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # pass arguments to 'geom_pointrange' through the ... ellipsis
 modelplot(mod, color = 'red', size = 1, fatten = .5)
+}\if{html}{\out{</div>}}
 
+\figure{unnamed-chunk-1-7.png}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # add geoms to the background, behind geom_pointrange
 b <- list(geom_vline(xintercept = 0, color = 'orange'),
   annotate("rect", alpha = .1,
@@ -176,7 +205,11 @@ b <- list(geom_vline(xintercept = 0, color = 'orange'),
   geom_point(aes(y = term, x = estimate), alpha = .3,
     size = 10, color = 'red', shape = 'square'))
 modelplot(mod, background = b)
+}\if{html}{\out{</div>}}
 
+\figure{unnamed-chunk-1-8.png}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # logistic regression example
 df <- as.data.frame(Titanic)
 mod_titanic <- glm(
@@ -191,6 +224,8 @@ modelplot(mod_titanic, exponentiate = TRUE) +
   scale_x_log10() +
   xlab("Odds Ratios and 95\% confidence intervals")
 }\if{html}{\out{</div>}}
+
+\figure{unnamed-chunk-1-9.png}
 }
 
 \references{

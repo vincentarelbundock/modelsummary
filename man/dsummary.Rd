@@ -215,38 +215,263 @@ HTML tables:
 # function as a column:
 
 datasummary(mpg ~ mean, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mean </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.09 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # This table uses the "mean" function as a row and the "mpg" variable as a column:
 
 datasummary(mean ~ mpg, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mpg </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> mean </td>
+   <td style="text-align:right;"> 20.09 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # Display several variables or functions of the data using the "+"
 # concatenation operator. This table has 2 rows and 2 columns:
 
 datasummary(hp + mpg ~ mean + sd, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mean </th>
+   <th style="text-align:right;"> sd </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 146.69 </td>
+   <td style="text-align:right;"> 68.56 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.09 </td>
+   <td style="text-align:right;"> 6.03 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # Nest variables or statistics inside a "factor" variable using the "*" nesting
 # operator. This table shows the mean of "hp" and "mpg" for each value of
 # "cyl":
 
 mtcars$cyl <- as.factor(mtcars$cyl)
 datasummary(hp + mpg ~ cyl * mean, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;">  4 </th>
+   <th style="text-align:right;">  6 </th>
+   <th style="text-align:right;">  8 </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 82.64 </td>
+   <td style="text-align:right;"> 122.29 </td>
+   <td style="text-align:right;"> 209.21 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 26.66 </td>
+   <td style="text-align:right;"> 19.74 </td>
+   <td style="text-align:right;"> 15.10 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # If you don't want to convert your original data
 # to factors, you can use the 'Factor()'
 # function inside 'datasummary' to obtain an identical result:
 
 datasummary(hp + mpg ~ Factor(cyl) * mean, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;">  4 </th>
+   <th style="text-align:right;">  6 </th>
+   <th style="text-align:right;">  8 </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 82.64 </td>
+   <td style="text-align:right;"> 122.29 </td>
+   <td style="text-align:right;"> 209.21 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 26.66 </td>
+   <td style="text-align:right;"> 19.74 </td>
+   <td style="text-align:right;"> 15.10 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # You can nest several variables or statistics inside a factor by using
 # parentheses. This table shows the mean and the standard deviation for each
 # subset of "cyl":
 
 datasummary(hp + mpg ~ cyl * (mean + sd), data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1"></th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">4</div></th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">6</div></th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">8</div></th>
+</tr>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mean </th>
+   <th style="text-align:right;"> sd </th>
+   <th style="text-align:right;"> mean </th>
+   <th style="text-align:right;"> sd </th>
+   <th style="text-align:right;"> mean </th>
+   <th style="text-align:right;"> sd </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 82.64 </td>
+   <td style="text-align:right;"> 20.93 </td>
+   <td style="text-align:right;"> 122.29 </td>
+   <td style="text-align:right;"> 24.26 </td>
+   <td style="text-align:right;"> 209.21 </td>
+   <td style="text-align:right;"> 50.98 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 26.66 </td>
+   <td style="text-align:right;"> 4.51 </td>
+   <td style="text-align:right;"> 19.74 </td>
+   <td style="text-align:right;"> 1.45 </td>
+   <td style="text-align:right;"> 15.10 </td>
+   <td style="text-align:right;"> 2.56 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # Summarize all numeric variables with 'All()'
 datasummary(All(mtcars) ~ mean + sd, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mean </th>
+   <th style="text-align:right;"> sd </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.09 </td>
+   <td style="text-align:right;"> 6.03 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> disp </td>
+   <td style="text-align:right;"> 230.72 </td>
+   <td style="text-align:right;"> 123.94 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 146.69 </td>
+   <td style="text-align:right;"> 68.56 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> drat </td>
+   <td style="text-align:right;"> 3.60 </td>
+   <td style="text-align:right;"> 0.53 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> wt </td>
+   <td style="text-align:right;"> 3.22 </td>
+   <td style="text-align:right;"> 0.98 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> qsec </td>
+   <td style="text-align:right;"> 17.85 </td>
+   <td style="text-align:right;"> 1.79 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> vs </td>
+   <td style="text-align:right;"> 0.44 </td>
+   <td style="text-align:right;"> 0.50 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> am </td>
+   <td style="text-align:right;"> 0.41 </td>
+   <td style="text-align:right;"> 0.50 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> gear </td>
+   <td style="text-align:right;"> 3.69 </td>
+   <td style="text-align:right;"> 0.74 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> carb </td>
+   <td style="text-align:right;"> 2.81 </td>
+   <td style="text-align:right;"> 1.62 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # Define custom summary statistics. Your custom function should accept a vector
 # of numeric values and return a single numeric or string value:
 
@@ -254,23 +479,123 @@ minmax <- function(x) sprintf("[\%.2f, \%.2f]", min(x), max(x))
 mean_na <- function(x) mean(x, na.rm = TRUE)
 
 datasummary(hp + mpg ~ minmax + mean_na, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> minmax </th>
+   <th style="text-align:right;"> mean_na </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> [52.00, 335.00] </td>
+   <td style="text-align:right;"> 146.69 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> [10.40, 33.90] </td>
+   <td style="text-align:right;"> 20.09 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # To handle missing values, you can pass arguments to your functions using
 # '*Arguments()'
 
 datasummary(hp + mpg ~ mean * Arguments(na.rm = TRUE), data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mean </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 146.69 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.09 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # For convenience, 'modelsummary' supplies several convenience functions
 # with the argument `na.rm=TRUE` by default: Mean, Median, Min, Max, SD, Var,
 # P0, P25, P50, P75, P100, NUnique, Histogram
 
 datasummary(hp + mpg ~ Mean + SD + Histogram, data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> Mean </th>
+   <th style="text-align:right;"> SD </th>
+   <th style="text-align:right;"> Histogram </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 146.69 </td>
+   <td style="text-align:right;"> 68.56 </td>
+   <td style="text-align:right;"> ▅▅▇▂▆▂▃▁▁ </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.09 </td>
+   <td style="text-align:right;"> 6.03 </td>
+   <td style="text-align:right;"> ▂▅▇▇▆▃▁▁▂▂ </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # These functions also accept a 'fmt' argument which allows you to
 # round/format the results
 
 datasummary(hp + mpg ~ Mean * Arguments(fmt = "\%.3f") + SD * Arguments(fmt = "\%.1f"), data = mtcars)
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> Mean </th>
+   <th style="text-align:right;"> SD </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 146.688 </td>
+   <td style="text-align:right;"> 68.6 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.091 </td>
+   <td style="text-align:right;"> 6.0 </td>
+  </tr>
+</tbody>
+</table>
+}}
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # Save your tables to a variety of output formats:
 f <- hp + mpg ~ Mean + SD
 #datasummary(f, data = mtcars, output = 'table.html')
@@ -291,14 +616,106 @@ f <- hp + mpg ~ Mean + SD
 #datasummary(f, data = mtcars, output = 'kableExtra')
 
 datasummary(f, data = mtcars, output = 'flextable')
+}\if{html}{\out{</div>}}\if{html}{\out{
+<div class="tabwid"><style>.cl-d443a566\{\}.cl-d440b1a8\{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;\}.cl-d4420b8e\{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;\}.cl-d4421516\{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-d4421520\{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.cl-d4421521\{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;\}.tabwid \{
+  font-size: initial;
+  padding-bottom: 1em;
+\}
+}}
 
+
+.tabwid table{
+border-spacing:0px !important;
+border-collapse:collapse;
+line-height:1;
+margin-left:auto;
+margin-right:auto;
+border-width: 0;
+border-color: transparent;
+caption-side: top;
+}
+.tabwid-caption-bottom table{
+caption-side: bottom;
+}
+.tabwid_left table{
+margin-left:0;
+}
+.tabwid_right table{
+margin-right:0;
+}
+.tabwid td, .tabwid th {
+padding: 0;
+}
+.tabwid a {
+text-decoration: none;
+}
+.tabwid thead {
+background-color: transparent;
+}
+.tabwid tfoot {
+background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+.katex-display {
+margin: 0 0 !important;
+}\if{html}{\out{</style>}}\if{html}{\out{<table data-quarto-disable-processing='true' class='cl-d443a566'>}}\if{html}{\out{<thead>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<th class="cl-d4421516">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}} \if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{<th class="cl-d4421516">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}Mean\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{<th class="cl-d4421516">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}SD\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</th>}}\if{html}{\out{</tr>}}\if{html}{\out{</thead>}}\if{html}{\out{<tbody>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-d4421520">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}hp\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-d4421520">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}146.69\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-d4421520">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}68.56\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{<tr style="overflow-wrap:break-word;">}}\if{html}{\out{<td class="cl-d4421521">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}mpg\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-d4421521">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}20.09\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{<td class="cl-d4421521">}}\if{html}{\out{<p class="cl-d4420b8e">}}\if{html}{\out{<span class="cl-d440b1a8">}}6.03\if{html}{\out{</span>}}\if{html}{\out{</p>}}\if{html}{\out{</td>}}\if{html}{\out{</tr>}}\if{html}{\out{</tbody>}}\if{html}{\out{</table>}}\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 datasummary(f, data = mtcars, output = 'huxtable')
+#> Warning in knit_print.huxtable(x, ...): Unrecognized output format "". Using `to_screen` to print huxtables.
+#> Set options("huxtable.knitr_output_format") manually to "latex", "html", "rtf", "docx", "pptx", "md" or "screen".
+}\if{html}{\out{</div>}}
 
+\if{html}{\out{<div class="sourceCode">}}\preformatted{                       ──────────────────────────
+                                 Mean     SD     
+                       ──────────────────────────
+                         hp      146.69   68.56  
+                         mpg     20.09    6.03   
+                       ──────────────────────────
+}\if{html}{\out{</div>}}
+
+Column names: , Mean, SD
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 # add_rows
 new_rows <- data.frame(a = 1:2, b = 2:3, c = 4:5)
 attr(new_rows, 'position') <- c(1, 3)
 datasummary(mpg + hp ~ mean + sd, data = mtcars, add_rows = new_rows)
-}\if{html}{\out{</div>}}
+}\if{html}{\out{</div>}}\if{html}{\out{
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> mean </th>
+   <th style="text-align:right;"> sd </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 1.00 </td>
+   <td style="text-align:right;"> 2.00 </td>
+   <td style="text-align:right;"> 4.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mpg </td>
+   <td style="text-align:right;"> 20.09 </td>
+   <td style="text-align:right;"> 6.03 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2.00 </td>
+   <td style="text-align:right;"> 3.00 </td>
+   <td style="text-align:right;"> 5.00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> hp </td>
+   <td style="text-align:right;"> 146.69 </td>
+   <td style="text-align:right;"> 68.56 </td>
+  </tr>
+</tbody>
+</table>
+}}
 }
 
 \references{
