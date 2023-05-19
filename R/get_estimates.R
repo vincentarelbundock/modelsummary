@@ -207,6 +207,10 @@ get_estimates_parameters <- function(model,
     # main call
     tidy_easystats <- function(...) {
         dots <- list(...)
+        # ci_method="profile" in parameters() does not respect vcov argument
+        if ("vcov" %in% names(dots) && !"ci_method" %in% names(dots)) {
+            dots[["ci_method"]] <- "wald"
+        }
         # bug in `parameters`
         if (isTRUE(dots$coef_rename)) {
             dots[["pretty_names"]] <- "labels"

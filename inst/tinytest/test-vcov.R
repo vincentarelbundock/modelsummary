@@ -326,6 +326,6 @@ a <- modelsummary(mlm, vcov = vcovHC, estimate = "conf.int", statistic = NULL, o
 b <- modelsummary(mlm, estimate = "conf.int", statistic = NULL, output = "dataframe", gof_map = NA)
 expect_false(any(a[["(1)"]] == b[["(1)"]]))
 
-a <- modelsummary(mglm, vcov = vcovHC, estimate = "conf.int", statistic = NULL, output = "dataframe", gof_map = NA)
+a <- modelsummary(mglm, vcov = sandwich::vcovHC, estimate = "conf.int", statistic = NULL, output = "dataframe", gof_map = NA)
 b <- modelsummary(mglm, estimate = "conf.int", statistic = NULL, output = "dataframe", gof_map = NA)
 expect_false(any(a[["(1)"]] == b[["(1)"]]))

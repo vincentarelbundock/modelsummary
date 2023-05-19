@@ -219,8 +219,7 @@ HTML tables:
 \section{Examples}{
 
 
-\if{html}{\out{<div class="sourceCode {r, eval = identical(Sys.getenv("pkgdown"), "true")}">}}\preformatted{library(modelsummary)
-library(tables)
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{library(modelsummary)
 
 # crosstab of two variables, showing counts, row percentages, and row/column totals
 datasummary_crosstab(cyl ~ gear, data = mtcars)
