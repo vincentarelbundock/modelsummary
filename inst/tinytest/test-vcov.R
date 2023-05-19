@@ -316,3 +316,16 @@ expect_equivalent(
 expect_equivalent(
   get_estimates(mod, vcov = ~cyl)$std.error,
   sqrt(diag(sandwich::vcovCL(mod, ~cyl))))
+
+
+# Issue 640
+mlm <- lm(mpg ~ wt, data = mtcars)
+mglm <- glm(mpg ~ wt, data = mtcars)
+
+a <- modelsummary(mlm, vcov = vcovHC, estimate = "conf.int", statistic = NULL, output = "dataframe", gof_map = NA)
+b <- modelsummary(mlm, estimate = "conf.int", statistic = NULL, output = "dataframe", gof_map = NA)
+expect_false(any(a[["(1)"]] == b[["(1)"]]))
+
+a <- modelsummary(mglm, vcov = vcovHC, estimate = "conf.int", statistic = NULL, output = "dataframe", gof_map = NA)
+b <- modelsummary(mglm, estimate = "conf.int", statistic = NULL, output = "dataframe", gof_map = NA)
+expect_false(any(a[["(1)"]] == b[["(1)"]]))

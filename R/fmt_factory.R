@@ -74,12 +74,16 @@ fmt_decimal <- function(digits = 3, pdigits = NULL, ...) {
 
     out <- function(x, pval = FALSE, ...) {
         fun <- function(z, ...) {
-            out <- format(
-                round(z, digits),
-                nsmall = digits,
-                drop0trailing = FALSE,
-                trim = TRUE,
-                ...)
+            if (isTRUE(digits == 0)) {
+                out <- sprintf("%.0f", z)
+            } else {
+                out <- format(
+                    round(z, digits),
+                    nsmall = digits,
+                    drop0trailing = FALSE,
+                    trim = TRUE,
+                    ...)
+            }
             # long numbers default to scientific notation with too many digits
             if (isTRUE(grepl("e", out))) {
                 out <- format(z, digits = digits, scientific = TRUE, trim = TRUE, ...)
