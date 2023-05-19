@@ -24,7 +24,7 @@ https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html
     
     <a class="navbar-brand me-2" href="../index.html">modelsummary</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -250,87 +250,87 @@ HTML tables:</p>
 
     </div>
     <div class="section level2">
+    <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h2>
+    
+
+
+<p></p><div class="sourceCode r"><pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># clean variable names (base R)</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Miles / Gallon"</span>, <span class="st">"Horse Power"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/datasummary_correlation.html">datasummary_correlation</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># clean variable names (tidyverse)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span>`Miles / Gallon` <span class="op">=</span> <span class="va">mpg</span>,</span>
+<span>         `Horse Power` <span class="op">=</span> <span class="va">hp</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/datasummary_correlation.html">datasummary_correlation</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># alternative methods</span></span>
+<span><span class="fu"><a href="../reference/datasummary_correlation.html">datasummary_correlation</a></span><span class="op">(</span><span class="va">dat</span>, method <span class="op">=</span> <span class="st">"pearspear"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># custom function</span></span>
+<span><span class="va">cor_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"kendall"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/datasummary_correlation.html">datasummary_correlation</a></span><span class="op">(</span><span class="va">dat</span>, method <span class="op">=</span> <span class="va">cor_fun</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># rename columns alphabetically and include a footnote for reference</span></span>
+<span><span class="va">note</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"(%s) %s"</span>, <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">note</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">note</span>, collapse <span class="op">=</span> <span class="st">"; "</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"(%s)"</span>, <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/datasummary_correlation.html">datasummary_correlation</a></span><span class="op">(</span><span class="va">dat</span>, notes <span class="op">=</span> <span class="va">note</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># `datasummary_correlation_format`: custom function with formatting</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"disp"</span><span class="op">)</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">cor_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"kendall"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/datasummary_correlation_format.html">datasummary_correlation_format</a></span><span class="op">(</span></span>
+<span>    <span class="va">out</span>,</span>
+<span>    fmt <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>    upper_triangle <span class="op">=</span> <span class="st">"x"</span>,</span>
+<span>    diagonal <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/datasummary_correlation.html">datasummary_correlation</a></span><span class="op">(</span><span class="va">dat</span>, method <span class="op">=</span> <span class="va">cor_fun</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># use kableExtra and psych to color significant cells</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://personality-project.org/r/psych/" class="external-link">psych</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/" class="external-link">kableExtra</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"vs"</span>, <span class="st">"hp"</span>, <span class="st">"gear"</span><span class="op">)</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">cor_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># compute correlations and format them</span></span>
+<span>  <span class="va">correlations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">correlations</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/datasummary_correlation_format.html">datasummary_correlation_format</a></span><span class="op">(</span><span class="va">correlations</span>, fmt <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># calculate pvalues using the `psych` package</span></span>
+<span>  <span class="va">pvalues</span> <span class="op">&lt;-</span> <span class="fu">psych</span><span class="fu">::</span><span class="fu">corr.test</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">$</span><span class="va">p</span></span>
+<span></span>
+<span>  <span class="co"># use `kableExtra::cell_spec` to color significant cells</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">correlations</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">correlations</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="kw">if</span> <span class="op">(</span><span class="va">pvalues</span><span class="op">[</span><span class="va">i</span>, <span class="va">j</span><span class="op">]</span> <span class="op">&lt;</span> <span class="fl">0.05</span> <span class="op">&amp;&amp;</span> <span class="va">i</span> <span class="op">!=</span> <span class="va">j</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="va">correlations</span><span class="op">[</span><span class="va">i</span>, <span class="va">j</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/cell_spec.html" class="external-link">cell_spec</a></span><span class="op">(</span><span class="va">correlations</span><span class="op">[</span><span class="va">i</span>, <span class="va">j</span><span class="op">]</span>, background <span class="op">=</span> <span class="st">"pink"</span><span class="op">)</span></span>
+<span>      <span class="op">}</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">correlations</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># The `escape=FALSE` is important here!</span></span>
+<span><span class="fu"><a href="../reference/datasummary_correlation.html">datasummary_correlation</a></span><span class="op">(</span><span class="va">dat</span>, method <span class="op">=</span> <span class="va">cor_fun</span>, escape <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre><p></p></div>
+    </div>
+    <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Arel-Bundock V (2022). “modelsummary: Data and Model Summaries in R.” <em>Journal of Statistical Software</em>, <em>103</em>(1), 1-23. <a href="https://doi.org/10.18637/jss.v103.i01" class="external-link">doi:10.18637/jss.v103.i01</a>
 .'</p>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># clean variable names (base R)</span></span></span>
-<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span><span class="op">)</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Miles / Gallon"</span>, <span class="st">"Horse Power"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary_correlation</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># clean variable names (tidyverse)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span>`Miles / Gallon` <span class="op">=</span> <span class="va">mpg</span>,</span></span>
-<span class="r-in"><span>         `Horse Power` <span class="op">=</span> <span class="va">hp</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary_correlation</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># alternative methods</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary_correlation</span><span class="op">(</span><span class="va">dat</span>, method <span class="op">=</span> <span class="st">"pearspear"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># custom function</span></span></span>
-<span class="r-in"><span><span class="va">cor_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"kendall"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary_correlation</span><span class="op">(</span><span class="va">dat</span>, method <span class="op">=</span> <span class="va">cor_fun</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># rename columns alphabetically and include a footnote for reference</span></span></span>
-<span class="r-in"><span><span class="va">note</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"(%s) %s"</span>, <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">note</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">note</span>, collapse <span class="op">=</span> <span class="st">"; "</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"(%s)"</span>, <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">datasummary_correlation</span><span class="op">(</span><span class="va">dat</span>, notes <span class="op">=</span> <span class="va">note</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># `datasummary_correlation_format`: custom function with formatting</span></span></span>
-<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"hp"</span>, <span class="st">"disp"</span><span class="op">)</span><span class="op">]</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">cor_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"kendall"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="datasummary_correlation_format.html">datasummary_correlation_format</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="va">out</span>,</span></span>
-<span class="r-in"><span>    fmt <span class="op">=</span> <span class="fl">2</span>,</span></span>
-<span class="r-in"><span>    upper_triangle <span class="op">=</span> <span class="st">"x"</span>,</span></span>
-<span class="r-in"><span>    diagonal <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">datasummary_correlation</span><span class="op">(</span><span class="va">dat</span>, method <span class="op">=</span> <span class="va">cor_fun</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># use kableExtra and psych to color significant cells</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://personality-project.org/r/psych/" class="external-link">psych</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/" class="external-link">kableExtra</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"vs"</span>, <span class="st">"hp"</span>, <span class="st">"gear"</span><span class="op">)</span><span class="op">]</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">cor_fun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="co"># compute correlations and format them</span></span></span>
-<span class="r-in"><span>  <span class="va">correlations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">correlations</span> <span class="op">&lt;-</span> <span class="fu"><a href="datasummary_correlation_format.html">datasummary_correlation_format</a></span><span class="op">(</span><span class="va">correlations</span>, fmt <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># calculate pvalues using the `psych` package</span></span></span>
-<span class="r-in"><span>  <span class="va">pvalues</span> <span class="op">&lt;-</span> <span class="fu">psych</span><span class="fu">::</span><span class="fu">corr.test</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">$</span><span class="va">p</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># use `kableExtra::cell_spec` to color significant cells</span></span></span>
-<span class="r-in"><span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">correlations</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>    <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">correlations</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>      <span class="kw">if</span> <span class="op">(</span><span class="va">pvalues</span><span class="op">[</span><span class="va">i</span>, <span class="va">j</span><span class="op">]</span> <span class="op">&lt;</span> <span class="fl">0.05</span> <span class="op">&amp;&amp;</span> <span class="va">i</span> <span class="op">!=</span> <span class="va">j</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>        <span class="va">correlations</span><span class="op">[</span><span class="va">i</span>, <span class="va">j</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/cell_spec.html" class="external-link">cell_spec</a></span><span class="op">(</span><span class="va">correlations</span><span class="op">[</span><span class="va">i</span>, <span class="va">j</span><span class="op">]</span>, background <span class="op">=</span> <span class="st">"pink"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>      <span class="op">}</span></span></span>
-<span class="r-in"><span>    <span class="op">}</span></span></span>
-<span class="r-in"><span>  <span class="op">}</span></span></span>
-<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">correlations</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># The `escape=FALSE` is important here!</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary_correlation</span><span class="op">(</span><span class="va">dat</span>, method <span class="op">=</span> <span class="va">cor_fun</span>, escape <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

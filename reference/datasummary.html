@@ -28,7 +28,7 @@ https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html
     
     <a class="navbar-brand me-2" href="../index.html">modelsummary</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -275,106 +275,105 @@ HTML tables:</p>
 
     </div>
     <div class="section level2">
+    <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h2>
+    
+
+
+<p></p><div class="sourceCode r"><pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># The left-hand side of the formula describes rows, and the right-hand side</span></span>
+<span><span class="co"># describes columns. This table uses the "mpg" variable as a row and the "mean"</span></span>
+<span><span class="co"># function as a column:</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">mean</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># This table uses the "mean" function as a row and the "mpg" variable as a column:</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">mean</span> <span class="op">~</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Display several variables or functions of the data using the "+"</span></span>
+<span><span class="co"># concatenation operator. This table has 2 rows and 2 columns:</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Nest variables or statistics inside a "factor" variable using the "*" nesting</span></span>
+<span><span class="co"># operator. This table shows the mean of "hp" and "mpg" for each value of</span></span>
+<span><span class="co"># "cyl":</span></span>
+<span></span>
+<span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="va">cyl</span> <span class="op">*</span> <span class="va">mean</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># If you don't want to convert your original data</span></span>
+<span><span class="co"># to factors, you can use the 'Factor()'</span></span>
+<span><span class="co"># function inside 'datasummary' to obtain an identical result:</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="fu"><a href="../reference/Factor.html">Factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span> <span class="op">*</span> <span class="va">mean</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># You can nest several variables or statistics inside a factor by using</span></span>
+<span><span class="co"># parentheses. This table shows the mean and the standard deviation for each</span></span>
+<span><span class="co"># subset of "cyl":</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="va">cyl</span> <span class="op">*</span> <span class="op">(</span><span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Summarize all numeric variables with 'All()'</span></span>
+<span><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="fu"><a href="../reference/All.html">All</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">~</span> <span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Define custom summary statistics. Your custom function should accept a vector</span></span>
+<span><span class="co"># of numeric values and return a single numeric or string value:</span></span>
+<span></span>
+<span><span class="va">minmax</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"[%.2f, %.2f]"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mean_na</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="va">minmax</span> <span class="op">+</span> <span class="va">mean_na</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># To handle missing values, you can pass arguments to your functions using</span></span>
+<span><span class="co"># '*Arguments()'</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="va">mean</span> <span class="op">*</span> <span class="fu"><a href="../reference/Arguments.html">Arguments</a></span><span class="op">(</span>na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># For convenience, 'modelsummary' supplies several convenience functions</span></span>
+<span><span class="co"># with the argument `na.rm=TRUE` by default: Mean, Median, Min, Max, SD, Var,</span></span>
+<span><span class="co"># P0, P25, P50, P75, P100, NUnique, Histogram</span></span>
+<span></span>
+<span><span class="co">#datasummary(hp + mpg ~ Mean + SD + Histogram, data = mtcars)</span></span>
+<span></span>
+<span><span class="co"># These functions also accept a 'fmt' argument which allows you to</span></span>
+<span><span class="co"># round/format the results</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">*</span> <span class="fu"><a href="../reference/Arguments.html">Arguments</a></span><span class="op">(</span>fmt <span class="op">=</span> <span class="st">"%.3f"</span><span class="op">)</span> <span class="op">+</span> <span class="va">SD</span> <span class="op">*</span> <span class="fu"><a href="../reference/Arguments.html">Arguments</a></span><span class="op">(</span>fmt <span class="op">=</span> <span class="st">"%.1f"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Save your tables to a variety of output formats:</span></span>
+<span><span class="va">f</span> <span class="op">&lt;-</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span></span>
+<span><span class="co">#datasummary(f, data = mtcars, output = 'table.html')</span></span>
+<span><span class="co">#datasummary(f, data = mtcars, output = 'table.tex')</span></span>
+<span><span class="co">#datasummary(f, data = mtcars, output = 'table.md')</span></span>
+<span><span class="co">#datasummary(f, data = mtcars, output = 'table.docx')</span></span>
+<span><span class="co">#datasummary(f, data = mtcars, output = 'table.pptx')</span></span>
+<span><span class="co">#datasummary(f, data = mtcars, output = 'table.jpg')</span></span>
+<span><span class="co">#datasummary(f, data = mtcars, output = 'table.png')</span></span>
+<span></span>
+<span><span class="co"># Display human-readable code</span></span>
+<span><span class="co">#datasummary(f, data = mtcars, output = 'html')</span></span>
+<span><span class="co">#datasummary(f, data = mtcars, output = 'markdown')</span></span>
+<span><span class="co">#datasummary(f, data = mtcars, output = 'latex')</span></span>
+<span></span>
+<span><span class="co"># Return a table object to customize using a table-making package</span></span>
+<span><span class="co">#datasummary(f, data = mtcars, output = 'gt')</span></span>
+<span><span class="co">#datasummary(f, data = mtcars, output = 'kableExtra')</span></span>
+<span><span class="co">#datasummary(f, data = mtcars, output = 'flextable')</span></span>
+<span><span class="co">#datasummary(f, data = mtcars, output = 'huxtable')</span></span>
+<span></span>
+<span><span class="co"># add_rows</span></span>
+<span><span class="va">new_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, b <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">3</span>, c <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">new_rows</span>, <span class="st">'position'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/datasummary.html">datasummary</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">~</span> <span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span>, data <span class="op">=</span> <span class="va">mtcars</span>, add_rows <span class="op">=</span> <span class="va">new_rows</span><span class="op">)</span></span></code></pre><p></p></div>
+    </div>
+    <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Arel-Bundock V (2022). “modelsummary: Data and Model Summaries in R.” <em>Journal of Statistical Software</em>, <em>103</em>(1), 1-23. <a href="https://doi.org/10.18637/jss.v103.i01" class="external-link">doi:10.18637/jss.v103.i01</a>
 .'</p>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># The left-hand side of the formula describes rows, and the right-hand side</span></span></span>
-<span class="r-in"><span><span class="co"># describes columns. This table uses the "mpg" variable as a row and the "mean"</span></span></span>
-<span class="r-in"><span><span class="co"># function as a column:</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">mean</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># This table uses the "mean" function as a row and the "mpg" variable as a column:</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">mean</span> <span class="op">~</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Display several variables or functions of the data using the "+"</span></span></span>
-<span class="r-in"><span><span class="co"># concatenation operator. This table has 2 rows and 2 columns:</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Nest variables or statistics inside a "factor" variable using the "*" nesting</span></span></span>
-<span class="r-in"><span><span class="co"># operator. This table shows the mean of "hp" and "mpg" for each value of</span></span></span>
-<span class="r-in"><span><span class="co"># "cyl":</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="va">cyl</span> <span class="op">*</span> <span class="va">mean</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># If you don't want to convert your original data</span></span></span>
-<span class="r-in"><span><span class="co"># to factors, you can use the 'Factor()'</span></span></span>
-<span class="r-in"><span><span class="co"># function inside 'datasummary' to obtain an identical result:</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="fu"><a href="Factor.html">Factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span> <span class="op">*</span> <span class="va">mean</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># You can nest several variables or statistics inside a factor by using</span></span></span>
-<span class="r-in"><span><span class="co"># parentheses. This table shows the mean and the standard deviation for each</span></span></span>
-<span class="r-in"><span><span class="co"># subset of "cyl":</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="va">cyl</span> <span class="op">*</span> <span class="op">(</span><span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Summarize all numeric variables with 'All()'</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="fu"><a href="All.html">All</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">~</span> <span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Define custom summary statistics. Your custom function should accept a vector</span></span></span>
-<span class="r-in"><span><span class="co"># of numeric values and return a single numeric or string value:</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">minmax</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"[%.2f, %.2f]"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">mean_na</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="va">minmax</span> <span class="op">+</span> <span class="va">mean_na</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># To handle missing values, you can pass arguments to your functions using</span></span></span>
-<span class="r-in"><span><span class="co"># '*Arguments()'</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="va">mean</span> <span class="op">*</span> <span class="fu"><a href="Arguments.html">Arguments</a></span><span class="op">(</span>na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># For convenience, 'modelsummary' supplies several convenience functions</span></span></span>
-<span class="r-in"><span><span class="co"># with the argument `na.rm=TRUE` by default: Mean, Median, Min, Max, SD, Var,</span></span></span>
-<span class="r-in"><span><span class="co"># P0, P25, P50, P75, P100, NUnique, Histogram</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span> <span class="op">+</span> <span class="va">Histogram</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># These functions also accept a 'fmt' argument which allows you to</span></span></span>
-<span class="r-in"><span><span class="co"># round/format the results</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">*</span> <span class="fu"><a href="Arguments.html">Arguments</a></span><span class="op">(</span>fmt <span class="op">=</span> <span class="st">"%.3f"</span><span class="op">)</span> <span class="op">+</span> <span class="va">SD</span> <span class="op">*</span> <span class="fu"><a href="Arguments.html">Arguments</a></span><span class="op">(</span>fmt <span class="op">=</span> <span class="st">"%.1f"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Save your tables to a variety of output formats:</span></span></span>
-<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">mpg</span> <span class="op">~</span> <span class="va">Mean</span> <span class="op">+</span> <span class="va">SD</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">mtcars</span>, output <span class="op">=</span> <span class="st">'table.html'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">mtcars</span>, output <span class="op">=</span> <span class="st">'table.tex'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">mtcars</span>, output <span class="op">=</span> <span class="st">'table.md'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">mtcars</span>, output <span class="op">=</span> <span class="st">'table.docx'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">mtcars</span>, output <span class="op">=</span> <span class="st">'table.pptx'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">mtcars</span>, output <span class="op">=</span> <span class="st">'table.jpg'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">mtcars</span>, output <span class="op">=</span> <span class="st">'table.png'</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Display human-readable code</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">mtcars</span>, output <span class="op">=</span> <span class="st">'html'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">mtcars</span>, output <span class="op">=</span> <span class="st">'markdown'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">mtcars</span>, output <span class="op">=</span> <span class="st">'latex'</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Return a table object to customize using a table-making package</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">mtcars</span>, output <span class="op">=</span> <span class="st">'gt'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">mtcars</span>, output <span class="op">=</span> <span class="st">'kableExtra'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">mtcars</span>, output <span class="op">=</span> <span class="st">'flextable'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">mtcars</span>, output <span class="op">=</span> <span class="st">'huxtable'</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># add_rows</span></span></span>
-<span class="r-in"><span><span class="va">new_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, b <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">3</span>, c <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">new_rows</span>, <span class="st">'position'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">datasummary</span><span class="op">(</span><span class="va">mpg</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">~</span> <span class="va">mean</span> <span class="op">+</span> <span class="va">sd</span>, data <span class="op">=</span> <span class="va">mtcars</span>, add_rows <span class="op">=</span> <span class="va">new_rows</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span></span></span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

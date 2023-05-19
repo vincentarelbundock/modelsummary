@@ -34,7 +34,7 @@ The Appearance Vignette shows how to modify the look of tables.
     
     <a class="navbar-brand me-2" href="../index.html">modelsummary</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -491,186 +491,184 @@ to workers. Subsequent calls to <code><a href="modelsummary.html">modelsummary()
 <p><code>options("modelsummary_future" = FALSE)</code></p>
     </div>
     <div class="section level2">
+    <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h2>
+    
+
+
+<p></p><div class="sourceCode r"><pre><code><span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># load data and estimate models</span></span>
+<span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">trees</span><span class="op">)</span></span>
+<span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">models</span><span class="op">[[</span><span class="st">'Bivariate'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Girth</span> <span class="op">~</span> <span class="va">Height</span>, data <span class="op">=</span> <span class="va">trees</span><span class="op">)</span></span>
+<span><span class="va">models</span><span class="op">[[</span><span class="st">'Multivariate'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Girth</span> <span class="op">~</span> <span class="va">Height</span> <span class="op">+</span> <span class="va">Volume</span>, data <span class="op">=</span> <span class="va">trees</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># simple table</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># statistic</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="st">'p.value'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="st">'statistic'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="st">'conf.int'</span>, conf_level <span class="op">=</span> <span class="fl">0.99</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"t = {statistic}"</span>,</span>
+<span>                                   <span class="st">"se = {std.error}"</span>,</span>
+<span>                                   <span class="st">"conf.int"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># estimate</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>,</span>
+<span>  statistic <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="st">"{estimate} [{conf.low}, {conf.high}]"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"{estimate}{stars}"</span>,</span>
+<span>               <span class="st">"{estimate} ({std.error})"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># vcov</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, vcov <span class="op">=</span> <span class="st">"robust"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, vcov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"classical"</span>, <span class="st">"stata"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, vcov <span class="op">=</span> <span class="fu">sandwich</span><span class="fu">::</span><span class="va"><a href="https://sandwich.R-Forge.R-project.org/reference/vcovHC.html" class="external-link">vcovHC</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>,</span>
+<span>  vcov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov</a></span>, <span class="fu">sandwich</span><span class="fu">::</span><span class="va"><a href="https://sandwich.R-Forge.R-project.org/reference/vcovHC.html" class="external-link">vcovHC</a></span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>,</span>
+<span>  vcov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"(Intercept)"</span><span class="op">=</span><span class="st">""</span>, <span class="st">"Height"</span><span class="op">=</span><span class="st">"!"</span><span class="op">)</span>,</span>
+<span>              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"(Intercept)"</span><span class="op">=</span><span class="st">""</span>, <span class="st">"Height"</span><span class="op">=</span><span class="st">"!"</span>, <span class="st">"Volume"</span><span class="op">=</span><span class="st">"!!"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># vcov with custom names</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span></span>
+<span>  <span class="va">models</span>,</span>
+<span>  vcov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Stata Corp"</span> <span class="op">=</span> <span class="st">"stata"</span>,</span>
+<span>              <span class="st">"Newey Lewis &amp; the News"</span> <span class="op">=</span> <span class="st">"NeweyWest"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># fmt</span></span>
+<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, fmt <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, fmt <span class="op">=</span> <span class="fu"><a href="../reference/fmt_significant.html">fmt_significant</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, fmt <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, fmt <span class="op">=</span> <span class="fu"><a href="../reference/fmt_decimal.html">fmt_decimal</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, fmt <span class="op">=</span> <span class="fu"><a href="../reference/fmt_sprintf.html">fmt_sprintf</a></span><span class="op">(</span><span class="st">"%.5f"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, fmt <span class="op">=</span> <span class="fu"><a href="../reference/fmt_statistic.html">fmt_statistic</a></span><span class="op">(</span>estimate <span class="op">=</span> <span class="fl">4</span>, conf.int <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, statistic <span class="op">=</span> <span class="st">"conf.int"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, fmt <span class="op">=</span> <span class="fu"><a href="../reference/fmt_term.html">fmt_term</a></span><span class="op">(</span>hp <span class="op">=</span> <span class="fl">4</span>, drat <span class="op">=</span> <span class="fl">1</span>, default <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">*</span> <span class="fl">1000</span><span class="op">)</span> <span class="op">+</span> <span class="va">drat</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span><span class="va">f</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="fl">3</span>, nsmall <span class="op">=</span> <span class="fl">2</span>, scientific <span class="op">=</span> <span class="cn">FALSE</span>, trim <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">m</span>, fmt <span class="op">=</span> <span class="va">f</span>, gof_map <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># coef_rename</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_rename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Volume'</span> <span class="op">=</span> <span class="st">'Large'</span>, <span class="st">'Height'</span> <span class="op">=</span> <span class="st">'Tall'</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_rename <span class="op">=</span> <span class="va">toupper</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_rename <span class="op">=</span> <span class="va">coef_rename</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># coef_rename = TRUE for variable labels</span></span>
+<span><span class="va">datlab</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span>
+<span><span class="va">datlab</span><span class="op">$</span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">datlab</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">datlab</span><span class="op">$</span><span class="va">hp</span>, <span class="st">"label"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Horsepower"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">datlab</span><span class="op">$</span><span class="va">cyl</span>, <span class="st">"label"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Cylinders"</span></span>
+<span><span class="va">modlab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">datlab</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">modlab</span>, coef_rename <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># coef_rename: unnamed vector of length equal to the number of terms in the final table</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">m</span>, coef_omit <span class="op">=</span> <span class="op">-</span><span class="op">(</span><span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, coef_rename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cyl 6"</span>, <span class="st">"Cyl 8"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># coef_map</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Volume'</span> <span class="op">=</span> <span class="st">'Large'</span>, <span class="st">'Height'</span> <span class="op">=</span> <span class="st">'Tall'</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Volume'</span>, <span class="st">'Height'</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># coef_omit: omit the first and second coefficients</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># coef_omit: omit coefficients matching one substring</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"ei"</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># coef_omit: omit a specific coefficient</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^Volume$"</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># coef_omit: omit coefficients matching either one of two substring</span></span>
+<span><span class="co">#modelsummary(models, coef_omit = "ei|rc", gof_omit = ".*")</span></span>
+<span></span>
+<span><span class="co"># coef_omit: keep coefficients starting with a substring (using a negative lookahead)</span></span>
+<span><span class="co">#modelsummary(models, coef_omit = "^(?!Vol)", gof_omit = ".*")</span></span>
+<span></span>
+<span><span class="co"># coef_omit: keep coefficients matching a substring</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^(?!.*ei|.*pt)"</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># shape: multinomial model</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">nnet</a></span><span class="op">)</span></span>
+<span><span class="va">multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">multinom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="co"># shape: term names and group ids in rows, models in columns</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">response</span> <span class="op">~</span> <span class="va">model</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># shape: term names and group ids in rows in a single column</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">term</span> <span class="op">:</span> <span class="va">response</span> <span class="op">~</span> <span class="va">model</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># shape: term names in rows and group ids in columns</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">term</span> <span class="op">~</span> <span class="va">response</span><span class="op">:</span><span class="va">model</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># shape = "rcollapse"</span></span>
+<span><span class="va">panels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Panel A: MPG"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        <span class="st">"A"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
+<span>        <span class="st">"B"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">gear</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Panel B: Displacement"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        <span class="st">"A"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span>
+<span>        <span class="st">"C"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">gear</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span></span>
+<span>    <span class="va">panels</span>,</span>
+<span>    shape <span class="op">=</span> <span class="st">"rbind"</span>,</span>
+<span>    gof_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nobs"</span>, <span class="st">"r.squared"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># title</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, title <span class="op">=</span> <span class="st">'This is the title'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># title with LaTeX label (for numbering and referencing)</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, title <span class="op">=</span> <span class="st">'This is the title \\label{tab:description}'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># add_rows</span></span>
+<span><span class="va">rows</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span><span class="op">~</span><span class="va">term</span>, <span class="op">~</span><span class="va">Bivariate</span>, <span class="op">~</span><span class="va">Multivariate</span>,</span>
+<span>  <span class="st">'Empty row'</span>, <span class="st">'-'</span>, <span class="st">'-'</span>,</span>
+<span>  <span class="st">'Another empty row'</span>, <span class="st">'?'</span>, <span class="st">'?'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">rows</span>, <span class="st">'position'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, add_rows <span class="op">=</span> <span class="va">rows</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># notes</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, notes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">'A first note'</span>, <span class="st">'A second note'</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># gof_map: tribble</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
+<span><span class="va">gm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span>  <span class="op">~</span><span class="va">raw</span>,        <span class="op">~</span><span class="va">clean</span>,      <span class="op">~</span><span class="va">fmt</span>,</span>
+<span>  <span class="st">"r.squared"</span>, <span class="st">"R Squared"</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_map <span class="op">=</span> <span class="va">gm</span><span class="op">)</span></span></code></pre><p></p></div>
+    </div>
+    <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Arel-Bundock V (2022). “modelsummary: Data and Model Summaries in R.” <em>Journal of Statistical Software</em>, <em>103</em>(1), 1-23. <a href="https://doi.org/10.18637/jss.v103.i01" class="external-link">doi:10.18637/jss.v103.i01</a>
 .'</p>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># The `modelsummary` website includes \emph{many} examples and tutorials:</span></span></span>
-<span class="r-in"><span><span class="co"># https://vincentarelbundock.github.io/modelsummary</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://vincentarelbundock.github.io/modelsummary/">modelsummary</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># load data and estimate models</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">trees</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">models</span><span class="op">[[</span><span class="st">'Bivariate'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Girth</span> <span class="op">~</span> <span class="va">Height</span>, data <span class="op">=</span> <span class="va">trees</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">models</span><span class="op">[[</span><span class="st">'Multivariate'</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Girth</span> <span class="op">~</span> <span class="va">Height</span> <span class="op">+</span> <span class="va">Volume</span>, data <span class="op">=</span> <span class="va">trees</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># simple table</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># statistic</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="st">'p.value'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="st">'statistic'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="st">'conf.int'</span>, conf_level <span class="op">=</span> <span class="fl">0.99</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, statistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"t = {statistic}"</span>,</span></span>
-<span class="r-in"><span>                                   <span class="st">"se = {std.error}"</span>,</span></span>
-<span class="r-in"><span>                                   <span class="st">"conf.int"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># estimate</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>,</span></span>
-<span class="r-in"><span>  statistic <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
-<span class="r-in"><span>  estimate <span class="op">=</span> <span class="st">"{estimate} [{conf.low}, {conf.high}]"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>,</span></span>
-<span class="r-in"><span>  estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"{estimate}{stars}"</span>,</span></span>
-<span class="r-in"><span>               <span class="st">"{estimate} ({std.error})"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># vcov</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, vcov <span class="op">=</span> <span class="st">"robust"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, vcov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"classical"</span>, <span class="st">"stata"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, vcov <span class="op">=</span> <span class="fu">sandwich</span><span class="fu">::</span><span class="va"><a href="https://sandwich.R-Forge.R-project.org/reference/vcovHC.html" class="external-link">vcovHC</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>,</span></span>
-<span class="r-in"><span>  vcov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov</a></span>, <span class="fu">sandwich</span><span class="fu">::</span><span class="va"><a href="https://sandwich.R-Forge.R-project.org/reference/vcovHC.html" class="external-link">vcovHC</a></span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>,</span></span>
-<span class="r-in"><span>  vcov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"(Intercept)"</span><span class="op">=</span><span class="st">""</span>, <span class="st">"Height"</span><span class="op">=</span><span class="st">"!"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"(Intercept)"</span><span class="op">=</span><span class="st">""</span>, <span class="st">"Height"</span><span class="op">=</span><span class="st">"!"</span>, <span class="st">"Volume"</span><span class="op">=</span><span class="st">"!!"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># vcov with custom names</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">models</span>,</span></span>
-<span class="r-in"><span>  vcov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Stata Corp"</span> <span class="op">=</span> <span class="st">"stata"</span>,</span></span>
-<span class="r-in"><span>              <span class="st">"Newey Lewis &amp; the News"</span> <span class="op">=</span> <span class="st">"NeweyWest"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># fmt</span></span></span>
-<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, fmt <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, fmt <span class="op">=</span> <span class="fu"><a href="fmt_significant.html">fmt_significant</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, fmt <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, fmt <span class="op">=</span> <span class="fu"><a href="fmt_decimal.html">fmt_decimal</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, fmt <span class="op">=</span> <span class="fu"><a href="fmt_sprintf.html">fmt_sprintf</a></span><span class="op">(</span><span class="st">"%.5f"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, fmt <span class="op">=</span> <span class="fu"><a href="fmt_statistic.html">fmt_statistic</a></span><span class="op">(</span>estimate <span class="op">=</span> <span class="fl">4</span>, conf.int <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, statistic <span class="op">=</span> <span class="st">"conf.int"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, fmt <span class="op">=</span> <span class="fu"><a href="fmt_term.html">fmt_term</a></span><span class="op">(</span>hp <span class="op">=</span> <span class="fl">4</span>, drat <span class="op">=</span> <span class="fl">1</span>, default <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">*</span> <span class="fl">1000</span><span class="op">)</span> <span class="op">+</span> <span class="va">drat</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="fl">3</span>, nsmall <span class="op">=</span> <span class="fl">2</span>, scientific <span class="op">=</span> <span class="cn">FALSE</span>, trim <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">m</span>, fmt <span class="op">=</span> <span class="va">f</span>, gof_map <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># coef_rename</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_rename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Volume'</span> <span class="op">=</span> <span class="st">'Large'</span>, <span class="st">'Height'</span> <span class="op">=</span> <span class="st">'Tall'</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_rename <span class="op">=</span> <span class="va">toupper</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_rename <span class="op">=</span> <span class="va">coef_rename</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># coef_rename = TRUE for variable labels</span></span></span>
-<span class="r-in"><span><span class="va">datlab</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span></span>
-<span class="r-in"><span><span class="va">datlab</span><span class="op">$</span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">datlab</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">datlab</span><span class="op">$</span><span class="va">hp</span>, <span class="st">"label"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Horsepower"</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">datlab</span><span class="op">$</span><span class="va">cyl</span>, <span class="st">"label"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Cylinders"</span></span></span>
-<span class="r-in"><span><span class="va">modlab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">datlab</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">modlab</span>, coef_rename <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># coef_rename: unnamed vector of length equal to the number of terms in the final table</span></span></span>
-<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">m</span>, coef_omit <span class="op">=</span> <span class="op">-</span><span class="op">(</span><span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, coef_rename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Cyl 6"</span>, <span class="st">"Cyl 8"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># coef_map</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Volume'</span> <span class="op">=</span> <span class="st">'Large'</span>, <span class="st">'Height'</span> <span class="op">=</span> <span class="st">'Tall'</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Volume'</span>, <span class="st">'Height'</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># coef_omit: omit the first and second coefficients</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># coef_omit: omit coefficients matching one substring</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"ei"</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># coef_omit: omit a specific coefficient</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^Volume$"</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># coef_omit: omit coefficients matching either one of two substring</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"ei|rc"</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># coef_omit: keep coefficients starting with a substring (using a negative lookahead)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^(?!Vol)"</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># coef_omit: keep coefficients matching a substring</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, coef_omit <span class="op">=</span> <span class="st">"^(?!.*ei|.*pt)"</span>, gof_omit <span class="op">=</span> <span class="st">".*"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># shape: multinomial model</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">nnet</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">multinom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span>, trace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># shape: term names and group ids in rows, models in columns</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">response</span> <span class="op">~</span> <span class="va">model</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># shape: term names and group ids in rows in a single column</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">term</span> <span class="op">:</span> <span class="va">response</span> <span class="op">~</span> <span class="va">model</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># shape: term names in rows and group ids in columns</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">multi</span>, shape <span class="op">=</span> <span class="va">term</span> <span class="op">~</span> <span class="va">response</span><span class="op">:</span><span class="va">model</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># shape = "rcollapse"</span></span></span>
-<span class="r-in"><span><span class="va">panels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="st">"Panel A: MPG"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>        <span class="st">"A"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        <span class="st">"B"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">gear</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="st">"Panel B: Displacement"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>        <span class="st">"A"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        <span class="st">"C"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">disp</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">gear</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="va">panels</span>,</span></span>
-<span class="r-in"><span>    shape <span class="op">=</span> <span class="st">"rbind"</span>,</span></span>
-<span class="r-in"><span>    gof_map <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nobs"</span>, <span class="st">"r.squared"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># title</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, title <span class="op">=</span> <span class="st">'This is the title'</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># title with LaTeX label (for numbering and referencing)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, title <span class="op">=</span> <span class="st">'This is the title \\label{tab:description}'</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># add_rows</span></span></span>
-<span class="r-in"><span><span class="va">rows</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span><span class="op">~</span><span class="va">term</span>, <span class="op">~</span><span class="va">Bivariate</span>, <span class="op">~</span><span class="va">Multivariate</span>,</span></span>
-<span class="r-in"><span>  <span class="st">'Empty row'</span>, <span class="st">'-'</span>, <span class="st">'-'</span>,</span></span>
-<span class="r-in"><span>  <span class="st">'Another empty row'</span>, <span class="st">'?'</span>, <span class="st">'?'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">rows</span>, <span class="st">'position'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, add_rows <span class="op">=</span> <span class="va">rows</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># notes</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, notes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">'A first note'</span>, <span class="st">'A second note'</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># gof_map: tribble</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">gm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="op">~</span><span class="va">raw</span>,        <span class="op">~</span><span class="va">clean</span>,      <span class="op">~</span><span class="va">fmt</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"r.squared"</span>, <span class="st">"R Squared"</span>, <span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_map <span class="op">=</span> <span class="va">gm</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># gof_map: data.frame</span></span></span>
-<span class="r-in"><span><span class="va">gm</span> <span class="op">&lt;-</span> <span class="fu">modelsummary</span><span class="fu">::</span><span class="va"><a href="gof_map.html">gof_map</a></span></span></span>
-<span class="r-in"><span><span class="va">gm</span><span class="op">$</span><span class="va">omit</span><span class="op">[</span><span class="va">gm</span><span class="op">$</span><span class="va">raw</span> <span class="op">==</span> <span class="st">'deviance'</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span></span>
-<span class="r-in"><span><span class="va">gm</span><span class="op">$</span><span class="va">fmt</span><span class="op">[</span><span class="va">gm</span><span class="op">$</span><span class="va">raw</span> <span class="op">==</span> <span class="st">'r.squared'</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"%.5f"</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>, gof_map <span class="op">=</span> <span class="va">gm</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># gof_map: list of lists</span></span></span>
-<span class="r-in"><span><span class="va">f1</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">3</span><span class="op">)</span>, big.mark<span class="op">=</span><span class="st">","</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">f2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">0</span><span class="op">)</span>, big.mark<span class="op">=</span><span class="st">","</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">gm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"raw"</span> <span class="op">=</span> <span class="st">"nobs"</span>, <span class="st">"clean"</span> <span class="op">=</span> <span class="st">"N"</span>, <span class="st">"fmt"</span> <span class="op">=</span> <span class="va">f2</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"raw"</span> <span class="op">=</span> <span class="st">"AIC"</span>, <span class="st">"clean"</span> <span class="op">=</span> <span class="st">"aic"</span>, <span class="st">"fmt"</span> <span class="op">=</span> <span class="va">f1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">models</span>,</span></span>
-<span class="r-in"><span>  fmt <span class="op">=</span> <span class="va">f1</span>,</span></span>
-<span class="r-in"><span>  gof_map <span class="op">=</span> <span class="va">gm</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span></span></span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
