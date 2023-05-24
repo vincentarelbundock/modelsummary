@@ -36,7 +36,7 @@ formula, but all summary functions must be on one side.}
 \itemize{
 \item If the user does not choose a default value, the packages listed above are tried in sequence.
 \item Session-specific configuration: \code{options("modelsummary_factory_default" = "gt")}
-\item Persistent configuration: \code{modelsummary_config(output = "markdown")}
+\item Persistent configuration: \code{config_modelsummary(output = "markdown")}
 }
 \item Warning: Users should not supply a file name to the \code{output} argument if they intend to customize the table with external packages. See the 'Details' section.
 \item LaTeX compilation requires the \code{booktabs} and \code{siunitx} packages, but \code{siunitx} can be disabled or replaced with global options. See the 'Details' section.

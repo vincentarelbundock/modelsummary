@@ -43,7 +43,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * The "default" output format can be set to "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"
 #'   - If the user does not choose a default value, the packages listed above are tried in sequence.
 #'   - Session-specific configuration: `options("modelsummary_factory_default" = "gt")`
-#'   - Persistent configuration: `modelsummary_config(output = "markdown")`
+#'   - Persistent configuration: `config_modelsummary(output = "markdown")`
 #' * Warning: Users should not supply a file name to the `output` argument if they intend to customize the table with external packages. See the 'Details' section.
 #' * LaTeX compilation requires the `booktabs` and `siunitx` packages, but `siunitx` can be disabled or replaced with global options. See the 'Details' section.
 #' @param fmt how to format numeric values: integer, user-supplied function, or `modelsummary` function.
