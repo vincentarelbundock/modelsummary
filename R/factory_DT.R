@@ -16,11 +16,13 @@ factory_DT <- function(
 
   colnames(tab) <- gsub("\\|\\|\\|\\|", " / ", colnames(tab))
 
-  DT::datatable(
+  dots <- list(...)
+  dots[["internal_call"]] <- NULL
+  args <- list(
     tab,
     caption = title,
     escape = escape,
-    rownames = FALSE,
-    ...)
-
+    rownames = FALSE)
+  args <- c(args, dots)
+  do.call(DT::datatable, args)
 }

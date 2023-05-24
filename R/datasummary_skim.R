@@ -187,7 +187,7 @@ datasummary_skim_numeric <- function(
 
     # if flag was flipped
     if (!histogram) {
-      warning('The histogram argument is only supported for (a) output types "default", "html", or "kableExtra"; (b) writing to file paths with extensions ".html", ".jpg", or ".png"; and (c) Rmarkdown or knitr documents compiled to PDF or HTML. Use `histogram=FALSE` to silence this warning.')
+      insight::format_warning('The histogram argument is only supported for (a) output types "default", "html", or "kableExtra"; (b) writing to file paths with extensions ".html", ".jpg", or ".png"; and (c) Rmarkdown or knitr documents compiled to PDF or HTML. Use `histogram=FALSE` to silence this warning.')
     }
 
   }
