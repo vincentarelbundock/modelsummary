@@ -5,6 +5,7 @@
 #' @param models A regression model or list of regression models
 #' @param number Should the models be numbered (1), (2), etc., in addition to their dependent variable names?
 #' @param fill If \code{insight::find_response()} cannot find a response, the column title to use in its place. Set to \code{' '} to leave blank.
+#' @param boolean FALSE returns the dependent variable names as they appear in the model. TRUE returns the dependent variable names as they appear in the data, without transformations.
 #'
 #' @examples
 #'
@@ -19,13 +20,28 @@
 #'
 #' @export
 
-dvnames <- function(models, number = FALSE, fill = 'Model') {
+dvnames <- function(
+    models,
+    number = FALSE,
+    strip = FALSE,
+    fill = 'Model') {
+
     if (class(models)[1] != 'list') {
         models <- list(models)
     }
 
     # Get dependent variables
-    dvs <- sapply(models, insight::find_response)
+    checkmate::assert_flag(strip)
+    if (!isTRUE(strip)) {
+        dvs <- tryCatch(
+            sapply(models, function(f) deparse(stats::formula(f)[[2]])),
+            error = function(e) NULL)
+        if (is.null(dvs)) {
+            dvs <- sapply(models, insight::find_response)
+        }
+    } else {
+        dvs <- sapply(models, insight::find_response)
+    }
 
     lab <- get_variable_labels_models(models)
     idx <- dvs %in% names(lab)

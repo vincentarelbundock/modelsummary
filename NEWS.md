@@ -1,6 +1,8 @@
 # modelsummary 1.4.1 (development)
 
+New:
 
+* `strip` argument in `dvnames`.
 
 # modelsummary 1.4.1
 
