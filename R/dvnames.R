@@ -5,7 +5,7 @@
 #' @param models A regression model or list of regression models
 #' @param number Should the models be numbered (1), (2), etc., in addition to their dependent variable names?
 #' @param fill If \code{insight::find_response()} cannot find a response, the column title to use in its place. Set to \code{' '} to leave blank.
-#' @param boolean FALSE returns the dependent variable names as they appear in the model. TRUE returns the dependent variable names as they appear in the data, without transformations.
+#' @param strip boolean FALSE returns the dependent variable names as they appear in the model. TRUE returns the dependent variable names as they appear in the data, without transformations.
 #'
 #' @examples
 #'

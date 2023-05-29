@@ -11,9 +11,9 @@ dvnames(models, number = FALSE, strip = FALSE, fill = "Model")
 
 \item{number}{Should the models be numbered (1), (2), etc., in addition to their dependent variable names?}
 
-\item{fill}{If \code{insight::find_response()} cannot find a response, the column title to use in its place. Set to \code{' '} to leave blank.}
+\item{strip}{boolean FALSE returns the dependent variable names as they appear in the model. TRUE returns the dependent variable names as they appear in the data, without transformations.}
 
-\item{boolean}{FALSE returns the dependent variable names as they appear in the model. TRUE returns the dependent variable names as they appear in the data, without transformations.}
+\item{fill}{If \code{insight::find_response()} cannot find a response, the column title to use in its place. Set to \code{' '} to leave blank.}
 }
 \description{
 A convenience function for use with a regression model or list of regression models. Returns a named list of models, where the names are the models' respective dependent variables. Pass your list of models to \code{dvnames} before sending to \code{modelsummary} to automatically get dependent variable-titled columns.
