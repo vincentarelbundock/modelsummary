@@ -46,9 +46,9 @@ escape_latex <- function (x, newlines = FALSE, spaces = FALSE) {
 #' @param x a character string to escape
 #' @keywords internal
 escape_html <- function (x) {
-    x <- gsub("&", "&amp;", x)
-    x <- gsub("<", "&lt;", x)
-    x <- gsub(">", "&gt;", x)
-    x <- gsub("\"", "&quot;", x)
+    x <- gsub("&", "&amp;", x, fixed = TRUE)
+    x <- gsub("<", "&lt;", x, fixed = TRUE)
+    x <- gsub(">", "&gt;", x, fixed = TRUE)
+    x <- gsub("\"", "&quot;", x, fixed = TRUE)
     x
 }
