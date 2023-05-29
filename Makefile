@@ -17,10 +17,10 @@ install: documentplain
 	Rscript -e "devtools::install()"
 
 buildsite: documentrich
-	Rscript -e "pkgdown::build_site()"
+	Rscript -e "Sys.setenv('pkgdown' = 'true');pkgdown::build_site()"
 
 deploysite: documentrich
-	Rscript -e "pkgdown::deploy_to_branch()"
+	Rscript -e "Sys.setenv('pkgdown' = 'true');pkgdown::deploy_to_branch()"
 
 buildpdf: documentplain
 	R CMD Rd2pdf .

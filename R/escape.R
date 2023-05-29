@@ -3,7 +3,7 @@
 #' @keywords internal
 escape_string <- function(x) {
     if (settings_equal("escape", TRUE)) {
-        if (settings_equal("output_format", c("html", "kableExtra"))) {
+        if (identical(Sys.getenv("pkgdown"),  "true") || settings_equal("output_format", c("html", "kableExtra"))) {
             out <- escape_html(x)
         } else if (settings_equal("output_format", c("latex", "latex_tabular"))) {
             out <- escape_latex(x)
