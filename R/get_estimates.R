@@ -221,7 +221,7 @@ get_estimates_parameters <- function(model,
 
         # S-value (Greenland 2019)
         if ("p.value" %in% colnames(out)) {
-            out$s.value <- -log2(out$p.value)
+            out$s.value <- sprintf("%.1f", -log2(out$p.value))
         }
         return(out)
     }
