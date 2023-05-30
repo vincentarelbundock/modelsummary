@@ -218,6 +218,11 @@ get_estimates_parameters <- function(model,
         inner <- parameters::parameters
         out <- do.call("inner", dots)
         out <- insight::standardize_names(out, style = "broom")
+
+        # S-value (Greenland 2019)
+        if ("p.value" %in% colnames(out)) {
+            out$s.value <- -log2(out$p.value)
+        }
         return(out)
     }
 

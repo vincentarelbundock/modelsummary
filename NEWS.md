@@ -3,6 +3,7 @@
 New:
 
 * `strip` argument in `dvnames`.
+* `s.value` statistic is now available whenever `p.value` is available. See Greenland (2019).
 
 # modelsummary 1.4.1
 
