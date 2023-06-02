@@ -160,14 +160,6 @@ datasummary <- function(formula,
                         escape = TRUE,
                         ...) {
 
-  # tables::All does not accept tibbles
-  # https://github.com/vincentarelbundock/modelsummary/issues/395
-  if (inherits(data, "tbl_df")) {
-    if (any(grepl("All\\(", as.character(formula)))) {
-      warning("The `All()` function does not accept tibbles. Please convert `data` to a `data.frame` before calling `datasummary`. A bugfix patch has been submitted upstream to the `tables` package.")
-    }
-  }
-
   ## settings: don't overwrite settings on internal calls
   settings_init(settings = list(
      "function_called" = "datasummary"

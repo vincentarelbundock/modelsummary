@@ -12,7 +12,8 @@ expect_inherits(tab, "gt_tbl")
 # https://github.com/vincentarelbundock/modelsummary/issues/395
 requiet("tibble")
 dat <- tibble::as_tibble(mtcars)
-expect_warning(datasummary(All(dat) ~ Mean + SD, data = dat), pattern = "does not accept tibbles")
+tab <- datasummary(All(dat) ~ Mean + SD, data = dat, output = "dataframe")
+expect_equal(dim(tab), c(11, 3))
 
 # big.mark formatting
 set.seed(10)
