@@ -168,6 +168,10 @@ sanitize_output <- function(output) {
     ## reprex and github: change to markdown output format only if `output` is "default"
     } else if (any(markdown_fmt %in% fmt) && (output_user == "default")) {
       output_format <- "markdown"
+
+
+    } else if (isTRUE(knitr::pandoc_to() == "typst")) {
+      output_format <- "typst"
     }
 
   }
