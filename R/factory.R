@@ -39,13 +39,15 @@ factory <- function(tab,
     factory_fun <- factory_dataframe
   } else if (settings_equal("output_factory", "modelsummary")) {
     factory_fun <- factory_markdown
+  } else if (settings_equal("output_factory", "typst")) {
+    factory_fun <- factory_typst
   }
 
   # flat header if necessary
   flat_header <- attr(tab, 'header_sparse_flat')
   if (!is.null(flat_header)) {
-    flat_factories <- c('flextable', 'huxtable', 'dataframe')
-    flat_formats <- c('markdown', 'word', 'powerpoint')
+    flat_factories <- c('flextable', 'huxtable', 'dataframe', 'typst')
+    flat_formats <- c('markdown', 'word', 'powerpoint', 'typst')
     if (settings_get("output_factory") %in% flat_factories ||
         settings_get("output_format") %in% flat_formats) {
         attr(tab, "header_bottom") <- colnames(tab)
