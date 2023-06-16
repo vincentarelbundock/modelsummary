@@ -1,7 +1,6 @@
 factory_typst <- function(
   tab,
   align = NULL,
-  quarto = TRUE,
   ...) {
 
   align[align == "c"] <- "center"
@@ -9,10 +8,11 @@ factory_typst <- function(
   align[align == "r"] <- "right"
   out <- typstable(tab, align = align, ...)
 
-  if (isTRUE(quarto)) {
-    insight::check_if_installed("knitr")
-    out <- paste0("```{=typst}\n", out, "\n```\n")
-    out <- knitr::asis_output(out)
+  if (insight::check_if_installed("knitr", quietly = TRUE)) {
+    if (isTRUE(knitr::pandoc_to() == "typst")) {
+        out <- paste0("```{=typst}\n", out, "\n```\n")
+        out <- knitr::asis_output(out)
+    }
   }
 
   return(out)
