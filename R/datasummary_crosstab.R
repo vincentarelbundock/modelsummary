@@ -49,7 +49,7 @@
 #'   datasummary_crosstab(am * cyl ~ gear, data = mtcars)
 #'
 #' # crosstab with two variables and column percentages 
-#' datasummary_crosstab(am ~ gear, statistic = ~ Percentage("col"), data = mtcars)
+#' datasummary_crosstab(am ~ gear, statistic = ~ Percent("col"), data = mtcars)
 #' ```
 #'
 #' @details
