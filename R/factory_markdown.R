@@ -73,8 +73,9 @@ factory_markdown <- function(tab,
         tab <- append(tab, ruler, after = hgroup[[i]][2] + 1)
     }
 
-    # horizontal rulers
-    hrule <- rev(sort(c(1, hrule)))
+    # horizontal rulers: knitr and pandoc may not support headers, or I don't know how
+    # hrule <- rev(sort(c(1, hrule)))
+    hrule <- 1
     for (h in hrule) {
         tab <- append(tab, ruler, after = h)
     }

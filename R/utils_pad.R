@@ -49,14 +49,19 @@ pad <- function(x, style = "unique", sep = ".") {
 
     for (i in seq_along(x_split)) {
 
+      if (settings_equal("output_format", "markdown")) {
+        padchar <- " "
+      } else {
+        padchar <- "\U02007"
+      }
       # rounded numeric (no decimal): left-centered
       if (length(x_split[[i]]) == 1) {
         is_rounded <- !is.na(suppressWarnings(as.numeric(x_split[[i]])))
         if (is_rounded) {
           left <- x_split[[i]]
           right <- ""
-          left <- paste0(strrep("\U02007", left_long - nchar(left, type = "width")), left)
-          right <- paste0(strrep("\U02007", right_long - nchar(right, type = "width") + 1))
+          left <- paste0(strrep(padchar, left_long - nchar(left, type = "width")), left)
+          right <- paste0(strrep(padchar, right_long - nchar(right, type = "width") + 1))
           x_split[[i]] <- paste0(left, right)
         } else {
           x_split[[i]] <- x[[i]]
@@ -66,8 +71,8 @@ pad <- function(x, style = "unique", sep = ".") {
       } else if (length(x_split[[i]]) == 2) {
         left <- x_split[[i]][[1]]
         right <- x_split[[i]][[2]]
-        left <- paste0(strrep("\U02007", left_long - nchar(left, type = "width")), left)
-        right <- paste0(right, strrep("\U02007", right_long - nchar(right, type = "width")))
+        left <- paste0(strrep(padchar, left_long - nchar(left, type = "width")), left)
+        right <- paste0(right, strrep(padchar, right_long - nchar(right, type = "width")))
         x_split[[i]] <- paste0(left, sep, right)
 
 
