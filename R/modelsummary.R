@@ -877,7 +877,13 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, sh
                future::nbrOfWorkers() > 1 &&
                number_of_models > 1 &&
                isTRUE(getOption("modelsummary_future", default = TRUE))) {
-        out <- future.apply::future_lapply(seq_len(number_of_models), inner_loop, future.seed = TRUE)
+        # Issue #647: conflict with `furrr`. Very hard to diagnose.
+        out <- try(
+          future.apply::future_lapply(seq_len(number_of_models), inner_loop, future.seed = TRUE),
+          silent = TRUE)
+        if (inherits(out, "try-error")) {
+          out <- lapply(seq_len(number_of_models), inner_loop)
+        }
 
     # sequential
     } else {
