@@ -1,4 +1,4 @@
-# modelsummary 1.4.1 (development)
+# modelsummary 1.4.2
 
 New:
 
@@ -11,7 +11,6 @@ Bugs:
 
 * GOF term names get escaped in LaTeX. Thanks to @shreyasgm for reviving Issue #546.
 * Conflict with `furrr` generated errors for some models. Thanks to @sammo3182 for Issue #647.
-
 
 # modelsummary 1.4.1
 
