@@ -6,6 +6,11 @@ New:
 * `strip` argument in `dvnames`.
 * `s.value` statistic is now available whenever `p.value` is available. See Greenland (2019).
 
+Bugs:
+
+* GOF term names get escaped in LaTeX. Thanks to @shreyasgm for reviving Issue #546.
+
+
 # modelsummary 1.4.1
 
 New:

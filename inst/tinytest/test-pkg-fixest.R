@@ -114,3 +114,10 @@ mod <- list(
 expect_snapshot_print(
   modelsummary(mod, output = "markdown"),
   "test-pkg-fixest_model_names_single")
+
+
+# Issue #546
+dat <- transform(mtcars, carb_carb = carb)
+mod <- feols(mpg ~ hp | carb_carb, data = dat)
+k <- modelsummary(mod, output = "latex")
+expect_false(grepl("FE: carb_carb", k))

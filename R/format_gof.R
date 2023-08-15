@@ -57,6 +57,9 @@ format_gof <- function(gof, fmt, gof_map, ...) {
     out <- stats::na.omit(out)
   }
 
+  # escape term names (fixest: FE: x_1)
+  out$term <- escape_string(out$term)
+
   # output
   row.names(out) <- NULL
   return(out)
