@@ -271,7 +271,7 @@ datasummary_skim_numeric <- function(
       escape = escape,
       internal_call = TRUE)
 
-    if (identical(output_fmt, "gt")) {
+    if (identical(cache$output_factory, "gt")) {
       insight::check_if_installed("gtExtras")
       tmp <- data.table::data.table(a = histogram_list)
       out[["_data"]][, ncol(out[["_data"]])] <- tmp[, 1, drop = FALSE]
