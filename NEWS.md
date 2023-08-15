@@ -5,6 +5,7 @@ New:
 * Minimal support for `Typst` output, with auto-detection in Quarto documents.
 * `strip` argument in `dvnames`.
 * `s.value` statistic is now available whenever `p.value` is available. See Greenland (2019).
+* `datasummary_skim()` now includes histograms in `gt` tables.
 
 Bugs:
 

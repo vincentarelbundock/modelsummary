@@ -161,7 +161,7 @@ datasummary_skim_numeric <- function(
   if (histogram) {
 
     # histogram is a kableExtra-specific option
-    if (!settings_equal("output_factory", "kableExtra")) {
+    if (!settings_equal("output_factory", c("kableExtra", "gt"))) {
       histogram <- FALSE
     }
 
@@ -174,12 +174,16 @@ datasummary_skim_numeric <- function(
     # interactive or Rmarkdown/knitr
     } else {
       if (isTRUE(check_dependency("knitr"))) {
-        if (!settings_equal("output_format", c("default", "jupyter", "html", "kableExtra")) &&
+        if (!settings_equal("output_format", c("default", "jupyter", "html", "kableExtra", "gt")) &&
             !knitr::is_latex_output()) {
           histogram <- FALSE
         }
+        # gt cannot print histograms in latex
+        if (knitr::is_latex_output() && settings_equal("output_format", "gt")) {
+          histogram <- FALSE
+        }
       } else {
-        if (!settings_equal("output_format", c("default", "jupyter", "html", "kableExtra"))) {
+        if (!settings_equal("output_format", c("default", "jupyter", "html", "kableExtra", "gt"))) {
           histogram <- FALSE
         }
       }
@@ -187,7 +191,7 @@ datasummary_skim_numeric <- function(
 
     # if flag was flipped
     if (!histogram) {
-      insight::format_warning('The histogram argument is only supported for (a) output types "default", "html", or "kableExtra"; (b) writing to file paths with extensions ".html", ".jpg", or ".png"; and (c) Rmarkdown or knitr documents compiled to PDF or HTML. Use `histogram=FALSE` to silence this warning.')
+      insight::format_warning('The histogram argument is only supported for (a) output types "default", "html", "kableExtra", or "gt"; (b) writing to file paths with extensions ".html", ".jpg", or ".png"; and (c) Rmarkdown, knitr or Quarto documents compiled to PDF (via kableExtra)  or HTML (via kableExtra or gt). Use `histogram=FALSE` to silence this warning.')
     }
 
   }
@@ -254,25 +258,39 @@ datasummary_skim_numeric <- function(
         output_fmt <- output
     }
 
-
     # draw table
     cache <- settings_cache(c("output_format", "output_file", "output_factory"))
-    out <- datasummary(formula = f,
-        data = dat_lab,
-        output = "kableExtra",
-        # output = output_fmt,
-        title = title,
-        align = align,
-        notes = notes,
-        escape = escape,
-        internal_call = TRUE)
-    settings_restore(cache)
 
-    out <- kableExtra::column_spec(out,
+    out <- datasummary(
+      formula = f,
+      data = dat_lab,
+      output = output_fmt,
+      title = title,
+      align = align,
+      notes = notes,
+      escape = escape,
+      internal_call = TRUE)
+
+    if (identical(output_fmt, "gt")) {
+      insight::check_if_installed("gtExtras")
+      tmp <- data.table::data.table(a = histogram_list)
+      out[["_data"]][, ncol(out[["_data"]])] <- tmp[, 1, drop = FALSE]
+      out <- gtExtras::gt_plt_dist(out,
+        column = ncol(out[["_data"]]),
+        type = "histogram",
+        fill_color = "black",
+        line_color = "black",
+        same_limit = FALSE)
+
+    } else {
+      out <- kableExtra::column_spec(out,
         column = 9,
         image = kableExtra::spec_hist(histogram_list,
-                                      col = "black",
-                                      same_lim = FALSE))
+          col = "black",
+          same_lim = FALSE))
+    }
+
+    settings_restore(cache)
 
     # don't use output=filepath.html when post-processing
     if (!is.null(settings_get("output_file"))) {

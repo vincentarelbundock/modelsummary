@@ -107,6 +107,10 @@ tab <- datasummary_skim(penguins)
 expect_inherits(tab, "kableExtra")
 
 
+# Issue #627: histograms in gt
+expect_inherits(datasummary_skim(mtcars, output = "gt"), "gt_tbl")
+
+
 # # RDatasets tests: must be commented out
 # any_categorical <- function(x) {
 #   # datasummary_skim ignores characters with more than 10 levels
