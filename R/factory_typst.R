@@ -66,6 +66,15 @@ typstable <- function(
     } else {
         cn <- NULL
     }
+    cn <- gsub("\\*", "\\\\*", cn)
+    cn <- gsub("\\#", "\\\\#", cn)
+
+    # escape asterisks, which have a special delimiter meaning in Typst
+    for (i in seq_along(x)) {
+        x[[i]] <- gsub("\\*", "\\\\*", x[[i]])
+        x[[i]] <- gsub("\\#", "\\\\#", x[[i]])
+    }
+
 
     # cells
     tab <- data.frame(apply(x, 1:2, function(z) sprintf("[%s]", z)))
@@ -79,6 +88,7 @@ typstable <- function(
 inset: %s,
 columns: %s,
 align: %s,
+stroke: none,
 %s
 )",
     inset, columns, align, tab)
