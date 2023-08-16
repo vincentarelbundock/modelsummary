@@ -1,4 +1,4 @@
-# modelsummary 1.4.1 (development)
+# modelsummary 1.4.2
 
 New:
 
