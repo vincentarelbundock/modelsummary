@@ -4,8 +4,8 @@
 #' of the columns in the `data`. You can rename those columns (with or without
 #' spaces) to produce a table of human-readable variables. See the Details and
 #' Examples sections below, and the vignettes on the `modelsummary` website: 
-#' * https://vincentarelbundock.github.io/modelsummary/
-#' * https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html
+#' * https://modelsummary.com/
+#' * https://modelsummary.com/articles/datasummary.html
 #'
 #' @inheritParams datasummary
 #' @param method character or function

@@ -170,7 +170,7 @@ format_estimates <- function(
     miss <- setdiff(shape$group_name, colnames(est))
     if (length(miss) > 0) {
       msg <- sprintf('Group columns (%s) were not found in the extracted data. The "group" argument must be a column name in the data.frame produced by `get_estimates(model)`.  If you wish to combine models with and without grouped estimates, you will find examples on the modelsummary website:', paste(miss, collapse = ", "))
-      msg <- c(msg, "https://vincentarelbundock.github.io/modelsummary")
+      msg <- c(msg, "https://modelsummary.com")
       insight::format_error(msg)
     }
   } else if (is.null(group_name) && !"group" %in% colnames(est)) {

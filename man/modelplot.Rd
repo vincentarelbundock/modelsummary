@@ -117,9 +117,9 @@ plot.  This is especially useful to display annotations "behind" the
 Dot-Whisker plot of coefficient estimates with confidence intervals. For
 more information, see the Details and Examples sections below, and the
 vignettes on the \code{modelsummary} website:
-https://vincentarelbundock.github.io/modelsummary/
+https://modelsummary.com/
 \itemize{
-\item \href{https://vincentarelbundock.github.io/modelsummary/articles/modelplot.html}{modelplot Vignette.}
+\item \href{https://modelsummary.com/articles/modelplot.html}{modelplot Vignette.}
 }
 }
 \section{Examples}{

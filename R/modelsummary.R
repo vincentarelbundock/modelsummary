@@ -18,9 +18,9 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' one of the supported table customization packages: `kableExtra`, `gt`,
 #' `flextable`, `huxtable`, `DT`. For more information, see the Details and Examples
 #' sections below, and the vignettes on the `modelsummary` website:
-#' https://vincentarelbundock.github.io/modelsummary/
-#' * [The `modelsummary` Vignette includes dozens of examples of tables with extensive customizations.](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html)
-#' * [The Appearance Vignette shows how to modify the look of tables.](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html)
+#' https://modelsummary.com/
+#' * [The `modelsummary` Vignette includes dozens of examples of tables with extensive customizations.](https://modelsummary.com/articles/modelsummary.html)
+#' * [The Appearance Vignette shows how to modify the look of tables.](https://modelsummary.com/articles/appearance.html)
 #'
 #' @template citation
 #'
@@ -184,7 +184,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' ```{r, eval = identical(Sys.getenv("pkgdown"), "true")}
 
 # The `modelsummary` website includes \emph{many} examples and tutorials:
-# https://vincentarelbundock.github.io/modelsummary
+# https://modelsummary.com
 #'
 #' library(modelsummary)
 #' 

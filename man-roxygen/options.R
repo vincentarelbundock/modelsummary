@@ -36,7 +36,7 @@
 #'
 #' ### Table themes
 #' 
-#' Change the look of tables in an automated and replicable way, using the `modelsummary` theming functionality. See the vignette: https://vincentarelbundock.github.io/modelsummary/articles/appearance.html
+#' Change the look of tables in an automated and replicable way, using the `modelsummary` theming functionality. See the vignette: https://modelsummary.com/articles/appearance.html
 #' 
 #' * `modelsummary_theme_gt`
 #' * `modelsummary_theme_kableExtra`

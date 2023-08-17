@@ -312,7 +312,7 @@ sanity_ds_nesting_factor <- function(formula, data) {
 sanity_ds_right_handed_formula <- function(formula) {
   termlabels <- labels(stats::terms(formula))
   if (length(termlabels) > 1) {
-    stop("The 'datasummary_table' function only accepts a single right-hand side variable of type factor, character, or logical. If you do not want to transform your variable in the original data, you can wrap it in a Factor() call: datasummary_balance(~Factor(x), data). the name of your variablePlease visit the `modelsummary` website to learn how to build your own, more complex, Table 1. It's easy, I promise! https://vincentarelbundock.github.io/modelsummary/datasummary.html")
+    stop("The 'datasummary_table' function only accepts a single right-hand side variable of type factor, character, or logical. If you do not want to transform your variable in the original data, you can wrap it in a Factor() call: datasummary_balance(~Factor(x), data). the name of your variablePlease visit the `modelsummary` website to learn how to build your own, more complex, Table 1. It's easy, I promise! https://modelsummary.com/datasummary.html")
   }
 }
 

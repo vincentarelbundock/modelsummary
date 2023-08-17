@@ -9,9 +9,9 @@
 #' `kableExtra`, `gt`, `flextable`, `huxtable`, `DT`. For more information, see
 #' the Details and Examples sections below, and the vignettes on the
 #' `modelsummary` website:
-#' https://vincentarelbundock.github.io/modelsummary/
-#' * [The `modelsummary` Vignette includes dozens of examples of tables with extensive customizations.](https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html)
-#' * [The Appearance Vignette shows how to modify the look of tables.](https://vincentarelbundock.github.io/modelsummary/articles/appearance.html)
+#' https://modelsummary.com/
+#' * [The `modelsummary` Vignette includes dozens of examples of tables with extensive customizations.](https://modelsummary.com/articles/modelsummary.html)
+#' * [The Appearance Vignette shows how to modify the look of tables.](https://modelsummary.com/articles/appearance.html)
 #'
 #' @param panels a nested list of models
 #' * Unnamed nested list with 2 panels: `list(list(model1, model2), list(model3, model4))`

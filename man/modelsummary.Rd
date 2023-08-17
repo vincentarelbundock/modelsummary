@@ -267,10 +267,10 @@ extensively by specifying the \code{output} argument, and by using functions fro
 one of the supported table customization packages: \code{kableExtra}, \code{gt},
 \code{flextable}, \code{huxtable}, \code{DT}. For more information, see the Details and Examples
 sections below, and the vignettes on the \code{modelsummary} website:
-https://vincentarelbundock.github.io/modelsummary/
+https://modelsummary.com/
 \itemize{
-\item \href{https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html}{The \code{modelsummary} Vignette includes dozens of examples of tables with extensive customizations.}
-\item \href{https://vincentarelbundock.github.io/modelsummary/articles/appearance.html}{The Appearance Vignette shows how to modify the look of tables.}
+\item \href{https://modelsummary.com/articles/modelsummary.html}{The \code{modelsummary} Vignette includes dozens of examples of tables with extensive customizations.}
+\item \href{https://modelsummary.com/articles/appearance.html}{The Appearance Vignette shows how to modify the look of tables.}
 }
 }
 \details{
@@ -359,7 +359,7 @@ the \code{options} function:
 
 \subsection{Table themes}{
 
-Change the look of tables in an automated and replicable way, using the \code{modelsummary} theming functionality. See the vignette: https://vincentarelbundock.github.io/modelsummary/articles/appearance.html
+Change the look of tables in an automated and replicable way, using the \code{modelsummary} theming functionality. See the vignette: https://modelsummary.com/articles/appearance.html
 \itemize{
 \item \code{modelsummary_theme_gt}
 \item \code{modelsummary_theme_kableExtra}

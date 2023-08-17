@@ -10,8 +10,8 @@
 #' 
 #' See the Details and Examples sections below, and the vignettes on the `modelsummary` website: 
 #'
-#' * https://vincentarelbundock.github.io/modelsummary/ 
-#' * https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html
+#' * https://modelsummary.com/ 
+#' * https://modelsummary.com/articles/datasummary.html
 #'
 #' @inheritParams modelsummary
 #' @import tables
@@ -137,7 +137,7 @@
 #'
 #' @details
 #' Visit the 'modelsummary' website for more usage examples:
-#' https://vincentarelbundock.github.io/modelsummary
+#' https://modelsummary.com
 #'
 #' The 'datasummary' function is a thin wrapper around the 'tabular' function
 #' from the 'tables' package. More details about table-making formulas can be

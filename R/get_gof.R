@@ -102,7 +102,7 @@ broom::glance(model)
 
 One of these functions must return a one-row `data.frame`. The `modelsummary` website explains how to summarize unsupported models or add support for new models yourself:
 
-https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html',
+https://modelsummary.com/articles/modelsummary.html',
 class(model)[1]),
             call. = FALSE)
 }

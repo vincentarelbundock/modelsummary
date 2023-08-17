@@ -5,8 +5,8 @@
 #' description of the internal design. For more complex cross tabulations, use
 #' \link{datasummary} directly. See the Details and Examples sections below,
 #' and the vignettes on the `modelsummary` website: 
-#' * https://vincentarelbundock.github.io/modelsummary/
-#' * https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html
+#' * https://modelsummary.com/
+#' * https://modelsummary.com/articles/datasummary.html
 #'
 #' @inheritParams datasummary
 #' @import tables

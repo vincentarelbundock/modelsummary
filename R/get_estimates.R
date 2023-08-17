@@ -77,7 +77,7 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, co
         'parameters::parameters(model)',
         'broom::tidy(model)',
         '',
-        'To draw a table, one of these commands must return a `data.frame` with a column named "term". The `modelsummary` website explains how to summarize unsupported models or add support for new models yourself: https://vincentarelbundock.github.io/modelsummary/articles/modelsummary.html',
+        'To draw a table, one of these commands must return a `data.frame` with a column named "term". The `modelsummary` website explains how to summarize unsupported models or add support for new models yourself: https://modelsummary.com/articles/modelsummary.html',
         '',
         'These errors messages were generated during extraction:',
         '', '')

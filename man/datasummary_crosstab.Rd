@@ -110,8 +110,8 @@ description of the internal design. For more complex cross tabulations, use
 \link{datasummary} directly. See the Details and Examples sections below,
 and the vignettes on the \code{modelsummary} website:
 \itemize{
-\item https://vincentarelbundock.github.io/modelsummary/
-\item https://vincentarelbundock.github.io/modelsummary/articles/datasummary.html
+\item https://modelsummary.com/
+\item https://modelsummary.com/articles/datasummary.html
 }
 }
 \details{
@@ -174,7 +174,7 @@ the \code{options} function:
 
 \subsection{Table themes}{
 
-Change the look of tables in an automated and replicable way, using the \code{modelsummary} theming functionality. See the vignette: https://vincentarelbundock.github.io/modelsummary/articles/appearance.html
+Change the look of tables in an automated and replicable way, using the \code{modelsummary} theming functionality. See the vignette: https://modelsummary.com/articles/appearance.html
 \itemize{
 \item \code{modelsummary_theme_gt}
 \item \code{modelsummary_theme_kableExtra}

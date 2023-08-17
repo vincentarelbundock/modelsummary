@@ -3,8 +3,8 @@
 #' Dot-Whisker plot of coefficient estimates with confidence intervals. For
 #' more information, see the Details and Examples sections below, and the
 #' vignettes on the `modelsummary` website:
-#' https://vincentarelbundock.github.io/modelsummary/
-#' * [modelplot Vignette.](https://vincentarelbundock.github.io/modelsummary/articles/modelplot.html)
+#' https://modelsummary.com/
+#' * [modelplot Vignette.](https://modelsummary.com/articles/modelplot.html)
 #'
 #' @inheritParams modelsummary
 #' @param draw TRUE returns a 'ggplot2' object, FALSE returns the data.frame
