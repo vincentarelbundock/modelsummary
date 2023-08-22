@@ -124,7 +124,7 @@ datasummary(All(penguins) ~ Mean + SD + Histogram,
 |body_mass_g       | 4201.75| 801.95| ▁▄▇▅▄▄▃▃▂▁|
 ```
 
-Note that the `histogram` argument of the `datasummary_skim` function is `FALSE` by default, because printing histograms will not work on all computers. If you have issues with this option, try changing your computer's locale, or try using a different display font.
+Printing histograms will not work on all computers. If you have issues with this feature, try changing your computer's locale, or try using a different display font.
 
 The `datasummary_skim` function does not currently allow users to summarize continuous and categorical variables together in a single table, but the `datasummary_balance` function described in the next section can do so.
 
@@ -723,10 +723,6 @@ penguins$sex <- str_to_title(penguins$sex)
 ```
 
 ```{r, eval = FALSE}
-# Convert to `data.frame` to circumvent a `tibbles`-related bug in `All()`
-# https://github.com/vincentarelbundock/modelsummary/issues/395
-penguins <- data.frame(penguins)
-
 datasummary(All(penguins) ~ sex * (Mean + SD),
             data = penguins,
             output = 'kableExtra') %>%
