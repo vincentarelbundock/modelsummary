@@ -1,3 +1,8 @@
+# dev
+
+Bugs:
+
+* Small p values were not displayed properly in HTML output using `kableExtra`. Issue #669.
 # modelsummary 1.4.2
 
 New:
