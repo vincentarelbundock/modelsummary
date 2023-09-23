@@ -1,6 +1,7 @@
 source("helpers.R")
 
-penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
+penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv",
+  na.strings = "")
 
 # regression test: gt duplicate span labels
 tab <- datasummary(
@@ -130,7 +131,7 @@ expect_true(is.numeric(tmp$male))
 
 # regression test
 url <- "https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv"
-penguins <- read.csv(url)
+penguins <- read.csv(url, na.strings = "")
 tab <- datasummary(island * species * body_mass_g ~ sex * (Mean + SD), data = penguins)
 expect_inherits(tab, "kableExtra")
 tab <- datasummary(island * species * body_mass_g ~ sex * (Mean + SD) * DropEmpty(), data = penguins)
