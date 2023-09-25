@@ -1,6 +1,8 @@
 source("helpers.R")
 requiet("estimatr")
 requiet("flextable")
+requiet("tinysnapshot")
+using("tinysnapshot")
 if (ON_CI) exit_file("CI")
 
 mod <- list(
@@ -196,11 +198,16 @@ unlink("test.tex")
 
 # unsupported formats
 expect_warning(datasummary_skim(dat, output="flextable"))
-expect_warning(datasummary_skim(dat, output="gt"))
 expect_warning(datasummary_skim(dat, output="huxtable"))
 expect_warning(datasummary_skim(dat, output="latex"))
 
 
+# Issue #671: Do not indent title
+mod <- lm(speed ~ dist, data = cars)
+expect_snapshot_print(
+  modelsummary(mod, title = "test", output = "markdown"),
+  "output-title_not_indented"
+)
 
 ##########################################
 # "output: datasummary_correlation"

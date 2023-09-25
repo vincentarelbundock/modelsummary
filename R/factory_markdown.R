@@ -82,7 +82,7 @@ factory_markdown <- function(tab,
 
     # title
     if (!is.null(title)) {
-        tab <- c(paste("     Table:", title), "", tab)
+        tab <- c(paste("Table:", title), "", tab)
     }
 
     # notes
