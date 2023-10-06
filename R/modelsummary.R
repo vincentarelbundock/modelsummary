@@ -744,9 +744,10 @@ modelsummary <- function(
 
   if (!settings_equal("output_format", "dataframe") && !settings_equal("function_called", "modelsummary_rbind")) {
 
-    tab <- redundant_labels(tab, "model")
-    tab <- redundant_labels(tab, "group")
-    tab <- redundant_labels(tab, "term")
+    dups <- c("term", "model", shape$group_name)
+    for (d in dups) {
+      tab <- redundant_labels(tab, d)
+    }
 
     # after label redundancy, before align
     tab$statistic <- tab$part <- NULL
