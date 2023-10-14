@@ -52,7 +52,7 @@ library(kableExtra)
 cap <- 'Penguin flipper lengths (mm) by location, species, and sex. This table was created using the \\texttt{datasummary} function from the modelsummary package for R.'
 src <- 'Data source: Gorman, Williams & Fraser (2014) and  palmerpenguins package by @apreshill and @allison_horst.'
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv'
-penguins <- read.csv(url) %>%
+penguins <- read.csv(url, na.strings = "") %>%
             select(Species = species,
                    Island = island,
                    Sex = sex,
@@ -86,7 +86,7 @@ library(modelsummary)
 library(tidyverse)
 
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv'
-penguins <- read.csv(url)
+penguins <- read.csv(url, na.strings = "")
 ```
 
 ```{r, echo=FALSE}
@@ -137,7 +137,7 @@ To illustrate how to build a balance table using the `datasummary_balance` funct
 ```{r}
 # Download and read data
 training <- 'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv'
-training <- read.csv(training)
+training <- read.csv(training, na.strings = "")
 
 # Rename and recode variables
 training <- training %>%
@@ -207,7 +207,7 @@ A cross tabulation is often useful to explore the association between two catego
 ```{r}
 library(modelsummary)
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv'
-penguins <- read.csv(url)
+penguins <- read.csv(url, na.strings = "")
 
 datasummary_crosstab(species ~ sex, data = penguins)
 ```
