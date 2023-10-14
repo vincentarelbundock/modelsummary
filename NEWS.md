@@ -1,12 +1,13 @@
-# dev
+# 1.4.3
+
+Misc:
+
+* Duplicate values in `shape` groups are removed automatically for cleaner labels.
+* "Title" line no longer indented in markdown tables. Thanks to Ryan Briggs for report #671.
 
 Bugs:
 
 * Small p values were not displayed properly in HTML output using `kableExtra`. Issue #669.
-
-Misc:
-
-* "Title" line no longer indented in markdown tables. Thanks to Ryan Briggs for report #671.
 
 # modelsummary 1.4.2
 
