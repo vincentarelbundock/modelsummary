@@ -190,6 +190,28 @@ tab %>%
     set_text_color(row = 4, col = 1:ncol(.), value = 'red')
 ```
 
+
+# `DT`
+
+[The `DT` package](https://rstudio.github.io/DT/) is an interface to [the JavasScript DataTables library.](https://datatables.net/) We can create a `DT` table by using the `output` argument, and pass arguments to `modelsummary()` which will be passed forward to the `DT::datatable` to customize the output of the table. For example, let's use the `fixest` package to estimate multiple linear regression models, and the `DT` package to create a table with a "frozen" first column:
+
+```{r, message = FALSE}
+library(fixest)
+
+models <- feols(c(mpg, hp) ~ csw0(cyl, drat, am, vs, wt, carb, qsec, gear), data = mtcars)
+
+modelsummary(
+    models,
+    output = "DT",
+    extensions = "FixedColumns",
+    height = 50,
+    options = list(pageLength = 50,
+                   scrollX = TRUE,
+                   fixedColumns = list(leftColumns = 1)))
+```
+
+
+
 # Themes
 
 If you want to apply the same post-processing functions to your tables, you can use `modelsummary`'s theming functionality. To do so, we first create a function to post-process a table. This function must accept a table as its first argument, and include the ellipsis (`...`). Optionally, the theming function can also accept an `hrule` argument which is a vector of row positions where we insert horizontal rule, and an `output_format` which allows output format-specific customization. For inspiration, you may want to consult the default `modelsummary` themes in the [`themes.R` file of the Github repository.](https://github.com/vincentarelbundock/modelsummary)
@@ -232,7 +254,7 @@ mod <- lm(mpg ~ hp + drat, mtcars)
 modelsummary(mod, output = "dataframe")
 ```
 
-Imagine we want to create a table using the `DT` package, a table-drawing backend which is not currently supported by `modelsummary`. To do this, we can create a theming function:
+`modelsummary` supports the `DT` table-making package out of the box. But for the sake of illustration, imagine we want to create a table using the `DT` package with specific customization and options, in a repeatable fashion. To do this, we can create a theming function:
 
 ```{r}
 library(DT)
@@ -313,26 +335,6 @@ tab <- modelsummary(models, output = 'latex') %>%
   add_header_above(c(" " = 1, "Donations" = 2, "Crimes (person)" = 2, "Crimes (property)" = 1))
 
 kableExtra::save_kable(tab, file = "table.tex")
-```
-
-
-# `DT`
-
-[The `DT` package](https://rstudio.github.io/DT/) is an interface to [the JavasScript DataTables library.](https://datatables.net/) We can create a `DT` table by using the `output` argument, and pass arguments to `modelsummary()` which will be passed forward to the `DT::datatable` to customize the output of the table. For example, let's use the `fixest` package to estimate multiple linear regression models, and the `DT` package to create a table with a "frozen" first column:
-
-```{r, message = FALSE}
-library(fixest)
-
-models <- feols(c(mpg, hp) ~ csw0(cyl, drat, am, vs, wt, carb, qsec, gear), data = mtcars)
-
-modelsummary(
-    models,
-    output = "DT",
-    extensions = "FixedColumns",
-    height = 50,
-    options = list(pageLength = 50,
-                   scrollX = TRUE,
-                   fixedColumns = list(leftColumns = 1)))
 ```
 
 
