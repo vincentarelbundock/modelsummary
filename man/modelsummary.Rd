@@ -98,7 +98,7 @@ or any column name produced by \code{get_estimates(model)}
 \itemize{
 \item \code{"{p.value} [{conf.low}, {conf.high}]"}
 \item \code{"Std.Error: {std.error}"}
-\item `"{exp(estimate) * std.error}"
+\item \code{"{exp(estimate) * std.error}"}
 }
 \item Numbers are automatically rounded and converted to strings. To apply functions to their numeric values, as in the last \code{glue} example, users must set \code{fmt=NULL}.
 \item Parentheses are added automatically unless the string includes \code{glue} curly braces \code{{}}.

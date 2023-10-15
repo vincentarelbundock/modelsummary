@@ -72,7 +72,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `glue` package strings with braces, with or without R functions, such as:
 #'   - `"{p.value} [{conf.low}, {conf.high}]"`
 #'   - `"Std.Error: {std.error}"`
-#'   - `"{exp(estimate) * std.error}"
+#'   - `"{exp(estimate) * std.error}"`
 #' * Numbers are automatically rounded and converted to strings. To apply functions to their numeric values, as in the last `glue` example, users must set `fmt=NULL`.
 #' * Parentheses are added automatically unless the string includes `glue` curly braces `{}`.
 #' * Some statistics are not supported for all models. See column names in `get_estimates(model)`, and visit the website to learn how to add custom statistics.
