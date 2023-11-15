@@ -156,6 +156,7 @@ sanitize_output <- function(output) {
     markdown_fmt <- c(
       "md",
       "gfm",
+      "markdown",
       "markdown_strict",
       "commonmark",
       "github_document",
