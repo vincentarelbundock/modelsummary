@@ -154,7 +154,9 @@ sanitize_output <- function(output) {
       "bookdown::word_document2")
 
     markdown_fmt <- c(
+      "md",
       "gfm",
+      "markdown_strict",
       "commonmark",
       "github_document",
       "reprex_render",

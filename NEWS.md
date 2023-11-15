@@ -1,3 +1,7 @@
+# Development
+
+* Quarto: `md` output format is recognized.
+
 # 1.4.3
 
 Misc:
