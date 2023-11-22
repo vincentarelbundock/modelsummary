@@ -200,6 +200,25 @@ datasummary_correlation(mtcars)
 
 The values displayed in this table are equivalent to those obtained by calling: `cor(x, use='pairwise.complete.obs')`.
 
+The `datasummary_correlation` function has a `methods` argument. The default value is `"pearson"`, but it also accepts other values like `"spearman"`. In addition, `method` can accept any function which takes a data frame and returns a matrix. For example, we can create a custom function to display information from the `correlation` package. This allows us to include significance stars even if the `stars` argument is not supported by default in `datasummary_correlation()`:
+
+```{r}
+library(correlation)
+library(modelsummary)
+
+fun <- function(x) {
+  out <- correlation(mtcars) |>
+    summary() |>
+    format(2) |> 
+    as.matrix()
+  row.names(out) <- out[, 1]
+  out <- out[, 2:ncol(out)]
+  return(out)
+}
+
+datasummary_correlation(mtcars, method = fun)
+```
+
 # `datasummary_crosstab`
 
 A cross tabulation is often useful to explore the association between two categorical variables.
