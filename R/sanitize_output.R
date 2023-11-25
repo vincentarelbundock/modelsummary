@@ -169,7 +169,10 @@ sanitize_output <- function(output) {
     # unfortunately, `rmarkdown::default_output_format` only detects
     # `html_document` on reprex, so this will only work in `github_document`
     ## reprex and github: change to markdown output format only if `output` is "default"
-    } else if (any(markdown_fmt %in% fmt) && (output_user == "default")) {
+    } else if (any(markdown_fmt %in% fmt) &&
+               output_user == "default"  &&
+               # respect global options, even in qmd->md documents
+               is.null(getOption("modelsummary_factory_default", default = NULL))) {
       output_format <- "markdown"
 
 

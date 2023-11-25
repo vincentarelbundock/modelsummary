@@ -1,6 +1,7 @@
 # Development
 
 * Quarto: `md` output format is recognized.
+* `options(modelsummary_factory_default)` is respected, even in qmd->md documents.
 
 # 1.4.3
 
