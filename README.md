@@ -197,13 +197,3 @@ details, see the vignettes:
 -   [`modelsummary` extensions and
     customization](vignettes/modelsummary_extension.html)
 -   [Themes and Styles](vignettes/appearance.html)
-
-##### Test image
-
-``` r
-with(mtcars, plot(wt, mpg))
-```
-
-![](README.markdown_strict_files/figure-markdown_strict/unnamed-chunk-1-1.png)
-
-![](altdoc/images/modelsummary_montage.png)
