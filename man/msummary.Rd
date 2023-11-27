@@ -72,7 +72,7 @@ msummary(
 \item \code{fmt = fmt_decimal(digits = 2, pdigits = 3)}: Decimal digits for estimate and p values
 \item \code{fmt = fmt_sprintf("\%.3f")}: See \code{?sprintf}
 \item \code{fmt = fmt_term("(Intercept)" = 1, "X" = 2)}: Format terms differently
-\item \code{fmt = fmt_statistic("estimate" = 1, "r.sqared" = 6)}: Format statistics differently.
+\item \code{fmt = fmt_statistic("estimate" = 1, "r.squared" = 6)}: Format statistics differently.
 \item \code{fmt = fmt_identity()}: unformatted raw values
 }
 \item string:

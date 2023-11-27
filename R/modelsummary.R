@@ -55,7 +55,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   - `fmt = fmt_decimal(digits = 2, pdigits = 3)`: Decimal digits for estimate and p values
 #'   - `fmt = fmt_sprintf("%.3f")`: See `?sprintf`
 #'   - `fmt = fmt_term("(Intercept)" = 1, "X" = 2)`: Format terms differently
-#'   - `fmt = fmt_statistic("estimate" = 1, "r.sqared" = 6)`: Format statistics differently.
+#'   - `fmt = fmt_statistic("estimate" = 1, "r.squared" = 6)`: Format statistics differently.
 #'   - `fmt = fmt_identity()`: unformatted raw values
 #' * string:
 #' * Note on LaTeX output: To ensure proper typography, all numeric entries are enclosed in the `\num{}` command, which requires the `siunitx` package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
