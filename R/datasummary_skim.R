@@ -37,7 +37,6 @@
 #'
 #' f <- All(mtcars) ~ Mean + SD + Min + Median + Max + Histogram
 #' # datasummary(f, mtcars, output="markdown")
-#'
 #' ```
 #' @export
 datasummary_skim <- function(data,

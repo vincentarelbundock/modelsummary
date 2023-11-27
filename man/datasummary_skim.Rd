@@ -196,7 +196,6 @@ datasummary_skim(dat, "categorical")
 
 f <- All(mtcars) ~ Mean + SD + Min + Median + Max + Histogram
 # datasummary(f, mtcars, output="markdown")
-
 }\if{html}{\out{</div>}}
 }
 

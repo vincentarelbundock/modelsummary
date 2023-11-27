@@ -1,9 +1,11 @@
-# Development
+# News 
+
+## Development
 
 * Quarto: `md` output format is recognized.
 * `options(modelsummary_factory_default)` is respected, even in qmd->md documents.
 
-# 1.4.3
+## 1.4.3
 
 Misc:
 
@@ -14,7 +16,7 @@ Bugs:
 
 * Small p values were not displayed properly in HTML output using `kableExtra`. Issue #669.
 
-# modelsummary 1.4.2
+## 1.4.2
 
 New:
 
@@ -28,7 +30,7 @@ Bugs:
 * GOF term names get escaped in LaTeX. Thanks to @shreyasgm for reviving Issue #546.
 * Conflict with `furrr` generated errors for some models. Thanks to @sammo3182 for Issue #647.
 
-# modelsummary 1.4.1
+## 1.4.1
 
 New:
 
@@ -41,7 +43,7 @@ Bugs:
 * `coef_rename=TRUE` bug with grouped estimates. Thanks to @iago-pssjd for Report #631.
 * Upstream issue #881 in `parameters` meant that `vcov` was no longer used for confidence intervals.
 
-# modelsummary 1.4.0
+## 1.4.0
 
 * Built-in support for markdown tables.
 * Package no longer depends on `kableExtra`. Recommends an additional install for other formats.
@@ -60,7 +62,7 @@ Bug fixes:
 * Quarto and Rmarkdown documents include `situnix` in header automatically for decimal alignement with `align="ddd"` 
 * `escape` is now respected by `modelsummary` with `shape="rbind"`. Thanks to @chickymonkeys for report #622.
 
-# modelsummary 1.3.0
+## 1.3.0
 
 Breaking change:
 
@@ -88,7 +90,7 @@ Bugs:
 
 * Some `fixest` models returns useless "group.x" and "group.y" columns. Isse #591. Thanks to Adam Altmejd for the report.
 
-# modelsummary 1.2.0
+## 1.2.0
 
 Breaking change:
 
@@ -106,7 +108,7 @@ Bug fixes:
 
 * Order of notes preserved in some output format (Issue #577)
 
-# modelsummary 1.1.0
+## 1.1.0
 
 Breaking change:
 
@@ -130,11 +132,11 @@ Bug fixes:
 * In some locales, the HTML minus sign created problems in the output. We only use it in "known" locales.
 * Many minor bug fixes
 
-# modelsummary 1.0.2
+## 1.0.2
 
 * Minor release to fix CRAN failure
 
-# modelsummary 1.0.1
+## 1.0.1
 
 * `shape` argument accepts interactions with the colon ":" character. This combines two columns into one, which can be useful to display terms and group names in a single column.
 * Parallelization using `parallel::mclapply`. See `?modelsummary` 
@@ -143,7 +145,7 @@ Bug fixes:
 * Removed extraneous warnings
 * Bug fixes
 
-# modelsummary 1.0.0
+## 1.0.0
 
 This first major release accompanies the publication of an article in the Journal of Statistical Software:
 
@@ -156,12 +158,12 @@ Minor changes:
 * `gof_map="all"` includes all available statistics. `gof_map="none"` excludes all statistics.
 * Bug fixes
 
-# modelsummary 0.11.1
+## 0.11.1
 
 * Better printout for term names in mixed-effects models
 * {brms} and {stanreg} models now extracted with `diagnostic=NULL` and `test=NULL` by default for speed.
 
-# modelsummary 0.11.0
+## 0.11.0
 
 Breaking changes:
 
@@ -188,14 +190,14 @@ Bug fixes:
 * `datasummary_skim` output to jpg should now works
 * `escape` fixes
 
-# modelsummary 0.10.0
+## 0.10.0
 
 * New `exponentiate` argument for `modelsummary()` and `modelplot()`
 * `gof_map` accepts a vector such as `c("rmse", "nobs", "r.squared")`
 * Drop `rlang` dependency
 * Bug fixes
 
-# modelsummary 0.9.6
+## 0.9.6
 
 `datasummary_balance`:
 
@@ -206,7 +208,7 @@ Misc:
 * documentation improvements
 * RMSE included by default in models of class `lm`
 
-# modelsummary 0.9.5
+## 0.9.5
 
 `modelsummary`:
 
@@ -228,11 +230,11 @@ Misc:
 * Many small improvements to the vignettes and docs
 * `output = "github_document"` is now supported
 
-# modelsummary 0.9.4
+## 0.9.4
 
 * Bug fix: siunitx and rounding NA
 
-# modelsummary 0.9.3
+## 0.9.3
 
 `modelsummary`:
 
@@ -248,7 +250,7 @@ Misc:
 * Bugfix: rounding in LaTeX w/ siunitx and NaN entries.
 * output='jupyter' no longer prints an extraneous TRUE to the notebook
 
-# modelsummary 0.9.2
+## 0.9.2
 
 `modelsummary`:
 
@@ -270,7 +272,7 @@ Bug fixes:
 * `datasummary_balance`: escape variable names when `escape=TRUE`
 * Blogdown LaTeX dependency bug when output is HTML
 
-# modelsummary 0.9.1
+## 0.9.1
 
 Breaking change:
 
@@ -309,7 +311,7 @@ Other changes:
 
 * Default alignment "lrrrrr" consistent with other datasummary_* functions
 
-# modelsummary 0.8.1
+## 0.8.1
 
 `modelsummary`:
 
@@ -329,7 +331,7 @@ Other:
 * `gt` titles use the new `caption` argument in the `gt 0.3.0` function
 * Bug fix: Overaggressive tests for glue strings prevented functions inside {}
 
-# modelsummary 0.8.0
+## 0.8.0
 
 Breaking change:
 
@@ -366,7 +368,7 @@ Other:
 * Jupyter notebook support via `output="jupyter"`
 * Bug fixes
 
-# modelsummary 0.7.0
+## 0.7.0
 
 `modelsummary`:
 
@@ -409,7 +411,7 @@ Other:
   
 Bug fixes and lints
 
-# modelsummary 0.6.6
+## 0.6.6
 
 * new output format: latex_tabular
 * `tidy_custom` allows partial term matches
@@ -419,7 +421,7 @@ Bug fixes and lints
 * informative error message when estimate or statistic is not available
 * bug fixes
 
-# modelsummary 0.6.5
+## 0.6.5
 
 * `statistic_override` becomes `vcov`
 * vcov accepts shortcuts: "robust", "stata", "HC0", etc.
@@ -433,7 +435,7 @@ Bug fixes and lints
 * bug: passing arguments through ...
 * bug: stars and rounding
 
-# modelsummary 0.6.4
+## 0.6.4
 
 * glue format for `estimate` and `statistic`
 * easystats support for model info extraction
@@ -448,7 +450,7 @@ Bug fixes and lints
 * N function for well formatted N in datasummary
 * Bug fixes
 
-# modelsummary 0.6.3
+## 0.6.3
 
 * new function: modelsummary_wide
 * coef_omit and gof_omit use grepl(perl=TRUE)
@@ -458,7 +460,7 @@ Bug fixes and lints
 * glance_custom methods for lfe and fixest 
 * bug fixes
 
-# modelsummary 0.6.2
+## 0.6.2
 
 * new argument: coef_rename
 * new function: datasummary_df
@@ -471,11 +473,11 @@ Bug fixes and lints
 * internal code style
 * bug fixes
 
-# modelsummary 0.6.1
+## 0.6.1
 
 * bug fixes
 
-# modelsummary 0.6.0
+## 0.6.0
 
 * default HTML output factory is now kableExtra
 * interaction ":" gsubbed by "\u00d7"
@@ -483,11 +485,11 @@ Bug fixes and lints
 * word_document knitr works out-of-the-box
 * bug fixes
 
-# modelsummary 0.5.1
+## 0.5.1
 
 * glance_custom.fixest ships with modelsummary
 
-# modelsummary 0.5.0
+## 0.5.0
 
 * datasummary
 * datasummary_skim
@@ -499,13 +501,13 @@ Bug fixes and lints
 * bug: wrong number of stars w/ statistic='p.value' (thanks @torfason)
 * output='data.frame'. `extract` is no longer documented.
 
-# modelsummary 0.4.1
+## 0.4.1
 
 * add_rows now accepts a data.frame with "position" and "section" columns
 * add_rows_location is deprecated
 * bug in sanity_output prevented overwriting files
 
-# modelsummary 0.4.0
+## 0.4.0
 
 * huxtable support
 * flextable support
@@ -516,7 +518,7 @@ Bug fixes and lints
 * glance_custom
 * tidy_custom
 
-# modelsummary 0.3.0
+## 0.3.0
 
 * Out-of-the-box Rmarkdown compilation to HTML, PDF, RTF
 * kableExtra output format for LaTeX and Markdown
@@ -527,14 +529,14 @@ Bug fixes and lints
 * `mitools` tidiers
 * New tests
 
-# modelsummary 0.2.1
+## 0.2.1
 
 * Convenience function to render markdown in row/column labels
 * bug: breakage when all GOF were omitted
 * Clean up manual with @keywords internal
 * bug: tidyr import
 
-# modelsummary 0.2.0
+## 0.2.0
 
 * gt is now available on CRAN
 * new latex_env argument for knit_latex and clean_latex
@@ -550,6 +552,6 @@ Bug fixes and lints
 * Internal functions have @keywords internal to avoid inclusion in docs
 * Statistic override accepts pre-formatted character vectors
 
-# modelsummary 0.1.0
+## 0.1.0
 
 * Initial release (gt still needs to be installed from github)

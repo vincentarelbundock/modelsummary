@@ -1,16 +1,4 @@
----
-title: '`datasummary`: Crosstabs, frequencies, correlations, balance (a.k.a. "table 1"), and more'
-output:
-  html_document: default
-  pdf_document:
-      latex_engine: xelatex
----
-
-<style>
-tbody {
-  font-family: 'DejaVu Sans', 'Roboto', 'Georgia', 'Times', 'Roboto', 'DejaVu Serif', serif;
-}
-</style>
+# Data Summaries 
 
 `datasummary` is a function from the `modelsummary` package. It allows us to create data summaries, frequency tables, crosstabs, correlation tables, balance tables (aka "Table 1"), and more. It has many benefits:
 
@@ -37,7 +25,7 @@ options(modelsummary_factory_default = "gt")
 <img src="https://user-images.githubusercontent.com/987057/85774118-8b127080-b6ec-11ea-913d-d0c13066cf6b.png" width="49%">
 </center>
 
-# Background
+## Background
 
 `datasummary` is built around the *fantastic* [`tables` package for `R`.](https://cran.r-project.org/web/packages/tables/index.html) It is a thin "wrapper" which adds convenience functions and arguments; a user-interface consistent with `modelsummary`; cleaner html output; and the ability to export tables to more formats, including [`gt` tables](https://gt.rstudio.com), [`flextable` objects](https://davidgohel.github.io/flextable/), and Microsoft Word documents.
 
@@ -75,7 +63,7 @@ In addition to `datasummary`, the `modelsummary` package includes a "family" of 
 
 In the next three sections, we illustrate how to use `datasummary_balance`, `datasummary_correlation`, `datasummary_skim`, and `datasummary_crosstab`. Then, we dive into `datasummary` itself to highlight its ease and flexibility.
 
-# `datasummary_skim`
+## `datasummary_skim`
 
 The first `datasummary` companion function is called `datasummary_skim`. It was *heavily* inspired by one of my favorite data exploration tools for `R`: the [`skimr` package.](https://docs.ropensci.org/skimr) The goal of this function is to give us a quick look at the data.
 
@@ -128,18 +116,18 @@ Printing histograms will not work on all computers. If you have issues with this
 
 The `datasummary_skim` function does not currently allow users to summarize continuous and categorical variables together in a single table, but the `datasummary_balance` function described in the next section can do so.
 
-# `datasummary_balance`
+## `datasummary_balance`
 
 The expressions "balance table" or "Table 1" refer to a type of table which is often printed in the opening pages of a scientific peer-reviewed article. Typically, this table includes basic descriptive statistics about different subsets of the study population. For instance, analysts may want to compare the socio-demographic characteristics of members of the "control" and "treatment" groups in a randomized control trial, or the flipper lengths of male and female penguins. In addition, balance tables often include difference in means tests.
 
 To illustrate how to build a balance table using the `datasummary_balance` function, we download data about a job training experiment studies in Lalonde (1986). Then, we clean up the data by renaming and recoding a few variables.
 
 ```{r}
-# Download and read data
+## Download and read data
 training <- 'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv'
 training <- read.csv(training, na.strings = "")
 
-# Rename and recode variables
+## Rename and recode variables
 training <- training %>%
             mutate(`Earnings Before` = re75 / 1000,
                    `Earnings After` = re78 / 1000,
@@ -190,7 +178,7 @@ Users can also use the `~ 1` formula to indicate that they want to summarize all
 datasummary_balance(~ 1, data = training)
 ```
 
-# `datasummary_correlation`
+## `datasummary_correlation`
 
 The `datasummary_correlation` accepts a dataframe or tibble, it identifies all the numeric variables, and calculates the correlation between each of those variables:
 
@@ -219,7 +207,7 @@ fun <- function(x) {
 datasummary_correlation(mtcars, method = fun)
 ```
 
-# `datasummary_crosstab`
+## `datasummary_crosstab`
 
 A cross tabulation is often useful to explore the association between two categorical variables.
 
@@ -248,7 +236,7 @@ datasummary_crosstab(species ~ sex,
 
 See `?datasummary_crosstab` for more details.
 
-# `datasummary`
+## `datasummary`
 
 `datasummary` tables are specified using a 2-sided formula, divided by a tilde `~`. The left-hand side describes the rows; the right-hand side describes the columns. To illustrate how this works, we will again be using the [`palmerpenguins dataset`](https://allisonhorst.github.io/palmerpenguins/):
 
@@ -266,7 +254,7 @@ datasummary(Mean ~ flipper_length_mm,
             data = penguins)
 ```
 
-## Custom summary functions
+### Custom summary functions
 
 The `Mean` function is a shortcut supplied by `modelsummary`, and it is equivalent to `mean(x,na.rm=TRUE)`. Since the `flipper_length_mm` variable includes missing observation, using the `mean` formula (with default `na.rm=FALSE`) would produce a missing/empty cell:
 
@@ -291,7 +279,7 @@ datasummary(flipper_length_mm ~ MinMax,
             data = penguins)
 ```
 
-## Concatenating with `+`
+### Concatenating with `+`
 
 To include more rows and columns, we use the `+` sign:
 
@@ -308,7 +296,7 @@ datasummary(All(penguins) ~ Mean + SD,
 ```
 By default, `All` selects all numeric variables. This behavior can be changed by modifying the function's arguments. See `?All` for details.
 
-## Nesting with `*`
+### Nesting with `*`
 
 `datasummary` can nest variables and statistics inside categorical variables using the `*` symbol. When applying the the `*` operator to factor, character, or logical variables, columns or rows will automatically be nested. For instance, if we want to display separate means for each value of the variable `sex`, we use `mean * sex`:
 
@@ -355,7 +343,7 @@ datasummary(flipper_length_mm + body_mass_g ~ mean * sex * island,
 
 When using `sparse_header=FALSE`, it is often useful to insert `Heading() *` in the table formula, in order to rename or omit some of the labels manually. Type `?tables::Heading` for details and examples.
 
-## Renaming with `=`
+### Renaming with `=`
 
 Personally, I prefer to rename variables and values *before* drawing my tables, using backticks when variable names include whitespace. For example,
 
@@ -394,7 +382,7 @@ datasummary(sex * (flipper_length_mm + bill_length_mm) + Heading("Body mass (g)"
 ```
 
 
-## Counts and Percentages
+### Counts and Percentages
 
 The `tables` package allows `datasummary` to use neat tricks to produce frequency tables:
 
@@ -409,7 +397,7 @@ datasummary(species * sex + 1 ~ N + Percent(),
 
 Note that the `Percent()` function accepts a `denom` argument to determine if percentages should be calculated row or column-wise, or if they should take into account all cells.
 
-## Weighted percentages
+### Weighted percentages
 
 The `Percent()` pseudo-function also accepts a `fn` argument, which must be a function which accepts two vectors: `x` is the values in the current cell, and `y` is all the values in the whole dataset. The default `fn` is:
 
@@ -433,7 +421,7 @@ datasummary(species * sex + 1 ~ N + flipper_length_mm * Percent(fn = wtpct),
 
 In each cell we now have the sum of weights in that cell, divided by the total sum of weights in the column.
 
-## Custom percentages
+### Custom percentages
 
 Here is another simple illustration of Percent function mechanism in action, where we combine counts and percentages in a simple nice label:
 
@@ -452,7 +440,7 @@ datasummary(
     data = dat)
 ```
 
-## `Factor`
+### `Factor`
 
 The `*` nesting operator that we used above works automatically for factor, character, and logical variables. Sometimes, it is convenient to use it with other types of variables, such as binary numeric variables. In that case, we can wrap the variable name inside a call to `Factor()`. This allows us to treat a variable as factor, without having to modify it in the original data. For example, in the `mtcars` data, there is a binary numeric variable call `am`. We nest statistics within categories of `am` by typing:
 
@@ -461,7 +449,7 @@ datasummary(mpg + hp ~ Factor(am) * (mean + sd),
             data = mtcars)
 ```
 
-## `Arguments`: `na.rm=TRUE`
+### `Arguments`: `na.rm=TRUE`
 
 We can pass any argument to the summary function by including a call to `Arguments()`. For instance, there are missing values in the `flipper_length_mm` variable of the `penguins` dataset. Therefore, the standard `mean` function will produce no result, because its default argument is `na.rm=FALSE`. We can change that by calling:
 
@@ -486,7 +474,7 @@ datasummary(flipper_length_mm ~ Mean + Var + P75 + Range,
             data = penguins)
 ```
 
-## `Arguments`: Weighted Mean
+### `Arguments`: Weighted Mean
 
 You can use the `Arguments` mechanism to do various things, such as calculating weighted means:
 
@@ -514,7 +502,7 @@ mean(newdata$x)
 mean(newdata$y)
 ```
 
-## Empty cells
+### Empty cells
 
 Sometimes, if we nest too much and the dataset is not large/diverse enough, we end up with empty cells. In that case, we add `*DropEmpty()` to the formula:
 
@@ -525,7 +513,7 @@ datasummary(island * species * body_mass_g ~ sex * (Mean + SD) * DropEmpty(),
             data = penguins)
 ```
 
-## Logical subsets
+### Logical subsets
 
 Cool stuff is possible with logical subsets:
 
@@ -536,7 +524,7 @@ datasummary((bill_length_mm > 44.5) + (bill_length_mm <= 44.5) ~ Mean * flipper_
 
 See the `tables` package documentation for more details and examples.
 
-# output
+## output
 
 All functions in the `datasummary_*` family accept the same `output` argument. Tables can be saved to several file formats:
 
@@ -573,7 +561,7 @@ datasummary(f, data = penguins, output = 'DT')
 
 Please note that hierarchical or "nested" column labels are only available for these output formats: kableExtra, gt, html, rtf, and LaTeX. When saving tables to other formats, nested labels will be combined to a "flat" header.
 
-# fmt
+## fmt
 
 The `fmt` argument allows us to set the printing format of numeric values. It accepts a single number representing the number of digits after the period, or a string to be passed to the `sprintf` function. For instance, setting `fmt="%.4f"` will keep 4 digits after the dot (see `?sprintf` for more options):
 
@@ -612,7 +600,7 @@ N <- \(x) format(length(x), big.mark = ",")
 datasummary(X ~ N, data = tmp)
 ```
 
-# title, notes
+## title, notes
 
 `datasummary` includes the same `title` and `notes` arguments as in `modelsummary`:
 
@@ -623,7 +611,7 @@ datasummary(All(penguins) ~ Mean + SD,
             notes = c('A note at the bottom of the table.'))
 ```
 
-# align
+## align
 
 We can align columns using the `align` argument. `align` should be a string of length equal to the number of columns, and which includes only the letters "l",
 "c", or "r":
@@ -634,7 +622,7 @@ datasummary(flipper_length_mm + bill_length_mm ~ Mean + SD + Range,
             align = 'lrcl')
 ```
 
-# add_rows
+## add_rows
 
 ```{r}
 new_rows <- data.frame('Does',
@@ -649,7 +637,7 @@ datasummary(flipper_length_mm + body_mass_g ~ species * (Mean + SD),
             add_rows = new_rows)
 ```
 
-# add_columns
+## add_columns
 
 ```{r}
 new_cols <- data.frame('New Stat' = runif(2))
@@ -658,7 +646,7 @@ datasummary(flipper_length_mm + body_mass_g ~ species * (Mean + SD),
             add_columns = new_cols)
 ```
 
-# Histograms
+## Histograms
 
 The `datasummary` family of functions allow users to display in-line spark-style histograms to describe the distribution of the variables. For example, the `datasummary_skim` produces such a histogram:
 
@@ -678,14 +666,14 @@ The `datasummary` function is incredibly flexible, but it does not include a his
 ```{r, eval = FALSE}
 tmp <- mtcars[, c("mpg", "hp")]
 
-# create a list with individual variables
-# remove missing and rescale
+## create a list with individual variables
+## remove missing and rescale
 tmp_list <- lapply(tmp, na.omit)
 tmp_list <- lapply(tmp_list, scale)
 
-# create a table with `datasummary`
-# add a histogram with column_spec and spec_hist
-# add a boxplot with colun_spec and spec_box
+## create a table with `datasummary`
+## add a histogram with column_spec and spec_hist
+## add a boxplot with colun_spec and spec_box
 emptycol = function(x) " "
 datasummary(mpg + hp ~ Mean + SD + Heading("Boxplot") * emptycol + Heading("Histogram") * emptycol,
     output = "kableExtra",
@@ -700,11 +688,11 @@ If you want a simpler solution, you can try the `Histogram` function which works
 datasummary(mpg + hp ~ Mean + SD + Histogram, data = tmp)
 ```
 
-# Missing values
+## Missing values
 
 At least 3 distinct issues can arise related to missing values.
 
-## Functions and `na.rm`
+### Functions and `na.rm`
 
 An empty cell can appear in the table when a statistical function returns `NA` instead of a numeric value. In those cases, you should:
 
@@ -712,11 +700,11 @@ An empty cell can appear in the table when a statistical function returns `NA` i
 2. Use the `Arguments` strategy to set `na.rm=TRUE` (see the `Arguments` section of this vignette).
 3. Use a convenience function supplied by `modelsummary`, where `na.rm` is `TRUE` by default: `Mean`, `SD`, `P25`, etc.
 
-## Empty crosstab cells
+### Empty crosstab cells
 
 An empty cell can appear in the table when a crosstab is deeply nested, and there are no observations for a given combination of covariates. In those cases, you can use the `* DropEmpty` pseudo-function. See the "Empty cells" section of this vignette for examples.
 
-## Factors
+### Factors
 
 By default, the `factor` function in `R` does *not* assign a distinct factor level to missing values: the `factor` function's `exclude` argument is set to `NA` by default. To ensure that `NA`s appear in your table, make sure you set `exclude=NULL` when you create the factor.
 
@@ -732,7 +720,7 @@ datasummary_crosstab(cyl_nona ~ vs, data = mycars)
 datasummary_crosstab(cyl_na ~ vs, data = mycars)
 ```
 
-# Appearance
+## Appearance
 
 In the [Appearance Vignette](https://modelsummary.com/articles/appearance.html) we saw how to customize the tables produced by the `modelsummary` function. The same customization possibilities are also available for all functions in the `datasummary_*` family of functions. Indeed, we can customize the tables produced by `datasummary` using the functions provided by `gt`, `kableExtra`, `flextable`, `huxtable`, and `DT`. For instance, to customize tables using `kableExtra`, we can do:
 

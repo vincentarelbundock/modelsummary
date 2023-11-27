@@ -1,0 +1,81 @@
+# Getting started
+
+To begin, load the `modelsummary` package and download data from the
+[Rdatasets archive](https://vincentarelbundock.github.io/Rdatasets/):
+
+```{r}
+library(modelsummary)
+
+url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
+dat <- read.csv(url) 
+dat$Small <- dat$Pop1831 > median(dat$Pop1831)
+dat <- dat[, 
+  c("Donations", "Literacy", "Commerce", "Crime_pers", "Crime_prop", "Clergy", "Small")
+]
+```
+
+## Data Summaries
+
+Quick overview of the data:
+
+```{r}
+datasummary_skim(dat)
+```
+
+Balance table (aka “Table 1”) with differences in means by subgroups:
+
+```{r}
+datasummary_balance(~Small, dat)
+```
+
+Correlation table:
+
+```{r}
+datasummary_correlation(dat)
+```
+
+Two variables and two statistics, nested in subgroups:
+
+```{r}
+datasummary(Literacy + Commerce ~ Small * (mean + sd), dat)
+```
+
+## Model Summaries
+
+Estimate a linear model and display the results:
+
+```{r}
+mod <- lm(Donations ~ Crime_prop, data = dat)
+
+modelsummary(mod)
+```
+
+Estimate five regression models, display the results side-by-side, and display the table:
+
+```{r}
+models <- list(
+  "OLS 1"     = lm(Donations ~ Literacy + Clergy, data = dat),
+  "Poisson 1" = glm(Donations ~ Literacy + Commerce, family = poisson, data = dat),
+  "OLS 2"     = lm(Crime_pers ~ Literacy + Clergy, data = dat),
+  "Poisson 2" = glm(Crime_pers ~ Literacy + Commerce, family = poisson, data = dat),
+  "OLS 3"     = lm(Crime_prop ~ Literacy + Clergy, data = dat)
+)
+
+modelsummary(models, stars = TRUE, gof_omit = "IC|Adj|F|RMSE|Log")
+```
+
+Now, save it to a Microsoft Word document:
+
+```{r}
+#| eval: false
+modelsummary(models, output = "table.docx")
+```
+
+And draw a coefficient plot:
+
+
+```{r}
+# OLS models only
+ols <- models[grepl("OLS", names(models))]
+modelplot(ols, coef_omit = "Intercept")
+```

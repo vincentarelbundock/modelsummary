@@ -1,10 +1,4 @@
----
-title: '`modelplot`: Plot model coefficients with confidence intervals'
-output:
-  html_document: default
-  pdf_document:
-      latex_engine: xelatex
----
+# Model Plots 
 
 ```{r, echo=FALSE, message=FALSE}
 library(modelsummary)
@@ -19,7 +13,7 @@ To illustrate how the function works, we fit a linear model to data about the [P
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv'
 dat <- read.csv(url)
 
-# rescale mm -> cm
+## rescale mm -> cm
 dat$bill_length_cm <- dat$bill_length_mm / 10
 dat$flipper_length_cm <- dat$flipper_length_mm / 10
 
@@ -34,7 +28,7 @@ library(modelsummary)
 modelplot(mod)
 ```
 
-# Rename, reorder, subset
+## Rename, reorder, subset
 
 `modelplot` uses the same mechanics as `modelsummary` to rename, reorder, and subset estimates. First, you can use the `coef_omit` argument. This will omit any coefficient that matches a string or regular expression. To omit the intercept, for example, we can type:
 
@@ -52,7 +46,7 @@ cm <- c('speciesChinstrap' = 'Chinstrap',
 modelplot(mod, coef_map = cm)
 ```
 
-# Several models
+## Several models
 
 The main `modelsummary` functions allows you to create a table with the results of several models side-by-side, by storing them in a (potentially named) list:
 
@@ -77,7 +71,7 @@ Instead of displaying results with "dodged" side-by-side lines, you can also use
 modelplot(models, facet = TRUE)
 ```
 
-# Customizing plots
+## Customizing plots
 
 The graphs produced by `modelplot` are simple `ggplot2` objects. You can thus post-process them using the normal suite of functions available for all objects of this type. Here, we change the axis labels, add a title and a caption, and use a color scheme inspired by Wes Anderson's *Darjeeling Limited*:
 
@@ -102,14 +96,14 @@ modelplot(mod, size = 1, fatten = .7, color = 'darkgreen', linetype = 'dotted') 
     theme_classic()
 ```
 
-## Conditional colors and shape
+### Conditional colors and shape
 
 Note: This section requires a version of `modelsummary` greater than 1.2.0 [or the development version.](https://github.com/vincentarelbundock/modelsummary#installation)
 
 In a [very nice Stack Overflow answer](https://stackoverflow.com/a/74835661/342331), Allan Cameron shows how we can use the `aes()` function from `ggplot2` to add conditional aesthetics. For example, if we want to display statistically significant coefficients in a different color:
 
 ```{r}
-#| fig.asp = .3
+##| fig.asp = .3
 library(ggplot2)
 mod <- lm(hp ~ factor(gear) + factor(cyl), data = mtcars)
 
@@ -118,7 +112,7 @@ modelplot(mod, coef_rename = TRUE) +
   scale_color_manual(values = c("grey", "black"))
 ```
 
-## Example: Using facets to compare models
+### Example: Using facets to compare models
 
 Customizing plots with `ggplot2` makes `modelplot` very flexible. For example, imagine you want to compare the coefficients of three models with different dependent variables. First, we load the packages and estimate our models:
 
@@ -150,7 +144,7 @@ Finally, we use the `model` column as our identifier in `ggplot2`’s `facet_gri
 modelplot(models, color = "black") + facet_grid(~model)
 ```
 
-# Confidence intervals: change or omit
+## Confidence intervals: change or omit
 
 You can change the $\alpha$ level of your confidence intervals by changing the `conf_level` argument:
 
@@ -159,7 +153,7 @@ modelplot(mod, conf_level = .99)
 modelplot(mod, conf_level = NULL)
 ```
 
-# Background annotations
+## Background annotations
 
 Sometimes, you want to display annotations on a plot, but you would like to draw these annotations *behind* the `geom_pointrange` which displays the estimates. Since `modelplot` draws the `geom_pointrange` automatically, any `ggplot2` annotation you add to the plot using `+` will be added on *top* of the existing ones.
 
@@ -179,7 +173,7 @@ modelplot(mod, background = b)
 ```
 
 
-# Raw data & More customization
+## Raw data & More customization
 
 If you would like to customize the plots even more than what `modelplot` allows, you can obtain the raw data used to draw the plots by setting `draw=FALSE`:
 
@@ -194,18 +188,18 @@ library(tidyverse)
 library(modelsummary)
 library(ggdist)
 
-# fit
+## fit
 models <- list(
   lm(mpg ~ am, mtcars),
   lm(mpg ~ am + cyl, mtcars))
 
-# summarize
+## summarize
 dat <- map_dfr(c(.8, .9, .99), function(x) {
   modelplot(models, conf_level = x, draw = FALSE) %>%
   mutate(.width = x)
 })
 
-# plot
+## plot
 ggplot(dat, aes(
     y = term, x = estimate,
     xmin = conf.low, xmax = conf.high,

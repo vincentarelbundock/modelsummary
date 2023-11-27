@@ -1,5 +1,6 @@
-GNU General Public License
-==========================
+# License 
+
+## GNU General Public License
 
 _Version 3, 29 June 2007_  
 _Copyright © 2007 Free Software Foundation, Inc. &lt;<http://fsf.org/>&gt;_
@@ -63,7 +64,7 @@ GPL assures that patents cannot be used to render the program non-free.
 
 The precise terms and conditions for copying, distribution and modification follow.
 
-## TERMS AND CONDITIONS
+## Terms and Conditions
 
 ### 0. Definitions
 
