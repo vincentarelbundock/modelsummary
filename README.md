@@ -2,7 +2,7 @@
 # Home
 
 <a href="http://modelsummary.com">
-<img src="https://user-images.githubusercontent.com/987057/82849698-05ba5700-9ec7-11ea-93a0-67dcd9151848.png" align="center" alt="marginaleffects logo" width="200" />
+<img src="https://user-images.githubusercontent.com/987057/82849698-05ba5700-9ec7-11ea-93a0-67dcd9151848.png" align="center" alt="modelsummary logo" width="200" />
 </a> <br>
 <img src="https://github.com/vincentarelbundock/modelsummary/workflows/R-CMD-check/badge.svg">
 <img src="https://img.shields.io/badge/license-GPLv3-blue">
