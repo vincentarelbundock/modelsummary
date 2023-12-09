@@ -1,7 +1,6 @@
 #' Extract model estimates in a tidy format. 
 #'
-#' This is a mostly internal function which could be useful to users who want
-#' a unified approach to extract results from a wide variety of models. For
+#' A unified approach to extract results from a wide variety of models. For
 #' some models `get_estimates` attaches useful attributes to the output. You
 #' can access this information by calling the `attributes` function:
 #' `attributes(get_estimates(model))`

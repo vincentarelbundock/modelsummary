@@ -1,5 +1,9 @@
-#' Extract model gof A mostly internal function with some potential uses
-#' outside.
+#' Extract goodness-of-fit statistics a tidy format. 
+#'
+#' A unified approach to extract results from a wide variety of models. For
+#' some models `get_gof` attaches useful attributes to the output. You
+#' can access this information by calling the `attributes` function:
+#' `attributes(get_estimates(model))`
 #'
 #' @inheritParams get_estimates
 #' @param vcov_type string vcov type to add at the bottom of the table

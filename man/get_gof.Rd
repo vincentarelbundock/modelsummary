@@ -2,8 +2,7 @@
 % Please edit documentation in R/get_gof.R
 \name{get_gof}
 \alias{get_gof}
-\title{Extract model gof A mostly internal function with some potential uses
-outside.}
+\title{Extract goodness-of-fit statistics a tidy format.}
 \usage{
 get_gof(model, vcov_type = NULL, ...)
 }
@@ -26,6 +25,8 @@ get_gof(model, vcov_type = NULL, ...)
 }}
 }
 \description{
-Extract model gof A mostly internal function with some potential uses
-outside.
+A unified approach to extract results from a wide variety of models. For
+some models \code{get_gof} attaches useful attributes to the output. You
+can access this information by calling the \code{attributes} function:
+\code{attributes(get_estimates(model))}
 }
