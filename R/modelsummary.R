@@ -724,7 +724,6 @@ modelsummary <- function(
     hrule <- NULL
   }
 
-
   # stars
   stars_note <- settings_get("stars_note")
   if (isTRUE(stars_note) && !isFALSE(stars) && !any(grepl("\\{stars\\}", c(estimate, statistic)))) {
@@ -792,7 +791,6 @@ modelsummary <- function(
     colnames(tab) <- gsub("^contrast$", " ", colnames(tab)) # comparisons() and marginaleffects()
   }
 
-
   # HACK: remove "empty" confidence intervals or standard errors and omit empty rows
   for (i in seq_along(tab)) {
     tab[[i]] <- gsub("\\(\\s*\\)", "", tab[[i]])
@@ -800,8 +798,10 @@ modelsummary <- function(
     tab[[i]] <- gsub("\\[,\\s*\\]", "", tab[[i]])
     tab[[i]] <- gsub("\\[\\\\num\\{NA\\}, \\\\num\\{NA\\}\\]", "", tab[[i]])
     # Issue #560 don't replace fe1^fe2 -> fe1\textasciicircum{}fe2 -> fe1\textasciicircumfe2
-    tab[[i]] <- gsub("^\\S*\\{\\}\\S*", "", tab[[i]])
+    # commented out because I don't see a problem without, and because this line breaks I(wt^2) (Issue #693)
+    # tab[[i]] <- gsub("^\\S*\\{\\}\\S*", "", tab[[i]])
   }
+
   idx <- apply(tab, 1, function(x) any(x != ""))
   tab <- tab[idx, ]
 

@@ -5,6 +5,10 @@
 * Quarto: `md` output format is recognized.
 * `options(modelsummary_factory_default)` is respected, even in qmd->md documents.
 
+Bugs:
+
+* Some omitted coefficients with `I()` operator in formulas. Issue #693.
+
 ## 1.4.3
 
 Misc:

@@ -160,5 +160,20 @@ using("tinysnapshot")
 mod <- lm(mpg ~ hp, mtcars)
 expect_snapshot_print(
     modelsummary(mod, "latex", title = "Blah_blah \\label{tab:blah-blah}"),
-    "test-escape_label_title")
+    "escape_label_title")
 
+# Issue #560 and #693
+mod <- lm(mpg ~ I(wt^2) * disp, data = mtcars)
+expect_snapshot_print(
+    modelsummary(mod, output = "latex", escape = TRUE),
+    "escape-hat_I_formula")
+
+requiet("fixest")
+base <- iris
+names(base) <- c("y", paste0("x", 1:3), "fe1")
+base$fe2 <- rep(letters[1:5], 30)
+base$fe3 <- rep(letters[1:5], 30)
+est_comb <- feols(y ~ x1 | fe1 +fe2 +fe3, data = base, cluster= "fe1^fe2")
+expect_snapshot_print(
+    modelsummary(est_comb, output = "latex", escape = TRUE),
+    "escape-hat_fixest")

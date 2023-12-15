@@ -67,7 +67,7 @@ expect_equivalent(tab[[4]][1:2], c("5.6", "16.7"))
 # palmer penguins was once broken with kableExtra
 penguins <- "https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv"
 penguins <- read.csv(penguins)
-raw <- datasummary_balance(~sex, penguins, output = "html")
+raw <- datasummary_balance(~sex, penguins, output = "html", dinm = FALSE)
 expect_inherits(raw, "knitr_kable")
 
 # variable name with spaces
