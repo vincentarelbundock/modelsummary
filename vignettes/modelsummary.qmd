@@ -879,6 +879,26 @@ modelsummary(mod, output = "gt")
 
 ## Case studies
 
+
+### Standardization
+
+In some cases, it is useful to standardize coefficients before reporting them. `modelsummary` extracts coefficients from model objects using the `parameters` package, and that package offers several options for standardization: https://easystats.github.io/parameters/reference/model_parameters.default.html
+
+We can pass the `standardize` argument directly to `modelsummary` or `modelplot`, and that argument will be forwarded to `parameters`. For example to refit the model on standardized data and plot the results, we can do:
+
+```{r}
+library(modelsummary)
+mod <- lm(mpg ~ hp + am, data = mtcars)
+
+modelplot(mod, standardize = "refit")
+```
+
+Compare to the unstandardized plot:
+
+```{r}
+modelplot(mod)
+```
+
 ### Subgroup estimation with `nest_by`
 
 Sometimes, it is useful to estimate multiple regression models on subsets of the data. To do this efficiently, we can use the `nest_by` function from the `dplyr` package. Then, estimate the models with `lm`, extract them and name them with `pull`, and finally summarize them with `modelsummary`:
