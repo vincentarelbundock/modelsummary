@@ -28,11 +28,10 @@ documentplain: ## devtools::document()
 documentrich: ## documentplain + html rendering of examples
 	Rscript -e "Sys.setenv('pkgdown' = 'true');devtools::document()"
 
-buildsite: documentrich ## pkgdown::build_site() + documentrich
-	Rscript -e "Sys.setenv('pkgdown' = 'true');pkgdown::build_site()"
-
-deploysite: documentrich ## pkgdown::deploy_to_branch() + documentrich
-	Rscript -e "Sys.setenv('pkgdown' = 'true');pkgdown::deploy_to_branch()"
+website: ## render vignettes and website
+	Rscript -e "devtools::document();devtools::install()"
+	Rscript -e "altdoc::render_docs(verbose = TRUE)"
+	rm -rf _quarto
 
 buildpdf: documentplain ## documentplain + R CMD Rd2pdf .
 	R CMD Rd2pdf .
