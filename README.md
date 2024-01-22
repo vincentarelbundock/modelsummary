@@ -5,7 +5,7 @@
 <a href="http://modelsummary.com">
 <img src="https://user-images.githubusercontent.com/987057/82849698-05ba5700-9ec7-11ea-93a0-67dcd9151848.png" align="center" alt="modelsummary logo" width="200" />
 </a> <br>
-[![](https://img.shields.io/badge/license-GPLv3-blue.png)](https://github.com/vincentarelbundock/tinytable/blob/main/LICENSE.md)
+<a href = "https://github.com/vincentarelbundock/tinytable/blob/main/LICENSE.md" target = "_blank"><img src="https://img.shields.io/badge/license-GPLv3-blue"></a>
 <a href = "https://modelsummary.com" target = "_blank"><img src="https://img.shields.io/static/v1?label=Website&message=Visit&color=blue"></a>
 <br><br>
 
