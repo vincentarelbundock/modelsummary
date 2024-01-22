@@ -1,4 +1,5 @@
 source("helpers.R")
+exit_file("screenshot problems")
 requiet("estimatr")
 requiet("flextable")
 requiet("tinysnapshot")
