@@ -115,6 +115,7 @@ panels <- list(
 expect_snapshot_print(
     modelsummary(
         panels,
+        fmt = 2, # tolerance
         output = "markdown",
         shape = "rbind",
         gof_map = gm,
