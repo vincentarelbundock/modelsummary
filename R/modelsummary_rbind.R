@@ -6,7 +6,7 @@
 #' PowerPoint, Excel, RTF, JPG, or PNG. The appearance of the tables can be
 #' customized extensively by specifying the `output` argument, and by using
 #' functions from one of the supported table customization packages:
-#' `kableExtra`, `gt`, `flextable`, `huxtable`, `DT`. For more information, see
+#' `tinytable`, `kableExtra`, `gt`, `flextable`, `huxtable`, `DT`. For more information, see
 #' the Details and Examples sections below, and the vignettes on the
 #' `modelsummary` website:
 #' https://modelsummary.com/

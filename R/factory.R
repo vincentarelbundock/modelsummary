@@ -27,6 +27,8 @@ factory <- function(tab,
   # parse output
   if (settings_equal("output_factory", "gt")) {
     factory_fun <- factory_gt
+  } else if (settings_equal("output_factory", "tinytable")) {
+    factory_fun <- factory_tinytable
   } else if (settings_equal("output_factory", "kableExtra")) {
     factory_fun <- factory_kableExtra
   } else if (settings_equal("output_factory", "flextable")) {

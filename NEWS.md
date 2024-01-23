@@ -2,6 +2,8 @@
 
 ## Development
 
+
+* Support the `tinytable` package as an output format ("factory"): https://vincentarelbundock.github.io/tinytable/
 * Quarto: `md` output format is recognized.
 * `options(modelsummary_factory_default)` is respected, even in qmd->md documents.
 
