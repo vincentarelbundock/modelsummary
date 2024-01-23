@@ -8,7 +8,7 @@ requiet("marginaleffects")
 
 # combine columns with :
 mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
-mfx <- suppressWarnings(marginaleffects(mod))
+mfx <- suppressWarnings(avg_slopes(mod))
 tab1 <- modelsummary(mfx, output = "dataframe", shape = term:contrast ~ model)
 tab2 <- modelsummary(mfx, output = "dataframe", shape = term:contrast + statistic ~ model)
 tab3 <- modelsummary(mfx, output = "dataframe", shape = term + contrast + statistic ~ model)

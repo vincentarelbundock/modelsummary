@@ -9,24 +9,19 @@ dat <<- dat
 mod <- lm(mpg ~ am + cyl + hp, data = dat)
 rm("dat")
 
-mfx <- marginaleffects(mod)
-cmp <- comparisons(mod)
-mm <- marginalmeans(mod)
+mfx <- avg_slopes(mod)
+cmp <- avg_comparisons(mod)
 
-tab <- modelsummary(mm, shape = term + statistic + value ~ model, output = "data.frame")
-expect_inherits(tab, "data.frame")
 tab <- modelsummary(mfx, shape = term + contrast ~ model, output = "data.frame")
 expect_inherits(tab, "data.frame")
 tab <- modelsummary(cmp, shape = term + contrast ~ model, output = "data.frame")
 expect_inherits(tab, "data.frame")
 
 # multiple groups
-requiet("marginaleffects")
-
 mod <- lm(mpg ~ am + vs + factor(cyl), data = mtcars)
 mod2 <- lm(mpg ~ drat + am + vs + factor(cyl), data = mtcars)
-cmp <- comparisons(mod, variables = c("am", "vs"), by = "cyl", cross = TRUE)
-cmp2 <- comparisons(mod2, variables = c("am", "vs"), by = "cyl", cross = TRUE)
+cmp <- avg_comparisons(mod, variables = c("am", "vs"), by = "cyl", cross = TRUE)
+cmp2 <- avg_comparisons(mod2, variables = c("am", "vs"), by = "cyl", cross = TRUE)
 
 tab <- modelsummary(
     list(cmp, cmp2),
