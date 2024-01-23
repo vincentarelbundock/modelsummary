@@ -1,6 +1,6 @@
 # News 
 
-## Development
+## 1.4.4
 
 
 * Support the `tinytable` package as an output format ("factory"): https://vincentarelbundock.github.io/tinytable/
