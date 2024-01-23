@@ -432,6 +432,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="extension-and-customization">Extension and Customization</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Version 2.0.0 of `modelsummary`, to be released soon, will introduce a
+  breaking change: The default table-drawing package will be `tinytable`
+  instead of `kableExtra`. All currently supported table-drawing packages
+  will continue to be supported for the foreseeable future, including
+  `kableExtra`, `gt`, `huxtable`, `flextable, and `DT`.
+  
+  You can always call the `config_modelsummary()` function to change the
+  default table-drawing package in persistent fashion. To try `tinytable`
+  now:
+  
+  config_modelsummary(factory_default = 'tinytable')
+  
+  To set the default back to `kableExtra`:
+  
+  config_modelsummary(factory_default = 'kableExtra')</code></pre>
+</div>
 </div>
 </section>
 <section id="unsupported-models-modelsummary_list" class="level2">
@@ -439,21 +456,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The simplest way to summarize an unsupported model is to create a <code>modelsummary_list</code> object. This approach is super flexible, but it requires manual intervention, and it can become tedious if you need to summarize many models. The next section shows how to add formal support for an unsupported model type.</p>
 <p>A <code>modelsummary_list</code> is a list with two element that conform to the <code>broom</code> package specification: <code>tidy</code> and <code>glance</code>. <code>tidy</code> is a data.frame with at least three columns: <code>term</code>, <code>estimate</code>, and <code>std.error</code>. <code>glance</code> is a data.frame with only a single row, and where each column will be displayed at the bottom of the table in the goodness-of-fit section. Finally, we wrap those two elements in a list and assign it a <code>modelsummary_list</code> class:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ti <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">term =</span> <span class="fu">c</span>(<span class="st">"coef1"</span>, <span class="st">"coef2"</span>, <span class="st">"coef3"</span>),</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimate =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.error =</span> <span class="fu">c</span>(pi, <span class="fu">exp</span>(<span class="dv">1</span>), <span class="fu">sqrt</span>(<span class="dv">2</span>)))</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>gl <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">stat1 =</span> <span class="st">"blah"</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">stat2 =</span> <span class="st">"blah blah"</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">tidy =</span> ti,</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">glance =</span> gl)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(mod) <span class="ot">&lt;-</span> <span class="st">"modelsummary_list"</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ti <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">term =</span> <span class="fu">c</span>(<span class="st">"coef1"</span>, <span class="st">"coef2"</span>, <span class="st">"coef3"</span>),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimate =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">std.error =</span> <span class="fu">c</span>(pi, <span class="fu">exp</span>(<span class="dv">1</span>), <span class="fu">sqrt</span>(<span class="dv">2</span>)))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>gl <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">stat1 =</span> <span class="st">"blah"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">stat2 =</span> <span class="st">"blah blah"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">tidy =</span> ti,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">glance =</span> gl)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(mod) <span class="ot">&lt;-</span> <span class="st">"modelsummary_list"</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
@@ -506,34 +523,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="unsupported-models-glance-and-tidy">Unsupported models: <code>glance</code> and <code>tidy</code></h2>
 <p><code>modelsummary</code> relies on two functions from the <code>broom</code> package to extract model information: <code>tidy</code> and <code>glance</code>. If <code>broom</code> doesn’t support the type of model you are trying to summarize, <code>modelsummary</code> won’t support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.</p>
 <p>For example, models produced by the <code>MCMCglmm</code> package are not currently supported by <code>broom</code>. To add support, you simply need to create a <code>tidy</code> and a <code>glance</code> method:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load packages and data</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MCMCglmm)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(PlodiaPO)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># add custom functions to extract estimates (tidy) and goodness-of-fit (glance) information</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>tidy.MCMCglmm <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    s <span class="ot">&lt;-</span> <span class="fu">summary</span>(x, ...)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    ret <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">term      =</span> <span class="fu">row.names</span>(s<span class="sc">$</span>solutions),</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">estimate  =</span> s<span class="sc">$</span>solutions[, <span class="dv">1</span>],</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">conf.low  =</span> s<span class="sc">$</span>solutions[, <span class="dv">2</span>],</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">conf.high =</span> s<span class="sc">$</span>solutions[, <span class="dv">3</span>])</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    ret</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>glance.MCMCglmm <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    ret <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">dic =</span> x<span class="sc">$</span>DIC,</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">n   =</span> <span class="fu">nrow</span>(x<span class="sc">$</span>X))</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    ret</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate a simple model</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">MCMCglmm</span>(PO <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> plate, <span class="at">random =</span> <span class="sc">~</span> FSfamily, <span class="at">data =</span> PlodiaPO, <span class="at">verbose=</span><span class="cn">FALSE</span>, <span class="at">pr=</span><span class="cn">TRUE</span>)</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co"># summarize the model</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(model, <span class="at">statistic =</span> <span class="st">'conf.int'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load packages and data</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MCMCglmm)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(PlodiaPO)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># add custom functions to extract estimates (tidy) and goodness-of-fit (glance) information</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>tidy.MCMCglmm <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    s <span class="ot">&lt;-</span> <span class="fu">summary</span>(x, ...)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    ret <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">term      =</span> <span class="fu">row.names</span>(s<span class="sc">$</span>solutions),</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">estimate  =</span> s<span class="sc">$</span>solutions[, <span class="dv">1</span>],</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">conf.low  =</span> s<span class="sc">$</span>solutions[, <span class="dv">2</span>],</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">conf.high =</span> s<span class="sc">$</span>solutions[, <span class="dv">3</span>])</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    ret</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>glance.MCMCglmm <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    ret <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">dic =</span> x<span class="sc">$</span>DIC,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">n   =</span> <span class="fu">nrow</span>(x<span class="sc">$</span>X))</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    ret</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate a simple model</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">MCMCglmm</span>(PO <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> plate, <span class="at">random =</span> <span class="sc">~</span> FSfamily, <span class="at">data =</span> PlodiaPO, <span class="at">verbose=</span><span class="cn">FALSE</span>, <span class="at">pr=</span><span class="cn">TRUE</span>)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co"># summarize the model</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(model, <span class="at">statistic =</span> <span class="st">'conf.int'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Three important things to note.</p>
 <p>First, the methods are named <code>tidy.MCMCglmm</code> and <code>glance.MCMCglmm</code> because the model object I am trying to summarize is of class <code>MCMCglmm</code>. You can find the class of a model by running: <code>class(model)</code>.</p>
 <p>Second, both of the methods include the ellipsis <code>...</code> argument.</p>
@@ -545,11 +562,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Users may want to include more information than is made available by the default extractor function. For example, models produced by the <code>MASS::polr</code> do not produce p values by default, which means that we cannot use the <code>stars=TRUE</code> argument in <code>modelsummary</code>. However, it is possible to extract this information by using the <code>lmtest::coeftest</code> function. To include such custom information, we will define new <code>glance_custom</code> and <code>tidy_custom</code> methods.</p>
 <p>We begin by estimating a model with the <code>MASS::polr</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>mod_ordinal <span class="ot">&lt;-</span> <span class="fu">polr</span>(<span class="fu">as.ordered</span>(gear) <span class="sc">~</span> mpg <span class="sc">+</span> drat, <span class="at">data =</span> mtcars)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">get_estimates</span>(mod_ordinal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>mod_ordinal <span class="ot">&lt;-</span> <span class="fu">polr</span>(<span class="fu">as.ordered</span>(gear) <span class="sc">~</span> mpg <span class="sc">+</span> drat, <span class="at">data =</span> mtcars)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">get_estimates</span>(mod_ordinal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  term     estimate  std.error conf.level   conf.low  conf.high   statistic
 1  3|4 13.962948761 4.04107300       0.95  5.6851860 22.2407116  3.45525774
@@ -566,24 +583,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The <code>get_estimates</code> function shows that our default extractor does <em>not</em> produce a <code>p.value</code> column. As a result, setting <code>stars=TRUE</code> in <code>modelsummary</code> will produce an error.</p>
 <p>We know that the <code>MASS::polr</code> produces an object of class <code>polr</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(mod_ordinal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(mod_ordinal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "polr"</code></pre>
 </div>
 </div>
 <p>To extract more (custom) information from a model of this class, we thus define a method called <code>tidy_custom.polr</code> which returns a data.frame with two columns: <code>term</code> and <code>p.value</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tidy_custom.polr <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> lmtest<span class="sc">::</span><span class="fu">coeftest</span>(x)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">row.names</span>(s),</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">p.value =</span> s[, <span class="st">"Pr(&gt;|t|)"</span>])</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  out</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tidy_custom.polr <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> lmtest<span class="sc">::</span><span class="fu">coeftest</span>(x)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">row.names</span>(s),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">p.value =</span> s[, <span class="st">"Pr(&gt;|t|)"</span>])</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  out</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>When this method is defined, <code>modelsummary</code> can automatically extract p values from all models of this class, and will now work properly with <code>stars=TRUE</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(mod_ordinal, <span class="at">stars =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(mod_ordinal, <span class="at">stars =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
@@ -658,41 +675,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="new-information-tidy_custom-and-glance_custom">New information: <code>tidy_custom</code> and <code>glance_custom</code></h2>
 <p>Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new <code>glance_custom</code> and <code>tidy_custom</code> methods. To illustrate, we estimate two linear regression models using the <code>lm</code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>mod[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> <span class="fu">lm</span>(hp <span class="sc">~</span> mpg <span class="sc">+</span> drat, mtcars)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>mod[[<span class="dv">2</span>]] <span class="ot">&lt;-</span> <span class="fu">lm</span>(wt <span class="sc">~</span> mpg <span class="sc">+</span> drat <span class="sc">+</span> am, mtcars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>mod[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> <span class="fu">lm</span>(hp <span class="sc">~</span> mpg <span class="sc">+</span> drat, mtcars)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>mod[[<span class="dv">2</span>]] <span class="ot">&lt;-</span> <span class="fu">lm</span>(wt <span class="sc">~</span> mpg <span class="sc">+</span> drat <span class="sc">+</span> am, mtcars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In <code>R</code>, the <code>lm</code> function produces models of class “lm”:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(mod[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(mod[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "lm"</code></pre>
 </div>
 </div>
 <p>Let’s say you would like to print the dependent variable for each model of this particular class. All you need to do is define a new method called <code>glance_custom.lm</code>. This method should return a data.frame (or tibble) with 1 row, and 1 column per piece of information you want to display. For example:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>glance_custom.lm <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    dv <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">formula</span>(x)[<span class="dv">2</span>])</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">"DV"</span> <span class="ot">=</span> dv)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(out)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>glance_custom.lm <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    dv <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">formula</span>(x)[<span class="dv">2</span>])</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">"DV"</span> <span class="ot">=</span> dv)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(out)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now, let’s customize the body of the table. The <code>vcov</code> argument already allows users to customize uncertainty estimates. But imagine you want to override the <em>coefficient estimates</em> of your “lm” models. Easy! All you need to do is define a <code>tidy_custom.lm</code> method which returns a data.frame (or tibble) with one column called “term” and one column called “estimate”.</p>
 <p>Here, we’ll substitute estimates by an up/down-pointing triangles which represents their signs:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>tidy_custom.lm <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    s <span class="ot">&lt;-</span> <span class="fu">summary</span>(x)<span class="sc">$</span>coefficients</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">term =</span> <span class="fu">row.names</span>(s),</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">estimate =</span> <span class="fu">ifelse</span>(s[,<span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="st">'▲'</span>, <span class="st">'▼'</span>))</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(out)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>tidy_custom.lm <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    s <span class="ot">&lt;-</span> <span class="fu">summary</span>(x)<span class="sc">$</span>coefficients</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">term =</span> <span class="fu">row.names</span>(s),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">estimate =</span> <span class="fu">ifelse</span>(s[,<span class="dv">1</span>] <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="st">'▲'</span>, <span class="st">'▼'</span>))</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(out)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>After you define the <code>glance_custom</code> and <code>tidy_custom</code> methods, <code>modelsummary</code> will automatically display your customized model information:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
@@ -800,30 +817,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="customization-new-model-class">Customization: New model class</h2>
 <p>An even more fundamental way to customize the output would be to completely bypass <code>modelsummary</code>’s extractor functions by assigning a new class name to your model. For example,</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate a linear model</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>mod_custom <span class="ot">&lt;-</span> <span class="fu">lm</span>(hp <span class="sc">~</span> mpg <span class="sc">+</span> drat, mtcars)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># assign it a new class</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(mod_custom) <span class="ot">&lt;-</span> <span class="st">"custom"</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># define tidy and glance methods</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>tidy.custom <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">names</span>(<span class="fu">coef</span>(x)),</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimate =</span> letters[<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">coef</span>(x))],</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">std.error =</span> <span class="fu">seq_along</span>(<span class="fu">coef</span>(x))</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>glance.custom <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Model"</span> <span class="ot">=</span> <span class="st">"Custom"</span>,</span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"nobs"</span> <span class="ot">=</span> stats<span class="sc">:::</span><span class="fu">nobs.lm</span>(x)</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="co"># summarize</span></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(mod_custom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate a linear model</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>mod_custom <span class="ot">&lt;-</span> <span class="fu">lm</span>(hp <span class="sc">~</span> mpg <span class="sc">+</span> drat, mtcars)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># assign it a new class</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(mod_custom) <span class="ot">&lt;-</span> <span class="st">"custom"</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># define tidy and glance methods</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>tidy.custom <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">names</span>(<span class="fu">coef</span>(x)),</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimate =</span> letters[<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">coef</span>(x))],</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">std.error =</span> <span class="fu">seq_along</span>(<span class="fu">coef</span>(x))</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>glance.custom <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Model"</span> <span class="ot">=</span> <span class="st">"Custom"</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"nobs"</span> <span class="ot">=</span> stats<span class="sc">:::</span><span class="fu">nobs.lm</span>(x)</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="co"># summarize</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(mod_custom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
@@ -875,17 +892,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Note that in the <code>glance.custom()</code> method, we called <code>stats:::nobs.lm()</code> instead of the default <code>stats::nobs()</code> method, because the latter know does not know where to dispatch models of our new “custom” class. Being more explicit solves the problem.</p>
 <p>An alternative would be to set a new class that inherits from the previous one, and to use a global option to set <code>broom</code> as the default extractor function (otherwise <code>modelsummary</code> will use its standard <code>lm</code> extractors by inheritance):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">modelsummary_get =</span> <span class="st">"broom"</span>)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(mod_custom) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"custom"</span>, <span class="st">"lm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">modelsummary_get =</span> <span class="st">"broom"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(mod_custom) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"custom"</span>, <span class="st">"lm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="customization-modelsummary_list" class="level2">
 <h2 class="anchored" data-anchor-id="customization-modelsummary_list">Customization: <code>modelsummary_list</code></h2>
 <p>Another flexible way to customize model output is to use <code>output = "modelsummary_list"</code>. With this output option, <code>modelsummary()</code> returns a list with two elements: <code>tidy</code> contains parameter estimates, standard errors, etc., and <code>glance</code> contains model statistics such as the AIC. For example,</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(hp <span class="sc">~</span> mpg <span class="sc">+</span> drat, mtcars)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>mod_list <span class="ot">&lt;-</span> <span class="fu">modelsummary</span>(mod, <span class="at">output =</span> <span class="st">"modelsummary_list"</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>mod_list<span class="sc">$</span>tidy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(hp <span class="sc">~</span> mpg <span class="sc">+</span> drat, mtcars)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>mod_list <span class="ot">&lt;-</span> <span class="fu">modelsummary</span>(mod, <span class="at">output =</span> <span class="st">"modelsummary_list"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>mod_list<span class="sc">$</span>tidy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         term   estimate std.error  statistic df.error      p.value s.value
 1 (Intercept) 278.515455 55.414866  5.0260061       29 2.359726e-05    15.4
@@ -896,7 +913,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 2             NA        NA
 3             NA        NA</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>mod_list<span class="sc">$</span>glance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>mod_list<span class="sc">$</span>glance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       aic      bic r.squared adj.r.squared     rmse nobs        F    logLik
 1 337.8809 343.7438 0.6143611     0.5877653 41.90687   32 23.09994 -164.9404</code></pre>
@@ -905,15 +922,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Both <code>tidy</code> and <code>glance</code> can now be customized, and the updated model can be passed back to modelsummary using <code>modelsummary(mod_list)</code>. All information that is displayed in the table is contained in <code>mod_list</code>, so this pattern allows for very flexible adjustments of output tables.</p>
 <p>A useful example for this pattern concerns mixed models using <code>lme4</code>. Assume we want to compare the effect of using different degrees-of-freedom adjustments on the significance of the coefficients. The models have identical parameter estimates, standard errors, and model fit statistics - we only want to change the p-values. We use the <code>parameters</code> package to compute the adjusted p-values.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"lme4"</span>)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lmer</span>(mpg <span class="sc">~</span> drat <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> am), <span class="at">data =</span> mtcars)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>mod_list <span class="ot">&lt;-</span> <span class="fu">modelsummary</span>(mod, <span class="at">output =</span> <span class="st">"modelsummary_list"</span>, <span class="at">effects =</span> <span class="st">"fixed"</span>)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create a copy, where we'll change the p-values</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>mod_list_kenward <span class="ot">&lt;-</span> <span class="fu">as.list</span>(mod_list)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>mod_list_kenward<span class="sc">$</span>tidy<span class="sc">$</span>p.value <span class="ot">&lt;-</span> parameters<span class="sc">::</span><span class="fu">p_value_kenward</span>(mod)<span class="sc">$</span>p</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(<span class="fu">list</span>(<span class="st">"Wald"</span> <span class="ot">=</span> mod_list, <span class="st">"Kenward"</span> <span class="ot">=</span> mod_list_kenward), </span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">statistic =</span> <span class="st">"{std.error} ({p.value}) {stars}"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"lme4"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lmer</span>(mpg <span class="sc">~</span> drat <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> am), <span class="at">data =</span> mtcars)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>mod_list <span class="ot">&lt;-</span> <span class="fu">modelsummary</span>(mod, <span class="at">output =</span> <span class="st">"modelsummary_list"</span>, <span class="at">effects =</span> <span class="st">"fixed"</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create a copy, where we'll change the p-values</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>mod_list_kenward <span class="ot">&lt;-</span> <span class="fu">as.list</span>(mod_list)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>mod_list_kenward<span class="sc">$</span>tidy<span class="sc">$</span>p.value <span class="ot">&lt;-</span> parameters<span class="sc">::</span><span class="fu">p_value_kenward</span>(mod)<span class="sc">$</span>p</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(<span class="fu">list</span>(<span class="st">"Wald"</span> <span class="ot">=</span> mod_list, <span class="st">"Kenward"</span> <span class="ot">=</span> mod_list_kenward), </span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">statistic =</span> <span class="st">"{std.error} ({p.value}) {stars}"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
