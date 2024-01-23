@@ -264,7 +264,7 @@ models side-by-side. This function supports dozens of statistical models,
 and it can produce tables in HTML, LaTeX, Word, Markdown, PDF, PowerPoint,
 Excel, RTF, JPG, or PNG. The appearance of the tables can be customized
 extensively by specifying the \code{output} argument, and by using functions from
-one of the supported table customization packages: \code{kableExtra}, \code{gt},
+one of the supported table customization packages: \code{tinytable}, \code{kableExtra}, \code{gt},
 \code{flextable}, \code{huxtable}, \code{DT}. For more information, see the Details and Examples
 sections below, and the vignettes on the \code{modelsummary} website:
 https://modelsummary.com/
