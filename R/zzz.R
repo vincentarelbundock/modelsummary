@@ -1,22 +1,14 @@
-.onLoad <- function(libname, pkgname){
-    pkgs <- c("kableExtra", "gt", "flextable", "huxtable", "DT")
-    flags <- insight::check_if_installed(pkgs, quietly = TRUE)
-    if (!any(flags) && !isTRUE(config_get("factory_default") == "markdown")) {
-        msg <- c(
-            '`modelsummary` has built-in support to draw text-only (markdown) tables. To generate tables in other formats, you must install one or more of these libraries:',
-            '
-install.packages(c(
-    "kableExtra",
-    "gt",
-    "flextable",
-    "huxtable",
-    "DT"
-))
-',
-            'Alternatively, you can set markdown as the default table format to silence this alert:',
-            '
-config_modelsummary(factory_default = "markdown")
-')
-        insight::format_alert(msg)
-    }
+.onAttach <- function(libname, pkgname){
+  msg <- insight::format_message(
+"Version 2.0.0 of `modelsummary`, to be released soon, will introduce a breaking change: The default table-drawing package will be `tinytable` instead of `kableExtra`. All currently supported table-drawing packages will continue to be supported for the foreseeable future, including `kableExtra`, `gt`, `huxtable`, `flextable, and `DT`.",
+"",
+"You can always call the `config_modelsummary()` function to change the default table-drawing package in persistent fashion. To try `tinytable` now:",
+"",
+"config_modelsummary(factory_default = 'tinytable')",
+"",
+"To set the default back to `kableExtra`:",
+"",
+"config_modelsummary(factory_default = 'kableExtra')"
+)
+  packageStartupMessage(msg)
 }
