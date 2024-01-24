@@ -1,5 +1,4 @@
 
-
 # Home
 
 <a href="https://modelsummary.com">
@@ -185,17 +184,20 @@ install.packages(
 
 ## Get started
 
-The [GET STARTED](vignettes/get_started.html) vignette will walk you
-through the basics of `modelsummary`.
+The [GET STARTED](https://modelsummary.com/vignettes/get_started.html)
+vignette will walk you through the basics of `modelsummary`.
 
 You will find that there are a million ways to customize the tables and
 plots produced by `modelsummary`, but [the Get Started
 page](vignettes/get_started.html) only scratches the surface. For
 details, see the vignettes:
 
--   [Data Summaries](vignettes/datasummary.html)
--   [Model Summaries](vignettes/modelsummary.html)
--   [Model Plots](vignettes/modelplot.html)
+-   [Data
+    Summaries](https://modelsummary.com/vignettes/datasummary.html)
+-   [Model
+    Summaries](https://modelsummary.com/vignettes/modelsummary.html)
+-   [Model Plots](https://modelsummary.com/vignettes/modelplot.html)
 -   [`modelsummary` extensions and
-    customization](vignettes/modelsummary_extension.html)
--   [Themes and Styles](vignettes/appearance.html)
+    customization](https://modelsummary.com/vignettes/modelsummary_extension.html)
+-   [Themes and
+    Styles](https://modelsummary.com/vignettes/appearance.html)
