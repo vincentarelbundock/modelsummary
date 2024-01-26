@@ -33,7 +33,8 @@ config_modelsummary <- function(
     }
 
     if (!missing(factory_default)) {
-        checkmate::assert_choice(factory_default, c("kableExtra", "gt", "huxtable", "flextable", "DT", "markdown"), null.ok = TRUE)
+        checkmate::assert_choice(factory_default, c("tinytable", "kableExtra", "gt", "huxtable", "flextable", "DT", "markdown"), null.ok = TRUE)
+        if (isTRUE(factory_default == "tinytable")) insight::check_if_installed("tinytable")
         if (isTRUE(factory_default == "kableExtra")) insight::check_if_installed("kableExtra")
         if (isTRUE(factory_default == "gt")) insight::check_if_installed("gt")
         if (isTRUE(factory_default == "huxtable")) insight::check_if_installed("huxtable")
