@@ -17,7 +17,7 @@ check: documentplain ## devtools::check()
 	Rscript -e "devtools::check()"
 
 install: documentplain ## devtools::install()
-	Rscript -e "devtools::install()"
+	Rscript -e "devtools::install(dependencies = TRUE)"
 
 deploy: ## pkgdown::deploy_to_branch()
 	Rscript -e "pkgdown::deploy_to_branch()"
