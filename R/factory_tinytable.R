@@ -36,27 +36,43 @@ factory_tinytable <- function(tab,
     notes = as.list(notes)
   )
 
-  # # span: compute
-  # span_list <- get_span_tinytable(tab)
-  # if (!is.null(span_list) && settings_equal("output_format", c("tinytable", "html", "latex"))) {
-  #   column_names <- attr(span_list, "column_names")
-  #   if (!is.null(column_names)) {
-  #     colnames(tab) <- column_names
-  #   }
-  # } else {
-  #     colnames(tab) <- gsub("\\|{4}", " / ", colnames(tab))
-  # }
-
   # create tables with combined arguments
   arguments <- arguments[base::intersect(names(arguments), valid)]
   arguments <- c(list(tab), arguments)
   out <- do.call(tinytable::tt, arguments)
 
   # align: other factories require a vector of "c", "l", "r", etc.
+  # before span because those should be centered
   if (!is.null(align)) {
     l <- length(align)
     align <- paste(align, collapse = "")
     out <- tinytable::style_tt(out, j = seq_len(l), align = align)
+  }
+
+  # span: compute
+  span_list <- get_span_kableExtra(tab)
+  if (!is.null(span_list)) {
+    column_names <- attr(span_list, "column_names")
+    if (!is.null(column_names)) {
+      colnames(out) <- column_names
+    }
+    for (i in seq_along(span_list)) {
+      sp <- cumsum(span_list[[i]])
+      sp <- as.list(sp)
+      sp[[1]] <- 1:sp[[1]]
+      sp[2:length(sp)] <- lapply(2:length(sp), function(k) (sp[[k - 1]] + 1):sp[[k]])
+      out <- tinytable::group_tt(out, j = sp)
+      out <- tinytable::style_tt(out, i = -i, align = "c")
+    }
+  } else {
+    colnames(out) <- gsub("\\|{4}", " / ", colnames(out))
+  }
+
+
+  if (!is.null(hrule)) {
+    for (h in hrule) {
+      out <- tinytable::style_tt(out, i = h - 1, line = "b", line_width = .05)
+    }
   }
 
   # output
