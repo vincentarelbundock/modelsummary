@@ -175,20 +175,20 @@ sanity_factory <- function(factory_dict) {
       stop(msg)
     }
   }
-  check_option('html', c('gt', 'kableExtra', 'flextable', 'huxtable'))
+  check_option('html', c('gt', 'kableExtra', 'flextable', 'huxtable', 'tinytable'))
   check_option('rtf', c('gt', 'huxtable'))
-  check_option('latex', c('gt', 'kableExtra', 'huxtable'))
-  check_option('markdown', c('kableExtra', 'modelsummary'))
-  check_option('word', c('flextable', 'huxtable'))
+  check_option('latex', c('gt', 'kableExtra', 'huxtable', 'tinytable'))
+  check_option('markdown', c('kableExtra', 'modelsummary', 'tinytable'))
+  check_option('word', c('flextable', 'huxtable', 'tinytable'))
   check_option('powerpoint', c('flextable', 'huxtable'))
-  check_option('png', c('gt', 'flextable', 'kableExtra'))
+  check_option('png', c('gt', 'flextable', 'kableExtra', 'tinytable'))
   check_option('jpg', c('flextable', 'kableExtra'))
 
   # check default
   modelsummary_default <- getOption("modelsummary_factory_default", default = "kableExtra")
-  checkmate::assert_true(modelsummary_default %in% c("gt", "kableExtra",
+  checkmate::assert_true(modelsummary_default %in% c("tinytable", "gt", "kableExtra",
                                                      "flextable", "huxtable",
-                                                     "DT", 
+                                                     "DT",
                                                      "jupyter", "markdown",
                                                      "html", "data.frame",
                                                      "dataframe", "latex",
