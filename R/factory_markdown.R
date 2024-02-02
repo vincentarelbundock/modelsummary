@@ -14,6 +14,10 @@ align_str_center <- function(x, pad_n = NULL) {
     right <- strrep(" ", floor((pad_n - nchar(x)) / 2))
     paste0(left, x, right)
 }
+
+#' @export
+#' @keywords internal
+#' @noRd
 print.modelsummary_markdown <- function(x, ...) {
     cat("\n\n")
     cat(x, sep = "\n")
