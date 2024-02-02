@@ -27,7 +27,7 @@ factory_tinytable <- function(tab,
 
 
   # tinytable arguments
-  valid <- c("x", "theme", "placement", "width", "digits", "notes")
+  valid <- c("x", "theme", "placement", "width", "digits", "notes", "caption")
 
   arguments <- list(
     caption = title,
