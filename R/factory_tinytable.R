@@ -79,7 +79,7 @@ factory_tinytable <- function(tab,
   if (is.null(settings_get("output_file"))) {
     return(out)
   } else {
-    tinytable::save_tt(out, output = settings_get("output_file"))
+    tinytable::save_tt(out, output = settings_get("output_file"), overwrite = TRUE)
   }
 
 }
