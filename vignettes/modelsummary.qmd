@@ -1,25 +1,35 @@
 # Model Summaries 
 
-```{r, include = FALSE}
-options(modelsummary_factory_default = "gt")
+`modelsummary` includes a powerful set of utilities to customize the information displayed in your model summary tables. You can easily rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to display; display various "robust" standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.
+
+Before starting, we set `modelsummary` to use the `tinytable` package to draw table, and we set a few CSS properties to make tables more display in a more compact format on this website. This step is optional.
+
+```{r}
+options(modelsummary_factory_default = "tinytable")
 ```
 
-`modelsummary` includes a powerful set of utilities to customize the information displayed in your model summary tables. You can easily rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to display; display various "robust" standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.
+```{css}
+.table, th, td {
+  font-size: 0.9em;
+} 
+.table tbody td {
+    white-space: nowrap;
+}
+```
+
+Now, we download data, fit some models, and summarize them in a table using the `modelsummary()` function:
 
 ```{r, message = FALSE}
 library(modelsummary)
-library(kableExtra)
-library(gt)
+library(tinytable)
 
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
 dat <- read.csv(url)
 
 models <- list(
   "OLS 1"     = lm(Donations ~ Literacy + Clergy, data = dat),
-  "Poisson 1" = glm(Donations ~ Literacy + Commerce, family = poisson, data = dat),
-  "OLS 2"     = lm(Crime_pers ~ Literacy + Clergy, data = dat),
-  "Poisson 2" = glm(Crime_pers ~ Literacy + Commerce, family = poisson, data = dat),
-  "OLS 3"     = lm(Crime_prop ~ Literacy + Clergy, data = dat)
+  "Poisson" = glm(Donations ~ Literacy + Commerce, family = poisson, data = dat),
+  "OLS 2"     = lm(Crime_pers ~ Literacy + Clergy, data = dat)
 )
 
 modelsummary(models)
@@ -59,8 +69,9 @@ modelsummary(models, output = "huxtable")
 
 Warning: When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with an external package, you need to choose a different output format and saving mechanism.  Unfortunately, the approach differs from package to package:
 
-* `gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave` function.
-* `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.
+* `tinytable`: set `output="tinytable"`, post-process your table, and use the `tinytable::save_tt()` function.
+* `gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave()` function.
+* `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable()` function.
 
 ## `fmt`: round and format
 
@@ -154,9 +165,7 @@ modelsummary(
   fmt = 1,
   estimate  = c("estimate",
                 "{estimate}{stars}",
-                "{estimate} ({std.error})",
-                "{estimate} ({std.error}){stars}",
-                "{estimate} [{conf.low}, {conf.high}]"),
+                "{estimate} ({std.error})"),
   statistic = NULL,
   coef_omit = "Intercept")
 ```
@@ -212,7 +221,7 @@ You can use clustered or robust uncertainty estimates by modifying the `vcov` pa
 
 ```r
 modelsummary(models, vcov = "robust")
-modelsummary(models, vcov = c("classical", "robust", "bootstrap", "stata", "HC4"))
+modelsummary(models, vcov = c("classical", "HC3", "bootstrap"))
 ```
 
 These variance-covariance matrices are calculated using the `sandwich` package. You can pass arguments to the `sandwich` functions directly from the `modelsummary` function. For instance, to change the number of bootstrap replicates and to specify a clustering variable we could call:
@@ -253,10 +262,9 @@ You can supply a list of named vectors:
 ```r
 vc <- list(
   `OLS 1` = c(`(Intercept)` = 2, Literacy = 3, Clergy = 4), 
-  `Poisson 1` = c(`(Intercept)` = 3, Literacy = -5, Commerce = 3),
-  `OLS 2` = c(`(Intercept)` = 7, Literacy = -6, Clergy = 9), 
-  `Poisson 2` = c(`(Intercept)` = 4, Literacy = -7, Commerce = -9),
-  `OLS 3` = c(`(Intercept)` = 1, Literacy = -5, Clergy = -2))
+  `Poisson` = c(`(Intercept)` = 3, Literacy = -5, Commerce = 3),
+  `OLS 2` = c(`(Intercept)` = 7, Literacy = -6, Clergy = 9)
+  )
 modelsummary(models, vcov = vc)
 ```
 
@@ -513,7 +521,7 @@ get_estimates(mod[[1]])
 To summarize the results, we can type: 
 
 ```{r, warning=FALSE}
-modelsummary(mod, shape = term + response ~ statistic)
+# modelsummary(mod, shape = term + response ~ statistic)
 ```
 
 The terms of the `shape` formula above can of course be rearranged to reshape the table. For example:
@@ -527,7 +535,7 @@ We can combine the `term` and group identifier columns by inserting an interacti
 ```{r, warning = FALSE, message = FALSE}
 library(marginaleffects)
 mod <- glm(am ~ mpg + factor(cyl), family = binomial, data = mtcars)
-mfx <- slopes(mod)
+mfx <- avg_slopes(mod)
 
 modelsummary(mfx, shape = term + contrast ~ model)
 ```
@@ -719,13 +727,14 @@ All arguments passed supported by these functions are thus automatically availab
 
 ## Custom appearance
 
-To customize the appearance of tables, `modelsummary` supports five popular and extremely powerful table-making packages: 
+To customize the appearance of tables, `modelsummary` supports six popular and extremely powerful table-making packages: 
 
+1. [`tinytable`: https://vincentarelbundock.github.io/tinytable/](https://vincentarelbundock.github.io/tinytable/)
 1. [`gt`: https://gt.rstudio.com](https://gt.rstudio.com)
-2. [`kableExtra`: http://haozhu233.github.io/kableExtra](http://haozhu233.github.io/kableExtra)
-3. [`huxtable`: https://hughjonesd.github.io/huxtable/](https://hughjonesd.github.io/huxtable/)
-4. [`flextable`: https://davidgohel.github.io/flextable/](https://davidgohel.github.io/flextable/)
-5. [`DT`: https://rstudio.github.io/DT](https://rstudio.github.io/DT)
+1. [`kableExtra`: http://haozhu233.github.io/kableExtra](http://haozhu233.github.io/kableExtra)
+1. [`huxtable`: https://hughjonesd.github.io/huxtable/](https://hughjonesd.github.io/huxtable/)
+1. [`flextable`: https://davidgohel.github.io/flextable/](https://davidgohel.github.io/flextable/)
+1. [`DT`: https://rstudio.github.io/DT](https://rstudio.github.io/DT)
 
 The ["customizing the look of your tables" vignette](https://modelsummary.com/articles/appearance.html) shows examples for all 4 packages.
 

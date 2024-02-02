@@ -27,14 +27,14 @@ factory_tinytable <- function(tab,
 
 
   # tinytable arguments
-  valid <- c("x", "theme", "placement", "width", "digits")
+  valid <- c("x", "theme", "placement", "width", "digits", "notes")
 
-  arguments <- c(
-    list(...),
+  arguments <- list(
     caption = title,
     align = align,
     notes = as.list(notes)
   )
+  arguments <- c(arguments, list(...))
 
   # create tables with combined arguments
   arguments <- arguments[base::intersect(names(arguments), valid)]
