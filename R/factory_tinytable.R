@@ -31,9 +31,9 @@ factory_tinytable <- function(tab,
 
   arguments <- list(
     caption = title,
-    align = align,
-    notes = as.list(notes)
+    align = align
   )
+  if (length(notes) > 1) arguments$notes <- as.list(notes)
   arguments <- c(arguments, list(...))
 
   # create tables with combined arguments

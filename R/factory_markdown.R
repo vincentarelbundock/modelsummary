@@ -19,6 +19,9 @@ print.modelsummary_markdown <- function(x, ...) {
     cat(x, sep = "\n")
 }
 
+#' @export
+#' @keywords internal
+#' @noRd
 factory_markdown <- function(tab,
                              align = NULL,
                              hrule = NULL,

@@ -160,20 +160,20 @@ datasummary_skim_numeric <- function(
   if (histogram) {
 
     # histogram is a kableExtra-specific option
-    if (!settings_equal("output_factory", c("kableExtra", "gt"))) {
+    if (!settings_equal("output_factory", c("kableExtra", "gt", "tinytable"))) {
       histogram <- FALSE
     }
 
     # write to file
     if (!is.null(settings_get("output_file"))) {
-      if (!settings_equal("output_format", c("html", "png", "jpg"))) {
+      if (!settings_equal("output_format", c("html", "png", "jpg", "pdf"))) {
         histogram <- FALSE
       }
 
     # interactive or Rmarkdown/knitr
     } else {
       if (isTRUE(check_dependency("knitr"))) {
-        if (!settings_equal("output_format", c("default", "jupyter", "html", "kableExtra", "gt")) &&
+        if (!settings_equal("output_format", c("default", "jupyter", "html", "tinytable", "kableExtra", "gt")) &&
             !knitr::is_latex_output()) {
           histogram <- FALSE
         }
@@ -182,7 +182,7 @@ datasummary_skim_numeric <- function(
           histogram <- FALSE
         }
       } else {
-        if (!settings_equal("output_format", c("default", "jupyter", "html", "kableExtra", "gt"))) {
+        if (!settings_equal("output_format", c("default", "jupyter", "html", "kableExtra", "gt", "tinytable"))) {
           histogram <- FALSE
         }
       }
@@ -281,12 +281,20 @@ datasummary_skim_numeric <- function(
         line_color = "black",
         same_limit = FALSE)
 
-    } else {
+    } else if (identical(cache$output_factory, "kableExtra")) {
       out <- kableExtra::column_spec(out,
         column = 9,
         image = kableExtra::spec_hist(histogram_list,
           col = "black",
           same_lim = FALSE))
+
+    } else if (identical(cache$output_factory, "tinytable")) {
+      assert_dependency("tinytable")
+      out <- tinytable::plot_tt(out,
+        j = 9,
+        fun = "histogram", 
+        data = histogram_list,
+        color = "black")
     }
 
     settings_restore(cache)

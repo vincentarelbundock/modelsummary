@@ -181,6 +181,9 @@ reconstruct_attrs_dispatch <- function(data, template) {
   UseMethod("reconstruct_attrs", template)
 }
 
+#' @export
+#' @keywords internal
+#' @noRd
 reconstruct_attrs.data.frame <- function(data, template) {
   attrs <- attributes(template)
   attrs$names <- names(data)
