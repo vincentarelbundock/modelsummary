@@ -1,5 +1,9 @@
 # News 
 
+## Development
+
+* `tinytable` supports histograms in `datasummary_skim()`
+
 ## 1.4.4
 
 
