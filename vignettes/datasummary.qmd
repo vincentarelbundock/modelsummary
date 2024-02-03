@@ -1,3 +1,15 @@
+```{r}
+options(modelsummary_factory_default = "tinytable")
+```
+```{css}
+.table, th, td {
+  font-size: 0.9em;
+} 
+.table tbody td, .table thead tr {
+    white-space: nowrap;
+}
+```
+
 # Data Summaries 
 
 `datasummary` is a function from the `modelsummary` package. It allows us to create data summaries, frequency tables, crosstabs, correlation tables, balance tables (aka "Table 1"), and more. It has many benefits:
@@ -15,7 +27,6 @@ library(tidyverse)
 library(gt)
 library(modelsummary)
 options(width = 120)
-options(modelsummary_factory_default = "gt")
 ```
 
 <center>
@@ -35,7 +46,6 @@ options(modelsummary_factory_default = "gt")
 ```{r, echo=FALSE, message=FALSE, include=FALSE, eval=FALSE}
 library(modelsummary)
 library(tidyverse)
-library(kableExtra)
 
 cap <- 'Penguin flipper lengths (mm) by location, species, and sex. This table was created using the \\texttt{datasummary} function from the modelsummary package for R.'
 src <- 'Data source: Gorman, Williams & Fraser (2014) and  palmerpenguins package by @apreshill and @allison_horst.'
@@ -47,7 +57,6 @@ penguins <- read.csv(url, na.strings = "") %>%
                    `Flipper length (mm)` = flipper_length_mm) %>%
             mutate(Sex = str_to_title(Sex))
 datasummary(Factor(Island) * Factor(Species) ~ Factor(Sex) * `Flipper length (mm)` * (Mean + SD) * DropEmpty(), penguins,
-           output = "kableExtra",
            title = cap,
            notes = src)
 ```
@@ -83,11 +92,9 @@ penguins$X <- NULL
 
 To summarize the numeric variables in the dataset, we type:
 
-```{r, eval=FALSE}
+```{r}
 datasummary_skim(penguins)
 ```
-
-<img src="https://user-images.githubusercontent.com/987057/95397127-6d9a9880-08d0-11eb-8ee4-3cd181d55b32.png" width="69%">
 
 To summarize the categorical variables in the dataset, we type:
 
@@ -160,14 +167,14 @@ caption <- 'Descriptive statistics about participants in a job training experime
 reference <- 'Source: Lalonde (1986) American Economic Review.'
 
 library(modelsummary)
+library(tinytable)
 datasummary_balance(~Treatment,
                     data = training,
                     title = caption,
-                    notes = reference,
-                    output = 'kableExtra') %>%
-  kableExtra::row_spec(5, bold = TRUE) %>%
-  kableExtra::row_spec(1, color = 'green') %>%
-  kableExtra::row_spec(2, color = 'red')
+                    notes = reference)) |>
+  style_tt(i = 5, bold = TRUE) |>
+  style_tt(i = 1, color = "green") |>
+  style_tt(i = 2, color = "orange")
 ```
 
 Note that if the dataset includes columns called "blocks", "clusters", or "weights", this information will automatically be taken into consideration by `estimatr` when calculating the difference in means and the associated statistics.
@@ -192,7 +199,6 @@ The `datasummary_correlation` function has a `methods` argument. The default val
 
 ```{r}
 library(correlation)
-library(modelsummary)
 
 fun <- function(x) {
   out <- correlation(mtcars) |>
@@ -403,7 +409,6 @@ The `Percent()` pseudo-function also accepts a `fn` argument, which must be a fu
 
 ```{r}
 datasummary(species * sex + 1 ~ N + Percent(fn = function(x, y) 100 * length(x) / length(y)),
-            output = "markdown",
             data = penguins)
 ```
 
@@ -415,7 +420,6 @@ Now, let's say we want to display percentages weighted by one of the variables o
 ```{r}
 wtpct <- function(x, y) sum(x, na.rm = TRUE) / sum(y, na.rm = TRUE) * 100
 datasummary(species * sex + 1 ~ N + flipper_length_mm * Percent(fn = wtpct),
-            output = "markdown",
             data = penguins)
 ```
 
@@ -485,7 +489,7 @@ newdata <- data.frame(
   y = rnorm(20))
 
 datasummary(x + y ~ weighted.mean * Arguments(w = w),
-            data = newdata, output = "markdown")
+            data = newdata)
 ```
 
 Which produces the same results as:
@@ -549,9 +553,10 @@ datasummary(f, data = penguins, output = 'html')
 datasummary(f, data = penguins, output = 'latex')
 ```
 
-`datasummary` can return objects compatible with the `gt`, `kableExtra`, `flextable`, `huxtable`, and `DT` table creation and customization packages:
+`datasummary` can return objects compatible with the `tinytable`, `gt`, `kableExtra`, `flextable`, `huxtable`, and `DT` table creation and customization packages:
 
 ```{r, eval=FALSE}
+datasummary(f, data = penguins, output = 'tinytable')
 datasummary(f, data = penguins, output = 'gt')
 datasummary(f, data = penguins, output = 'kableExtra')
 datasummary(f, data = penguins, output = 'flextable')
@@ -584,9 +589,9 @@ If we do *not* want `datasummary` to format numbers, and we want to keep the num
 library(gt)
 
 datasummary(All(mtcars) ~ Mean + SD,
+            output = "gt",
             data = mtcars,
-            fmt = NULL,
-            output = 'gt') %>%
+            fmt = NULL) %>%
     tab_style(style = cell_fill(color = "pink"),
               locations = cells_body(rows = Mean > 10, columns = 2))
 ```
@@ -601,6 +606,14 @@ datasummary(X ~ N, data = tmp)
 ```
 
 ## title, notes
+library(gt)
+
+datasummary(All(mtcars) ~ Mean + SD,
+            data = mtcars,
+            fmt = NULL
+) %>%
+    tab_style(style = cell_fill(color = "pink"),
+              locations = cells_body(rows = Mean > 10, columns = 2))
 
 `datasummary` includes the same `title` and `notes` arguments as in `modelsummary`:
 
@@ -722,18 +735,17 @@ datasummary_crosstab(cyl_na ~ vs, data = mycars)
 
 ## Appearance
 
-In the [Appearance Vignette](https://modelsummary.com/articles/appearance.html) we saw how to customize the tables produced by the `modelsummary` function. The same customization possibilities are also available for all functions in the `datasummary_*` family of functions. Indeed, we can customize the tables produced by `datasummary` using the functions provided by `gt`, `kableExtra`, `flextable`, `huxtable`, and `DT`. For instance, to customize tables using `kableExtra`, we can do:
+In the [Appearance Vignette](https://modelsummary.com/articles/appearance.html) we saw how to customize the tables produced by the `modelsummary` function. The same customization possibilities are also available for all functions in the `datasummary_*` family of functions. Indeed, we can customize the tables produced by `datasummary` using the functions provided by `tinytable`, `gt`, `kableExtra`, `flextable`, `huxtable`, and `DT`. For instance, to customize tables using `tinytable`, we can do:
 
 
 ```{r, echo=FALSE}
 penguins$sex <- str_to_title(penguins$sex)
 ```
 
-```{r, eval = FALSE}
-datasummary(All(penguins) ~ sex * (Mean + SD),
-            data = penguins,
-            output = 'kableExtra') %>%
-  kableExtra::row_spec(3, background = 'cyan', color = 'red')
+```{r}
+library(tinytable)
+datasummary(All(penguins) ~ sex * (Mean + SD), data = penguins) |>
+  style_tt(i = 3, background = 'cyan', color = 'red')
 ```
 
 To customize a table using the `gt` package, we can:

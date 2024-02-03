@@ -1,4 +1,4 @@
-.PHONY: help testall testone documentplain documentrich check install buildsite deploysite buildpdf
+.PHONY: help testall testone document documentrich check install buildsite deploysite buildpdf
 
 help:  ## Display this help screen
 	@echo -e "\033[1mAvailable commands:\033[0m\n"
@@ -13,25 +13,21 @@ testone: ## make testone testfile="inst/tinytest/test-aaa-warn_once.R"
 document: ## devtools::document()
 	Rscript -e "devtools::document()"
 
-check: documentplain ## devtools::check()
+check: document ## devtools::check()
 	Rscript -e "devtools::check()"
 
-install: documentplain ## devtools::install()
+install: document ## devtools::install()
 	Rscript -e "devtools::install(dependencies = TRUE)"
 
 deploy: ## pkgdown::deploy_to_branch()
 	Rscript -e "pkgdown::deploy_to_branch()"
 
-documentplain: ## devtools::document()
+document: ## devtools::document()
 	Rscript -e "devtools::document()"
 
-documentrich: ## documentplain + html rendering of examples
-	Rscript -e "Sys.setenv('pkgdown' = 'true');devtools::document()"
-
-website: ## render vignettes and website
-	Rscript -e "devtools::document();devtools::install()"
+website: install ## render vignettes and website
 	Rscript -e "altdoc::render_docs(verbose = TRUE)"
 	rm -rf _quarto
 
-buildpdf: documentplain ## documentplain + R CMD Rd2pdf .
+buildpdf: document ## document + R CMD Rd2pdf .
 	R CMD Rd2pdf .

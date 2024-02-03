@@ -60,7 +60,7 @@ factory_tinytable <- function(tab,
       sp <- cumsum(span_list[[i]])
       sp <- as.list(sp)
       sp[[1]] <- 1:sp[[1]]
-      sp[2:length(sp)] <- lapply(2:length(sp), function(k) (sp[[k - 1]] + 1):sp[[k]])
+      sp[2:length(sp)] <- lapply(2:length(sp), function(k) (max(sp[[k - 1]]) + 1):sp[[k]])
       out <- tinytable::group_tt(out, j = sp)
       out <- tinytable::style_tt(out, i = -i, align = "c")
     }
