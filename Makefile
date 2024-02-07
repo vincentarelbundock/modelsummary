@@ -22,10 +22,10 @@ install: document ## devtools::install()
 deploy: ## pkgdown::deploy_to_branch()
 	Rscript -e "pkgdown::deploy_to_branch()"
 
-document: ## devtools::document()
+document: install ## devtools::document()
 	Rscript -e "devtools::document()"
 
-website: install ## render vignettes and website
+website: document ## render vignettes and website
 	Rscript -e "altdoc::render_docs(verbose = TRUE)"
 	rm -rf _quarto
 

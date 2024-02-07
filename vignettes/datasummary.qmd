@@ -1,7 +1,7 @@
-```{r}
+```{r, echo = FALSE}
 options(modelsummary_factory_default = "tinytable")
 ```
-```{css}
+```{css, echo = FALSE}
 .table, th, td {
   font-size: 0.9em;
 } 
@@ -583,20 +583,7 @@ datasummary(flipper_length_mm ~ Mean * Arguments(fmt = "%.4f") + SD * Arguments(
             data = penguins)
 ```
 
-If we do *not* want `datasummary` to format numbers, and we want to keep the numerical values instead of formatted strings, set `fmt=NULL`. This can be useful when post-processing tables with packages like `gt`, which allow us to transform cells based on their numerical content (this `gt` table will be omitted from PDF output):
-
-```{r, eval = !knitr::is_latex_output()}
-library(gt)
-
-datasummary(All(mtcars) ~ Mean + SD,
-            output = "gt",
-            data = mtcars,
-            fmt = NULL) %>%
-    tab_style(style = cell_fill(color = "pink"),
-              locations = cells_body(rows = Mean > 10, columns = 2))
-```
-
-Please note that the `N()` function is supplied by the upstream `tables` package, and does not have a `fmt` argument. Fortunately, it is easy to override the built-in function to use custom formatting:
+Note that the `N()` function is supplied by the upstream `tables` package, and does not have a `fmt` argument. Fortunately, it is easy to override the built-in function to use custom formatting:
 
 
 ```{r}
@@ -606,14 +593,6 @@ datasummary(X ~ N, data = tmp)
 ```
 
 ## title, notes
-library(gt)
-
-datasummary(All(mtcars) ~ Mean + SD,
-            data = mtcars,
-            fmt = NULL
-) %>%
-    tab_style(style = cell_fill(color = "pink"),
-              locations = cells_body(rows = Mean > 10, columns = 2))
 
 `datasummary` includes the same `title` and `notes` arguments as in `modelsummary`:
 
@@ -744,6 +723,7 @@ penguins$sex <- str_to_title(penguins$sex)
 
 ```{r}
 library(tinytable)
+
 datasummary(All(penguins) ~ sex * (Mean + SD), data = penguins) |>
   style_tt(i = 3, background = 'cyan', color = 'red')
 ```

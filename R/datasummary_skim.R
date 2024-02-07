@@ -220,8 +220,8 @@ datasummary_skim_numeric <- function(
 
     histogram_col <- function(x) ""
     f <- All(dat_nolab, numeric = TRUE, factor = FALSE) ~
-        Heading("Unique (#)") * NUnique +
-        Heading("Missing (%)") * PercentMissing +
+        Heading("Unique") * NUnique +
+        Heading("Missing Pct.") * PercentMissing +
         (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
         Heading("") * histogram_col
 
@@ -308,8 +308,8 @@ datasummary_skim_numeric <- function(
   # without histogram
   } else {
     f <- All(dat_nolab, numeric = TRUE, factor = FALSE) ~
-         Heading("Unique (#)") * NUnique +
-         Heading("Missing (%)") * PercentMissing +
+         Heading("Unique") * NUnique +
+         Heading("Missing Pct.") * PercentMissing +
          (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt)
 
     out <- datasummary(f,
