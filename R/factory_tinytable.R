@@ -41,6 +41,8 @@ factory_tinytable <- function(tab,
   arguments <- c(list(tab), arguments)
   out <- do.call(tinytable::tt, arguments)
 
+  out <- tinytable::format_tt(out, escape = escape)
+
   # align: other factories require a vector of "c", "l", "r", etc.
   # before span because those should be centered
   if (!is.null(align)) {
