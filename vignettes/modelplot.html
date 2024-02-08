@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Data and Model Summaries in R</title>
+<title>Data and Model Summaries in R - Model Plots</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -102,8 +102,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="../site_libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -228,7 +226,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../vignettes/appearance.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Themes &amp; Styles</span></a>
+ <span class="menu-text">Themes and Styles</span></a>
   </div>
 </li>
       </ul>
@@ -448,9 +446,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#model-plots" id="toc-model-plots" class="nav-link active" data-scroll-target="#model-plots">Model Plots</a>
-  <ul class="collapse">
-  <li><a href="#rename-reorder-subset" id="toc-rename-reorder-subset" class="nav-link" data-scroll-target="#rename-reorder-subset">Rename, reorder, subset</a></li>
+  <li><a href="#rename-reorder-subset" id="toc-rename-reorder-subset" class="nav-link active" data-scroll-target="#rename-reorder-subset">Rename, reorder, subset</a></li>
   <li><a href="#several-models" id="toc-several-models" class="nav-link" data-scroll-target="#several-models">Several models</a></li>
   <li><a href="#customizing-plots" id="toc-customizing-plots" class="nav-link" data-scroll-target="#customizing-plots">Customizing plots</a>
   <ul class="collapse">
@@ -460,25 +456,48 @@ window.Quarto = {
   <li><a href="#confidence-intervals-change-or-omit" id="toc-confidence-intervals-change-or-omit" class="nav-link" data-scroll-target="#confidence-intervals-change-or-omit">Confidence intervals: change or omit</a></li>
   <li><a href="#background-annotations" id="toc-background-annotations" class="nav-link" data-scroll-target="#background-annotations">Background annotations</a></li>
   <li><a href="#raw-data-more-customization" id="toc-raw-data-more-customization" class="nav-link" data-scroll-target="#raw-data-more-customization">Raw data &amp; More customization</a></li>
-  </ul></li>
   </ul>
-</nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="modelplot.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../vignettes/datasummary.html">Tutorials</a></li><li class="breadcrumb-item"><a href="../vignettes/modelplot.html">Model Plots</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Model Plots</h1>
+</div>
 
 
 
-<section id="model-plots" class="level1">
-<h1>Model Plots</h1>
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<style type="text/css">
+.table, th, td {
+  font-size: 0.9em;
+} 
+.table tbody td, .table thead tr {
+    white-space: nowrap;
+}
+</style>
+</div>
 <p><code>modelplot</code> is a function from the <code>modelsummary</code> package. It allows you to plot model estimates and confidence intervals. It makes it easy to subset, rename, reorder, and customize plots using same mechanics as in <code>modelsummary</code>.</p>
 <p>To illustrate how the function works, we fit a linear model to data about the <a href="https://github.com/allisonhorst/palmerpenguins">Palmer Penguins</a>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">'https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv'</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(url)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="do">## rescale mm -&gt; cm</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># rescale mm -&gt; cm</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>bill_length_cm <span class="ot">&lt;-</span> dat<span class="sc">$</span>bill_length_mm <span class="sc">/</span> <span class="dv">10</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>flipper_length_cm <span class="ot">&lt;-</span> dat<span class="sc">$</span>flipper_length_mm <span class="sc">/</span> <span class="dv">10</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
@@ -492,20 +511,20 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="modelplot_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<section id="rename-reorder-subset" class="level2">
-<h2 class="anchored" data-anchor-id="rename-reorder-subset">Rename, reorder, subset</h2>
+<section id="rename-reorder-subset" class="level1">
+<h1>Rename, reorder, subset</h1>
 <p><code>modelplot</code> uses the same mechanics as <code>modelsummary</code> to rename, reorder, and subset estimates. First, you can use the <code>coef_omit</code> argument. This will omit any coefficient that matches a string or regular expression. To omit the intercept, for example, we can type:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelplot</span>(mod, <span class="at">coef_omit =</span> <span class="st">'Interc'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="modelplot_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -520,14 +539,14 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="modelplot_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="several-models" class="level2">
-<h2 class="anchored" data-anchor-id="several-models">Several models</h2>
+<section id="several-models" class="level1">
+<h1>Several models</h1>
 <p>The main <code>modelsummary</code> functions allows you to create a table with the results of several models side-by-side, by storing them in a (potentially named) list:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
@@ -537,126 +556,259 @@ window.Quarto = {
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(models, <span class="at">statistic =</span> <span class="st">'conf.int'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">Small model</th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">Medium model</th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">Large model</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">(Intercept)</td>
-<td style="text-align: center;">−0.726</td>
-<td style="text-align: center;">−0.344</td>
-<td style="text-align: center;">0.984</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;">[−1.356, −0.097]</td>
-<td style="text-align: center;">[−1.245, 0.557]</td>
-<td style="text-align: center;">[0.215, 1.752]</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">flipper_length_cm</td>
-<td style="text-align: center;">0.255</td>
-<td style="text-align: center;">0.222</td>
-<td style="text-align: center;">0.095</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;">[0.224, 0.286]</td>
-<td style="text-align: center;">[0.158, 0.285]</td>
-<td style="text-align: center;">[0.048, 0.142]</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">body_mass_g</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">0.000</td>
-<td style="text-align: center;">0.000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">[0.000, 0.000]</td>
-<td style="text-align: center;">[0.000, 0.000]</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">speciesChinstrap</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">0.939</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">[0.867, 1.011]</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">speciesGentoo</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">0.207</td>
-</tr>
-<tr class="even">
-<td style="text-align: left; box-shadow: 0px 1.5px;"></td>
-<td style="text-align: center; box-shadow: 0px 1.5px;"></td>
-<td style="text-align: center; box-shadow: 0px 1.5px;"></td>
-<td style="text-align: center; box-shadow: 0px 1.5px;">[0.088, 0.326]</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Num.Obs.</td>
-<td style="text-align: center;">342</td>
-<td style="text-align: center;">342</td>
-<td style="text-align: center;">342</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">R2</td>
-<td style="text-align: center;">0.431</td>
-<td style="text-align: center;">0.433</td>
-<td style="text-align: center;">0.817</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">R2 Adj.</td>
-<td style="text-align: center;">0.429</td>
-<td style="text-align: center;">0.430</td>
-<td style="text-align: center;">0.815</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">AIC</td>
-<td style="text-align: center;">369.0</td>
-<td style="text-align: center;">369.6</td>
-<td style="text-align: center;">−12.6</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">BIC</td>
-<td style="text-align: center;">380.5</td>
-<td style="text-align: center;">385.0</td>
-<td style="text-align: center;">10.4</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Log.Lik.</td>
-<td style="text-align: center;">−181.499</td>
-<td style="text-align: center;">−180.813</td>
-<td style="text-align: center;">12.313</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">F</td>
-<td style="text-align: center;">257.092</td>
-<td style="text-align: center;">129.365</td>
-<td style="text-align: center;">375.333</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">RMSE</td>
-<td style="text-align: center;">0.41</td>
-<td style="text-align: center;">0.41</td>
-<td style="text-align: center;">0.23</td>
-</tr>
-</tbody>
-</table>
+ 
+
+  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tinytable_e0bizx19j21h4u5sc0fn</title>
+    <style>
+.table td.tinytable_css_1fomm9l1im1fsi5k6to7, .table th.tinytable_css_1fomm9l1im1fsi5k6to7 {    border-bottom: solid 0.1em #d3d8dc; }
+.table td.tinytable_css_hbi97tppqgqcta9xd8w8, .table th.tinytable_css_hbi97tppqgqcta9xd8w8 {    text-align: left; }
+.table td.tinytable_css_qvr85md86xalfujue1mg, .table th.tinytable_css_qvr85md86xalfujue1mg {    text-align: center; }
+.table td.tinytable_css_j4pi2rgefhpgwfe8hd96, .table th.tinytable_css_j4pi2rgefhpgwfe8hd96 {    border-bottom: solid 0.05em black; }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+  
+
+  
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_e0bizx19j21h4u5sc0fn" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        <thead>
+        
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">Small model</th>
+                <th scope="col">Medium model</th>
+                <th scope="col">Large model</th>
+              </tr>
+        </thead>
+        
+        <tbody>
+                <tr>
+                  <td>(Intercept)</td>
+                  <td>-0.726</td>
+                  <td>-0.344</td>
+                  <td>0.984</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>[-1.356, -0.097]</td>
+                  <td>[-1.245, 0.557]</td>
+                  <td>[0.215, 1.752]</td>
+                </tr>
+                <tr>
+                  <td>flipper_length_cm</td>
+                  <td>0.255</td>
+                  <td>0.222</td>
+                  <td>0.095</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>[0.224, 0.286]</td>
+                  <td>[0.158, 0.285]</td>
+                  <td>[0.048, 0.142]</td>
+                </tr>
+                <tr>
+                  <td>body_mass_g</td>
+                  <td></td>
+                  <td>0.000</td>
+                  <td>0.000</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>[0.000, 0.000]</td>
+                  <td>[0.000, 0.000]</td>
+                </tr>
+                <tr>
+                  <td>speciesChinstrap</td>
+                  <td></td>
+                  <td></td>
+                  <td>0.939</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>[0.867, 1.011]</td>
+                </tr>
+                <tr>
+                  <td>speciesGentoo</td>
+                  <td></td>
+                  <td></td>
+                  <td>0.207</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>[0.088, 0.326]</td>
+                </tr>
+                <tr>
+                  <td>Num.Obs.</td>
+                  <td>342</td>
+                  <td>342</td>
+                  <td>342</td>
+                </tr>
+                <tr>
+                  <td>R2</td>
+                  <td>0.431</td>
+                  <td>0.433</td>
+                  <td>0.817</td>
+                </tr>
+                <tr>
+                  <td>R2 Adj.</td>
+                  <td>0.429</td>
+                  <td>0.430</td>
+                  <td>0.815</td>
+                </tr>
+                <tr>
+                  <td>AIC</td>
+                  <td>369.0</td>
+                  <td>369.6</td>
+                  <td>-12.6</td>
+                </tr>
+                <tr>
+                  <td>BIC</td>
+                  <td>380.5</td>
+                  <td>385.0</td>
+                  <td>10.4</td>
+                </tr>
+                <tr>
+                  <td>Log.Lik.</td>
+                  <td>-181.499</td>
+                  <td>-180.813</td>
+                  <td>12.313</td>
+                </tr>
+                <tr>
+                  <td>F</td>
+                  <td>257.092</td>
+                  <td>129.365</td>
+                  <td>375.333</td>
+                </tr>
+                <tr>
+                  <td>RMSE</td>
+                  <td>0.41</td>
+                  <td>0.41</td>
+                  <td>0.23</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+    function styleCell_tinytable_md51xmwsxljrh9mts7w5(i, j, css_id) {
+      var table = document.getElementById("tinytable_e0bizx19j21h4u5sc0fn");
+      table.rows[i].cells[j].classList.add(css_id);
+    }
+    function insertSpanRow(i, colspan, content) {
+      var table = document.getElementById('tinytable_e0bizx19j21h4u5sc0fn');
+      var newRow = table.insertRow(i);
+      var newCell = newRow.insertCell(0);
+      newCell.setAttribute("colspan", colspan);
+      // newCell.innerText = content;
+      // this may be unsafe, but innerText does not interpret <br>
+      newCell.innerHTML = content;
+    }
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(0, 0, 'tinytable_css_1fomm9l1im1fsi5k6to7') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(0, 1, 'tinytable_css_1fomm9l1im1fsi5k6to7') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(0, 2, 'tinytable_css_1fomm9l1im1fsi5k6to7') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(0, 3, 'tinytable_css_1fomm9l1im1fsi5k6to7') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(0, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(0, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(0, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(0, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(1, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(1, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(1, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(1, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(2, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(2, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(2, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(2, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(3, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(3, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(3, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(3, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(4, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(4, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(4, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(4, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(5, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(5, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(5, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(5, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(6, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(6, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(6, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(6, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(7, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(7, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(7, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(7, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(8, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(8, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(8, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(8, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(9, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(9, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(9, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(9, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(10, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(10, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(10, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(10, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(11, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(11, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(11, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(11, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(12, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(12, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(12, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(12, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(13, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(13, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(13, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(13, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(14, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(14, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(14, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(14, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(15, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(15, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(15, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(15, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(16, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(16, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(16, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(16, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(17, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(17, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(17, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(17, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(18, 0, 'tinytable_css_hbi97tppqgqcta9xd8w8') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(18, 1, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(18, 2, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(18, 3, 'tinytable_css_qvr85md86xalfujue1mg') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(10, 0, 'tinytable_css_j4pi2rgefhpgwfe8hd96') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(10, 1, 'tinytable_css_j4pi2rgefhpgwfe8hd96') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(10, 2, 'tinytable_css_j4pi2rgefhpgwfe8hd96') })
+window.addEventListener('load', function () { styleCell_tinytable_md51xmwsxljrh9mts7w5(10, 3, 'tinytable_css_j4pi2rgefhpgwfe8hd96') })
+    </script>
+
+  
 
 
 </div>
@@ -667,7 +819,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="modelplot_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -678,14 +830,14 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="modelplot_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="customizing-plots" class="level2">
-<h2 class="anchored" data-anchor-id="customizing-plots">Customizing plots</h2>
+<section id="customizing-plots" class="level1">
+<h1>Customizing plots</h1>
 <p>The graphs produced by <code>modelplot</code> are simple <code>ggplot2</code> objects. You can thus post-process them using the normal suite of functions available for all objects of this type. Here, we change the axis labels, add a title and a caption, and use a color scheme inspired by Wes Anderson’s <em>Darjeeling Limited</em>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(wesanderson)</span>
@@ -700,7 +852,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="modelplot_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -712,34 +864,33 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="modelplot_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<section id="conditional-colors-and-shape" class="level3">
-<h3 class="anchored" data-anchor-id="conditional-colors-and-shape">Conditional colors and shape</h3>
-<p>Note: This section requires a version of <code>modelsummary</code> greater than 1.2.0 <a href="https://github.com/vincentarelbundock/modelsummary#installation">or the development version.</a></p>
-<p>In a <a href="https://stackoverflow.com/a/74835661/342331">very nice Stack Overflow answer</a>, Allan Cameron shows how we can use the <code>aes()</code> function from <code>ggplot2</code> to add conditional aesthetics. For example, if we want to display statistically significant coefficients in a different color:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">##| fig.asp = .3</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(hp <span class="sc">~</span> <span class="fu">factor</span>(gear) <span class="sc">+</span> <span class="fu">factor</span>(cyl), <span class="at">data =</span> mtcars)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">modelplot</span>(mod, <span class="at">coef_rename =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">ifelse</span>(p.value <span class="sc">&lt;</span> <span class="fl">0.001</span>, <span class="st">"Significant"</span>, <span class="st">"Not significant"</span>)) <span class="sc">+</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"grey"</span>, <span class="st">"black"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
 <p><img src="modelplot_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<section id="conditional-colors-and-shape" class="level2">
+<h2 class="anchored" data-anchor-id="conditional-colors-and-shape">Conditional colors and shape</h2>
+<p>Note: This section requires a version of <code>modelsummary</code> greater than 1.2.0 <a href="https://github.com/vincentarelbundock/modelsummary#installation">or the development version.</a></p>
+<p>In a <a href="https://stackoverflow.com/a/74835661/342331">very nice Stack Overflow answer</a>, Allan Cameron shows how we can use the <code>aes()</code> function from <code>ggplot2</code> to add conditional aesthetics. For example, if we want to display statistically significant coefficients in a different color:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(hp <span class="sc">~</span> <span class="fu">factor</span>(gear) <span class="sc">+</span> <span class="fu">factor</span>(cyl), <span class="at">data =</span> mtcars)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">modelplot</span>(mod, <span class="at">coef_rename =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">ifelse</span>(p.value <span class="sc">&lt;</span> <span class="fl">0.001</span>, <span class="st">"Significant"</span>, <span class="st">"Not significant"</span>)) <span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"grey"</span>, <span class="st">"black"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="modelplot_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="example-using-facets-to-compare-models" class="level3">
-<h3 class="anchored" data-anchor-id="example-using-facets-to-compare-models">Example: Using facets to compare models</h3>
+<section id="example-using-facets-to-compare-models" class="level2">
+<h2 class="anchored" data-anchor-id="example-using-facets-to-compare-models">Example: Using facets to compare models</h2>
 <p>Customizing plots with <code>ggplot2</code> makes <code>modelplot</code> very flexible. For example, imagine you want to compare the coefficients of three models with different dependent variables. First, we load the packages and estimate our models:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
@@ -792,22 +943,22 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="modelplot_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
 </section>
-<section id="confidence-intervals-change-or-omit" class="level2">
-<h2 class="anchored" data-anchor-id="confidence-intervals-change-or-omit">Confidence intervals: change or omit</h2>
+<section id="confidence-intervals-change-or-omit" class="level1">
+<h1>Confidence intervals: change or omit</h1>
 <p>You can change the <span class="math inline">\(\alpha\)</span> level of your confidence intervals by changing the <code>conf_level</code> argument:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelplot</span>(mod, <span class="at">conf_level =</span> .<span class="dv">99</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="modelplot_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -815,14 +966,14 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="modelplot_files/figure-html/unnamed-chunk-16-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-17-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="background-annotations" class="level2">
-<h2 class="anchored" data-anchor-id="background-annotations">Background annotations</h2>
+<section id="background-annotations" class="level1">
+<h1>Background annotations</h1>
 <p>Sometimes, you want to display annotations on a plot, but you would like to draw these annotations <em>behind</em> the <code>geom_pointrange</code> which displays the estimates. Since <code>modelplot</code> draws the <code>geom_pointrange</code> automatically, any <code>ggplot2</code> annotation you add to the plot using <code>+</code> will be added on <em>top</em> of the existing ones.</p>
 <p>To add your annotations in the background, you can pass them as a list of <code>ggplot2</code> “geoms”:</p>
 <div class="cell">
@@ -839,14 +990,14 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="modelplot_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="raw-data-more-customization" class="level2">
-<h2 class="anchored" data-anchor-id="raw-data-more-customization">Raw data &amp; More customization</h2>
+<section id="raw-data-more-customization" class="level1">
+<h1>Raw data &amp; More customization</h1>
 <p>If you would like to customize the plots even more than what <code>modelplot</code> allows, you can obtain the raw data used to draw the plots by setting <code>draw=FALSE</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelplot</span>(models, <span class="at">draw =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -885,18 +1036,18 @@ window.Quarto = {
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggdist)</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="do">## fit</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># fit</span></span>
 <span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(mpg <span class="sc">~</span> am, mtcars),</span>
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(mpg <span class="sc">~</span> am <span class="sc">+</span> cyl, mtcars))</span>
 <span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="do">## summarize</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># summarize</span></span>
 <span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="fu">c</span>(.<span class="dv">8</span>, .<span class="dv">9</span>, .<span class="dv">99</span>), <span class="cf">function</span>(x) {</span>
 <span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">modelplot</span>(models, <span class="at">conf_level =</span> x, <span class="at">draw =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">.width =</span> x)</span>
 <span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="do">## plot</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
 <span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(</span>
 <span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> term, <span class="at">x =</span> estimate,</span>
 <span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">xmin =</span> conf.low, <span class="at">xmax =</span> conf.high,</span>
@@ -908,14 +1059,13 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="modelplot_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="modelplot_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
