@@ -2,9 +2,9 @@
 
 <p align="center">
 <a href="https://modelsummary.com">
-<img src="https://user-images.githubusercontent.com/987057/82849698-05ba5700-9ec7-11ea-93a0-67dcd9151848.png" align="center" alt="modelsummary logo" width="200" />
+<img src="man/figures/modelsummary_gallery.gif" height = "250" class = "center">
 </a> <br> <br>
-<a href = "https://github.com/vincentarelbundock/tinytable/blob/main/LICENSE.md" target = "_blank"><img src="https://img.shields.io/badge/license-GPLv3-blue"></a>
+<a href = "https://github.com/vincentarelbundock/modelsummary/blob/main/LICENSE.md" target = "_blank"><img src="https://img.shields.io/badge/license-GPLv3-blue"></a>
 <a href = "https://modelsummary.com" target = "_blank"><img src="https://img.shields.io/static/v1?label=Website&message=Visit&color=blue"></a>
 <a href = "https://modelsummary.com" target = "_blank"><img src="https://cranlogs.r-pkg.org/badges/grand-total/modelsummary"></a>
 <br><br>
