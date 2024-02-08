@@ -1,4 +1,15 @@
-```{css}
+---
+title: "Model Summaries"
+format: 
+  html: default
+  pdf:
+    toc: true
+    number-sections: true
+    colorlinks: true
+    keep-tex: true
+---
+
+```{css, echo=FALSE}
 .table, th, td {
   font-size: 0.9em;
 } 
@@ -6,9 +17,6 @@
     white-space: nowrap;
 }
 ```
-
-
-# Model Summaries 
 
 `modelsummary` includes a powerful set of utilities to customize the information displayed in your model summary tables. You can easily rename, reorder, subset or omit parameter estimates; choose the set of goodness-of-fit statistics to display; display various "robust" standard errors or confidence intervals; add titles, footnotes, or source notes; insert stars or custom characters to indicate levels of statistical significance; or add rows with supplemental information about your models.
 
@@ -33,7 +41,7 @@ models <- list(
 modelsummary(models)
 ```
 
-## `output`: print and save
+# `output`: print and save
 
 The `output` argument determines the type of object returned by `modelsummary` and/or the file where this table should be written.
 
@@ -71,7 +79,7 @@ Warning: When a file name is supplied to the `output` argument, the table is wri
 * `gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave()` function.
 * `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable()` function.
 
-## `fmt`: round and format
+# `fmt`: round and format
 
 The `fmt` argument defines how numeric values are rounded and presented in the table. This argument accepts three types of input:
 
@@ -84,28 +92,28 @@ Examples:
 ```{r, eval=FALSE}
 mod <- lm(mpg ~ hp + drat + qsec, data = mtcars)
 
-## decimal digits
+# decimal digits
 modelsummary(mod, fmt = 3)
 
-## user-supplied function
+# user-supplied function
 modelsummary(mod, fmt = function(x) round(x, 2))
 
-## p values with different number of digits
+# p values with different number of digits
 modelsummary(mod, fmt = fmt_decimal(1, 3), statistic = c("std.error", "p.value"))
 
-## significant digits
+# significant digits
 modelsummary(mod, fmt = fmt_significant(3))
 
-## sprintf(): decimal digits
+# sprintf(): decimal digits
 modelsummary(mod, fmt = fmt_sprintf("%.5f"))
 
-## sprintf(): scientific notation 
+# sprintf(): scientific notation 
 modelsummary(mod, fmt = fmt_sprintf("%.5e"))
 
-## statistic-specific formatting
+# statistic-specific formatting
 modelsummary(mod, fmt = fmt_statistic(estimate = 4, conf.int = 1), statistic = "conf.int")
 
-## term-specific formatting
+# term-specific formatting
 modelsummary(mod, fmt = fmt_term(hp = 4, drat = 1, default = fmt_significant(2)))
 
 modelsummary(mod, fmt = NULL)
@@ -125,7 +133,7 @@ In many languages the comma is used as a decimal mark instead of the period.  `m
 options(OutDec=",")
 ```
 
-## `estimate`
+# `estimate`
 
 By default, `modelsummary` prints each coefficient estimate on its own row. You can customize this by changing the `estimate` argument. For example, this would produce a table of p values instead of coefficient estimates:
 
@@ -169,7 +177,7 @@ modelsummary(
 ```
 
 
-## `statistic`: SE, t, p, CI, etc.
+# `statistic`: SE, t, p, CI, etc.
 
 By default, `modelsummary` prints the coefficient's standard error in parentheses below the corresponding estimate. The value of this uncertainty statistic is determined by the `statistic` argument. The `statistic` argument accepts any of the column names produced by `get_estimates(model)`. For example:
 
@@ -213,7 +221,7 @@ modelsummary(models, gof_omit = ".*",
              statistic = NULL)
 ```
 
-## `vcov`: robust SEs
+# `vcov`: robust SEs
 
 You can use clustered or robust uncertainty estimates by modifying the `vcov` parameter. This function accepts 5 different types of input.  You can use a string or a vector of strings:
 
@@ -266,7 +274,7 @@ vc <- list(
 modelsummary(models, vcov = vc)
 ```
 
-## `stars`
+# `stars`
 
 Some people like to add "stars" to their model summary tables to mark statistical significance. The `stars` argument can take three types of input:
 
@@ -291,7 +299,7 @@ modelsummary(models,
 If you want to create your own stars description, you can add custom notes with the [`notes`](https://github.com/vincentarelbundock/modelsummary#notes) argument.
 
 
-## `coef_omit`
+# `coef_omit`
 
 An alternative mechanism to subset coefficients is to use the `coef_omit` argument, which accepts a vector of integer or a regular expression. For example, we can omit the first and second coefficients as follows:
 
@@ -329,7 +337,7 @@ To keep all coefficients matching one of two substrings:
 modelsummary(models, coef_omit = "^(?!.*tercept|.*y)", gof_map = NA)
 ```
 
-## `coef_rename`
+# `coef_rename`
 
 `modelsummary` offers powerful and innovative mechanisms to rename, reorder, and subset coefficients and goodness-of-fit statistics.
 
@@ -384,7 +392,7 @@ modlab <- lm(mpg ~ cyl + am, data = datlab)
 modelsummary(modlab, coef_rename = TRUE)
 ```
 
-## `coef_map`: order, omit, rename
+# `coef_map`: order, omit, rename
 
 The `coef_map` argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the "clean" variable name. Names of this vector correspond to the "raw" variable name. The table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.
 
@@ -395,7 +403,7 @@ cm <- c('Literacy'    = 'Literacy (%)',
 modelsummary(models, coef_map = cm)
 ```
 
-## `gof_omit`: goodness-of-fit and model characteristics
+# `gof_omit`: goodness-of-fit and model characteristics
 
 `gof_omit` is a regular expression which will be fed to `grepl(x,perl=TRUE)` to detect the names of the statistics which should be excluded from the table.
 
@@ -403,7 +411,7 @@ modelsummary(models, coef_map = cm)
 modelsummary(models, gof_omit = 'DF|Deviance|R2|AIC|BIC')
 ```
 
-## gof_map
+# gof_map
 
 The `gof_map` argument can be used to rename, re-order, subset, and format the statistics displayed in the bottom section of the table ("goodness-of-fit").
 
@@ -456,7 +464,7 @@ modelsummary(
   escape = FALSE)
 ```
 
-## `shape`: pivot, groups, panels, and stacks
+# `shape`: pivot, groups, panels, and stacks
 
 This section requires version 1.3.1 of `modelsummary`. If this version is not available on CRAN yet, you can install the development version by following [the instructions on the website.](https://modelsummary.com/#installation)
 
@@ -465,7 +473,7 @@ The `shape` argument accepts:
 1. A formula which determines the structure of the table, and can display "grouped" coefficients together (e.g., multivariate outcome or mixed-effects models). 
 2. The strings "rbind" or "rcollapse" to stack multiple tables on top of each other and present models in distinct "panels".
 
-### Formula
+## Formula
 
 The left side of the formula represents the rows and the right side represents the columns. The default formula is `term + statistic ~ model`:
 
@@ -542,7 +550,7 @@ modelsummary(mfx, shape = term + contrast ~ model)
 modelsummary(mfx, shape = term : contrast ~ model)
 ```
 
-### String ("rbind" or "rcollapse"): Panels of models in stacked regression tables
+## String ("rbind" or "rcollapse"): Panels of models in stacked regression tables
 
 Note: The code in this section requires version 1.3.0 or the development version of `modelsummary`. See [the website](https://modelsummary.com/index.html) for installation instructions.
 
@@ -588,22 +596,22 @@ modelsummary(
   gof_map = gm)
 ```
 
-#### `fixest`
+### `fixest`
 
 The `fixest` package offers powerful tools to estimate multiple models using a concise syntax. `fixest` functions are also convenient because they return named lists of models which are easy to subset and manipulate using standard `R` functions like `grepl`. 
 
 For example, to introduce regressors in stepwise fashion, and to estimate models on different subsets of the data, we can do:
 
 ```{r}
-##| message = FALSE
+#| message = FALSE
 
-## estimate 4 models
+# estimate 4 models
 library(fixest)
 mod <- feols(
   c(hp, mpg) ~ csw(qsec, drat) | gear,
   data = mtcars)
 
-## select models with different outcome variables
+# select models with different outcome variables
 panels <- list(
   "Miles per gallon" = mod[grepl("mpg", names(mod))],
   "Horsepower" = mod[grepl("hp", names(mod))]
@@ -633,7 +641,7 @@ rm("glance_custom.fixest")
 ```
 
 
-## `align`: column alignment
+# `align`: column alignment
 
 By default, `modelsummary` will align the first column (with coefficient names) to the left, and will center the results columns. To change this default, you can use the align argument, which accepts a string of the same length as the number of columns:
 
@@ -655,7 +663,7 @@ For the table produced by this code to compile, users must include the following
 \newcolumntype{d}{S[input-symbols = ()]}
 ```
 
-## `notes`: footers
+# `notes`: footers
 
 Add notes to the bottom of your table:
 
@@ -665,7 +673,7 @@ modelsummary(models,
                 'Text of the second note.'))
 ```
 
-## `title`: captions
+# `title`: captions
 
 You can add a title to your table as follows:
 
@@ -673,7 +681,7 @@ You can add a title to your table as follows:
 modelsummary(models, title = 'This is a title for my table.')
 ```
 
-## `add_rows`
+# `add_rows`
 
 Use the `add_rows` argument to add rows manually to a table. For example, let's say you estimate two models with a factor variables and you want to insert (a) an empty line to identify the category of reference, and (b) customized information at the bottom of the table:
 
@@ -695,7 +703,7 @@ attr(rows, 'position') <- c(3, 9)
 modelsummary(models, add_rows = rows)
 ```
 
-## `exponentiate`
+# `exponentiate`
 
 We can exponentiate their estimates using the `exponentiate` argument:
 
@@ -711,7 +719,7 @@ mod_logit <- list(mod_logit, mod_logit)
 modelsummary(mod_logit, exponentiate = c(TRUE, FALSE))
 ```
 
-## `...` ellipsis: Additional arguments
+# `...` ellipsis: Additional arguments
 
 All arguments passed by the user to a `modelsummary` function are pushed forward in two other functions:
 
@@ -723,7 +731,7 @@ All arguments passed by the user to a `modelsummary` function are pushed forward
 
 All arguments passed supported by these functions are thus automatically available directly in `modelsummary`, `modelplot`, and the `datasummary` family of functions.
 
-## Custom appearance
+# Custom appearance
 
 To customize the appearance of tables, `modelsummary` supports six popular and extremely powerful table-making packages: 
 
@@ -736,7 +744,7 @@ To customize the appearance of tables, `modelsummary` supports six popular and e
 
 The ["customizing the look of your tables" vignette](https://modelsummary.com/articles/appearance.html) shows examples for all 4 packages.
 
-## Supported models
+# Supported models
 
 `modelsummary` automatically supports all the models supported by the `tidy` function of the [broom package](broom.tidymodels.org) or the `parameters` function of the [parameters package](https://easystats.github.io/parameters/). The list of supported models is rapidly expanding. At the moment, it covers the following model classes:
 
@@ -753,9 +761,9 @@ get_estimates(model)
 If this function does not return a valid output, you can easily (really!!) add your own support. See the next section for a tutorial. If you do this, you may consider opening an issue on the Github website of the `broom` package: https://github.com/tidymodels/broom/issues
 
 
-## Rmarkdown, Quarto, Org-Mode
+# Rmarkdown, Quarto, Org-Mode
 
-### Rmarkdown
+## Rmarkdown
 
 You can use `modelsummary` to insert tables into dynamic documents with `knitr` or `Rmarkdown`. This minimal .Rmd file can produce tables in PDF, HTML, or RTF documents:
 
@@ -769,7 +777,7 @@ This .Rmd file shows how to customize tables in PDF and HTML files using `gt` an
 
 * [appearance.Rmd](https://github.com/vincentarelbundock/modelsummary/blob/master/examples/appearance.Rmd)
 
-### Quarto
+## Quarto
 
 [Quarto is an open source publishing system](https://quarto.org/) built on top of Pandoc. It was designed as a "successor" to Rmarkdown, and includes useful features for technical writing, such as built-in support for cross-references. `modelsummary` works automatically with Quarto. This is a minimal document with cross-references which should render automatically to PDF, HTML, and more:
 
@@ -782,31 +790,31 @@ title: Example
 @tbl-mtcars shows that cars with high horse power get low miles per gallon.
 
 ```{r}
-##| label: tbl-mtcars
-##| tbl-cap: "Horse Powers vs. Miles per Gallon"
+#| label: tbl-mtcars
+#| tbl-cap: "Horse Powers vs. Miles per Gallon"
 library(modelsummary)
 mod <- lm(mpg ~ hp, mtcars)
 modelsummary(mod)
 ```
 ````
 
-### Emacs Org-Mode
+## Emacs Org-Mode
 
 You can use `modelsummary` to insert tables into Emacs Org-Mode documents, which can be exported to a variety of formats, including HTML and PDF (via LaTeX). As with anything Emacs-related, there are many ways to achieve the outcomes you want. Here is one example of an Org-Mode document which can automatically export tables to HTML and PDF without manual tweaks:
 
 ````
-##+PROPERTY: header-args:R :var orgbackend=(prin1-to-string org-export-current-backend)
-##+MACRO: Rtable (eval (concat "#+header: :results output " (prin1-to-string org-export-current-backend)))
+#+PROPERTY: header-args:R :var orgbackend=(prin1-to-string org-export-current-backend)
+#+MACRO: Rtable (eval (concat "#+header: :results output " (prin1-to-string org-export-current-backend)))
 
 {{{Rtable}}}
-##+BEGIN_SRC R :exports both
+#+BEGIN_SRC R :exports both
 library(modelsummary)
 options(modelsummary_factory_default = orgbackend)
 
 mod = lm(hp ~ mpg, data = mtcars)
 
 modelsummary(mod)
-##+END_SRC
+#+END_SRC
 ````
 
 The first line tells Org-mode to assign a variable called `orgbackend`. This variable will be accessible by the `R` session, and will be equal to "html" or "latex", depending on the export format.
@@ -823,7 +831,7 @@ One potentially issue to keep in mind is that the code above extracts the printo
 
 ````
 {{{Rtable}}}
-##+BEGIN_SRC R :exports both
+#+BEGIN_SRC R :exports both
 library(modelsummary)
 library(kableExtra)
 
@@ -832,10 +840,10 @@ mod = lm(hp ~ mpg, data = mtcars)
 modelsummary(mod, output = orgbackend) %>%
   row_spec(1, background = "pink") %>%
   cat()
-##+END_SRC
+#+END_SRC
 ````
 
-## Global options
+# Global options
 
 Users can change the default behavior of `modelsummary` by setting global options.
 
@@ -864,10 +872,10 @@ options(modelsummary_factory_png = 'gt')
 Change the packages that `modelsummary` uses to extract information from models:
 
 ```{r, eval = FALSE}
-## tidymodels: broom 
+# tidymodels: broom 
 options(modelsummary_get = "broom")
 
-## easystats: performance + parameters
+# easystats: performance + parameters
 options(modelsummary_get = "easystats")
 ```
 
@@ -876,7 +884,7 @@ options(modelsummary_get = "easystats")
 ```{r, eval=FALSE}
 library(gt)
 
-## The ... ellipsis is required!
+# The ... ellipsis is required!
 custom_theme <- function(x, ...) {
     x %>% gt::opt_row_striping(row_striping = TRUE)
 }
@@ -886,10 +894,10 @@ mod <- lm(mpg ~ hp + drat, mtcars)
 modelsummary(mod, output = "gt")
 ```
 
-## Case studies
+# Case studies
 
 
-### Standardization
+## Standardization
 
 In some cases, it is useful to standardize coefficients before reporting them. `modelsummary` extracts coefficients from model objects using the `parameters` package, and that package offers several options for standardization: https://easystats.github.io/parameters/reference/model_parameters.default.html
 
@@ -908,7 +916,7 @@ Compare to the unstandardized plot:
 modelplot(mod)
 ```
 
-### Subgroup estimation with `nest_by`
+## Subgroup estimation with `nest_by`
 
 Sometimes, it is useful to estimate multiple regression models on subsets of the data. To do this efficiently, we can use the `nest_by` function from the `dplyr` package. Then, estimate the models with `lm`, extract them and name them with `pull`, and finally summarize them with `modelsummary`:
 
@@ -922,7 +930,7 @@ mtcars %>%
     modelsummary
 ```
 
-### Statistics in separate columns instead of one over the other
+## Statistics in separate columns instead of one over the other
 
 In somes cases, you may want to display statistics in separate columns instead of one over the other. It is easy to achieve this outcome by using the `estimate` argument. This argument accepts a vector of values, one for each of the models we are trying to summarize. If we want to include estimates and standard errors in separate columns, all we need to do is repeat a model, but request different statistics. For example,
 
@@ -967,7 +975,7 @@ estimates <- c("Coef." = "estimate", "Std.Error" = "std.error")
 side_by_side(models, estimates = estimates)
 ```
 
-### Bootstrap
+## Bootstrap
 
 Users often want to use estimates or standard errors that have been obtained using a custom strategy. To achieve this in an automated and replicable way, it can be useful to use the `tidy_custom` strategy described above in the "Cutomizing Existing Models" section. 
 
@@ -1008,7 +1016,7 @@ modelsummary(mod)
 rm("tidy_custom.lm")
 ```
 
-### `fixest`: Fixed effects and instrumental variable regression
+## `fixest`: Fixed effects and instrumental variable regression
 
 One common use-case for `glance_custom` is to include additional goodness-of-fit statistics. For example, in an instrumental variable estimation computed by the `fixest` package, we may want to include an IV-Wald statistic for the first-stage regression of each endogenous regressor:
 
@@ -1020,16 +1028,16 @@ eval_fixest <- utils::packageVersion("fixest") >= "0.10.5"
 library(fixest)
 library(tidyverse)
 
-## create a toy dataset
+# create a toy dataset
 base <- iris
 names(base) <- c("y", "x1", "x_endo_1", "x_inst_1", "fe")
 base$x_inst_2 <- 0.2 * base$y + 0.2 * base$x_endo_1 + rnorm(150, sd = 0.5)
 base$x_endo_2 <- 0.2 * base$y - 0.2 * base$x_inst_1 + rnorm(150, sd = 0.5)
 
-## estimate an instrumental variable model
+# estimate an instrumental variable model
 mod <- feols(y ~ x1 | fe | x_endo_1 + x_endo_2 ~ x_inst_1 + x_inst_2, base)
 
-## custom extractor function returns a one-row data.frame (or tibble)
+# custom extractor function returns a one-row data.frame (or tibble)
 glance_custom.fixest <- function(x) {
   tibble(
     "Wald (x_endo_1)" = fitstat(x, "ivwald")[[1]]$stat,
@@ -1037,7 +1045,7 @@ glance_custom.fixest <- function(x) {
   )
 }
 
-## draw table
+# draw table
 modelsummary(mod)
 ```
 
@@ -1045,7 +1053,7 @@ modelsummary(mod)
 rm("glance_custom.fixest")
 ```
 
-### Multiple imputation
+## Multiple imputation
 
 `modelsummary` can pool and display analyses on several datasets imputed using the `mice` or `Amelia` packages. This code illustrates how:
 
@@ -1054,34 +1062,34 @@ library(mice)
 library(Amelia)
 library(modelsummary)
 
-## Download data from `Rdatasets`
+# Download data from `Rdatasets`
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
 dat <- read.csv(url)[, c('Clergy', 'Commerce', 'Literacy')]
 
-## Insert missing values
+# Insert missing values
 dat$Clergy[sample(1:nrow(dat), 10)] <- NA
 dat$Commerce[sample(1:nrow(dat), 10)] <- NA
 dat$Literacy[sample(1:nrow(dat), 10)] <- NA
 
-## Impute with `mice` and `Amelia`
+# Impute with `mice` and `Amelia`
 dat_mice <- mice(dat, m = 5, printFlag = FALSE)
 dat_amelia <- amelia(dat, m = 5, p2s = 0)$imputations
 
-## Estimate models
+# Estimate models
 mod <- list()
 mod[['Listwise deletion']] <- lm(Clergy ~ Literacy + Commerce, dat)
 mod[['Mice']] <- with(dat_mice, lm(Clergy ~ Literacy + Commerce)) 
 mod[['Amelia']] <- lapply(dat_amelia, function(x) lm(Clergy ~ Literacy + Commerce, x))
 
-## Pool results
+# Pool results
 mod[['Mice']] <- mice::pool(mod[['Mice']])
 mod[['Amelia']] <- mice::pool(mod[['Amelia']])
 
-## Summarize
+# Summarize
 modelsummary(mod)
 ```
 
-## Table-making packages
+# Table-making packages
 
 The table-making backends supported by `modelsummary` have overlapping capabilities (e.g., several of them can produce HTML tables). These are the default packages used for different outputs:
 
@@ -1109,16 +1117,16 @@ options(modelsummary_factory_word = "huxtable")
 options(modelsummary_factory_png = "gt")
 ```
 
-## FAQ
+# FAQ
 
-### Stack Overflow is useful
+## Stack Overflow is useful
 
 * [Standardized coefficients](https://stackoverflow.com/questions/72266343/how-do-i-get-standardized-beta-coefficients-using-modelsummary-in-r-and-how-to/72267006#72267006)
 * [Row group labels](https://stackoverflow.com/questions/72729369/adding-coefficient-group-titles-to-modelsummary-output/72736415#72736415)
 * [Customizing Word tables](https://stackoverflow.com/questions/73120996/how-to-export-kableextra-output-in-r-to-word/73123552#73123552)
 * [How to add p values to `datasummary_correlation`](https://stackoverflow.com/questions/75991478/how-to-add-a-p-value-to-a-correlation-table-while-using-model-summary-package-in/75997827#75997827)
 
-### Where can I get help?
+## Where can I get help?
 
 First, please read the documentation in `?modelsummary` and on [the `modelsummary` website.](https://modelsummary.com/) The website includes dozens of worked examples and a lot of detailed explanation.
 
@@ -1126,11 +1134,11 @@ Second, try to [use the `[modelsummary]` tag on StackOverflow.](https://stackove
 
 Third, if you think you found a bug or have a feature request, please file it on the Github issue tracker: 
 
-### How can I add or modify statistics in a table?
+## How can I add or modify statistics in a table?
 
 See the detailed documentation in the ["Adding and Customizing Models" section of the `modelsummary` website.](https://modelsummary.com/articles/modelsummary.html)
 
-### How does `modelsummary` extract estimates and goodness-of-fit statistics?
+## How does `modelsummary` extract estimates and goodness-of-fit statistics?
 
 A `modelsummary` table is divided in two parts: "Estimates" (top of the table) and "Goodness-of-fit" (bottom of the table). To populate those two parts, `modelsummary` tries using the `broom`, `parameters` and `performance` packages in sequence.
 
@@ -1147,10 +1155,10 @@ Goodness-of-fit:
 You can change the order in which those steps are executed by setting a global option:
 
 ```{r, eval=FALSE}
-## tidymodels: broom 
+# tidymodels: broom 
 options(modelsummary_get = "broom")
 
-## easystats: performance + parameters
+# easystats: performance + parameters
 options(modelsummary_get = "easystats")
 ```
 
@@ -1160,18 +1168,18 @@ If all of this fails, `modelsummary` will return an error message.
 If you have problems with a model object, you can often diagnose the problem by running the following commands from a *clean* R session:
 
 ```r
-## see if parameters and performance support your model type
+# see if parameters and performance support your model type
 library(parameters)
 library(performance)
 model_parameters(model)
 model_performance(model)
 
-## see if broom supports your model type
+# see if broom supports your model type
 library(broom)
 tidy(model)
 glance(model)
 
-## see if broom.mixed supports your model type
+# see if broom.mixed supports your model type
 library(broom.mixed)
 tidy(model)
 glance(model)
@@ -1181,7 +1189,7 @@ If none of these options work, you can create your own `tidy` and `glance` metho
 
 If one of the extractor functions does not work well or takes too long to process, you can define a new "custom" model class and choose your own extractors, as described in the [Adding new models section.](https://modelsummary.com/articles/modelsummary.html#adding-new-models-1)
 
-### How can I speed up `modelsummary`?
+## How can I speed up `modelsummary`?
 
 The `modelsummary` function, by itself, is *not* slow: it should only take a couple seconds to produce a table in any output format. However, sometimes it can be computationally expensive (and long) to extract estimates and to compute goodness-of-fit statistics for your model.
 
@@ -1224,7 +1232,7 @@ We call `modelsummary` with the `metrics` argument:
 modelsummary(mod, metrics = "rmse")
 ```
 
-### Escaped LaTeX characters
+## Escaped LaTeX characters
 
 Sometimes, users want to include raw LaTeX commands in their tables, such as coefficient names including math mode: `Apple $\times$ Orange`. The result of these attempts is often a weird string such as: `\$\textbackslash{}times\$` instead of proper LaTeX-rendered characters.
 
@@ -1234,7 +1242,7 @@ The source of the problem is that `kableExtra`, default table-making package in 
 modelsummary(mod, escape = FALSE)
 ```
 
-### Bayesian models
+## Bayesian models
 
 Many bayesian models are supported out-of-the-box, including those produced by the `rstanarm` and `brms` packages. The statistics available for bayesian models are slightly different than those available for most frequentist models. Users can call `get_estimates` to see what is available:
 

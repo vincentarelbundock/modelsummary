@@ -1,3 +1,14 @@
+---
+title: "Extension and Customization"
+format: 
+  html: default
+  pdf:
+    toc: true
+    number-sections: true
+    colorlinks: true
+    keep-tex: true
+---
+
 ```{css, echo = FALSE}
 .table, th, td {
   font-size: 0.9em;
@@ -7,14 +18,11 @@
 }
 ```
 
-## Extension and Customization 
-
-
 ```{r}
 library(modelsummary)
 ```
 
-## Unsupported models: `modelsummary_list`
+# Unsupported models: `modelsummary_list`
 
 The simplest way to summarize an unsupported model is to create a `modelsummary_list` object. This approach is super flexible, but it requires manual intervention, and it can become tedious if you need to summarize many models. The next section shows how to add formal support for an unsupported model type.
 
@@ -39,7 +47,7 @@ modelsummary(mod)
 ```
 
 
-## Unsupported models: `glance` and `tidy`
+# Unsupported models: `glance` and `tidy`
 
 `modelsummary` relies on two functions from the `broom` package to extract model information: `tidy` and `glance`. If `broom` doesn't support the type of model you are trying to summarize, `modelsummary` won't support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.
 
@@ -87,7 +95,7 @@ Third, in the example above we used the `statistic = 'conf.int'` argument. This 
 If you create new `tidy` and `glance` methods, please consider contributing them to `broom` so that the rest of the community can benefit from your work: https://github.com/tidymodels/broom
 
 
-## Modifying information: `tidy_custom` and `glance_custom`
+# Modifying information: `tidy_custom` and `glance_custom`
 
 Users may want to include more information than is made available by the default extractor function. For example, models produced by the `MASS::polr` do not produce p values by default, which means that we cannot use the `stars=TRUE` argument in `modelsummary`. However, it is possible to extract this information by using the `lmtest::coeftest` function. To include such custom information, we will define new `glance_custom` and `tidy_custom` methods. 
 
@@ -128,7 +136,7 @@ modelsummary(mod_ordinal, stars = TRUE)
 ```
 
 
-## New information: `tidy_custom` and `glance_custom`
+# New information: `tidy_custom` and `glance_custom`
 
 Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new `glance_custom` and `tidy_custom` methods. To illustrate, we estimate two linear regression models using the `lm` function:
 
@@ -184,7 +192,7 @@ rm("glance_custom.lm")
 ```
 
 
-## Customization: New model class
+# Customization: New model class
 
 An even more fundamental way to customize the output would be to completely bypass `modelsummary`'s extractor functions by assigning a new class name to your model. For example, 
 
@@ -227,7 +235,7 @@ class(mod_custom) <- c("custom", "lm")
 ```
 
 
-## Customization: `modelsummary_list`
+# Customization: `modelsummary_list`
 
 Another flexible way to customize model output is to use `output = "modelsummary_list"`.
 With this output option, `modelsummary()` returns a list with two elements:
