@@ -1,8 +1,9 @@
 # News 
 
-## Development
+## 1.4.5
 
 * `tinytable` supports histograms in `datasummary_skim()`
+* `config_modelsummary()` supports `tinytable` factory.
 
 ## 1.4.4
 

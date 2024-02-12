@@ -23,9 +23,12 @@ print.modelsummary_markdown <- function(x, ...) {
     cat(x, sep = "\n")
 }
 
-#' @export
-#' @keywords internal
+
+#' Internal function to build table with `markdown`
+#'
+#' @inheritParams factory_gt
 #' @noRd
+#' @return tinytable object
 factory_markdown <- function(tab,
                              align = NULL,
                              hrule = NULL,
