@@ -189,15 +189,11 @@ vignette will walk you through the basics of `modelsummary`.
 
 You will find that there are a million ways to customize the tables and
 plots produced by `modelsummary`, but [the Get Started
-page](vignettes/get_started.html) only scratches the surface. For
+page](https://modelsummary.com/vignettes/get_started.html) only scratches the surface. For
 details, see the vignettes:
 
--   [Data
-    Summaries](https://modelsummary.com/vignettes/datasummary.html)
--   [Model
-    Summaries](https://modelsummary.com/vignettes/modelsummary.html)
+-   [Data Summaries](https://modelsummary.com/vignettes/datasummary.html)
+-   [Model Summaries](https://modelsummary.com/vignettes/modelsummary.html)
 -   [Model Plots](https://modelsummary.com/vignettes/modelplot.html)
--   [`modelsummary` extensions and
-    customization](https://modelsummary.com/vignettes/modelsummary_extension.html)
--   [Themes and
-    Styles](https://modelsummary.com/vignettes/appearance.html)
+-   [`modelsummary` extensions and customization](https://modelsummary.com/vignettes/modelsummary_extension.html)
+-   [Themes and Styles](https://modelsummary.com/vignettes/appearance.html)
