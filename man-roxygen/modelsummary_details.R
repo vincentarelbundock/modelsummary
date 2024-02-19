@@ -10,6 +10,7 @@
 #' different output format and saving mechanism. Unfortunately, the approach
 #' differs from package to package:
 #'
+#' * `tinytable`: set `output="tinytable"`, post-process your table, and use the `tinytable::save_tt` function.
 #' * `gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave` function.
 #' * `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable` function.
 #'

@@ -37,7 +37,7 @@
 #' `x~mean*z` will print the `mean`-related header above the `z`-related
 #' header.`
 #' @param ... all other arguments are passed through to the table-making
-#' functions [kableExtra::kbl], [gt::gt], [DT::datatable], etc. depending on the `output` argument.
+#' functions [tinytable::tt], [kableExtra::kbl], [gt::gt], [DT::datatable], etc. depending on the `output` argument.
 #' This allows users to pass arguments directly to `datasummary` in order to
 #' affect the behavior of other functions behind the scenes.
 #' @template citation
@@ -124,6 +124,7 @@
 #' #datasummary(f, data = mtcars, output = 'latex')
 #'
 #' # Return a table object to customize using a table-making package
+#' #datasummary(f, data = mtcars, output = 'tinytable')
 #' #datasummary(f, data = mtcars, output = 'gt')
 #' #datasummary(f, data = mtcars, output = 'kableExtra')
 #' #datasummary(f, data = mtcars, output = 'flextable')
@@ -144,7 +145,7 @@
 #' found in the 'tables' package documentation: ?tables::tabular
 #'
 #' Hierarchical or "nested" column labels are only available for these output
-#' formats: kableExtra, gt, html, rtf, and LaTeX. When saving tables to other
+#' formats: tinytable, kableExtra, gt, html, rtf, and LaTeX. When saving tables to other
 #' formats, nested labels will be combined to a "flat" header.
 #' @export
 datasummary <- function(formula,

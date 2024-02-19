@@ -13,7 +13,7 @@ config_modelsummary(
 )
 }
 \arguments{
-\item{factory_default}{Default output format: "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"}
+\item{factory_default}{Default output format: "tinytable", "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"}
 
 \item{factory_latex}{Name of package used to generate LaTeX output when \code{output="latex"}.}
 

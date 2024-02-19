@@ -1,6 +1,6 @@
 #' Persistent user settings for the `modelsummary` package
 #'
-#' @param factory_default Default output format: "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown" 
+#' @param factory_default Default output format: "tinytable", "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown" 
 #' @param factory_latex Name of package used to generate LaTeX output when `output="latex"`.
 #' @param factory_markdown Name of package used to generate LaTeX output when `output="markdown"`.
 #' @param factory_html Name of package used to generate LaTeX output when `output="html"`.

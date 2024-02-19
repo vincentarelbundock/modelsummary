@@ -11,7 +11,7 @@
 #' @param histogram include a histogram (TRUE/FALSE). Supported for:
 #' \itemize{
 #' \item type = "numeric"
-#' \item output is "html", "default", "jpg", "png", or "kableExtra"
+#' \item output is "html", "default", "jpg", "png", "tinytable", or "kableExtra"
 #' \item PDF and HTML documents compiled via Rmarkdown or knitr
 #' \item See the examples section below for an example of how to use
 #' `datasummary` to include histograms in other formats such as markdown.

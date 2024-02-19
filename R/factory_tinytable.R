@@ -1,13 +1,3 @@
-# TODO
-# span
-# hrule
-# hgroup
-# hindent
-# dot align
-# tab[[i]][idx] <- gsub("<", "&lt;", tab[[i]][idx])
-# tab[[i]][idx] <- gsub(">", "&gt;", tab[[i]][idx])
- 
-
 #' Internal function to build table with `tinytable`
 #'
 #' @inheritParams factory_gt
@@ -24,7 +14,6 @@ factory_tinytable <- function(tab,
                               ...) {
 
   insight::check_if_installed("tinytable")
-
 
   # tinytable arguments
   valid <- c("x", "theme", "placement", "width", "digits", "notes", "caption")
@@ -79,11 +68,24 @@ factory_tinytable <- function(tab,
     }
   }
 
-  # output
-  if (is.null(settings_get("output_file"))) {
-    return(out)
-  } else {
+  # write to file
+  if (!is.null(settings_get("output_file"))) {
     tinytable::save_tt(out, output = settings_get("output_file"), overwrite = TRUE)
+    return(invisible())
   }
+
+  if (settings_equal("output_format", "latex")) {
+    cat(tinytable::save_tt(out, output = "latex"), "\n")
+  } else if (settings_equal("output_format", "html")) {
+    print(out, output = "html")
+  } else if (settings_equal("output_format", "markdown")) {
+    cat(tinytable::save_tt(out, output = "markdown"), "\n")
+  } else if (settings_equal("output_format", "typst")) {
+    cat(tinytable::save_tt(out, output = "typst"), "\n")
+  } else if (settings_equal("output_format", "tinytable")) {
+    return(out)
+  }
+
+  return(invisible(NULL))
 
 }

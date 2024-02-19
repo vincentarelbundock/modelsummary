@@ -1,5 +1,16 @@
 # News 
 
+## 1.9.9.9999
+
+BREAKING CHANGE: The default output format is now `tinytable` instead of `kableExtra`. Learn more about `tinytable` here:
+
+https://vincentarelbundock.github.io/tinytable/
+
+To revert to the previous behavior persistently, users can call:
+
+library(modelsummary)
+config_modelsummary(factory_default = "kableExtra")
+
 ## 1.4.5
 
 * `tinytable` supports histograms in `datasummary_skim()`

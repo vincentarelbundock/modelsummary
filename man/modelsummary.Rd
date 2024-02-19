@@ -49,7 +49,7 @@ modelsummary(
 \itemize{
 \item Supported filename extensions: .docx, .html, .tex, .md, .txt, .csv, .xlsx, .png, .jpg
 \item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "tinytable", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
-\item The "default" output format can be set to "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"
+\item The "default" output format can be set to "tinytable", "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"
 \itemize{
 \item If the user does not choose a default value, the packages listed above are tried in sequence.
 \item Session-specific configuration: \code{options("modelsummary_factory_default" = "gt")}
@@ -252,7 +252,7 @@ prevent the file from compiling/displaying. This setting does not affect caption
 \itemize{
 \item \code{metrics}, \code{estimator}, etc.
 }
-\item \link[kableExtra:kbl]{kableExtra::kbl} or \link[gt:gt]{gt::gt} draw tables, depending on the value of the \code{output} argument.
+\item \link[tinytable:tt]{tinytable::tt}, \link[kableExtra:kbl]{kableExtra::kbl} or \link[gt:gt]{gt::gt} draw tables, depending on the value of the \code{output} argument.
 }}
 }
 \value{
@@ -284,6 +284,7 @@ by post-processing it with an external package, you need to choose a
 different output format and saving mechanism. Unfortunately, the approach
 differs from package to package:
 \itemize{
+\item \code{tinytable}: set \code{output="tinytable"}, post-process your table, and use the \code{tinytable::save_tt} function.
 \item \code{gt}: set \code{output="gt"}, post-process your table, and use the \code{gt::gtsave} function.
 \item \code{kableExtra}: set \code{output} to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use \code{kableExtra::save_kable} function.
 }
@@ -342,18 +343,14 @@ The panel-specific option is only used when \code{shape="rbind"}
 
 \subsection{Table-making packages}{
 
-\code{modelsummary} supports 4 table-making packages: \code{kableExtra}, \code{gt},
+\code{modelsummary} supports 6 table-making packages: \code{tinytable}, \code{kableExtra}, \code{gt},
 \code{flextable}, \code{huxtable}, and \code{DT}. Some of these packages have overlapping
-functionalities. For example, 3 of those packages can export to LaTeX. To
-change the default backend used for a specific file format, you can use
-the \code{options} function:
+functionalities. To change the default backend used for a specific file
+format, you can use ' the \code{options} function:
 
 \code{options(modelsummary_factory_html = 'kableExtra')}
-
 \code{options(modelsummary_factory_latex = 'gt')}
-
 \code{options(modelsummary_factory_word = 'huxtable')}
-
 \code{options(modelsummary_factory_png = 'gt')}
 }
 
@@ -377,9 +374,9 @@ and \code{broom}. By default, it uses \code{easystats} first and then falls back
 \code{broom} in case of failure. You can change the order of priorities or include
 goodness-of-fit extracted by \emph{both} packages by setting:
 
-\code{options(modelsummary_get = "broom")}
-
 \code{options(modelsummary_get = "easystats")}
+
+\code{options(modelsummary_get = "broom")}
 
 \code{options(modelsummary_get = "all")}
 }
@@ -398,6 +395,21 @@ A similar option can be used to display numerical entries using MathJax in
 HTML tables:
 
 \code{options(modelsummary_format_numeric_html = "mathjax")}
+}
+
+\subsection{LaTeX preamble}{
+
+When creating LaTeX via the \code{tinytable} backend (default in version 2.0.0 and later), it is useful to include the following commands in the LaTeX preamble of your documents. Note that they are added automatically when compiling Rmarkdown or Quarto documents.
+
+\\usepackage\{tabularray\}
+\\usepackage\{float\}
+\\usepackage\{graphicx\}
+\\usepackage\{codehigh\}
+\\usepackage\link{normalem}\{ulem\}
+\\UseTblrLibrary\{booktabs\}
+\\newcommand\{\\tinytableTabularrayUnderline\}\link{1}\{\\underline\{#1\}\}
+\\newcommand\{\\tinytableTabularrayStrikeout\}\link{1}\{\\sout\{#1\}\}
+\\NewTableCommand\{\\tinytableDefineColor\}\link{3}\{\\definecolor\{#1\}\{#2\}\{#3\}\}
 }
 }
 

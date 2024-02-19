@@ -20,18 +20,14 @@
 #' 
 #' ### Table-making packages
 #'
-#' `modelsummary` supports 4 table-making packages: `kableExtra`, `gt`,
+#' `modelsummary` supports 6 table-making packages: `tinytable`, `kableExtra`, `gt`,
 #' `flextable`, `huxtable`, and `DT`. Some of these packages have overlapping
-#' functionalities. For example, 3 of those packages can export to LaTeX. To
-#' change the default backend used for a specific file format, you can use
-#' the `options` function:
+#' functionalities. To change the default backend used for a specific file
+#' format, you can use ' the `options` function:
 #'
 #' `options(modelsummary_factory_html = 'kableExtra')`
-#' 
 #' `options(modelsummary_factory_latex = 'gt')`
-#' 
 #' `options(modelsummary_factory_word = 'huxtable')`
-#' 
 #' `options(modelsummary_factory_png = 'gt')`
 #'
 #' ### Table themes
@@ -51,10 +47,10 @@
 #' and `broom`. By default, it uses `easystats` first and then falls back on
 #' `broom` in case of failure. You can change the order of priorities or include
 #' goodness-of-fit extracted by *both* packages by setting:
-#'
-#' `options(modelsummary_get = "broom")`
 #' 
 #' `options(modelsummary_get = "easystats")`
+#' 
+#' `options(modelsummary_get = "broom")`
 #' 
 #' `options(modelsummary_get = "all")`
 #'
@@ -72,3 +68,18 @@
 #' HTML tables:
 #'
 #' `options(modelsummary_format_numeric_html = "mathjax")`
+#' 
+#' 
+#' ### LaTeX preamble
+#' 
+#' When creating LaTeX via the `tinytable` backend (default in version 2.0.0 and later), it is useful to include the following commands in the LaTeX preamble of your documents. Note that they are added automatically when compiling Rmarkdown or Quarto documents.
+#' 
+#' \\usepackage\{tabularray\}
+#' \\usepackage\{float\}
+#' \\usepackage\{graphicx\}
+#' \\usepackage\{codehigh\}
+#' \\usepackage[normalem]\{ulem\}
+#' \\UseTblrLibrary\{booktabs\}
+#' \\newcommand\{\\tinytableTabularrayUnderline\}[1]\{\\underline\{#1\}\}
+#' \\newcommand\{\\tinytableTabularrayStrikeout\}[1]\{\\sout\{#1\}\}
+#' \\NewTableCommand\{\\tinytableDefineColor\}[3]\{\\definecolor\{#1\}\{#2\}\{#3\}\}

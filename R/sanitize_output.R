@@ -27,11 +27,12 @@ sanitize_output <- function(output) {
     stop("The `output` argument must be a string. Type `?modelsummary` for details. This error is sometimes raised when users supply multiple models to `modelsummary` but forget to wrap them in a list. This works: `modelsummary(list(model1, model2))`. This does *not* work: `modelsummary(model1, model2)`")
   }
 
-  object_types <- c('default', 'gt', 'kableExtra', 'flextable', 'huxtable', 'DT', "tinytable",
-                    'html', 'jupyter', 'latex', 'latex_tabular', 'markdown',
-                    'dataframe', 'data.frame', 'typst', 'modelsummary_list')
-  extension_types <- c('html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf',
-                       'jpg', 'png', 'csv', 'xlsx')
+  object_types <- c('default',
+    'tinytable', 'gt', 'kableExtra', 'flextable', 'huxtable', 'DT',
+    'html', 'jupyter', 'latex', 'latex_tabular', 'markdown',
+    'dataframe', 'data.frame', 'typst', 'modelsummary_list')
+  extension_types <- c(
+    'html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf', 'jpg', 'png', 'csv', 'xlsx')
 
   checkmate::assert_string(output)
 
@@ -79,15 +80,15 @@ sanitize_output <- function(output) {
     "kableExtra" = "kableExtra",
     "latex_tabular" = "kableExtra",
     "modelsummary_list" = "modelsummary_list",
-    "typst" = "typst",
-    "markdown" = get_factory_name("markdown", default = "modelsummary"),
-    "jupyter" = get_factory_name("html", default = "kableExtra"),
-    "latex" = get_factory_name("latex", default = "kableExtra"),
-    "html" = get_factory_name("html", default = "kableExtra"),
+    "typst" = "tinytable",
+    "markdown" = get_factory_name("markdown", default = "tinytable"),
+    "jupyter" = get_factory_name("html", default = "tinytable"),
+    "latex" = get_factory_name("latex", default = "tinytable"),
+    "html" = get_factory_name("html", default = "tinytable"),
+    "png" = get_factory_name("png", default = "tinytable"),
+    "word" = get_factory_name("word", default = "tinytable"),
     "jpg" = get_factory_name("jpg", default = "kableExtra"),
-    "png" = get_factory_name("png", default = "kableExtra"),
     "rtf" = get_factory_name("rtf", default = "gt"),
-    "word" = get_factory_name("word", default = "flextable"),
     "powerpoint" = get_factory_name("powerpoint", default = "flextable"))
 
   ## sanity check: are user-supplied global options ok?
@@ -103,12 +104,12 @@ sanitize_output <- function(output) {
         output <- config_get("factory_default")
       }
       if (is.null(output)) {
-        if (isTRUE(insight::check_if_installed("kableExtra", quietly = TRUE))) {
+        if (isTRUE(insight::check_if_installed("tinytable", quietly = TRUE))) {
+          output <- "tinytable"
+        } else if (isTRUE(insight::check_if_installed("kableExtra", quietly = TRUE))) {
           output <- "kableExtra"
         } else if (isTRUE(insight::check_if_installed("gt", quietly = TRUE))) {
           output <- "gt"
-        } else if (isTRUE(insight::check_if_installed("tinytable", quietly = TRUE))) {
-          output <- "tinytable"
         } else if (isTRUE(insight::check_if_installed("flextable", quietly = TRUE))) {
           output <- "flextable"
         } else if (isTRUE(insight::check_if_installed("huxtable", quietly = TRUE))) {
@@ -201,15 +202,16 @@ sanitize_output <- function(output) {
   if (settings_equal("format_numeric_latex", "siunitx") && (output %in% c("latex", "latex_tabular") || tools::file_ext(output) == "tex")) {
       msg <- 'To compile a LaTeX document with this table, the following commands must be placed in the document preamble:
 
-\\usepackage{booktabs}
-\\usepackage{siunitx}
-\\newcolumntype{d}{S[
-    input-open-uncertainty=,
-    input-close-uncertainty=,
-    parse-numbers = false,
-    table-align-text-pre=false,
-    table-align-text-post=false
- ]}
+\\usepackage{tabularray}
+\\usepackage{float}
+\\usepackage{graphicx}
+\\usepackage{codehigh}
+\\usepackage[normalem]{ulem}
+\\UseTblrLibrary{booktabs}
+\\UseTblrLibrary{siunitx}
+\\newcommand{\\tinytableTabularrayUnderline}[1]{\\underline{#1}}
+\\newcommand{\\tinytableTabularrayStrikeout}[1]{\\sout{#1}}
+\\NewTableCommand{\\tinytableDefineColor}[3]{\\definecolor{#1}{#2}{#3}}
 
 To disable `siunitx` and prevent `modelsummary` from wrapping numeric entries in `\\num{}`, call:
 

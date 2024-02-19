@@ -12,7 +12,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'
 #' Create beautiful and customizable tables to summarize several statistical
 #' models side-by-side. This function supports dozens of statistical models,
-#' and it can produce tables in HTML, LaTeX, Word, Markdown, PDF, PowerPoint,
+#' and it can produce tables in HTML, LaTeX, Word, Markdown, Typst, PDF, PowerPoint,
 #' Excel, RTF, JPG, or PNG. The appearance of the tables can be customized
 #' extensively by specifying the `output` argument, and by using functions from
 #' one of the supported table customization packages: `tinytable`, `kableExtra`, `gt`,
@@ -39,8 +39,8 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * Nested list of models: When using the `shape="rbind"` argument, `models` can be a nested list of models to display "panels" or "stacks" of regression models. See the `shape` argument documentation and examples below.
 #' @param output filename or object type (character string)
 #' * Supported filename extensions: .docx, .html, .tex, .md, .txt, .csv, .xlsx, .png, .jpg
-#' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "tinytable", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the `modelsummary` function.
-#' * The "default" output format can be set to "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"
+#' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "typst", "data.frame", "tinytable", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the `modelsummary` function.
+#' * The "default" output format can be set to "tinytable", "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"
 #'   - If the user does not choose a default value, the packages listed above are tried in sequence.
 #'   - Session-specific configuration: `options("modelsummary_factory_default" = "gt")`
 #'   - Persistent configuration: `config_modelsummary(output = "markdown")`
@@ -176,7 +176,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'     - `standardize`, `centrality`, `dispersion`, `test`, `ci_method`, `prior`, `diagnostic`, `rope_range`, `power`, `cluster`, etc.
 #' + [performance::model_performance] extracts goodness-of-fit statistics. Available arguments depend on model type, but include:
 #'     - `metrics`, `estimator`, etc.
-#' + [kableExtra::kbl] or [gt::gt] draw tables, depending on the value of the `output` argument.
+#' + [tinytable::tt], [kableExtra::kbl] or [gt::gt] draw tables, depending on the value of the `output` argument.
 #' @return a regression table in a format determined by the `output` argument.
 #' @importFrom generics glance tidy
 #'
@@ -490,7 +490,7 @@ modelsummary <- function(
   # don't do this now when called from modelsummary_rbind() or there are escape issues
   if (!settings_equal("function_called", "modelsummary_rbind") &&
       all(grepl("^\\(\\d+\\)$", model_names)) &&
-      settings_equal("output_format", c("html", "kableExtra"))) {
+      settings_equal("output_format", "kableExtra")) {
     model_names <- paste0("&nbsp;", model_names)
   }
 

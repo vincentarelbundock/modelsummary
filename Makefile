@@ -22,7 +22,7 @@ install: document ## devtools::install()
 deploy: ## pkgdown::deploy_to_branch()
 	Rscript -e "pkgdown::deploy_to_branch()"
 
-document: install ## devtools::document()
+document: ## devtools::document()
 	Rscript -e "devtools::document()"
 
 website: document ## render vignettes and website
