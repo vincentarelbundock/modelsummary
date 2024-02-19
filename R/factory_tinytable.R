@@ -74,18 +74,12 @@ factory_tinytable <- function(tab,
     return(invisible())
   }
 
-  if (settings_equal("output_format", "latex")) {
-    cat(tinytable::save_tt(out, output = "latex"), "\n")
-  } else if (settings_equal("output_format", "html")) {
-    print(out, output = "html")
-  } else if (settings_equal("output_format", "markdown")) {
-    cat(tinytable::save_tt(out, output = "markdown"), "\n")
-  } else if (settings_equal("output_format", "typst")) {
-    cat(tinytable::save_tt(out, output = "typst"), "\n")
-  } else if (settings_equal("output_format", "tinytable")) {
-    return(out)
+  # html & latex get a new class to use print.modelsummary_string
+  if (settings_equal("output_format", c("latex", "typst", "html", "markdown"))) {
+    out <- tinytable::save_tt(out, output = settings_get("output_format"), overwrite = TRUE)
+    class(out) <- c("modelsummary_string", class(out))
   }
 
-  return(invisible(NULL))
+  return(invisible(out))
 
 }

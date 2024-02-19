@@ -48,7 +48,7 @@ modelsummary(
 \item{output}{filename or object type (character string)
 \itemize{
 \item Supported filename extensions: .docx, .html, .tex, .md, .txt, .csv, .xlsx, .png, .jpg
-\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "data.frame", "tinytable", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
+\item Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "typst", "data.frame", "tinytable", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the \code{modelsummary} function.
 \item The "default" output format can be set to "tinytable", "kableExtra", "gt", "flextable", "huxtable", "DT", or "markdown"
 \itemize{
 \item If the user does not choose a default value, the packages listed above are tried in sequence.
@@ -261,7 +261,7 @@ a regression table in a format determined by the \code{output} argument.
 \description{
 Create beautiful and customizable tables to summarize several statistical
 models side-by-side. This function supports dozens of statistical models,
-and it can produce tables in HTML, LaTeX, Word, Markdown, PDF, PowerPoint,
+and it can produce tables in HTML, LaTeX, Word, Markdown, Typst, PDF, PowerPoint,
 Excel, RTF, JPG, or PNG. The appearance of the tables can be customized
 extensively by specifying the \code{output} argument, and by using functions from
 one of the supported table customization packages: \code{tinytable}, \code{kableExtra}, \code{gt},
