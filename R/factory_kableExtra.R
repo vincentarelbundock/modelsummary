@@ -15,8 +15,22 @@ factory_kableExtra <- function(tab,
 
   insight::check_if_installed("kableExtra")
 
-  if (isTRUE(escape)) {
-    colnames(tab) <- escape_string(colnames(tab))
+  output_format <- settings_get("output_format")
+
+  span_list <- get_span_kableExtra(tab)
+
+  # escape
+  if (isTRUE(escape) && isTRUE(output_format %in% c("latex", "html", "typst"))) {
+    tmp <- escape_everything(
+      tab = tab,
+      output_format = output_format,
+      span_list = span_list,
+      title = title,
+      notes = notes)
+    tab <- tmp$tab
+    title <- tmp$title
+    notes <- tmp$notes
+    span_list <- tmp$span_list
   }
 
   # new variable "kable_format" because "kableExtra" and "html" both produce
@@ -38,26 +52,15 @@ factory_kableExtra <- function(tab,
              "position", "centering", "vline", "toprule", "bottomrule",
              "midrule", "caption.short", "table.envir", "col.names")
 
-  # kableExtra::kbl and knitr::kable do not respect the `escape` argument for captions.
-  # this will never be fixed upstream because of backward compatibility
-  title <- escape_string(title)
-
-  # don't escape \\label{} calls
-  if (isTRUE(kable_format == "latex")) {
-    title <- sub("\\\\textbackslash\\{\\}label\\\\\\{(.*)\\\\}", "\\\\label{\\1}", title)
-  }
-
   arguments <- c(
     list(...),
     "caption"   = title,
     "format"    = kable_format,
     "booktabs"  = TRUE,
+    "escape" = FALSE, # never use kableExtra's default escape; inconsistent
     "linesep"   = "",
     "row.names" = NULL
   )
-
-  ## never use `kableExtra`'s default escape
-  arguments$escape <- FALSE
 
   ## siunitx in preamble
   extra_siunitx <- "
@@ -88,24 +91,12 @@ factory_kableExtra <- function(tab,
           tab[[i]] <- ifelse(grepl("[0-9]", tab[[i]]), sprintf("$%s$", tab[[i]]), tab[[i]])
         }
       }
-
     }
     if (any(grepl("d", align))) {
       ## protect column labels
       colnames(tab)[align == "d"] <- sprintf("{%s}", colnames(tab)[align == "d"])
     }
     arguments[["align"]] <- align
-  }
-
-  # span: compute
-  span_list <- get_span_kableExtra(tab)
-  if (!is.null(span_list) && settings_equal("output_format", c("kableExtra", "html", "latex"))) {
-    column_names <- attr(span_list, "column_names")
-    if (!is.null(column_names)) {
-      colnames(tab) <- column_names
-    }
-  } else {
-      colnames(tab) <- gsub("\\|{4}", " / ", colnames(tab))
   }
 
   # Issue #669: <0.001 gets printed as a tag in HTML
@@ -185,6 +176,7 @@ factory_kableExtra <- function(tab,
   # span: apply (not supported in markdown)
   if (!is.null(span_list) && settings_equal("output_format", c("kableExtra", "latex", "html"))) {
     for (i in 1:length(span_list)) {
+      sp <- span_list[[i]]
       names(span_list[[i]]) <- gsub("&nbsp;", " ", names(span_list[[i]]))
       out <- kableExtra::add_header_above(out, span_list[[i]], escape = TRUE)
     }

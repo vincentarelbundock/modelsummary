@@ -17,42 +17,31 @@ factory_tinytable <- function(tab,
 
   output_format <- settings_get("output_format")
 
-  # tinytable arguments
-  valid <- c("x", "theme", "placement", "width", "digits", "notes", "caption")
-
-  arguments <- list(
-    caption = title,
-    align = align
-  )
-  if (length(notes) > 1) arguments$notes <- as.list(notes)
-  arguments <- c(arguments, list(...))
-
-  # escape column names and body
-  if (isTRUE(escape) && isTRUE(output_format %in% c("latex", "html"))) {
-    for (col in seq_len(ncol(tab))) {
-      # do not escape siunitx \num{}
-      tab[[col]] <- ifelse(
-        grepl("\\\\num\\{", tab[[col]]),
-        tab[[col]],
-        tinytable::format_tt(tab[, col], escape = output_format))
-    }
-  }
-
-  # escape colnames after span
-  # span before do.call()
   span_list <- get_span_kableExtra(tab)
-  if (is.null(span_list)) {
-    colnames(tab) <- gsub("\\|{4}", " / ", colnames(tab))
-  } else {
-    colnames(tab) <- attr(span_list, "column_names")
-  }
 
-  if (isTRUE(escape)) {
-    colnames(tab) <- tinytable::format_tt(colnames(tab), escape = output_format)
+  # escape
+  if (isTRUE(escape) && isTRUE(output_format %in% c("latex", "html", "typst"))) {
+    tmp <- escape_everything(
+      tab = tab,
+      output_format = output_format,
+      span_list = span_list,
+      title = title,
+      notes = notes)
+    tab <- tmp$tab
+    title <- tmp$title
+    notes <- tmp$notes
+    span_list <- tmp$span_list
   }
 
   # create tables with combined arguments
-  arguments <- arguments[base::intersect(names(arguments), valid)]
+  arguments <- list(caption = title)
+  if (length(notes) > 1) {
+    arguments$notes <- as.list(notes)
+  } else {
+    arguments$notes <- notes
+  }
+  arguments <- c(arguments, list(...))
+  arguments <- arguments[base::intersect(names(arguments), c("x", "theme", "placement", "width", "caption", "align", "notes"))]
   arguments <- c(list(tab), arguments)
   out <- do.call(tinytable::tt, arguments)
 
@@ -99,4 +88,45 @@ factory_tinytable <- function(tab,
 
   return(invisible(out))
 
+}
+
+
+
+escape_everything <- function(tab, output_format, span_list, title, notes) {
+  # colnames with or without spans (before escape)
+  if (is.null(span_list)) {
+    if (!is.null(colnames(tab))) {
+      colnames(tab) <- gsub("\\|{4}", " / ", colnames(tab))
+    }
+  } else {
+    colnames(tab) <- attr(span_list, "column_names")
+  }
+
+  # body: do not escape siunitx \num{}
+  for (col in seq_len(ncol(tab))) {
+    tab[[col]] <- ifelse(
+      grepl("\\\\num\\{", tab[[col]]),
+      tab[[col]],
+      tinytable::format_tt(tab[, col], escape = output_format))
+  }
+
+  for (i in seq_along(span_list)) {
+    names(span_list)[i] <- tinytable::format_tt(names(span_list)[i], escape = output_format)
+  }
+
+  for (i in seq_along(notes)) {
+    notes[[i]] <- tinytable::format_tt(notes[[i]], escape = output_format)
+  }
+
+  if (!is.null(colnames(tab))) {
+    colnames(tab) <- tinytable::format_tt(colnames(tab), escape = output_format)
+  }
+
+  # do not escape if title includes a LaTeX label
+  if (isTRUE(checkmate::check_string(title)) && !isTRUE(grepl("\\\\label\\{", title))) {
+    title <- tinytable::format_tt(title, escape = output_format)
+  }
+
+  out <- list(tab = tab, title = title, notes = notes)
+  return(out)
 }
