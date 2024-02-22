@@ -25,8 +25,9 @@ factory_tinytable <- function(tab,
   if (length(notes) > 1) arguments$notes <- as.list(notes)
   arguments <- c(arguments, list(...))
 
+  # escape column names and body
   if (isTRUE(escape)) {
-    if (settings_equal("output_format", c("latex", "html"))) {
+    if (settings_equal("output_format", c("latex", "html", "tinytable"))) {
       o <- settings_get("output_format")
       colnames(tab) <- tinytable::format_tt(colnames(tab), escape = o)
       for (col in seq_len(ncol(tab))) {
