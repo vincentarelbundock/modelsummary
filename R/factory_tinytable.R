@@ -25,14 +25,24 @@ factory_tinytable <- function(tab,
   if (length(notes) > 1) arguments$notes <- as.list(notes)
   arguments <- c(arguments, list(...))
 
+  if (isTRUE(escape)) {
+    if (settings_equal("output_format", c("latex", "html"))) {
+      o <- settings_get("output_format")
+      colnames(tab) <- tinytable::format_tt(colnames(tab), escape = o)
+      for (col in seq_len(ncol(tab))) {
+        # do not escape siunitx \num{}
+        tab[[col]] <- ifelse(
+          grepl("\\\\num\\{", tab[[col]]),
+          tab[[col]],
+          tinytable::format_tt(tab[, col], escape = o))
+      }
+    }
+  }
+
   # create tables with combined arguments
   arguments <- arguments[base::intersect(names(arguments), valid)]
   arguments <- c(list(tab), arguments)
   out <- do.call(tinytable::tt, arguments)
-
-  if (isTRUE(escape)) {
-    out <- tinytable::format_tt(out, escape = escape)
-  }
 
   # align: other factories require a vector of "c", "l", "r", etc.
   # before span because those should be centered

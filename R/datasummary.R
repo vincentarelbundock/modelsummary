@@ -223,13 +223,6 @@ datasummary <- function(formula,
     }
   }
 
-  ## escape stub
-  sw <- attr(dse, "stub_width")
-  for (i in 1:sw) {
-    dse[, i] <- escape_string(dse[, i])
-  }
-  colnames(dse)[1:sw] <- escape_string(colnames(dse)[1:sw])
-
   # build
   out <- factory(dse,
     align = align,

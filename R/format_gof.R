@@ -15,9 +15,6 @@ format_gof <- function(gof, fmt, gof_map, ...) {
     if (is.factor(gof[[i]])) {
       gof[[i]] <- as.character(gof[[i]])
     }
-    if (is.character(gof[[i]])) {
-      gof[[i]] <- escape_string(gof[[i]])
-    }
   }
 
 
@@ -56,9 +53,6 @@ format_gof <- function(gof, fmt, gof_map, ...) {
     out <- data.frame(term = NA_character_, value = NA_character_)
     out <- stats::na.omit(out)
   }
-
-  # escape term names (fixest: FE: x_1)
-  out$term <- escape_string(out$term)
 
   # output
   row.names(out) <- NULL

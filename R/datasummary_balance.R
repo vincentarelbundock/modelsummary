@@ -258,13 +258,6 @@ datasummary_balance <- function(formula,
                         strrep("r", ncol(tab) - attr(tab, "stub_width")))
     }
 
-    ## escape stub: re-sanitize because we called `datasummary()` a few times
-    sanitize_output(output) # before sanitize_escape
-    sanitize_escape(escape) # after sanitize_output
-    for (i in 1:attr(tab, "stub_width")) {
-      tab[[i]] <- escape_string(tab[[i]])
-    }
-
     ## weights warning
     if (isTRUE(any_factor) && "weights" %in% colnames(data)) {
       msg <- 'When the `data` used in `datasummary_balance` contains a "weights" column, the means, standard deviations, difference in means, and standard errors of numeric variables are adjusted to account for weights. However, the counts and percentages for categorical variables are not adjusted.'
@@ -339,7 +332,6 @@ DinM <- function(lhs, rhs, data, fmt, statistic, stars = TRUE, escape = TRUE) {
 
   if (identical(statistic, "p.value")) {
     out[[statistic]] <- rounding(out[[statistic]], pval = TRUE)
-    out[[statistic]] <- escape_string(out[[statistic]]) # <0.001 interpreted as html tag
   } else {
     out[[statistic]] <- rounding(out[[statistic]])
   }

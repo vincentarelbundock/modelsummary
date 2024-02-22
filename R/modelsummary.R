@@ -483,7 +483,6 @@ modelsummary <- function(
     model_names <- names(models)
   }
   model_names <- pad(model_names)
-  model_names <- escape_string(model_names)
 
   # kableExtra sometimes converts (1), (2) to list items, which breaks formatting
   # insert think white non-breaking space
@@ -589,7 +588,6 @@ modelsummary <- function(
   if ("term" %in% colnames(est)) {
     if (!is.null(coef_map)) {
         term_order <- coef_map
-        term_order <- escape_string(term_order)
     }
     est$term <- factor(est$term, unique(term_order))
 
@@ -733,7 +731,6 @@ modelsummary <- function(
     } else {
       notes <- c(stars_note, notes)
     }
-    notes <- escape_string(notes)
   }
 
   # data.frame output keeps redundant info

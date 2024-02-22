@@ -15,6 +15,10 @@ factory_kableExtra <- function(tab,
 
   insight::check_if_installed("kableExtra")
 
+  if (isTRUE(escape)) {
+    colnames(tab) <- escape_string(colnames(tab))
+  }
+
   # new variable "kable_format" because "kableExtra" and "html" both produce
   # html, but we need to distinguish the two.
   if (settings_equal("output_format", c("latex", "latex_tabular"))) {

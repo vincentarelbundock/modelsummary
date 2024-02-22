@@ -22,9 +22,6 @@ datasummary_df <- function(data,
 
   checkmate::assert_data_frame(data)
 
-  notes <- escape_string(notes)
-  title <- escape_string(title)
-
   for (n in colnames(data)) {
     fmt <- sanitize_fmt(fmt)
     data[[n]] <- fmt(data[[n]])
