@@ -233,6 +233,7 @@ datasummary <- function(formula,
     title = title,
     add_columns = add_columns,
     add_rows = add_rows,
+    escape = escape,
     ...)
 
   # invisible return

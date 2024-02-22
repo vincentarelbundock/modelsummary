@@ -15,6 +15,8 @@ factory_tinytable <- function(tab,
 
   insight::check_if_installed("tinytable")
 
+  output_format <- settings_get("output_format")
+
   # tinytable arguments
   valid <- c("x", "theme", "placement", "width", "digits", "notes", "caption")
 
@@ -26,24 +28,48 @@ factory_tinytable <- function(tab,
   arguments <- c(arguments, list(...))
 
   # escape column names and body
-  if (isTRUE(escape)) {
-    if (settings_equal("output_format", c("latex", "html", "tinytable"))) {
-      o <- settings_get("output_format")
-      colnames(tab) <- tinytable::format_tt(colnames(tab), escape = o)
-      for (col in seq_len(ncol(tab))) {
-        # do not escape siunitx \num{}
-        tab[[col]] <- ifelse(
-          grepl("\\\\num\\{", tab[[col]]),
-          tab[[col]],
-          tinytable::format_tt(tab[, col], escape = o))
-      }
+  if (isTRUE(escape) && isTRUE(output_format %in% c("latex", "html"))) {
+    for (col in seq_len(ncol(tab))) {
+      # do not escape siunitx \num{}
+      tab[[col]] <- ifelse(
+        grepl("\\\\num\\{", tab[[col]]),
+        tab[[col]],
+        tinytable::format_tt(tab[, col], escape = output_format))
     }
+  }
+
+  # escape colnames after span
+  # span before do.call()
+  span_list <- get_span_kableExtra(tab)
+  if (is.null(span_list)) {
+    colnames(tab) <- gsub("\\|{4}", " / ", colnames(tab))
+  } else {
+    colnames(tab) <- attr(span_list, "column_names")
+  }
+
+  if (isTRUE(escape)) {
+    colnames(tab) <- tinytable::format_tt(colnames(tab), escape = output_format)
   }
 
   # create tables with combined arguments
   arguments <- arguments[base::intersect(names(arguments), valid)]
   arguments <- c(list(tab), arguments)
   out <- do.call(tinytable::tt, arguments)
+
+  # span: compute
+  if (!is.null(span_list)) {
+    for (i in seq_along(span_list)) {
+      sp <- cumsum(span_list[[i]])
+      sp <- as.list(sp)
+      sp[[1]] <- 1:sp[[1]]
+      sp[2:length(sp)] <- lapply(2:length(sp), function(k) (max(sp[[k - 1]]) + 1):sp[[k]])
+      if (isTRUE(escape) && isTRUE(output_format %in% c("latex", "html"))) {
+        names(sp) <- tinytable::format_tt(names(sp), escape = output_format)
+      }
+      out <- tinytable::group_tt(out, j = sp)
+      out <- tinytable::style_tt(out, i = -i, align = "c")
+    }
+  }
 
   # align: other factories require a vector of "c", "l", "r", etc.
   # before span because those should be centered
@@ -52,26 +78,6 @@ factory_tinytable <- function(tab,
     align <- paste(align, collapse = "")
     out <- tinytable::style_tt(out, j = seq_len(l), align = align)
   }
-
-  # span: compute
-  span_list <- get_span_kableExtra(tab)
-  if (!is.null(span_list)) {
-    column_names <- attr(span_list, "column_names")
-    if (!is.null(column_names)) {
-      colnames(out) <- column_names
-    }
-    for (i in seq_along(span_list)) {
-      sp <- cumsum(span_list[[i]])
-      sp <- as.list(sp)
-      sp[[1]] <- 1:sp[[1]]
-      sp[2:length(sp)] <- lapply(2:length(sp), function(k) (max(sp[[k - 1]]) + 1):sp[[k]])
-      out <- tinytable::group_tt(out, j = sp)
-      out <- tinytable::style_tt(out, i = -i, align = "c")
-    }
-  } else {
-    colnames(out) <- gsub("\\|{4}", " / ", colnames(out))
-  }
-
 
   if (!is.null(hrule)) {
     for (h in hrule) {
