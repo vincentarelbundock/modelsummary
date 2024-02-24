@@ -19,8 +19,17 @@ factory_tinytable <- function(tab,
 
   span_list <- get_span_kableExtra(tab)
 
+  # colnames with or without spans: before escape and for all span/no-span
+  if (is.null(span_list)) {
+    if (!is.null(colnames(tab))) {
+      colnames(tab) <- gsub("\\|{4}", " / ", colnames(tab))
+    }
+  } else {
+    colnames(tab) <- attr(span_list, "column_names")
+  }
+
   # escape
-  if (isTRUE(escape) && isTRUE(output_format %in% c("latex", "html", "typst"))) {
+  if (isTRUE(escape) && isTRUE(output_format %in% c("latex", "html", "typst", "tinytable"))) {
     tmp <- escape_everything(
       tab = tab,
       output_format = output_format,
@@ -52,9 +61,6 @@ factory_tinytable <- function(tab,
       sp <- as.list(sp)
       sp[[1]] <- 1:sp[[1]]
       sp[2:length(sp)] <- lapply(2:length(sp), function(k) (max(sp[[k - 1]]) + 1):sp[[k]])
-      if (isTRUE(escape) && isTRUE(output_format %in% c("latex", "html"))) {
-        names(sp) <- tinytable::format_tt(names(sp), escape = output_format)
-      }
       out <- tinytable::group_tt(out, j = sp)
       out <- tinytable::style_tt(out, i = -i, align = "c")
     }
@@ -93,15 +99,6 @@ factory_tinytable <- function(tab,
 
 
 escape_everything <- function(tab, output_format, span_list, title, notes) {
-  # colnames with or without spans (before escape)
-  if (is.null(span_list)) {
-    if (!is.null(colnames(tab))) {
-      colnames(tab) <- gsub("\\|{4}", " / ", colnames(tab))
-    }
-  } else {
-    colnames(tab) <- attr(span_list, "column_names")
-  }
-
   # body: do not escape siunitx \num{}
   for (col in seq_len(ncol(tab))) {
     tab[[col]] <- ifelse(
@@ -111,7 +108,7 @@ escape_everything <- function(tab, output_format, span_list, title, notes) {
   }
 
   for (i in seq_along(span_list)) {
-    names(span_list)[i] <- tinytable::format_tt(names(span_list)[i], escape = output_format)
+    names(span_list[[i]]) <- tinytable::format_tt(names(span_list[[i]]), escape = output_format)
   }
 
   for (i in seq_along(notes)) {
@@ -127,6 +124,6 @@ escape_everything <- function(tab, output_format, span_list, title, notes) {
     title <- tinytable::format_tt(title, escape = output_format)
   }
 
-  out <- list(tab = tab, title = title, notes = notes)
+  out <- list(tab = tab, title = title, notes = notes, span_list = span_list)
   return(out)
 }

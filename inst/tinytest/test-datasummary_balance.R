@@ -11,7 +11,7 @@ expect_snapshot_print(
   "datasummary_balance-escape_TRUE")
 expect_snapshot_print(
   datasummary_balance(~vs, data = dat, output = "latex", escape = FALSE),
-  "datasummary_balance-escape_TRUE")
+  "datasummary_balance-escape_FALSE")
 
 # stub is escaped in latex
 tmp <- data.frame(
@@ -65,10 +65,12 @@ tab <- datasummary_balance(~vs, dat, output="dataframe")
 expect_equivalent(tab[[4]][1:2], c("5.6", "16.7"))
 
 # palmer penguins was once broken with kableExtra
+options(modelsummary_factory_html = "kableExtra")
 penguins <- "https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv"
 penguins <- read.csv(penguins)
 raw <- datasummary_balance(~sex, penguins, output = "html", dinm = FALSE)
 expect_inherits(raw, "knitr_kable")
+options(modelsummary_factory_html = NULL)
 
 # variable name with spaces
 tmp <- mtcars
