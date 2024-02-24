@@ -47,9 +47,6 @@ sanity_ellipsis <- function(vcov, ...) {
             call. = FALSE)
   }
 
-  if (!is.null(vcov) && ("statistic_override" %in% names(ellip))) {
-    stop("The `vcov` and `statistic_override` arguments cannot be used at the same time. The `statistic_override` argument is deprecated. Please use `vcov` instead.")
-  }
 }
 
 

@@ -109,12 +109,6 @@ modelplot <- function(models,
 
   ellip <- list(...)
 
-  if ("statistic_override" %in% names(ellip)) {
-    if (!is.null(vcov)) {
-      stop("The `vcov` and `statistic_override` arguments cannot be used at the same time. The `statistic_override` argument is deprecated. Please use `vcov` instead.")
-    }
-  }
-
   if (is.null(conf_level)) {
     estimate <- "estimate"
   } else {

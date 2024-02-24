@@ -27,4 +27,4 @@ tab <- modelsummary(
     coef_rename = \(x) gsub("b_", "", x),
     coef_omit = "Intercept",
     statistic = c("std.error", "conf.int"))
-expect_inherits(tab, "kableExtra")
+expect_inherits(tab, "tinytable")

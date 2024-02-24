@@ -133,6 +133,6 @@ expect_true(is.numeric(tmp$male))
 url <- "https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv"
 penguins <- read.csv(url, na.strings = "")
 tab <- datasummary(island * species * body_mass_g ~ sex * (Mean + SD), data = penguins)
-expect_inherits(tab, "kableExtra")
+expect_inherits(tab, "tinytable")
 tab <- datasummary(island * species * body_mass_g ~ sex * (Mean + SD) * DropEmpty(), data = penguins)
-expect_inherits(tab, "kableExtra")
+expect_inherits(tab, "tinytable")

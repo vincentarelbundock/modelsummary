@@ -104,7 +104,7 @@ expect_equivalent(dim(tab), c(4, 2))
 penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
 penguins <- tibble::as_tibble(penguins)
 tab <- datasummary_skim(penguins)
-expect_inherits(tab, "kableExtra")
+expect_inherits(tab, "tinytable")
 
 
 # Issue #627: histograms in gt

@@ -6,11 +6,6 @@ sanitize_vcov <- function(vcov, models, ...) {
   ellip <- list(...)
   number_of_models <- length(models)
 
-  # sanity_ellipsis must be called before sanity_vcov
-  if ("statistic_override" %in% names(ellip)) {
-    vcov <- ellip[["statistic_override"]]
-  }
-
   if (is.null(vcov)) {
     vcov <- list(vcov)
     names(vcov) <- ""
