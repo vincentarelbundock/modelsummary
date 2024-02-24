@@ -93,6 +93,6 @@ expect_equivalent(dim(tab3), c(14, 10))
 dat <- mtcars
 dat$`# of Cylinders` <- dat$cyl
 tab <- datasummary_crosstab(`# of Cylinders` ~ am * gear, data = dat)
-expect_inherits(tab, "kableExtra")
+expect_inherits(tab, "tinytable")
 expect_error(datasummary_crosstab((`# of Cylinders` = cyl) ~ am * gear, data = dat))
 expect_error(datasummary_crosstab(Heading("# of Cylinders") * cyl ~ am * gear, data = dat))

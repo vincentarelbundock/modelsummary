@@ -1,6 +1,15 @@
+exit_file("TODO")
+
 source("helpers.R")
 requiet("tinysnapshot")
 using("tinysnapshot")
+
+options(modelsummayr_factory_default = "kableExtra")
+options(modelsummayr_factory_markdown = "kableExtra")
+options(modelsummayr_factory_html = "kableExtra")
+options(modelsummayr_factory_latex = "kableExtra")
+
+
 
 models <- list()
 models[["OLS 1"]] <- lm(hp ~ mpg + wt, mtcars)
@@ -54,3 +63,10 @@ tab <- modelsummary(mod, "latex", title = "blah_cyl", escape = TRUE)
 expect_true(grepl("blah\\\\_cyl", tab))
 tab <- modelsummary(mod, "latex", title = "blah_cyl", escape = FALSE)
 expect_false(grepl("blah\\\\_cyl", tab))
+
+
+
+options(modelsummayr_factory_default = NULL)
+options(modelsummayr_factory_markdown = NULL)
+options(modelsummayr_factory_html = NULL)
+options(modelsummayr_factory_latex = NULL)

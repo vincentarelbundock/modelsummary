@@ -54,7 +54,17 @@ factory_tinytable <- function(tab,
   arguments <- c(list(tab), arguments)
   out <- do.call(tinytable::tt, arguments)
 
+
+  # align: other factories require a vector of "c", "l", "r", etc.
+  # before span because those should be centered
+  if (!is.null(align)) {
+    l <- length(align)
+    align <- paste(align, collapse = "")
+    out <- tinytable::style_tt(out, j = seq_len(l), align = align)
+  }
+
   # span: compute
+  # after align, otherwise span alignment is overridden
   if (!is.null(span_list)) {
     for (i in seq_along(span_list)) {
       sp <- cumsum(span_list[[i]])
@@ -64,14 +74,6 @@ factory_tinytable <- function(tab,
       out <- tinytable::group_tt(out, j = sp)
       out <- tinytable::style_tt(out, i = -i, align = "c")
     }
-  }
-
-  # align: other factories require a vector of "c", "l", "r", etc.
-  # before span because those should be centered
-  if (!is.null(align)) {
-    l <- length(align)
-    align <- paste(align, collapse = "")
-    out <- tinytable::style_tt(out, j = seq_len(l), align = align)
   }
 
   if (!is.null(hrule)) {
