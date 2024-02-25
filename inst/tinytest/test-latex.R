@@ -7,6 +7,7 @@ models <- list(
   lm(hp ~ mpg + drat, mtcars))
 
 # latex threeparttable argument
+options(modelsummary_factory_latex = "kableExtra")
 tab1 <- modelsummary(models, output = "latex", stars = TRUE)
 tab2 <- modelsummary(models, output = "latex", threeparttable = TRUE, stars = TRUE)
 expect_false(grepl("threeparttable", tab1))
@@ -22,6 +23,7 @@ tab3 <- modelsummary(models,
   stars = TRUE,
   threeparttable = TRUE)
 expect_equivalent(sum(grepl("threeparttable", strsplit(tab3, "\n")[[1]])), 2)
+options(modelsummary_factory_latex = NULL)
 
 # stars_note < are protected by $ in latex
 tab <- modelsummary(models, stars = TRUE, output = "latex")

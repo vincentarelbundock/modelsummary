@@ -113,7 +113,7 @@ mod <- list(
   "K" = feols(y1 ~ x1, base))
 expect_snapshot_print(
   modelsummary(mod, output = "markdown"),
-  "test-pkg-fixest_model_names_single")
+  "pkg-fixest_model_names_single")
 
 
 # Issue #546

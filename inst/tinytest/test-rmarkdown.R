@@ -2,6 +2,7 @@
 # pkgdown failure on github actions
 source("helpers.R")
 if (ON_CI) exit_file("CI")
+exit_file("tinytable + rmarkdown")
 
 dangerous_document <- '
 ---

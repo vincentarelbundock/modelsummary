@@ -1,6 +1,7 @@
 source("helpers.R")
 requiet("tinysnapshot")
 using("tinysnapshot")
+exit_file("tinytable: d column support")
 
 mod <- list(
     lm(mpg ~ hp, mtcars),
