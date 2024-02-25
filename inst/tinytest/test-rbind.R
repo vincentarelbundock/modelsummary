@@ -37,13 +37,13 @@ expect_equivalent(colnames(tab2), c(" ", "A", "B", "C"))
 
 # stars note
 p <- suppressWarnings(modelsummary(panels, output = "markdown", stars = TRUE, shape = "rbind"))
-expect_true(any(grepl("Note", p)))
+expect_true(any(grepl("p < 0.1", p, fixed = TRUE)))
 
 # output formats: no validity
 p <- modelsummary(panels, output = "gt", shape = "rbind")
 expect_inherits(p, "gt_tbl")
 p <- modelsummary(panels, output = "latex", shape = "rbind")
-expect_inherits(p, "knitr_kable")
+expect_inherits(p, "modelsummary_string")
 
 # Issue #593: rbind vs rcollapse
 panels <- list(

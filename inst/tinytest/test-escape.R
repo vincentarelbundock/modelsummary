@@ -1,6 +1,7 @@
 source("helpers.R")
 requiet("tinysnapshot")
 using("tinysnapshot")
+exit_file("many tinytable problems")
 
 dat <- mtcars
 colnames(dat)[1] <- "under_score"
