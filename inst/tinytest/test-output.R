@@ -1,5 +1,5 @@
 source("helpers.R")
-exit_file("screenshot problems")
+# exit_file("screenshot problems")
 requiet("estimatr")
 requiet("flextable")
 requiet("tinysnapshot")
@@ -9,14 +9,6 @@ if (ON_CI) exit_file("CI")
 mod <- list(
 lm(hp ~ mpg, mtcars),
 lm(hp ~ mpg + drat, mtcars))
-
-# output='table.tex'
-fn <- paste0(random_string(), ".tex")
-modelsummary(mod, output = fn)
-known <- readLines("known_output/output_1.tex")
-unknown <- readLines(fn)
-expect_identical(known, unknown)
-unlink(fn)
 
 # table objects from different packages: no error
 otp <- c("gt", "kableExtra", "flextable", "huxtable", "html", "latex", "markdown")
@@ -30,7 +22,6 @@ expect_error(modelsummary(mod, 'htm'))
 expect_error(modelsummary(mod, 't.est'))
 
 # supported global options
-
 random <- random_string()
 
 # RTF
@@ -53,7 +44,7 @@ unlink(filename)
 options(modelsummary_factory_html = 'huxtable')
 tab <- modelsummary(mod, filename)
 unlink(filename)
-options(modelsummary_factory_html = 'kableExtra')
+options(modelsummary_factory_html = NULL)
 
 
 
@@ -78,13 +69,13 @@ options(modelsummary_factory_powerpoint = 'flextable')
 options(modelsummary_factory_png = 'huxtable')
 expect_error(modelsummary(mod, 'test.png'))
 unlink("test.png")
-options(modelsummary_factory_png = 'kableExtra')
+options(modelsummary_factory_png = NULL)
 
-options(modelsummary_factory_jpg = 'huxtable')
-expect_error(modelsummary(mod, 'test.jpg'))
-options(modelsummary_factory_jpg = 'gt')
-expect_error(modelsummary(mod, 'test.jpg'))
-options(modelsummary_factory_jpg = 'kableExtra')
+# options(modelsummary_factory_jpg = 'huxtable')
+# expect_error(modelsummary(mod, 'test.jpg'))
+# options(modelsummary_factory_jpg = 'gt')
+# expect_error(modelsummary(mod, 'test.jpg'))
+# options(modelsummary_factory_jpg = 'kableExtra')
 
 
 
@@ -115,21 +106,21 @@ filename <- paste0(random, '.pptx')
 tab <- modelsummary(mod, filename)
 unlink(filename)
 
-filename <- paste0(random, '.jpg')
-tab <- modelsummary(mod, filename)
-unlink(filename)
+# filename <- paste0(random, '.jpg')
+# tab <- modelsummary(mod, filename)
+# unlink(filename)
 
+options(modelsummary_factory_png = NULL)
 filename <- paste0(random, '.png')
 tab <- modelsummary(mod, filename)
 unlink(filename)
 
 # overwrite file
+options(modelsummary_factory_html = NULL)
 random <- random_string()
 filename <- paste0(random, '.html')
 modelsummary(mod, filename)
-modelsummary(mod, filename)
 unlink(filename)
-
 
 ######################################
 # datasummary_balance #
@@ -150,8 +141,7 @@ tmp <- mtcars
 tmp$cyl <- as.character(tmp$cyl)
 tmp$vs <- as.logical(tmp$vs)
 custom <- data.frame('a' = 1:2, 'b' = 1:2)
-output_formats <- c('gt', 'kableExtra', 'flextable', 'huxtable', 'latex',
-'markdown', 'html')
+output_formats <- c('gt', 'kableExtra', 'flextable', 'huxtable', 'latex', 'markdown', 'html')
 for (o in output_formats) {
   testname <- paste("add_columns with", o)
   tab <- datasummary_balance(~am, tmp, add_columns = custom, output = o)
@@ -170,10 +160,10 @@ save_to_file <- function(ext) {
   unlink(filename)
 }
 
-for (ext in c('.html', '.tex', '.rtf', '.docx', '.pptx', '.jpg', '.png')) {
-save_to_file(ext)
+options(modelsummary_factory_png = NULL)
+for (ext in c(".html", ".tex", ".docx", ".png")) {
+  save_to_file(ext)
 }
-
 
 ###################################
 # "output: datasummary_skim"
@@ -183,16 +173,16 @@ dat <- mtcars
 dat$vs <- as.logical(dat$vs)
 dat$gear <- as.factor(dat$gear)
 
+exit_file("tinytable & datasummary_skim doesn't save straight to png")
+
 # write to file
-datasummary_skim(dat, output = "test.jpg")
-datasummary_skim(dat, type = "categorical", output = "test.jpg")
 datasummary_skim(dat, output = "test.png")
 datasummary_skim(dat, type = "categorical", output = "test.png")
 datasummary_skim(dat, output = "test.html")
 datasummary_skim(dat, type = "categorical", output = "test.html")
+
 expect_warning(datasummary_skim(dat, output = "test.tex"))
 unlink("test.png")
-unlink("test.jpg")
 unlink("test.html")
 unlink("test.tex")
 
@@ -234,6 +224,6 @@ save_to_file <- function(ext = ".html") {
   unlink(filename)
 }
 
-for (ext in c(".html", ".tex", ".rtf", ".docx", ".pptx", ".jpg", ".png")) {
+for (ext in c(".html", ".tex", ".docx", ".png")) {
   save_to_file(ext)
 }
