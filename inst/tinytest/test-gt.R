@@ -1,6 +1,7 @@
 source("helpers.R")
 requiet("gt")
-exit_file("gt html snapshot change all the time")
+using("tinysnapshot")
+# exit_file("gt html snapshot change all the time")
 
 models <- list()
 models[["OLS 1"]] <- lm(hp ~ mpg + wt, mtcars)
@@ -11,7 +12,8 @@ models[["Logit 2"]] <- glm(am ~ hp + disp, mtcars, family = binomial())
 
 # gof_omit='.*' used to produce an error
 mod <- lm(mpg ~ wt, mtcars)
-expect_error(modelsummary(mod, output = "gt", gof_omit = ".*"), NA)
+tab <- modelsummary(mod, output = "gt", gof_omit = ".*")
+expect_inherits(tab, "gt_tbl")
 
 # complex html table
 cm <- c(
@@ -39,14 +41,12 @@ raw <-
   gt::tab_spanner(label = "Transmission", columns = `Logit 2`) %>%
   gt::tab_header(
     title = "Summarizing 5 statistical models using the `modelsummary` package for `R`.",
-    subtitle = "Models estimated using the mtcars dataset.") %>%
-  gt::as_raw_html()
-expect_snapshot(cat(raw))
+    subtitle = "Models estimated using the mtcars dataset.")
+suppressWarnings(expect_snapshot_print(print_html(raw), "gt-complex"))
 
 # title
 raw <- modelsummary(models, output = "gt", title = "This is a title for my table.")
-raw <- gt::as_raw_html(raw)
-expect_snapshot(cat(raw))
+suppressWarnings(expect_snapshot_print(print_html(raw), "gt-title"))
 
 # background color
 raw <- modelsummary(models, output = "gt", title = "colors") %>%
@@ -61,6 +61,5 @@ raw <- modelsummary(models, output = "gt", title = "colors") %>%
     locations = cells_body(columns = c(`OLS 1`))) %>%
   tab_style(
     style = cell_fill(color = "#F9E3D6"),
-    locations = cells_body(columns = c(`Logit 2`), rows = 2:6)) %>%
-  as_raw_html()
-expect_snapshot(cat(raw))
+    locations = cells_body(columns = c(`Logit 2`), rows = 2:6))
+suppressWarnings(expect_snapshot_print(print_html(raw), "gt-background_color"))

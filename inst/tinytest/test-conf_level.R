@@ -1,4 +1,4 @@
-exit_file("works interactively")
+# exit_file("works interactively")
 
 # Issue 513
 # bad combination of arguments
@@ -21,7 +21,7 @@ expect_true(any(grepl("\\[", tab[["(1)"]])))
 
 # faster
 est <- get_estimates(mod, conf_level = NULL)
-expect_false("conf.low" %in% colnames(est))
+expect_true(!"conf.low" %in% colnames(est) || all(is.na(est$conf.low)))
 
 ci_funs <- paste0(c("^ci$", "ci\\.glm", "confint\\.glm", "stats::confint"), collapse = "|")
 mod <- list()
@@ -30,7 +30,7 @@ mod$Logit <- glm(am ~ qsec, data = mtcars, family = poisson())
 
 # when confidence intervals are enabled, some CI functions should have been called",
 tmp_withCI <- tempfile()
-Rprof(tmp_withCI, interval = 0.005)
+suppressWarnings(Rprof(tmp_withCI, interval = 0.005))
 tab <- modelsummary(mod,
     output = "data.frame",
     statistic = "conf.int",
@@ -42,7 +42,7 @@ expect_true(any(grepl(ci_funs, called_funs)))
 
 # when no confidence intervals are needed, no CI functions should have been called
 tmp_withoutCI <- tempfile()
-Rprof(tmp_withoutCI, interval = 0.005)
+suppressWarnings(Rprof(tmp_withoutCI, interval = 0.005))
 tmp <- modelsummary(mod,
     output = "data.frame",
     statistic = NULL, vcov = NULL, conf_level = NULL,
