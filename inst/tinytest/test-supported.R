@@ -122,7 +122,7 @@ vc <- list(
 tab <- modelsummary(
   m,
   output = "data.frame",
-  statistic_override = vc["Clustered"],
+  vcov = vc["Clustered"],
   stars = TRUE)
 expect_inherits(tab, "data.frame")
 expect_true("Clustered" %in% tab[["(1)"]])

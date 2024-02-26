@@ -11,6 +11,10 @@ To revert to the previous behavior persistently, users can call:
 library(modelsummary)
 config_modelsummary(factory_default = "kableExtra")
 
+Other breaking changes:
+
+* The `statistic_override` argument was replaced by `vcov` over 1 year ago, with appropriate deprecation warnings. It is now fully removed.
+
 ## 1.4.5
 
 * `tinytable` supports histograms in `datasummary_skim()`

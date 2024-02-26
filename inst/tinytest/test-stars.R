@@ -12,7 +12,7 @@ tab <- paste(tab, collapse = "")
 expect_false(grepl("Note", paste(tab, collapse = "\n")))
 options(modelsummary_stars_note = NULL)
 tab <- modelsummary(mod, output = "markdown", stars = TRUE)
-expect_true(grepl("Note", paste(tab, collapse = "\n")))
+expect_true(grepl("p < 0.1", paste(tab, collapse = "\n")))
 
 # no automatic note with glue stars
 tab <- modelsummary(
@@ -20,7 +20,7 @@ tab <- modelsummary(
   output = "markdown",
   estimate = "{estimate}{stars}",
   stars = c("+" = .1))
-expect_false(any(grepl("Note:", as.character(tab))))
+expect_false(any(grepl("p < 0.1", as.character(tab))))
 
 tab <- modelsummary(
   mod,
@@ -28,13 +28,13 @@ tab <- modelsummary(
   estimate = "estimate",
   statistic = "{std.error}{stars}",
   stars = c("+" = .1))
-expect_false(any(grepl("Note:", as.character(tab))))
+expect_false(any(grepl("p < 0.1", as.character(tab))))
 
 tab <- modelsummary(
   mod,
   output = "markdown",
   stars = c("+" = .1))
-expect_true(any(grepl("Note:", as.character(tab))))
+expect_true(any(grepl("p < 0.1", as.character(tab))))
 
 # glue stars
 tab <- modelsummary(
