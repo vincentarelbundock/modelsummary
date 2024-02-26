@@ -1,7 +1,7 @@
 source("helpers.R")
 requiet("tinysnapshot")
 using("tinysnapshot")
-exit_file("many tinytable problems")
+# exit_file("many tinytable problems")
 
 dat <- mtcars
 colnames(dat)[1] <- "under_score"
@@ -16,13 +16,11 @@ expect_snapshot_print(
     modelsummary(mod, output = "latex"),
     "escape-latex")
 ## <td style="text-align:left;"> `oh&amp;yeah&lt;sup&gt;2&lt;/sup&gt;` </td>
-expect_snapshot_print(
-    modelsummary(mod, output = "html"),
-    "escape-html")
+tab <- modelsummary(mod)
+expect_snapshot_print(print_html(tab), "escape-html")
 ## <td style="text-align:left;"> `oh&amp;yeah<sup>2</sup>` </td>
-expect_snapshot_print(
-    modelsummary(mod, output = "html", escape = FALSE),
-    "escape-html_escape_FALSE")
+tab <- modelsummary(mod, escape = FALSE)
+expect_snapshot_print(print_html(tab), "escape-html_escape_FALSE")
 
 # manual escape
 expect_equivalent(modelsummary:::escape_latex("$&_"), "\\$\\&\\_")
@@ -123,11 +121,10 @@ expect_snapshot_print(modelsummary(models, coef_map = cm, output = "latex_tabula
 mod <- list(
     "<code>lm()</code>" = lm(mpg ~ hp + drat, mtcars),
     "<code>lm_robust()</code>" = lm(mpg ~ hp + drat, mtcars))
-expect_snapshot_print(modelsummary(mod,
+tab <- modelsummary(mod,
     vcov = c("classical", "HC1"),
-    escape = FALSE,
-    output = "html"),
-    "escape-modelsummary_html")
+    escape = FALSE)
+expect_snapshot_print(print_html(tab), "escape-modelsummary_html")
 
 # Issue 546: escape gof names
 requiet("fixest")
