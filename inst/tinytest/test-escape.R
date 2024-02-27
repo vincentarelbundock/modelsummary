@@ -170,11 +170,10 @@ expect_snapshot_print(
     "escape-hat_fixest")
 
 
-exit_file("minor snapshot diff, possibly related to kableExtra version")
 # Issue #594: escape LaTeX label
 if (!requiet("tinysnapshot")) exit_file("tinysnapshot")
 using("tinysnapshot")
 mod <- lm(mpg ~ hp, mtcars)
 expect_snapshot_print(
-    modelsummary(mod, "latex", title = "Blah_blah \\label{tab:blah-blah}"),
+    modelsummary(mod, "latex", title = "Blah_blah \\\\label{tab:blah-blah}"),
     "escape_label_title")
