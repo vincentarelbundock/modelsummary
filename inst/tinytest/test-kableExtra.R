@@ -1,13 +1,11 @@
-exit_file("TODO")
-
 source("helpers.R")
 requiet("tinysnapshot")
 using("tinysnapshot")
 
-options(modelsummayr_factory_default = "kableExtra")
-options(modelsummayr_factory_markdown = "kableExtra")
-options(modelsummayr_factory_html = "kableExtra")
-options(modelsummayr_factory_latex = "kableExtra")
+options(modelsummary_factory_default = "kableExtra")
+options(modelsummary_factory_markdown = "kableExtra")
+options(modelsummary_factory_html = "kableExtra")
+options(modelsummary_factory_latex = "kableExtra")
 
 
 
@@ -20,11 +18,11 @@ models[["Logit 2"]] <- glm(am ~ hp + disp, mtcars, family = binomial())
 
 # knitr::kable_latex ignores bad arguments passed through ...
 tab <- modelsummary(models, output = "latex", badarg = TRUE)
-expect_inherits(tab, "knitr_kable")
+expect_inherits(tab, "modelsummary_string")
 
 # output="html" returns raw html
 tab <- modelsummary(models, output = "html")
-expect_identical(class(tab), c("modelsummary_string", "kableExtra", "knitr_kable"))
+expect_inherits(tab, "modelsummary_string")
 
 # kable markdown: complex table
 cm <- c(
@@ -66,7 +64,7 @@ expect_false(grepl("blah\\\\_cyl", tab))
 
 
 
-options(modelsummayr_factory_default = NULL)
-options(modelsummayr_factory_markdown = NULL)
-options(modelsummayr_factory_html = NULL)
-options(modelsummayr_factory_latex = NULL)
+options(modelsummary_factory_default = NULL)
+options(modelsummary_factory_html = NULL)
+options(modelsummary_factory_latex = NULL)
+options(modelsummary_factory_markdown = NULL)
