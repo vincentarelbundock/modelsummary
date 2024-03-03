@@ -1,7 +1,5 @@
 source("helpers.R")
 
-exit_file("tinytable must support multiple notes in Markdown")
-
 tmp <- head(mtcars)
 
 # no error + code coverage
