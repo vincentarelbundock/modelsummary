@@ -1,5 +1,6 @@
 source("helpers.R")
 requiet("tinysnapshot")
+requiet("magrittr")
 using("tinysnapshot")
 
 # flextable is not installed on CRAN's M1 machine

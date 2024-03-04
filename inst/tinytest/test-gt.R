@@ -1,5 +1,6 @@
 source("helpers.R")
 requiet("gt")
+requiet("magrittr")
 using("tinysnapshot")
 # exit_file("gt html snapshot change all the time")
 
