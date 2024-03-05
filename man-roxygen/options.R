@@ -78,7 +78,7 @@
 #' \\usepackage\{float\}
 #' \\usepackage\{graphicx\}
 #' \\usepackage\{codehigh\}
-#' \\usepackage[normalem]\{ulem\}
+#' \\usepackage\[normalem\]\{ulem\}
 #' \\UseTblrLibrary\{booktabs\}
 #' \\newcommand\{\\tinytableTabularrayUnderline\}[1]\{\\underline\{#1\}\}
 #' \\newcommand\{\\tinytableTabularrayStrikeout\}[1]\{\\sout\{#1\}\}

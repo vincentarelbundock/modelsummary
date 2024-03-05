@@ -189,7 +189,7 @@ When creating LaTeX via the \code{tinytable} backend (default in version 2.0.0 a
 \\usepackage\{float\}
 \\usepackage\{graphicx\}
 \\usepackage\{codehigh\}
-\\usepackage\link{normalem}\{ulem\}
+\\usepackage[normalem]\{ulem\}
 \\UseTblrLibrary\{booktabs\}
 \\newcommand\{\\tinytableTabularrayUnderline\}\link{1}\{\\underline\{#1\}\}
 \\newcommand\{\\tinytableTabularrayStrikeout\}\link{1}\{\\sout\{#1\}\}
