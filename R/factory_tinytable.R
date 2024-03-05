@@ -88,10 +88,10 @@ factory_tinytable <- function(tab,
     return(invisible())
   }
 
-  # html & latex get a new class to use print.modelsummary_string
+  # change output format in the S4 object, but return a `tinytable` for when we
+  # post-process it with `plot_tt()` in `datasummary_skim()`
   if (settings_equal("output_format", c("latex", "typst", "html", "markdown"))) {
-    out <- tinytable::save_tt(out, output = settings_get("output_format"), overwrite = TRUE)
-    class(out) <- c("knit_asis", "modelsummary_string", class(out))
+    out@output <- settings_get("output_format")
   }
 
   return(invisible(out))
