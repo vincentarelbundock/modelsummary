@@ -91,7 +91,7 @@ factory_tinytable <- function(tab,
   # html & latex get a new class to use print.modelsummary_string
   if (settings_equal("output_format", c("latex", "typst", "html", "markdown"))) {
     out <- tinytable::save_tt(out, output = settings_get("output_format"), overwrite = TRUE)
-    class(out) <- c("modelsummary_string", class(out))
+    class(out) <- c("knit_asis", "modelsummary_string", class(out))
   }
 
   return(invisible(out))

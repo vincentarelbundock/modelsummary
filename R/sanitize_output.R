@@ -189,6 +189,13 @@ sanitize_output <- function(output) {
   # choose factory based on output_format
   output_factory <- factory_dict[[output_format]]
 
+  # appears to be needed otherwise not treated as_is in Quarto
+  if (output_factory == 'tinytable') {
+    if (isTRUE(check_dependency('knitr')) && knitr::is_latex_output()) {
+      output_format <- "latex"
+    }
+  }
+
   # kableExtra must specify output_format ex ante (but after factory choice)
   if (output_factory == 'kableExtra' && output_format %in% c('default', 'kableExtra')) {
     if (isTRUE(check_dependency("knitr"))) {
