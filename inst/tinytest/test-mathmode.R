@@ -1,7 +1,6 @@
 source("helpers.R")
 requiet("tinysnapshot")
 using("tinysnapshot")
-exit_file("tinytable: d column support")
 
 mod <- list(
     lm(mpg ~ hp, mtcars),
@@ -19,7 +18,7 @@ expect_snapshot_print(
 
 options("modelsummary_format_numeric_latex" = "dollars")
 expect_snapshot_print(
-    modelsummary(mod, output = "latex"),
+    modelsummary(mod, output = "latex", escape = FALSE),
     "mathmode-latex_dollars")
 
 options("modelsummary_format_numeric_latex" = "anything else")
@@ -32,17 +31,17 @@ options("modelsummary_format_numeric_latex" = NULL)
 
 # HTML global options
 expect_snapshot_print(
-    modelsummary(mod, output = "html"),
+    print_html(modelsummary(mod, output = "html")),
     "mathmode-html_null")
 
 options("modelsummary_format_numeric_html" = "dollars")
 expect_snapshot_print(
-    modelsummary(mod, output = "html"),
+    print_html(modelsummary(mod, output = "html")),
     "mathmode-html_dollars")
 
 options("modelsummary_format_numeric_html" = "anything else")
 expect_snapshot_print(
-    modelsummary(mod, output = "html"),
+    print_html(modelsummary(mod, output = "html")),
     "mathmode-html_anything")
 
 options("modelsummary_format_numeric_html" = NULL)
