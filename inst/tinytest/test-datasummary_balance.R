@@ -17,7 +17,7 @@ expect_snapshot_print(
 tmp <- data.frame(
   under_score = rnorm(100),
   X = sample(0:1, 100, replace = TRUE))
-tab <- datasummary_balance(~X, data = tmp, output = "latex")
+tab <- tinytable::save_tt(datasummary_balance(~X, data = tmp, output = "latex"), "latex")
 expect_true(grepl("under\\\\_score", tab))
 
 # errors and warnings
