@@ -10,7 +10,7 @@ sanitize_shape <- function(shape) {
     checkmate::assert(
         checkmate::check_null(shape),
         checkmate::check_formula(shape),
-        checkmate::check_choice(shape, choices = c("rbind", "rcollapse"))
+        checkmate::check_choice(shape, choices = c("cbind", "rbind", "rcollapse"))
     )
 
     # interactions with ":" are used to combine columns

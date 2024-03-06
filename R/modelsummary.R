@@ -380,7 +380,7 @@ modelsummary <- function(
   # panel summary shape: dispatch to other function
   checkmate::assert(
     checkmate::check_formula(shape),
-    checkmate::check_choice(shape, c("rbind", "rcollapse")),
+    checkmate::check_choice(shape, c("cbind", "rbind", "rcollapse")),
     checkmate::check_null(shape))
   if (isTRUE(checkmate::check_choice(shape, c("rbind", "rcollapse")))) {
     out <- modelsummary_rbind(models,
@@ -418,23 +418,37 @@ modelsummary <- function(
     ))
   }
 
-  # bug: deprecated `group` argument gets partial matched
-  scall <- sys.call()
-  if (all(c("group", "shape") %in% names(scall))) {
-    stop("The `group` argument is deprecated. Please use `shape` instead.", call. = FALSE)
-  # both group and group_map -> group is pushed to ...
-  } else if ("group" %in% names(scall) && "group_map" %in% names(scall)) {
-    shape <- list(...)[["group"]]
-  # only group -> partial match assigns to group_map
-  } else if ("group" %in% names(scall) && !"group_map" %in% names(scall)) {
-    shape <- group_map
-    group_map <- NULL
-  }
 
   ## sanity functions validate variables/settings
   ## sanitize functions validate & modify & initialize
   checkmate::assert_string(gof_omit, null.ok = TRUE)
   sanitize_output(output)           # early
+
+  # shape="cbind" only available with `tinytable`
+  # before sanitize_models()
+  # before sanitize_shape()
+  # after sanitize_output()
+  span_cbind_tinytable <- NULL
+  if (isTRUE(shape == "cbind")) {
+    flag <- is.list(models) &&
+      all(sapply(models, function(x) is.list(x))) &&
+      !is.null(names(models))
+    msg <- "With `shape='cbind', `models` must be a named list of lists of models."
+    if (!flag) insight::format_error(msg)
+
+    # "cbind" uses the default shape
+    shape <- term + statistic ~ model
+
+    if (settings_equal("output_factory", "tinytable")) {
+      span_cbind_tinytable <- get_span_cbind_tinytable(models)
+      models <- do.call(c, unname(models))
+    } else {
+      span_cbind_tinytable <- NULL
+      models <- do.call(c, models)
+    }
+  }
+
+  # other sanity checks
   sanitize_escape(escape)
   sanity_ellipsis(vcov, ...)        # before sanitize_vcov
   models <- sanitize_models(models, ...) # before sanitize_vcov
@@ -814,6 +828,10 @@ modelsummary <- function(
     ...
   )
 
+  if (!is.null(span_cbind_tinytable) && inherits(out, "tinytable")) {
+    out <- tinytable::group_tt(out, j = span_cbind_tinytable)
+  }
+
   # invisible return
   if (settings_equal("function_called", "modelsummary_rbind")) {
     return(out)
@@ -911,3 +929,13 @@ redundant_labels <- function(dat, column) {
 #' @keywords internal
 #' @export
 msummary <- modelsummary
+
+
+
+get_span_cbind_tinytable <- function(models) {
+    model_names <- rep(names(models), sapply(models, length))
+    model_indices <- seq_along(model_names)
+    indices_list <- split(model_indices, model_names)
+    final_indices <- lapply(indices_list, function(x) range(x))
+    lapply(final_indices, function(x) x + 1)
+}
