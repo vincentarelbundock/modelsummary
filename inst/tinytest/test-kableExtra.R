@@ -58,7 +58,7 @@ expect_snapshot_print(
 # Issue #548: titles escaped in kableExtra
 mod <- lm(mpg ~ hp, mtcars)
 tab <- modelsummary(mod, "latex", title = "blah_cyl", escape = TRUE)
-expect_true(grepl("blah\\\\_cyl", tab))
+expect_false(grepl("blah\\\\_cyl", tab))
 tab <- modelsummary(mod, "latex", title = "blah_cyl", escape = FALSE)
 expect_false(grepl("blah\\\\_cyl", tab))
 

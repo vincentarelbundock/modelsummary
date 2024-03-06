@@ -88,7 +88,7 @@ your main table.}
 \item{notes}{list or vector of notes to append to the bottom of the table.}
 
 \item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML characters which could
-prevent the file from compiling/displaying. This setting does not affect captions or notes.}
+prevent the file from compiling/displaying. This setting escape all cells, captions, and notes. Users can have more fine-grained control by setting \code{escape=FALSE} and using an external function such as: \code{tinytable::format_tt(tab, j=1:5, escape=TRUE)}.}
 
 \item{...}{other parameters are passed through to the table-making
 packages.}

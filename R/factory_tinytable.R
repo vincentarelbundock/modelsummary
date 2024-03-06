@@ -117,21 +117,18 @@ escape_everything <- function(tab, output_format, span_list, title, notes) {
     colnames(tab) <- tinytable::format_tt(colnames(tab), escape = output_format)
   }
   
-  # As has been documented for a **loooong** time, we don't want escape to
-  # automatically escape captions and notes, because those are user-supplied,
-  # which means they can escape them themselves. Also, it would make it
-  # difficult to have LaTeX in the caption, such as \label{}, while escaping the
-  # actual content of the table.
-  # for (i in seq_along(notes)) {
-  #   notes[[i]] <- tinytable::format_tt(notes[[i]], escape = output_format)
-  # }
-  # # do not escape if title includes a LaTeX label
-  # if (isTRUE(checkmate::check_string(title)) && !isTRUE(grepl("\\\\label\\{", title))) {
-  #   title <- tinytable::format_tt(title, escape = output_format)
-  # }
-  # if (isTRUE(output_format == "latex") && any(grepl(" < ", notes))) {
-  #   notes <- gsub(" < ", " $<$ ", notes)
-  # }
+  for (i in seq_along(notes)) {
+    notes[[i]] <- tinytable::format_tt(notes[[i]], escape = output_format)
+  }
+
+  # do not escape if title includes a LaTeX label
+  if (isTRUE(checkmate::check_string(title)) && !isTRUE(grepl("\\\\label\\{", title))) {
+    title <- tinytable::format_tt(title, escape = output_format)
+  }
+
+  if (isTRUE(output_format == "latex") && any(grepl(" < ", notes))) {
+    notes <- gsub(" < ", " $<$ ", notes)
+  }
 
   out <- list(tab = tab, title = title, notes = notes, span_list = span_list)
   return(out)

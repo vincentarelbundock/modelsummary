@@ -90,7 +90,7 @@ the formula determines the order in which headers appear. For example,
 header.`}
 
 \item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML characters which could
-prevent the file from compiling/displaying. This setting does not affect captions or notes.}
+prevent the file from compiling/displaying. This setting escape all cells, captions, and notes. Users can have more fine-grained control by setting \code{escape=FALSE} and using an external function such as: \code{tinytable::format_tt(tab, j=1:5, escape=TRUE)}.}
 
 \item{...}{all other arguments are passed through to the table-making
 functions \link[tinytable:tt]{tinytable::tt}, \link[kableExtra:kbl]{kableExtra::kbl}, \link[gt:gt]{gt::gt}, \link[DT:datatable]{DT::datatable}, etc. depending on the \code{output} argument.

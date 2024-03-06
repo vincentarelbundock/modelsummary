@@ -152,6 +152,14 @@ expect_snapshot_print(
     "escape-panel_escape_TRUE")
 
 
+# Escape caption and notes
+tmp <- mtcars |>
+    transform(x = ifelse(cyl == 4, "foo_bar", "hello_world")) |>
+    transform(x = ifelse(cyl == 6, "banana_fish", x))
+mod <- lm(mpg ~ x + drat, data = tmp)
+tab <- modelsummary(mod, output = "latex", title = "banana_fish", notes = c("foo_bar", "hello_world"))
+expect_snapshot_print(tab, "escape-caption_notes")
+
 
 # Issue #560 and #693
 mod <- lm(mpg ~ I(wt^2) * disp, data = mtcars)
@@ -175,5 +183,5 @@ if (!requiet("tinysnapshot")) exit_file("tinysnapshot")
 using("tinysnapshot")
 mod <- lm(mpg ~ hp, mtcars)
 expect_snapshot_print(
-    modelsummary(mod, "latex", title = "Blah_blah \\\\label{tab:blah-blah}"),
+    modelsummary(mod, "latex", title = "Blah_blah \\label{tab:blah-blah}"),
     "escape_label_title")
