@@ -58,9 +58,9 @@ factory_tinytable <- function(tab,
   # align: other factories require a vector of "c", "l", "r", etc.
   # before span because those should be centered
   if (!is.null(align)) {
-    l <- length(align)
-    align <- paste(align, collapse = "")
-    out <- tinytable::style_tt(out, j = seq_len(l), align = align)
+    for (idx in seq_along(tab)) {
+      out <- tinytable::style_tt(out, j = idx, align = align[idx])
+    } 
   }
 
   # span: compute

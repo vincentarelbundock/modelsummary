@@ -171,7 +171,7 @@ factory <- function(tab,
   align <- strsplit(align, "")[[1]]
 
   # dot align with unicode spaces (latex has its own mechanism)
-  if (!settings_equal("output_format", "latex")) {
+  if (!settings_equal("output_format", c("latex", "tinytable"))) {
     align_d <- grep("d", align)
     for (i in align_d) {
       tab[[i]] <- pad(tab[[i]], style = "character")
