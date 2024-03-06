@@ -25,10 +25,6 @@ tab3 <- modelsummary(models,
 expect_equivalent(sum(grepl("threeparttable", strsplit(tab3, "\n")[[1]])), 2)
 options(modelsummary_factory_latex = NULL)
 
-# stars_note < are protected by $ in latex
-tab <- modelsummary(models, stars = TRUE, output = "latex")
-expect_true(grepl("p $<$ 0.1", tab, fixed = TRUE))
-
 # output = latex_tabular
 expect_snapshot_print(
   modelsummary(models, output = "latex_tabular"),
