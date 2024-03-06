@@ -190,9 +190,8 @@ sanitize_output <- function(output) {
   output_factory <- factory_dict[[output_format]]
 
   # appears to be needed otherwise not treated as_is in Quarto
-  if (output_factory == 'tinytable') {
-    if (isTRUE(check_dependency('knitr')) {
-      if (knitr::is_latex_output()) {
+  if (output_factory == "tinytable" && isTRUE(check_dependency("knitr"))) {
+    if (knitr::is_latex_output()) {
       output_format <- "latex"
     } else if (knitr::is_html_output()) {
       output_format <- "html"
