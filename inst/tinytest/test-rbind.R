@@ -43,7 +43,9 @@ expect_true(any(grepl("p < 0.1", p, fixed = TRUE)))
 p <- modelsummary(panels, output = "gt", shape = "rbind")
 expect_inherits(p, "gt_tbl")
 p <- modelsummary(panels, output = "latex", shape = "rbind")
-expect_inherits(p, "modelsummary_string")
+expect_inherits(p, "tinytable")
+p <- modelsummary(panels, output = "tinytable", shape = "rbind")
+expect_inherits(p, "tinytable")
 
 # Issue #593: rbind vs rcollapse
 panels <- list(
