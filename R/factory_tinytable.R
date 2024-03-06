@@ -121,13 +121,8 @@ escape_everything <- function(tab, output_format, span_list, title, notes) {
     notes[[i]] <- tinytable::format_tt(notes[[i]], escape = output_format)
   }
 
-  # do not escape if title includes a LaTeX label
-  if (isTRUE(checkmate::check_string(title)) && !isTRUE(grepl("\\\\label\\{", title))) {
+  if (isTRUE(checkmate::check_string(title))) {
     title <- tinytable::format_tt(title, escape = output_format)
-  }
-
-  if (isTRUE(output_format == "latex") && any(grepl(" < ", notes))) {
-    notes <- gsub(" < ", " $<$ ", notes)
   }
 
   out <- list(tab = tab, title = title, notes = notes, span_list = span_list)

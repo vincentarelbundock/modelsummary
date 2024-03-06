@@ -178,10 +178,13 @@ expect_snapshot_print(
     "escape-hat_fixest")
 
 
-# Issue #594: escape LaTeX label
-if (!requiet("tinysnapshot")) exit_file("tinysnapshot")
-using("tinysnapshot")
+# Issue #707: inconsistent escape for captions in modelsummary and datasummary
 mod <- lm(mpg ~ hp, mtcars)
-expect_snapshot_print(
-    modelsummary(mod, "latex", title = "Blah_blah \\label{tab:blah-blah}"),
-    "escape_label_title")
+tab <- modelsummary(mod, title = "blah_blah", gof_map = NA, output = "latex")
+expect_snapshot_print(tab, "escape-issue707_01")
+tab <- datasummary(mpg + hp ~ mean + sd, title = "blah_blah", data = mtcars, output = "latex")
+expect_snapshot_print(tab, "escape-issue707_02")
+tab <- modelsummary(mod, title = "blah_blah", gof_map = NA, output = "latex", escape = FALSE)
+expect_snapshot_print(tab, "escape-issue707_03")
+tab <- datasummary(mpg + hp ~ mean + sd, title = "blah_blah", data = mtcars, output = "latex", escape = FALSE)
+expect_snapshot_print(tab, "escape-issue707_04")

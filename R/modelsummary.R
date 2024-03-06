@@ -170,7 +170,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   - `\usepackage{siunitx}`
 #'   - `\newcolumntype{d}{S[ input-open-uncertainty=, input-close-uncertainty=, parse-numbers = false, table-align-text-pre=false, table-align-text-post=false ]}`
 #' @param escape boolean TRUE escapes or substitutes LaTeX/HTML characters which could
-#' prevent the file from compiling/displaying. This setting escape all cells, captions, and notes. Users can have more fine-grained control by setting `escape=FALSE` and using an external function such as: `tinytable::format_tt(tab, j=1:5, escape=TRUE)`.
+#' prevent the file from compiling/displaying. `TRUE` escapes all cells, captions, and notes. Users can have more fine-grained control by setting `escape=FALSE` and using an external command such as: `modelsummary(model, "latex") |> tinytable::format_tt(tab, j=1:5, escape=TRUE)`
 #' @param ... all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.
 #' + [parameters::model_parameters] extracts parameter estimates. Available arguments depend on model type, but include:
 #'     - `standardize`, `centrality`, `dispersion`, `test`, `ci_method`, `prior`, `diagnostic`, `rope_range`, `power`, `cluster`, etc.
