@@ -10,7 +10,8 @@
 "",
 "Or change the backend persistently:",
 "",
-"  config_modelsummary(factory_default = 'gt')"
+"  config_modelsummary(factory_default = 'gt')",
+""
 )
   packageStartupMessage(msg)
 }

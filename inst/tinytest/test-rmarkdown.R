@@ -11,7 +11,7 @@ title: test
 output: %s
 ---
 
-Table \\ref{tab:simple}
+Table \\ref{tab-simple}
 
 ```{r}
 library(modelsummary)
@@ -38,7 +38,7 @@ modelsummary(mod, title = "Some caption content.")
 
 ```{r siunitx, eval = FALSE}
 if (knitr::is_latex_output()) {
-  modelsummary(mod, title = "Some caption content.", align = "lc")
+  modelsummary(mod, title = "Some caption content.", align = "ld")
 }
 ```
 '
