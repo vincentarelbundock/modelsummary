@@ -201,7 +201,7 @@ model information. This argument accepts 4 types of values:
 \item NULL (default): the \code{modelsummary::gof_map} dictionary is used for formatting, and all unknown statistic are included.
 \item character vector: "all", "none", or a vector of statistics such as \code{c("rmse", "nobs", "r.squared")}. Elements correspond to colnames in the data.frame produced by \code{get_gof(model)}. The \code{modelsummary::gof_map} default dictionary is used to format and rename statistics.
 \item NA: excludes all statistics from the bottom part of the table.
-\item data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below.
+\item data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below. The \code{fmt} column in this data frame only accepts integers. For more flexibilyt, use a list of lists, as described in the next bullet.
 \item list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
 }}
 
