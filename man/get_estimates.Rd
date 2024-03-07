@@ -44,8 +44,10 @@ sections below):
 \item \code{term : response + statistic ~ model}: term and group id in a single column
 \item \code{term ~ response}
 }
-\item String: "rbind" or "rcollapse" to bind rows of two or more regression tables to create "panels" or "stacks" of regression models.
+\item String: "cbind", "rbind", "rcollapse"
 \itemize{
+\item "cbind": side-by-side models with autmoatic spanning column headers to group models (\code{tinytable} only feature).
+\item "rbind" or "rcollapse": "panels" or "stacks" of regression models.
 \item the \code{models} argument must be a (potentially named) nested list of models.
 }
 \itemize{

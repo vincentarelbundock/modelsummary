@@ -36,7 +36,8 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   - Models are labelled automatically. The default label style can be altered by setting a global option. See below.
 #' * Named list of models: `modelsummary(list("A"=model1, "B"=model2))`
 #'   - Models are labelled using the list names.
-#' * Nested list of models: When using the `shape="rbind"` argument, `models` can be a nested list of models to display "panels" or "stacks" of regression models. See the `shape` argument documentation and examples below.
+#' * Nested list of models: 
+#'   - When using the `shape` argument with "rbind", "rcollapse", or "cbind" values, `models` can be a nested list of models to display "panels" or "stacks" of regression models. See the `shape` argument documentation and examples below.
 #' @param output filename or object type (character string)
 #' * Supported filename extensions: .docx, .html, .tex, .md, .txt, .csv, .xlsx, .png, .jpg
 #' * Supported object types: "default", "html", "markdown", "latex", "latex_tabular", "typst", "data.frame", "tinytable", "gt", "kableExtra", "huxtable", "flextable", "DT", "jupyter". The "modelsummary_list" value produces a lightweight object which can be saved and fed back to the `modelsummary` function.
@@ -137,7 +138,9 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   - `term + response + statistic ~ model`: term and group id in separate columns
 #'   - `term : response + statistic ~ model`: term and group id in a single column
 #'   - `term ~ response`
-#' * String: "rbind" or "rcollapse" to bind rows of two or more regression tables to create "panels" or "stacks" of regression models.
+#' * String: "cbind", "rbind", "rcollapse"
+#'   - "cbind": side-by-side models with autmoatic spanning column headers to group models (`tinytable` only feature).
+#'   - "rbind" or "rcollapse": "panels" or "stacks" of regression models.
 #'   -  the `models` argument must be a (potentially named) nested list of models.
 #'     + Unnamed nested list with 2 panels: `list(list(model1, model2), list(model3, model4))`
 #'     + Named nested list with 2 panels: `list("Panel A" = list(model1, model2), "Panel B" = list(model3, model4))`
@@ -322,6 +325,9 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'         "C" = lm(disp ~ hp + factor(gear), data = mtcars))
 #' )
 #' 
+#' # shape = "cbind"
+#' modelsummary(panels, shape = "cbind")
+#' 
 #' modelsummary(
 #'     panels,
 #'     shape = "rbind",
@@ -382,6 +388,7 @@ modelsummary <- function(
     checkmate::check_formula(shape),
     checkmate::check_choice(shape, c("cbind", "rbind", "rcollapse")),
     checkmate::check_null(shape))
+
   if (isTRUE(checkmate::check_choice(shape, c("rbind", "rcollapse")))) {
     out <- modelsummary_rbind(models,
       output = output,
@@ -428,25 +435,10 @@ modelsummary <- function(
   # before sanitize_models()
   # before sanitize_shape()
   # after sanitize_output()
-  span_cbind_tinytable <- NULL
-  if (isTRUE(shape == "cbind")) {
-    flag <- is.list(models) &&
-      all(sapply(models, function(x) is.list(x))) &&
-      !is.null(names(models))
-    msg <- "With `shape='cbind', `models` must be a named list of lists of models."
-    if (!flag) insight::format_error(msg)
-
-    # "cbind" uses the default shape
-    shape <- term + statistic ~ model
-
-    if (settings_equal("output_factory", "tinytable")) {
-      span_cbind_tinytable <- get_span_cbind_tinytable(models)
-      models <- do.call(c, unname(models))
-    } else {
-      span_cbind_tinytable <- NULL
-      models <- do.call(c, models)
-    }
-  }
+  tmp <- get_span_cbind(models, shape)
+  shape <- tmp$shape
+  models <- tmp$models
+  span_cbind <- tmp$span_cbind
 
   # other sanity checks
   sanitize_escape(escape)
@@ -828,9 +820,8 @@ modelsummary <- function(
     ...
   )
 
-  if (!is.null(span_cbind_tinytable) && inherits(out, "tinytable")) {
-    out <- tinytable::group_tt(out, j = span_cbind_tinytable)
-  }
+  # after factory call
+  out <- set_span_cbind(out, span_cbind)
 
   # invisible return
   if (settings_equal("function_called", "modelsummary_rbind")) {
@@ -931,11 +922,3 @@ redundant_labels <- function(dat, column) {
 msummary <- modelsummary
 
 
-
-get_span_cbind_tinytable <- function(models) {
-    model_names <- rep(names(models), sapply(models, length))
-    model_indices <- seq_along(model_names)
-    indices_list <- split(model_indices, model_names)
-    final_indices <- lapply(indices_list, function(x) range(x))
-    lapply(final_indices, function(x) x + 1)
-}

@@ -31,7 +31,10 @@ modelplot(
 \itemize{
 \item Models are labelled using the list names.
 }
-\item Nested list of models: When using the \code{shape="rbind"} argument, \code{models} can be a nested list of models to display "panels" or "stacks" of regression models. See the \code{shape} argument documentation and examples below.
+\item Nested list of models:
+\itemize{
+\item When using the \code{shape} argument with "rbind", "rcollapse", or "cbind" values, \code{models} can be a nested list of models to display "panels" or "stacks" of regression models. See the \code{shape} argument documentation and examples below.
+}
 }}
 
 \item{conf_level}{numeric value between 0 and 1. confidence level to use for

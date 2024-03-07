@@ -42,7 +42,10 @@ msummary(
 \itemize{
 \item Models are labelled using the list names.
 }
-\item Nested list of models: When using the \code{shape="rbind"} argument, \code{models} can be a nested list of models to display "panels" or "stacks" of regression models. See the \code{shape} argument documentation and examples below.
+\item Nested list of models:
+\itemize{
+\item When using the \code{shape} argument with "rbind", "rcollapse", or "cbind" values, \code{models} can be a nested list of models to display "panels" or "stacks" of regression models. See the \code{shape} argument documentation and examples below.
+}
 }}
 
 \item{output}{filename or object type (character string)
@@ -146,8 +149,10 @@ statistics are exponentiated, and the \code{std.error} is transformed to
 \item \code{term : response + statistic ~ model}: term and group id in a single column
 \item \code{term ~ response}
 }
-\item String: "rbind" or "rcollapse" to bind rows of two or more regression tables to create "panels" or "stacks" of regression models.
+\item String: "cbind", "rbind", "rcollapse"
 \itemize{
+\item "cbind": side-by-side models with autmoatic spanning column headers to group models (\code{tinytable} only feature).
+\item "rbind" or "rcollapse": "panels" or "stacks" of regression models.
 \item the \code{models} argument must be a (potentially named) nested list of models.
 }
 \itemize{
@@ -586,6 +591,9 @@ panels <- list(
         "A" = lm(disp ~ hp, data = mtcars),
         "C" = lm(disp ~ hp + factor(gear), data = mtcars))
 )
+
+# shape = "cbind"
+modelsummary(panels, shape = "cbind")
 
 modelsummary(
     panels,

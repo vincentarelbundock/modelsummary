@@ -4,7 +4,7 @@
 sanitize_shape <- function(shape) {
 
     if (is.null(shape)) {
-        return(term + statistic ~ model)
+        shape <- term + statistic ~ model
     }
 
     checkmate::assert(

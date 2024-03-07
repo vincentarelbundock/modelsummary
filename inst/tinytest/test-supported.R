@@ -140,7 +140,7 @@ make_data <- function(response = c("A", "B", "C")) {
 dat <- make_data()
 invisible(capture.output(mod <- nnet::multinom(var1 ~ var2, data = dat)))
 expect_warning(modelsummary(mod, output = "dataframe"), pattern = "duplicate")
-tab <- suppressWarnings(modelsummary(mod, group = response + term ~ model, output = "dataframe"))
+tab <- suppressWarnings(modelsummary(mod, shape = response + term ~ model, output = "dataframe"))
 expect_inherits(tab, "data.frame")
 expect_true(nrow(tab) > 11)
 

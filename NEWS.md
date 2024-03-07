@@ -16,6 +16,10 @@ Other breaking changes:
 * The `statistic_override` argument was replaced by `vcov` over 1 year ago, with appropriate deprecation warnings. It is now fully removed.
 * The `group` argument was replaced by `shape` over 1 year ago, with appropriate deprecation warnings. It is now fully removed.
 
+New features:
+
+* `modelsummary(panels, shape = "cbind")` automatically adds column-spanning labels when `panels` is a named nested list of models.
+
 ## 1.4.5
 
 * `tinytable` supports histograms in `datasummary_skim()`

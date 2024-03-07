@@ -102,11 +102,11 @@ dat <- data.frame(
 mod <- suppressMessages(lmer(y ~ x + (1 | k) + (1 | m), data = dat))
 tab1 <- modelsummary(mod,
     output = "data.frame",
-    group = term + group ~ model)
+    shape = term + group ~ model)
 tab2 <- modelsummary(
     mod,
     output = "data.frame",
-    group = term + group ~ model,
+    shape = term + group ~ model,
     metrics = c("RMSE", "BIC"))
 expect_true("RMSE" %in% tab1$term)
 expect_false("R2" %in% tab1$term)
@@ -131,7 +131,7 @@ tab <- suppressWarnings(modelsummary(mod, output = "data.frame", gof_omit = ".*"
 expect_inherits(tab, "data.frame")
 tab <- modelsummary(mod,
     output = "data.frame", gof_omit = ".*",
-    group = group + term ~ model)
+    shape = group + term ~ model)
 expect_inherits(tab, "data.frame")
 expect_equivalent(dim(tab), c(7, 5))
 
