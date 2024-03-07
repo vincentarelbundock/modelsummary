@@ -14,7 +14,7 @@ config_modelsummary(factory_default = "kableExtra")
 Other breaking changes:
 
 * The `statistic_override` argument was replaced by `vcov` over 1 year ago, with appropriate deprecation warnings. It is now fully removed.
-* The `group` argument was replaced by `shape` over 1 year ago, with appropriate deprecation warnings. It is now fully removed.
+* The `group` argument was replaced by `shape` several releases ago. It is now fully removed.
 
 New features:
 
