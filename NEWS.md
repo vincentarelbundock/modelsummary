@@ -19,6 +19,7 @@ Other breaking changes:
 New features:
 
 * `modelsummary(panels, shape = "cbind")` automatically adds column-spanning labels when `panels` is a named nested list of models.
+* `config_modelsummary()` gets a `startup_message` argument to silence the startup message persistently.
 
 ## 1.4.5
 
