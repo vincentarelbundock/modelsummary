@@ -22,6 +22,8 @@ config_modelsummary(
 
 \item{factory_markdown}{Name of package used to generate LaTeX output when \code{output="markdown"}.}
 
+\item{startup_message}{TRUE or FALSE to show warnings at startup}
+
 \item{reset}{TRUE to return to default settings.}
 }
 \description{

@@ -302,3 +302,22 @@ expect_equivalent(tab[1, 4], '4.7')
 expect_equivalent(tab[1, 5], '0.8')
 expect_equivalent(tab[1, 6], '5.5')
 expect_equivalent(tab[1, 7], '0.4')
+
+# Issue #711: stars and d-columns
+requiet("dplyr")
+training <- 'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv'
+training <- read.csv(training, na.strings = "")
+training <- training %>%
+  mutate(`Earnings Before` = re75 / 1000,
+         `Earnings After` = re78 / 1000,
+         Treatment = ifelse(treat == TRUE, 'Treatment', 'Control'),
+         Married = ifelse(married == TRUE, 'Yes', 'No')) %>%
+  select(`Earnings Before`,
+         `Earnings After`,
+         Treatment,
+         Ethnicity = ethn,
+         Age = age,
+         Education = educ,
+         Married)
+tab <- datasummary_balance(~ Treatment, training, fmt = 3, stars = TRUE, align = "lllllldl", output = "latex")
+expect_snapshot_print(tab, "datasummary_balance-issue711")
