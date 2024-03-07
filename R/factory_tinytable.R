@@ -71,6 +71,7 @@ factory_tinytable <- function(tab,
       sp <- as.list(sp)
       sp[[1]] <- 1:sp[[1]]
       sp[2:length(sp)] <- lapply(2:length(sp), function(k) (max(sp[[k - 1]]) + 1):sp[[k]])
+      sp <- sp[trimws(names(sp)) != ""]
       out <- tinytable::group_tt(out, j = sp)
       out <- tinytable::style_tt(out, i = -i, align = "c")
     }
