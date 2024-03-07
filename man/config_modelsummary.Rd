@@ -9,6 +9,7 @@ config_modelsummary(
   factory_latex,
   factory_html,
   factory_markdown,
+  startup_message,
   reset = FALSE
 )
 }

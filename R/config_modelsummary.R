@@ -4,6 +4,7 @@
 #' @param factory_latex Name of package used to generate LaTeX output when `output="latex"`.
 #' @param factory_markdown Name of package used to generate LaTeX output when `output="markdown"`.
 #' @param factory_html Name of package used to generate LaTeX output when `output="html"`.
+#' @param startup_message TRUE or FALSE to show warnings at startup
 #' @param reset TRUE to return to default settings.
 #' @export
 config_modelsummary <- function(
