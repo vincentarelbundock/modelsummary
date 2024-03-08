@@ -21,6 +21,10 @@ New features:
 * `modelsummary(panels, shape = "cbind")` automatically adds column-spanning labels when `panels` is a named nested list of models.
 * `config_modelsummary()` gets a `startup_message` argument to silence the startup message persistently.
 
+Bug fixes:
+
+* Fixed Issue #399: datasummary_balance() siunitx formatting.
+
 ## 1.4.5
 
 * `tinytable` supports histograms in `datasummary_skim()`

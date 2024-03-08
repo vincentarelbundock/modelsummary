@@ -310,7 +310,7 @@ fmt_nainf <- function(x) {
     }
 
     # Remove weird numbers before wrapping in siunitx
-    out <- gsub("^NA$|^NaN$|^-Inf$|^Inf$", "", x)
+    out <- gsub("^NA$|^NaN$|^-Inf$|^Inf$|^\\\\num\\{NA\\}|^\\\\num\\{NaN\\}|^\\\\num\\{-Inf\\}|^\\\\num\\{Inf\\}", "", x)
 
     # empty siunitx
     out <- gsub("\\\\num\\{\\}", "", out)
