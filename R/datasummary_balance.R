@@ -34,7 +34,7 @@
 datasummary_balance <- function(formula,
                                 data,
                                 output = "default",
-                                fmt = fmt_decimal(digits = 1, pdigits = 3),
+                                fmt = 2,
                                 title = NULL,
                                 notes = NULL,
                                 align = NULL,
@@ -52,9 +52,13 @@ datasummary_balance <- function(formula,
                       "function_called" = "datasummary_balance"
                   ))
 
-
     ## sanity checks
     sanitize_output(output) # before sanitize_escape
+    # this is going to be detected by fmt_mathmode() when we call
+    # datasummary(output="dataframe") so we can get siunitx formatting even in
+    # internal calls.
+    settings_set("output_format_ultimate", settings_get("output_format"))
+
     sanitize_escape(escape) # after sanitize_output
     sanity_ds_right_handed_formula(formula)
     sanity_stars(stars)
@@ -63,6 +67,7 @@ datasummary_balance <- function(formula,
     checkmate::assert_flag(dinm)
     checkmate::assert_choice(dinm_statistic, choices = c("std.error", "p.value"))
     data <- sanitize_datasummary_balance_data(formula, data)
+
 
     if ("p.value" %in% dinm_statistic) {
       insight::check_if_installed("estimatr")
@@ -147,6 +152,7 @@ datasummary_balance <- function(formula,
 
         ## datasummary(output="dataframe") changes the output format
         sanitize_output(output)
+        settings_set("output_format_ultimate", settings_get("output_format"))
 
         ## enforce 2-column stub, even when there is only one factor
         idx <- grep("bad_factor_for_stub", tab_fac[[1]])
@@ -193,6 +199,7 @@ datasummary_balance <- function(formula,
 
         ## datasummary(output="dataframe") changes the output format
         sanitize_output(output)
+        settings_set("output_format_ultimate", settings_get("output_format"))
     }
 
     ## combine
@@ -320,6 +327,7 @@ DinM <- function(lhs, rhs, data, fmt, statistic, stars = TRUE, escape = TRUE) {
 
   out <- estimatr::tidy(out)
 
+settings_set("junk", TRUE)
   rounding <- sanitize_fmt(fmt)
 
   out[["estimate"]] <- rounding(out[["estimate"]])
