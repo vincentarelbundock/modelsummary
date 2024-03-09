@@ -170,6 +170,7 @@ datasummary <- function(formula,
 
   sanitize_output(output) # before sanitize_escape
   sanitize_escape(escape) # after sanitize_output
+  sanity_align(align)
 
   sanity_ds_data(formula = formula, data = data, internal_call = list(...)[["internal_call"]])
 

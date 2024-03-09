@@ -48,9 +48,7 @@ datasummary_balance <- function(formula,
 
 
     ## settings
-    settings_init(settings = list(
-                      "function_called" = "datasummary_balance"
-                  ))
+    settings_init(settings = list("function_called" = "datasummary_balance"))
 
     ## sanity checks
     sanitize_output(output) # before sanitize_escape
@@ -59,6 +57,7 @@ datasummary_balance <- function(formula,
     # internal calls.
     settings_set("output_format_ultimate", settings_get("output_format"))
 
+    sanity_align(align)
     sanitize_escape(escape) # after sanitize_output
     sanity_ds_right_handed_formula(formula)
     sanity_stars(stars)

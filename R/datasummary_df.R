@@ -17,8 +17,11 @@ datasummary_df <- function(data,
                            escape = TRUE,
                            ...) {
 
+  settings_init(settings = list("function_called" = "datasummary_df"))
+
   sanitize_output(output) # before sanitize_escape
   sanitize_escape(escape) # after sanitize_output
+  sanity_align(align)
 
   checkmate::assert_data_frame(data)
 
@@ -27,7 +30,7 @@ datasummary_df <- function(data,
     data[[n]] <- fmt(data[[n]])
   }
 
-  factory(data,
+  out <- factory(data,
           align = align,
           hrule = hrule,
           notes = notes,
@@ -36,5 +39,8 @@ datasummary_df <- function(data,
           add_rows = add_rows,
           add_columns = add_columns,
           ...)
+
+  settings_rm()
+  return(out)
 
 }
