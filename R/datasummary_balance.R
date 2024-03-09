@@ -48,13 +48,16 @@ datasummary_balance <- function(formula,
 
 
     ## settings
-    settings_init(settings = list(
-                      "function_called" = "datasummary_balance"
-                  ))
-
+    settings_init(settings = list("function_called" = "datasummary_balance"))
 
     ## sanity checks
     sanitize_output(output) # before sanitize_escape
+    # this is going to be detected by fmt_mathmode() when we call
+    # datasummary(output="dataframe") so we can get siunitx formatting even in
+    # internal calls.
+    settings_set("output_format_ultimate", settings_get("output_format"))
+
+    sanity_align(align)
     sanitize_escape(escape) # after sanitize_output
     sanity_ds_right_handed_formula(formula)
     sanity_stars(stars)
@@ -63,6 +66,7 @@ datasummary_balance <- function(formula,
     checkmate::assert_flag(dinm)
     checkmate::assert_choice(dinm_statistic, choices = c("std.error", "p.value"))
     data <- sanitize_datasummary_balance_data(formula, data)
+
 
     if ("p.value" %in% dinm_statistic) {
       insight::check_if_installed("estimatr")
@@ -129,15 +133,19 @@ datasummary_balance <- function(formula,
         tmp1$bad_factor_for_stub <- as.factor(sample(c("A", "B"), nrow(tmp1), replace = TRUE))
         tmp2$bad_factor_for_stub <- as.factor(sample(c("A", "B"), nrow(tmp2), replace = TRUE))
 
-        pctformat = function(x) sprintf("%.1f", x)
+        # pctformat = function(x) sprintf("%.1f", x)
+        pctformat <- sanitize_fmt(1)
+        nformat <- function(x) {
+          sanitize_fmt(0)(as.numeric(x))
+        }
         if (!is.null(rhs)) {
             f_fac <- stats::as.formula(sprintf(
                 "All(tmp2, factor = TRUE, numeric = FALSE) ~
-                 Factor(%s) * (N + Heading('Pct.') * Percent('col') * Format(pctformat()))", rhs))
+                 Factor(%s) * (N * Format(nformat()) + Heading('Pct.') * Percent('col') * Format(pctformat()))", rhs))
         } else {
             f_fac <- stats::as.formula(
                 "All(tmp2, factor = TRUE, numeric = FALSE) ~
-                 (N + Heading('Pct.') * Percent('col') * Format(pctformat()))")
+                 (N * Format(nformat()) + Heading('Pct.') * Percent('col') * Format(pctformat()))")
         }
         tab_fac <- datasummary(formula = f_fac,
                                data = tmp1,
@@ -147,6 +155,7 @@ datasummary_balance <- function(formula,
 
         ## datasummary(output="dataframe") changes the output format
         sanitize_output(output)
+        settings_set("output_format_ultimate", settings_get("output_format"))
 
         ## enforce 2-column stub, even when there is only one factor
         idx <- grep("bad_factor_for_stub", tab_fac[[1]])
@@ -193,6 +202,7 @@ datasummary_balance <- function(formula,
 
         ## datasummary(output="dataframe") changes the output format
         sanitize_output(output)
+        settings_set("output_format_ultimate", settings_get("output_format"))
     }
 
     ## combine

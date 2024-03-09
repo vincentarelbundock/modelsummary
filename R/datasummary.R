@@ -161,13 +161,16 @@ datasummary <- function(formula,
                         escape = TRUE,
                         ...) {
 
-  ## settings: don't overwrite settings on internal calls
-  settings_init(settings = list(
-     "function_called" = "datasummary"
-  ))
+  if (!isTRUE(list(...)[["internal_call"]])) {
+    ## settings: don't overwrite settings on internal calls
+    settings_init(settings = list(
+      "function_called" = "datasummary"
+    ))
+  }
 
   sanitize_output(output) # before sanitize_escape
   sanitize_escape(escape) # after sanitize_output
+  sanity_align(align)
 
   sanity_ds_data(formula = formula, data = data, internal_call = list(...)[["internal_call"]])
 
@@ -240,11 +243,11 @@ datasummary <- function(formula,
   if (!is.null(settings_get("output_file")) ||
       output == "jupyter" ||
       (output == "default" && settings_equal("output_default", "jupyter"))) {
-    settings_rm()
+    if (!isTRUE(list(...)[["internal_call"]])) settings_rm()
     return(invisible(out))
   # visible return
   } else {
-    settings_rm()
+    if (!isTRUE(list(...)[["internal_call"]])) settings_rm()
     return(out)
   }
 

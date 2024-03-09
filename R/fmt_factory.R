@@ -105,8 +105,8 @@ fmt_decimal <- function(digits = 3, pdigits = NULL, ...) {
                     } else {
                         x[[n]] <- fun(x[[n]], ...)
                     }
-                    x[[n]] <- fmt_nainf(x[[n]])
                     x[[n]] <- fmt_mathmode(x[[n]])
+                    x[[n]] <- fmt_nainf(x[[n]])
                 } else {
                     x[[n]] <- as.character(x[[n]])
                     x[[n]] <- fmt_nainf(x[[n]])
@@ -118,9 +118,9 @@ fmt_decimal <- function(digits = 3, pdigits = NULL, ...) {
                 x <- pfun(x, ...)
             } else {
                 x <- fun(x, ...)
+                x <- fmt_mathmode(x)
             }
             x <- fmt_nainf(x)
-            x <- fmt_mathmode(x)
         }
 
         return(x)
@@ -270,16 +270,19 @@ fmt_term <- function(..., default = 3) {
 
 
 fmt_mathmode <- function(x) {
+
     out <- x
 
     ## LaTeX siunitx \num{}
-    if (settings_equal("output_format", c("latex", "latex_tabular"))) {
-        if (!isTRUE(settings_get("siunitx_scolumns"))) {
-            if (settings_equal("format_numeric_latex", "siunitx") && !settings_equal("dcolumn_stars_mbox", TRUE)) {
+    flag <- settings_equal("output_format", c("latex", "latex_tabular")) ||
+        settings_equal("output_format_ultimate", c("latex", "latex_tabular"))
+    if (flag) {
+        if (settings_equal("format_numeric_latex", "siunitx")) {
+            if (!settings_equal("dcolumn_stars_mbox", TRUE)) {
                 out <- sprintf("\\num{%s}", out)
-            } else if (settings_equal("format_numeric_latex", c("dollars", "mathmode"))) {
-                out <- sprintf("$%s$", out)
             }
+        } else if (settings_equal("format_numeric_latex", c("dollars", "mathmode"))) {
+            out <- sprintf("$%s$", out)
         }
     }
 
@@ -307,7 +310,7 @@ fmt_nainf <- function(x) {
     }
 
     # Remove weird numbers before wrapping in siunitx
-    out <- gsub("^NA$|^NaN$|^-Inf$|^Inf$", "", x)
+    out <- gsub("^NA$|^NaN$|^-Inf$|^Inf$|^\\\\num\\{NA\\}|^\\\\num\\{NaN\\}|^\\\\num\\{-Inf\\}|^\\\\num\\{Inf\\}", "", x)
 
     # empty siunitx
     out <- gsub("\\\\num\\{\\}", "", out)

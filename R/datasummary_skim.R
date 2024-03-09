@@ -56,6 +56,7 @@ datasummary_skim <- function(data,
   ))
   sanitize_output(output) # before sanitize_escape
   sanitize_escape(escape) # after sanitize_output
+  sanity_align(align)
 
 
   checkmate::assert_true(type %in% c("numeric", "categorical", "dataset"))
