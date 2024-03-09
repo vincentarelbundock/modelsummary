@@ -308,11 +308,11 @@ requiet("dplyr")
 training <- 'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv'
 training <- read.csv(training, na.strings = "")
 training <- training %>%
-  mutate(`Earnings Before` = re75 / 1000,
+  dplyr::mutate(`Earnings Before` = re75 / 1000,
          `Earnings After` = re78 / 1000,
          Treatment = ifelse(treat == TRUE, 'Treatment', 'Control'),
          Married = ifelse(married == TRUE, 'Yes', 'No')) %>%
-  select(`Earnings Before`,
+  dplyr::select(`Earnings Before`,
          `Earnings After`,
          Treatment,
          Ethnicity = ethn,
