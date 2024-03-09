@@ -133,15 +133,19 @@ datasummary_balance <- function(formula,
         tmp1$bad_factor_for_stub <- as.factor(sample(c("A", "B"), nrow(tmp1), replace = TRUE))
         tmp2$bad_factor_for_stub <- as.factor(sample(c("A", "B"), nrow(tmp2), replace = TRUE))
 
-        pctformat = function(x) sprintf("%.1f", x)
+        # pctformat = function(x) sprintf("%.1f", x)
+        pctformat <- sanitize_fmt(1)
+        nformat <- function(x) {
+          sanitize_fmt(0)(as.numeric(x))
+        }
         if (!is.null(rhs)) {
             f_fac <- stats::as.formula(sprintf(
                 "All(tmp2, factor = TRUE, numeric = FALSE) ~
-                 Factor(%s) * (N + Heading('Pct.') * Percent('col') * Format(pctformat()))", rhs))
+                 Factor(%s) * (N * Format(nformat()) + Heading('Pct.') * Percent('col') * Format(pctformat()))", rhs))
         } else {
             f_fac <- stats::as.formula(
                 "All(tmp2, factor = TRUE, numeric = FALSE) ~
-                 (N + Heading('Pct.') * Percent('col') * Format(pctformat()))")
+                 (N * Format(nformat()) + Heading('Pct.') * Percent('col') * Format(pctformat()))")
         }
         tab_fac <- datasummary(formula = f_fac,
                                data = tmp1,
@@ -326,7 +330,6 @@ DinM <- function(lhs, rhs, data, fmt, statistic, stars = TRUE, escape = TRUE) {
 
   out <- estimatr::tidy(out)
 
-settings_set("junk", TRUE)
   rounding <- sanitize_fmt(fmt)
 
   out[["estimate"]] <- rounding(out[["estimate"]])
