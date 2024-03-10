@@ -155,9 +155,6 @@ format_estimates <- function(
     }
   }
 
-  # reference categories (after character conversion)
-  # spot is important
-  est[["estimate"]][idx_ref] <- "-"
 
   # extract estimates (there can be several)
   for (i in seq_along(estimate_glue)) {
@@ -178,6 +175,9 @@ format_estimates <- function(
     # avoid empty parentheses for NAs
     est[[paste0("modelsummary_tmp", i)]][est[[s]] == ""] <- ""
   }
+
+  # reference level: only first category, rest should be empty
+  est[["modelsummary_tmp1"]][idx_ref] <- "-"
 
   if (!is.null(group_name)) {
     miss <- setdiff(shape$group_name, colnames(est))
