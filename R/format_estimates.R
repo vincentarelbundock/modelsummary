@@ -144,8 +144,6 @@ format_estimates <- function(
     }
   }
 
-  # reference categories (after character conversion)
-  est[["estimate"]][idx_ref] <- "-"
 
   # modelplot safety hack: statistics may not be available for some models (e.g., "brms")
   if (identical(estimate_glue, "{estimate}|{std.error}|{conf.low}|{conf.high}|{p.value}")) {
@@ -156,6 +154,10 @@ format_estimates <- function(
       estimate_glue <- gsub("{p.value}", " ", estimate_glue, fixed = TRUE)
     }
   }
+
+  # reference categories (after character conversion)
+  # spot is important
+  est[["estimate"]][idx_ref] <- "-"
 
   # extract estimates (there can be several)
   for (i in seq_along(estimate_glue)) {
