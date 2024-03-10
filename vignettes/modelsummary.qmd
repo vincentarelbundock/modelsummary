@@ -921,6 +921,15 @@ modelsummary(mod, output = "gt")
 
 # Case studies
 
+## Reference categories
+
+When estimating models with factor regressors, `R` will typically omit the reference category. We can include an empty row for the reference level automatically by using the `include_reference` argument. This argument is supplied by the `parameters` package, which `modelsummary` uses behind the scenes to extract model estimates. We can supply it directly to `modelsummary()`, which will then pass the argument forward automatically:
+
+```{r}
+tmp <- transform(mtcars, cyl = factor(cyl))
+mod <- lm(mpg ~ cyl, tmp)
+modelsummary(mod, include_reference = TRUE)
+```
 
 ## Standardization
 

@@ -129,6 +129,7 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, co
     # term must be a character (not rounded with decimals when integer)
     out$term <- as.character(out$term)
 
+
     # standard columns may be missing, but a blank space is better than an
     # error, especially for mix of brms::brm() and lm(), for example
     for (col in c("estimate", "std.error", "statistic", "p.value", "conf.low", "conf.high")) {

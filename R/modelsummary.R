@@ -173,7 +173,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' prevent the file from compiling/displaying. `TRUE` escapes all cells, captions, and notes. Users can have more fine-grained control by setting `escape=FALSE` and using an external command such as: `modelsummary(model, "latex") |> tinytable::format_tt(tab, j=1:5, escape=TRUE)`
 #' @param ... all other arguments are passed through to three functions. See the documentation of these functions for lists of available arguments.
 #' + [parameters::model_parameters] extracts parameter estimates. Available arguments depend on model type, but include:
-#'     - `standardize`, `centrality`, `dispersion`, `test`, `ci_method`, `prior`, `diagnostic`, `rope_range`, `power`, `cluster`, etc.
+#'     - `standardize`, `include_reference`, `centrality`, `dispersion`, `test`, `ci_method`, `prior`, `diagnostic`, `rope_range`, `power`, `cluster`, etc.
 #' + [performance::model_performance] extracts goodness-of-fit statistics. Available arguments depend on model type, but include:
 #'     - `metrics`, `estimator`, etc.
 #' + [tinytable::tt], [kableExtra::kbl] or [gt::gt] draw tables, depending on the value of the `output` argument.
