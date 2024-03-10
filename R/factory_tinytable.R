@@ -29,10 +29,11 @@ factory_tinytable <- function(tab,
   }
 
   # escape everything except \\num{} in LaTeX
-  if (isTRUE(escape) && isTRUE(output_format %in% c("latex", "html", "typst", "tinytable"))) {
+  if (isTRUE(escape) && isTRUE(output_format %in% c("latex", "latex_tabular", "html", "typst", "tinytable"))) {
+    of <- if (output_format == "latex_tabular") "latex" else output_format
     tmp <- escape_everything(
       tab = tab,
-      output_format = output_format,
+      output_format = of,
       span_list = span_list,
       title = title,
       notes = notes)
@@ -93,6 +94,9 @@ factory_tinytable <- function(tab,
   # post-process it with `plot_tt()` in `datasummary_skim()`
   if (settings_equal("output_format", c("latex", "typst", "html", "markdown"))) {
     out@output <- settings_get("output_format")
+  } else if (settings_equal("output_format", "latex_tabular")) {
+    out@output <- "latex"
+    out <- tinytable::theme_tt(out, "tabular")
   }
 
   return(invisible(out))
