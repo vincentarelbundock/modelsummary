@@ -2,7 +2,7 @@
 #'
 #' @keywords internal
 #' @noRd
-shape_estimates <- function(estimates, shape, conf_level) {
+shape_estimates <- function(estimates, shape, conf_level, statistic, estimate) {
 
     # default
     if (isTRUE(all.equal(shape$shape_formula, term + statistic ~ model))) {
@@ -20,7 +20,7 @@ shape_estimates <- function(estimates, shape, conf_level) {
                             value.name = "estimate")
 
     if ("statistic" %in% shape$rhs) {
-        out$statistic <- rename_statistics(out$statistic, conf_level = conf_level)
+        out$statistic <- rename_statistics(out$statistic, conf_level = conf_level, statistic = statistic, estimate = estimate)
     }
 
     # use factors to preserve order in `dcast`

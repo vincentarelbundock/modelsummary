@@ -578,7 +578,7 @@ modelsummary <- function(
     }
   }
 
-  est <- shape_estimates(est, shape, conf_level = conf_level)
+  est <- shape_estimates(est, shape, conf_level = conf_level, statistic = statistic, estimate = estimate)
 
   # distinguish between estimates and gof (first column for tests)
   est$part <- "estimates"

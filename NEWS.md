@@ -18,6 +18,7 @@ Other breaking changes:
 
 New features:
 
+* `statistic` and `estimate` can be specified as named vectors to control the names of statistics when displayed in different columns using the `shape` argument.
 * `modelsummary(panels, shape = "cbind")` automatically adds column-spanning labels when `panels` is a named nested list of models.
 * `config_modelsummary()` gets a `startup_message` argument to silence the startup message persistently.
 

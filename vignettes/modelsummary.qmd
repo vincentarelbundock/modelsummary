@@ -606,6 +606,21 @@ When using the default `tinytable` backend, we can use a named nested list to au
 modelsummary(panels, shape = "cbind")
 ```
 
+## Renaming estimates and statistics
+
+When statistics are displayed in different columns, users may want control over the statistic names. To do so, we specify the `estimate` and `statistic` as named vectors:
+
+
+```{r}
+mod <- lm(mpg ~ factor(cyl), mtcars)
+
+modelsummary(
+    mod, 
+    estimate = c("$\\hat{\\beta}$" = "estimate"),
+    statistic = c("$\\sigma_{\\hat{\\beta}}$" = "std.error"),
+    shape = term ~ model + statistic)
+  ```
+
 
 ### `fixest`
 
