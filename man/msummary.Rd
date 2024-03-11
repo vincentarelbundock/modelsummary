@@ -407,9 +407,9 @@ When creating LaTeX via the \code{tinytable} backend (default in version 2.0.0 a
 \\usepackage\{codehigh\}
 \\usepackage[normalem]\{ulem\}
 \\UseTblrLibrary\{booktabs\}
-\\newcommand\{\\tinytableTabularrayUnderline\}\link{1}\{\\underline\{#1\}\}
-\\newcommand\{\\tinytableTabularrayStrikeout\}\link{1}\{\\sout\{#1\}\}
-\\NewTableCommand\{\\tinytableDefineColor\}\link{3}\{\\definecolor\{#1\}\{#2\}\{#3\}\}
+\\newcommand\{\\tinytableTabularrayUnderline\}[1]\{\\underline\{#1\}\}
+\\newcommand\{\\tinytableTabularrayStrikeout\}[1]\{\\sout\{#1\}\}
+\\NewTableCommand\{\\tinytableDefineColor\}[3]\{\\definecolor\{#1\}\{#2\}\{#3\}\}
 }
 }
 

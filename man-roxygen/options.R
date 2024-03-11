@@ -80,6 +80,6 @@
 #' \\usepackage\{codehigh\}
 #' \\usepackage\[normalem\]\{ulem\}
 #' \\UseTblrLibrary\{booktabs\}
-#' \\newcommand\{\\tinytableTabularrayUnderline\}[1]\{\\underline\{#1\}\}
-#' \\newcommand\{\\tinytableTabularrayStrikeout\}[1]\{\\sout\{#1\}\}
-#' \\NewTableCommand\{\\tinytableDefineColor\}[3]\{\\definecolor\{#1\}\{#2\}\{#3\}\}
+#' \\newcommand\{\\tinytableTabularrayUnderline\}\[1\]\{\\underline\{#1\}\}
+#' \\newcommand\{\\tinytableTabularrayStrikeout\}\[1\]\{\\sout\{#1\}\}
+#' \\NewTableCommand\{\\tinytableDefineColor\}\[3\]\{\\definecolor\{#1\}\{#2\}\{#3\}\}
