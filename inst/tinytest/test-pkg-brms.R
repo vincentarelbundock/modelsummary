@@ -1,6 +1,5 @@
 source("helpers.R")
 using("checkmate")
-exit_file('brms download is heavy')
 requiet("brms")
 
 # brms: diagnostics and tests
