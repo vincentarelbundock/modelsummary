@@ -25,7 +25,9 @@ factory <- function(tab,
   # sanitize_output(output) # do not override (otherwise this breaks quarto for shape="rbind")
 
   # parse output
-  if (settings_equal("output_factory", "gt")) {
+  if (isTRUE(output == "data.frame")) { # internal calls from datasummary_skim()
+    factory_fun <- factory_dataframe
+  } else if (settings_equal("output_factory", "gt")) {
     factory_fun <- factory_gt
   } else if (settings_equal("output_factory", "tinytable")) {
     factory_fun <- factory_tinytable

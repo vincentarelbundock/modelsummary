@@ -24,15 +24,12 @@ sanitize_output <- function(output) {
   flag <- checkmate::check_string(output)
   fun <- settings_get("function_called")
   if (!isTRUE(flag) && !is.null(fun) && fun == "modelsummary") {
-    stop("The `output` argument must be a string. Type `?modelsummary` for details. This error is sometimes raised when users supply multiple models to `modelsummary` but forget to wrap them in a list. This works: `modelsummary(list(model1, model2))`. This does *not* work: `modelsummary(model1, model2)`")
+    msg <- "The `output` argument must be a string. Type `?modelsummary` for details. This error is sometimes raised when users supply multiple models to `modelsummary` but forget to wrap them in a list. This works: `modelsummary(list(model1, model2))`. This does *not* work: `modelsummary(model1, model2)`"
+    insight::format_error(msg)
   }
 
-  object_types <- c('default',
-    'tinytable', 'gt', 'kableExtra', 'flextable', 'huxtable', 'DT',
-    'html', 'jupyter', 'latex', 'latex_tabular', 'markdown',
-    'dataframe', 'data.frame', 'typst', 'modelsummary_list')
-  extension_types <- c(
-    'html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf', 'jpg', 'png', 'csv', 'xlsx')
+  object_types <- c('default', 'tinytable', 'gt', 'kableExtra', 'flextable', 'huxtable', 'DT', 'html', 'jupyter', 'latex', 'latex_tabular', 'markdown', 'dataframe', 'data.frame', 'typst', 'modelsummary_list')
+  extension_types <- c('html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf', 'jpg', 'png', 'csv', 'xlsx')
 
   checkmate::assert_string(output)
 
@@ -100,13 +97,9 @@ sanitize_output <- function(output) {
   # defaults
   if (output == "default") {
       output <- getOption("modelsummary_factory_default", default = NULL)
+      if (is.null(output)) output <- config_get("factory_default")
       if (is.null(output)) {
-        output <- config_get("factory_default")
-      }
-      if (is.null(output)) {
-        if (isTRUE(insight::check_if_installed("tinytable", quietly = TRUE))) {
-          output <- "tinytable"
-        } else if (isTRUE(insight::check_if_installed("kableExtra", quietly = TRUE))) {
+        if (isTRUE(insight::check_if_installed("kableExtra", quietly = TRUE))) {
           output <- "kableExtra"
         } else if (isTRUE(insight::check_if_installed("gt", quietly = TRUE))) {
           output <- "gt"
@@ -125,9 +118,7 @@ sanitize_output <- function(output) {
   }
 
   # rename otherwise an extension is wrongly detected
-  if (output == "data.frame") {
-    output <- "dataframe"
-  }
+  if (output == "data.frame") output <- "dataframe"
 
   # file extension for auto-detect
   ext <- tools::file_ext(output)
@@ -140,13 +131,9 @@ sanitize_output <- function(output) {
     output_file <- output
   }
 
-  if (isTRUE(check_dependency("knitr")) && isTRUE(check_dependency("rmarkdown"))) {
-
-    ## various strategies to guess the knitr output format
-    fmt <- c(
-      hush(knitr::pandoc_to()),
-      hush(names(rmarkdown::metadata[["format"]])),
-      hush(rmarkdown::default_output_format(knitr::current_input())$name))
+  ## guess the knitr output format
+  if (isTRUE(check_dependency("knitr"))) {
+    fmt <- hush(knitr::pandoc_to())
 
     word_fmt <- c(
       "docx",
@@ -167,23 +154,19 @@ sanitize_output <- function(output) {
       "reprex_render",
       "reprex::reprex_render")
 
-    if (any(word_fmt %in% fmt) && output_user %in% c("flextable", "default")) {
+    typst_fmt <- c("typst")
+
+    latex_fmt <- c("latex", "pdf")
+
+    if (any(word_fmt %in% fmt)) {
       output_format <- "word"
-
-    # unfortunately, `rmarkdown::default_output_format` only detects
-    # `html_document` on reprex, so this will only work in `github_document`
-    ## reprex and github: change to markdown output format only if `output` is "default"
-    } else if (any(markdown_fmt %in% fmt) &&
-               output_user == "default"  &&
-               # respect global options, even in qmd->md documents
-               is.null(getOption("modelsummary_factory_default", default = NULL))) {
+    } else if (any(latex_fmt %in% fmt)) {
+      output_format <- "word"
+    } else if (any(markdown_fmt %in% fmt)) {
       output_format <- "markdown"
-
-
-    } else if (isTRUE(knitr::pandoc_to() == "typst")) {
+    } else if (any(typst_fmt %in% fmt)) {
       output_format <- "typst"
     }
-
   }
 
   # choose factory based on output_format
