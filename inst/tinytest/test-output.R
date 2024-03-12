@@ -131,7 +131,7 @@ unlink(filename)
 tmp <- mtcars
 tmp$cyl <- as.character(tmp$cyl)
 tmp$vs <- as.logical(tmp$vs)
-otp <- c("huxtable", "flextable", "kableExtra", "dataframe", "markdown", "latex", "html")
+otp <- c("tinytable", "huxtable", "flextable", "kableExtra", "dataframe", "markdown", "latex", "html")
 for (o in otp) {
   tab <- datasummary_balance(~am, tmp, output = o)
 }
@@ -142,7 +142,7 @@ tmp <- mtcars
 tmp$cyl <- as.character(tmp$cyl)
 tmp$vs <- as.logical(tmp$vs)
 custom <- data.frame('a' = 1:2, 'b' = 1:2)
-output_formats <- c('gt', 'kableExtra', 'flextable', 'huxtable', 'latex', 'markdown', 'html')
+output_formats <- c('tinytable', 'gt', 'kableExtra', 'flextable', 'huxtable', 'latex', 'markdown', 'html')
 for (o in output_formats) {
   testname <- paste("add_columns with", o)
   tab <- datasummary_balance(~am, tmp, add_columns = custom, output = o)
@@ -174,9 +174,8 @@ dat <- mtcars
 dat$vs <- as.logical(dat$vs)
 dat$gear <- as.factor(dat$gear)
 
-exit_file("tinytable & datasummary_skim doesn't save straight to png")
-
 # write to file
+pkgload::load_all()
 datasummary_skim(dat, output = "test.png")
 datasummary_skim(dat, type = "categorical", output = "test.png")
 datasummary_skim(dat, output = "test.html")

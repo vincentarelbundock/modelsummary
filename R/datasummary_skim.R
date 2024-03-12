@@ -248,7 +248,11 @@ datasummary_skim_numeric <- function(
 
     # don't use output=filepath.html when post-processing
     if (!is.null(settings_get("output_file"))) {
-      output <- "kableExtra"
+      if (settings_equal("output_factory", "kableExtra")) {
+        output <- "kableExtra"
+      } else if (settings_equal("output_factory", "tinytable")) {
+        output <- "tinytable"
+      }
     }
 
     # need this otherwise kableExtra error with `column_spec`
@@ -301,8 +305,11 @@ datasummary_skim_numeric <- function(
     settings_restore(cache)
 
     # don't use output=filepath.html when post-processing
-    if (!is.null(settings_get("output_file"))) {
+    if (!is.null(settings_get("output_file")) && settings_equal("output_factory", "kableExtra")) {
       kableExtra::save_kable(out, file = settings_get("output_file"))
+      return(invisible(out))
+    } else if (!is.null(settings_get("output_file")) && settings_equal("output_factory", "tinytable")) {
+      tinytable::save_tt(out, output = settings_get("output_file"))
       return(invisible(out))
     }
 
