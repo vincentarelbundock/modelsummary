@@ -1,7 +1,7 @@
 
 <p align="center">
 <a href="https://modelsummary.com">
-<img src="man/figures/modelsummary_gallery.gif" height = "250" class = "center">
+<img src="man/figures/modelsummary_gallery.gif" height = "350" class = "center">
 </a> <br> <br>
 <a href = "https://github.com/vincentarelbundock/modelsummary/blob/main/LICENSE.md" target = "_blank"><img src="https://img.shields.io/badge/license-GPLv3-blue"></a>
 <a href = "https://modelsummary.com" target = "_blank"><img src="https://img.shields.io/static/v1?label=Website&message=Visit&color=blue"></a>
@@ -37,18 +37,18 @@ statistics* and to summarize *statistical models* in `R`.
 `modelsummary` includes two families of functions:
 
 1.  Model Summary
-    -   `modelsummary`: Regression tables with side-by-side models.
-    -   `modelplot`: Coefficient plots.
+    - `modelsummary`: Regression tables with side-by-side models.
+    - `modelplot`: Coefficient plots.
 2.  Data Summary
-    -   `datasummary`: Powerful tool to create (multi-level) cross-tabs
-        and data summaries.
-    -   `datasummary_crosstab`: Cross-tabulations.
-    -   `datasummary_balance`: Balance tables with subgroup statistics
-        and difference in means (aka “Table 1”).
-    -   `datasummary_correlation`: Correlation tables.
-    -   `datasummary_skim`: Quick overview (“skim”) of a dataset.
-    -   `datasummary_df`: Turn dataframes into nice tables with titles,
-        notes, etc.
+    - `datasummary`: Powerful tool to create (multi-level) cross-tabs
+      and data summaries.
+    - `datasummary_crosstab`: Cross-tabulations.
+    - `datasummary_balance`: Balance tables with subgroup statistics and
+      difference in means (aka “Table 1”).
+    - `datasummary_correlation`: Correlation tables.
+    - `datasummary_skim`: Quick overview (“skim”) of a dataset.
+    - `datasummary_df`: Turn dataframes into nice tables with titles,
+      notes, etc.
 
 ## Why?
 
@@ -129,7 +129,8 @@ formats.](https://modelsummary.com/articles/modelsummary.html#rmarkdown-and-knit
 tables.](https://modelsummary.com/articles/appearance.html#gt-1)
 
 <center>
-<img src="man/figures/squirrel.png" width="40%">
+<img src="man/figures/modelsummary_gallery.gif" height = "350" class = "center">
+\<img src=“man/figures/squirrel.png” width=“40%”, class = “center\>
 </center>
 
 #### Reliable
@@ -166,12 +167,12 @@ You can install `modelsummary` from CRAN:
 install.packages('modelsummary')
 ```
 
-You can install the development version of `modelsummary` (and its
-dependency `insight`) from R-Universe:
+You can install the development version of `modelsummary` and its
+dependencies from R-Universe:
 
 ``` r
 install.packages(
-    c("modelsummary", "insight", "performance", "parameters"),
+    c("modelsummary", "tinytable", "insight", "performance", "parameters"),
     repos = c(
         "https://vincentarelbundock.r-universe.dev",
         "https://easystats.r-universe.dev"))
@@ -189,12 +190,11 @@ plots produced by `modelsummary`, but [the Get Started
 page](https://modelsummary.com/vignettes/get_started.html) only
 scratches the surface. For details, see the vignettes:
 
--   [Data
-    Summaries](https://modelsummary.com/vignettes/datasummary.html)
--   [Model
-    Summaries](https://modelsummary.com/vignettes/modelsummary.html)
--   [Model Plots](https://modelsummary.com/vignettes/modelplot.html)
--   [`modelsummary` extensions and
-    customization](https://modelsummary.com/vignettes/modelsummary_extension.html)
--   [Themes and
-    Styles](https://modelsummary.com/vignettes/appearance.html)
+- [Data Summaries](https://modelsummary.com/vignettes/datasummary.html)
+- [Model
+  Summaries](https://modelsummary.com/vignettes/modelsummary.html)
+- [Model Plots](https://modelsummary.com/vignettes/modelplot.html)
+- [`modelsummary` extensions and
+  customization](https://modelsummary.com/vignettes/modelsummary_extension.html)
+- [Themes and
+  Styles](https://modelsummary.com/vignettes/appearance.html)
