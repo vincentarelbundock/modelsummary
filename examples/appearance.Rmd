@@ -68,6 +68,32 @@ modelsummary(models,
              locations = cells_body(rows = 3))
 ```
 
+
+```{r, eval=knitr::is_html_output()}
+library(gt)
+
+adelie <- function(x) web_image('https://user-images.githubusercontent.com/987057/85402702-20b1d280-b52a-11ea-9950-f3a03133fd45.png', height = 100)
+gentoo <- function(x) web_image('https://user-images.githubusercontent.com/987057/85402718-27404a00-b52a-11ea-9ad3-dd7562f6438d.png', height = 100)
+chinstrap <- function(x) web_image('https://user-images.githubusercontent.com/987057/85402708-23acc300-b52a-11ea-9a77-de360a0d1f7d.png', height = 100)
+
+cap <- 'Flipper lengths (mm) of the famous penguins of Palmer Station, Antarctica.'
+f <- (`Species` = species) ~ (` ` = flipper_length_mm) * (`Distribution` = Histogram) + flipper_length_mm * sex * ((`Avg.` = Mean)*Arguments(fmt='%.0f') + (`Std. Dev.` = SD)*Arguments(fmt='%.1f'))
+datasummary(f,
+            data = penguins,
+            output = 'gt',
+            title = cap,
+            notes = 'Artwork by @allison_horst',
+            sparse_header = TRUE) %>%
+    text_transform(locations = cells_body(columns = 1, rows = 1), fn = adelie) %>%
+    text_transform(locations = cells_body(columns = 1, rows = 2), fn = chinstrap) %>%
+    text_transform(locations = cells_body(columns = 1, rows = 3), fn = gentoo) %>%
+    tab_style(style = list(cell_text(color = "#FF6700", size = 'x-large')), locations = cells_body(rows = 1)) %>%
+    tab_style(style = list(cell_text(color = "#CD51D1", size = 'x-large')), locations = cells_body(rows = 2)) %>%
+    tab_style(style = list(cell_text(color = "#007377", size = 'x-large')), locations = cells_body(rows = 3)) %>%
+    tab_options(table_body.hlines.width = 0, table.border.top.width = 0, table.border.bottom.width = 0) %>%
+    cols_align('center', columns = 3:6)
+```
+
 # Customizing tables with `kableExtra`
 
 We can use functions from the `kableExtra` package to post-process and customize a `modelsummary` table. To do this, we load the `kableExtra` package, and we set `output='kableExtra'` in the `modelsummary()` call:

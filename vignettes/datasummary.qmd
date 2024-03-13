@@ -42,7 +42,6 @@ options(width = 120)
 <img src="https://user-images.githubusercontent.com/987057/85774118-8b127080-b6ec-11ea-913d-d0c13066cf6b.png" width="49%">
 </center>
 
-# Background
 
 `datasummary` is built around the *fantastic* [`tables` package for `R`.](https://cran.r-project.org/web/packages/tables/index.html) It is a thin "wrapper" which adds convenience functions and arguments; a user-interface consistent with `modelsummary`; cleaner html output; and the ability to export tables to more formats, including [`gt` tables](https://gt.rstudio.com), [`flextable` objects](https://davidgohel.github.io/flextable/), and Microsoft Word documents.
 
@@ -108,26 +107,6 @@ To summarize the categorical variables in the dataset, we type:
 datasummary_skim(penguins, type = "categorical")
 ```
 
-Later in this tutorial, it will become clear that `datasummary_skim` is just a convenience "template" built around `datasummary`, since we can achieve identical results with the latter. For example, to produce a text-only version of the tables above, we can type:
-
-```{r, eval=FALSE}
-datasummary(All(penguins) ~ Mean + SD + Histogram,
-            data = penguins,
-            output = 'markdown')
-```
-
-```
-|                  |    Mean|     SD|  Histogram|
-|:-----------------|-------:|------:|----------:|
-|bill_length_mm    |   43.92|   5.46|  ▁▅▆▆▆▇▇▂▁|
-|bill_depth_mm     |   17.15|   1.97| ▃▄▄▄▇▆▇▅▂▁|
-|flipper_length_mm |  200.92|  14.06|  ▂▅▇▄▁▄▄▂▁|
-|body_mass_g       | 4201.75| 801.95| ▁▄▇▅▄▄▃▃▂▁|
-```
-
-Printing histograms will not work on all computers. If you have issues with this feature, try changing your computer's locale, or try using a different display font.
-
-The `datasummary_skim` function does not currently allow users to summarize continuous and categorical variables together in a single table, but the `datasummary_balance` function described in the next section can do so.
 
 # `datasummary_balance`
 
@@ -512,16 +491,6 @@ mean(newdata$x)
 mean(newdata$y)
 ```
 
-## Empty cells
-
-Sometimes, if we nest too much and the dataset is not large/diverse enough, we end up with empty cells. In that case, we add `*DropEmpty()` to the formula:
-
-```{r}
-datasummary(island * species * body_mass_g ~ sex * (Mean + SD),
-            data = penguins)
-datasummary(island * species * body_mass_g ~ sex * (Mean + SD) * DropEmpty(),
-            data = penguins)
-```
 
 ## Logical subsets
 
@@ -534,7 +503,54 @@ datasummary((bill_length_mm > 44.5) + (bill_length_mm <= 44.5) ~ Mean * flipper_
 
 See the `tables` package documentation for more details and examples.
 
-# output
+## Missing values
+
+At least 3 distinct issues can arise related to missing values.
+
+### Functions and `na.rm`
+
+An empty cell can appear in the table when a statistical function returns `NA` instead of a numeric value. In those cases, you should:
+
+1. Make sure that your statistical function (e.g., `mean` or `sd`) uses `na.rm=TRUE` by default
+2. Use the `Arguments` strategy to set `na.rm=TRUE` (see the `Arguments` section of this vignette).
+3. Use a convenience function supplied by `modelsummary`, where `na.rm` is `TRUE` by default: `Mean`, `SD`, `P25`, etc.
+
+### Empty crosstab cells
+
+An empty cell can appear in the table when a crosstab is deeply nested, and there are no observations for a given combination of covariates. In those cases, you can use the `* DropEmpty` pseudo-function. See the "Empty cells" section of this vignette for examples.
+
+```{r}
+datasummary(island * species * body_mass_g ~ sex * (Mean + SD),
+            data = penguins)
+datasummary(island * species * body_mass_g ~ sex * (Mean + SD) * DropEmpty(),
+            data = penguins)
+```
+
+## Add rows
+
+```{r}
+new_rows <- data.frame('Does',
+                       2,
+                       'plus',
+                       2,
+                       'equals',
+                       5,
+                       '?')
+datasummary(flipper_length_mm + body_mass_g ~ species * (Mean + SD),
+            data = penguins,
+            add_rows = new_rows)
+```
+
+## Add columns
+
+```{r}
+new_cols <- data.frame('New Stat' = runif(2))
+datasummary(flipper_length_mm + body_mass_g ~ species * (Mean + SD),
+            data = penguins,
+            add_columns = new_cols)
+```
+
+# Output formats
 
 All functions in the `datasummary_*` family accept the same `output` argument. Tables can be saved to several file formats:
 
@@ -572,7 +588,7 @@ datasummary(f, data = penguins, output = 'DT')
 
 Please note that hierarchical or "nested" column labels are only available for these output formats: kableExtra, gt, html, rtf, and LaTeX. When saving tables to other formats, nested labels will be combined to a "flat" header.
 
-# fmt
+# Rounding
 
 The `fmt` argument allows us to set the printing format of numeric values. It accepts a single number representing the number of digits after the period, or a string to be passed to the `sprintf` function. For instance, setting `fmt="%.4f"` will keep 4 digits after the dot (see `?sprintf` for more options):
 
@@ -598,7 +614,7 @@ N <- \(x) format(length(x), big.mark = ",")
 datasummary(X ~ N, data = tmp)
 ```
 
-# title, notes
+# Titles and notes
 
 `datasummary` includes the same `title` and `notes` arguments as in `modelsummary`:
 
@@ -609,7 +625,7 @@ datasummary(All(penguins) ~ Mean + SD,
             notes = c('A note at the bottom of the table.'))
 ```
 
-# align
+# Alignment
 
 We can align columns using the `align` argument. `align` should be a string of length equal to the number of columns, and which includes only the letters "l",
 "c", or "r":
@@ -620,89 +636,8 @@ datasummary(flipper_length_mm + bill_length_mm ~ Mean + SD + Range,
             align = 'lrcl')
 ```
 
-# add_rows
 
-```{r}
-new_rows <- data.frame('Does',
-                       2,
-                       'plus',
-                       2,
-                       'equals',
-                       5,
-                       '?')
-datasummary(flipper_length_mm + body_mass_g ~ species * (Mean + SD),
-            data = penguins,
-            add_rows = new_rows)
-```
-
-# add_columns
-
-```{r}
-new_cols <- data.frame('New Stat' = runif(2))
-datasummary(flipper_length_mm + body_mass_g ~ species * (Mean + SD),
-            data = penguins,
-            add_columns = new_cols)
-```
-
-# Histograms
-
-The `datasummary` family of functions allow users to display in-line spark-style histograms to describe the distribution of the variables. For example, the `datasummary_skim` produces such a histogram:
-
-```{r}
-tmp <- mtcars[, c("mpg", "hp")]
-datasummary_skim(tmp)
-```
-
-Each of the histograms in the table above is actually an SVG image, produced by the `kableExtra` package. For this reason, the histogram will *not* appear when users use a different output backend, such as `gt`, `flextable`, or `huxtable`.
-
-The `datasummary` function is incredibly flexible, but it does not include a histogram option by default. Here is a simple example of how one can customize the output of `datasummary`. We proceed in 4 steps:
-
-1. Normalize the variables and store them in a list 
-2. Create the table with `datasummary`, making sure to include 2 "empty" columns. In the example, we use a simple function called `emptycol` to fill those columns with empty strings.
-3. Add the histograms or boxplots using functions from the `kableExtra` package.
-
-```{r, eval = FALSE}
-tmp <- mtcars[, c("mpg", "hp")]
-
-# create a list with individual variables
-# remove missing and rescale
-tmp_list <- lapply(tmp, na.omit)
-tmp_list <- lapply(tmp_list, scale)
-
-# create a table with `datasummary`
-# add a histogram with column_spec and spec_hist
-# add a boxplot with colun_spec and spec_box
-emptycol = function(x) " "
-datasummary(mpg + hp ~ Mean + SD + Heading("Boxplot") * emptycol + Heading("Histogram") * emptycol,
-    output = "kableExtra",
-    data = tmp) %>%
-    kableExtra::column_spec(column = 4, image = spec_boxplot(tmp_list)) %>%
-    kableExtra::column_spec(column = 5, image = spec_hist(tmp_list))
-```
-
-If you want a simpler solution, you can try the `Histogram` function which works in `datasummary` automatically and comes bundled with `modelsummary`. The downside of this function is that it uses Unicode characters to create the histogram. This kind of histogram may not display well with certain typefaces or on some operating systems (Windows!).
-
-```{r}
-datasummary(mpg + hp ~ Mean + SD + Histogram, data = tmp)
-```
-
-# Missing values
-
-At least 3 distinct issues can arise related to missing values.
-
-## Functions and `na.rm`
-
-An empty cell can appear in the table when a statistical function returns `NA` instead of a numeric value. In those cases, you should:
-
-1. Make sure that your statistical function (e.g., `mean` or `sd`) uses `na.rm=TRUE` by default
-2. Use the `Arguments` strategy to set `na.rm=TRUE` (see the `Arguments` section of this vignette).
-3. Use a convenience function supplied by `modelsummary`, where `na.rm` is `TRUE` by default: `Mean`, `SD`, `P25`, etc.
-
-## Empty crosstab cells
-
-An empty cell can appear in the table when a crosstab is deeply nested, and there are no observations for a given combination of covariates. In those cases, you can use the `* DropEmpty` pseudo-function. See the "Empty cells" section of this vignette for examples.
-
-## Factors
+# Factors
 
 By default, the `factor` function in `R` does *not* assign a distinct factor level to missing values: the `factor` function's `exclude` argument is set to `NA` by default. To ensure that `NA`s appear in your table, make sure you set `exclude=NULL` when you create the factor.
 
@@ -716,47 +651,4 @@ mycars$cyl_na <- factor(mycars$cyl, exclude = NULL)
 
 datasummary_crosstab(cyl_nona ~ vs, data = mycars)
 datasummary_crosstab(cyl_na ~ vs, data = mycars)
-```
-
-# Appearance
-
-In the [Appearance Vignette](https://modelsummary.com/articles/appearance.html) we saw how to customize the tables produced by the `modelsummary` function. The same customization possibilities are also available for all functions in the `datasummary_*` family of functions. Indeed, we can customize the tables produced by `datasummary` using the functions provided by `tinytable`, `gt`, `kableExtra`, `flextable`, `huxtable`, and `DT`. For instance, to customize tables using `tinytable`, we can do:
-
-
-```{r, echo=FALSE}
-penguins$sex <- str_to_title(penguins$sex)
-```
-
-```{r}
-library(tinytable)
-
-datasummary(All(penguins) ~ sex * (Mean + SD), data = penguins) |>
-  style_tt(i = 3, background = 'cyan', color = 'red')
-```
-
-To customize a table using the `gt` package, we can:
-
-```{r, eval=knitr::is_html_output()}
-library(gt)
-
-adelie <- function(x) web_image('https://user-images.githubusercontent.com/987057/85402702-20b1d280-b52a-11ea-9950-f3a03133fd45.png', height = 100)
-gentoo <- function(x) web_image('https://user-images.githubusercontent.com/987057/85402718-27404a00-b52a-11ea-9ad3-dd7562f6438d.png', height = 100)
-chinstrap <- function(x) web_image('https://user-images.githubusercontent.com/987057/85402708-23acc300-b52a-11ea-9a77-de360a0d1f7d.png', height = 100)
-
-cap <- 'Flipper lengths (mm) of the famous penguins of Palmer Station, Antarctica.'
-f <- (`Species` = species) ~ (` ` = flipper_length_mm) * (`Distribution` = Histogram) + flipper_length_mm * sex * ((`Avg.` = Mean)*Arguments(fmt='%.0f') + (`Std. Dev.` = SD)*Arguments(fmt='%.1f'))
-datasummary(f,
-            data = penguins,
-            output = 'gt',
-            title = cap,
-            notes = 'Artwork by @allison_horst',
-            sparse_header = TRUE) %>%
-    text_transform(locations = cells_body(columns = 1, rows = 1), fn = adelie) %>%
-    text_transform(locations = cells_body(columns = 1, rows = 2), fn = chinstrap) %>%
-    text_transform(locations = cells_body(columns = 1, rows = 3), fn = gentoo) %>%
-    tab_style(style = list(cell_text(color = "#FF6700", size = 'x-large')), locations = cells_body(rows = 1)) %>%
-    tab_style(style = list(cell_text(color = "#CD51D1", size = 'x-large')), locations = cells_body(rows = 2)) %>%
-    tab_style(style = list(cell_text(color = "#007377", size = 'x-large')), locations = cells_body(rows = 3)) %>%
-    tab_options(table_body.hlines.width = 0, table.border.top.width = 0, table.border.bottom.width = 0) %>%
-    cols_align('center', columns = 3:6)
 ```
