@@ -1,5 +1,4 @@
 
-
 <p align="center">
 <a href="https://modelsummary.com">
 <img src="man/figures/modelsummary_gallery.gif" height = "250" class = "center">
@@ -51,10 +50,6 @@ statistics* and to summarize *statistical models* in `R`.
     -   `datasummary_df`: Turn dataframes into nice tables with titles,
         notes, etc.
 
-With these functions, you can create tables and plots like these:
-
-<img src="https://user-images.githubusercontent.com/987057/103904985-060d0880-50cc-11eb-8be0-3922ef5108e0.png" align="center" width="100%">
-
 ## Why?
 
 Here are a few benefits of `modelsummary` over some [alternative
@@ -99,7 +94,9 @@ intervals; add titles, footnotes, or source notes; insert stars or
 custom characters to indicate levels of statistical significance; or add
 rows with supplemental information about your models.
 
-*Appearance*: Thanks to the [`gt`](https://gt.rstudio.com),
+*Appearance*: Thanks to the
+[`tinytable`](https://vincentarelbundock.github.io/tinytable/),
+[`gt`](https://gt.rstudio.com),
 [`kableExtra`](https://haozhu233.github.io/kableExtra/),
 [`huxtable`](https://hughjonesd.github.io/huxtable/),
 [`flextable`](https://davidgohel.github.io/flextable/), and
@@ -128,11 +125,11 @@ formats.](https://modelsummary.com/articles/modelsummary.html#rmarkdown-and-knit
 #### Dangerous
 
 `modelsummary` is dangerous! It allows users to do stupid stuff like
-[replacing their intercepts by
-squirrels.](https://modelsummary.com/articles/appearance.html#gt-1)
+[inserting squirrels in all your
+tables.](https://modelsummary.com/articles/appearance.html#gt-1)
 
 <center>
-<img src="https://user-images.githubusercontent.com/987057/82818916-7a60a780-9e6d-11ea-96ed-04fa92874a23.png" width="40%">
+<img src="man/figures/squirrel.png" width="40%">
 </center>
 
 #### Reliable
