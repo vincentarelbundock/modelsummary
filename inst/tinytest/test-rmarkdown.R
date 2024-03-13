@@ -48,7 +48,7 @@ rmd_file <- paste0(random_string(), ".Rmd")
 ## not sure why PDF compilation doesn't work on Github actions
 cat(sprintf(dangerous_document, "pdf_document"), file = rmd_file)
 pdf_file <- gsub("\\.Rmd$", ".pdf", rmd_file )
-rmarkdown::render(rmd_file, output_file = pdf_file, quiet = TRUE)
+suppressWarnings(rmarkdown::render(rmd_file, output_file = pdf_file, quiet = TRUE))
 
 
 # # Rmarkdown to html_document
