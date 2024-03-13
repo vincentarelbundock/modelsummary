@@ -128,7 +128,7 @@ formats.](https://modelsummary.com/articles/modelsummary.html#rmarkdown-and-knit
 [inserting squirrels in all your
 tables.](https://modelsummary.com/articles/appearance.html#gt-1)
 
-\<img src=“man/figures/squirrel.png” width=“40%”, class = “center\>
+\<img src=“man/figures/squirrel.png” width=“40%”, class = “center”\>
 
 #### Reliable
 
