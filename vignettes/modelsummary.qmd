@@ -814,7 +814,7 @@ This .Rmd file shows how to customize tables in PDF and HTML files using `gt` an
 
 [Quarto is an open source publishing system](https://quarto.org/) built on top of Pandoc. It was designed as a "successor" to Rmarkdown, and includes useful features for technical writing, such as built-in support for cross-references. `modelsummary` works automatically with Quarto. This is a minimal document with cross-references which should render automatically to PDF, HTML, and more:
 
-````{r, eval = FALSE}
+````r
 ---
 format: pdf
 title: Example
@@ -946,7 +946,6 @@ In some cases, it is useful to standardize coefficients before reporting them. `
 We can pass the `standardize` argument directly to `modelsummary` or `modelplot`, and that argument will be forwarded to `parameters`. For example to refit the model on standardized data and plot the results, we can do:
 
 ```{r}
-library(modelsummary)
 mod <- lm(mpg ~ hp + am, data = mtcars)
 
 modelplot(mod, standardize = "refit")
@@ -977,8 +976,7 @@ mtcars %>%
 In somes cases, you may want to display statistics in separate columns instead of one over the other. It is easy to achieve this outcome by using the `estimate` argument. This argument accepts a vector of values, one for each of the models we are trying to summarize. If we want to include estimates and standard errors in separate columns, all we need to do is repeat a model, but request different statistics. For example,
 
 ```{r}
-library(modelsummary)
-library(kableExtra)
+library(tinytable)
 
 mod1 <- lm(mpg ~ hp, mtcars)
 mod2 <- lm(mpg ~ hp + drat, mtcars)
@@ -990,11 +988,11 @@ models <- list(
     "Std.Error" = mod2)
 
 modelsummary(models,
+             output = "tinytable",
              estimate = c("estimate", "std.error", "estimate", "std.error"),
              statistic = NULL,
-             gof_omit = ".*",
-             output = "kableExtra") %>%
-    add_header_above(c(" " = 1, "Model A" = 2, "Model B" = 2))
+             gof_omit = ".*") |>
+    group_tt(j = list("Model A" = 2:3, "Model B" = 4:5))
 ```
 
 This can be automated using a simple function:
@@ -1026,7 +1024,6 @@ For example, we can use the `modelr` package to draw 500 resamples of a dataset,
 Note that the `tidy_custom_lm` returns a data.frame with 3 columns: `term`, `estimate`, and `std.error`: 
 
 ```{r, message=FALSE}
-library("modelsummary")
 library("broom")
 library("tidyverse")
 library("modelr")
@@ -1102,7 +1099,6 @@ rm("glance_custom.fixest")
 ```{r, message=FALSE}
 library(mice)
 library(Amelia)
-library(modelsummary)
 
 # Download data from `Rdatasets`
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
@@ -1129,34 +1125,6 @@ mod[['Amelia']] <- mice::pool(mod[['Amelia']])
 
 # Summarize
 modelsummary(mod)
-```
-
-# Table-making packages
-
-The table-making backends supported by `modelsummary` have overlapping capabilities (e.g., several of them can produce HTML tables). These are the default packages used for different outputs:
-
-`kableExtra`:
-
-* HTML
-* LaTeX / PDF
-
-`flextable`:
-
-* Word
-* Powerpoint
-
-`gt`:
-
-* jpg
-* png
-
-You can modify these defaults by setting global options such as:
-
-```r
-options(modelsummary_factory_html = "kableExtra")
-options(modelsummary_factory_latex = "gt")
-options(modelsummary_factory_word = "huxtable")
-options(modelsummary_factory_png = "gt")
 ```
 
 # FAQ
