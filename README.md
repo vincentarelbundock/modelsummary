@@ -129,7 +129,6 @@ formats.](https://modelsummary.com/articles/modelsummary.html#rmarkdown-and-knit
 tables.](https://modelsummary.com/articles/appearance.html#gt-1)
 
 <center>
-<img src="man/figures/modelsummary_gallery.gif" height = "350" class = "center">
 \<img src=“man/figures/squirrel.png” width=“40%”, class = “center\>
 </center>
 
