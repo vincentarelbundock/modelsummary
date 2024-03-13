@@ -116,6 +116,7 @@ modelplot <- function(models,
     estimate <- "{estimate}|{std.error}|{conf.low}|{conf.high}|{p.value}"
   }
 
+  # otherwise `modelsummary` returns a tinytable
   out <- modelsummary(
     output      = "dataframe",
     models      = models,
@@ -132,6 +133,7 @@ modelplot <- function(models,
     ...
   )
   out$part <- out$statistic <- NULL
+
 
   # save for sorting later
   term_order <- unique(out$term)

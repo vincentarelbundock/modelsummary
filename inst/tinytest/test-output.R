@@ -175,7 +175,6 @@ dat$vs <- as.logical(dat$vs)
 dat$gear <- as.factor(dat$gear)
 
 # write to file
-pkgload::load_all()
 datasummary_skim(dat, output = "test.png")
 datasummary_skim(dat, type = "categorical", output = "test.png")
 datasummary_skim(dat, output = "test.html")

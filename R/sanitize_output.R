@@ -1,3 +1,22 @@
+latex_compilation_tips <- 'To compile a LaTeX document with this table, the following commands must be placed in the document preamble:
+
+\\usepackage{tabularray}
+\\usepackage{float}
+\\usepackage{graphicx}
+\\usepackage{codehigh}
+\\usepackage[normalem]{ulem}
+\\UseTblrLibrary{booktabs}
+\\UseTblrLibrary{siunitx}
+\\newcommand{\\tinytableTabularrayUnderline}[1]{\\underline{#1}}
+\\newcommand{\\tinytableTabularrayStrikeout}[1]{\\sout{#1}}
+\\NewTableCommand{\\tinytableDefineColor}[3]{\\definecolor{#1}{#2}{#3}}
+
+To disable `siunitx` and prevent `modelsummary` from wrapping numeric entries in `\\num{}`, call:
+
+options("modelsummary_format_numeric_latex" = "plain")
+'
+
+
 get_factory_name <- function(x, default) {
   out <- getOption(paste0("modelsummary_factory_", x))
   if (is.null(out)) {
@@ -15,38 +34,6 @@ get_factory_name <- function(x, default) {
 #'
 #' @noRd
 sanitize_output <- function(output) {
-
-  # useful in modelsummary_rbind()
-  if (is.null(output)) {
-    return(NULL)
-  }
-
-  flag <- checkmate::check_string(output)
-  fun <- settings_get("function_called")
-  if (!isTRUE(flag) && !is.null(fun) && fun == "modelsummary") {
-    msg <- "The `output` argument must be a string. Type `?modelsummary` for details. This error is sometimes raised when users supply multiple models to `modelsummary` but forget to wrap them in a list. This works: `modelsummary(list(model1, model2))`. This does *not* work: `modelsummary(model1, model2)`"
-    insight::format_error(msg)
-  }
-
-  object_types <- c('default', 'tinytable', 'gt', 'kableExtra', 'flextable', 'huxtable', 'DT', 'html', 'jupyter', 'latex', 'latex_tabular', 'markdown', 'dataframe', 'data.frame', 'typst', 'modelsummary_list')
-  extension_types <- c('html', 'tex', 'md', 'txt', 'docx', 'pptx', 'rtf', 'jpg', 'png', 'csv', 'xlsx')
-
-  checkmate::assert_string(output)
-
-  cond1 <- output %in% object_types
-  if (isFALSE(cond1)) {
-    extension <- tools::file_ext(output)
-    cond2 <- extension %in% extension_types
-    if (isTRUE(cond2)) {
-      checkmate::assert_path_for_output(output, overwrite = TRUE)
-    } else {
-      msg <- paste0('The `output` argument must be ',
-        paste(object_types, collapse = ', '),
-        ', or a valid file path with one of these extensions: ',
-        paste(extension_types, collapse = ', '))
-      stop(msg)
-    }
-  }
 
   extension_dict <- c(
     "csv"  = "dataframe",
@@ -87,134 +74,92 @@ sanitize_output <- function(output) {
     "jpg" = get_factory_name("jpg", default = "kableExtra"),
     "rtf" = get_factory_name("rtf", default = "gt"),
     "powerpoint" = get_factory_name("powerpoint", default = "flextable"))
-
-  ## sanity check: are user-supplied global options ok?
   sanity_factory(factory_dict)
 
-  ## save user input to check later
-  output_user <- output
+  fmt_dict <- list(
+    typst = c("typst"),
+    latex = c("latex", "pdf"),
+    word = c("docx", "word"),
+    markdown = c("md", "gfm", "markdown", "markdown_strict", "commonmark")
+  )
 
-  # defaults
-  if (output == "default") {
-      output <- getOption("modelsummary_factory_default", default = NULL)
-      if (is.null(output)) output <- config_get("factory_default")
-      if (is.null(output)) {
-        if (isTRUE(insight::check_if_installed("kableExtra", quietly = TRUE))) {
-          output <- "kableExtra"
-        } else if (isTRUE(insight::check_if_installed("gt", quietly = TRUE))) {
-          output <- "gt"
-        } else if (isTRUE(insight::check_if_installed("flextable", quietly = TRUE))) {
-          output <- "flextable"
-        } else if (isTRUE(insight::check_if_installed("huxtable", quietly = TRUE))) {
-          output <- "huxtable"
-        } else if (isTRUE(insight::check_if_installed("DT", quietly = TRUE))) {
-          output <- "DT"
-        } else {
-          output <- "markdown"
-        }
-      }
-  } else if (output == "jupyter") {
-      output <- "html"
+  # useful in modelsummary_rbind()
+  if (is.null(output)) return(NULL)
+
+  if (!isTRUE(checkmate::check_string(output)) && settings_equal("function_called", "modelsummary")) {
+    msg <- "The `output` argument must be a string. This error is sometimes raised when users supply multiple models to `modelsummary` but forget to wrap them in a list. This works: `modelsummary(list(model1, model2))`. This does *not* work: `modelsummary(model1, model2)`"
+    insight::format_error(msg)
   }
+  checkmate::assert_string(output)
 
   # rename otherwise an extension is wrongly detected
-  if (output == "data.frame") output <- "dataframe"
+  if (isTRUE(output == "data.frame")) output <- "dataframe"
 
-  # file extension for auto-detect
+  if (output == "jupyter") output <- "html"
+
   ext <- tools::file_ext(output)
 
-  # don't write to file if the extension is unknown or missing
-  output_file <- NULL
-  output_format <- output
-  if (ext %in% names(extension_dict)) {
-    output_format <- extension_dict[ext]
-    output_file <- output
-  }
-
-  ## guess the knitr output format
-  if (isTRUE(check_dependency("knitr"))) {
-    fmt <- hush(knitr::pandoc_to())
-
-    word_fmt <- c(
-      "docx",
-      "word",
-      "word_document",
-      "rdocx_document",
-      "officedown::rdocx_document",
-      "word_document2",
-      "bookdown::word_document2")
-
-    markdown_fmt <- c(
-      "md",
-      "gfm",
-      "markdown",
-      "markdown_strict",
-      "commonmark",
-      "github_document",
-      "reprex_render",
-      "reprex::reprex_render")
-
-    typst_fmt <- c("typst")
-
-    latex_fmt <- c("latex", "pdf")
-
-    if (any(word_fmt %in% fmt)) {
-      output_format <- "word"
-    } else if (any(latex_fmt %in% fmt)) {
-      output_format <- "word"
-    } else if (any(markdown_fmt %in% fmt)) {
-      output_format <- "markdown"
-    } else if (any(typst_fmt %in% fmt)) {
-      output_format <- "typst"
+  if (isTRUE(ext == "")) {
+    object_types <- c('default', 'tinytable', 'gt', 'kableExtra', 'flextable', 'huxtable', 'DT', 'html', 'jupyter', 'latex', 'latex_tabular', 'markdown', 'dataframe', 'typst', 'modelsummary_list') 
+    if (!isTRUE(checkmate::check_choice(output, object_types))) {
+      msg <- sprintf("`output` must be a file path or one of: %s", paste(object_types, collapse = ", "))
+      insight::format_error(msg)
     }
+
+  } else if (!ext %in% names(extension_dict)) {
+    msg <- sprintf("`output` supports these file path extensions: %s", paste(names(extension_dict), collapse = ", "))
+    insight::format_error(msg)
+
+  } else {
+    checkmate::assert_path_for_output(output, overwrite = TRUE)
   }
 
-  # choose factory based on output_format
-  output_factory <- factory_dict[[output_format]]
-
-  # appears to be needed otherwise not treated as_is in Quarto
-  if (output_factory == "tinytable" && isTRUE(check_dependency("knitr"))) {
-    if (knitr::is_latex_output()) {
-      output_format <- "latex"
-    } else if (knitr::is_html_output()) {
-      output_format <- "html"
-    }
-  }
-
-  # kableExtra must specify output_format ex ante (but after factory choice)
-  if (output_factory == 'kableExtra' && output_format %in% c('default', 'kableExtra')) {
+  # default: explicit > knitr > options > config
+  if (isTRUE(output == "default")) {
+    output_format <- NULL
     if (isTRUE(check_dependency("knitr"))) {
-      if (knitr::is_latex_output()) {
+      fmt <- hush(knitr::pandoc_to())
+      if (any(fmt_dict$word %in% fmt)) {
+        output_format <- "word"
+      } else if (any(fmt_dict$latex %in% fmt)) {
         output_format <- "latex"
+      } else if (any(fmt_dict$markdown %in% fmt)) {
+        output_format <- "markdown"
+      } else if (any(fmt_dict$typst %in% fmt)) {
+        output_format <- "typst"
       }
     }
+    if (is.null(output_format)) output_format <- getOption("modelsummary_factory_default", default = NULL)
+    if (is.null(output_format)) output_format <- config_get("factory_default")
+    if (is.null(output_format)) output_format <- "tinytable"
+    output_file <- NULL
+
+  } else if (ext %in% names(extension_dict)) {
+    output_format <- extension_dict[ext]
+    output_file <- output
+
+  } else {
+    output_format <- output
+    output_file <- NULL
   }
 
-  ## warning siunitx & booktabs in preamble
+  # do this here again with output_format now in case user supplies global option
+  if (isTRUE(output_format == "data.frame")) output_format <- "dataframe"
+
+  output_factory <- factory_dict[[output_format]]
+
+  # kableExtra must specify output_format ex ante (but after factory choice)
+  if (output_factory == "kableExtra" && output_format %in% c("default", "kableExtra")) {
+    if (isTRUE(check_dependency("knitr")) && knitr::is_latex_output()) {
+      output_format <- "latex"
+    }
+  }
+
   if (settings_equal("format_numeric_latex", "siunitx") && (output %in% c("latex", "latex_tabular") || tools::file_ext(output) == "tex")) {
-      msg <- 'To compile a LaTeX document with this table, the following commands must be placed in the document preamble:
-
-\\usepackage{tabularray}
-\\usepackage{float}
-\\usepackage{graphicx}
-\\usepackage{codehigh}
-\\usepackage[normalem]{ulem}
-\\UseTblrLibrary{booktabs}
-\\UseTblrLibrary{siunitx}
-\\newcommand{\\tinytableTabularrayUnderline}[1]{\\underline{#1}}
-\\newcommand{\\tinytableTabularrayStrikeout}[1]{\\sout{#1}}
-\\NewTableCommand{\\tinytableDefineColor}[3]{\\definecolor{#1}{#2}{#3}}
-
-To disable `siunitx` and prevent `modelsummary` from wrapping numeric entries in `\\num{}`, call:
-
-options("modelsummary_format_numeric_latex" = "plain")
-'
-      warn_once(msg, "latex_siunitx_preamble")
+      warn_once(latex_compilation_tips, "latex_siunitx_preamble")
   }
 
-  # settings environment
   settings_set("output_factory", unname(output_factory))
   settings_set("output_format", unname(output_format))
   settings_set("output_file", unname(output_file))
-
 }
