@@ -17,6 +17,11 @@ format:
     white-space: nowrap;
 }
 ```
+```{r}
+#| include: false
+options(width = 10000)
+options("tinytable_theme_placement_latex_float" = "H")
+```
 
 To begin, load the `modelsummary` package and download data from the
 [Rdatasets archive](https://vincentarelbundock.github.io/Rdatasets/):
@@ -83,7 +88,7 @@ models <- list(
 )
 
 modelsummary(models, stars = TRUE, gof_omit = "IC|Adj|F|RMSE|Log") |>
-    group_tt(j = list("Linear" = 1:3, "Poisson" = 4:5))
+    group_tt(j = list("Linear" = 2:4, "Poisson" = 5:6))
 ```
 
 Now, save it to a Microsoft Word document:
@@ -95,9 +100,7 @@ modelsummary(models, output = "table.docx")
 
 And draw a coefficient plot:
 
-
 ```{r}
-# OLS models only
-ols <- models[grepl("OLS", names(models))]
+ols <- models[1:3]
 modelplot(ols, coef_omit = "Intercept")
 ```
