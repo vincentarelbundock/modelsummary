@@ -21,8 +21,9 @@ format:
 To begin, load the `modelsummary` package and download data from the
 [Rdatasets archive](https://vincentarelbundock.github.io/Rdatasets/):
 
-```{r}
+```{r, message = FALSE}
 library(modelsummary)
+library(tinytable)
 
 url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
 dat <- read.csv(url) 
@@ -68,18 +69,21 @@ mod <- lm(Donations ~ Crime_prop, data = dat)
 modelsummary(mod)
 ```
 
-Estimate five regression models, display the results side-by-side, and display the table:
+Now estimate five regression models, display the results side-by-side, and use the `group_tt()` function from the `tinytable` package to add column labels:
 
 ```{r}
+library(tinytable)
+
 models <- list(
-  "OLS 1"     = lm(Donations ~ Literacy + Clergy, data = dat),
-  "Poisson 1" = glm(Donations ~ Literacy + Commerce, family = poisson, data = dat),
-  "OLS 2"     = lm(Crime_pers ~ Literacy + Clergy, data = dat),
-  "Poisson 2" = glm(Crime_pers ~ Literacy + Commerce, family = poisson, data = dat),
-  "OLS 3"     = lm(Crime_prop ~ Literacy + Clergy, data = dat)
+    "I" = lm(Donations ~ Literacy + Clergy, data = dat),
+    "II" = lm(Crime_pers ~ Literacy + Clergy, data = dat),
+    "III" = lm(Crime_prop ~ Literacy + Clergy, data = dat),
+    "IV" = glm(Crime_pers ~ Literacy + Commerce, family = poisson, data = dat),
+    "V" = glm(Donations ~ Literacy + Commerce, family = poisson, data = dat)
 )
 
-modelsummary(models, stars = TRUE, gof_omit = "IC|Adj|F|RMSE|Log")
+modelsummary(models, stars = TRUE, gof_omit = "IC|Adj|F|RMSE|Log") |>
+    group_tt(j = list("Linear" = 1:3, "Poisson" = 4:5))
 ```
 
 Now, save it to a Microsoft Word document:
