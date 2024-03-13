@@ -15,15 +15,16 @@ format: html
 
 To customize the appearance of tables, `modelsummary` supports five of the most popular table-making packages: 
 
-1. [`gt`: https://gt.rstudio.com](https://gt.rstudio.com)
-2. [`kableExtra`: http://haozhu233.github.io/kableExtra](http://haozhu233.github.io/kableExtra)
-3. [`huxtable`: https://hughjonesd.github.io/huxtable/](https://hughjonesd.github.io/huxtable/)
-4. [`flextable`: https://davidgohel.github.io/flextable/](https://davidgohel.github.io/flextable/)
-5. [`DT`: https://rstudio.github.io/DT](https://rstudio.github.io/DT)
+1. [`tinytable`: https://vincentarelbundock.github.io/tinytable/](https://vincentarelbundock.github.io/tinytable/)
+2. [`gt`: https://gt.rstudio.com](https://gt.rstudio.com)
+3. [`kableExtra`: http://haozhu233.github.io/kableExtra](http://haozhu233.github.io/kableExtra)
+4. [`huxtable`: https://hughjonesd.github.io/huxtable/](https://hughjonesd.github.io/huxtable/)
+5. [`flextable`: https://davidgohel.github.io/flextable/](https://davidgohel.github.io/flextable/)
+6. [`DT`: https://rstudio.github.io/DT](https://rstudio.github.io/DT)
 
-Users are encouraged to visit these websites to determine which package suits their needs best. Each of them has different strengths and weaknesses. For instance, `gt` allows seamless integration with the RStudio IDE, but `kableExtra`'s LaTeX (and PDF) output is far more mature.
+Users are encouraged to visit these websites to determine which package suits their needs best.
 
-To create customized tables, the analyst begins by calling `modelsummary(models)` to create a summary table. Then, she *post-processes* the table by applying functions from one of the packages listed above. It is often convenient to use the `%>%` operator to do this.
+To create customized tables, the analyst begins by calling `modelsummary(models)` to create a summary table. Then, she *post-processes* the table by applying functions from one of the packages listed above. It is often convenient to use the `|>` operator to do this.
 
 To illustrate, we download data from the [Rdatasets repository](https://vincentarelbundock.github.io/Rdatasets') and we estimate 5 models:
 
@@ -121,10 +122,8 @@ tab <- modelsummary(models, output = 'kableExtra',
 
 ## customize table with `kableExtra`
 tab %>%
-    
     # column labels
     add_header_above(c(" " = 1, "Donations" = 2, "Crimes (person)" = 2, "Crimes (property)" = 1)) %>%
-   
     # text and background color
     row_spec(3, color = 'red') %>%
     row_spec(5, background = 'lightblue')
@@ -159,11 +158,9 @@ tab <- modelsummary(models, output = 'flextable',
 
 ## customize table with `flextable`
 tab %>%
-   
     # text and background color
     color(3, color = 'red') %>%
     bg(5, bg = 'lightblue') %>%
-  
     # column widths
     autofit()
 ```
