@@ -101,13 +101,13 @@ modelplot <- function(models,
 
   ## settings
   settings_init(settings = list(
-    "function_called" = "modelplot"
+  "function_called" = "modelplot"
   ))
-
+   
   # more informative error message specific to `modelplot`
   sanity_conf_level_modelplot(conf_level)
-
-  ellip <- list(...)
+   
+  #ellip <- list(...)
   
   # Function to remove invalid arguments
   remove_invalid_args <- function(args, valid_args) {
@@ -289,3 +289,5 @@ modelplot <- function(models,
 
   return(p)
 }
+
+
