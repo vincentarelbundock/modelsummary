@@ -1,4 +1,5 @@
 
+
 <p align="center">
 <a href="https://modelsummary.com">
 <img src="man/figures/modelsummary_gallery.gif" height = "350" class = "center">
