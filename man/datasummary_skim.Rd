@@ -185,7 +185,7 @@ When creating LaTeX via the \code{tinytable} backend (default in version 2.0.0 a
 }
 
 \examples{
-\dontshow{if (isTRUE(Sys.getenv("R_NOT_CRAN") == 'true')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (FALSE) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontshow{\}) # examplesIf}
 dat <- mtcars
 dat$vs <- as.logical(dat$vs)

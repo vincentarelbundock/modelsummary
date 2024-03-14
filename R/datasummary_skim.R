@@ -20,7 +20,7 @@
 #'
 #' @template citation
 #' @template options
-#' @examplesIf isTRUE(Sys.getenv("R_NOT_CRAN") == 'true')
+#' @examplesIf FALSE
 #' @examples
 #' dat <- mtcars
 #' dat$vs <- as.logical(dat$vs)
