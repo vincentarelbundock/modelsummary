@@ -40,20 +40,67 @@ To illustrate, we download data from the [Rdatasets repository](https://vincenta
 ```{r}
 library(modelsummary)
 
-url <- 'https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv'
+url <- "https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Guerry.csv"
 dat <- read.csv(url, na.strings = "")
 
-models <- list()
-models[['OLS 1']] <- lm(Donations ~ Literacy, data = dat)
-models[['Poisson 1']] <- glm(Donations ~ Literacy + Clergy, family = poisson, data = dat)
-models[['OLS 2']] <- lm(Crime_pers ~ Literacy, data = dat)
-models[['Poisson 2']] <- glm(Crime_pers ~ Literacy + Clergy, family = poisson, data = dat)
-models[['OLS 3']] <- lm(Crime_prop ~ Literacy + Clergy, data = dat)
+models <- list(
+    I = lm(Donations ~ Literacy, data = dat),
+    II = lm(Crime_pers ~ Literacy, data = dat),
+    III = lm(Crime_prop ~ Literacy + Clergy, data = dat)
+    IV = glm(Crime_pers ~ Literacy + Clergy, family = poisson, data = dat),
+    V = glm(Donations ~ Literacy + Clergy, family = poisson, data = dat),
+)
 ```
 
 In the rest of this vignette, we will customize tables using tools `tinytable` and `gt`. The same process can be used to customize `kableExtra`, `flextable`, `huxtable`, and `DT` tables.
 
 # `tinytable`
+
+The `tinytable` package offers many functions to customize the appearance of tables. Below, we give a couple illustrations, but interested readers should refer to the detailed tutorial on the `tinytable` package website:  https://vincentarelbundock.github.io/tinytable/
+
+In this example, we use the `group_tt()` function to add spanning column headers, and the `style_tt()` function to color a few cells of the table:
+
+```{r}
+library(tinytable)
+
+modelsummary(models) |>
+    group_tt(j = list(Linear = 2:4, Poisson = 5:6)) |>
+    style_tt(i = 3:4, j = 2, background = "teal", color = "white", bold = TRUE)
+```
+
+Now, we create a descriptive statistics table with `datasummary()`. That table includes an emptyr row, which we fill with density plots using the `plot_tt()` function from `tinytable`:
+
+```{r}
+Density <- function(x) ""
+
+datasummary(mpg + hp ~ Mean + SD + Density, data = mtcars) |>
+    plot_tt(
+        j = 4,
+        fun = "density",
+        data = list(mtcars$mpg, mtcars$hp),
+        color = "#E69F00")
+```
+
+::: {.content-visible when-format="html"}
+HTML tables can be further customized in `tinytable` by specifying CSS rules. Again, [detailed tutorials are available on the `tinytable` website.] This example adds an image in the background of a table:
+
+```{r}
+css <- "
+.mytable {
+  background-size: cover;
+  background-position: center;
+  background-image: url('https://user-images.githubusercontent.com/987057/82732352-b9aabf00-9cda-11ea-92a6-26750cf097d0.png');
+  --bs-table-bg: transparent;
+}
+"
+
+modelsummary(models) |>
+    style_tt(
+        bootstrap_class = "table table-borderless mytable", 
+        bootstrap_css_rule = css)
+```
+:::
+
 
 # `gt`
 
