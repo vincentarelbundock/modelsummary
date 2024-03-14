@@ -45,7 +45,7 @@ models <- list(
 modelsummary(models)
 ```
 
-# `output`: print and save
+# `output`
 
 The `output` argument determines the type of object returned by `modelsummary` and/or the file where this table should be written.
 
@@ -77,13 +77,23 @@ modelsummary(models, output = "flextable")
 modelsummary(models, output = "huxtable")
 ```
 
-Warning: When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with an external package, you need to choose a different output format and saving mechanism.  Unfortunately, the approach differs from package to package:
+Warning: When a file name is supplied to the `output` argument, the table is written immediately to file. If you want to customize your table by post-processing it with an external package, you need to choose a different output format and saving mechanism.  The saving function differs from package to package:
 
 * `tinytable`: set `output="tinytable"`, post-process your table, and use the `tinytable::save_tt()` function.
 * `gt`: set `output="gt"`, post-process your table, and use the `gt::gtsave()` function.
 * `kableExtra`: set `output` to your destination format (e.g., "latex", "html", "markdown"), post-process your table, and use `kableExtra::save_kable()` function.
 
-# `fmt`: round and format
+For example:
+
+```{r}
+#| eval: false
+library(tinytable)
+modelsummary(models, output = "tinytable") |>
+  style_tt(i = 1, background = "pink") |>
+  save_tt("table.html")
+```
+
+# `fmt`
 
 The `fmt` argument defines how numeric values are rounded and presented in the table. This argument accepts three types of input:
 
@@ -183,7 +193,7 @@ modelsummary(
 ```
 
 
-# `statistic`: SE, t, p, CI, etc.
+# `statistic`
 
 By default, `modelsummary` prints the coefficient's standard error in parentheses below the corresponding estimate. The value of this uncertainty statistic is determined by the `statistic` argument. The `statistic` argument accepts any of the column names produced by `get_estimates(model)`. For example:
 
@@ -227,7 +237,7 @@ modelsummary(models, gof_omit = ".*",
              statistic = NULL)
 ```
 
-# `vcov`: robust SEs
+# `vcov`
 
 You can use clustered or robust uncertainty estimates by modifying the `vcov` parameter. This function accepts 5 different types of input.  You can use a string or a vector of strings:
 
@@ -398,7 +408,7 @@ modlab <- lm(mpg ~ cyl + am, data = datlab)
 modelsummary(modlab, coef_rename = TRUE)
 ```
 
-# `coef_map`: order, omit, rename
+# `coef_map`
 
 The `coef_map` argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the "clean" variable name. Names of this vector correspond to the "raw" variable name. The table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.
 
@@ -409,7 +419,7 @@ cm <- c('Literacy'    = 'Literacy (%)',
 modelsummary(models, coef_map = cm)
 ```
 
-# `gof_omit`: goodness-of-fit and model characteristics
+# `gof_omit`
 
 `gof_omit` is a regular expression which will be fed to `grepl(x,perl=TRUE)` to detect the names of the statistics which should be excluded from the table.
 
@@ -417,7 +427,7 @@ modelsummary(models, coef_map = cm)
 modelsummary(models, gof_omit = 'DF|Deviance|R2|AIC|BIC')
 ```
 
-# gof_map
+# `gof_map`
 
 The `gof_map` argument can be used to rename, re-order, subset, and format the statistics displayed in the bottom section of the table ("goodness-of-fit").
 
@@ -470,7 +480,7 @@ modelsummary(
   escape = FALSE)
 ```
 
-# `shape`: pivot, groups, panels, and stacks
+# `shape`
 
 This section requires version 1.3.1 of `modelsummary`. If this version is not available on CRAN yet, you can install the development version by following [the instructions on the website.](https://modelsummary.com/#installation)
 
@@ -671,7 +681,7 @@ rm("glance_custom.fixest")
 ```
 
 
-# `align`: column alignment
+# `align`
 
 By default, `modelsummary` will align the first column (with coefficient names) to the left, and will center the results columns. To change this default, you can use the align argument, which accepts a string of the same length as the number of columns:
 
@@ -687,7 +697,7 @@ modelsummary(models, align="lddddd")
 
 See `?modelsummary` for a list of commands which need to appear in the LaTeX preamble to compile tables like this one.
 
-# `notes`: footers
+# `notes`
 
 Add notes to the bottom of your table:
 
@@ -697,7 +707,7 @@ modelsummary(models,
                 'Text of the second note.'))
 ```
 
-# `title`: captions
+# `title`
 
 You can add a title to your table as follows:
 
@@ -727,20 +737,6 @@ attr(rows, 'position') <- c(3, 9)
 modelsummary(models, add_rows = rows)
 ```
 
-# Math
-
-We can display math in tables by enclosing math expressions in dollars signs and setting the argument `escape=FALSE`:
-
-```{r}
-res <- lm(wt ~ mpg + drat, mtcars)
-
-modelsummary(
-  res,
-  escape = FALSE,
-  title = "Another math expression: $\\sum_{i=1}^n x^-i$",
-  coef_rename = c("mpg" = "$\\beta_1$"))
-```
-
 # `exponentiate`
 
 We can exponentiate their estimates using the `exponentiate` argument:
@@ -757,7 +753,7 @@ mod_logit <- list(mod_logit, mod_logit)
 modelsummary(mod_logit, exponentiate = c(TRUE, FALSE))
 ```
 
-# `...` ellipsis: Additional arguments
+# `...` : Additional arguments
 
 All arguments passed by the user to a `modelsummary` function are pushed forward in two other functions:
 
@@ -769,7 +765,49 @@ All arguments passed by the user to a `modelsummary` function are pushed forward
 
 All arguments passed supported by these functions are thus automatically available directly in `modelsummary`, `modelplot`, and the `datasummary` family of functions.
 
-# Custom appearance
+## Reference categories
+
+When estimating models with factor regressors, `R` will typically omit the reference category. We can include an empty row for the reference level automatically by using the `include_reference` argument. This argument is supplied by the `parameters` package, which `modelsummary` uses behind the scenes to extract model estimates. We can supply it directly to `modelsummary()`, which will then pass the argument forward automatically:
+
+```{r}
+tmp <- transform(mtcars, cyl = factor(cyl))
+mod <- lm(mpg ~ cyl, tmp)
+modelsummary(mod, include_reference = TRUE)
+```
+
+## Standardization
+
+In some cases, it is useful to standardize coefficients before reporting them. `modelsummary` extracts coefficients from model objects using the `parameters` package, and that package offers several options for standardization: https://easystats.github.io/parameters/reference/model_parameters.default.html
+
+We can pass the `standardize` argument directly to `modelsummary` or `modelplot`, and that argument will be forwarded to `parameters`. For example to refit the model on standardized data and plot the results, we can do:
+
+```{r}
+mod <- lm(mpg ~ hp + am, data = mtcars)
+
+modelplot(mod, standardize = "refit")
+```
+
+Compare to the unstandardized plot:
+
+```{r}
+modelplot(mod)
+```
+
+# Math
+
+We can display math in tables by enclosing math expressions in dollars signs and setting the argument `escape=FALSE`:
+
+```{r}
+res <- lm(wt ~ mpg + drat, mtcars)
+
+modelsummary(
+  res,
+  escape = FALSE,
+  title = "Another math expression: $\\sum_{i=1}^n x^-i$",
+  coef_rename = c("mpg" = "$\\beta_1$"))
+```
+
+# Themes and styles
 
 To customize the appearance of tables, `modelsummary` supports six popular and extremely powerful table-making packages: 
 
@@ -797,7 +835,6 @@ get_estimates(model)
 ```
 
 If this function does not return a valid output, you can easily (really!!) add your own support. See the next section for a tutorial. If you do this, you may consider opening an issue on the Github website of the `broom` package: https://github.com/tidymodels/broom/issues
-
 
 # Rmarkdown, Quarto, Org-Mode
 
@@ -933,34 +970,6 @@ modelsummary(mod, output = "gt")
 ```
 
 # Case studies
-
-## Reference categories
-
-When estimating models with factor regressors, `R` will typically omit the reference category. We can include an empty row for the reference level automatically by using the `include_reference` argument. This argument is supplied by the `parameters` package, which `modelsummary` uses behind the scenes to extract model estimates. We can supply it directly to `modelsummary()`, which will then pass the argument forward automatically:
-
-```{r}
-tmp <- transform(mtcars, cyl = factor(cyl))
-mod <- lm(mpg ~ cyl, tmp)
-modelsummary(mod, include_reference = TRUE)
-```
-
-## Standardization
-
-In some cases, it is useful to standardize coefficients before reporting them. `modelsummary` extracts coefficients from model objects using the `parameters` package, and that package offers several options for standardization: https://easystats.github.io/parameters/reference/model_parameters.default.html
-
-We can pass the `standardize` argument directly to `modelsummary` or `modelplot`, and that argument will be forwarded to `parameters`. For example to refit the model on standardized data and plot the results, we can do:
-
-```{r}
-mod <- lm(mpg ~ hp + am, data = mtcars)
-
-modelplot(mod, standardize = "refit")
-```
-
-Compare to the unstandardized plot:
-
-```{r}
-modelplot(mod)
-```
 
 ## Subgroup estimation with `nest_by`
 
