@@ -99,15 +99,15 @@ modelplot <- function(models,
                       background  = NULL,
                       ...) {
 
-  ## settings
-  settings_init(settings = list(
-  "function_called" = "modelplot"
-  ))
+   ## settings
+   settings_init(settings = list(
+   "function_called" = "modelplot"
+   ))
    
-  # more informative error message specific to `modelplot`
-  sanity_conf_level_modelplot(conf_level)
+   # more informative error message specific to `modelplot`
+   sanity_conf_level_modelplot(conf_level)
    
-  #ellip <- list(...)
+  
   
   # Function to remove invalid arguments
   remove_invalid_args <- function(args, valid_args) {
@@ -139,7 +139,8 @@ modelplot <- function(models,
     ...
   )
   out$part <- out$statistic <- NULL
-
+  
+  ellip <- list(...)
 
   # save for sorting later
   term_order <- unique(out$term)
@@ -226,7 +227,7 @@ modelplot <- function(models,
                                xmin = conf.low, xmax = conf.high)
       )
       args_list <- c(args_list, ellip)
-      valid_args_geom_pointrange <- formalArgs(geom_pointrange)
+      valid_args_geom_pointrange <- formalArgs(ggplot2::geom_pointrange)
       filtered_args <- remove_invalid_args(args_list, valid_args_geom_pointrange)
       p <- p + do.call(ggplot2::geom_pointrange, filtered_args)
     } else {
@@ -236,7 +237,7 @@ modelplot <- function(models,
                                  xmin = conf.low, xmax = conf.high)
         )
         args_list <- c(args_list, ellip)
-        valid_args_geom_pointrange <- formalArgs(geom_pointrange)
+        valid_args_geom_pointrange <- formalArgs(ggplot2::geom_pointrange)
         filtered_args <- remove_invalid_args(args_list, valid_args_geom_pointrange)
         p <- p + do.call(ggplot2::geom_pointrange, filtered_args) +
             ggplot2::facet_grid(term ~ ., scales = 'free_y')
@@ -245,7 +246,7 @@ modelplot <- function(models,
           mapping = ggplot2::aes(y = term, x = estimate, xmin = conf.low, xmax = conf.high, color = model),
           position = ggplot2::position_dodge(width = .5))
         args_list <- c(args_list, ellip)
-        valid_args_geom_pointrange <- formalArgs(geom_pointrange)
+        valid_args_geom_pointrange <- formalArgs(ggplot2::geom_pointrange)
         filtered_args <- remove_invalid_args(args_list, valid_args_geom_pointrange)
         p <- p + do.call(ggplot2::geom_pointrange, filtered_args)
       }
@@ -259,7 +260,7 @@ modelplot <- function(models,
         mapping = ggplot2::aes(y = term, x = estimate)
       )
       args_list <- c(args_list, ellip)
-      valid_args_geom_point <- formalArgs(geom_point)
+      valid_args_geom_point <- formalArgs(ggplot2::geom_point)
       filtered_args <- remove_invalid_args(args_list, valid_args_geom_point)
       p <- p + do.call(ggplot2::geom_point, filtered_args)
     } else {
@@ -268,7 +269,7 @@ modelplot <- function(models,
           mapping = ggplot2::aes(y = term, x = estimate)
         )
         args_list <- c(args_list, ellip)
-        valid_args_geom_point <- formalArgs(geom_point)
+        valid_args_geom_point <- formalArgs(ggplot2::geom_point)
         filtered_args <- remove_invalid_args(args_list, valid_args_geom_point)
         p <- p +
           do.call(ggplot2::geom_point, filtered_args) +
@@ -279,7 +280,7 @@ modelplot <- function(models,
           position = ggplot2::position_dodge(width = .5)
         )
         args_list <- c(args_list, ellip)
-        valid_args_geom_point <- formalArgs(geom_point)
+        valid_args_geom_point <- formalArgs(ggplot2::geom_point)
         filtered_args <- remove_invalid_args(args_list, valid_args_geom_point)
         p <- p + do.call(ggplot2::geom_point, filtered_args)
       }
