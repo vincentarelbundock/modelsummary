@@ -108,6 +108,12 @@ modelplot <- function(models,
   sanity_conf_level_modelplot(conf_level)
 
   ellip <- list(...)
+  
+  # Function to remove invalid arguments
+  remove_invalid_args <- function(args, valid_args) {
+    # Filter out invalid arguments based on their names
+    args[names(args) %in% valid_args]
+  }
 
   if (is.null(conf_level)) {
     estimate <- "estimate"
@@ -215,20 +221,33 @@ modelplot <- function(models,
   # geom_pointrange: with confidence interval
   if (!is.null(conf_level)) {
     if (length(unique(dat$model)) == 1) {
-      p <- p + ggplot2::geom_pointrange(
-        ggplot2::aes(y = term, x = estimate,
-          xmin = conf.low, xmax = conf.high), ...)
+      args_list <- list(
+        mapping = ggplot2::aes(y = model, x = estimate, 
+                               xmin = conf.low, xmax = conf.high)
+      )
+      args_list <- c(args_list, ellip)
+      valid_args_geom_pointrange <- formalArgs(geom_pointrange)
+      filtered_args <- remove_invalid_args(args_list, valid_args_geom_pointrange)
+      p <- p + do.call(ggplot2::geom_pointrange, filtered_args)
     } else {
       if (facet) {
-        p <- p +
-            ggplot2::geom_pointrange(ggplot2::aes(y = model, x = estimate,
-                                                  xmin = conf.low, xmax = conf.high), ...) +
+        args_list <- list(
+          mapping = ggplot2::aes(y = model, x = estimate,
+                                 xmin = conf.low, xmax = conf.high)
+        )
+        args_list <- c(args_list, ellip)
+        valid_args_geom_pointrange <- formalArgs(geom_pointrange)
+        filtered_args <- remove_invalid_args(args_list, valid_args_geom_pointrange)
+        p <- p + do.call(ggplot2::geom_pointrange, filtered_args) +
             ggplot2::facet_grid(term ~ ., scales = 'free_y')
       } else {
-        p <- p +
-          ggplot2::geom_pointrange(
-            ggplot2::aes(y = term, x = estimate, xmin = conf.low, xmax = conf.high, color = model),
-            position = ggplot2::position_dodge(width = .5), ...)
+        args_list <- list(
+          mapping = ggplot2::aes(y = term, x = estimate, xmin = conf.low, xmax = conf.high, color = model),
+          position = ggplot2::position_dodge(width = .5))
+        args_list <- c(args_list, ellip)
+        valid_args_geom_pointrange <- formalArgs(geom_pointrange)
+        filtered_args <- remove_invalid_args(args_list, valid_args_geom_pointrange)
+        p <- p + do.call(ggplot2::geom_pointrange, filtered_args)
       }
     }
     tmp <- sprintf('Coefficient estimates and %s%% confidence intervals', conf_level * 100)
@@ -236,15 +255,33 @@ modelplot <- function(models,
     # geom_point: without confidence interval
   } else {
     if (length(unique(dat$model)) == 1) {
-      p <- p + ggplot2::geom_point(ggplot2::aes(y = term, x = estimate), ...)
+      args_list <- list(
+        mapping = ggplot2::aes(y = term, x = estimate)
+      )
+      args_list <- c(args_list, ellip)
+      valid_args_geom_point <- formalArgs(geom_point)
+      filtered_args <- remove_invalid_args(args_list, valid_args_geom_point)
+      p <- p + do.call(ggplot2::geom_point, filtered_args)
     } else {
       if (facet) {
+        args_list <- list(
+          mapping = ggplot2::aes(y = term, x = estimate)
+        )
+        args_list <- c(args_list, ellip)
+        valid_args_geom_point <- formalArgs(geom_point)
+        filtered_args <- remove_invalid_args(args_list, valid_args_geom_point)
         p <- p +
-          ggplot2::geom_point(ggplot2::aes(y = model, x = estimate), ...) +
+          do.call(ggplot2::geom_point, filtered_args) +
           ggplot2::facet_grid(term ~ ., scales = 'free_y')
       } else {
-        p <- p + ggplot2::geom_point(ggplot2::aes(y = term, x = estimate),
-                                     position = ggplot2::position_dodge(width = .5), ...)
+        args_list <- list(
+          mapping = ggplot2::aes(y = term, x = estimate),
+          position = ggplot2::position_dodge(width = .5)
+        )
+        args_list <- c(args_list, ellip)
+        valid_args_geom_point <- formalArgs(geom_point)
+        filtered_args <- remove_invalid_args(args_list, valid_args_geom_point)
+        p <- p + do.call(ggplot2::geom_point, filtered_args)
       }
     }
     p <- p + ggplot2::labs(x = 'Coefficient estimates', y = '')
