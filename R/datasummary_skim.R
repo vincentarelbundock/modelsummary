@@ -20,8 +20,8 @@
 #'
 #' @template citation
 #' @template options
-#' @section Examples:
-#' ```{r, eval = identical(Sys.getenv("pkgdown"), "true")}
+#' @examplesIf isTRUE(Sys.getenv("R_NOT_CRAN") == 'true')
+#' @examples
 #' dat <- mtcars
 #' dat$vs <- as.logical(dat$vs)
 #' dat$cyl <- as.factor(dat$cyl)
@@ -37,7 +37,6 @@
 #'
 #' f <- All(mtcars) ~ Mean + SD + Min + Median + Max + Histogram
 #' # datasummary(f, mtcars, output="markdown")
-#' ```
 #' @export
 datasummary_skim <- function(data,
                              type   = 'numeric',

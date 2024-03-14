@@ -184,10 +184,10 @@ When creating LaTeX via the \code{tinytable} backend (default in version 2.0.0 a
 }
 }
 
-\section{Examples}{
-
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{dat <- mtcars
+\examples{
+\dontshow{if (isTRUE(Sys.getenv("R_NOT_CRAN") == 'true')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
+dat <- mtcars
 dat$vs <- as.logical(dat$vs)
 dat$cyl <- as.factor(dat$cyl)
 datasummary_skim(dat)
@@ -202,9 +202,7 @@ datasummary_skim(dat, "categorical")
 
 f <- All(mtcars) ~ Mean + SD + Min + Median + Max + Histogram
 # datasummary(f, mtcars, output="markdown")
-}\if{html}{\out{</div>}}
 }
-
 \references{
 Arel-Bundock V (2022). “modelsummary: Data and Model Summaries in R.” \emph{Journal of Statistical Software}, \emph{103}(1), 1-23. \doi{10.18637/jss.v103.i01}.'
 }

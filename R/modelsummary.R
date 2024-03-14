@@ -179,12 +179,10 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' + [tinytable::tt], [kableExtra::kbl] or [gt::gt] draw tables, depending on the value of the `output` argument.
 #' @return a regression table in a format determined by the `output` argument.
 #' @importFrom generics glance tidy
-#'
-#' @section Examples:
-#' ```{r, eval = identical(Sys.getenv("pkgdown"), "true")}
-
-# The `modelsummary` website includes \emph{many} examples and tutorials:
-# https://modelsummary.com
+#' @examplesIf isTRUE(Sys.getenv("R_NOT_CRAN") == 'true')
+#' @examples
+#' # The `modelsummary` website includes \emph{many} examples and tutorials:
+#' # https://modelsummary.com
 #'
 #' library(modelsummary)
 #' 
@@ -355,8 +353,6 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   ~raw,        ~clean,      ~fmt,
 #'   "r.squared", "R Squared", 5)
 #' modelsummary(models, gof_map = gm)
-#' ```
-#' 
 #' @export
 modelsummary <- function(
   models,

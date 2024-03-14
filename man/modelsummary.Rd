@@ -449,10 +449,12 @@ Some users have reported difficult to reproduce errors when using the
 \code{options("modelsummary_future" = FALSE)}
 }
 
-\section{Examples}{
+\examples{
+\dontshow{if (isTRUE(Sys.getenv("R_NOT_CRAN") == 'true')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
+# The `modelsummary` website includes \emph{many} examples and tutorials:
+# https://modelsummary.com
 
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{
 library(modelsummary)
 
 # load data and estimate models
@@ -473,18 +475,18 @@ modelsummary(models, statistic = 'statistic')
 
 modelsummary(models, statistic = 'conf.int', conf_level = 0.99)
 
-modelsummary(models, statistic = c("t = \{statistic\}",
-                                   "se = \{std.error\}",
+modelsummary(models, statistic = c("t = {statistic}",
+                                   "se = {std.error}",
                                    "conf.int"))
 
 # estimate
 modelsummary(models,
   statistic = NULL,
-  estimate = "\{estimate\} [\{conf.low\}, \{conf.high\}]")
+  estimate = "{estimate} [{conf.low}, {conf.high}]")
 
 modelsummary(models,
-  estimate = c("\{estimate\}\{stars\}",
-               "\{estimate\} (\{std.error\})"))
+  estimate = c("{estimate}{stars}",
+               "{estimate} ({std.error})"))
 
 # vcov
 modelsummary(models, vcov = "robust")
@@ -604,7 +606,7 @@ modelsummary(
 modelsummary(models, title = 'This is the title')
 
 # title with LaTeX label (for numbering and referencing)
-modelsummary(models, title = 'This is the title \\\\label\{tab:description\}')
+modelsummary(models, title = 'This is the title \\\\label{tab:description}')
 
 # add_rows
 rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,
@@ -622,9 +624,7 @@ gm <- tribble(
   ~raw,        ~clean,      ~fmt,
   "r.squared", "R Squared", 5)
 modelsummary(models, gof_map = gm)
-}\if{html}{\out{</div>}}
 }
-
 \references{
 Arel-Bundock V (2022). “modelsummary: Data and Model Summaries in R.” \emph{Journal of Statistical Software}, \emph{103}(1), 1-23. \doi{10.18637/jss.v103.i01}.'
 }
