@@ -526,6 +526,25 @@ datasummary(island * species * body_mass_g ~ sex * (Mean + SD) * DropEmpty(),
             data = penguins)
 ```
 
+### Percent()
+
+By default, the `Percent()` function computes the share of each category with respect to the whole data, including missing observations, but we can work around this with some trickery:
+
+```{r}
+dat <- data.frame(z = c(0,0,1,0,NA,0,1))
+
+prop.table(table(dat))
+
+datasummary(Factor(y) ~ N + Percent(), data = dat)
+```
+
+To count percentages without missing values, we can exploit the fact that `Percent()` accepts a `denom` argument which can be a logical vector:
+
+```{r}
+datasummary(Factor(z) ~ N + Percent(denom = !is.na(dat$z)), data = dat)
+```
+
+
 ## Add rows
 
 ```{r}
