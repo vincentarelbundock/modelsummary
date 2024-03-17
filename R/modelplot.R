@@ -99,7 +99,9 @@ modelplot <- function(models,
                       background  = NULL,
                       ...) {
 
-   ## settings
+  ellip <- list(...)
+   
+  ## settings
    settings_init(settings = list(
    "function_called" = "modelplot"
    ))
@@ -140,7 +142,7 @@ modelplot <- function(models,
   )
   out$part <- out$statistic <- NULL
   
-  ellip <- list(...)
+
 
   # save for sorting later
   term_order <- unique(out$term)
