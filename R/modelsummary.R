@@ -180,7 +180,6 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' @return a regression table in a format determined by the `output` argument.
 #' @importFrom generics glance tidy
 #' @examplesIf isTRUE(Sys.getenv("R_NOT_CRAN") == 'true')
-#' @examples
 #' # The `modelsummary` website includes \emph{many} examples and tutorials:
 #' # https://modelsummary.com
 #'

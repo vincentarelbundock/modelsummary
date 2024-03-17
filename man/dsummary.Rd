@@ -134,7 +134,7 @@ These global option changes the style of the default column headers:
 \item \code{options(modelsummary_panel_labels = "roman")}
 }
 
-The supported styles are: "model", "panel", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""
+The supported styles are: "model", "panel", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)"
 
 The panel-specific option is only used when \code{shape="rbind"}
 }

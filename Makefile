@@ -17,8 +17,12 @@ check: document ## devtools::check()
 	Rscript -e "devtools::check()"
 
 install: document ## devtools::install()
-	Rscript -e "devtools::install(dependencies = TRUE)"
+	R CMD INSTALL .
+	# Rscript -e "devtools::install(dependencies = TRUE)"
 
+deps: ## install dependencies
+	Rscript -e "devtools::install(dependencies = TRUE)"
+	
 deploy: ## pkgdown::deploy_to_branch()
 	Rscript -e "pkgdown::deploy_to_branch()"
 

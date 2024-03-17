@@ -107,7 +107,7 @@ These global option changes the style of the default column headers:
 \item \code{options(modelsummary_panel_labels = "roman")}
 }
 
-The supported styles are: "model", "panel", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""
+The supported styles are: "model", "panel", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)"
 
 The panel-specific option is only used when \code{shape="rbind"}
 }
@@ -186,22 +186,12 @@ When creating LaTeX via the \code{tinytable} backend (default in version 2.0.0 a
 
 \examples{
 \dontshow{if (FALSE) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
 dat <- mtcars
 dat$vs <- as.logical(dat$vs)
 dat$cyl <- as.factor(dat$cyl)
 datasummary_skim(dat)
 datasummary_skim(dat, "categorical")
-
-# You can use `datasummary` to produce a similar table in different formats.
-# Note that the `Histogram` function relies on unicode characters. These
-# characters will only display correctly in some operating systems, under some
-# locales, using some fonts. Displaying such histograms on Windows computers
-# is notoriously tricky. The `modelsummary` authors cannot provide support to
-# display these unicode histograms.
-
-f <- All(mtcars) ~ Mean + SD + Min + Median + Max + Histogram
-# datasummary(f, mtcars, output="markdown")
+\dontshow{\}) # examplesIf}
 }
 \references{
 Arel-Bundock V (2022). “modelsummary: Data and Model Summaries in R.” \emph{Journal of Statistical Software}, \emph{103}(1), 1-23. \doi{10.18637/jss.v103.i01}.'
