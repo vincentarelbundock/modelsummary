@@ -282,6 +282,7 @@ modelplot <- function(models,
 
 do_call <- function(fun, args) {
   valid <- formalArgs(fun)
+  valid <- c(valid, "color", "colour", "size", "linetype", "fill")
   args <- args[names(args) %in% valid]
   do.call(fun, args)
 }
