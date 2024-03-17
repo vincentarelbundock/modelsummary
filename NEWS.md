@@ -25,6 +25,7 @@ New features:
 Bug fixes:
 
 * Fixed Issue #399: datasummary_balance() siunitx formatting.
+* Fixed Issue #782: Useless warning in some `modelplot()` calls. Thanks to @iago-pssjd for the report and @florence-laflamme for the fix.
 
 ## 1.4.5
 
