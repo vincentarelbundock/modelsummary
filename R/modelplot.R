@@ -229,7 +229,7 @@ modelplot <- function(models,
       args_list <- c(args_list, ellip)
       valid_args_geom_pointrange <- formalArgs(ggplot2::geom_pointrange)
       filtered_args <- remove_invalid_args(args_list, valid_args_geom_pointrange)
-      p <- p + do.call(ggplot2::geom_pointrange, filtered_args)
+      p <- p + do.call(ggplot2::geom_pointrange, c(filtered_args))
     } else {
       if (facet) {
         args_list <- list(
@@ -239,7 +239,7 @@ modelplot <- function(models,
         args_list <- c(args_list, ellip)
         valid_args_geom_pointrange <- formalArgs(ggplot2::geom_pointrange)
         filtered_args <- remove_invalid_args(args_list, valid_args_geom_pointrange)
-        p <- p + do.call(ggplot2::geom_pointrange, filtered_args) +
+        p <- p + do.call(ggplot2::geom_pointrange, c(filtered_args)) +
             ggplot2::facet_grid(term ~ ., scales = 'free_y')
       } else {
         args_list <- list(
@@ -248,7 +248,7 @@ modelplot <- function(models,
         args_list <- c(args_list, ellip)
         valid_args_geom_pointrange <- formalArgs(ggplot2::geom_pointrange)
         filtered_args <- remove_invalid_args(args_list, valid_args_geom_pointrange)
-        p <- p + do.call(ggplot2::geom_pointrange, filtered_args)
+        p <- p + do.call(ggplot2::geom_pointrange, c(filtered_args))
       }
     }
     tmp <- sprintf('Coefficient estimates and %s%% confidence intervals', conf_level * 100)
@@ -262,7 +262,7 @@ modelplot <- function(models,
       args_list <- c(args_list, ellip)
       valid_args_geom_point <- formalArgs(ggplot2::geom_point)
       filtered_args <- remove_invalid_args(args_list, valid_args_geom_point)
-      p <- p + do.call(ggplot2::geom_point, filtered_args)
+      p <- p + do.call(ggplot2::geom_point, c(filtered_args))
     } else {
       if (facet) {
         args_list <- list(
@@ -272,7 +272,7 @@ modelplot <- function(models,
         valid_args_geom_point <- formalArgs(ggplot2::geom_point)
         filtered_args <- remove_invalid_args(args_list, valid_args_geom_point)
         p <- p +
-          do.call(ggplot2::geom_point, filtered_args) +
+          do.call(ggplot2::geom_point, c(filtered_args)) +
           ggplot2::facet_grid(term ~ ., scales = 'free_y')
       } else {
         args_list <- list(
@@ -282,7 +282,7 @@ modelplot <- function(models,
         args_list <- c(args_list, ellip)
         valid_args_geom_point <- formalArgs(ggplot2::geom_point)
         filtered_args <- remove_invalid_args(args_list, valid_args_geom_point)
-        p <- p + do.call(ggplot2::geom_point, filtered_args)
+        p <- p + do.call(ggplot2::geom_point, c(filtered_args))
       }
     }
     p <- p + ggplot2::labs(x = 'Coefficient estimates', y = '')
