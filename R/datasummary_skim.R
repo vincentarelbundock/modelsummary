@@ -21,22 +21,12 @@
 #' @template citation
 #' @template options
 #' @examplesIf FALSE
-#' @examples
 #' dat <- mtcars
 #' dat$vs <- as.logical(dat$vs)
 #' dat$cyl <- as.factor(dat$cyl)
 #' datasummary_skim(dat)
 #' datasummary_skim(dat, "categorical")
 #'
-#' # You can use `datasummary` to produce a similar table in different formats.
-#' # Note that the `Histogram` function relies on unicode characters. These
-#' # characters will only display correctly in some operating systems, under some
-#' # locales, using some fonts. Displaying such histograms on Windows computers
-#' # is notoriously tricky. The `modelsummary` authors cannot provide support to
-#' # display these unicode histograms.
-#'
-#' f <- All(mtcars) ~ Mean + SD + Min + Median + Max + Histogram
-#' # datasummary(f, mtcars, output="markdown")
 #' @export
 datasummary_skim <- function(data,
                              type   = 'numeric',

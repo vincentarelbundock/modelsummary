@@ -336,7 +336,7 @@ These global option changes the style of the default column headers:
 \item \code{options(modelsummary_panel_labels = "roman")}
 }
 
-The supported styles are: "model", "panel", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""
+The supported styles are: "model", "panel", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)"
 
 The panel-specific option is only used when \code{shape="rbind"}
 }
@@ -451,7 +451,6 @@ Some users have reported difficult to reproduce errors when using the
 
 \examples{
 \dontshow{if (isTRUE(Sys.getenv("R_NOT_CRAN") == 'true')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
 # The `modelsummary` website includes \emph{many} examples and tutorials:
 # https://modelsummary.com
 
@@ -624,6 +623,7 @@ gm <- tribble(
   ~raw,        ~clean,      ~fmt,
   "r.squared", "R Squared", 5)
 modelsummary(models, gof_map = gm)
+\dontshow{\}) # examplesIf}
 }
 \references{
 Arel-Bundock V (2022). “modelsummary: Data and Model Summaries in R.” \emph{Journal of Statistical Software}, \emph{103}(1), 1-23. \doi{10.18637/jss.v103.i01}.'

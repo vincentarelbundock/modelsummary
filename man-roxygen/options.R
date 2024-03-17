@@ -14,7 +14,7 @@
 #' * `options(modelsummary_model_labels = "roman")`
 #' * `options(modelsummary_panel_labels = "roman")`
 #' 
-#' The supported styles are: "model", "panel", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)""
+#' The supported styles are: "model", "panel", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)"
 #' 
 #' The panel-specific option is only used when `shape="rbind"`
 #' 
