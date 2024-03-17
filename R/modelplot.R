@@ -167,8 +167,8 @@ modelplot <- function(models,
     out$p.value <- as.numeric(gsub(regex, "\\5", out$value))
   }
 
-  # clean and sort
   dat <- out[!is.na(out$term) & !is.na(out$model) & !is.na(out$estimate),]
+  # clean and sort
   row.names(dat) <- dat$value <- dat$id <- NULL
   dat$term <- factor(dat$term, term_order)
   dat$model <- factor(dat$model, model_order)
@@ -225,32 +225,24 @@ modelplot <- function(models,
   if (!is.null(conf_level)) {
     if (length(unique(dat$model)) == 1) {
       args_list <- list(
-        mapping = ggplot2::aes(y = model, x = estimate, 
-                               xmin = conf.low, xmax = conf.high)
+        mapping = ggplot2::aes(y = term, x = estimate, xmin = conf.low, xmax = conf.high)
       )
       args_list <- c(args_list, ellip)
-      valid_args_geom_pointrange <- formalArgs(ggplot2::geom_pointrange)
-      filtered_args <- remove_invalid_args(args_list, valid_args_geom_pointrange)
-      p <- p + do.call(ggplot2::geom_pointrange, c(filtered_args))
+      p <- p + do_call(ggplot2::geom_pointrange, args_list)
     } else {
       if (facet) {
         args_list <- list(
-          mapping = ggplot2::aes(y = model, x = estimate,
-                                 xmin = conf.low, xmax = conf.high)
+          mapping = ggplot2::aes(y = model, x = estimate, xmin = conf.low, xmax = conf.high)
         )
         args_list <- c(args_list, ellip)
-        valid_args_geom_pointrange <- formalArgs(ggplot2::geom_pointrange)
-        filtered_args <- remove_invalid_args(args_list, valid_args_geom_pointrange)
-        p <- p + do.call(ggplot2::geom_pointrange, c(filtered_args)) +
+        p <- p + do_call(ggplot2::geom_pointrange, c(args_list, ellip)) +
             ggplot2::facet_grid(term ~ ., scales = 'free_y')
       } else {
         args_list <- list(
           mapping = ggplot2::aes(y = term, x = estimate, xmin = conf.low, xmax = conf.high, color = model),
           position = ggplot2::position_dodge(width = .5))
         args_list <- c(args_list, ellip)
-        valid_args_geom_pointrange <- formalArgs(ggplot2::geom_pointrange)
-        filtered_args <- remove_invalid_args(args_list, valid_args_geom_pointrange)
-        p <- p + do.call(ggplot2::geom_pointrange, c(filtered_args))
+        p <- p + do_call(ggplot2::geom_pointrange, args_list)
       }
     }
     tmp <- sprintf('Coefficient estimates and %s%% confidence intervals', conf_level * 100)
@@ -262,19 +254,15 @@ modelplot <- function(models,
         mapping = ggplot2::aes(y = term, x = estimate)
       )
       args_list <- c(args_list, ellip)
-      valid_args_geom_point <- formalArgs(ggplot2::geom_point)
-      filtered_args <- remove_invalid_args(args_list, valid_args_geom_point)
-      p <- p + do.call(ggplot2::geom_point, c(filtered_args))
+      p <- p + do_call(ggplot2::geom_point, args_list)
     } else {
       if (facet) {
         args_list <- list(
           mapping = ggplot2::aes(y = term, x = estimate)
         )
         args_list <- c(args_list, ellip)
-        valid_args_geom_point <- formalArgs(ggplot2::geom_point)
-        filtered_args <- remove_invalid_args(args_list, valid_args_geom_point)
         p <- p +
-          do.call(ggplot2::geom_point, c(filtered_args)) +
+          do_call(ggplot2::geom_point, args_list) +
           ggplot2::facet_grid(term ~ ., scales = 'free_y')
       } else {
         args_list <- list(
@@ -282,9 +270,7 @@ modelplot <- function(models,
           position = ggplot2::position_dodge(width = .5)
         )
         args_list <- c(args_list, ellip)
-        valid_args_geom_point <- formalArgs(ggplot2::geom_point)
-        filtered_args <- remove_invalid_args(args_list, valid_args_geom_point)
-        p <- p + do.call(ggplot2::geom_point, c(filtered_args))
+        p <- p + do_call(ggplot2::geom_point, args_list)
       }
     }
     p <- p + ggplot2::labs(x = 'Coefficient estimates', y = '')
@@ -294,3 +280,8 @@ modelplot <- function(models,
 }
 
 
+do_call <- function(fun, args) {
+  valid <- formalArgs(fun)
+  args <- args[names(args) %in% valid]
+  do.call(fun, args)
+}
