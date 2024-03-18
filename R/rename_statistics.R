@@ -18,6 +18,9 @@ rename_statistics <- function(x, conf_level = 0.95, statistic = NULL, estimate =
         }
     }
     if (!is.null(names(statistic))) {
+        # Otherwise model indentifiers get flatted in things like
+        # `statistic = c("Confidence interval" = "conf.int")`
+        names(statistic)[names(statistic) == ""] <- "\u00a0"
         for (i in seq_along(statistic)) {
             dict[[statistic[[i]]]] <- names(statistic)[i]
         }

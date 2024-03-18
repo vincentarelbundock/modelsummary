@@ -62,13 +62,13 @@ expect_equivalent(
 
 tab <- modelsummary(
   mod, 
-  output = "dataframe",
   estimate = c("$\\hat{\\beta}$" = "estimate"),
+  output = "dataframe",
   statistic = c("Confidence Interval" = "conf.int"),
   shape = term ~ model + statistic)
 expect_equivalent(
   colnames(tab),
-  c("part", "term", "(1) / $\\hat{\\beta}$", "(1) / Confidence Interval", "(1)")
+  c("part", "term", "(1) / $\\hat{\\beta}$", "(1) / Confidence Interval", "(1) /  ")
 )
 
 
