@@ -86,6 +86,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
 #' * named list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
 #' * a named list of length(models) vectors with names equal to the names of your coefficient estimates. See 'Examples' section below. Warning: since this list of vectors can include arbitrary strings or numbers, `modelsummary` cannot automatically calculate p values. The `stars` argument may thus use incorrect significance thresholds when `vcov` is a list of vectors.
+
 #' @param conf_level numeric value between 0 and 1. confidence level to use for
 #' confidence intervals. Setting this argument to `NULL` does not extract
 #' confidence intervals, which can be faster for some models.

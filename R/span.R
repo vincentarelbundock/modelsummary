@@ -7,8 +7,9 @@ get_span_kableExtra <- function(tab) {
         span_list <- list()
         span <- strsplit(colnames(tab), "\\|\\|\\|\\|")
         span <- lapply(span, rev)
+        # allow empty spans
         span_max <- max(sapply(span, length))
-        span <- lapply(span, function(x) c(x, rep(" ", span_max - length(x))))
+        span <- lapply(span, function(z) c(z, rep(" ", span_max - length(z))))
         column_names <- sapply(span, function(x) x[1])
         for (i in 2:span_max) {
             tmp <- sapply(span, function(x) x[i])

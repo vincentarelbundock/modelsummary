@@ -33,3 +33,42 @@ truth <- c("[-3.181, -0.791]", "[0.336, 0.994]")
 expect_equivalent(truth, unname(raw[[4]][c(2, 4)]))
 truth <- c("[-5.070, 16.689]", "[-0.966, 0.259]")
 expect_equivalent(truth, unname(raw[[5]][c(2, 6)]))
+
+
+# issue 722: renaming statistics
+mod <- lm(mpg ~ factor(cyl), mtcars)
+
+tab <- modelsummary(
+  output = "dataframe",
+  mod, 
+  estimate = c("$\\hat{\\beta}$" = "estimate"),
+  statistic = c("Confidence Interval" = "[{conf.low}, {conf.high}]"),
+  shape = term ~ model + statistic)
+expect_equivalent(
+  colnames(tab),
+  c("part", "term", "(1) / $\\hat{\\beta}$", "(1) / Confidence Interval")
+)
+
+tab <- modelsummary(
+  mod, 
+  output = "dataframe",
+  estimate = c("$\\hat{\\beta}$" = "estimate"),
+  statistic = c("t-stat" = "statistic", "p-value" = "p.value"),
+  shape = term ~ model + statistic)
+expect_equivalent(
+  colnames(tab),
+  c("part", "term", "(1) / $\\hat{\\beta}$", "(1) / t-stat", "(1) / p-value")
+)
+
+tab <- modelsummary(
+  mod, 
+  estimate = c("$\\hat{\\beta}$" = "estimate"),
+  output = "dataframe",
+  statistic = c("Confidence Interval" = "conf.int"),
+  shape = term ~ model + statistic)
+expect_equivalent(
+  colnames(tab),
+  c("part", "term", "(1) / $\\hat{\\beta}$", "(1) / Confidence Interval", "(1) /  ")
+)
+
+
