@@ -1,5 +1,7 @@
 source("helpers.R")
 
+exit_file("gt")
+
 penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv",
   na.strings = "")
 

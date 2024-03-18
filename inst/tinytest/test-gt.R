@@ -1,4 +1,6 @@
 source("helpers.R")
+exit_file("gt")
+
 requiet("gt")
 requiet("magrittr")
 using("tinysnapshot")
