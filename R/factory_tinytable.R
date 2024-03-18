@@ -84,6 +84,13 @@ factory_tinytable <- function(tab,
     }
   }
 
+  if (!is.null(hgroup)) {
+    hg <- sapply(hgroup, min)
+    names(hg) <- names(hgroup)
+    hg <- as.list(hg)
+    out <- tinytable::group_tt(out, i = hg)
+  }
+
   # write to file
   if (!is.null(settings_get("output_file"))) {
     tinytable::save_tt(out, output = settings_get("output_file"), overwrite = TRUE)

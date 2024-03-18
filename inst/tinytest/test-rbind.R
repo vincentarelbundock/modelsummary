@@ -124,3 +124,27 @@ expect_snapshot_print(
         add_rows = rows),
     "rbind-add_rows_rbind"
 )
+
+
+# Issue #725: Headers are not printed if shape = "rbind" is used
+gm <- c("r.squared", "nobs", "rmse")
+panels <- list(
+  list(
+    lm(mpg ~ 1, data = mtcars),
+    lm(mpg ~ qsec, data = mtcars)
+  ),
+  list(
+    lm(hp ~ 1, data = mtcars),
+    lm(hp ~ qsec, data = mtcars)
+  )
+)
+tab <- modelsummary(
+  panels,
+  output = "tinytable",
+  shape = "rbind",
+  gof_map = gm)
+expect_snapshot_print(tab, "rbind-issue725_tinytable_hgroup")
+
+
+
+rm(list=ls())
