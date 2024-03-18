@@ -54,7 +54,7 @@ datasummary_skim <- function(data,
   sanitize_escape(escape) # after sanitize_output
   sanity_align(align)
   checkmate::assert_character(by, null.ok = TRUE)
-  checkmate::assert_list(fun_numeric, min.len = 1)
+  checkmate::assert_list(fun_numeric, min.len = 1, names = "unique")
   for (fun_numeric_element in fun_numeric) {
     checkmate::assert_function(fun_numeric_element)
   }
