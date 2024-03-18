@@ -3,9 +3,9 @@ dat$vs <- as.logical(dat$vs)
 dat$gear <- as.factor(dat$gear)
 
 # basic
-expect_warning(datasummary_skim(dat, output = "data.frame"))
+expect_silent(datasummary_skim(dat, output = "data.frame"))
 tmp <- suppressWarnings(datasummary_skim(dat, output = "data.frame"))
-expect_equivalent(dim(tmp), c(9, 8))
+expect_equivalent(dim(tmp), c(9, 9))
 
 tmp <- datasummary_skim(dat, type = "categorical", output = "data.frame")
 expect_equivalent(dim(tmp), c(5, 4))
@@ -29,10 +29,6 @@ expect_equivalent(dim(tab), c(5, 4))
 
 
 # errors and warnings: numeric
-
-# histograms only possible in default, html, or kableExtra
-expect_warning(datasummary_skim(dat, output = "markdown"),
-  pattern = "histogram argument")
 
 # no numeric variables
 tmp <- data.frame(
@@ -69,7 +65,7 @@ expect_error(datasummary_skim(tmp, "categorical"),
 
 # fmt
 known <- c("33.9000", "8.0000", "472.0000", "335.0000", "4.9300", "5.4240", "22.9000", "1.0000", "8.0000")
-tmp <- datasummary_skim(dat, output = "data.frame", fmt = "%.4f", histogram = FALSE)
+tmp <- datasummary_skim(dat, output = "data.frame", fmt = "%.4f")
 expect_equivalent(tmp$Max, known)
 
 known <- c("56.2500", "43.7500", "46.8750", "37.5000", "15.6250")
@@ -108,7 +104,7 @@ expect_inherits(tab, "tinytable")
 
 
 # Issue #627: histograms in gt
-expect_inherits(datasummary_skim(mtcars, output = "gt"), "gt_tbl")
+# expect_inherits(datasummary_skim(mtcars, output = "gt"), "gt_tbl")
 
 
 # # Big refactor

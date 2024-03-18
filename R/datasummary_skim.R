@@ -53,10 +53,14 @@ datasummary_skim <- function(data,
   sanitize_output(output) # before sanitize_escape
   sanitize_escape(escape) # after sanitize_output
   sanity_align(align)
-  checkmate::assert_character(by, null.ok = TRUE)
   checkmate::assert_list(fun_numeric, min.len = 1, names = "unique")
   for (fun_numeric_element in fun_numeric) {
     checkmate::assert_function(fun_numeric_element)
+  }
+  checkmate::assert_data_frame(data)
+  checkmate::assert_character(by, null.ok = TRUE)
+  if (!is.null(by)) {
+    checkmate::assert_true(all(by %in% colnames(data)))
   }
 
   dots <- list(...)
@@ -66,7 +70,8 @@ datasummary_skim <- function(data,
   }
 
   # in 2.0.0, histogram is a tinytable-specific option.
-  if (!settings_equal("output_factory", "tinytable")) {
+  if (!settings_equal("output_factory", c("tinytable", "dataframe"))) {
+    insight::format_warning("Inline histograms in `datasummary_skim()` are only supported for tables produced by the `tinytable` backend.")
     fun_numeric[["Histogram"]] <- NULL
   }
 
