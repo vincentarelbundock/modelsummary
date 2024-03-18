@@ -15,6 +15,7 @@ Other breaking changes:
 
 * The `statistic_override` argument was replaced by `vcov` over 1 year ago, with appropriate deprecation warnings. It is now fully removed.
 * The `group` argument was replaced by `shape` several releases ago. It is now fully removed.
+* `datasummary_skim()` histograms available in `tinytable` only. Allows a lot of code simplification.
 
 New features:
 

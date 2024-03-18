@@ -8,12 +8,14 @@ datasummary_skim(
   data,
   type = "numeric",
   output = "default",
-  fmt = "\%.1f",
-  histogram = TRUE,
+  fmt = 1,
   title = NULL,
   notes = NULL,
   align = NULL,
   escape = TRUE,
+  by = NULL,
+  fun_numeric = list(Unique = NUnique, `Missing Pct.` = PercentMissing, Mean = Mean, SD =
+    SD, Min = Min, Median = Median, Max = Max, Histogram = function(x) ""),
   ...
 )
 }
@@ -51,15 +53,6 @@ datasummary_skim(
 }
 }}
 
-\item{histogram}{include a histogram (TRUE/FALSE). Supported for:
-\itemize{
-\item type = "numeric"
-\item output is "html", "default", "jpg", "png", "tinytable", or "kableExtra"
-\item PDF and HTML documents compiled via Rmarkdown or knitr
-\item See the examples section below for an example of how to use
-\code{datasummary} to include histograms in other formats such as markdown.
-}}
-
 \item{title}{string}
 
 \item{notes}{list or vector of notes to append to the bottom of the table.}
@@ -80,6 +73,15 @@ prevent the file from compiling/displaying. \code{TRUE} escapes all cells, capti
 functions \link[tinytable:tt]{tinytable::tt}, \link[kableExtra:kbl]{kableExtra::kbl}, \link[gt:gt]{gt::gt}, \link[DT:datatable]{DT::datatable}, etc. depending on the \code{output} argument.
 This allows users to pass arguments directly to \code{datasummary} in order to
 affect the behavior of other functions behind the scenes.}
+
+\item{histogram}{include a histogram (TRUE/FALSE). Supported for:
+\itemize{
+\item type = "numeric"
+\item output is "html", "default", "jpg", "png", "tinytable", or "kableExtra"
+\item PDF and HTML documents compiled via Rmarkdown or knitr
+\item See the examples section below for an example of how to use
+\code{datasummary} to include histograms in other formats such as markdown.
+}}
 }
 \description{
 This function was inspired by the excellent \code{skimr} package for R.

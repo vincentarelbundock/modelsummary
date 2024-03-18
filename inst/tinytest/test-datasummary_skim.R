@@ -111,6 +111,22 @@ expect_inherits(tab, "tinytable")
 expect_inherits(datasummary_skim(mtcars, output = "gt"), "gt_tbl")
 
 
+# # Big refactor
+# Q
+# pkgload::load_all()
+# fun <- list(
+#             "mean" = mean,
+#             "sd" = sd,
+#             "Histogram" = function(x) ""
+# )
+# mtcars[, c("qsec", "mpg", "drat", "vs")] |>
+#   datasummary_skim(fmt = 1, by = "vs", fun_numeric = fun, output = 'html') #|>
+#   # print("html")
+#   # print("html")
+#   #
+#
+
+
 # # RDatasets tests: must be commented out
 # any_categorical <- function(x) {
 #   # datasummary_skim ignores characters with more than 10 levels

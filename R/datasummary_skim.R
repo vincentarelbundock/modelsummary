@@ -8,6 +8,7 @@
 #'
 #' @inheritParams datasummary
 #' @inheritParams modelsummary
+#' @import data.table
 #' @param histogram include a histogram (TRUE/FALSE). Supported for:
 #' \itemize{
 #' \item type = "numeric"
@@ -31,22 +32,43 @@
 datasummary_skim <- function(data,
                              type   = 'numeric',
                              output = 'default',
-                             fmt    = '%.1f',
-                             histogram = TRUE,
+                             fmt    = 1,
                              title  = NULL,
                              notes  = NULL,
                              align  = NULL,
                              escape = TRUE,
+                             by = NULL,
+                             fun_numeric = list("Unique" = NUnique,
+                                                "Missing Pct." = PercentMissing,
+                                                "Mean" = Mean,
+                                                "SD" = SD,
+                                                "Min" = Min,
+                                                "Median" = Median,
+                                                "Max" = Max,
+                                                "Histogram" = function(x) ""),
                              ...) {
 
   ## settings 
-  settings_init(settings = list(
-     "function_called" = "datasummary_skim"
-  ))
+  settings_init(settings = list("function_called" = "datasummary_skim"))
   sanitize_output(output) # before sanitize_escape
   sanitize_escape(escape) # after sanitize_output
   sanity_align(align)
+  checkmate::assert_character(by, null.ok = TRUE)
+  checkmate::assert_list(fun_numeric, min.len = 1)
+  for (fun_numeric_element in fun_numeric) {
+    checkmate::assert_function(fun_numeric_element)
+  }
 
+  dots <- list(...)
+  if (isFALSE(dots[["histogram"]])) {
+    fun_numeric[["Histogram"]] <- NULL
+    insight::format_warning("The `histogram` argument is deprecated. Use `fun_numeric` instead.")
+  }
+
+  # in 2.0.0, histogram is a tinytable-specific option.
+  if (!settings_equal("output_factory", "tinytable")) {
+    fun_numeric[["Histogram"]] <- NULL
+  }
 
   checkmate::assert_true(type %in% c("numeric", "categorical", "dataset"))
 
@@ -54,10 +76,9 @@ datasummary_skim <- function(data,
   data <- as.data.frame(data)
 
   if (type == "numeric") {
-    out <- datasummary_skim_numeric(data, output = output, fmt = fmt,
-                                    histogram = histogram, title = title,
-                                    notes = notes, align = align,
-                                    escape = escape, ...)
+    out <- datasummary_skim_numeric(data, output = output, fmt = fmt, by = by,
+                                    title = title, notes = notes, align = align,
+                                    escape = escape, fun_numeric = fun_numeric, ...)
   }
 
   if (type == "categorical") {
@@ -135,194 +156,80 @@ datasummary_skim_dataset <- function(
 #' Internal function to skim numeric variables
 #'
 #' @noRd
-datasummary_skim_numeric <- function(
-  data,
-  output,
-  fmt,
-  histogram,
-  title,
-  notes,
-  align,
-  escape,
-  ...) {
+datasummary_skim_numeric <- function(data,
+                                     output,
+                                     fmt,
+                                     title,
+                                     notes,
+                                     align,
+                                     escape,
+                                     by = NULL,
+                                     fun_numeric = NULL,
+                                     ...) {
 
-  # draw histogram?
-  if (histogram) {
 
-    # histogram is a kableExtra-specific option
-    if (!settings_equal("output_factory", c("kableExtra", "gt", "tinytable"))) {
-      histogram <- FALSE
-    }
-
-    # write to file
-    if (!is.null(settings_get("output_file"))) {
-      if (!settings_equal("output_format", c("html", "png", "jpg", "pdf"))) {
-        histogram <- FALSE
-      }
-
-    # interactive or Rmarkdown/knitr
-    } else {
-      if (isTRUE(check_dependency("knitr"))) {
-        if (!settings_equal("output_format", c("default", "jupyter", "html", "tinytable", "kableExtra", "gt")) &&
-            !knitr::is_latex_output()) {
-          histogram <- FALSE
-        }
-        # gt cannot print histograms in latex
-        if (knitr::is_latex_output() && settings_equal("output_format", "gt")) {
-          histogram <- FALSE
-        }
-      } else {
-        if (!settings_equal("output_format", c("default", "jupyter", "html", "kableExtra", "gt", "tinytable"))) {
-          histogram <- FALSE
-        }
-      }
-    }
-
-    # if flag was flipped
-    if (!histogram) {
-      insight::format_warning('The histogram argument is only supported for (a) output types "default", "html", "tinytable", "kableExtra", or "gt"; (b) writing to file paths with extensions ".html", ".jpg", or ".png"; and (c) Rmarkdown, knitr or Quarto documents compiled to PDF (via kableExtra)  or HTML (via kableExtra or gt). Use `histogram=FALSE` to silence this warning.')
-    }
-
-  }
 
   # subset of numeric variables
   idx <- sapply(data, is.numeric)
-  if (!any(idx)) stop('data contains no numeric variable.')
+  if (!any(idx)) insight::format_error('data contains no numeric variable.')
   dat_new <- data[, idx, drop = FALSE]
 
   # subset of non-NA variables
   idx <- sapply(dat_new, function(x) !all(is.na(x)))
-  if (!any(idx)) stop('all numeric variables are completely missing.')
-  dat_new <- dat_new[, idx, drop = FALSE]
+  if (!any(idx)) insight::format_error('all numeric variables are completely missing.')
+  dat <- dat_new[, idx, drop = FALSE]
 
-  # convert to numeric (tables::All() does not play well with haven_labelled)
-  # but we want to keep the labels for display
-  dat_lab <- dat_nolab <- dat_new
-  for (i in seq_along(dat_new)) {
-    dat_nolab[[i]] <- as.numeric(dat_nolab[[i]])
+  # too large
+  if (ncol(dat) > 250) {
+    insight::format_error("Cannot summarize more than 250 variables at a time.")
   }
 
-  # pad colnames in case one is named Min, Max, Mean, or other function name
-  # colnames(dat_nolab) <- paste0(colnames(dat_nolab), " ")
+  cols <- setdiff(colnames(dat), by)
 
-  # with histogram
-  if (histogram) {
+  dat <- data.table::as.data.table(dat)
 
-    histogram_col <- function(x) ""
-    f <- All(dat_nolab, numeric = TRUE, factor = FALSE) ~
-        Heading("Unique") * NUnique +
-        Heading("Missing Pct.") * PercentMissing +
-        (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt) +
-        Heading("") * histogram_col
+  funcs <- list(
+      "Variable" = function(x) "",
+      "Internal Data List" = function(x) list(x)
+  )
+  funcs <- c(funcs, fun_numeric)
 
-    # prepare list of histograms
-    # TODO: inefficient because it computes the table twice. But I need to
-    # know the exact subset of variables kept by tabular, in the exact
-    # order, to print the right histograms.
-    cache <- settings_cache(c("output_format", "output_file", "output_factory"))
-    idx <- datasummary(
-        f,
-        data = dat_nolab,
-        output = "data.frame",
-        internal_call = TRUE)[[1]]
-    settings_restore(cache)
+  # Compute
+  rows <- list()
+  for (v in cols) {
+    tmp <- dat[, lapply(funcs, function(funny) funny(variable)), 
+               by = by,
+               env = list("variable" = v)][
+               , Variable := v]
+    rows <- c(rows, list(tmp))
+  }
+  rows <- data.table::rbindlist(rows)
 
-    histogram_list <- as.list(dat_lab[, idx, drop = FALSE])
-    histogram_list <- lapply(histogram_list, stats::na.omit)
+  data_list <- rows[["Internal Data List"]]
 
-    # too large
-    if (ncol(dat_lab) > 250) {
-      stop("Cannot summarize more than 250 variables at a time.")
-    }
+  rows[, Variable := dedup(Variable)]
+  rows[, `Internal Data List` := NULL]
+  idx <- unique(c("Variable", by, colnames(rows)))
+  rows <- rows[, ..idx]
+  data.table::setnames(rows, old = "Variable", new = " ")
 
-    # don't use output=filepath.html when post-processing
-    if (!is.null(settings_get("output_file"))) {
-      if (settings_equal("output_factory", "kableExtra")) {
-        output <- "kableExtra"
-      } else if (settings_equal("output_factory", "tinytable")) {
-        output <- "tinytable"
-      }
-    }
+  out <- datasummary_df(rows,
+                        fmt = fmt,
+                        output = output)
 
-    # need this otherwise kableExtra error with `column_spec`
-    if (output == "jupyter") {
-        output_fmt <- "html"
-    } else {
-        output_fmt <- output
-    }
+  idx <- match("Histogram", colnames(rows))[1]
+  if (!is.na(idx) && inherits(out, "tinytable")) {
+    out <- tinytable::plot_tt(out, j = idx, fun = "histogram", data = data_list)
+  }
 
-    # draw table
-    cache <- settings_cache(c("output_format", "output_file", "output_factory"))
-
-    out <- datasummary(
-      formula = f,
-      data = dat_lab,
-      output = output_fmt,
-      title = title,
-      align = align,
-      notes = notes,
-      escape = escape,
-      internal_call = TRUE)
-
-    if (identical(cache$output_factory, "gt")) {
-      insight::check_if_installed("gtExtras")
-      tmp <- data.table::data.table(a = histogram_list)
-      out[["_data"]][, ncol(out[["_data"]])] <- tmp[, 1, drop = FALSE]
-      out <- gtExtras::gt_plt_dist(out,
-        column = ncol(out[["_data"]]),
-        type = "histogram",
-        fill_color = "black",
-        line_color = "black",
-        same_limit = FALSE)
-
-    } else if (identical(cache$output_factory, "kableExtra")) {
-      out <- kableExtra::column_spec(out,
-        column = 9,
-        image = kableExtra::spec_hist(histogram_list,
-          col = "black",
-          same_lim = FALSE))
-
-    } else if (identical(cache$output_factory, "tinytable")) {
-      assert_dependency("tinytable")
-      out <- tinytable::plot_tt(out,
-        j = 9,
-        fun = "histogram", 
-        data = histogram_list,
-        color = "black")
-    }
-
-    settings_restore(cache)
-
-    # don't use output=filepath.html when post-processing
-    if (!is.null(settings_get("output_file")) && settings_equal("output_factory", "kableExtra")) {
-      kableExtra::save_kable(out, file = settings_get("output_file"))
-      return(invisible(out))
-    } else if (!is.null(settings_get("output_file")) && settings_equal("output_factory", "tinytable")) {
-      tinytable::save_tt(out, output = settings_get("output_file"))
-      return(invisible(out))
-    }
-
-  # without histogram
-  } else {
-    f <- All(dat_nolab, numeric = TRUE, factor = FALSE) ~
-         Heading("Unique") * NUnique +
-         Heading("Missing Pct.") * PercentMissing +
-         (Mean + SD + Min + Median + Max) * Arguments(fmt = fmt)
-
-    out <- datasummary(f,
-        data = dat_lab,
-        output = output,
-        title = title,
-        align = align,
-        notes = notes,
-        escape = escape,
-        internal_call = TRUE)
-
+  idx <- match("Density", colnames(rows))[1]
+  if (!is.na(idx) && inherits(out, "tinytable")) {
+    out <- tinytable::plot_tt(out, j = idx, fun = "density", data = data_list)
   }
 
   return(out)
-
 }
+
 
 
 #' Internal function to skim categorical variables
@@ -417,4 +324,18 @@ datasummary_skim_categorical <- function(
     align = align,
     notes = notes)
 
+}
+
+
+
+dedup <- function(x) {
+  for (i in length(x):2) {
+    if (x[i] == x[i - 1]) {
+      x[i] <- NA
+    }
+  }
+  if (is.character(x)) {
+    x[is.na(x)] <- ""
+  }
+  return(x)
 }
