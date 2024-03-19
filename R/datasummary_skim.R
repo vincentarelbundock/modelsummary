@@ -86,23 +86,32 @@ datasummary_skim <- function(data,
   }
 
   if (type == "all") {
-    a <- datasummary_skim_numeric(data,
-      output = output, fmt = fmt, by = by,
-      title = title, notes = notes, align = align,
-      escape = escape, fun_numeric = fun_numeric, ...)
-    b <- datasummary_skim_categorical(data,
-      output = output, fmt = fmt,
-      title = title, notes = notes, align = align,
-      escape = escape, ...)
+    a <- tryCatch(datasummary_skim_numeric(data,
+                                           output = output, fmt = fmt, by = by,
+                                           title = title, notes = notes, align = align,
+                                           escape = escape, fun_numeric = fun_numeric, ...),
+                  error = function(e) NULL)
+    b <- tryCatch(datasummary_skim_categorical(data,
+                                               output = output, fmt = fmt,
+                                               title = title, notes = notes, align = align,
+                                               escape = escape, ...),
+                  error = function(e) NULL)
+
     sanitize_output(output)
 
     data_list <- attr(a, "data_list")
 
-    out <- rbind2(a, b, use_names = FALSE)
-
-
-    out <- tinytable::format_tt(out, replace_na = "")
-    out <- tinytable::style_tt(out, i = nrow(a) + 1, line = "t", line_size = .3)
+    if (!is.null(a) && !is.null(b)) {
+      out <- rbind2(a, b, use_names = FALSE)
+      out <- tinytable::format_tt(out, replace_na = "")
+      out <- tinytable::style_tt(out, i = nrow(a) + 1, line = "t", line_size = .3)
+    } else if (!is.null(a)) {
+      out <- a
+    } else if (!is.null(b)) {
+      out <- b
+    } else {
+      insight::format_error("Unable to skim this dataset.")
+    }
 
   } else if (type == "numeric") {
     out <- datasummary_skim_numeric(data,
