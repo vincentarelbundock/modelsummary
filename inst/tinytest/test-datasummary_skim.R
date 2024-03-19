@@ -31,18 +31,15 @@ expect_equivalent(dim(tab), c(5, 4))
 # errors and warnings: numeric
 
 # no numeric variables
-tmp <- data.frame(
-  a = sample(letters, 20),
-  b = as.character(sample(1:2000, 20, replace = TRUE)))
-expect_error(datasummary_skim(tmp),
-  pattern = "no numeric")
+tab <- datasummary_skim(tmp)
+expect_inherits(tab, "tinytable")
 
-# all fully missing
 tmp <- data.frame(
+# all fully missing
   a = rep(NA_real_, 20),
   b = rep(NA_character_, 20))
 expect_error(datasummary_skim(tmp),
-  pattern = "missing")
+  pattern = "all numeric")
 
 # too many columns
 tmp <- data.frame(matrix(rnorm(252 * 3), ncol = 252))

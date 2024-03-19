@@ -87,30 +87,30 @@ datasummary_skim <- function(data,
 
   if (type == "all") {
     a <- tryCatch(datasummary_skim_numeric(data,
-                                           output = output, fmt = fmt, by = by,
+                                           output = "tinytable", fmt = fmt, by = by,
                                            title = title, notes = notes, align = align,
                                            escape = escape, fun_numeric = fun_numeric, ...),
-                  error = function(e) NULL)
+                  error = function(e) e$message)
     b <- tryCatch(datasummary_skim_categorical(data,
-                                               output = output, fmt = fmt,
+                                               output = "tinytable", fmt = fmt,
                                                title = title, notes = notes, align = align,
                                                escape = escape, ...),
-                  error = function(e) NULL)
+                  error = function(e) e$message)
 
     sanitize_output(output)
 
     data_list <- attr(a, "data_list")
 
-    if (!is.null(a) && !is.null(b)) {
+    if (inherits(a, "tinytable") && inherits(b, "tinytable")) {
       out <- rbind2(a, b, use_names = FALSE)
       out <- tinytable::format_tt(out, replace_na = "")
       out <- tinytable::style_tt(out, i = nrow(a) + 1, line = "t", line_size = .3)
-    } else if (!is.null(a)) {
+    } else if (!inherits(a, "tinytable") && !inherits(b, "tinytable")) {
+      insight::format_error(a, b)
+    } else if (!inherits(a, "tinytable")) {
       out <- a
-    } else if (!is.null(b)) {
+    } else if (!inherits(b, "tinytable")) {
       out <- b
-    } else {
-      insight::format_error("Unable to skim this dataset.")
     }
 
   } else if (type == "numeric") {
@@ -137,7 +137,7 @@ datasummary_skim <- function(data,
     sanitize_output(output)
   }
 
-  if (settings_equal("output_factory", "tinytable")) {
+  if (inherits(out, "tinytable")) {
     if ("Histogram" %in% out@names && !is.null(data_list)) {
       out <- tinytable::plot_tt(out, i = seq_along(data_list), j = "Histogram", fun = "histogram", data = data_list)
     }
