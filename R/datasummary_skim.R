@@ -30,8 +30,8 @@
 #'
 #' @export
 datasummary_skim <- function(data,
-                             type   = 'numeric',
                              output = 'default',
+                             type   = 'all',
                              fmt    = 1,
                              title  = NULL,
                              notes  = NULL,
@@ -80,11 +80,12 @@ datasummary_skim <- function(data,
   # tables does not play well with tibbles
   data <- as.data.frame(data)
 
+  if (type == "all" && !settings_equal("output_factory", "tinytable")) {
+    insight::format_warning("`type='all'` is only supported for the `tinytable` backend. Set the `type` argument explicitly to suppress this warning.")
+    type <- "numeric"
+  }
 
   if (type == "all") {
-    if (!settings_equal("output_factory", "tinytable")) {
-      insight::format_error("`type='all'` is only supported for the `tinytable` backend.")
-    }
     a <- datasummary_skim_numeric(data,
       output = output, fmt = fmt, by = by,
       title = title, notes = notes, align = align,
@@ -93,17 +94,12 @@ datasummary_skim <- function(data,
       output = output, fmt = fmt,
       title = title, notes = notes, align = align,
       escape = escape, ...)
+    sanitize_output(output)
+
+    data_list <- attr(a, "data_list")
 
     out <- rbind2(a, b, use_names = FALSE)
 
-    data_list <- attr(a, "data_list")
-    if ("Histogram" %in% out@names && !is.null(data_list)) {
-      out <- tinytable::plot_tt(out, i = seq_along(data_list), j = "Histogram", fun = "histogram", data = data_list)
-    }
-
-    if ("Density" %in% out@names && !is.null(data_list)) {
-      out <- tinytable::plot_tt(out, i = seq_along(data_list), j = "Density", fun = "density", data = data_list)
-    }
 
     out <- tinytable::format_tt(out, replace_na = "")
     out <- tinytable::style_tt(out, i = nrow(a) + 1, line = "t", line_size = .3)
@@ -113,16 +109,32 @@ datasummary_skim <- function(data,
       output = output, fmt = fmt, by = by,
       title = title, notes = notes, align = align,
       escape = escape, fun_numeric = fun_numeric, ...)
+    sanitize_output(output)
+
+    data_list <- attr(out, "data_list")
+
   } else if (type == "categorical") {
     out <- datasummary_skim_categorical(data,
       output = output, fmt = fmt,
       title = title, notes = notes, align = align,
       escape = escape, ...)
+    sanitize_output(output)
+
   } else if (type == "dataset") {
     out <- datasummary_skim_dataset(data,
       output = output, title = title,
       notes = notes, align = align,
       escape = escape, ...)
+    sanitize_output(output)
+  }
+
+  if (settings_equal("output_factory", "tinytable")) {
+    if ("Histogram" %in% out@names && !is.null(data_list)) {
+      out <- tinytable::plot_tt(out, i = seq_along(data_list), j = "Histogram", fun = "histogram", data = data_list)
+    }
+    if ("Density" %in% out@names && !is.null(data_list)) {
+      out <- tinytable::plot_tt(out, i = seq_along(data_list), j = "Density", fun = "density", data = data_list)
+    }
   }
 
   if (!is.null(settings_get("output_file"))) {

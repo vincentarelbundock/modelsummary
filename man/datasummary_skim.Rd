@@ -6,8 +6,8 @@
 \usage{
 datasummary_skim(
   data,
-  type = "numeric",
   output = "default",
+  type = "all",
   fmt = 1,
   title = NULL,
   notes = NULL,
@@ -22,8 +22,6 @@ datasummary_skim(
 \arguments{
 \item{data}{A data.frame (or tibble)}
 
-\item{type}{of variables to summarize: "numeric" or "categorical" (character)}
-
 \item{output}{filename or object type (character string)
 \itemize{
 \item Supported filename extensions: .docx, .html, .tex, .md, .txt, .csv, .xlsx, .png, .jpg
@@ -37,6 +35,8 @@ datasummary_skim(
 \item Warning: Users should not supply a file name to the \code{output} argument if they intend to customize the table with external packages. See the 'Details' section.
 \item LaTeX compilation requires the \code{booktabs} and \code{siunitx} packages, but \code{siunitx} can be disabled or replaced with global options. See the 'Details' section.
 }}
+
+\item{type}{of variables to summarize: "numeric" or "categorical" (character)}
 
 \item{fmt}{how to format numeric values: integer, user-supplied function, or \code{modelsummary} function.
 \itemize{

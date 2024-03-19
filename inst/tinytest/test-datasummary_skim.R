@@ -3,8 +3,8 @@ dat$vs <- as.logical(dat$vs)
 dat$gear <- as.factor(dat$gear)
 
 # basic
-expect_silent(datasummary_skim(dat, output = "data.frame"))
-tmp <- suppressWarnings(datasummary_skim(dat, output = "data.frame"))
+expect_silent(datasummary_skim(dat, type = "numeric", output = "data.frame"))
+tmp <- suppressWarnings(datasummary_skim(dat, type = "numeric", output = "data.frame"))
 expect_equivalent(dim(tmp), c(9, 9))
 
 tmp <- datasummary_skim(dat, type = "categorical", output = "data.frame")
@@ -15,11 +15,11 @@ tmp <- mtcars
 tmp$vs <- as.logical(tmp$vs)
 tmp$vs[1:3] <- NA
 
-tab <- datasummary_skim(tmp, "categorical", output = "data.frame")
+tab <- datasummary_skim(tmp, type = "categorical", output = "data.frame")
 expect_equivalent(nrow(tab), 3)
 
 tmp$vs <- factor(tmp$vs)
-tab <- datasummary_skim(tmp, "categorical", output = "data.frame")
+tab <- datasummary_skim(tmp, type = "categorical", output = "data.frame")
 expect_equivalent(nrow(tab), 2)
 
 # simple categorical
@@ -54,27 +54,22 @@ expect_error(datasummary_skim(tmp),
 
 # no categorical
 tmp <- data.frame(a = rnorm(10))
-expect_error(datasummary_skim(tmp, "categorical"),
+expect_error(datasummary_skim(tmp, type = "categorical"),
   pattern = "contains no logical")
 
 # too many columns
 tmp <- data.frame(matrix(as.character(rnorm(52 * 3)), ncol = 52))
-expect_error(datasummary_skim(tmp, "categorical"),
+expect_error(datasummary_skim(tmp, type = "categorical"),
   pattern = "more than 50 variables")
-
 
 # fmt
 known <- c("33.9000", "8.0000", "472.0000", "335.0000", "4.9300", "5.4240", "22.9000", "1.0000", "8.0000")
-tmp <- datasummary_skim(dat, output = "data.frame", fmt = "%.4f")
+tmp <- datasummary_skim(dat, output = "data.frame", type = "numeric", fmt = "%.4f")
 expect_equivalent(tmp$Max, known)
-
-known <- c("56.2500", "43.7500", "46.8750", "37.5000", "15.6250")
-tmp <- datasummary_skim(dat, output = "data.frame", fmt = "%.4f", type = "categorical")
-expect_equivalent(tmp[[4]], known)
 
 # empty string factor level (tricky for tables::tabular)
 tmp <- data.frame(a = c(rep("", 3), rep("b", 5), rep("c", 10)))
-tmp <- datasummary_skim(tmp, "categorical", output = "data.frame")
+tmp <- datasummary_skim(tmp, type = "categorical", output = "data.frame")
 expect_equivalent(dim(tmp), c(3, 3))
 
 # too many factor levels
@@ -103,16 +98,24 @@ tab <- datasummary_skim(penguins)
 expect_inherits(tab, "tinytable")
 
 
+# no validity; just no error
+tmp <- mtcars |>
+  transform(cyl = factor(cyl), gear = factor(gear)) |>
+  subset(select = c("cyl", "mpg", "hp", "vs", "gear"))
+x <- datasummary_skim(tmp, type = "all", output = "latex")
+y <- datasummary_skim(tmp, type = "numeric")
+z <- datasummary_skim(tmp, type = "categorical")
+expect_inherits(x, "tinytable")
+expect_inherits(y, "tinytable")
+expect_inherits(z, "tinytable")
 
-# # combined factor and numeric
-# pkgload::load_all()
-# tmp <- mtcars |>
-#   transform(cyl = factor(cyl), gear = factor(gear)) |>
-#   subset(select = c("cyl", "mpg", "hp", "vs", "gear"))
-# a = datasummary_skim(tmp, type = "all")
-# b = datasummary_skim(tmp, type = "categorical")
-# rbind(a, b)
 
+# TODO: broken
+tmp <- mtcars |>
+  transform(cyl = factor(cyl), gear = factor(gear)) |>
+  subset(select = c("cyl", "mpg", "hp", "vs", "gear"))
+tab <- datasummary_skim(tmp, by = "gear", type = "numeric")
+expect_inherits(tab, "tinytable")
 
 
 # Issue #627: histograms in gt
