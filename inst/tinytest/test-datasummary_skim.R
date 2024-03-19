@@ -110,11 +110,11 @@ expect_inherits(y, "tinytable")
 expect_inherits(z, "tinytable")
 
 
-# TODO: broken
+# by is non-numeric
 tmp <- mtcars |>
   transform(cyl = factor(cyl), gear = factor(gear)) |>
   subset(select = c("cyl", "mpg", "hp", "vs", "gear"))
-tab <- datasummary_skim(tmp, by = "gear", type = "numeric")
+tab <- datasummary_skim(tmp, by = "gear", type = "all")
 expect_inherits(tab, "tinytable")
 
 

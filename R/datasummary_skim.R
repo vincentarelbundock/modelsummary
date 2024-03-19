@@ -213,6 +213,7 @@ datasummary_skim_numeric <- function(data,
 
   # subset of numeric variables
   idx <- sapply(data, is.numeric)
+  idx[colnames(data) %in% by] <- TRUE
   if (!any(idx)) insight::format_error('data contains no numeric variable.')
   dat_new <- data[, idx, drop = FALSE]
 
