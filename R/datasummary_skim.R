@@ -206,12 +206,23 @@ datasummary_skim_numeric <- function(data,
                by = by,
                env = list("variable" = v)][
                , Variable := v]
+    for (i in seq_along(tmp)) {
+      class(tmp[[i]]) <- setdiff(class(tmp[[i]]), c("haven_labelled", "vctrs_vctr"))
+    }
     rows <- c(rows, list(tmp))
   }
   rows <- data.table::rbindlist(rows)
 
   data_list <- rows[["Internal Data List"]]
 
+  # labels
+  for (col in colnames(data)) {
+    lab <- attr(data[[col]], "label")
+    if (!is.null(lab)) {
+      rows[Variable == col, Variable := lab]
+    }
+  }
+  
   rows[, Variable := dedup(Variable)]
   rows[, `Internal Data List` := NULL]
   idx <- unique(c("Variable", by, colnames(rows)))
