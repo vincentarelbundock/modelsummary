@@ -103,6 +103,18 @@ tab <- datasummary_skim(penguins)
 expect_inherits(tab, "tinytable")
 
 
+
+# # combined factor and numeric
+# pkgload::load_all()
+# tmp <- mtcars |>
+#   transform(cyl = factor(cyl), gear = factor(gear)) |>
+#   subset(select = c("cyl", "mpg", "hp", "vs", "gear"))
+# a = datasummary_skim(tmp, type = "all")
+# b = datasummary_skim(tmp, type = "categorical")
+# rbind(a, b)
+
+
+
 # Issue #627: histograms in gt
 # expect_inherits(datasummary_skim(mtcars, output = "gt"), "gt_tbl")
 

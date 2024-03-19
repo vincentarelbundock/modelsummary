@@ -75,27 +75,54 @@ datasummary_skim <- function(data,
     fun_numeric[["Histogram"]] <- NULL
   }
 
-  checkmate::assert_true(type %in% c("numeric", "categorical", "dataset"))
+  checkmate::assert_choice(type, c("all", "numeric", "categorical", "dataset"))
 
   # tables does not play well with tibbles
   data <- as.data.frame(data)
 
-  if (type == "numeric") {
-    out <- datasummary_skim_numeric(data, output = output, fmt = fmt, by = by,
-                                    title = title, notes = notes, align = align,
-                                    escape = escape, fun_numeric = fun_numeric, ...)
-  }
 
-  if (type == "categorical") {
-    out <- datasummary_skim_categorical(data, output = output, fmt = fmt,
-                                        title = title, notes = notes, align = align,
-                                        escape = escape, ...)
-  }
+  if (type == "all") {
+    if (!settings_equal("output_factory", "tinytable")) {
+      insight::format_error("`type='all'` is only supported for the `tinytable` backend.")
+    }
+    a <- datasummary_skim_numeric(data,
+      output = output, fmt = fmt, by = by,
+      title = title, notes = notes, align = align,
+      escape = escape, fun_numeric = fun_numeric, ...)
+    b <- datasummary_skim_categorical(data,
+      output = output, fmt = fmt,
+      title = title, notes = notes, align = align,
+      escape = escape, ...)
 
-  if (type == "dataset") {
-    out <- datasummary_skim_dataset(data, output = output, title = title,
-                                    notes = notes, align = align,
-                                    escape = escape, ...)
+    out <- rbind2(a, b, use_names = FALSE)
+
+    data_list <- attr(a, "data_list")
+    if ("Histogram" %in% out@names && !is.null(data_list)) {
+      out <- tinytable::plot_tt(out, i = seq_along(data_list), j = "Histogram", fun = "histogram", data = data_list)
+    }
+
+    if ("Density" %in% out@names && !is.null(data_list)) {
+      out <- tinytable::plot_tt(out, i = seq_along(data_list), j = "Density", fun = "density", data = data_list)
+    }
+
+    out <- tinytable::format_tt(out, replace_na = "")
+    out <- tinytable::style_tt(out, i = nrow(a) + 1, line = "t", line_size = .3)
+
+  } else if (type == "numeric") {
+    out <- datasummary_skim_numeric(data,
+      output = output, fmt = fmt, by = by,
+      title = title, notes = notes, align = align,
+      escape = escape, fun_numeric = fun_numeric, ...)
+  } else if (type == "categorical") {
+    out <- datasummary_skim_categorical(data,
+      output = output, fmt = fmt,
+      title = title, notes = notes, align = align,
+      escape = escape, ...)
+  } else if (type == "dataset") {
+    out <- datasummary_skim_dataset(data,
+      output = output, title = title,
+      notes = notes, align = align,
+      escape = escape, ...)
   }
 
   if (!is.null(settings_get("output_file"))) {
@@ -172,8 +199,6 @@ datasummary_skim_numeric <- function(data,
                                      fun_numeric = NULL,
                                      ...) {
 
-
-
   # subset of numeric variables
   idx <- sapply(data, is.numeric)
   if (!any(idx)) insight::format_error('data contains no numeric variable.')
@@ -233,15 +258,8 @@ datasummary_skim_numeric <- function(data,
                         fmt = fmt,
                         output = output)
 
-  idx <- match("Histogram", colnames(rows))[1]
-  if (!is.na(idx) && inherits(out, "tinytable")) {
-    out <- tinytable::plot_tt(out, j = idx, fun = "histogram", data = data_list)
-  }
 
-  idx <- match("Density", colnames(rows))[1]
-  if (!is.na(idx) && inherits(out, "tinytable")) {
-    out <- tinytable::plot_tt(out, j = idx, fun = "density", data = data_list)
-  }
+  attr(out, "data_list") <- data_list
 
   return(out)
 }
