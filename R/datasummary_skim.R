@@ -107,9 +107,9 @@ datasummary_skim <- function(data,
       out <- tinytable::style_tt(out, i = nrow(a) + 1, line = "t", line_size = .3)
     } else if (!inherits(a, "tinytable") && !inherits(b, "tinytable")) {
       insight::format_error(a, b)
-    } else if (!inherits(a, "tinytable")) {
+    } else if (inherits(a, "tinytable")) {
       out <- a
-    } else if (!inherits(b, "tinytable")) {
+    } else if (inherits(b, "tinytable")) {
       out <- b
     }
 
