@@ -119,6 +119,13 @@ datasummary_correlation <- function(data,
   sanitize_escape(escape) # after sanitize_output
   sanity_add_columns(add_columns)
   sanity_align(align)
+  
+  if (inherits(data, "easycorrelation")) {
+    data <- as.matrix(data)
+    out <- datasummary_correlation_format(
+      data,
+      fmt = fmt)
+  } else { 
 
   any_numeric <- any(sapply(data, is.numeric) == TRUE)
   if (any_numeric == FALSE) {
@@ -172,7 +179,6 @@ datasummary_correlation <- function(data,
       out,
       fmt = fmt)
   }
-
   col_names <- colnames(out)
   out <- cbind(rowname = row.names(out), out)
   colnames(out) <- c(' ', col_names)
@@ -189,7 +195,7 @@ datasummary_correlation <- function(data,
   dict <- get_variable_labels_data(data)
   out[, 1] <- replace_dict(out[, 1], dict)
   colnames(out) <- replace_dict(colnames(out), dict)
-
+  }
   out <- factory(out,
     align = align,
     hrule = NULL,
