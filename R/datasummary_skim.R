@@ -9,15 +9,9 @@
 #' @inheritParams datasummary
 #' @inheritParams modelsummary
 #' @import data.table
-#' @param histogram include a histogram (TRUE/FALSE). Supported for:
-#' \itemize{
-#' \item type = "numeric"
-#' \item output is "html", "default", "jpg", "png", "tinytable", or "kableExtra"
-#' \item PDF and HTML documents compiled via Rmarkdown or knitr
-#' \item See the examples section below for an example of how to use
-#' `datasummary` to include histograms in other formats such as markdown.
-#' }
-#' @param type of variables to summarize: "numeric" or "categorical" (character)
+#' @param type String. Variables to summarize: "all", "numeric", "categorical", "dataset"
+#' @param by Character vector of grouping variables to compute statistics over.
+#' @param fun_numeric Named list of funtions to apply to each column of `data`. If `fun_numeric` includes "Histogram" or "Density", inline plots are inserted. 
 #'
 #' @template citation
 #' @template options
@@ -89,12 +83,12 @@ datasummary_skim <- function(data,
     a <- tryCatch(datasummary_skim_numeric(data,
                                            output = "tinytable", fmt = fmt, by = by,
                                            title = title, notes = notes, align = align,
-                                           escape = escape, fun_numeric = fun_numeric, ...),
+                                           escape = FALSE, fun_numeric = fun_numeric, ...),
                   error = function(e) e$message)
     b <- tryCatch(datasummary_skim_categorical(data,
                                                output = "tinytable", fmt = fmt,
                                                title = title, notes = notes, align = align,
-                                               escape = escape, ...),
+                                               escape = FALSE, ...),
                   error = function(e) e$message)
 
     sanitize_output(output)
@@ -102,7 +96,7 @@ datasummary_skim <- function(data,
     data_list <- attr(a, "data_list")
 
     if (inherits(a, "tinytable") && inherits(b, "tinytable")) {
-      out <- rbind2(a, b, use_names = FALSE)
+      out <- tinytable::rbind2(a, b, use_names = FALSE)
       out <- tinytable::format_tt(out, replace_na = "")
       out <- tinytable::style_tt(out, i = nrow(a) + 1, line = "t", line_size = .3)
     } else if (!inherits(a, "tinytable") && !inherits(b, "tinytable")) {
@@ -121,6 +115,8 @@ datasummary_skim <- function(data,
     if (!is.null(ofile)) {
       tinytable::save_tt(out, output = ofile, overwrite = TRUE)
     }
+
+    out <- tinytable::format_tt(out, escape = escape)
 
   } else if (type == "numeric") {
     out <- datasummary_skim_numeric(data,
