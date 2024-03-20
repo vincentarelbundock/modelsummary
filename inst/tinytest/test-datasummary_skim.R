@@ -27,9 +27,6 @@ tab <- datasummary_skim(dat, type = "categorical", output = "data.frame")
 expect_inherits(tab, "data.frame")
 expect_equivalent(dim(tab), c(5, 4))
 
-
-# errors and warnings: numeric
-
 # no numeric variables
 tab <- datasummary_skim(tmp)
 expect_inherits(tab, "tinytable")

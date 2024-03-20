@@ -113,6 +113,15 @@ datasummary_skim <- function(data,
       out <- b
     }
 
+    ofmt <- settings_get("output_format")
+    if (isTRUE(ofmt %in% c("latex", "markdown", "html", "typst", "dataframe"))) {
+      out@output <- ofmt
+    }
+    ofile <- settings_get("output_file")
+    if (!is.null(ofile)) {
+      tinytable::save_tt(out, output = ofile, overwrite = TRUE)
+    }
+
   } else if (type == "numeric") {
     out <- datasummary_skim_numeric(data,
       output = output, fmt = fmt, by = by,
