@@ -192,7 +192,7 @@ dat <- mtcars
 dat$vs <- as.logical(dat$vs)
 dat$cyl <- as.factor(dat$cyl)
 datasummary_skim(dat)
-datasummary_skim(dat, "categorical")
+datasummary_skim(dat, type = "categorical")
 \dontshow{\}) # examplesIf}
 }
 \references{

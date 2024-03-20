@@ -26,7 +26,7 @@
 #' dat$vs <- as.logical(dat$vs)
 #' dat$cyl <- as.factor(dat$cyl)
 #' datasummary_skim(dat)
-#' datasummary_skim(dat, "categorical")
+#' datasummary_skim(dat, type = "categorical")
 #'
 #' @export
 datasummary_skim <- function(data,
