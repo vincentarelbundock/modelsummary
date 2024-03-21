@@ -120,12 +120,11 @@ datasummary_correlation <- function(data,
   sanity_add_columns(add_columns)
   sanity_align(align)
   
+  
   if (inherits(data, "easycorrelation")) {
     data <- as.matrix(data)
-    out <- datasummary_correlation_format(
-      data,
-      fmt = fmt)
-  } else { 
+    data <- as.data.frame(data)
+  } 
 
   any_numeric <- any(sapply(data, is.numeric) == TRUE)
   if (any_numeric == FALSE) {
@@ -148,19 +147,19 @@ datasummary_correlation <- function(data,
       x,
       use = "pairwise.complete.obs",
       method = method)
-  }
+  
 
   # subset numeric and compute correlation
   out <- data[, sapply(data, is.numeric), drop = FALSE]
   out <- fn(out)
-
+  }
   if ((!is.matrix(out) && !inherits(out, "data.frame")) ||
       is.null(row.names(out)) ||
       is.null(colnames(out)) ||
       nrow(out) != ncol(out)) {
     stop("The function supplied to the `method` argument did not return a square matrix or data.frame with row.names and colnames.")
   }
-
+  
   if (is.character(method)) {
     if (method == "pearspear") {
       out <- datasummary_correlation_format(
@@ -195,7 +194,7 @@ datasummary_correlation <- function(data,
   dict <- get_variable_labels_data(data)
   out[, 1] <- replace_dict(out[, 1], dict)
   colnames(out) <- replace_dict(colnames(out), dict)
-  }
+  
   out <- factory(out,
     align = align,
     hrule = NULL,
