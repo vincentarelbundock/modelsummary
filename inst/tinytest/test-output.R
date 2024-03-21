@@ -180,7 +180,6 @@ datasummary_skim(dat, type = "categorical", output = "test.png")
 datasummary_skim(dat, output = "test.html")
 datasummary_skim(dat, type = "categorical", output = "test.html")
 
-expect_warning(datasummary_skim(dat, output = "test.tex"))
 unlink("test.png")
 unlink("test.html")
 unlink("test.tex")
@@ -189,7 +188,6 @@ unlink("test.tex")
 # unsupported formats
 expect_warning(datasummary_skim(dat, output="flextable"))
 expect_warning(datasummary_skim(dat, output="huxtable"))
-expect_warning(datasummary_skim(dat, output="latex"))
 
 
 # Issue #671: Do not indent title

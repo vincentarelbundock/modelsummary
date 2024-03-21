@@ -118,7 +118,7 @@ escape_everything <- function(tab, output_format, span_list, title, notes) {
     tab[[col]] <- ifelse(
       grepl("\\\\num\\{", tab[[col]]),
       tab[[col]],
-      tinytable::format_tt(tab[, col], escape = output_format))
+      tinytable::format_tt(tab[[col]], escape = output_format))
   }
 
   for (i in seq_along(span_list)) {

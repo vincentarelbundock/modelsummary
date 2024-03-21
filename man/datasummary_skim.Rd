@@ -6,21 +6,21 @@
 \usage{
 datasummary_skim(
   data,
-  type = "numeric",
   output = "default",
-  fmt = "\%.1f",
-  histogram = TRUE,
+  type = "all",
+  fmt = 1,
   title = NULL,
   notes = NULL,
   align = NULL,
   escape = TRUE,
+  by = NULL,
+  fun_numeric = list(Unique = NUnique, `Missing Pct.` = PercentMissing, Mean = Mean, SD =
+    SD, Min = Min, Median = Median, Max = Max, Histogram = function(x) ""),
   ...
 )
 }
 \arguments{
 \item{data}{A data.frame (or tibble)}
-
-\item{type}{of variables to summarize: "numeric" or "categorical" (character)}
 
 \item{output}{filename or object type (character string)
 \itemize{
@@ -36,6 +36,8 @@ datasummary_skim(
 \item LaTeX compilation requires the \code{booktabs} and \code{siunitx} packages, but \code{siunitx} can be disabled or replaced with global options. See the 'Details' section.
 }}
 
+\item{type}{String. Variables to summarize: "all", "numeric", "categorical", "dataset"}
+
 \item{fmt}{how to format numeric values: integer, user-supplied function, or \code{modelsummary} function.
 \itemize{
 \item Integer: Number of decimal digits
@@ -49,15 +51,6 @@ datasummary_skim(
 \item \code{fmt = fmt_sprintf("\%.3f")}: See \code{?sprintf}
 \item \code{fmt = fmt_identity()}: unformatted raw values
 }
-}}
-
-\item{histogram}{include a histogram (TRUE/FALSE). Supported for:
-\itemize{
-\item type = "numeric"
-\item output is "html", "default", "jpg", "png", "tinytable", or "kableExtra"
-\item PDF and HTML documents compiled via Rmarkdown or knitr
-\item See the examples section below for an example of how to use
-\code{datasummary} to include histograms in other formats such as markdown.
 }}
 
 \item{title}{string}
@@ -75,6 +68,10 @@ the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, d.
 
 \item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML characters which could
 prevent the file from compiling/displaying. \code{TRUE} escapes all cells, captions, and notes. Users can have more fine-grained control by setting \code{escape=FALSE} and using an external command such as: \code{modelsummary(model, "latex") |> tinytable::format_tt(tab, j=1:5, escape=TRUE)}}
+
+\item{by}{Character vector of grouping variables to compute statistics over.}
+
+\item{fun_numeric}{Named list of funtions to apply to each column of \code{data}. If \code{fun_numeric} includes "Histogram" or "Density", inline plots are inserted.}
 
 \item{...}{all other arguments are passed through to the table-making
 functions \link[tinytable:tt]{tinytable::tt}, \link[kableExtra:kbl]{kableExtra::kbl}, \link[gt:gt]{gt::gt}, \link[DT:datatable]{DT::datatable}, etc. depending on the \code{output} argument.
@@ -190,7 +187,7 @@ dat <- mtcars
 dat$vs <- as.logical(dat$vs)
 dat$cyl <- as.factor(dat$cyl)
 datasummary_skim(dat)
-datasummary_skim(dat, "categorical")
+datasummary_skim(dat, type = "categorical")
 \dontshow{\}) # examplesIf}
 }
 \references{

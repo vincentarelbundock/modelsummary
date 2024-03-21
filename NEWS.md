@@ -15,9 +15,14 @@ Other breaking changes:
 
 * The `statistic_override` argument was replaced by `vcov` over 1 year ago, with appropriate deprecation warnings. It is now fully removed.
 * The `group` argument was replaced by `shape` several releases ago. It is now fully removed.
+* `datasummary_skim()`
+  - histograms available only with the `tinytable` backend. This allows a lot of code simplification and more customization.
+  - The order of arguments `type` and `output` is switched for consistency with other functions.
+  - `histogram` argument is deprecated.
 
 New features:
 
+* `datasummary_skim()` uses the new `type="all"` by default to display both numeric and categorical variables in a single table with distinct panels. This feature is only available with the `tinytable` backend (default).
 * `statistic` and `estimate` can be specified as named vectors to control the names of statistics when displayed in different columns using the `shape` argument. (Thanks to @mps9506 for bug report #722)
 * `modelsummary(panels, shape = "cbind")` automatically adds column-spanning labels when `panels` is a named nested list of models.
 * `config_modelsummary()` gets a `startup_message` argument to silence the startup message persistently.
