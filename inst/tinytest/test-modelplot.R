@@ -1,4 +1,5 @@
 source("helpers.R")
+if (ON_CI) exit_file("plot local only")
 requiet("tinysnapshot")
 using("tinysnapshot")
 requiet("sandwich")
