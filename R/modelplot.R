@@ -280,6 +280,10 @@ modelplot <- function(models,
 }
 
 
+#' safe do.call
+#'
+#' @keywords internal
+#' @importFrom methods formalArgs
 do_call <- function(fun, args) {
   valid <- formalArgs(fun)
   valid <- c(valid, "color", "colour", "size", "linetype", "fill")

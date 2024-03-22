@@ -4,7 +4,7 @@
 globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 'value', 'p.value', 'std.error', 'statistic', 'stars_note', 'logLik',
 'formatBicLL', 'section', 'position', 'where', 'ticks', 'statistic1', 'model',
-'tmp_grp', 'condition_variable', 'conf_int', 'conf_level'))
+'tmp_grp', 'condition_variable', 'conf_int', 'conf_level', '..idx', 'Internal Data List', 'Variable', 'variable'))
 
 
 

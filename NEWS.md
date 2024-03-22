@@ -1,8 +1,8 @@
 # News 
 
-## 1.9.9.9999
+## 2.0.0
 
-BREAKING CHANGE: The default output format is now `tinytable` instead of `kableExtra`. Learn more about `tinytable` here:
+MAJOR BREAKING CHANGE: The default output format is now `tinytable` instead of `kableExtra`. Learn more about `tinytable` here:
 
 https://vincentarelbundock.github.io/tinytable/
 
@@ -16,15 +16,18 @@ Other breaking changes:
 * The `statistic_override` argument was replaced by `vcov` over 1 year ago, with appropriate deprecation warnings. It is now fully removed.
 * The `group` argument was replaced by `shape` several releases ago. It is now fully removed.
 * `datasummary_skim()`
-  - histograms available only with the `tinytable` backend. This allows a lot of code simplification and more customization.
+  - histograms are only available with the `tinytable` backend. This allows a lot of code simplification and more customization.
   - The order of arguments `type` and `output` is switched for consistency with other functions.
   - `histogram` argument is deprecated.
 
 New features:
 
-* `datasummary_skim()` uses the new `type="all"` by default to display both numeric and categorical variables in a single table with distinct panels. This feature is only available with the `tinytable` backend (default).
-* `statistic` and `estimate` can be specified as named vectors to control the names of statistics when displayed in different columns using the `shape` argument. (Thanks to @mps9506 for bug report #722)
-* `modelsummary(panels, shape = "cbind")` automatically adds column-spanning labels when `panels` is a named nested list of models.
+* `datasummary_skim()`:
+  - New `type="all"` by default to display both numeric and categorical variables in a single table with distinct panels. This feature is only available with the `tinytable` backend (default).
+  - `fun_numeric` argument accepts a list of functions to control the summary columns.
+* `modelsummary()`:
+  - `statistic` and `estimate` can be specified as named vectors to control the names of statistics when displayed in different columns using the `shape` argument. (Thanks to @mps9506 for bug report #722)
+  - `modelsummary(panels, shape = "cbind")` automatically adds column-spanning labels when `panels` is a named nested list of models.
 * `config_modelsummary()` gets a `startup_message` argument to silence the startup message persistently.
 
 Bug fixes:
@@ -32,13 +35,14 @@ Bug fixes:
 * Fixed Issue #399: datasummary_balance() siunitx formatting.
 * Fixed Issue #782: Useless warning in some `modelplot()` calls. Thanks to @iago-pssjd for the report and @florence-laflamme for the fix.
 
+
 ## 1.4.5
 
 * `tinytable` supports histograms in `datasummary_skim()`
 * `config_modelsummary()` supports `tinytable` factory.
 
-## 1.4.4
 
+## 1.4.4
 
 * Support the `tinytable` package as an output format ("factory"): https://vincentarelbundock.github.io/tinytable/
 * Quarto: `md` output format is recognized.
