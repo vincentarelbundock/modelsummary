@@ -119,7 +119,15 @@ datasummary_correlation <- function(data,
   sanitize_escape(escape) # after sanitize_output
   sanity_add_columns(add_columns)
   sanity_align(align)
+  
+  easycorrelation <- FALSE
 
+  if (inherits(data, "easycorrelation")) {
+    easycorrelation <- TRUE
+    data <- as.matrix(data)
+    data <- as.data.frame(data)
+  } 
+  
   any_numeric <- any(sapply(data, is.numeric) == TRUE)
   if (any_numeric == FALSE) {
     stop("`datasummary_correlation` can only summarize numeric data columns.")
@@ -128,7 +136,7 @@ datasummary_correlation <- function(data,
   checkmate::assert(
     checkmate::check_choice(
       method,
-      c("pearson", "kendall", "spearman", "pearspear")),
+      c("pearson", "kendall", "spearman", "pearspear", "easycorrelation")),
     checkmate::check_function(method))
 
   # assign correlation computation function
@@ -141,11 +149,13 @@ datasummary_correlation <- function(data,
       x,
       use = "pairwise.complete.obs",
       method = method)
-  }
+  } 
 
   # subset numeric and compute correlation
   out <- data[, sapply(data, is.numeric), drop = FALSE]
+  if (easycorrelation == FALSE) {
   out <- fn(out)
+  }
 
   if ((!is.matrix(out) && !inherits(out, "data.frame")) ||
       is.null(row.names(out)) ||
@@ -171,7 +181,7 @@ datasummary_correlation <- function(data,
     out <- datasummary_correlation_format(
       out,
       fmt = fmt)
-  }
+  } 
 
   col_names <- colnames(out)
   out <- cbind(rowname = row.names(out), out)
