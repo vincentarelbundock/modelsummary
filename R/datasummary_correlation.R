@@ -136,7 +136,7 @@ datasummary_correlation <- function(data,
   checkmate::assert(
     checkmate::check_choice(
       method,
-      c("pearson", "kendall", "spearman", "pearspear", "easycorrelation")),
+      c("pearson", "kendall", "spearman", "pearspear")),
     checkmate::check_function(method))
 
   # assign correlation computation function
