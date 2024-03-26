@@ -5,6 +5,9 @@ using("tinysnapshot")
 
 x <- mtcars[, 1:4]
 
+# basics
+expect_snapshot_print(datasummary_correlation(x, output = "latex"), label= "datasummary_correlation-basics")
+
 # easycorrelation
 x <- correlation(x)
 expect_snapshot_print(datasummary_correlation(x, output = "latex"), label= "datasummary_correlation-easycorrelation")
