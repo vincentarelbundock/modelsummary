@@ -315,7 +315,6 @@ datasummary_correlation_format <- function(
   make_stars(p, stars)
   out$stars <- make_stars(p, stars)
   out$stars[is.na(out$stars)] <- ""
-  print("...")
   }
 
   return(out)
