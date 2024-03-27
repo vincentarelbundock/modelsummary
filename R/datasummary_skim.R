@@ -390,6 +390,7 @@ datasummary_skim_categorical <- function(
 
 
 dedup <- function(x) {
+  if (length(x) < 2) return(x)
   for (i in length(x):2) {
     if (x[i] == x[i - 1]) {
       x[i] <- NA
