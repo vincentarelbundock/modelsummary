@@ -311,24 +311,12 @@ datasummary_correlation_format <- function(
     }
   }
   
-  # if (!is.null(p) && isTRUE(stars)) {
-  #   for (i in 1:nrow(p)) {
-  #     for (j in 1:ncol(p)) {
-  #       if (!is.na(p[i, j]) && p[i, j] < 0.001 && !is.na(out[i, j])) {
-  #         print(out[i, j])
-  #         out[i, j] <- paste0(out[i, j], "***")
-  #         print(out[i, j])
-  #       }
-  #       else if (!is.na(p[i, j]) && p[i, j] < 0.01 && !is.na(out[i, j])) {
-  #         out[i, j] <- paste0(out[i, j], "**")
-  #       }
-  #       else if (!is.na(p[i, j]) && p[i, j] < 0.05 && !is.na(out[i, j])) {
-  #         out[i, j] <- paste0(out[i, j], "*")
-  #       }
-  #     }
-  #   }
-    # make_stars(p, stars)
-  # }
+  if (!is.null(p) && isTRUE(stars)) {
+  make_stars(p, stars)
+  out$stars <- make_stars(p, stars)
+  out$stars[is.na(out$stars)] <- ""
+  print("...")
+  }
 
   return(out)
 }
