@@ -106,7 +106,6 @@ datasummary_correlation <- function(data,
                                     title = NULL,
                                     notes = NULL,
                                     escape = TRUE,
-                                    p = NULL,
                                     stars = FALSE,
                                     ...) {
 
