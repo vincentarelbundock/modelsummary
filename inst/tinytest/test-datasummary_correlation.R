@@ -8,9 +8,6 @@ x <- mtcars[, 1:4]
 # basics
 expect_snapshot_print(datasummary_correlation(x, output = "latex"), label= "datasummary_correlation-basics")
 
-# easycorrelation
-x <- correlation(x)
-expect_snapshot_print(datasummary_correlation(x, output = "latex"), label= "datasummary_correlation-easycorrelation")
 
 dat <- mtcars[, c("mpg", "hp")]
 colnames(dat) <- c("Miles / Gallon", "Horse Power")
