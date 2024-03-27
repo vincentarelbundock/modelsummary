@@ -106,6 +106,8 @@ datasummary_correlation <- function(data,
                                     title = NULL,
                                     notes = NULL,
                                     escape = TRUE,
+                                    p = NULL,
+                                    stars = FALSE,
                                     ...) {
 
 
@@ -124,6 +126,8 @@ datasummary_correlation <- function(data,
 
   if (inherits(data, "easycorrelation")) {
     easycorrelation <- TRUE
+    s <- summary(data, redundant = TRUE)
+    p <- attr(s, "p")
     data <- as.matrix(data)
     data <- as.data.frame(data)
   } 
@@ -156,6 +160,9 @@ datasummary_correlation <- function(data,
   if (easycorrelation == FALSE) {
   out <- fn(out)
   }
+  else {
+    datasummary_correlation_format(out, fmt = fmt, p = p, stars = stars)
+  }
 
   if ((!is.matrix(out) && !inherits(out, "data.frame")) ||
       is.null(row.names(out)) ||
@@ -169,7 +176,7 @@ datasummary_correlation <- function(data,
       out <- datasummary_correlation_format(
         out,
         fmt = fmt,
-        diagonal = "1")
+        diagonal = "1",)
     } else {
       out <- datasummary_correlation_format(
         out,
@@ -209,7 +216,6 @@ datasummary_correlation <- function(data,
     notes = notes,
     title = title,
     ...)
-
 
   # invisible return
   if (!is.null(settings_get("output_file")) ||
@@ -276,7 +282,9 @@ datasummary_correlation_format <- function(
   fmt,
   leading_zero = FALSE,
   diagonal = NULL,
-  upper_triangle = NULL) {
+  upper_triangle = NULL,
+  p = NULL,
+  stars = FALSE) {
 
   # sanity
   checkmate::assert_character(diagonal, len = 1, null.ok = TRUE)
@@ -303,6 +311,25 @@ datasummary_correlation_format <- function(
       }
     }
   }
+  
+  # if (!is.null(p) && isTRUE(stars)) {
+  #   for (i in 1:nrow(p)) {
+  #     for (j in 1:ncol(p)) {
+  #       if (!is.na(p[i, j]) && p[i, j] < 0.001 && !is.na(out[i, j])) {
+  #         print(out[i, j])
+  #         out[i, j] <- paste0(out[i, j], "***")
+  #         print(out[i, j])
+  #       }
+  #       else if (!is.na(p[i, j]) && p[i, j] < 0.01 && !is.na(out[i, j])) {
+  #         out[i, j] <- paste0(out[i, j], "**")
+  #       }
+  #       else if (!is.na(p[i, j]) && p[i, j] < 0.05 && !is.na(out[i, j])) {
+  #         out[i, j] <- paste0(out[i, j], "*")
+  #       }
+  #     }
+  #   }
+    # make_stars(p, stars)
+  # }
 
   return(out)
 }
