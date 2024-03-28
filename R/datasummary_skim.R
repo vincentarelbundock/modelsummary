@@ -99,6 +99,9 @@ datasummary_skim <- function(data,
       out <- tinytable::rbind2(a, b, use_names = FALSE)
       out <- tinytable::format_tt(out, replace_na = "")
       out <- tinytable::style_tt(out, i = nrow(a) + 1, line = "t", line_size = .3)
+      if (settings_equal("output_format", "html")) {
+          out <- tinytable::style_tt(out, i = nrow(a) + 1, bold = TRUE, line = "bt", line_color = "#d3d8dc")
+      }
     } else if (!inherits(a, "tinytable") && !inherits(b, "tinytable")) {
       insight::format_error(a, b)
     } else if (inherits(a, "tinytable")) {
@@ -390,6 +393,7 @@ datasummary_skim_categorical <- function(
 
 
 dedup <- function(x) {
+  if (length(x) < 2) return(x)
   for (i in length(x):2) {
     if (x[i] == x[i - 1]) {
       x[i] <- NA
