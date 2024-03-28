@@ -121,14 +121,16 @@ datasummary_correlation <- function(data,
   sanity_add_columns(add_columns)
   sanity_align(align)
   
-  easycorrelation <- FALSE
+  easycorrelation <- inherits(data, "easycorrelation")FALSE
 
-  if (inherits(data, "easycorrelation")) {
+  if (easycorrelation) {
     easycorrelation <- TRUE
     s <- summary(data, redundant = TRUE)
-    p <- attr(s, "p")
     data <- as.matrix(data)
     data <- as.data.frame(data)
+    # store the p values in a "attribute" of the object
+    # this is retrieved and used in the `_format()` function.
+    attr(data, "p") <- attr(s, "p")
   } 
   
   any_numeric <- any(sapply(data, is.numeric) == TRUE)
@@ -155,12 +157,11 @@ datasummary_correlation <- function(data,
   } 
 
   # subset numeric and compute correlation
-  out <- data[, sapply(data, is.numeric), drop = FALSE]
   if (easycorrelation == FALSE) {
-  out <- fn(out)
-  }
-  else {
-    datasummary_correlation_format(out, fmt = fmt, p = p, stars = stars)
+    out <- data[, sapply(data, is.numeric), drop = FALSE]
+    out <- fn(out)
+  } else {
+    out <- data
   }
 
   if ((!is.matrix(out) && !inherits(out, "data.frame")) ||
@@ -170,12 +171,19 @@ datasummary_correlation <- function(data,
     stop("The function supplied to the `method` argument did not return a square matrix or data.frame with row.names and colnames.")
   }
 
-  if (is.character(method)) {
+  if (easycorrelation) {
+    out <- datasummary_correlation_format(
+        out,
+        fmt = fmt,
+        diagonal = "1",
+        upper_triangle = ".",
+        stars = stars)
+  } else if (is.character(method)) {
     if (method == "pearspear") {
       out <- datasummary_correlation_format(
         out,
         fmt = fmt,
-        diagonal = "1",)
+        diagonal = "1")
     } else {
       out <- datasummary_correlation_format(
         out,
@@ -282,13 +290,14 @@ datasummary_correlation_format <- function(
   leading_zero = FALSE,
   diagonal = NULL,
   upper_triangle = NULL,
-  p = NULL,
   stars = FALSE) {
 
   # sanity
   checkmate::assert_character(diagonal, len = 1, null.ok = TRUE)
   checkmate::assert_character(upper_triangle, len = 1, null.ok = TRUE)
   checkmate::assert_flag(leading_zero)
+
+  p <- attr(x, "p")
 
   out <- data.frame(x, check.names = FALSE)
 
@@ -308,6 +317,7 @@ datasummary_correlation_format <- function(
       out[, j] <- paste0(out[, j], st[, j])
     }
   }
+
 
   for (i in 1:nrow(out)) {
     for (j in 1:ncol(out)) {

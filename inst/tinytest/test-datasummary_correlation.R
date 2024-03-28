@@ -1,9 +1,13 @@
 source("helpers.R")
 requiet("tinysnapshot")
 using("tinysnapshot")
+if (!requiet("correlation")) exit_file("correlation package")
 
 
 x <- mtcars[, 1:4]
+co <- correlation(x)
+tab <- datasummary_correlation(co, output = "dataframe", stars = TRUE)
+expect_equivalent(tab[[2]], c("1", "-.85***", "-.85***", "-.78***"))
 
 # basics
 expect_snapshot_print(datasummary_correlation(x, output = "latex"), label= "datasummary_correlation-basics")
