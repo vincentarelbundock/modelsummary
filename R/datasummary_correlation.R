@@ -106,6 +106,7 @@ datasummary_correlation <- function(data,
                                     title = NULL,
                                     notes = NULL,
                                     escape = TRUE,
+                                    stars = FALSE,
                                     ...) {
 
 
@@ -119,7 +120,17 @@ datasummary_correlation <- function(data,
   sanitize_escape(escape) # after sanitize_output
   sanity_add_columns(add_columns)
   sanity_align(align)
+  
+  easycorrelation <- FALSE
 
+  if (inherits(data, "easycorrelation")) {
+    easycorrelation <- TRUE
+    s <- summary(data, redundant = TRUE)
+    p <- attr(s, "p")
+    data <- as.matrix(data)
+    data <- as.data.frame(data)
+  } 
+  
   any_numeric <- any(sapply(data, is.numeric) == TRUE)
   if (any_numeric == FALSE) {
     stop("`datasummary_correlation` can only summarize numeric data columns.")
@@ -141,11 +152,16 @@ datasummary_correlation <- function(data,
       x,
       use = "pairwise.complete.obs",
       method = method)
-  }
+  } 
 
   # subset numeric and compute correlation
   out <- data[, sapply(data, is.numeric), drop = FALSE]
+  if (easycorrelation == FALSE) {
   out <- fn(out)
+  }
+  else {
+    datasummary_correlation_format(out, fmt = fmt, p = p, stars = stars)
+  }
 
   if ((!is.matrix(out) && !inherits(out, "data.frame")) ||
       is.null(row.names(out)) ||
@@ -159,7 +175,7 @@ datasummary_correlation <- function(data,
       out <- datasummary_correlation_format(
         out,
         fmt = fmt,
-        diagonal = "1")
+        diagonal = "1",)
     } else {
       out <- datasummary_correlation_format(
         out,
@@ -171,7 +187,7 @@ datasummary_correlation <- function(data,
     out <- datasummary_correlation_format(
       out,
       fmt = fmt)
-  }
+  } 
 
   col_names <- colnames(out)
   out <- cbind(rowname = row.names(out), out)
@@ -199,7 +215,6 @@ datasummary_correlation <- function(data,
     notes = notes,
     title = title,
     ...)
-
 
   # invisible return
   if (!is.null(settings_get("output_file")) ||
@@ -266,7 +281,9 @@ datasummary_correlation_format <- function(
   fmt,
   leading_zero = FALSE,
   diagonal = NULL,
-  upper_triangle = NULL) {
+  upper_triangle = NULL,
+  p = NULL,
+  stars = FALSE) {
 
   # sanity
   checkmate::assert_character(diagonal, len = 1, null.ok = TRUE)
@@ -292,6 +309,12 @@ datasummary_correlation_format <- function(
         out[i, j] <- ifelse(i == j, diagonal, out[i, j])
       }
     }
+  }
+  
+  if (!is.null(p) && isTRUE(stars)) {
+  make_stars(p, stars)
+  out$stars <- make_stars(p, stars)
+  out$stars[is.na(out$stars)] <- ""
   }
 
   return(out)
