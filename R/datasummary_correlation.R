@@ -121,7 +121,12 @@ datasummary_correlation <- function(data,
   sanity_add_columns(add_columns)
   sanity_align(align)
   
-  easycorrelation <- inherits(data, "easycorrelation")FALSE
+  easycorrelation <- inherits(data, "easycorrelation")
+
+  if (isFALSE(easycorrelation) && !isFALSE(stars)) {
+      msg <- "The `stars` argument of the `datasummary_correlation()` function is only supported when `x` is an object produced by the `correlation` package."
+      insight::format_error(msg)
+  }
 
   if (easycorrelation) {
     easycorrelation <- TRUE
