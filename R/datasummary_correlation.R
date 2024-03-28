@@ -300,6 +300,15 @@ datasummary_correlation_format <- function(
     }
   }
 
+  # before triangle, otherwise we get empty cells with stars
+  if (!is.null(p) && isTRUE(stars)) {
+    st <- make_stars(p, stars)
+    st <- st[, 2:ncol(st)]
+    for (j in 1:ncol(out)) {
+      out[, j] <- paste0(out[, j], st[, j])
+    }
+  }
+
   for (i in 1:nrow(out)) {
     for (j in 1:ncol(out)) {
       if (!is.null(upper_triangle)) {
@@ -309,12 +318,6 @@ datasummary_correlation_format <- function(
         out[i, j] <- ifelse(i == j, diagonal, out[i, j])
       }
     }
-  }
-  
-  if (!is.null(p) && isTRUE(stars)) {
-  make_stars(p, stars)
-  out$stars <- make_stars(p, stars)
-  out$stars[is.na(out$stars)] <- ""
   }
 
   return(out)
