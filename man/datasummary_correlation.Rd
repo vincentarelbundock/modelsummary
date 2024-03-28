@@ -15,6 +15,7 @@ datasummary_correlation(
   title = NULL,
   notes = NULL,
   escape = TRUE,
+  stars = FALSE,
   ...
 )
 }
@@ -208,6 +209,11 @@ dat <- mtcars \%>\%
   select(`Miles / Gallon` = mpg,
          `Horse Power` = hp)
 datasummary_correlation(dat)
+
+# detect easycorrelation objects and add stars
+table <- mtcars[, 1:4]
+co <- correlation(x)
+datasummary_correlation(co, stars = TRUE)
 
 # alternative methods
 datasummary_correlation(dat, method = "pearspear")

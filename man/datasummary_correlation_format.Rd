@@ -9,7 +9,8 @@ datasummary_correlation_format(
   fmt,
   leading_zero = FALSE,
   diagonal = NULL,
-  upper_triangle = NULL
+  upper_triangle = NULL,
+  stars = FALSE
 )
 }
 \arguments{
