@@ -24,16 +24,20 @@ New features:
 
 * `datasummary_skim()`:
   - New `type="all"` by default to display both numeric and categorical variables in a single table with distinct panels. This feature is only available with the `tinytable` backend (default).
+  - `by` argument allows summarizing numeric variables by group.
   - `fun_numeric` argument accepts a list of functions to control the summary columns.
 * `modelsummary()`:
   - `statistic` and `estimate` can be specified as named vectors to control the names of statistics when displayed in different columns using the `shape` argument. (Thanks to @mps9506 for bug report #722)
   - `modelsummary(panels, shape = "cbind")` automatically adds column-spanning labels when `panels` is a named nested list of models.
 * `config_modelsummary()` gets a `startup_message` argument to silence the startup message persistently.
+* Improved documentation and vignettes, providing clearer instructions and examples.
+* Updated tests and snapshots to ensure reliability and consistency across changes.
 
 Bug fixes:
 
 * Fixed Issue #399: datasummary_balance() siunitx formatting.
 * Fixed Issue #782: Useless warning in some `modelplot()` calls. Thanks to @iago-pssjd for the report and @florence-laflamme for the fix.
+* Addressed various bugs and made optimizations for better performance and user experience.
 
 
 ## 1.4.5
