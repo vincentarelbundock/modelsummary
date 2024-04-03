@@ -971,11 +971,46 @@ modelsummary(mod, output = "gt")
 
 # Case studies
 
+## Collapse control variables into an indicator
+
+In some cases, analysts want to display a single checkmark in their table if a full set of control variables is available. This can easily be achieved with the `glance_custom` mechanism described in detail in [the extension vignette.](modelsummary_extension.html) Here is a simple example:
+
+```{r}
+library(modelsummary)
+
+mod <- list(
+  glm(am ~ hp + factor(cyl), data = mtcars, family = binomial),
+  lm(mpg ~ hp + factor(cyl) + gear + qsec, data = mtcars)
+)
+
+glance_custom.lm <- function(x, ...) {
+  controls <- c("gear", "qsec")
+  if (all(controls %in% names(coef(x)))) {
+    out <- data.frame(Controls = "✓")
+  } else {
+    out <- data.frame(Controls = "✗")
+  }
+  return(out)
+}
+
+glance_custom.glm <- glance_custom.lm
+
+modelsummary(mod, "html", coef_omit = "qsec|gear")
+```
+
+
+Return to nomal:
+
+```{r}
+rm(list = c("glance_custom.glm", "glance_custom.lm"))
+```
+
+
 ## Subgroup estimation with `nest_by`
 
 Sometimes, it is useful to estimate multiple regression models on subsets of the data. To do this efficiently, we can use the `nest_by` function from the `dplyr` package. Then, estimate the models with `lm`, extract them and name them with `pull`, and finally summarize them with `modelsummary`:
-
 ```{r, message=FALSE, warning=FALSE}
+
 library(tidyverse)
 
 mtcars %>%
