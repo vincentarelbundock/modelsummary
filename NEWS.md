@@ -1,5 +1,11 @@
 # News 
 
+## Development
+
+Bugs:
+
+* `escape` argument not respected in `datasummary_df()`. Thanks to @adamaltmejd for report #740
+
 ## 2.0.0
 
 MAJOR BREAKING CHANGE: The default output format is now `tinytable` instead of `kableExtra`. Learn more about `tinytable` here:
