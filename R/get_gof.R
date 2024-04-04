@@ -89,11 +89,7 @@ get_gof <- function(model, gof_function, vcov_type = NULL, ...) {
 
     # gof_function function supplied directly by the user
     if (is.function(gof_function)) {
-        if ("..." %in% names(formals(gof_function))) {
-            tmp <- try(gof_function(model, ...))
-        } else {
-            tmp <- try(gof_function(model))
-        }
+        tmp <- try(gof_function(model, ...))
         if (!isTRUE(checkmate::check_data_frame(tmp, nrows = 1, col.names = "unique"))) {
             msg <- "`gof_function` must be a function which accepts a model and returns a 1-row data frame with unique column names."
             insight::format_error(msg)
