@@ -127,6 +127,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `"IC"`: omit statistics matching the "IC" substring.
 #' * `"BIC|AIC"`: omit statistics matching the "AIC" or "BIC" substrings.
 #' * `"^(?!.*IC)"`: keep statistics matching the "IC" substring.
+#' @param gof_function function which accepts a model and returns a 1-row `data.frame` with one custom goodness-of-fit statistic per column.
 #' @param group_map named or unnamed character vector. Subset, rename, and
 #' reorder coefficient groups specified a grouping variable specified in the
 #' `shape` argument formula. This argument behaves like `coef_map`.
@@ -370,6 +371,7 @@ modelsummary <- function(
   coef_rename = FALSE,
   gof_map     = NULL,
   gof_omit    = NULL,
+  gof_function  = NULL,
   group_map   = NULL,
   add_columns = NULL,
   add_rows    = NULL,
@@ -400,6 +402,7 @@ modelsummary <- function(
       coef_rename = coef_rename,
       gof_map = gof_map,
       gof_omit = gof_omit,
+      gof_function = gof_function,
       add_columns = add_columns,
       add_rows = add_rows,
       align = align,
@@ -453,6 +456,8 @@ modelsummary <- function(
   sanity_coef(coef_map, coef_rename, coef_omit)
   sanity_stars(stars)
   sanity_align(align, estimate = estimate, statistic = statistic, stars = stars)
+  checkmate::assert_function(gof_function, null.ok = TRUE)
+
 
   # confidence intervals are expensive
   if (!any(grepl("conf", c(estimate, statistic)))) {
@@ -501,6 +506,7 @@ modelsummary <- function(
                                         conf_level = conf_level,
                                         vcov = vcov,
                                         gof_map = gof_map, # check if we can skip all gof computation
+                                        gof_function = gof_function,
                                         shape = shape,
                                         coef_rename = coef_rename,
                                         ...)
@@ -836,7 +842,7 @@ modelsummary <- function(
 }
 
 
-get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, shape, coef_rename, ...) {
+get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, gof_function, shape, coef_rename, ...) {
 
     number_of_models <- max(length(models), length(vcov))
 
@@ -852,7 +858,7 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, sh
         }
 
         # don't waste time if we are going to exclude all gof anyway
-        gla <- get_gof(models[[j]], vcov_type = names(vcov)[i], gof_map = gof_map, ...)
+        gla <- get_gof(models[[j]], vcov_type = names(vcov)[i], gof_map = gof_map, gof_function = gof_function, ...)
 
         tid <- get_estimates(
             models[[j]],

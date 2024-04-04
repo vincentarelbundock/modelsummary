@@ -1,5 +1,11 @@
 # News 
 
+## Development
+
+New features:
+
+* `modelsummary()` gets a `gof_function` argument which accepts functions to extract custom information from models.
+
 ## 2.0.0
 
 MAJOR BREAKING CHANGE: The default output format is now `tinytable` instead of `kableExtra`. Learn more about `tinytable` here:

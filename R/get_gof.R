@@ -5,10 +5,11 @@
 #' can access this information by calling the `attributes` function:
 #' `attributes(get_estimates(model))`
 #'
-#' @inheritParams get_estimates
 #' @param vcov_type string vcov type to add at the bottom of the table
+#' @inheritParams get_estimates
+#' @inheritParams modelsummary
 #' @export
-get_gof <- function(model, vcov_type = NULL, ...) {
+get_gof <- function(model, gof_function, vcov_type = NULL, ...) {
 
     # secret argument passed internally
     # gof_map = NULL: no value supplied by the user
@@ -61,27 +62,44 @@ get_gof <- function(model, vcov_type = NULL, ...) {
     }
 
     # internal customization by modelsummary
-    gof_custom <- glance_custom_internal(model, vcov_type = vcov_type, gof = gof)
-    if (!is.null(gof_custom) && is.data.frame(gof)) {
-        for (n in colnames(gof_custom)) {
+    gof_custom_df <- glance_custom_internal(model, vcov_type = vcov_type, gof = gof, gof_function = gof_function)
+    if (!is.null(gof_custom_df) && is.data.frame(gof)) {
+        for (n in colnames(gof_custom_df)) {
             # modelsummary's vcov argument has precedence
             # mainly useful to avoid collision with `fixest::glance_custom`
             overwriteable <- c("IID", "Default", "")
             if (is.null(vcov_type) || n != "vcov.type" || gof[["vcov.type"]] %in% overwriteable) {
 
-                gof[[n]] <- gof_custom[[n]]
+                gof[[n]] <- gof_custom_df[[n]]
             }
         }
     }
 
     # glance_custom (vcov_type arg is needed for glance_custom.fixest)
-    gof_custom <- glance_custom(model)
-    if (!is.null(gof_custom) && is.data.frame(gof)) {
-        for (n in colnames(gof_custom)) {
+    gof_custom_df <- glance_custom(model)
+    if (!is.null(gof_custom_df) && is.data.frame(gof)) {
+        for (n in colnames(gof_custom_df)) {
             # modelsummary's vcov argument has precedence
             # mainly useful to avoid collision with `fixest::glance_custom`
             if (is.null(vcov_type) || n != "vcov.type") {
-                gof[[n]] <- gof_custom[[n]]
+                gof[[n]] <- gof_custom_df[[n]]
+            }
+        }
+    }
+
+    # gof_function function supplied directly by the user
+    if (is.function(gof_function)) {
+        if ("..." %in% names(formals(gof_function))) {
+            tmp <- try(gof_function(model, ...))
+        } else {
+            tmp <- try(gof_function(model))
+        }
+        if (!isTRUE(checkmate::check_data_frame(tmp, nrows = 1, col.names = "unique"))) {
+            msg <- "`gof_function` must be a function which accepts a model and returns a 1-row data frame with unique column names."
+            insight::format_error(msg)
+        } else {
+            for (n in names(tmp)) {
+                gof[[n]] <- tmp[[n]]
             }
         }
     }

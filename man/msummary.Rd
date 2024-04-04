@@ -20,6 +20,7 @@ msummary(
   coef_rename = FALSE,
   gof_map = NULL,
   gof_omit = NULL,
+  gof_function = NULL,
   group_map = NULL,
   add_columns = NULL,
   add_rows = NULL,
@@ -211,6 +212,8 @@ model information. This argument accepts 4 types of values:
 \item \code{"BIC|AIC"}: omit statistics matching the "AIC" or "BIC" substrings.
 \item \code{"^(?!.*IC)"}: keep statistics matching the "IC" substring.
 }}
+
+\item{gof_function}{function which accepts a model and returns a 1-row \code{data.frame} with one custom goodness-of-fit statistic per column.}
 
 \item{group_map}{named or unnamed character vector. Subset, rename, and
 reorder coefficient groups specified a grouping variable specified in the

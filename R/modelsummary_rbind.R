@@ -34,6 +34,7 @@ modelsummary_rbind <- function(
     coef_rename = FALSE,
     gof_map     = NULL,
     gof_omit    = NULL,
+    gof_custom  = NULL,
     add_columns = NULL,
     add_rows    = NULL,
     align       = NULL,
@@ -124,6 +125,7 @@ modelsummary_rbind <- function(
                 group_map = NULL,
                 gof_map = gof_map,
                 gof_omit = gof_omit,
+                gof_custom = gof_custom,
                 escape = escape
         ), keep.null = TRUE)
         tab <- do.call("modelsummary", args)
