@@ -28,6 +28,13 @@ factory_tinytable <- function(tab,
     colnames(tab) <- attr(span_list, "column_names")
   }
 
+  # Issue #742: remove heavy attributes if there are any
+  att_names <- names(attributes(tab))
+  att_names <- setdiff(att_names, c("names", "row.names", "class"))
+  for (a in att_names) {
+      attr(tab, a) <- NULL
+  }
+
   # escape everything except \\num{} in LaTeX
   if (isTRUE(escape) && isTRUE(output_format %in% c("latex", "latex_tabular", "html", "typst", "tinytable"))) {
     of <- if (output_format == "latex_tabular") "latex" else output_format
