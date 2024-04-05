@@ -144,7 +144,8 @@ datasummary_correlation <- function(data,
   }
 
   # subset numeric and compute correlation
-  out <- data[, sapply(data, is.numeric), drop = FALSE]
+  out <- data.frame(data, check.names = FALSE) # data.table & tibble
+  out <- out[, sapply(data, is.numeric), drop = FALSE]
   out <- fn(out)
 
   if ((!is.matrix(out) && !inherits(out, "data.frame")) ||
