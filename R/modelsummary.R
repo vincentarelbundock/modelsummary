@@ -65,18 +65,18 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * TRUE: +=.1, *=.05, **=.01, ***=0.001
 #' * Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
 #' * Note: a legend will not be inserted at the bottom of the table when the `estimate` or `statistic` arguments use "glue strings" with `{stars}`.
-#' @param statistic vector of strings or `glue` strings which select uncertainty
-#' statistics to report vertically below the estimate. NULL omits all
-#' uncertainty statistics.
-#' * "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", .
-#'    or any column name produced by `get_estimates(model)`
+#' @param statistic vector of strings or `glue` strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics.
+#' * "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", or any column name produced by `get_estimates(model)`
 #' * `glue` package strings with braces, with or without R functions, such as:
 #'   - `"{p.value} [{conf.low}, {conf.high}]"`
 #'   - `"Std.Error: {std.error}"`
 #'   - `"{exp(estimate) * std.error}"`
-#' * Numbers are automatically rounded and converted to strings. To apply functions to their numeric values, as in the last `glue` example, users must set `fmt=NULL`.
-#' * Parentheses are added automatically unless the string includes `glue` curly braces `{}`.
-#' * Some statistics are not supported for all models. See column names in `get_estimates(model)`, and visit the website to learn how to add custom statistics.
+#'   - Numbers are automatically rounded and converted to strings. To apply functions to their numeric values, as in the last `glue` example, users must set `fmt=NULL`.
+#'   - Parentheses are added automatically unless the string includes `glue` curly braces `{}`.
+#' * Notes: 
+#'   - The names of the `statistic` are used a column names when using the `shape` argument to display statistics as columns: 
+#'      - `statistic=c("p"="p.value", "["="conf.low", "]"="conf.high")`
+#'   - Some statistics are not supported for all models. See column names in `get_estimates(model)`, and visit the website to learn how to add custom statistics.
 #' @param vcov robust standard errors and other manual statistics. The `vcov`
 #'   argument accepts six types of input (see the 'Details' and 'Examples'
 #'   sections below):
