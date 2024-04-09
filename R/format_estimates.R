@@ -227,7 +227,7 @@ format_estimates <- function(
   # estimates are one per model, but all displayed on the same row, so we give
   # the same identifier. statistics have different names because they need to
   # be merged.
-  est$statistic <- c("estimate", statistic)[idx]
+  est$statistic <- c(estimate, statistic)[idx]
 
   # drop empty rows (important for broom.mixed which produces group
   # estimates without standard errors)

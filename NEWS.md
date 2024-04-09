@@ -6,6 +6,7 @@ Bugs:
 
 * `escape` argument not respected in `datasummary_df()`. Thanks to @adamaltmejd for report #740
 * `datasummary_correlation()` supports `data.table`. Thanks to volatilehead on Twitter for report #737.
+* Accepts named `estimate` argument when using shape and statistics are horizontal. Thanks to @iago-pssjd for report #745.
 
 ## 2.0.0
 
