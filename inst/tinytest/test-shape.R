@@ -292,11 +292,12 @@ tab <- modelsummary(
     mod,
     output = "dataframe",
     shape = term + model ~ statistic,
-    statistic = c("std.error", "{p.value}{stars}", "{estimate} ({statistic})"),
+    estimate = c("$\\hat{\\beta}$" = "{estimate}"),
+    statistic = c("S.E." = "std.error", "p" = "{p.value}{stars}", "Est. (t)" = "{estimate} ({statistic})"),
     fmt = fmt_statistic(estimate = 3, p.value = 2))
 expect_equivalent(
     colnames(tab),
-    c("part", "term", "model", "Est.", "S.E.", "p", "Est.  (t)"))
+    c("part", "term", "model", "$\\hat{\\beta}$", "S.E.", "p", "Est. (t)"))
 
 
 # Issue #631: bad group column

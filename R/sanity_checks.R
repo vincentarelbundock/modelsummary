@@ -104,6 +104,9 @@ sanitize_estimate <- function(estimate, number_of_models) {
     out <- rep(estimate, number_of_models)
     out <- as.list(out)
   } else {
+    if (!is.null(names(estimate)) && length(unique(names(estimate))) > 1) {
+      insight::format_error("The `estimate` vector must have no name or every element must be named the same.")
+    }
     out <- as.list(estimate)
   }
 

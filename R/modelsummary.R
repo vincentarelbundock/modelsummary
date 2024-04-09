@@ -525,6 +525,8 @@ modelsummary <- function(
       est        = msl[[i]]$tidy,
       fmt        = fmt,
       estimate   = estimate[[i]],
+      # enforce single name when multiple estimates in different colums
+      estimate_label = names(estimate)[1],
       statistic  = statistic,
       vcov       = vcov[[i]],
       conf_level = conf_level,
