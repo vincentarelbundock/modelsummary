@@ -44,7 +44,7 @@ sanitize_vcov <- function(vcov, models, ...) {
 
   sandwich_types <- c(
     "Andrews",
-    "bootstrap",
+    "BS",
     "classical",
     "constant",
     "CR",
