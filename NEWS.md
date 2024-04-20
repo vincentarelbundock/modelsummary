@@ -2,6 +2,10 @@
 
 ## Development
 
+`datasummary_balance()`:
+
+* `formula` can now include variables on the left-hand side to indicate the subset of columns to summarize: `datasummary_balance(mpg + hp ~ am, data = mtcars)`
+
 Bugs:
 
 * `escape` argument not respected in `datasummary_df()`. Thanks to @adamaltmejd for report #740
