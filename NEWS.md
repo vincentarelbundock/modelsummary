@@ -4,7 +4,7 @@
 
 `datasummary_balance()`:
 
-* `formula` can now include variables on the left-hand side to indicate the subset of columns to summarize: `datasummary_balance(mpg + hp ~ am, data = mtcars)`
+* `formula` can now include variables on the left-hand side to indicate the subset of columns to summarize: `datasummary_balance(mpg + hp ~ am, data = mtcars)` Thanks to @etiennebacher for feature request #751.
 
 Bugs:
 
