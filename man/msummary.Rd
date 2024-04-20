@@ -92,21 +92,25 @@ the data.frame produced by \code{get_estimates(model)}, and strings with curly b
 \item \code{"{estimate} [{conf.low}, {conf.high}]"}
 }}
 
-\item{statistic}{vector of strings or \code{glue} strings which select uncertainty
-statistics to report vertically below the estimate. NULL omits all
-uncertainty statistics.
+\item{statistic}{vector of strings or \code{glue} strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics.
 \itemize{
-\item "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", .
-or any column name produced by \code{get_estimates(model)}
+\item "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", or any column name produced by \code{get_estimates(model)}
 \item \code{glue} package strings with braces, with or without R functions, such as:
 \itemize{
 \item \code{"{p.value} [{conf.low}, {conf.high}]"}
 \item \code{"Std.Error: {std.error}"}
 \item \code{"{exp(estimate) * std.error}"}
-}
 \item Numbers are automatically rounded and converted to strings. To apply functions to their numeric values, as in the last \code{glue} example, users must set \code{fmt=NULL}.
 \item Parentheses are added automatically unless the string includes \code{glue} curly braces \code{{}}.
+}
+\item Notes:
+\itemize{
+\item The names of the \code{statistic} are used a column names when using the \code{shape} argument to display statistics as columns:
+\itemize{
+\item \code{statistic=c("p"="p.value", "["="conf.low", "]"="conf.high")}
+}
 \item Some statistics are not supported for all models. See column names in \code{get_estimates(model)}, and visit the website to learn how to add custom statistics.
+}
 }}
 
 \item{vcov}{robust standard errors and other manual statistics. The \code{vcov}
@@ -114,7 +118,7 @@ argument accepts six types of input (see the 'Details' and 'Examples'
 sections below):
 \itemize{
 \item NULL returns the default uncertainty estimates of the model object
-\item string, vector, or (named) list of strings. "iid", "classical", and "constant" are aliases for \code{NULL}, which returns the model's default uncertainty estimates. The strings "HC", "HC0", "HC1" (alias: "stata"), "HC2", "HC3" (alias: "robust"), "HC4", "HC4m", "HC5", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", and "weave" use variance-covariance matrices computed using functions from the \code{sandwich} package, or equivalent method. The behavior of those functions can (and sometimes \emph{must}) be altered by passing arguments to \code{sandwich} directly from \code{modelsummary} through the ellipsis (\code{...}), but it is safer to define your own custom functions as described in the next bullet.
+\item string, vector, or (named) list of strings. "iid", "classical", and "constant" are aliases for \code{NULL}, which returns the model's default uncertainty estimates. The strings "HC", "HC0", "HC1" (alias: "stata"), "HC2", "HC3" (alias: "robust"), "HC4", "HC4m", "HC5", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", and "weave" use variance-covariance matrices computed using functions from the \code{sandwich} package, or equivalent method. "BS", "bootstrap", "residual", "mammen", "webb", "xy", "wild" use the \code{sandwich::vcovBS()}. The behavior of those functions can (and sometimes \emph{must}) be altered by passing arguments to \code{sandwich} directly from \code{modelsummary} through the ellipsis (\code{...}), but it is safer to define your own custom functions as described in the next bullet.
 \item function or (named) list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., \code{stats::vcov}, \code{sandwich::vcovHC}, \code{function(x) vcovPC(x, cluster="country")}).
 \item formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
 \item named list of \code{length(models)} variance-covariance matrices with row and column names equal to the names of your coefficient estimates.

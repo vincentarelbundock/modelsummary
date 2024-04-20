@@ -5,6 +5,16 @@
 New features:
 
 * `modelsummary()` gets a `gof_function` argument which accepts functions to extract custom information from models.
+`datasummary_balance()`:
+
+* `formula` can now include variables on the left-hand side to indicate the subset of columns to summarize: `datasummary_balance(mpg + hp ~ am, data = mtcars)` Thanks to @etiennebacher for feature request #751.
+
+Bugs:
+
+* `escape` argument not respected in `datasummary_df()`. Thanks to @adamaltmejd for report #740
+* `datasummary_correlation()` supports `data.table`. Thanks to volatilehead on Twitter for report #737.
+* Accepts named `estimate` argument when using shape and statistics are horizontal. Thanks to @iago-pssjd for report #745.
+* Labelled values but no label for variable broke `datasummary()`. Thanks to @marklhc for report #752.
 
 ## 2.0.0
 

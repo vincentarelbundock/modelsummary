@@ -23,9 +23,11 @@ datasummary_balance(
 )
 }
 \arguments{
-\item{formula}{a one-sided formula with the "condition" or "column" variable
-on the right-hand side. ~1 can be used to show summary statistics for the
-full data set}
+\item{formula}{\itemize{
+\item \code{~1}: show summary statistics for the full dataset
+\item one-sided formula: with the "condition" or "column" variable on the right-hand side.
+\item two-side formula: with the subset of variables to summarize on the left-hand side and the condition variable on the right-hand side.
+}}
 
 \item{data}{A data.frame (or tibble). If this data includes columns called
 "blocks", "clusters", and/or "weights", the "estimatr" package will consider

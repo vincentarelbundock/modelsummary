@@ -633,7 +633,7 @@ modelsummary(
     estimate = c("$\\hat{\\beta}$" = "estimate"),
     statistic = c("$\\sigma_{\\hat{\\beta}}$" = "std.error"),
     shape = term ~ model + statistic)
-  ```
+```
 
 
 ### `fixest`
@@ -1020,49 +1020,6 @@ mtcars %>%
     modelsummary
 ```
 
-## Statistics in separate columns instead of one over the other
-
-In somes cases, you may want to display statistics in separate columns instead of one over the other. It is easy to achieve this outcome by using the `estimate` argument. This argument accepts a vector of values, one for each of the models we are trying to summarize. If we want to include estimates and standard errors in separate columns, all we need to do is repeat a model, but request different statistics. For example,
-
-```{r}
-library(tinytable)
-
-mod1 <- lm(mpg ~ hp, mtcars)
-mod2 <- lm(mpg ~ hp + drat, mtcars)
-
-models <- list(
-    "Coef."     = mod1,
-    "Std.Error" = mod1,
-    "Coef."     = mod2,
-    "Std.Error" = mod2)
-
-modelsummary(models,
-             output = "tinytable",
-             estimate = c("estimate", "std.error", "estimate", "std.error"),
-             statistic = NULL,
-             gof_omit = ".*") |>
-    group_tt(j = list("Model A" = 2:3, "Model B" = 4:5))
-```
-
-This can be automated using a simple function:
-
-```{r}
-side_by_side <- function(models, estimates, ...) {
-    models <- rep(models, each = length(estimates))
-    estimates <- rep(estimates, times = 2)
-    names(models) <- names(estimates)
-    modelsummary(models = models, estimate = estimates,
-                 statistic = NULL, gof_omit = ".*", ...)
-}
-
-models = list(
-    lm(mpg ~ hp, mtcars),
-    lm(mpg ~ hp + drat, mtcars))
-
-estimates <- c("Coef." = "estimate", "Std.Error" = "std.error")
-
-side_by_side(models, estimates = estimates)
-```
 
 ## Bootstrap
 
