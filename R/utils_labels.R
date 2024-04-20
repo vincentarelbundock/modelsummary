@@ -33,6 +33,11 @@ get_variable_labels_data <- function(data) {
     if (length(lab) == 0) {
         lab <- NULL
     }
+    for (n in names(lab)) {
+        if (is.null(lab[[n]])) {
+            lab[[n]] <- names(n)
+        }
+    }
     return(lab)
 }
 

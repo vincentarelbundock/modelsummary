@@ -110,3 +110,11 @@ mod <- list(
 tab <- modelsummary(dvnames(mod), "dataframe", coef_rename = TRUE)
 expect_equivalent(names(tab)[4:5], c("Miles per gallon", "hp"))
 expect_true("Number of cylinders" %in% tab$term)
+
+
+# Issue #752
+requiet("labelled")
+v2 <- labelled( c(0L, 0L, 1L), labels = c(yes = 1, no = 0))
+dat <- data.frame(v2, y = 1:3)
+tab <- datasummary(y ~ Mean, dat)
+expect_inherits(tab, "tinytable")
