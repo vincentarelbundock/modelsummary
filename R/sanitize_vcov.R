@@ -44,7 +44,7 @@ sanitize_vcov <- function(vcov, models, ...) {
 
   sandwich_types <- c(
     "Andrews",
-    "bootstrap",
+    "BS",
     "classical",
     "constant",
     "CR",
@@ -69,6 +69,8 @@ sanitize_vcov <- function(vcov, models, ...) {
     "outer-product",
     "panel-corrected",
     "PL",
+    "bootstrap",
+    "residual",
     "robust",
     "stata",
     "weave",
@@ -168,7 +170,6 @@ sanitize_vcov <- function(vcov, models, ...) {
 
       } else if (identical(tolower(vcov[[i]]), "bootstrap")) {
         assert_dependency("sandwich")
-        vcov[[i]] <- sandwich::vcovBS
         names(vcov)[i] <- "Bootstrap"
 
       } else if (identical(tolower(vcov[[i]]), "panel-corrected")) {

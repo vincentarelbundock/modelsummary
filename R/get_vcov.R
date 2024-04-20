@@ -27,6 +27,7 @@ get_vcov.default <- function(model, vcov = NULL, ...) {
     return(out)
 
   } else if (isTRUE(checkmate::check_character(vcov, len = 1))) {
+    if (isTRUE(vcov == "bootstrap")) vcov <- "vcovBS"
     out <- insight::get_varcov(model, vcov = vcov, vcov_args = dots, component = "all")
 
   } else if (isTRUE(checkmate::check_formula(vcov))) {
