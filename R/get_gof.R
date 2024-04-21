@@ -9,7 +9,7 @@
 #' @inheritParams get_estimates
 #' @inheritParams modelsummary
 #' @export
-get_gof <- function(model, gof_function, vcov_type = NULL, ...) {
+get_gof <- function(model, gof_function = NULL, vcov_type = NULL, ...) {
 
     # secret argument passed internally
     # gof_map = NULL: no value supplied by the user
