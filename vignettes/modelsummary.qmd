@@ -504,20 +504,24 @@ mod <- list(
 )
 
 check_controls <- function(variables, yes = "✓", no = "") {
+    checkmate::assert_character(variables, min.len = 1)
+    checkmate::assert_string(no)
+    checkmate::assert_string(yes)
+    reg <- paste0("^", paste(variables, collapse = "$|^"), "$")
     fun <- function(model) {
         est <- get_estimates(model)
         df <- if (all(variables %in% est$term)) yes else no
         df <- data.frame(Controls = df)
         return(df)
     }
-    return(fun)
+    list("fun" = fun, "regex" = reg)
 }
 
-controls <- c("hp", "mpg")
-controls_regex <- paste(controls, collapse = "$|^")
-fun <- check_controls(controls)
+cc <- check_controls(c("hp", "mpg"))
 
-modelsummary(mod, gof_function = fun, coef_omit = controls_regex)
+modelsummary(mod, 
+    gof_function = cc$fun, 
+    coef_omit = cc$regex)
 ```
 
 
