@@ -133,8 +133,8 @@ sanity_coef <- function(coef_map, coef_rename, coef_omit) {
     checkmate::check_numeric(coef_omit)
   )
 
-  if ((!isFALSE(coef_rename) && !is.null(coef_rename)) && !is.null(coef_map)) {
-    stop("coef_map and coef_rename cannot be used together.")
+  if ((!isTRUE(checkmate::check_flag(coef_rename)) && !is.null(coef_rename)) && !is.null(coef_map)) {
+    stop("coef_map and coef_rename cannot be used together.", call. = FALSE)
   }
 
   if (!is.null(coef_map)) {

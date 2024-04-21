@@ -4,7 +4,7 @@
 \alias{get_gof}
 \title{Extract goodness-of-fit statistics a tidy format.}
 \usage{
-get_gof(model, gof_function, vcov_type = NULL, ...)
+get_gof(model, gof_function = NULL, vcov_type = NULL, ...)
 }
 \arguments{
 \item{model}{a single model object}
