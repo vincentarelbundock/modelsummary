@@ -9,7 +9,7 @@ get_gof(model, gof_function, vcov_type = NULL, ...)
 \arguments{
 \item{model}{a single model object}
 
-\item{gof_function}{function which accepts a model and returns a 1-row \code{data.frame} with one custom goodness-of-fit statistic per column.}
+\item{gof_function}{function which accepts a model object in the \code{model} argument and returns a 1-row \code{data.frame} with one custom goodness-of-fit statistic per column.}
 
 \item{vcov_type}{string vcov type to add at the bottom of the table}
 

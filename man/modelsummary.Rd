@@ -217,7 +217,7 @@ model information. This argument accepts 4 types of values:
 \item \code{"^(?!.*IC)"}: keep statistics matching the "IC" substring.
 }}
 
-\item{gof_function}{function which accepts a model and returns a 1-row \code{data.frame} with one custom goodness-of-fit statistic per column.}
+\item{gof_function}{function which accepts a model object in the \code{model} argument and returns a 1-row \code{data.frame} with one custom goodness-of-fit statistic per column.}
 
 \item{group_map}{named or unnamed character vector. Subset, rename, and
 reorder coefficient groups specified a grouping variable specified in the

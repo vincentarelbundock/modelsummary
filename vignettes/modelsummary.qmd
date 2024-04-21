@@ -480,6 +480,47 @@ modelsummary(
   escape = FALSE)
 ```
 
+# `gof_function`
+
+The `gof_function` argument accepts a function which processes the model and returns a data frame with custom information about each model. For example, we can insert a row in the bottom portion of the table to display the dependent variable with:
+
+```{r}
+mod <- list(
+    lm(mpg ~ qsec + drat, mtcars),
+    lm(hp ~ qsec + drat, mtcars)
+)
+
+fun <- function(model) data.frame("DV" = insight::find_response(model))
+
+modelsummary(mod, gof_function = fun)
+```
+
+In this example, we write a function factory to insert an indicator for whether a model includes control variables:
+
+```{r}
+mod <- list(
+    lm(wt ~ qsec, data = mtcars),
+    lm(wt ~ qsec + hp + mpg, data = mtcars)
+)
+
+check_controls <- function(variables, yes = "✓", no = "") {
+    fun <- function(model) {
+        est <- get_estimates(model)
+        df <- if (all(variables %in% est$term)) yes else no
+        df <- data.frame(Controls = df)
+        return(df)
+    }
+    return(fun)
+}
+
+controls <- c("hp", "mpg")
+controls_regex <- paste(controls, collapse = "$|^")
+fun <- check_controls(controls)
+
+modelsummary(mod, gof_function = fun, coef_omit = controls_regex)
+```
+
+
 # `shape`
 
 This section requires version 1.3.1 of `modelsummary`. If this version is not available on CRAN yet, you can install the development version by following [the instructions on the website.](https://modelsummary.com/#installation)

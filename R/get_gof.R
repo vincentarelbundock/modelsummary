@@ -17,6 +17,8 @@ get_gof <- function(model, gof_function, vcov_type = NULL, ...) {
     dots <- list(...)
     if (isTRUE(is.na(dots$gof_map))) return(NULL)
 
+    checkmate::assert_function(gof_function, null.ok = TRUE)
+
     # priority
     get_priority <- getOption("modelsummary_get", default = "easystats")
     checkmate::assert_choice(
@@ -89,7 +91,11 @@ get_gof <- function(model, gof_function, vcov_type = NULL, ...) {
 
     # gof_function function supplied directly by the user
     if (is.function(gof_function)) {
-        tmp <- try(gof_function(model, ...))
+        if (!"model" %in% names(formals(gof_function))) {
+            msg <- "`gof_function` must accept an argument named 'model'."
+            insight::format_error(msg)
+        }
+        tmp <- try(gof_function(model = model))
         if (!isTRUE(checkmate::check_data_frame(tmp, nrows = 1, col.names = "unique"))) {
             msg <- "`gof_function` must be a function which accepts a model and returns a 1-row data frame with unique column names."
             insight::format_error(msg)

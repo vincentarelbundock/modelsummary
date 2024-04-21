@@ -128,7 +128,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `"IC"`: omit statistics matching the "IC" substring.
 #' * `"BIC|AIC"`: omit statistics matching the "AIC" or "BIC" substrings.
 #' * `"^(?!.*IC)"`: keep statistics matching the "IC" substring.
-#' @param gof_function function which accepts a model and returns a 1-row `data.frame` with one custom goodness-of-fit statistic per column.
+#' @param gof_function function which accepts a model object in the `model` argument and returns a 1-row `data.frame` with one custom goodness-of-fit statistic per column.
 #' @param group_map named or unnamed character vector. Subset, rename, and
 #' reorder coefficient groups specified a grouping variable specified in the
 #' `shape` argument formula. This argument behaves like `coef_map`.
