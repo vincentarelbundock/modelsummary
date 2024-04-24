@@ -16,6 +16,7 @@ update_modelsummary <- function(source = "development") {
     utils::install.packages("parameters", repos = repo_easystats)
     utils::install.packages("performance", repos = repo_easystats)
     utils::install.packages("modelsummary", repos = repo_vab)
+    utils::install.packages("tinytable", repos = repo_vab)
     msg <- "Please restart your R session"
     msg <- c("", strrep("#", nchar(msg)), msg, strrep("#", nchar(msg)))
     insight::format_alert(msg)
