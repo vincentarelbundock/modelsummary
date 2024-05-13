@@ -19,6 +19,7 @@ Bugs:
 * Labelled values but no label for variable broke `datasummary()`. Thanks to @marklhc for report #752.
 * `coef_map` does not work when there is a `group`. Thanks to @mccarthy-m-g for report #757.
 * `kableExtra`: fix spanning column headers when using the `shape` argument.
+* Multiple footnotes and line breaks in footnotes are now allowed in `tinytable` output. Thanks to 
 
 
 ## 2.0.0
