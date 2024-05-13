@@ -381,7 +381,7 @@ sanitize_datasummary_balance_data <- function(formula, data) {
   rhs <- labels(stats::terms(formula))
 
   # LHS selects columns
-  lhs <- update(formula, ".~1")
+  lhs <- stats::update(formula, ".~1")
   lhs <- all.vars(lhs)
   lhs <- setdiff(lhs, ".")
   if (length(lhs) > 0) {
