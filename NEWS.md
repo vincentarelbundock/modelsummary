@@ -5,6 +5,7 @@
 New features:
 
 * `modelsummary()` gets a `gof_function` argument which accepts functions to extract custom information from models.
+* `flextable`: Support spanning column headers
 
 `datasummary_balance()`:
 
@@ -17,6 +18,7 @@ Bugs:
 * Accepts named `estimate` argument when using shape and statistics are horizontal. Thanks to @iago-pssjd for report #745.
 * Labelled values but no label for variable broke `datasummary()`. Thanks to @marklhc for report #752.
 * `coef_map` does not work when there is a `group`. Thanks to @mccarthy-m-g for report #757.
+* `kableExtra`: fix spanning column headers when using the `shape` argument.
 
 
 ## 2.0.0

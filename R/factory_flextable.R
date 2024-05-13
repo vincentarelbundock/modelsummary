@@ -12,7 +12,9 @@ factory_flextable <- function(tab,
 
   insight::check_if_installed("flextable")
 
-  colnames(tab) <- gsub("\\|\\|\\|\\|", " / ", colnames(tab))
+  span <- get_span_kableExtra(tab)
+  colnames(tab) <- gsub(".*\\|\\|\\|\\|", "", colnames(tab))
+  colnames(tab) <- pad(colnames(tab))
 
   # measurements
   table_width <- ncol(tab)
@@ -38,6 +40,15 @@ factory_flextable <- function(tab,
   theme_ms <- getOption("modelsummary_theme_flextable",
                         default = theme_ms_flextable)
   out <- theme_ms(out, hrule = hrule)
+
+  # spanning headers
+  for (i in seq_along(span)) {
+    out <- flextable::add_header_row(out,
+      colwidths = span[[i]],
+      values = names(span[[i]])
+    )
+  }
+
 
   # output
   if (is.null(settings_get("output_file"))) {

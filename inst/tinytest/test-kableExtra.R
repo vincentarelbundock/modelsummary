@@ -63,6 +63,20 @@ tab <- modelsummary(mod, "latex", title = "blah_cyl", escape = FALSE)
 expect_false(grepl("blah\\\\_cyl", tab))
 
 
+# Issue #761
+# d <- data.frame(x = rnorm(100), y = rnorm(100))
+# res <- list(
+#   lm(y ~ x, data = d),
+#   lm(y ~ x + I(x^2), data = d)
+# )
+# modelsummary(
+#   res,
+#   output = "kableExtra",
+#   estimate = c(ABC = "estimate"),
+#   shape = term ~ model + statistic
+# )
+
+
 
 options(modelsummary_factory_default = NULL)
 options(modelsummary_factory_html = NULL)
