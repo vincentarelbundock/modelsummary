@@ -11,6 +11,10 @@ New features:
 
 * `formula` can now include variables on the left-hand side to indicate the subset of columns to summarize: `datasummary_balance(mpg + hp ~ am, data = mtcars)` Thanks to @etiennebacher for feature request #751.
 
+Minor:
+
+* Unnecessary text printed to screen on some F stat computations is now suppressed.
+
 Bugs:
 
 * `escape` argument not respected in `datasummary_df()`. Thanks to @adamaltmejd for report #740
