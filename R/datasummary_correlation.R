@@ -38,6 +38,15 @@
 #'   select(`Miles / Gallon` = mpg,
 #'          `Horse Power` = hp)
 #' datasummary_correlation(dat)
+#' 
+#' # `correlation` package objects
+#' if (requireNamespace("correlation", quietly = TRUE)) {
+#'   co <- correlation::correlation(mtcars[, 1:4])
+#'   datasummary_correlation(co)
+#' 
+#'   # add stars to easycorrelation objects
+#'   datasummary_correlation(co, stars = TRUE)
+#' }
 #'
 #' # alternative methods
 #' datasummary_correlation(dat, method = "pearspear")
@@ -106,6 +115,7 @@ datasummary_correlation <- function(data,
                                     title = NULL,
                                     notes = NULL,
                                     escape = TRUE,
+                                    stars = FALSE,
                                     ...) {
 
 
@@ -119,7 +129,25 @@ datasummary_correlation <- function(data,
   sanitize_escape(escape) # after sanitize_output
   sanity_add_columns(add_columns)
   sanity_align(align)
+  
+  easycorrelation <- inherits(data, "easycorrelation")
 
+  if (isFALSE(easycorrelation) && !isFALSE(stars)) {
+      msg <- "The `stars` argument of the `datasummary_correlation()` function is only supported when `x` is an object produced by the `correlation` package."
+      insight::format_error(msg)
+  }
+
+  if (easycorrelation) {
+    insight::check_if_installed("correlation")
+    easycorrelation <- TRUE
+    s <- summary(data, redundant = TRUE)
+    data <- as.matrix(data)
+    data <- as.data.frame(data)
+    # store the p values in a "attribute" of the object
+    # this is retrieved and used in the `_format()` function.
+    attr(data, "p") <- attr(s, "p")
+  } 
+  
   any_numeric <- any(sapply(data, is.numeric) == TRUE)
   if (any_numeric == FALSE) {
     stop("`datasummary_correlation` can only summarize numeric data columns.")
@@ -141,12 +169,16 @@ datasummary_correlation <- function(data,
       x,
       use = "pairwise.complete.obs",
       method = method)
-  }
+  } 
 
   # subset numeric and compute correlation
-  out <- data.frame(data, check.names = FALSE) # data.table & tibble
-  out <- out[, sapply(data, is.numeric), drop = FALSE]
-  out <- fn(out)
+  if (easycorrelation == FALSE) {
+    out <- data.frame(data, check.names = FALSE) # data.table & tibble
+    out <- data[, sapply(data, is.numeric), drop = FALSE]
+    out <- fn(out)
+  } else {
+    out <- data
+  }
 
   if ((!is.matrix(out) && !inherits(out, "data.frame")) ||
       is.null(row.names(out)) ||
@@ -155,7 +187,14 @@ datasummary_correlation <- function(data,
     stop("The function supplied to the `method` argument did not return a square matrix or data.frame with row.names and colnames.")
   }
 
-  if (is.character(method)) {
+  if (easycorrelation) {
+    out <- datasummary_correlation_format(
+        out,
+        fmt = fmt,
+        diagonal = "1",
+        upper_triangle = ".",
+        stars = stars)
+  } else if (is.character(method)) {
     if (method == "pearspear") {
       out <- datasummary_correlation_format(
         out,
@@ -172,7 +211,7 @@ datasummary_correlation <- function(data,
     out <- datasummary_correlation_format(
       out,
       fmt = fmt)
-  }
+  } 
 
   col_names <- colnames(out)
   out <- cbind(rowname = row.names(out), out)
@@ -200,7 +239,6 @@ datasummary_correlation <- function(data,
     notes = notes,
     title = title,
     ...)
-
 
   # invisible return
   if (!is.null(settings_get("output_file")) ||
@@ -267,12 +305,15 @@ datasummary_correlation_format <- function(
   fmt,
   leading_zero = FALSE,
   diagonal = NULL,
-  upper_triangle = NULL) {
+  upper_triangle = NULL,
+  stars = FALSE) {
 
   # sanity
   checkmate::assert_character(diagonal, len = 1, null.ok = TRUE)
   checkmate::assert_character(upper_triangle, len = 1, null.ok = TRUE)
   checkmate::assert_flag(leading_zero)
+
+  p <- attr(x, "p")
 
   out <- data.frame(x, check.names = FALSE)
 
@@ -283,6 +324,16 @@ datasummary_correlation_format <- function(
       out[[i]] <- gsub('0\\.', '\\.', out[[i]])
     }
   }
+
+  # before triangle, otherwise we get empty cells with stars
+  if (!is.null(p) && isTRUE(stars)) {
+    st <- make_stars(p, stars)
+    st <- st[, 2:ncol(st)]
+    for (j in 1:ncol(out)) {
+      out[, j] <- paste0(out[, j], st[, j])
+    }
+  }
+
 
   for (i in 1:nrow(out)) {
     for (j in 1:ncol(out)) {

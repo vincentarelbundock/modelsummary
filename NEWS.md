@@ -6,10 +6,9 @@ New features:
 
 * `modelsummary()` gets a `gof_function` argument which accepts functions to extract custom information from models.
 * `flextable`: Support spanning column headers
-
-`datasummary_balance()`:
-
-* `formula` can now include variables on the left-hand side to indicate the subset of columns to summarize: `datasummary_balance(mpg + hp ~ am, data = mtcars)` Thanks to @etiennebacher for feature request #751.
+* `datasummary_correlation()` gets a `star` argument.
+* `datasummary_correlation()` accepts objects produced by the `correlation` package.
+* `datasummary_balance()`: `formula` can now include variables on the left-hand side to indicate the subset of columns to summarize: `datasummary_balance(mpg + hp ~ am, data = mtcars)` Thanks to @etiennebacher for feature request #751.
 
 Minor:
 
