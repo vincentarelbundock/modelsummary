@@ -321,3 +321,9 @@ training <- training %>%
          Married)
 tab <- datasummary_balance(~ Treatment, training, fmt = 3, stars = TRUE, align = "lllllldl", output = "latex")
 expect_snapshot_print(tab, "datasummary_balance-issue711")
+
+
+# Issue #751
+tab <- datasummary_balance(mpg + hp ~ am, data = mtcars, output = "dataframe")
+expect_equal(nrow(tab), 2)
+

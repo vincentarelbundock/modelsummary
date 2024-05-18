@@ -18,7 +18,7 @@ check: document ## devtools::check()
 
 install: document ## devtools::install()
 	# R CMD INSTALL .
-	Rscript -e "devtools::install(dependencies = TRUE)"
+	Rscript -e "devtools::install(dependencies = FALSE)"
 
 deps: ## install dependencies
 	Rscript -e "devtools::install(dependencies = TRUE)"

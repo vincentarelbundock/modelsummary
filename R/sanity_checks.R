@@ -104,6 +104,9 @@ sanitize_estimate <- function(estimate, number_of_models) {
     out <- rep(estimate, number_of_models)
     out <- as.list(out)
   } else {
+    if (!is.null(names(estimate)) && length(unique(names(estimate))) > 1) {
+      insight::format_error("The `estimate` vector must have no name or every element must be named the same.")
+    }
     out <- as.list(estimate)
   }
 
@@ -130,8 +133,8 @@ sanity_coef <- function(coef_map, coef_rename, coef_omit) {
     checkmate::check_numeric(coef_omit)
   )
 
-  if ((!isFALSE(coef_rename) && !is.null(coef_rename)) && !is.null(coef_map)) {
-    stop("coef_map and coef_rename cannot be used together.")
+  if ((!isTRUE(checkmate::check_flag(coef_rename)) && !is.null(coef_rename)) && !is.null(coef_map)) {
+    stop("coef_map and coef_rename cannot be used together.", call. = FALSE)
   }
 
   if (!is.null(coef_map)) {

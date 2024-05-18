@@ -171,6 +171,7 @@ datasummary_correlation <- function(data,
 
   # subset numeric and compute correlation
   if (easycorrelation == FALSE) {
+    out <- data.frame(data, check.names = FALSE) # data.table & tibble
     out <- data[, sapply(data, is.numeric), drop = FALSE]
     out <- fn(out)
   } else {

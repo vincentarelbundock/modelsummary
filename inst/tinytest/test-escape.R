@@ -167,6 +167,17 @@ expect_snapshot_print(
     modelsummary(mod, output = "latex", escape = TRUE),
     "escape-hat_I_formula")
 
+
+# Issue# #740: escape not respected in `datasummary_df()`
+tbl <- data.frame("a"=c(1,2,3), "{}" = c(4,"\\times 5",6), check.names = FALSE)
+expect_snapshot_print(
+    datasummary_df(tbl, output = "latex_tabular", escape = FALSE),
+    "escape-latex_tabular_escape_false")
+expect_snapshot_print(
+    datasummary_df(tbl, output = "latex_tabular", escape = TRUE),
+    "escape-latex_tabular_escape_true")
+
+
 requiet("fixest")
 base <- iris
 names(base) <- c("y", paste0("x", 1:3), "fe1")

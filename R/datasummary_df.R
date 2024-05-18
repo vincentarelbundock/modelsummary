@@ -36,6 +36,7 @@ datasummary_df <- function(data,
           notes = notes,
           output = output,
           title = title,
+          escape = escape,
           add_rows = add_rows,
           add_columns = add_columns,
           ...)

@@ -26,9 +26,10 @@
 #' format, you can use ' the `options` function:
 #'
 #' `options(modelsummary_factory_html = 'kableExtra')`
-#' `options(modelsummary_factory_latex = 'gt')`
 #' `options(modelsummary_factory_word = 'huxtable')`
 #' `options(modelsummary_factory_png = 'gt')`
+#' `options(modelsummary_factory_latex = 'gt')`
+#' `options(modelsummary_factory_latex_tabular = 'kableExtra')`
 #'
 #' ### Table themes
 #' 

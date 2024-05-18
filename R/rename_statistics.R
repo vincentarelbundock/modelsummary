@@ -10,13 +10,20 @@ rename_statistics <- function(x, conf_level = 0.95, statistic = NULL, estimate =
         "estimate" = "Est.",
         "std.error" = "S.E.",
         "p.value" = "p",
-        "statistic" = "t")
+        "statistic" = "t",
+        "{estimate}" = "Est.",
+        "{std.error}" = "S.E.",
+        "{p.value}" = "p",
+        "{statistic}" = "t",
+        "{stars}" = ""
+    )
 
     if (!is.null(names(estimate))) {
         for (i in seq_along(estimate)) {
             dict[[estimate[[i]]]] <- names(estimate)[i]
         }
     }
+
     if (!is.null(names(statistic))) {
         # Otherwise model indentifiers get flatted in things like
         # `statistic = c("Confidence interval" = "conf.int")`
@@ -27,11 +34,5 @@ rename_statistics <- function(x, conf_level = 0.95, statistic = NULL, estimate =
     }
 
     out <- replace_dict(x, dict)
-    # glue string
-    out <- gsub("\\{estimate\\}", "Est. ", out)
-    out <- gsub("\\{std.error\\}", "S.E. ", out)
-    out <- gsub("\\{p.value\\}", "p ", out)
-    out <- gsub("\\{statistic\\}", "t", out)
-    out <- gsub("\\{stars\\}", "", out)
     return(out)
 }

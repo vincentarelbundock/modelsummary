@@ -118,6 +118,9 @@ factory_kableExtra <- function(tab,
       colnames(tab)[idx] <- paste0("&nbsp;", colnames(tab)[idx])
   }
 
+  # issue #761: only matters for shape
+  colnames(tab) <- gsub(".*\\|\\|\\|\\|", "", colnames(tab))
+
   # create tables with combined arguments
   arguments <- arguments[base::intersect(names(arguments), valid)]
   arguments <- c(list(tab), arguments)

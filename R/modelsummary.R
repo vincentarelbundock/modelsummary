@@ -65,23 +65,24 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * TRUE: +=.1, *=.05, **=.01, ***=0.001
 #' * Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
 #' * Note: a legend will not be inserted at the bottom of the table when the `estimate` or `statistic` arguments use "glue strings" with `{stars}`.
-#' @param statistic vector of strings or `glue` strings which select uncertainty
-#' statistics to report vertically below the estimate. NULL omits all
-#' uncertainty statistics.
-#' * "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", .
-#'    or any column name produced by `get_estimates(model)`
+#' @param statistic vector of strings or `glue` strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics.
+#' * "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", or any column name produced by `get_estimates(model)`
 #' * `glue` package strings with braces, with or without R functions, such as:
 #'   - `"{p.value} [{conf.low}, {conf.high}]"`
 #'   - `"Std.Error: {std.error}"`
 #'   - `"{exp(estimate) * std.error}"`
-#' * Numbers are automatically rounded and converted to strings. To apply functions to their numeric values, as in the last `glue` example, users must set `fmt=NULL`.
-#' * Parentheses are added automatically unless the string includes `glue` curly braces `{}`.
-#' * Some statistics are not supported for all models. See column names in `get_estimates(model)`, and visit the website to learn how to add custom statistics.
+#'   - Numbers are automatically rounded and converted to strings. To apply functions to their numeric values, as in the last `glue` example, users must set `fmt=NULL`.
+#'   - Parentheses are added automatically unless the string includes `glue` curly braces `{}`.
+#' * Notes: 
+#'   - The names of the `statistic` are used a column names when using the `shape` argument to display statistics as columns: 
+#'      - `statistic=c("p"="p.value", "["="conf.low", "]"="conf.high")`
+#'   - Some statistics are not supported for all models. See column names in `get_estimates(model)`, and visit the website to learn how to add custom statistics.
 #' @param vcov robust standard errors and other manual statistics. The `vcov`
 #'   argument accepts six types of input (see the 'Details' and 'Examples'
 #'   sections below):
 #' * NULL returns the default uncertainty estimates of the model object
-#' * string, vector, or (named) list of strings. "iid", "classical", and "constant" are aliases for `NULL`, which returns the model's default uncertainty estimates. The strings "HC", "HC0", "HC1" (alias: "stata"), "HC2", "HC3" (alias: "robust"), "HC4", "HC4m", "HC5", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", and "weave" use variance-covariance matrices computed using functions from the `sandwich` package, or equivalent method. The behavior of those functions can (and sometimes *must*) be altered by passing arguments to `sandwich` directly from `modelsummary` through the ellipsis (`...`), but it is safer to define your own custom functions as described in the next bullet.
+#' * string, vector, or (named) list of strings. "iid", "classical", and "constant" are aliases for `NULL`, which returns the model's default uncertainty estimates. The strings "HC", "HC0", "HC1" (alias: "stata"), "HC2", "HC3" (alias: "robust"), "HC4", "HC4m", "HC5", "HAC", "NeweyWest", "Andrews", "panel-corrected", "outer-product", and "weave" use variance-covariance matrices computed using functions from the `sandwich` package, or equivalent method. "BS", "bootstrap", "residual", "mammen", "webb", "xy", "wild" use the `sandwich::vcovBS()`. The behavior of those functions can (and sometimes *must*) be altered by passing arguments to `sandwich` directly from `modelsummary` through the ellipsis (`...`), but it is safer to define your own custom functions as described in the next bullet.
+#'
 #' * function or (named) list of functions which return variance-covariance matrices with row and column names equal to the names of your coefficient estimates (e.g., `stats::vcov`, `sandwich::vcovHC`, `function(x) vcovPC(x, cluster="country")`).
 #' * formula or (named) list of formulas with the cluster variable(s) on the right-hand side (e.g., ~clusterid).
 #' * named list of `length(models)` variance-covariance matrices with row and column names equal to the names of your coefficient estimates.
@@ -127,6 +128,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * `"IC"`: omit statistics matching the "IC" substring.
 #' * `"BIC|AIC"`: omit statistics matching the "AIC" or "BIC" substrings.
 #' * `"^(?!.*IC)"`: keep statistics matching the "IC" substring.
+#' @param gof_function function which accepts a model object in the `model` argument and returns a 1-row `data.frame` with one custom goodness-of-fit statistic per column.
 #' @param group_map named or unnamed character vector. Subset, rename, and
 #' reorder coefficient groups specified a grouping variable specified in the
 #' `shape` argument formula. This argument behaves like `coef_map`.
@@ -370,6 +372,7 @@ modelsummary <- function(
   coef_rename = FALSE,
   gof_map     = NULL,
   gof_omit    = NULL,
+  gof_function  = NULL,
   group_map   = NULL,
   add_columns = NULL,
   add_rows    = NULL,
@@ -400,6 +403,7 @@ modelsummary <- function(
       coef_rename = coef_rename,
       gof_map = gof_map,
       gof_omit = gof_omit,
+      gof_function = gof_function,
       add_columns = add_columns,
       add_rows = add_rows,
       align = align,
@@ -453,6 +457,8 @@ modelsummary <- function(
   sanity_coef(coef_map, coef_rename, coef_omit)
   sanity_stars(stars)
   sanity_align(align, estimate = estimate, statistic = statistic, stars = stars)
+  checkmate::assert_function(gof_function, null.ok = TRUE)
+
 
   # confidence intervals are expensive
   if (!any(grepl("conf", c(estimate, statistic)))) {
@@ -501,6 +507,7 @@ modelsummary <- function(
                                         conf_level = conf_level,
                                         vcov = vcov,
                                         gof_map = gof_map, # check if we can skip all gof computation
+                                        gof_function = gof_function,
                                         shape = shape,
                                         coef_rename = coef_rename,
                                         ...)
@@ -525,6 +532,8 @@ modelsummary <- function(
       est        = msl[[i]]$tidy,
       fmt        = fmt,
       estimate   = estimate[[i]],
+      # enforce single name when multiple estimates in different colums
+      estimate_label = names(estimate)[1],
       statistic  = statistic,
       vcov       = vcov[[i]],
       conf_level = conf_level,
@@ -836,7 +845,7 @@ modelsummary <- function(
 }
 
 
-get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, shape, coef_rename, ...) {
+get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, gof_function, shape, coef_rename, ...) {
 
     number_of_models <- max(length(models), length(vcov))
 
@@ -852,7 +861,7 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, sh
         }
 
         # don't waste time if we are going to exclude all gof anyway
-        gla <- get_gof(models[[j]], vcov_type = names(vcov)[i], gof_map = gof_map, ...)
+        gla <- get_gof(models[[j]], vcov_type = names(vcov)[i], gof_map = gof_map, gof_function = gof_function, ...)
 
         tid <- get_estimates(
             models[[j]],

@@ -2,11 +2,6 @@
 title: "Model Summaries"
 format: 
   html: default
-  # pdf:
-  #   toc: true
-  #   number-sections: true
-  #   colorlinks: true
-  #   keep-tex: true
 ---
 
 ```{css, echo=FALSE}
@@ -480,6 +475,51 @@ modelsummary(
   escape = FALSE)
 ```
 
+# `gof_function`
+
+The `gof_function` argument accepts a function which processes the model and returns a data frame with custom information about each model. For example, we can insert a row in the bottom portion of the table to display the dependent variable with:
+
+```{r}
+mod <- list(
+    lm(mpg ~ qsec + drat, mtcars),
+    lm(hp ~ qsec + drat, mtcars)
+)
+
+fun <- function(model) data.frame("DV" = insight::find_response(model))
+
+modelsummary(mod, gof_function = fun)
+```
+
+In this example, we write a function factory to insert an indicator for whether a model includes control variables:
+
+```{r}
+mod <- list(
+    lm(wt ~ qsec, data = mtcars),
+    lm(wt ~ qsec + hp + mpg, data = mtcars)
+)
+
+check_controls <- function(variables, yes = "✓", no = "") {
+    checkmate::assert_character(variables, min.len = 1)
+    checkmate::assert_string(no)
+    checkmate::assert_string(yes)
+    reg <- paste0("^", paste(variables, collapse = "$|^"), "$")
+    fun <- function(model) {
+        est <- get_estimates(model)
+        df <- if (all(variables %in% est$term)) yes else no
+        df <- data.frame(Controls = df)
+        return(df)
+    }
+    list("fun" = fun, "regex" = reg)
+}
+
+cc <- check_controls(c("hp", "mpg"))
+
+modelsummary(mod, 
+    gof_function = cc$fun, 
+    coef_omit = cc$regex)
+```
+
+
 # `shape`
 
 This section requires version 1.3.1 of `modelsummary`. If this version is not available on CRAN yet, you can install the development version by following [the instructions on the website.](https://modelsummary.com/#installation)
@@ -633,7 +673,7 @@ modelsummary(
     estimate = c("$\\hat{\\beta}$" = "estimate"),
     statistic = c("$\\sigma_{\\hat{\\beta}}$" = "std.error"),
     shape = term ~ model + statistic)
-  ```
+```
 
 
 ### `fixest`
@@ -971,11 +1011,46 @@ modelsummary(mod, output = "gt")
 
 # Case studies
 
+## Collapse control variables into an indicator
+
+In some cases, analysts want to display a single checkmark in their table if a full set of control variables is available. This can easily be achieved with the `glance_custom` mechanism described in detail in [the extension vignette.](modelsummary_extension.html) Here is a simple example:
+
+```{r}
+library(modelsummary)
+
+mod <- list(
+  glm(am ~ hp + factor(cyl), data = mtcars, family = binomial),
+  lm(mpg ~ hp + factor(cyl) + gear + qsec, data = mtcars)
+)
+
+glance_custom.lm <- function(x, ...) {
+  controls <- c("gear", "qsec")
+  if (all(controls %in% names(coef(x)))) {
+    out <- data.frame(Controls = "✓")
+  } else {
+    out <- data.frame(Controls = "✗")
+  }
+  return(out)
+}
+
+glance_custom.glm <- glance_custom.lm
+
+modelsummary(mod, "html", coef_omit = "qsec|gear")
+```
+
+
+Return to nomal:
+
+```{r}
+rm(list = c("glance_custom.glm", "glance_custom.lm"))
+```
+
+
 ## Subgroup estimation with `nest_by`
 
 Sometimes, it is useful to estimate multiple regression models on subsets of the data. To do this efficiently, we can use the `nest_by` function from the `dplyr` package. Then, estimate the models with `lm`, extract them and name them with `pull`, and finally summarize them with `modelsummary`:
-
 ```{r, message=FALSE, warning=FALSE}
+
 library(tidyverse)
 
 mtcars %>%
@@ -985,49 +1060,6 @@ mtcars %>%
     modelsummary
 ```
 
-## Statistics in separate columns instead of one over the other
-
-In somes cases, you may want to display statistics in separate columns instead of one over the other. It is easy to achieve this outcome by using the `estimate` argument. This argument accepts a vector of values, one for each of the models we are trying to summarize. If we want to include estimates and standard errors in separate columns, all we need to do is repeat a model, but request different statistics. For example,
-
-```{r}
-library(tinytable)
-
-mod1 <- lm(mpg ~ hp, mtcars)
-mod2 <- lm(mpg ~ hp + drat, mtcars)
-
-models <- list(
-    "Coef."     = mod1,
-    "Std.Error" = mod1,
-    "Coef."     = mod2,
-    "Std.Error" = mod2)
-
-modelsummary(models,
-             output = "tinytable",
-             estimate = c("estimate", "std.error", "estimate", "std.error"),
-             statistic = NULL,
-             gof_omit = ".*") |>
-    group_tt(j = list("Model A" = 2:3, "Model B" = 4:5))
-```
-
-This can be automated using a simple function:
-
-```{r}
-side_by_side <- function(models, estimates, ...) {
-    models <- rep(models, each = length(estimates))
-    estimates <- rep(estimates, times = 2)
-    names(models) <- names(estimates)
-    modelsummary(models = models, estimate = estimates,
-                 statistic = NULL, gof_omit = ".*", ...)
-}
-
-models = list(
-    lm(mpg ~ hp, mtcars),
-    lm(mpg ~ hp + drat, mtcars))
-
-estimates <- c("Coef." = "estimate", "Std.Error" = "std.error")
-
-side_by_side(models, estimates = estimates)
-```
 
 ## Bootstrap
 

@@ -80,13 +80,15 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
         }
         idx <- estimates$term %in% names(coef_map)
         if (!any(idx)) {
-            stop("At least one of the term names in each model must appear in `coef_map`.")
+            stop("At least one of the term names in each model must appear in `coef_map`.", call. = FALSE)
         }
         estimates <- estimates[idx, , drop = FALSE]
+        args <- list(match(estimates$term, names(coef_map)), seq_len(nrow(estimates)))
         estimates$term <- replace_dict(
             estimates$term,
             coef_map,
             interaction = !isTRUE(is.function(coef_rename)))
+        estimates <- estimates[do.call(order, args),]
     }
 
     # group_map

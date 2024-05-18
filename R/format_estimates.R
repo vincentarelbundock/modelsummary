@@ -6,6 +6,7 @@
 format_estimates <- function(
   est,
   estimate,
+  estimate_label,
   statistic,
   vcov,
   conf_level,
@@ -16,6 +17,9 @@ format_estimates <- function(
   exponentiate,
   ...) {
 
+
+  # when length(estimate) > 1, we want different stat and we want to allow labels
+  if (is.null(estimate_label)) estimate_label <- "estimate"
 
   # conf.int to glue
   estimate_glue <- ifelse(
@@ -125,7 +129,6 @@ format_estimates <- function(
     }
   }
 
-
   ## round all
   ## ensures that the reshape doesn't produce incompatible types
   ## exclude factors and characters, otherwise `rounding` will escape them
@@ -154,7 +157,6 @@ format_estimates <- function(
       estimate_glue <- gsub("{p.value}", " ", estimate_glue, fixed = TRUE)
     }
   }
-
 
   # extract estimates (there can be several)
   for (i in seq_along(estimate_glue)) {
@@ -222,12 +224,13 @@ format_estimates <- function(
     est[[col]] <- as.character(est[[col]])
   }
 
+
   # statistics need informative names
   idx <- as.numeric(factor(est$statistic))
   # estimates are one per model, but all displayed on the same row, so we give
   # the same identifier. statistics have different names because they need to
   # be merged.
-  est$statistic <- c("estimate", statistic)[idx]
+  est$statistic <- c(estimate_label, statistic)[idx]
 
   # drop empty rows (important for broom.mixed which produces group
   # estimates without standard errors)

@@ -71,3 +71,15 @@ mat <- modelsummary(models,
 
 expect_inherits(mat, "data.frame")
 expect_equivalent(dim(mat), c(19, 5))
+
+
+# Isuee #757
+requiet("lme4")
+sleepstudy_fit <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+tab <- modelsummary(
+  sleepstudy_fit,
+  coef_map = c("SD (Observations)", "(Intercept)"),
+  output = "dataframe"
+)
+expect_equivalent(tab$term[1:3], c("SD (Observations)", "(Intercept)", "(Intercept)"))
+expect_equivalent(tab$statistic[1:3], c("estimate", "estimate", "std.error"))

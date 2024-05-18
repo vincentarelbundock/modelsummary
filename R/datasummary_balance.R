@@ -8,9 +8,10 @@
 #' * https://modelsummary.com/
 #' * https://modelsummary.com/articles/datasummary.html
 #'
-#' @param formula a one-sided formula with the "condition" or "column" variable
-#'   on the right-hand side. ~1 can be used to show summary statistics for the
-#'   full data set
+#' @param formula 
+#' + `~1`: show summary statistics for the full dataset
+#' + one-sided formula: with the "condition" or "column" variable on the right-hand side.
+#' + two-side formula: with the subset of variables to summarize on the left-hand side and the condition variable on the right-hand side.
 #' @param data A data.frame (or tibble). If this data includes columns called
 #'   "blocks", "clusters", and/or "weights", the "estimatr" package will consider
 #'   them when calculating the difference in means. If there is a `weights`
@@ -376,10 +377,22 @@ sanitize_datasummary_balance_data <- function(formula, data) {
   # includes All())
   sanity_ds_data(All(data) ~ x + y, data)
 
+  # rhs condition variable
+  rhs <- labels(stats::terms(formula))
+
+  # LHS selects columns
+  lhs <- stats::update(formula, ".~1")
+  lhs <- all.vars(lhs)
+  lhs <- setdiff(lhs, ".")
+  if (length(lhs) > 0) {
+    cols <- intersect(c(lhs, rhs), colnames(data))
+    if (length(cols) > 1) {
+        data <- data[, cols, drop = FALSE]
+    }
+  }
+  
   if (formula != ~1) {
 
-      # rhs condition variable
-      rhs <- labels(stats::terms(formula))
 
       if (!rhs %in% colnames(data)) {
         stop("Variable ", rhs, " must be in data.")

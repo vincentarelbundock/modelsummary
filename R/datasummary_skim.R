@@ -97,7 +97,7 @@ datasummary_skim <- function(data,
 
     if (inherits(a, "tinytable") && inherits(b, "tinytable")) {
       out <- tinytable::rbind2(a, b, use_names = FALSE)
-      out <- tinytable::format_tt(out, replace_na = "")
+      out <- tinytable::format_tt(out, replace = "")
       out <- tinytable::style_tt(out, i = nrow(a) + 1, line = "t", line_size = .3)
       if (settings_equal("output_format", "html")) {
           out <- tinytable::style_tt(out, i = nrow(a) + 1, bold = TRUE, line = "bt", line_color = "#d3d8dc")

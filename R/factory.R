@@ -50,7 +50,7 @@ factory <- function(tab,
   # flat header if necessary
   flat_header <- attr(tab, 'header_sparse_flat')
   if (!is.null(flat_header)) {
-    flat_factories <- c('flextable', 'huxtable', 'dataframe', 'typst')
+    flat_factories <- c('huxtable', 'dataframe', 'typst')
     flat_formats <- c('markdown', 'word', 'powerpoint', 'typst')
     if (settings_get("output_factory") %in% flat_factories ||
         settings_get("output_format") %in% flat_formats) {
