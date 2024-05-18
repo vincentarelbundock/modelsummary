@@ -7,12 +7,13 @@ expect_true(length(x) > 100)
 expect_true(is.character(x))
 
 # margins
-requiet("margins")
-mod = glm(vs ~ hp + drat, data = mtcars, family = binomial)
-mfx = margins(mod)
-tab = modelsummary(mfx, "data.frame")
-expect_inherits(tab, "data.frame")
-expect_equivalent(dim(tab), c(7, 4))
+if (isTRUE(requiet("margins"))) {
+  mod = glm(vs ~ hp + drat, data = mtcars, family = binomial)
+  mfx = margins(mod)
+  tab = modelsummary(mfx, "data.frame")
+  expect_inherits(tab, "data.frame")
+  expect_equivalent(dim(tab), c(7, 4))
+}
 
 
 # MASS
