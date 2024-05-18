@@ -137,6 +137,7 @@ datasummary_correlation <- function(data,
   }
 
   if (easycorrelation) {
+    insight::check_if_installed("correlation")
     easycorrelation <- TRUE
     s <- summary(data, redundant = TRUE)
     data <- as.matrix(data)
