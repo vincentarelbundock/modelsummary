@@ -14,6 +14,7 @@ New features:
 Minor:
 
 * Unnecessary text printed to screen on some F stat computations is now suppressed.
+* Update to `tinytable` 0.3.0
 
 Bugs:
 
