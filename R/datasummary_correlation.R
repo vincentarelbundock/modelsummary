@@ -39,13 +39,14 @@
 #'          `Horse Power` = hp)
 #' datasummary_correlation(dat)
 #' 
-#' # detect easycorrelation objects 
-#' table <- mtcars[, 1:4]
-#' co <- correlation(x)
-#' datasummary_correlation(co)
+#' # `correlation` package objects
+#' if (requireNamespace("correlation", quietly = TRUE)) {
+#'   co <- correlation::correlation(mtcars[, 1:4])
+#'   datasummary_correlation(co)
 #' 
-#' # add stars to easycorrelation objects
-#' datasummary_correlation(co, stars = TRUE)
+#'   # add stars to easycorrelation objects
+#'   datasummary_correlation(co, stars = TRUE)
+#' }
 #'
 #' # alternative methods
 #' datasummary_correlation(dat, method = "pearspear")

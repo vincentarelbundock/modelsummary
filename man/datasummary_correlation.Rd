@@ -129,9 +129,10 @@ functionalities. To change the default backend used for a specific file
 format, you can use ' the \code{options} function:
 
 \code{options(modelsummary_factory_html = 'kableExtra')}
-\code{options(modelsummary_factory_latex = 'gt')}
 \code{options(modelsummary_factory_word = 'huxtable')}
 \code{options(modelsummary_factory_png = 'gt')}
+\code{options(modelsummary_factory_latex = 'gt')}
+\code{options(modelsummary_factory_latex_tabular = 'kableExtra')}
 }
 
 \subsection{Table themes}{
@@ -210,10 +211,14 @@ dat <- mtcars \%>\%
          `Horse Power` = hp)
 datasummary_correlation(dat)
 
-# detect easycorrelation objects and add stars
-table <- mtcars[, 1:4]
-co <- correlation(x)
-datasummary_correlation(co, stars = TRUE)
+# `correlation` package objects
+if (requireNamespace("correlation", quietly = TRUE)) \{
+  co <- correlation::correlation(mtcars[, 1:4])
+  datasummary_correlation(co)
+
+  # add stars to easycorrelation objects
+  datasummary_correlation(co, stars = TRUE)
+\}
 
 # alternative methods
 datasummary_correlation(dat, method = "pearspear")
