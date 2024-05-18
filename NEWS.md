@@ -1,18 +1,15 @@
 # News 
 
-## Development
+## 2.1.0
 
-New features:
+New:
 
 * `modelsummary()` gets a `gof_function` argument which accepts functions to extract custom information from models.
 * `flextable`: Support spanning column headers
 * `datasummary_correlation()` gets a `star` argument.
 * `datasummary_correlation()` accepts objects produced by the `correlation` package.
 * `datasummary_balance()`: `formula` can now include variables on the left-hand side to indicate the subset of columns to summarize: `datasummary_balance(mpg + hp ~ am, data = mtcars)` Thanks to @etiennebacher for feature request #751.
-
-Minor:
-
-* Unnecessary text printed to screen on some F stat computations is now suppressed.
+* Unnecessary text printed to screen on some F sta computations is now suppressed.
 * Update to `tinytable` 0.3.0
 
 Bugs:
