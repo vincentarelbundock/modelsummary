@@ -86,6 +86,14 @@ your main table.}
 \item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML characters which could
 prevent the file from compiling/displaying. \code{TRUE} escapes all cells, captions, and notes. Users can have more fine-grained control by setting \code{escape=FALSE} and using an external command such as: \code{modelsummary(model, "latex") |> tinytable::format_tt(tab, j=1:5, escape=TRUE)}}
 
+\item{stars}{to indicate statistical significance
+\itemize{
+\item FALSE (default): no significance stars.
+\item TRUE: +=.1, *=.05, **=.01, ***=0.001
+\item Named numeric vector for custom stars such as \code{c('*' = .1, '+' = .05)}
+\item Note: a legend will not be inserted at the bottom of the table when the \code{estimate} or \code{statistic} arguments use "glue strings" with \code{{stars}}.
+}}
+
 \item{...}{other parameters are passed through to the table-making
 packages.}
 }

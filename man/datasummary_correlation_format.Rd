@@ -38,6 +38,14 @@ diagonal are replaced by the same character (e.g., "1").}
 
 \item{upper_triangle}{character or NULL. If character, all elements of the
 upper triangle are replaced by the same character (e.g., "" or ".").}
+
+\item{stars}{to indicate statistical significance
+\itemize{
+\item FALSE (default): no significance stars.
+\item TRUE: +=.1, *=.05, **=.01, ***=0.001
+\item Named numeric vector for custom stars such as \code{c('*' = .1, '+' = .05)}
+\item Note: a legend will not be inserted at the bottom of the table when the \code{estimate} or \code{statistic} arguments use "glue strings" with \code{{stars}}.
+}}
 }
 \description{
 Mostly for internal use, but can be useful when users supply a function to

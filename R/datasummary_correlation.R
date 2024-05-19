@@ -8,6 +8,7 @@
 #' * https://modelsummary.com/articles/datasummary.html
 #'
 #' @inheritParams datasummary
+#' @inheritParams modelsummary
 #' @param method character or function
 #' \itemize{
 #'   \item character: "pearson", "kendall", "spearman", or "pearspear"
