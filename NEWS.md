@@ -1,5 +1,9 @@
 # News 
 
+## Development
+
+* Documentation improvements
+
 ## 2.1.0
 
 New:
