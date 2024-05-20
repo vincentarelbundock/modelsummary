@@ -355,6 +355,14 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   ~raw,        ~clean,      ~fmt,
 #'   "r.squared", "R Squared", 5)
 #' modelsummary(models, gof_map = gm)
+#' 
+#' # gof_map: list of lists
+#' f <- function(x) format(round(x, 3), big.mark=",")
+#' gm <- list(
+#'   list("raw" = "nobs", "clean" = "N", "fmt" = f),
+#'   list("raw" = "AIC", "clean" = "aic", "fmt" = f))
+#' modelsummary(models, gof_map = gm)
+#' 
 #' @export
 modelsummary <- function(
   models,
