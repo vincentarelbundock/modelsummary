@@ -120,7 +120,14 @@ sanitize_estimate <- function(estimate, number_of_models) {
 #' sanity check
 #'
 #' @noRd
-sanity_title <- function(title) TRUE #checkmate::assert_character(title, len = 1, null.ok = TRUE)
+sanity_title <- function(title, ...) {
+  dots <- list(...)
+  if (is.null(title) && "caption" %in% names(dots)) {
+    insight::format_warning("The `caption` argument is not supported by `modelsummary`. Try `title` instead.")
+  }
+  return(TRUE)
+  #checkmate::assert_character(title, len = 1, null.ok = TRUE)
+}
 
 
 #' sanity check

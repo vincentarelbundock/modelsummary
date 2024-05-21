@@ -3,6 +3,7 @@
 ## Development
 
 * Documentation improvements
+* Warning when users use `caption` instead of `title`. Inconsistency with respect to `tinyable`.
 
 ## 2.1.0
 

@@ -20,7 +20,7 @@ factory <- function(tab,
 
 
   # sanity check functions are hosted in R/sanity_checks.R
-  sanity_title(title)
+  sanity_title(title, ...)
   sanity_notes(notes)
   # sanitize_output(output) # do not override (otherwise this breaks quarto for shape="rbind")
 
