@@ -1331,3 +1331,39 @@ We can also get additional test statistics using the `test` argument:
 get_estimates(mod, test = c("pd", "rope"))
 ```
 
+## Factor labels
+
+Often, it is useful to include the reference level of a factor variable with an emtpy line. We can do so easily by passing the `include_reference` argument to `modelsummary()`. This argument will be pushed froward to the `parameters::model_parameters()` function which is used to extract coefficients from model objects.
+
+In this example, we also use the `group_tt()` function from `tinytable` to add a group label identifying the factor variable:
+
+```{r}
+library(tinytable)
+
+mod <- lm(mpg ~ hp + factor(gear), mtcars)
+
+cr <- c(
+    "hp" = "Horsepower",
+    "factor(gear)3" = "3",
+    "factor(gear)4" = "4",
+    "factor(gear)5" = "5"
+)
+
+modelsummary(mod,
+    include_reference = TRUE,
+    coef_rename = cr,
+    gof_map = NA) |>
+    group_tt(i = list("Gears" = 5), indent = 0)
+```
+
+Tables in other shapes may require a `format_tt()` call to ensure that empty cells are filled with `-`:
+
+```{r}
+modelsummary(mod,
+    include_reference = TRUE,
+    shape = term ~ statistic,
+    coef_rename = cr,
+    gof_map = NA) |>
+    format_tt(replace = list("-" = "")) |>
+    group_tt(i = list("Gears" = 3), indent = 0)
+```
