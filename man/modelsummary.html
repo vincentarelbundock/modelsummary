@@ -369,6 +369,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#details" id="toc-details" class="nav-link" data-scroll-target="#details">Details</a></li>
   <li><a href="#value" id="toc-value" class="nav-link" data-scroll-target="#value">Value</a></li>
   <li><a href="#global-options" id="toc-global-options" class="nav-link" data-scroll-target="#global-options">Global Options</a></li>
+  <li><a href="#latex-preamble" id="toc-latex-preamble" class="nav-link" data-scroll-target="#latex-preamble">LaTeX preamble</a></li>
   <li><a href="#parallel-computation" id="toc-parallel-computation" class="nav-link" data-scroll-target="#parallel-computation">Parallel computation</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
@@ -1052,11 +1053,19 @@ Formatting numeric entries
 <p><code>options(modelsummary_format_numeric_latex = “mathmode”)</code></p>
 <p>A similar option can be used to display numerical entries using MathJax in HTML tables:</p>
 <p><code>options(modelsummary_format_numeric_html = “mathjax”)</code></p>
-<h4 class="anchored">
-LaTeX preamble
-</h4>
+</section><section id="latex-preamble" class="level3"><h3 class="anchored" data-anchor-id="latex-preamble">LaTeX preamble</h3>
 <p>When creating LaTeX via the <code>tinytable</code> backend (default in version 2.0.0 and later), it is useful to include the following commands in the LaTeX preamble of your documents. Note that they are added automatically when compiling Rmarkdown or Quarto documents.</p>
-<p>[3]{}</p>
+<div class="sourceCode latex">
+<pre>\usepackage{tabularray}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage[normalem]{ulem}
+\UseTblrLibrary{booktabs}
+\newcommand{\tinytableTabularrayUnderline}[1]{\underline{#1}}
+\newcommand{\tinytableTabularrayStrikeout}[1]{\sout{#1}}
+\NewTableCommand{\tinytableDefineColor}[3]{\definecolor{#1}{#2}{#3}}
+</pre>
+</div>
 </section><section id="parallel-computation" class="level3"><h3 class="anchored" data-anchor-id="parallel-computation">Parallel computation</h3>
 <p>It can take a long time to compute and extract summary statistics from certain models (e.g., Bayesian). In those cases, users can parallelize the process. Since parallelization occurs at the model level, no speedup is available for tables with a single model. Users on mac or linux can launch parallel computation using the built-in <code>parallel</code> package. All they need to do is supply a <code>mc.cores</code> argument which will be pushed forward to the <code><a href="https://rdrr.io/r/parallel/mclapply.html">parallel::mclapply</a></code> function:</p>
 <div class="sourceCode r">
