@@ -71,16 +71,19 @@
 #' `options(modelsummary_format_numeric_html = "mathjax")`
 #' 
 #' 
-#' ### LaTeX preamble
-#' 
+#' @section LaTeX preamble:
+#'
 #' When creating LaTeX via the `tinytable` backend (default in version 2.0.0 and later), it is useful to include the following commands in the LaTeX preamble of your documents. Note that they are added automatically when compiling Rmarkdown or Quarto documents.
+#'
 #' 
-#' \\usepackage\{tabularray\}
-#' \\usepackage\{float\}
-#' \\usepackage\{graphicx\}
-#' \\usepackage\{codehigh\}
-#' \\usepackage\[normalem\]\{ulem\}
-#' \\UseTblrLibrary\{booktabs\}
-#' \\newcommand\{\\tinytableTabularrayUnderline\}\[1\]\{\\underline\{#1\}\}
-#' \\newcommand\{\\tinytableTabularrayStrikeout\}\[1\]\{\\sout\{#1\}\}
-#' \\NewTableCommand\{\\tinytableDefineColor\}\[3\]\{\\definecolor\{#1\}\{#2\}\{#3\}\}
+#' ```latex
+#' \usepackage{tabularray}
+#' \usepackage{float}
+#' \usepackage{graphicx}
+#' \usepackage[normalem]{ulem}
+#' \UseTblrLibrary{booktabs}
+#' \newcommand{\tinytableTabularrayUnderline}[1]{\underline{#1}}
+#' \newcommand{\tinytableTabularrayStrikeout}[1]{\sout{#1}}
+#' \NewTableCommand{\tinytableDefineColor}[3]{\definecolor{#1}{#2}{#3}}
+#' ```
+#' 
