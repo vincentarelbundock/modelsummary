@@ -251,6 +251,10 @@ get_estimates_parameters <- function(model,
         out$to <- out$operator <- out$from <- NULL
     }
 
+    if (inherits(model, "htest") && !"term" %in% colnames(out) && "method" %in% colnames(out)) {
+        out$term <- "method"
+    }
+
     if (!"term" %in% colnames(out)) {
         return("`parameters::parameters(model)` did not return a data.frame with a `term` column.")
     }
