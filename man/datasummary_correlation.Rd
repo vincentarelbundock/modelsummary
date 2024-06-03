@@ -197,6 +197,7 @@ When creating LaTeX via the \code{tinytable} backend (default in version 2.0.0 a
 \\usepackage\{graphicx\}
 \\usepackage[normalem]\{ulem\}
 \\UseTblrLibrary\{booktabs\}
+\\UseTblrLibrary\{siunitx\}
 \newcommand{\tinytableTabularrayUnderline}[1]\{\\underline\{#1\}\}
 \newcommand{\tinytableTabularrayStrikeout}[1]\{\\sout\{#1\}\}
 \\NewTableCommand\{\\tinytableDefineColor\}[3]\{\\definecolor\{#1\}\{#2\}\{#3\}\}
