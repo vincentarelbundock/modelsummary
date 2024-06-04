@@ -61,7 +61,7 @@ the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, d.
 
 \item{hrule}{position of horizontal rules (integer vector)}
 
-\item{title}{string}
+\item{title}{string. Cross-reference labels should be added with Quarto or Rmarkdown chunk options when applicable. When saving standalone LaTeX files, users can add a label such as \verb{\\\\label\{tab:mytable\}} directly to the title string, while also specifying \code{escape=FALSE}.}
 
 \item{notes}{list or vector of notes to append to the bottom of the table.}
 

@@ -244,7 +244,7 @@ the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, d.
 
 \item{notes}{list or vector of notes to append to the bottom of the table.}
 
-\item{title}{string}
+\item{title}{string. Cross-reference labels should be added with Quarto or Rmarkdown chunk options when applicable. When saving standalone LaTeX files, users can add a label such as \verb{\\\\label\{tab:mytable\}} directly to the title string, while also specifying \code{escape=FALSE}.}
 
 \item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML characters which could
 prevent the file from compiling/displaying. \code{TRUE} escapes all cells, captions, and notes. Users can have more fine-grained control by setting \code{escape=FALSE} and using an external command such as: \code{modelsummary(model, "latex") |> tinytable::format_tt(tab, j=1:5, escape=TRUE)}}
@@ -615,7 +615,7 @@ modelsummary(
 modelsummary(models, title = 'This is the title')
 
 # title with LaTeX label (for numbering and referencing)
-modelsummary(models, title = 'This is the title \\\\label{tab:description}')
+modelsummary(models, title = 'This is the title \\\\label{tab:description}', escape = FALSE)
 
 # add_rows
 rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,

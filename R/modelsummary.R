@@ -158,7 +158,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' your main table. By default, rows are appended to the bottom of the table.
 #' You can define a "position" attribute of integers to set the row positions.
 #' See Examples section below.
-#' @param title string
+#' @param title string. Cross-reference labels should be added with Quarto or Rmarkdown chunk options when applicable. When saving standalone LaTeX files, users can add a label such as `\\label{tab:mytable}` directly to the title string, while also specifying `escape=FALSE`.
 #' @param notes list or vector of notes to append to the bottom of the table.
 #' @param estimate a single string or a character vector of length equal to the
 #' number of models. Valid entries include any column name of
@@ -337,7 +337,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' modelsummary(models, title = 'This is the title')
 #' 
 #' # title with LaTeX label (for numbering and referencing)
-#' modelsummary(models, title = 'This is the title \\label{tab:description}')
+#' modelsummary(models, title = 'This is the title \\label{tab:description}', escape = FALSE)
 #' 
 #' # add_rows
 #' rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,

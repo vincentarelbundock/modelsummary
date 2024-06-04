@@ -4,6 +4,7 @@
 
 * Documentation improvements
 * Warning when users use `caption` instead of `title`. Inconsistency with respect to `tinytable`.
+* Improved documentation for `titlte` argument.
 * `htest` workaround.
 
 ## 2.1.0

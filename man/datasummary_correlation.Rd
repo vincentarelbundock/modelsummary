@@ -79,7 +79,7 @@ See Examples section below.}
 \item{add_columns}{a data.frame (or tibble) with the same number of rows as
 your main table.}
 
-\item{title}{string}
+\item{title}{string. Cross-reference labels should be added with Quarto or Rmarkdown chunk options when applicable. When saving standalone LaTeX files, users can add a label such as \verb{\\\\label\{tab:mytable\}} directly to the title string, while also specifying \code{escape=FALSE}.}
 
 \item{notes}{list or vector of notes to append to the bottom of the table.}
 
