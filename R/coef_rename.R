@@ -7,6 +7,9 @@
 #' @param factor boolean remove the "factor()" label
 #' @param factor_name boolean remove the "factor()" label and the name of the
 #' variable
+#' @param poly boolean remove the "poly()" label and function arguments
+#' @param poly_name boolean remove the "poly()" label, function arguments, and
+#' the name of the variable
 #' @param backticks boolean remove backticks
 #' @param titlecase boolean convert to title case
 #' @param underscore boolean replace underscores by spaces
@@ -24,6 +27,8 @@
 coef_rename <- function(x,
                        factor = TRUE,
                        factor_name = TRUE,
+                       poly = TRUE,
+                       poly_name = TRUE,
                        backticks = TRUE,
                        titlecase = TRUE,
                        underscore = TRUE,
@@ -34,6 +39,12 @@ coef_rename <- function(x,
     out <- gsub("factor\\(.*\\)", "", out)
   } else if (isTRUE(factor)) {
     out <- gsub("factor\\((.*)\\)", "\\1 ", out)
+  }
+
+  if (isTRUE(poly_name)) {
+    out <- gsub("poly\\(.*\\)", "^", out)
+  } else if (isTRUE(poly)) {
+    out <- gsub("poly\\(([^,]*),.*\\)", "\\1^", out)
   }
 
   if (isTRUE(underscore)) {
