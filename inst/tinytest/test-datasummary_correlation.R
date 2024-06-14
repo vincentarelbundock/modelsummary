@@ -1,5 +1,6 @@
 source("helpers.R")
 requiet("tinysnapshot")
+requiet("data.table")
 using("tinysnapshot")
 if (!requiet("correlation")) exit_file("correlation package")
 
@@ -24,4 +25,16 @@ cor_fun <- function(x) cor(x, method = "kendall")
 table <- datasummary_correlation(dat, method = cor_fun, output = "dataframe")
 expect_equivalent(table[[3]], c("-.74", "1.00"))
 
+# issue #772: escape
+x <- setNames(iris[, 1:3], c("blah_blah", "hello_world", "foo_bar"))
+escape_false <- datasummary_correlation(x, output = "latex", escape = FALSE)
+escape_true <- datasummary_correlation(x, output = "latex", escape = TRUE)
+expect_false(grepl("foo_bar", escape_true))
+expect_true(grepl("foo_bar", escape_false))
+expect_true(grepl("foo\\\\_bar", escape_true))
 
+# issue #771: data.table support
+x <- setNames(iris[, 1:3], c("blah blah", "hello world", "foo bar"))
+x <- data.table(x)
+x <- datasummary_correlation(x)
+expect_inherits(x, "tinytable")

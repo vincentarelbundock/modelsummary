@@ -7,6 +7,12 @@
 * Improved documentation for `titlte` argument.
 * `htest` workaround.
 
+Bugs:
+
+* `datasummary_correlation()` respects the `escape` argument. Issue #772.
+* `datasummary_correlation()` supports `data.table` objects. Issue #771.
+
+
 ## 2.1.0
 
 New:
