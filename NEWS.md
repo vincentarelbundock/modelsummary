@@ -7,6 +7,11 @@
 * Improved documentation for `titlte` argument.
 * `htest` workaround.
 
+Bugs:
+
+* `escape` was not respected in `datasummary_correlation()`. Issue #772.
+
+
 ## 2.1.0
 
 New:

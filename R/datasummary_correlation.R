@@ -239,6 +239,7 @@ datasummary_correlation <- function(data,
     add_columns = add_columns,
     notes = notes,
     title = title,
+    escape = escape,
     ...)
 
   # invisible return
