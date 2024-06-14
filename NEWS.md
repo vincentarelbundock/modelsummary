@@ -9,7 +9,8 @@
 
 Bugs:
 
-* `escape` was not respected in `datasummary_correlation()`. Issue #772.
+* `datasummary_correlation()` respects the `escape` argument. Issue #772.
+* `datasummary_correlation()` supports `data.table` objects. Issue #771.
 
 
 ## 2.1.0

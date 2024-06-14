@@ -1,5 +1,6 @@
 source("helpers.R")
 requiet("tinysnapshot")
+requiet("data.table")
 using("tinysnapshot")
 if (!requiet("correlation")) exit_file("correlation package")
 
@@ -32,3 +33,8 @@ expect_false(grepl("foo_bar", escape_true))
 expect_true(grepl("foo_bar", escape_false))
 expect_true(grepl("foo\\\\_bar", escape_true))
 
+# issue #771: data.table support
+x <- setNames(iris[, 1:3], c("blah blah", "hello world", "foo bar"))
+x <- data.table(x)
+x <- datasummary_correlation(x)
+expect_inherits(x, "tinytable")

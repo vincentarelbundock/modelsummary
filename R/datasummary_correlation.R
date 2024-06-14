@@ -130,6 +130,10 @@ datasummary_correlation <- function(data,
   sanitize_escape(escape) # after sanitize_output
   sanity_add_columns(add_columns)
   sanity_align(align)
+
+  if (inherits(data, "data.table")) {
+    data <- as.data.frame(data, check.names = FALSE)
+  }
   
   easycorrelation <- inherits(data, "easycorrelation")
 
