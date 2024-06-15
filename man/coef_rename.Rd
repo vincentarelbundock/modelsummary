@@ -9,7 +9,6 @@ coef_rename(
   factor = TRUE,
   factor_name = TRUE,
   poly = TRUE,
-  poly_name = TRUE,
   backticks = TRUE,
   titlecase = TRUE,
   underscore = TRUE,
@@ -25,9 +24,6 @@ coef_rename(
 variable}
 
 \item{poly}{boolean remove the "poly()" label and function arguments}
-
-\item{poly_name}{boolean remove the "poly()" label, function arguments, and
-the name of the variable}
 
 \item{backticks}{boolean remove backticks}
 
