@@ -1,11 +1,17 @@
 # News 
 
-## Development
+## 2.1.1
 
 * Documentation improvements
 * Warning when users use `caption` instead of `title`. Inconsistency with respect to `tinytable`.
-* Improved documentation for `titlte` argument.
+* Improved documentation for `title` argument.
 * `htest` workaround.
+
+Bugs:
+
+* `datasummary_correlation()` respects the `escape` argument. Issue #772.
+* `datasummary_correlation()` supports `data.table` objects. Issue #771.
+
 
 ## 2.1.0
 
