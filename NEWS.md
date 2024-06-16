@@ -1,5 +1,9 @@
 # News 
 
+## Development
+
+* `coef_rename()` gets a `poly=TRUE` argument to rename `poly(x, 2)`-style coefficients. Thanks to @mccarthy-m-g for code contribution #778.
+
 ## 2.1.1
 
 * Documentation improvements
