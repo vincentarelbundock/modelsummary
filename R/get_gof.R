@@ -113,6 +113,13 @@ get_gof <- function(model, gof_function = NULL, vcov_type = NULL, ...) {
         }
     }
 
+    # uniform types. Important for `mice` compatibility
+    for (col in colnames(gof)) {
+        if (inherits(gof[[col]], "logLik")) {
+            gof[[col]] <- as.numeric(gof[[col]])
+        }
+    }
+
     if (inherits(gof, "data.frame")) {
         return(gof)
     }
