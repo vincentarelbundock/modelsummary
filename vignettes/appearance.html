@@ -445,26 +445,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>    <span class="fu"><a href="https://vincentarelbundock.github.io/tinytable/man/group_tt.html">group_tt</a></span><span class="op">(</span>j <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>Linear <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, Poisson <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://vincentarelbundock.github.io/tinytable/man/style_tt.html">style_tt</a></span><span class="op">(</span>i <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">4</span>, j <span class="op">=</span> <span class="fl">2</span>, background <span class="op">=</span> <span class="st">"teal"</span>, color <span class="op">=</span> <span class="st">"white"</span>, bold <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
- 
+<!-- preamble start -->
 
-  
-    <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>tinytable_yp2cr9shoqge2vk5m28o</title>
-<style>
-.table td.tinytable_css_n4jahifb7t7sv45sismi, .table th.tinytable_css_n4jahifb7t7sv45sismi {    border-bottom: solid 0.1em #d3d8dc; }
-.table td.tinytable_css_8o36e5nng9sg63yl7quo, .table th.tinytable_css_8o36e5nng9sg63yl7quo {    text-align: center; }
-.table td.tinytable_css_7kpmwdj1498o4jta0suo, .table th.tinytable_css_7kpmwdj1498o4jta0suo {    border-bottom: solid 0.05em #d3d8dc; }
-.table td.tinytable_css_dowigh65blsy5au5misz, .table th.tinytable_css_dowigh65blsy5au5misz {    text-align: left; }
-.table td.tinytable_css_p27xb975ld8vvwb9gc9o, .table th.tinytable_css_p27xb975ld8vvwb9gc9o {    text-align: center; }
-.table td.tinytable_css_wcr678ul5lrvxvyu8r05, .table th.tinytable_css_wcr678ul5lrvxvyu8r05 {    text-align: center; }
-.table td.tinytable_css_kmy12zxr14dhd66pf6pl, .table th.tinytable_css_kmy12zxr14dhd66pf6pl {    text-align: center; }
-.table td.tinytable_css_l2dbrye3rckn48wrajml, .table th.tinytable_css_l2dbrye3rckn48wrajml {    text-align: center; }
-.table td.tinytable_css_k8y0f2aghin47uxzrvg8, .table th.tinytable_css_k8y0f2aghin47uxzrvg8 {    text-align: center; }
-.table td.tinytable_css_ptw1ey4gitwygmzk1590, .table th.tinytable_css_ptw1ey4gitwygmzk1590 {    border-bottom: solid 0.05em black; }
-.table td.tinytable_css_a4vri5yx8ihwyfpj3aoa, .table th.tinytable_css_a4vri5yx8ihwyfpj3aoa {    font-weight: bold; color: white; background-color: teal; }
-    </style>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>
     MathJax = {
       tex: {
         inlineMath: [['$', '$'], ['\\(', '\\)']]
@@ -473,8 +456,164 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         fontCache: 'global'
       }
     };
-    </script><div class="container">
-      <table class="table table-borderless" id="tinytable_yp2cr9shoqge2vk5m28o" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+    </script><script>
+      function styleCell_tinytable_rdkn8z0ivafmm76o7rbq(tableId, cellCoordinates, cssClass) {
+            var table = document.getElementById("tinytable_aiw7hx6z722nxtyowjxc");
+            cellCoordinates.forEach(([i, j]) => {
+                table.rows[i].cells[j].classList.add(cssClass);
+            });
+        }
+
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_aiw7hx6z722nxtyowjxc');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_tinytable_rdkn8z0ivafmm76o7rbq(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_aiw7hx6z722nxtyowjxc");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5]], class: 'tinytable_css_pj1d0voo85iv9x7l5mq7'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_rdkn8z0ivafmm76o7rbq('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5]], class: 'tinytable_css_qp0m3njxmsfz48qvz3fj'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_rdkn8z0ivafmm76o7rbq('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 1], [0, 2]], class: 'tinytable_css_oiflrukvv2jqw331mg0a'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_rdkn8z0ivafmm76o7rbq('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0], [8, 0], [9, 0], [10, 0], [11, 0], [12, 0], [13, 0], [14, 0], [15, 0]], class: 'tinytable_css_7cw8st8u6rcd41xhm6er'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_rdkn8z0ivafmm76o7rbq('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [9, 1], [10, 1], [11, 1], [12, 1], [13, 1], [14, 1], [15, 1]], class: 'tinytable_css_e70hkbun0zd7gvn755j4'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_rdkn8z0ivafmm76o7rbq('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2], [8, 2], [9, 2], [10, 2], [11, 2], [12, 2], [13, 2], [14, 2], [15, 2]], class: 'tinytable_css_f0xes7vt6jbeccjmd72a'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_rdkn8z0ivafmm76o7rbq('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3], [7, 3], [8, 3], [9, 3], [10, 3], [11, 3], [12, 3], [13, 3], [14, 3], [15, 3]], class: 'tinytable_css_qw1644t2z3idow2wlkm4'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_rdkn8z0ivafmm76o7rbq('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 4], [1, 4], [2, 4], [3, 4], [4, 4], [5, 4], [6, 4], [7, 4], [8, 4], [9, 4], [10, 4], [11, 4], [12, 4], [13, 4], [14, 4], [15, 4]], class: 'tinytable_css_8yeh1mey82hgdgc2e10c'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_rdkn8z0ivafmm76o7rbq('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 5], [1, 5], [2, 5], [3, 5], [4, 5], [5, 5], [6, 5], [7, 5], [8, 5], [9, 5], [10, 5], [11, 5], [12, 5], [13, 5], [14, 5], [15, 5]], class: 'tinytable_css_6sfqxanss61mxk3gs9tm'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_rdkn8z0ivafmm76o7rbq('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[7, 0], [7, 1], [7, 2], [7, 3], [7, 4], [7, 5]], class: 'tinytable_css_c0zj74ke9up7grzpce69'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_rdkn8z0ivafmm76o7rbq('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[4, 1], [5, 1]], class: 'tinytable_css_67jzgvofm1eefo79q90p'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_rdkn8z0ivafmm76o7rbq('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+    </script><style>
+.table td.tinytable_css_pj1d0voo85iv9x7l5mq7, .table th.tinytable_css_pj1d0voo85iv9x7l5mq7 {    border-bottom: solid 0.1em #d3d8dc; }
+.table td.tinytable_css_qp0m3njxmsfz48qvz3fj, .table th.tinytable_css_qp0m3njxmsfz48qvz3fj {    text-align: center; }
+.table td.tinytable_css_oiflrukvv2jqw331mg0a, .table th.tinytable_css_oiflrukvv2jqw331mg0a {    border-bottom: solid 0.05em #d3d8dc; }
+.table td.tinytable_css_7cw8st8u6rcd41xhm6er, .table th.tinytable_css_7cw8st8u6rcd41xhm6er {    text-align: left; }
+.table td.tinytable_css_e70hkbun0zd7gvn755j4, .table th.tinytable_css_e70hkbun0zd7gvn755j4 {    text-align: center; }
+.table td.tinytable_css_f0xes7vt6jbeccjmd72a, .table th.tinytable_css_f0xes7vt6jbeccjmd72a {    text-align: center; }
+.table td.tinytable_css_qw1644t2z3idow2wlkm4, .table th.tinytable_css_qw1644t2z3idow2wlkm4 {    text-align: center; }
+.table td.tinytable_css_8yeh1mey82hgdgc2e10c, .table th.tinytable_css_8yeh1mey82hgdgc2e10c {    text-align: center; }
+.table td.tinytable_css_6sfqxanss61mxk3gs9tm, .table th.tinytable_css_6sfqxanss61mxk3gs9tm {    text-align: center; }
+.table td.tinytable_css_c0zj74ke9up7grzpce69, .table th.tinytable_css_c0zj74ke9up7grzpce69 {    border-bottom: solid 0.05em black; }
+.table td.tinytable_css_67jzgvofm1eefo79q90p, .table th.tinytable_css_67jzgvofm1eefo79q90p {    font-weight: bold; color: white; background-color: teal; }
+    </style>
+<div class="container">
+      <table class="table table-borderless" id="tinytable_aiw7hx6z722nxtyowjxc" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <thead>
 <tr>
 <th scope="col" align="center" colspan="1"> </th>
@@ -606,168 +745,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </div>
-
-    <script>
-      function styleCell_tinytable_09ctw9m45xiq5omqu9sy(i, j, css_id) {
-        var table = document.getElementById("tinytable_yp2cr9shoqge2vk5m28o");
-        table.rows[i].cells[j].classList.add(css_id);
-      }
-      function insertSpanRow(i, colspan, content) {
-        var table = document.getElementById('tinytable_yp2cr9shoqge2vk5m28o');
-        var newRow = table.insertRow(i);
-        var newCell = newRow.insertCell(0);
-        newCell.setAttribute("colspan", colspan);
-        // newCell.innerText = content;
-        // this may be unsafe, but innerText does not interpret <br>
-        newCell.innerHTML = content;
-      }
-      function spanCell_tinytable_09ctw9m45xiq5omqu9sy(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_yp2cr9shoqge2vk5m28o");
-        const targetRow = table.rows[i];
-        const targetCell = targetRow.cells[j];
-        for (let r = 0; r < rowspan; r++) {
-          // Only start deleting cells to the right for the first row (r == 0)
-          if (r === 0) {
-            // Delete cells to the right of the target cell in the first row
-            for (let c = colspan - 1; c > 0; c--) {
-              if (table.rows[i + r].cells[j + c]) {
-                table.rows[i + r].deleteCell(j + c);
-              }
-            }
-          }
-          // For rows below the first, delete starting from the target column
-          if (r > 0) {
-            for (let c = colspan - 1; c >= 0; c--) {
-              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
-                table.rows[i + r].deleteCell(j);
-              }
-            }
-          }
-        }
-        // Set rowspan and colspan of the target cell
-        targetCell.rowSpan = rowspan;
-        targetCell.colSpan = colspan;
-      }
-
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(1, 0, 'tinytable_css_n4jahifb7t7sv45sismi') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(1, 1, 'tinytable_css_n4jahifb7t7sv45sismi') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(1, 2, 'tinytable_css_n4jahifb7t7sv45sismi') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(1, 3, 'tinytable_css_n4jahifb7t7sv45sismi') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(1, 4, 'tinytable_css_n4jahifb7t7sv45sismi') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(1, 5, 'tinytable_css_n4jahifb7t7sv45sismi') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(0, 0, 'tinytable_css_8o36e5nng9sg63yl7quo') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(0, 1, 'tinytable_css_8o36e5nng9sg63yl7quo') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(0, 2, 'tinytable_css_8o36e5nng9sg63yl7quo') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(0, 3, 'tinytable_css_8o36e5nng9sg63yl7quo') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(0, 4, 'tinytable_css_8o36e5nng9sg63yl7quo') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(0, 5, 'tinytable_css_8o36e5nng9sg63yl7quo') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(0, 1, 'tinytable_css_7kpmwdj1498o4jta0suo') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(0, 2, 'tinytable_css_7kpmwdj1498o4jta0suo') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(0, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(1, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(2, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(3, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(4, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(5, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(6, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(7, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(8, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(9, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(10, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(11, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(12, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(13, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(14, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(15, 0, 'tinytable_css_dowigh65blsy5au5misz') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(0, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(1, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(2, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(3, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(4, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(5, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(6, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(7, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(8, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(9, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(10, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(11, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(12, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(13, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(14, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(15, 1, 'tinytable_css_p27xb975ld8vvwb9gc9o') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(0, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(1, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(2, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(3, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(4, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(5, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(6, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(7, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(8, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(9, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(10, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(11, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(12, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(13, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(14, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(15, 2, 'tinytable_css_wcr678ul5lrvxvyu8r05') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(0, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(1, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(2, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(3, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(4, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(5, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(6, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(7, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(8, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(9, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(10, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(11, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(12, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(13, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(14, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(15, 3, 'tinytable_css_kmy12zxr14dhd66pf6pl') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(0, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(1, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(2, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(3, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(4, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(5, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(6, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(7, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(8, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(9, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(10, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(11, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(12, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(13, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(14, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(15, 4, 'tinytable_css_l2dbrye3rckn48wrajml') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(0, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(1, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(2, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(3, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(4, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(5, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(6, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(7, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(8, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(9, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(10, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(11, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(12, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(13, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(14, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(15, 5, 'tinytable_css_k8y0f2aghin47uxzrvg8') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(7, 0, 'tinytable_css_ptw1ey4gitwygmzk1590') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(7, 1, 'tinytable_css_ptw1ey4gitwygmzk1590') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(7, 2, 'tinytable_css_ptw1ey4gitwygmzk1590') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(7, 3, 'tinytable_css_ptw1ey4gitwygmzk1590') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(7, 4, 'tinytable_css_ptw1ey4gitwygmzk1590') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(7, 5, 'tinytable_css_ptw1ey4gitwygmzk1590') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(4, 1, 'tinytable_css_a4vri5yx8ihwyfpj3aoa') })
-window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5omqu9sy(5, 1, 'tinytable_css_a4vri5yx8ihwyfpj3aoa') })
-    </script>
+<!-- hack to avoid NA insertion in last line -->
 </div>
 </div>
 <p>Now, we create a descriptive statistics table with <code><a href="https://modelsummary.com/man/datasummary.html">datasummary()</a></code>. That table includes an emptyr row, which we fill with density plots using the <code><a href="https://vincentarelbundock.github.io/tinytable/man/plot_tt.html">plot_tt()</a></code> function from <code>tinytable</code>:</p>
@@ -781,20 +759,9 @@ window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5o
 <span>        data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>, <span class="va">mtcars</span><span class="op">$</span><span class="va">hp</span><span class="op">)</span>,</span>
 <span>        color <span class="op">=</span> <span class="st">"#E69F00"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
- 
+<!-- preamble start -->
 
-  
-    <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>tinytable_jtvj1g4nnqbcghy3whkm</title>
-<style>
-.table td.tinytable_css_nelv6tfgbn02csc1smx7, .table th.tinytable_css_nelv6tfgbn02csc1smx7 {    border-bottom: solid 0.1em #d3d8dc; }
-.table td.tinytable_css_o19j4ezw4tv4c75w5p1a, .table th.tinytable_css_o19j4ezw4tv4c75w5p1a {    text-align: left; }
-.table td.tinytable_css_e0x29iac37rouwmlown1, .table th.tinytable_css_e0x29iac37rouwmlown1 {    text-align: right; }
-.table td.tinytable_css_lnhagg0fq20wo43t1y0m, .table th.tinytable_css_lnhagg0fq20wo43t1y0m {    text-align: right; }
-.table td.tinytable_css_slb47z6sv7z1m0ot96nj, .table th.tinytable_css_slb47z6sv7z1m0ot96nj {    text-align: right; }
-    </style>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>
     MathJax = {
       tex: {
         inlineMath: [['$', '$'], ['\\(', '\\)']]
@@ -803,38 +770,16 @@ window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5o
         fontCache: 'global'
       }
     };
-    </script><div class="container">
-      <table class="table table-borderless" id="tinytable_jtvj1g4nnqbcghy3whkm" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
-<thead><tr>
-<th scope="col"> </th>
-                <th scope="col">Mean</th>
-                <th scope="col">SD</th>
-                <th scope="col">Density</th>
-              </tr></thead>
-<tbody>
-<tr>
-<td>mpg</td>
-                  <td>20.09 </td>
-                  <td>6.03 </td>
-                  <td><img src="./tinytable_assets/idd1lsc5tvyp4ft3ewryek.png" style="height: 1em;"></td>
-                </tr>
-<tr>
-<td>hp </td>
-                  <td>146.69</td>
-                  <td>68.56</td>
-                  <td><img src="./tinytable_assets/id9cqvgii9oi1f1gn8k6w1.png" style="height: 1em;"></td>
-                </tr>
-</tbody>
-</table>
-</div>
+    </script><script>
+      function styleCell_tinytable_3fm3vmotiu76iac5qbtx(tableId, cellCoordinates, cssClass) {
+            var table = document.getElementById("tinytable_bmv2yen7tshh5112girc");
+            cellCoordinates.forEach(([i, j]) => {
+                table.rows[i].cells[j].classList.add(cssClass);
+            });
+        }
 
-    <script>
-      function styleCell_tinytable_fn026ngt7t8dc7x65ky9(i, j, css_id) {
-        var table = document.getElementById("tinytable_jtvj1g4nnqbcghy3whkm");
-        table.rows[i].cells[j].classList.add(css_id);
-      }
       function insertSpanRow(i, colspan, content) {
-        var table = document.getElementById('tinytable_jtvj1g4nnqbcghy3whkm');
+        var table = document.getElementById('tinytable_bmv2yen7tshh5112girc');
         var newRow = table.insertRow(i);
         var newCell = newRow.insertCell(0);
         newCell.setAttribute("colspan", colspan);
@@ -842,8 +787,8 @@ window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5o
         // this may be unsafe, but innerText does not interpret <br>
         newCell.innerHTML = content;
       }
-      function spanCell_tinytable_fn026ngt7t8dc7x65ky9(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_jtvj1g4nnqbcghy3whkm");
+      function spanCell_tinytable_3fm3vmotiu76iac5qbtx(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_bmv2yen7tshh5112girc");
         const targetRow = table.rows[i];
         const targetCell = targetRow.cells[j];
         for (let r = 0; r < rowspan; r++) {
@@ -870,23 +815,82 @@ window.addEventListener('load', function () { styleCell_tinytable_09ctw9m45xiq5o
         targetCell.colSpan = colspan;
       }
 
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(0, 0, 'tinytable_css_nelv6tfgbn02csc1smx7') })
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(0, 1, 'tinytable_css_nelv6tfgbn02csc1smx7') })
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(0, 2, 'tinytable_css_nelv6tfgbn02csc1smx7') })
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(0, 3, 'tinytable_css_nelv6tfgbn02csc1smx7') })
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(0, 0, 'tinytable_css_o19j4ezw4tv4c75w5p1a') })
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(1, 0, 'tinytable_css_o19j4ezw4tv4c75w5p1a') })
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(2, 0, 'tinytable_css_o19j4ezw4tv4c75w5p1a') })
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(0, 1, 'tinytable_css_e0x29iac37rouwmlown1') })
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(1, 1, 'tinytable_css_e0x29iac37rouwmlown1') })
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(2, 1, 'tinytable_css_e0x29iac37rouwmlown1') })
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(0, 2, 'tinytable_css_lnhagg0fq20wo43t1y0m') })
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(1, 2, 'tinytable_css_lnhagg0fq20wo43t1y0m') })
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(2, 2, 'tinytable_css_lnhagg0fq20wo43t1y0m') })
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(0, 3, 'tinytable_css_slb47z6sv7z1m0ot96nj') })
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(1, 3, 'tinytable_css_slb47z6sv7z1m0ot96nj') })
-window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7x65ky9(2, 3, 'tinytable_css_slb47z6sv7z1m0ot96nj') })
-    </script>
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 0], [0, 1], [0, 2], [0, 3]], class: 'tinytable_css_vj6qef3w8pn09y60xkak'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_3fm3vmotiu76iac5qbtx('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 0], [1, 0], [2, 0]], class: 'tinytable_css_55u9i4ggwo1uzgbrcpz9'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_3fm3vmotiu76iac5qbtx('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 1], [1, 1], [2, 1]], class: 'tinytable_css_vj23fxijlzk9zp2zjyyc'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_3fm3vmotiu76iac5qbtx('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 2], [1, 2], [2, 2]], class: 'tinytable_css_ag9m1cc5ya9t53pyzgmy'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_3fm3vmotiu76iac5qbtx('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 3], [1, 3], [2, 3]], class: 'tinytable_css_rheguj8wz26i3vjvx1op'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_3fm3vmotiu76iac5qbtx('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+    </script><style>
+.table td.tinytable_css_vj6qef3w8pn09y60xkak, .table th.tinytable_css_vj6qef3w8pn09y60xkak {    border-bottom: solid 0.1em #d3d8dc; }
+.table td.tinytable_css_55u9i4ggwo1uzgbrcpz9, .table th.tinytable_css_55u9i4ggwo1uzgbrcpz9 {    text-align: left; }
+.table td.tinytable_css_vj23fxijlzk9zp2zjyyc, .table th.tinytable_css_vj23fxijlzk9zp2zjyyc {    text-align: right; }
+.table td.tinytable_css_ag9m1cc5ya9t53pyzgmy, .table th.tinytable_css_ag9m1cc5ya9t53pyzgmy {    text-align: right; }
+.table td.tinytable_css_rheguj8wz26i3vjvx1op, .table th.tinytable_css_rheguj8wz26i3vjvx1op {    text-align: right; }
+    </style>
+<div class="container">
+      <table class="table table-borderless" id="tinytable_bmv2yen7tshh5112girc" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+<thead><tr>
+<th scope="col"> </th>
+                <th scope="col">Mean</th>
+                <th scope="col">SD</th>
+                <th scope="col">Density</th>
+              </tr></thead>
+<tbody>
+<tr>
+<td>mpg</td>
+                  <td>20.09 </td>
+                  <td>6.03 </td>
+                  <td><img src="./tinytable_assets/id806kyu772wbazjlixnd0.png" style="height: 1em;"></td>
+                </tr>
+<tr>
+<td>hp </td>
+                  <td>146.69</td>
+                  <td>68.56</td>
+                  <td><img src="./tinytable_assets/id2wttw00rf2wenkphw48u.png" style="height: 1em;"></td>
+                </tr>
+</tbody>
+</table>
+</div>
+<!-- hack to avoid NA insertion in last line -->
 </div>
 </div>
 <p>HTML tables can be further customized in <code>tinytable</code> by specifying CSS rules. Again, <a href="https://vincentarelbundock.github.io/tinytable/">detailed tutorials are available on the <code>tinytable</code> website.</a> This example adds an image in the background of a table:</p>
@@ -905,21 +909,142 @@ window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7
 <span>        bootstrap_class <span class="op">=</span> <span class="st">"table table-borderless mytable"</span>, </span>
 <span>        bootstrap_css_rule <span class="op">=</span> <span class="va">css</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
- 
+<!-- preamble start -->
 
-  
-    <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>tinytable_2k71tb1vqyvdf16ck9l6</title>
-<style>
-.table td.tinytable_css_5fd8b5rnp252keoln8k0, .table th.tinytable_css_5fd8b5rnp252keoln8k0 {    border-bottom: solid 0.1em #d3d8dc; }
-.table td.tinytable_css_fbpyf11idloe4fwowdm6, .table th.tinytable_css_fbpyf11idloe4fwowdm6 {    text-align: left; }
-.table td.tinytable_css_naspu80zv6j9dfmphc0j, .table th.tinytable_css_naspu80zv6j9dfmphc0j {    text-align: center; }
-.table td.tinytable_css_o0z7klvh1i7z2cwyaiwe, .table th.tinytable_css_o0z7klvh1i7z2cwyaiwe {    text-align: center; }
-.table td.tinytable_css_koor5tnbyfsor6961icq, .table th.tinytable_css_koor5tnbyfsor6961icq {    text-align: center; }
-.table td.tinytable_css_un9rkhy9s9qfrom97j7r, .table th.tinytable_css_un9rkhy9s9qfrom97j7r {    text-align: center; }
-.table td.tinytable_css_eemqlum6pqop6pe92n3i, .table th.tinytable_css_eemqlum6pqop6pe92n3i {    text-align: center; }
-.table td.tinytable_css_6gfkkg7nwavwq9hpy7fr, .table th.tinytable_css_6gfkkg7nwavwq9hpy7fr {    border-bottom: solid 0.05em black; }
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script><script>
+      function styleCell_tinytable_yv2xvy074kwudumplc9c(tableId, cellCoordinates, cssClass) {
+            var table = document.getElementById("tinytable_py695z9xvns7fr89x73y");
+            cellCoordinates.forEach(([i, j]) => {
+                table.rows[i].cells[j].classList.add(cssClass);
+            });
+        }
+
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_py695z9xvns7fr89x73y');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_tinytable_yv2xvy074kwudumplc9c(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_py695z9xvns7fr89x73y");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5]], class: 'tinytable_css_lrul59crvlpmzkneqg36'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_yv2xvy074kwudumplc9c('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0], [8, 0], [9, 0], [10, 0], [11, 0], [12, 0], [13, 0], [14, 0]], class: 'tinytable_css_1j11at2riaslhv6ffpho'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_yv2xvy074kwudumplc9c('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [9, 1], [10, 1], [11, 1], [12, 1], [13, 1], [14, 1]], class: 'tinytable_css_ila1vo706qrmv2bks1km'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_yv2xvy074kwudumplc9c('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2], [8, 2], [9, 2], [10, 2], [11, 2], [12, 2], [13, 2], [14, 2]], class: 'tinytable_css_20wlbea42j07s5m42rtn'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_yv2xvy074kwudumplc9c('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3], [7, 3], [8, 3], [9, 3], [10, 3], [11, 3], [12, 3], [13, 3], [14, 3]], class: 'tinytable_css_84g90lfqub0hhioar5q4'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_yv2xvy074kwudumplc9c('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 4], [1, 4], [2, 4], [3, 4], [4, 4], [5, 4], [6, 4], [7, 4], [8, 4], [9, 4], [10, 4], [11, 4], [12, 4], [13, 4], [14, 4]], class: 'tinytable_css_5qh2jvpoek5z0eaun978'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_yv2xvy074kwudumplc9c('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 5], [1, 5], [2, 5], [3, 5], [4, 5], [5, 5], [6, 5], [7, 5], [8, 5], [9, 5], [10, 5], [11, 5], [12, 5], [13, 5], [14, 5]], class: 'tinytable_css_uwvjqr2dk902npth3ev9'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_yv2xvy074kwudumplc9c('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[6, 0], [6, 1], [6, 2], [6, 3], [6, 4], [6, 5]], class: 'tinytable_css_cseq1bvrnfz5oo0x31t7'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_yv2xvy074kwudumplc9c('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+    </script><style>
+.table td.tinytable_css_lrul59crvlpmzkneqg36, .table th.tinytable_css_lrul59crvlpmzkneqg36 {    border-bottom: solid 0.1em #d3d8dc; }
+.table td.tinytable_css_1j11at2riaslhv6ffpho, .table th.tinytable_css_1j11at2riaslhv6ffpho {    text-align: left; }
+.table td.tinytable_css_ila1vo706qrmv2bks1km, .table th.tinytable_css_ila1vo706qrmv2bks1km {    text-align: center; }
+.table td.tinytable_css_20wlbea42j07s5m42rtn, .table th.tinytable_css_20wlbea42j07s5m42rtn {    text-align: center; }
+.table td.tinytable_css_84g90lfqub0hhioar5q4, .table th.tinytable_css_84g90lfqub0hhioar5q4 {    text-align: center; }
+.table td.tinytable_css_5qh2jvpoek5z0eaun978, .table th.tinytable_css_5qh2jvpoek5z0eaun978 {    text-align: center; }
+.table td.tinytable_css_uwvjqr2dk902npth3ev9, .table th.tinytable_css_uwvjqr2dk902npth3ev9 {    text-align: center; }
+.table td.tinytable_css_cseq1bvrnfz5oo0x31t7, .table th.tinytable_css_cseq1bvrnfz5oo0x31t7 {    border-bottom: solid 0.05em black; }
 
 .mytable {
   background-size: cover;
@@ -929,17 +1054,8 @@ window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7
 }
 
     </style>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-      },
-      svg: {
-        fontCache: 'global'
-      }
-    };
-    </script><div class="container">
-      <table class="table table-borderless mytable" id="tinytable_2k71tb1vqyvdf16ck9l6" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+<div class="container">
+      <table class="table table-borderless mytable" id="tinytable_py695z9xvns7fr89x73y" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <thead><tr>
 <th scope="col"> </th>
                 <th scope="col">I</th>
@@ -1064,152 +1180,7 @@ window.addEventListener('load', function () { styleCell_tinytable_fn026ngt7t8dc7
 </tbody>
 </table>
 </div>
-
-    <script>
-      function styleCell_tinytable_zn1llayggy424fqhvszj(i, j, css_id) {
-        var table = document.getElementById("tinytable_2k71tb1vqyvdf16ck9l6");
-        table.rows[i].cells[j].classList.add(css_id);
-      }
-      function insertSpanRow(i, colspan, content) {
-        var table = document.getElementById('tinytable_2k71tb1vqyvdf16ck9l6');
-        var newRow = table.insertRow(i);
-        var newCell = newRow.insertCell(0);
-        newCell.setAttribute("colspan", colspan);
-        // newCell.innerText = content;
-        // this may be unsafe, but innerText does not interpret <br>
-        newCell.innerHTML = content;
-      }
-      function spanCell_tinytable_zn1llayggy424fqhvszj(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_2k71tb1vqyvdf16ck9l6");
-        const targetRow = table.rows[i];
-        const targetCell = targetRow.cells[j];
-        for (let r = 0; r < rowspan; r++) {
-          // Only start deleting cells to the right for the first row (r == 0)
-          if (r === 0) {
-            // Delete cells to the right of the target cell in the first row
-            for (let c = colspan - 1; c > 0; c--) {
-              if (table.rows[i + r].cells[j + c]) {
-                table.rows[i + r].deleteCell(j + c);
-              }
-            }
-          }
-          // For rows below the first, delete starting from the target column
-          if (r > 0) {
-            for (let c = colspan - 1; c >= 0; c--) {
-              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
-                table.rows[i + r].deleteCell(j);
-              }
-            }
-          }
-        }
-        // Set rowspan and colspan of the target cell
-        targetCell.rowSpan = rowspan;
-        targetCell.colSpan = colspan;
-      }
-
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(0, 0, 'tinytable_css_5fd8b5rnp252keoln8k0') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(0, 1, 'tinytable_css_5fd8b5rnp252keoln8k0') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(0, 2, 'tinytable_css_5fd8b5rnp252keoln8k0') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(0, 3, 'tinytable_css_5fd8b5rnp252keoln8k0') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(0, 4, 'tinytable_css_5fd8b5rnp252keoln8k0') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(0, 5, 'tinytable_css_5fd8b5rnp252keoln8k0') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(0, 0, 'tinytable_css_fbpyf11idloe4fwowdm6') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(1, 0, 'tinytable_css_fbpyf11idloe4fwowdm6') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(2, 0, 'tinytable_css_fbpyf11idloe4fwowdm6') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(3, 0, 'tinytable_css_fbpyf11idloe4fwowdm6') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(4, 0, 'tinytable_css_fbpyf11idloe4fwowdm6') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(5, 0, 'tinytable_css_fbpyf11idloe4fwowdm6') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(6, 0, 'tinytable_css_fbpyf11idloe4fwowdm6') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(7, 0, 'tinytable_css_fbpyf11idloe4fwowdm6') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(8, 0, 'tinytable_css_fbpyf11idloe4fwowdm6') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(9, 0, 'tinytable_css_fbpyf11idloe4fwowdm6') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(10, 0, 'tinytable_css_fbpyf11idloe4fwowdm6') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(11, 0, 'tinytable_css_fbpyf11idloe4fwowdm6') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(12, 0, 'tinytable_css_fbpyf11idloe4fwowdm6') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(13, 0, 'tinytable_css_fbpyf11idloe4fwowdm6') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(14, 0, 'tinytable_css_fbpyf11idloe4fwowdm6') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(0, 1, 'tinytable_css_naspu80zv6j9dfmphc0j') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(1, 1, 'tinytable_css_naspu80zv6j9dfmphc0j') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(2, 1, 'tinytable_css_naspu80zv6j9dfmphc0j') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(3, 1, 'tinytable_css_naspu80zv6j9dfmphc0j') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(4, 1, 'tinytable_css_naspu80zv6j9dfmphc0j') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(5, 1, 'tinytable_css_naspu80zv6j9dfmphc0j') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(6, 1, 'tinytable_css_naspu80zv6j9dfmphc0j') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(7, 1, 'tinytable_css_naspu80zv6j9dfmphc0j') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(8, 1, 'tinytable_css_naspu80zv6j9dfmphc0j') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(9, 1, 'tinytable_css_naspu80zv6j9dfmphc0j') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(10, 1, 'tinytable_css_naspu80zv6j9dfmphc0j') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(11, 1, 'tinytable_css_naspu80zv6j9dfmphc0j') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(12, 1, 'tinytable_css_naspu80zv6j9dfmphc0j') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(13, 1, 'tinytable_css_naspu80zv6j9dfmphc0j') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(14, 1, 'tinytable_css_naspu80zv6j9dfmphc0j') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(0, 2, 'tinytable_css_o0z7klvh1i7z2cwyaiwe') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(1, 2, 'tinytable_css_o0z7klvh1i7z2cwyaiwe') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(2, 2, 'tinytable_css_o0z7klvh1i7z2cwyaiwe') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(3, 2, 'tinytable_css_o0z7klvh1i7z2cwyaiwe') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(4, 2, 'tinytable_css_o0z7klvh1i7z2cwyaiwe') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(5, 2, 'tinytable_css_o0z7klvh1i7z2cwyaiwe') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(6, 2, 'tinytable_css_o0z7klvh1i7z2cwyaiwe') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(7, 2, 'tinytable_css_o0z7klvh1i7z2cwyaiwe') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(8, 2, 'tinytable_css_o0z7klvh1i7z2cwyaiwe') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(9, 2, 'tinytable_css_o0z7klvh1i7z2cwyaiwe') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(10, 2, 'tinytable_css_o0z7klvh1i7z2cwyaiwe') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(11, 2, 'tinytable_css_o0z7klvh1i7z2cwyaiwe') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(12, 2, 'tinytable_css_o0z7klvh1i7z2cwyaiwe') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(13, 2, 'tinytable_css_o0z7klvh1i7z2cwyaiwe') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(14, 2, 'tinytable_css_o0z7klvh1i7z2cwyaiwe') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(0, 3, 'tinytable_css_koor5tnbyfsor6961icq') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(1, 3, 'tinytable_css_koor5tnbyfsor6961icq') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(2, 3, 'tinytable_css_koor5tnbyfsor6961icq') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(3, 3, 'tinytable_css_koor5tnbyfsor6961icq') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(4, 3, 'tinytable_css_koor5tnbyfsor6961icq') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(5, 3, 'tinytable_css_koor5tnbyfsor6961icq') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(6, 3, 'tinytable_css_koor5tnbyfsor6961icq') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(7, 3, 'tinytable_css_koor5tnbyfsor6961icq') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(8, 3, 'tinytable_css_koor5tnbyfsor6961icq') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(9, 3, 'tinytable_css_koor5tnbyfsor6961icq') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(10, 3, 'tinytable_css_koor5tnbyfsor6961icq') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(11, 3, 'tinytable_css_koor5tnbyfsor6961icq') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(12, 3, 'tinytable_css_koor5tnbyfsor6961icq') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(13, 3, 'tinytable_css_koor5tnbyfsor6961icq') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(14, 3, 'tinytable_css_koor5tnbyfsor6961icq') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(0, 4, 'tinytable_css_un9rkhy9s9qfrom97j7r') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(1, 4, 'tinytable_css_un9rkhy9s9qfrom97j7r') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(2, 4, 'tinytable_css_un9rkhy9s9qfrom97j7r') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(3, 4, 'tinytable_css_un9rkhy9s9qfrom97j7r') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(4, 4, 'tinytable_css_un9rkhy9s9qfrom97j7r') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(5, 4, 'tinytable_css_un9rkhy9s9qfrom97j7r') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(6, 4, 'tinytable_css_un9rkhy9s9qfrom97j7r') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(7, 4, 'tinytable_css_un9rkhy9s9qfrom97j7r') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(8, 4, 'tinytable_css_un9rkhy9s9qfrom97j7r') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(9, 4, 'tinytable_css_un9rkhy9s9qfrom97j7r') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(10, 4, 'tinytable_css_un9rkhy9s9qfrom97j7r') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(11, 4, 'tinytable_css_un9rkhy9s9qfrom97j7r') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(12, 4, 'tinytable_css_un9rkhy9s9qfrom97j7r') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(13, 4, 'tinytable_css_un9rkhy9s9qfrom97j7r') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(14, 4, 'tinytable_css_un9rkhy9s9qfrom97j7r') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(0, 5, 'tinytable_css_eemqlum6pqop6pe92n3i') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(1, 5, 'tinytable_css_eemqlum6pqop6pe92n3i') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(2, 5, 'tinytable_css_eemqlum6pqop6pe92n3i') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(3, 5, 'tinytable_css_eemqlum6pqop6pe92n3i') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(4, 5, 'tinytable_css_eemqlum6pqop6pe92n3i') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(5, 5, 'tinytable_css_eemqlum6pqop6pe92n3i') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(6, 5, 'tinytable_css_eemqlum6pqop6pe92n3i') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(7, 5, 'tinytable_css_eemqlum6pqop6pe92n3i') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(8, 5, 'tinytable_css_eemqlum6pqop6pe92n3i') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(9, 5, 'tinytable_css_eemqlum6pqop6pe92n3i') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(10, 5, 'tinytable_css_eemqlum6pqop6pe92n3i') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(11, 5, 'tinytable_css_eemqlum6pqop6pe92n3i') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(12, 5, 'tinytable_css_eemqlum6pqop6pe92n3i') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(13, 5, 'tinytable_css_eemqlum6pqop6pe92n3i') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(14, 5, 'tinytable_css_eemqlum6pqop6pe92n3i') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(6, 0, 'tinytable_css_6gfkkg7nwavwq9hpy7fr') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(6, 1, 'tinytable_css_6gfkkg7nwavwq9hpy7fr') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(6, 2, 'tinytable_css_6gfkkg7nwavwq9hpy7fr') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(6, 3, 'tinytable_css_6gfkkg7nwavwq9hpy7fr') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(6, 4, 'tinytable_css_6gfkkg7nwavwq9hpy7fr') })
-window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424fqhvszj(6, 5, 'tinytable_css_6gfkkg7nwavwq9hpy7fr') })
-    </script>
+<!-- hack to avoid NA insertion in last line -->
 </div>
 </div>
 </section><section id="gt" class="level1"><h1><code>gt</code></h1>
@@ -1255,23 +1226,23 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
 <span>    <span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cell_fill.html">cell_fill</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">'lightblue'</span><span class="op">)</span>,</span>
 <span>              locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="txolvtnhqq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#txolvtnhqq table {
+<div id="jrqjytlfnt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jrqjytlfnt table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#txolvtnhqq thead, #txolvtnhqq tbody, #txolvtnhqq tfoot, #txolvtnhqq tr, #txolvtnhqq td, #txolvtnhqq th {
+#jrqjytlfnt thead, #jrqjytlfnt tbody, #jrqjytlfnt tfoot, #jrqjytlfnt tr, #jrqjytlfnt td, #jrqjytlfnt th {
   border-style: none;
 }
 
-#txolvtnhqq p {
+#jrqjytlfnt p {
   margin: 0;
   padding: 0;
 }
 
-#txolvtnhqq .gt_table {
+#jrqjytlfnt .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1297,12 +1268,12 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-left-color: #D3D3D3;
 }
 
-#txolvtnhqq .gt_caption {
+#jrqjytlfnt .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#txolvtnhqq .gt_title {
+#jrqjytlfnt .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1314,7 +1285,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-width: 0;
 }
 
-#txolvtnhqq .gt_subtitle {
+#jrqjytlfnt .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1326,7 +1297,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-top-width: 0;
 }
 
-#txolvtnhqq .gt_heading {
+#jrqjytlfnt .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1338,13 +1309,13 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#txolvtnhqq .gt_bottom_border {
+#jrqjytlfnt .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#txolvtnhqq .gt_col_headings {
+#jrqjytlfnt .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1359,7 +1330,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#txolvtnhqq .gt_col_heading {
+#jrqjytlfnt .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1379,7 +1350,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   overflow-x: hidden;
 }
 
-#txolvtnhqq .gt_column_spanner_outer {
+#jrqjytlfnt .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1391,15 +1362,15 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 4px;
 }
 
-#txolvtnhqq .gt_column_spanner_outer:first-child {
+#jrqjytlfnt .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#txolvtnhqq .gt_column_spanner_outer:last-child {
+#jrqjytlfnt .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#txolvtnhqq .gt_column_spanner {
+#jrqjytlfnt .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1411,11 +1382,11 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   width: 100%;
 }
 
-#txolvtnhqq .gt_spanner_row {
+#jrqjytlfnt .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#txolvtnhqq .gt_group_heading {
+#jrqjytlfnt .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1441,7 +1412,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   text-align: left;
 }
 
-#txolvtnhqq .gt_empty_group_heading {
+#jrqjytlfnt .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1456,15 +1427,15 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   vertical-align: middle;
 }
 
-#txolvtnhqq .gt_from_md > :first-child {
+#jrqjytlfnt .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#txolvtnhqq .gt_from_md > :last-child {
+#jrqjytlfnt .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#txolvtnhqq .gt_row {
+#jrqjytlfnt .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1483,7 +1454,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   overflow-x: hidden;
 }
 
-#txolvtnhqq .gt_stub {
+#jrqjytlfnt .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1496,7 +1467,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#txolvtnhqq .gt_stub_row_group {
+#jrqjytlfnt .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1510,15 +1481,15 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   vertical-align: top;
 }
 
-#txolvtnhqq .gt_row_group_first td {
+#jrqjytlfnt .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#txolvtnhqq .gt_row_group_first th {
+#jrqjytlfnt .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#txolvtnhqq .gt_summary_row {
+#jrqjytlfnt .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1528,16 +1499,16 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#txolvtnhqq .gt_first_summary_row {
+#jrqjytlfnt .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#txolvtnhqq .gt_first_summary_row.thick {
+#jrqjytlfnt .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#txolvtnhqq .gt_last_summary_row {
+#jrqjytlfnt .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1547,7 +1518,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-color: #D3D3D3;
 }
 
-#txolvtnhqq .gt_grand_summary_row {
+#jrqjytlfnt .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1557,7 +1528,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#txolvtnhqq .gt_first_grand_summary_row {
+#jrqjytlfnt .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1567,7 +1538,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-top-color: #D3D3D3;
 }
 
-#txolvtnhqq .gt_last_grand_summary_row_top {
+#jrqjytlfnt .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1577,11 +1548,11 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-color: #D3D3D3;
 }
 
-#txolvtnhqq .gt_striped {
+#jrqjytlfnt .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#txolvtnhqq .gt_table_body {
+#jrqjytlfnt .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1590,7 +1561,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-color: #D3D3D3;
 }
 
-#txolvtnhqq .gt_footnotes {
+#jrqjytlfnt .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1604,7 +1575,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#txolvtnhqq .gt_footnote {
+#jrqjytlfnt .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1613,7 +1584,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#txolvtnhqq .gt_sourcenotes {
+#jrqjytlfnt .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1627,7 +1598,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#txolvtnhqq .gt_sourcenote {
+#jrqjytlfnt .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1635,63 +1606,63 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#txolvtnhqq .gt_left {
+#jrqjytlfnt .gt_left {
   text-align: left;
 }
 
-#txolvtnhqq .gt_center {
+#jrqjytlfnt .gt_center {
   text-align: center;
 }
 
-#txolvtnhqq .gt_right {
+#jrqjytlfnt .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#txolvtnhqq .gt_font_normal {
+#jrqjytlfnt .gt_font_normal {
   font-weight: normal;
 }
 
-#txolvtnhqq .gt_font_bold {
+#jrqjytlfnt .gt_font_bold {
   font-weight: bold;
 }
 
-#txolvtnhqq .gt_font_italic {
+#jrqjytlfnt .gt_font_italic {
   font-style: italic;
 }
 
-#txolvtnhqq .gt_super {
+#jrqjytlfnt .gt_super {
   font-size: 65%;
 }
 
-#txolvtnhqq .gt_footnote_marks {
+#jrqjytlfnt .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#txolvtnhqq .gt_asterisk {
+#jrqjytlfnt .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#txolvtnhqq .gt_indent_1 {
+#jrqjytlfnt .gt_indent_1 {
   text-indent: 5px;
 }
 
-#txolvtnhqq .gt_indent_2 {
+#jrqjytlfnt .gt_indent_2 {
   text-indent: 10px;
 }
 
-#txolvtnhqq .gt_indent_3 {
+#jrqjytlfnt .gt_indent_3 {
   text-indent: 15px;
 }
 
-#txolvtnhqq .gt_indent_4 {
+#jrqjytlfnt .gt_indent_4 {
   text-indent: 20px;
 }
 
-#txolvtnhqq .gt_indent_5 {
+#jrqjytlfnt .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1819,23 +1790,23 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
 <span><span class="va">tab</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>    <span class="fu"><a href="https://gt.rstudio.com/reference/text_transform.html">text_transform</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">6</span>, rows <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, fn <span class="op">=</span> <span class="va">f</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="fkxesiklwg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#fkxesiklwg table {
+<div id="tvpmrzoghc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#tvpmrzoghc table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#fkxesiklwg thead, #fkxesiklwg tbody, #fkxesiklwg tfoot, #fkxesiklwg tr, #fkxesiklwg td, #fkxesiklwg th {
+#tvpmrzoghc thead, #tvpmrzoghc tbody, #tvpmrzoghc tfoot, #tvpmrzoghc tr, #tvpmrzoghc td, #tvpmrzoghc th {
   border-style: none;
 }
 
-#fkxesiklwg p {
+#tvpmrzoghc p {
   margin: 0;
   padding: 0;
 }
 
-#fkxesiklwg .gt_table {
+#tvpmrzoghc .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1861,12 +1832,12 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-left-color: #D3D3D3;
 }
 
-#fkxesiklwg .gt_caption {
+#tvpmrzoghc .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#fkxesiklwg .gt_title {
+#tvpmrzoghc .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1878,7 +1849,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-width: 0;
 }
 
-#fkxesiklwg .gt_subtitle {
+#tvpmrzoghc .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1890,7 +1861,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-top-width: 0;
 }
 
-#fkxesiklwg .gt_heading {
+#tvpmrzoghc .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1902,13 +1873,13 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#fkxesiklwg .gt_bottom_border {
+#tvpmrzoghc .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#fkxesiklwg .gt_col_headings {
+#tvpmrzoghc .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1923,7 +1894,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#fkxesiklwg .gt_col_heading {
+#tvpmrzoghc .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1943,7 +1914,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   overflow-x: hidden;
 }
 
-#fkxesiklwg .gt_column_spanner_outer {
+#tvpmrzoghc .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1955,15 +1926,15 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 4px;
 }
 
-#fkxesiklwg .gt_column_spanner_outer:first-child {
+#tvpmrzoghc .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#fkxesiklwg .gt_column_spanner_outer:last-child {
+#tvpmrzoghc .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#fkxesiklwg .gt_column_spanner {
+#tvpmrzoghc .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1975,11 +1946,11 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   width: 100%;
 }
 
-#fkxesiklwg .gt_spanner_row {
+#tvpmrzoghc .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#fkxesiklwg .gt_group_heading {
+#tvpmrzoghc .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2005,7 +1976,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   text-align: left;
 }
 
-#fkxesiklwg .gt_empty_group_heading {
+#tvpmrzoghc .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2020,15 +1991,15 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   vertical-align: middle;
 }
 
-#fkxesiklwg .gt_from_md > :first-child {
+#tvpmrzoghc .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#fkxesiklwg .gt_from_md > :last-child {
+#tvpmrzoghc .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#fkxesiklwg .gt_row {
+#tvpmrzoghc .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2047,7 +2018,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   overflow-x: hidden;
 }
 
-#fkxesiklwg .gt_stub {
+#tvpmrzoghc .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2060,7 +2031,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#fkxesiklwg .gt_stub_row_group {
+#tvpmrzoghc .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2074,15 +2045,15 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   vertical-align: top;
 }
 
-#fkxesiklwg .gt_row_group_first td {
+#tvpmrzoghc .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#fkxesiklwg .gt_row_group_first th {
+#tvpmrzoghc .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#fkxesiklwg .gt_summary_row {
+#tvpmrzoghc .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2092,16 +2063,16 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#fkxesiklwg .gt_first_summary_row {
+#tvpmrzoghc .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#fkxesiklwg .gt_first_summary_row.thick {
+#tvpmrzoghc .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#fkxesiklwg .gt_last_summary_row {
+#tvpmrzoghc .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2111,7 +2082,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-color: #D3D3D3;
 }
 
-#fkxesiklwg .gt_grand_summary_row {
+#tvpmrzoghc .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2121,7 +2092,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#fkxesiklwg .gt_first_grand_summary_row {
+#tvpmrzoghc .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2131,7 +2102,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-top-color: #D3D3D3;
 }
 
-#fkxesiklwg .gt_last_grand_summary_row_top {
+#tvpmrzoghc .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2141,11 +2112,11 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-color: #D3D3D3;
 }
 
-#fkxesiklwg .gt_striped {
+#tvpmrzoghc .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#fkxesiklwg .gt_table_body {
+#tvpmrzoghc .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2154,7 +2125,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-color: #D3D3D3;
 }
 
-#fkxesiklwg .gt_footnotes {
+#tvpmrzoghc .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2168,7 +2139,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#fkxesiklwg .gt_footnote {
+#tvpmrzoghc .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2177,7 +2148,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#fkxesiklwg .gt_sourcenotes {
+#tvpmrzoghc .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2191,7 +2162,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#fkxesiklwg .gt_sourcenote {
+#tvpmrzoghc .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2199,63 +2170,63 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#fkxesiklwg .gt_left {
+#tvpmrzoghc .gt_left {
   text-align: left;
 }
 
-#fkxesiklwg .gt_center {
+#tvpmrzoghc .gt_center {
   text-align: center;
 }
 
-#fkxesiklwg .gt_right {
+#tvpmrzoghc .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#fkxesiklwg .gt_font_normal {
+#tvpmrzoghc .gt_font_normal {
   font-weight: normal;
 }
 
-#fkxesiklwg .gt_font_bold {
+#tvpmrzoghc .gt_font_bold {
   font-weight: bold;
 }
 
-#fkxesiklwg .gt_font_italic {
+#tvpmrzoghc .gt_font_italic {
   font-style: italic;
 }
 
-#fkxesiklwg .gt_super {
+#tvpmrzoghc .gt_super {
   font-size: 65%;
 }
 
-#fkxesiklwg .gt_footnote_marks {
+#tvpmrzoghc .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#fkxesiklwg .gt_asterisk {
+#tvpmrzoghc .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#fkxesiklwg .gt_indent_1 {
+#tvpmrzoghc .gt_indent_1 {
   text-indent: 5px;
 }
 
-#fkxesiklwg .gt_indent_2 {
+#tvpmrzoghc .gt_indent_2 {
   text-indent: 10px;
 }
 
-#fkxesiklwg .gt_indent_3 {
+#tvpmrzoghc .gt_indent_3 {
   text-indent: 15px;
 }
 
-#fkxesiklwg .gt_indent_4 {
+#tvpmrzoghc .gt_indent_4 {
   text-indent: 20px;
 }
 
-#fkxesiklwg .gt_indent_5 {
+#tvpmrzoghc .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -2373,23 +2344,23 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, output <span class="op">=</span> <span class="st">"gt"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="ypdwzqlepd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ypdwzqlepd table {
+<div id="lbunajyjar" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lbunajyjar table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ypdwzqlepd thead, #ypdwzqlepd tbody, #ypdwzqlepd tfoot, #ypdwzqlepd tr, #ypdwzqlepd td, #ypdwzqlepd th {
+#lbunajyjar thead, #lbunajyjar tbody, #lbunajyjar tfoot, #lbunajyjar tr, #lbunajyjar td, #lbunajyjar th {
   border-style: none;
 }
 
-#ypdwzqlepd p {
+#lbunajyjar p {
   margin: 0;
   padding: 0;
 }
 
-#ypdwzqlepd .gt_table {
+#lbunajyjar .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2415,12 +2386,12 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-left-color: #D3D3D3;
 }
 
-#ypdwzqlepd .gt_caption {
+#lbunajyjar .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ypdwzqlepd .gt_title {
+#lbunajyjar .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2432,7 +2403,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-width: 0;
 }
 
-#ypdwzqlepd .gt_subtitle {
+#lbunajyjar .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2444,7 +2415,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-top-width: 0;
 }
 
-#ypdwzqlepd .gt_heading {
+#lbunajyjar .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2456,13 +2427,13 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#ypdwzqlepd .gt_bottom_border {
+#lbunajyjar .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ypdwzqlepd .gt_col_headings {
+#lbunajyjar .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2477,7 +2448,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#ypdwzqlepd .gt_col_heading {
+#lbunajyjar .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2497,7 +2468,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   overflow-x: hidden;
 }
 
-#ypdwzqlepd .gt_column_spanner_outer {
+#lbunajyjar .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2509,15 +2480,15 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 4px;
 }
 
-#ypdwzqlepd .gt_column_spanner_outer:first-child {
+#lbunajyjar .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ypdwzqlepd .gt_column_spanner_outer:last-child {
+#lbunajyjar .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ypdwzqlepd .gt_column_spanner {
+#lbunajyjar .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2529,11 +2500,11 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   width: 100%;
 }
 
-#ypdwzqlepd .gt_spanner_row {
+#lbunajyjar .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ypdwzqlepd .gt_group_heading {
+#lbunajyjar .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2559,7 +2530,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   text-align: left;
 }
 
-#ypdwzqlepd .gt_empty_group_heading {
+#lbunajyjar .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2574,15 +2545,15 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   vertical-align: middle;
 }
 
-#ypdwzqlepd .gt_from_md > :first-child {
+#lbunajyjar .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ypdwzqlepd .gt_from_md > :last-child {
+#lbunajyjar .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ypdwzqlepd .gt_row {
+#lbunajyjar .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2601,7 +2572,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   overflow-x: hidden;
 }
 
-#ypdwzqlepd .gt_stub {
+#lbunajyjar .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2614,7 +2585,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#ypdwzqlepd .gt_stub_row_group {
+#lbunajyjar .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2628,15 +2599,15 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   vertical-align: top;
 }
 
-#ypdwzqlepd .gt_row_group_first td {
+#lbunajyjar .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ypdwzqlepd .gt_row_group_first th {
+#lbunajyjar .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ypdwzqlepd .gt_summary_row {
+#lbunajyjar .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2646,16 +2617,16 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#ypdwzqlepd .gt_first_summary_row {
+#lbunajyjar .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ypdwzqlepd .gt_first_summary_row.thick {
+#lbunajyjar .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ypdwzqlepd .gt_last_summary_row {
+#lbunajyjar .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2665,7 +2636,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-color: #D3D3D3;
 }
 
-#ypdwzqlepd .gt_grand_summary_row {
+#lbunajyjar .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2675,7 +2646,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#ypdwzqlepd .gt_first_grand_summary_row {
+#lbunajyjar .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2685,7 +2656,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-top-color: #D3D3D3;
 }
 
-#ypdwzqlepd .gt_last_grand_summary_row_top {
+#lbunajyjar .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2695,11 +2666,11 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-color: #D3D3D3;
 }
 
-#ypdwzqlepd .gt_striped {
+#lbunajyjar .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ypdwzqlepd .gt_table_body {
+#lbunajyjar .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2708,7 +2679,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-color: #D3D3D3;
 }
 
-#ypdwzqlepd .gt_footnotes {
+#lbunajyjar .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2722,7 +2693,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#ypdwzqlepd .gt_footnote {
+#lbunajyjar .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2731,7 +2702,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#ypdwzqlepd .gt_sourcenotes {
+#lbunajyjar .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2745,7 +2716,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#ypdwzqlepd .gt_sourcenote {
+#lbunajyjar .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2753,63 +2724,63 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#ypdwzqlepd .gt_left {
+#lbunajyjar .gt_left {
   text-align: left;
 }
 
-#ypdwzqlepd .gt_center {
+#lbunajyjar .gt_center {
   text-align: center;
 }
 
-#ypdwzqlepd .gt_right {
+#lbunajyjar .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ypdwzqlepd .gt_font_normal {
+#lbunajyjar .gt_font_normal {
   font-weight: normal;
 }
 
-#ypdwzqlepd .gt_font_bold {
+#lbunajyjar .gt_font_bold {
   font-weight: bold;
 }
 
-#ypdwzqlepd .gt_font_italic {
+#lbunajyjar .gt_font_italic {
   font-style: italic;
 }
 
-#ypdwzqlepd .gt_super {
+#lbunajyjar .gt_super {
   font-size: 65%;
 }
 
-#ypdwzqlepd .gt_footnote_marks {
+#lbunajyjar .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ypdwzqlepd .gt_asterisk {
+#lbunajyjar .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ypdwzqlepd .gt_indent_1 {
+#lbunajyjar .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ypdwzqlepd .gt_indent_2 {
+#lbunajyjar .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ypdwzqlepd .gt_indent_3 {
+#lbunajyjar .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ypdwzqlepd .gt_indent_4 {
+#lbunajyjar .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ypdwzqlepd .gt_indent_5 {
+#lbunajyjar .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -2886,23 +2857,23 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
 <span></span>
 <span><span class="fu"><a href="https://modelsummary.com/man/datasummary_crosstab.html">datasummary_crosstab</a></span><span class="op">(</span><span class="va">island</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">*</span> <span class="va">species</span>, output <span class="op">=</span> <span class="st">"gt"</span>, data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="omiezywubq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#omiezywubq table {
+<div id="mahevjeraj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mahevjeraj table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#omiezywubq thead, #omiezywubq tbody, #omiezywubq tfoot, #omiezywubq tr, #omiezywubq td, #omiezywubq th {
+#mahevjeraj thead, #mahevjeraj tbody, #mahevjeraj tfoot, #mahevjeraj tr, #mahevjeraj td, #mahevjeraj th {
   border-style: none;
 }
 
-#omiezywubq p {
+#mahevjeraj p {
   margin: 0;
   padding: 0;
 }
 
-#omiezywubq .gt_table {
+#mahevjeraj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2928,12 +2899,12 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-left-color: #D3D3D3;
 }
 
-#omiezywubq .gt_caption {
+#mahevjeraj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#omiezywubq .gt_title {
+#mahevjeraj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2945,7 +2916,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-width: 0;
 }
 
-#omiezywubq .gt_subtitle {
+#mahevjeraj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2957,7 +2928,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-top-width: 0;
 }
 
-#omiezywubq .gt_heading {
+#mahevjeraj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2969,13 +2940,13 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#omiezywubq .gt_bottom_border {
+#mahevjeraj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#omiezywubq .gt_col_headings {
+#mahevjeraj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2990,7 +2961,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#omiezywubq .gt_col_heading {
+#mahevjeraj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3010,7 +2981,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   overflow-x: hidden;
 }
 
-#omiezywubq .gt_column_spanner_outer {
+#mahevjeraj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3022,15 +2993,15 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 4px;
 }
 
-#omiezywubq .gt_column_spanner_outer:first-child {
+#mahevjeraj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#omiezywubq .gt_column_spanner_outer:last-child {
+#mahevjeraj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#omiezywubq .gt_column_spanner {
+#mahevjeraj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3042,11 +3013,11 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   width: 100%;
 }
 
-#omiezywubq .gt_spanner_row {
+#mahevjeraj .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#omiezywubq .gt_group_heading {
+#mahevjeraj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3072,7 +3043,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   text-align: left;
 }
 
-#omiezywubq .gt_empty_group_heading {
+#mahevjeraj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3087,15 +3058,15 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   vertical-align: middle;
 }
 
-#omiezywubq .gt_from_md > :first-child {
+#mahevjeraj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#omiezywubq .gt_from_md > :last-child {
+#mahevjeraj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#omiezywubq .gt_row {
+#mahevjeraj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3114,7 +3085,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   overflow-x: hidden;
 }
 
-#omiezywubq .gt_stub {
+#mahevjeraj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3127,7 +3098,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#omiezywubq .gt_stub_row_group {
+#mahevjeraj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3141,15 +3112,15 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   vertical-align: top;
 }
 
-#omiezywubq .gt_row_group_first td {
+#mahevjeraj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#omiezywubq .gt_row_group_first th {
+#mahevjeraj .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#omiezywubq .gt_summary_row {
+#mahevjeraj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3159,16 +3130,16 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#omiezywubq .gt_first_summary_row {
+#mahevjeraj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#omiezywubq .gt_first_summary_row.thick {
+#mahevjeraj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#omiezywubq .gt_last_summary_row {
+#mahevjeraj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3178,7 +3149,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-color: #D3D3D3;
 }
 
-#omiezywubq .gt_grand_summary_row {
+#mahevjeraj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3188,7 +3159,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#omiezywubq .gt_first_grand_summary_row {
+#mahevjeraj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3198,7 +3169,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-top-color: #D3D3D3;
 }
 
-#omiezywubq .gt_last_grand_summary_row_top {
+#mahevjeraj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3208,11 +3179,11 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-color: #D3D3D3;
 }
 
-#omiezywubq .gt_striped {
+#mahevjeraj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#omiezywubq .gt_table_body {
+#mahevjeraj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3221,7 +3192,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-bottom-color: #D3D3D3;
 }
 
-#omiezywubq .gt_footnotes {
+#mahevjeraj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3235,7 +3206,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#omiezywubq .gt_footnote {
+#mahevjeraj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3244,7 +3215,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#omiezywubq .gt_sourcenotes {
+#mahevjeraj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3258,7 +3229,7 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   border-right-color: #D3D3D3;
 }
 
-#omiezywubq .gt_sourcenote {
+#mahevjeraj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3266,63 +3237,63 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
   padding-right: 5px;
 }
 
-#omiezywubq .gt_left {
+#mahevjeraj .gt_left {
   text-align: left;
 }
 
-#omiezywubq .gt_center {
+#mahevjeraj .gt_center {
   text-align: center;
 }
 
-#omiezywubq .gt_right {
+#mahevjeraj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#omiezywubq .gt_font_normal {
+#mahevjeraj .gt_font_normal {
   font-weight: normal;
 }
 
-#omiezywubq .gt_font_bold {
+#mahevjeraj .gt_font_bold {
   font-weight: bold;
 }
 
-#omiezywubq .gt_font_italic {
+#mahevjeraj .gt_font_italic {
   font-style: italic;
 }
 
-#omiezywubq .gt_super {
+#mahevjeraj .gt_super {
   font-size: 65%;
 }
 
-#omiezywubq .gt_footnote_marks {
+#mahevjeraj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#omiezywubq .gt_asterisk {
+#mahevjeraj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#omiezywubq .gt_indent_1 {
+#mahevjeraj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#omiezywubq .gt_indent_2 {
+#mahevjeraj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#omiezywubq .gt_indent_3 {
+#mahevjeraj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#omiezywubq .gt_indent_4 {
+#mahevjeraj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#omiezywubq .gt_indent_5 {
+#mahevjeraj .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -3482,8 +3453,8 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="st">"modelsummary_theme_dataframe"</span> <span class="op">=</span> <span class="va">theme_df</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, output <span class="op">=</span> <span class="st">"dataframe"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-562cfaf4e47b2b378b5d" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-562cfaf4e47b2b378b5d">{"x":{"filter":"none","vertical":false,"data":[["(Intercept)","(Intercept)","hp","hp","drat","drat","Num.Obs.","R2","R2 Adj.","AIC","BIC","Log.Lik.","F","RMSE"],["10.790","(5.078)","-0.052","(0.009)","4.698","(1.192)","32","0.741","0.723","169.5","175.4","-80.752","41.522","3.02"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>(1)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":30,"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"(1)","targets":1}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,25,30,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-55fe2705bcda08420f5b" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-55fe2705bcda08420f5b">{"x":{"filter":"none","vertical":false,"data":[["(Intercept)","(Intercept)","hp","hp","drat","drat","Num.Obs.","R2","R2 Adj.","AIC","BIC","Log.Lik.","F","RMSE"],["10.790","(5.078)","-0.052","(0.009)","4.698","(1.192)","32","0.741","0.723","169.5","175.4","-80.752","41.522","3.02"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>(1)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":30,"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"(1)","targets":1}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,25,30,50,100]}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>Restore default theme:</p>
@@ -3501,19 +3472,9 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
 <span></span>
 <span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, coef_rename <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
- 
+<!-- preamble start -->
 
-  
-    <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>tinytable_pks9xusybspzioxgmdvn</title>
-<style>
-.table td.tinytable_css_bhq4n04ctklhk05zwmie, .table th.tinytable_css_bhq4n04ctklhk05zwmie {    border-bottom: solid 0.1em #d3d8dc; }
-.table td.tinytable_css_yei7d1z5mp2kol31llxf, .table th.tinytable_css_yei7d1z5mp2kol31llxf {    text-align: left; }
-.table td.tinytable_css_gvxk1x4i7va62xccqxdq, .table th.tinytable_css_gvxk1x4i7va62xccqxdq {    text-align: center; }
-.table td.tinytable_css_9e0bhbxju3p5sszjs6w7, .table th.tinytable_css_9e0bhbxju3p5sszjs6w7 {    border-bottom: solid 0.05em black; }
-    </style>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>
     MathJax = {
       tex: {
         inlineMath: [['$', '$'], ['\\(', '\\)']]
@@ -3522,8 +3483,94 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
         fontCache: 'global'
       }
     };
-    </script><div class="container">
-      <table class="table table-borderless" id="tinytable_pks9xusybspzioxgmdvn" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+    </script><script>
+      function styleCell_tinytable_3suy9yq3rkziio5fmrwg(tableId, cellCoordinates, cssClass) {
+            var table = document.getElementById("tinytable_5z9li5wsotanzse2jrpl");
+            cellCoordinates.forEach(([i, j]) => {
+                table.rows[i].cells[j].classList.add(cssClass);
+            });
+        }
+
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_5z9li5wsotanzse2jrpl');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_tinytable_3suy9yq3rkziio5fmrwg(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_5z9li5wsotanzse2jrpl");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 0], [0, 1]], class: 'tinytable_css_yk8v6bg7y1780d12zgzq'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_3suy9yq3rkziio5fmrwg('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0], [8, 0], [9, 0], [10, 0], [11, 0], [12, 0], [13, 0], [14, 0]], class: 'tinytable_css_l477mh09fjzu8dth622z'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_3suy9yq3rkziio5fmrwg('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [9, 1], [10, 1], [11, 1], [12, 1], [13, 1], [14, 1]], class: 'tinytable_css_j8kzjncv1hl9ocfgbarv'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_3suy9yq3rkziio5fmrwg('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[6, 0], [6, 1]], class: 'tinytable_css_8io11ssgu3bv23b3xfju'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_3suy9yq3rkziio5fmrwg('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+    </script><style>
+.table td.tinytable_css_yk8v6bg7y1780d12zgzq, .table th.tinytable_css_yk8v6bg7y1780d12zgzq {    border-bottom: solid 0.1em #d3d8dc; }
+.table td.tinytable_css_l477mh09fjzu8dth622z, .table th.tinytable_css_l477mh09fjzu8dth622z {    text-align: left; }
+.table td.tinytable_css_j8kzjncv1hl9ocfgbarv, .table th.tinytable_css_j8kzjncv1hl9ocfgbarv {    text-align: center; }
+.table td.tinytable_css_8io11ssgu3bv23b3xfju, .table th.tinytable_css_8io11ssgu3bv23b3xfju {    border-bottom: solid 0.05em black; }
+    </style>
+<div class="container">
+      <table class="table table-borderless" id="tinytable_5z9li5wsotanzse2jrpl" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <thead><tr>
 <th scope="col"> </th>
                 <th scope="col">(1)</th>
@@ -3588,14 +3635,31 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
 </tbody>
 </table>
 </div>
+<!-- hack to avoid NA insertion in last line -->
+</div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://modelsummary.com/man/datasummary_skim.html">datasummary_skim</a></span><span class="op">(</span><span class="va">dat</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"am"</span>, <span class="st">"drat"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<!-- preamble start -->
 
-    <script>
-      function styleCell_tinytable_8frta6zisv1y51kkppts(i, j, css_id) {
-        var table = document.getElementById("tinytable_pks9xusybspzioxgmdvn");
-        table.rows[i].cells[j].classList.add(css_id);
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
       }
+    };
+    </script><script>
+      function styleCell_tinytable_bgjv5wk9sljyjpyukspk(tableId, cellCoordinates, cssClass) {
+            var table = document.getElementById("tinytable_es5104ecv5ifdmbig4aa");
+            cellCoordinates.forEach(([i, j]) => {
+                table.rows[i].cells[j].classList.add(cssClass);
+            });
+        }
+
       function insertSpanRow(i, colspan, content) {
-        var table = document.getElementById('tinytable_pks9xusybspzioxgmdvn');
+        var table = document.getElementById('tinytable_es5104ecv5ifdmbig4aa');
         var newRow = table.insertRow(i);
         var newCell = newRow.insertCell(0);
         newCell.setAttribute("colspan", colspan);
@@ -3603,8 +3667,8 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
         // this may be unsafe, but innerText does not interpret <br>
         newCell.innerHTML = content;
       }
-      function spanCell_tinytable_8frta6zisv1y51kkppts(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_pks9xusybspzioxgmdvn");
+      function spanCell_tinytable_bgjv5wk9sljyjpyukspk(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_es5104ecv5ifdmbig4aa");
         const targetRow = table.rows[i];
         const targetCell = targetRow.cells[j];
         for (let r = 0; r < rowspan; r++) {
@@ -3631,73 +3695,109 @@ window.addEventListener('load', function () { styleCell_tinytable_zn1llayggy424f
         targetCell.colSpan = colspan;
       }
 
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(0, 0, 'tinytable_css_bhq4n04ctklhk05zwmie') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(0, 1, 'tinytable_css_bhq4n04ctklhk05zwmie') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(0, 0, 'tinytable_css_yei7d1z5mp2kol31llxf') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(1, 0, 'tinytable_css_yei7d1z5mp2kol31llxf') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(2, 0, 'tinytable_css_yei7d1z5mp2kol31llxf') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(3, 0, 'tinytable_css_yei7d1z5mp2kol31llxf') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(4, 0, 'tinytable_css_yei7d1z5mp2kol31llxf') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(5, 0, 'tinytable_css_yei7d1z5mp2kol31llxf') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(6, 0, 'tinytable_css_yei7d1z5mp2kol31llxf') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(7, 0, 'tinytable_css_yei7d1z5mp2kol31llxf') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(8, 0, 'tinytable_css_yei7d1z5mp2kol31llxf') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(9, 0, 'tinytable_css_yei7d1z5mp2kol31llxf') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(10, 0, 'tinytable_css_yei7d1z5mp2kol31llxf') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(11, 0, 'tinytable_css_yei7d1z5mp2kol31llxf') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(12, 0, 'tinytable_css_yei7d1z5mp2kol31llxf') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(13, 0, 'tinytable_css_yei7d1z5mp2kol31llxf') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(14, 0, 'tinytable_css_yei7d1z5mp2kol31llxf') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(0, 1, 'tinytable_css_gvxk1x4i7va62xccqxdq') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(1, 1, 'tinytable_css_gvxk1x4i7va62xccqxdq') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(2, 1, 'tinytable_css_gvxk1x4i7va62xccqxdq') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(3, 1, 'tinytable_css_gvxk1x4i7va62xccqxdq') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(4, 1, 'tinytable_css_gvxk1x4i7va62xccqxdq') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(5, 1, 'tinytable_css_gvxk1x4i7va62xccqxdq') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(6, 1, 'tinytable_css_gvxk1x4i7va62xccqxdq') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(7, 1, 'tinytable_css_gvxk1x4i7va62xccqxdq') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(8, 1, 'tinytable_css_gvxk1x4i7va62xccqxdq') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(9, 1, 'tinytable_css_gvxk1x4i7va62xccqxdq') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(10, 1, 'tinytable_css_gvxk1x4i7va62xccqxdq') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(11, 1, 'tinytable_css_gvxk1x4i7va62xccqxdq') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(12, 1, 'tinytable_css_gvxk1x4i7va62xccqxdq') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(13, 1, 'tinytable_css_gvxk1x4i7va62xccqxdq') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(14, 1, 'tinytable_css_gvxk1x4i7va62xccqxdq') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(6, 0, 'tinytable_css_9e0bhbxju3p5sszjs6w7') })
-window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51kkppts(6, 1, 'tinytable_css_9e0bhbxju3p5sszjs6w7') })
-    </script>
-</div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://modelsummary.com/man/datasummary_skim.html">datasummary_skim</a></span><span class="op">(</span><span class="va">dat</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"mpg"</span>, <span class="st">"am"</span>, <span class="st">"drat"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
- 
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8]], class: 'tinytable_css_tzq0633ybdxpzycxafhy'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_bgjv5wk9sljyjpyukspk('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
 
-  
-    <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>tinytable_exl4xyrljn6wkdle640b</title>
-<style>
-.table td.tinytable_css_33h0rky0aa0l96ua7d7f, .table th.tinytable_css_33h0rky0aa0l96ua7d7f {    border-bottom: solid 0.1em #d3d8dc; }
-.table td.tinytable_css_ow263hbnvipxjox4h1ja, .table th.tinytable_css_ow263hbnvipxjox4h1ja {    text-align: left; }
-.table td.tinytable_css_818pnhynkt59imv76gn5, .table th.tinytable_css_818pnhynkt59imv76gn5 {    text-align: left; }
-.table td.tinytable_css_27nshq15wbgdhs262z8x, .table th.tinytable_css_27nshq15wbgdhs262z8x {    text-align: left; }
-.table td.tinytable_css_dvcx5kmca3cw61u57w69, .table th.tinytable_css_dvcx5kmca3cw61u57w69 {    text-align: left; }
-.table td.tinytable_css_ipft79h0vk4afym2fsug, .table th.tinytable_css_ipft79h0vk4afym2fsug {    text-align: left; }
-.table td.tinytable_css_107ohmny4ecn6v4j4ft7, .table th.tinytable_css_107ohmny4ecn6v4j4ft7 {    text-align: left; }
-.table td.tinytable_css_0oerlkxqxecrfj998iqp, .table th.tinytable_css_0oerlkxqxecrfj998iqp {    text-align: left; }
-.table td.tinytable_css_56ys7rzy76rghxrtvd2n, .table th.tinytable_css_56ys7rzy76rghxrtvd2n {    text-align: left; }
-.table td.tinytable_css_62vy9z8tqfslyniakiqu, .table th.tinytable_css_62vy9z8tqfslyniakiqu {    text-align: left; }
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 0], [1, 0], [2, 0], [3, 0]], class: 'tinytable_css_pozxip0mpi57boz0ofmm'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_bgjv5wk9sljyjpyukspk('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 1], [1, 1], [2, 1], [3, 1]], class: 'tinytable_css_n4qlrtuxe8gf6v49na2f'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_bgjv5wk9sljyjpyukspk('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 2], [1, 2], [2, 2], [3, 2]], class: 'tinytable_css_0s4kn8v6agxrbynb0bi0'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_bgjv5wk9sljyjpyukspk('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 3], [1, 3], [2, 3], [3, 3]], class: 'tinytable_css_trbisl3hye2cb4tik46k'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_bgjv5wk9sljyjpyukspk('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 4], [1, 4], [2, 4], [3, 4]], class: 'tinytable_css_pgamowy58e1kot75m90r'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_bgjv5wk9sljyjpyukspk('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 5], [1, 5], [2, 5], [3, 5]], class: 'tinytable_css_w5hmzn1yt7dp01oo08px'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_bgjv5wk9sljyjpyukspk('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 6], [1, 6], [2, 6], [3, 6]], class: 'tinytable_css_u1vgeeul0or3ex6rd878'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_bgjv5wk9sljyjpyukspk('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 7], [1, 7], [2, 7], [3, 7]], class: 'tinytable_css_lrky59l7vhth1qqgqke9'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_bgjv5wk9sljyjpyukspk('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+
+     window.addEventListener('load', function () {
+         const cellStyles = [
+             {coords: [[0, 8], [1, 8], [2, 8], [3, 8]], class: 'tinytable_css_7vhatplafm9omdpikke2'},
+         ];
+         cellStyles.forEach(({coords, class: cssClass}) => {
+             styleCell_tinytable_bgjv5wk9sljyjpyukspk('tinytable_szxl8eb7ubljmabuxmyx', coords, cssClass);
+         });
+     });
+    </script><style>
+.table td.tinytable_css_tzq0633ybdxpzycxafhy, .table th.tinytable_css_tzq0633ybdxpzycxafhy {    border-bottom: solid 0.1em #d3d8dc; }
+.table td.tinytable_css_pozxip0mpi57boz0ofmm, .table th.tinytable_css_pozxip0mpi57boz0ofmm {    text-align: left; }
+.table td.tinytable_css_n4qlrtuxe8gf6v49na2f, .table th.tinytable_css_n4qlrtuxe8gf6v49na2f {    text-align: left; }
+.table td.tinytable_css_0s4kn8v6agxrbynb0bi0, .table th.tinytable_css_0s4kn8v6agxrbynb0bi0 {    text-align: left; }
+.table td.tinytable_css_trbisl3hye2cb4tik46k, .table th.tinytable_css_trbisl3hye2cb4tik46k {    text-align: left; }
+.table td.tinytable_css_pgamowy58e1kot75m90r, .table th.tinytable_css_pgamowy58e1kot75m90r {    text-align: left; }
+.table td.tinytable_css_w5hmzn1yt7dp01oo08px, .table th.tinytable_css_w5hmzn1yt7dp01oo08px {    text-align: left; }
+.table td.tinytable_css_u1vgeeul0or3ex6rd878, .table th.tinytable_css_u1vgeeul0or3ex6rd878 {    text-align: left; }
+.table td.tinytable_css_lrky59l7vhth1qqgqke9, .table th.tinytable_css_lrky59l7vhth1qqgqke9 {    text-align: left; }
+.table td.tinytable_css_7vhatplafm9omdpikke2, .table th.tinytable_css_7vhatplafm9omdpikke2 {    text-align: left; }
     </style>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-      },
-      svg: {
-        fontCache: 'global'
-      }
-    };
-    </script><div class="container">
-      <table class="table table-borderless" id="tinytable_exl4xyrljn6wkdle640b" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+<div class="container">
+      <table class="table table-borderless" id="tinytable_es5104ecv5ifdmbig4aa" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <thead><tr>
 <th scope="col"> </th>
                 <th scope="col">Unique</th>
@@ -3719,7 +3819,7 @@ window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51
                   <td>10.4</td>
                   <td>19.2</td>
                   <td>33.9</td>
-                  <td><img src="./tinytable_assets/idta02wi04rbavmmsdna2c.png" style="height: 1em;"></td>
+                  <td><img src="./tinytable_assets/idx22gghu9brslijn38t5p.png" style="height: 1em;"></td>
                 </tr>
 <tr>
 <td>Transmission</td>
@@ -3730,7 +3830,7 @@ window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51
                   <td>0.0</td>
                   <td>0.0</td>
                   <td>1.0</td>
-                  <td><img src="./tinytable_assets/id8f2hw5egn570wll2ej9w.png" style="height: 1em;"></td>
+                  <td><img src="./tinytable_assets/idhuc8y06hw3b06z4syu8z.png" style="height: 1em;"></td>
                 </tr>
 <tr>
 <td>drat</td>
@@ -3741,100 +3841,12 @@ window.addEventListener('load', function () { styleCell_tinytable_8frta6zisv1y51
                   <td>2.8</td>
                   <td>3.7</td>
                   <td>4.9</td>
-                  <td><img src="./tinytable_assets/idywc7lhg36pugywjvr4eg.png" style="height: 1em;"></td>
+                  <td><img src="./tinytable_assets/idebkrxjejzg0bn118oa8y.png" style="height: 1em;"></td>
                 </tr>
 </tbody>
 </table>
 </div>
-
-    <script>
-      function styleCell_tinytable_78cepxucjabv9v9jgm53(i, j, css_id) {
-        var table = document.getElementById("tinytable_exl4xyrljn6wkdle640b");
-        table.rows[i].cells[j].classList.add(css_id);
-      }
-      function insertSpanRow(i, colspan, content) {
-        var table = document.getElementById('tinytable_exl4xyrljn6wkdle640b');
-        var newRow = table.insertRow(i);
-        var newCell = newRow.insertCell(0);
-        newCell.setAttribute("colspan", colspan);
-        // newCell.innerText = content;
-        // this may be unsafe, but innerText does not interpret <br>
-        newCell.innerHTML = content;
-      }
-      function spanCell_tinytable_78cepxucjabv9v9jgm53(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_exl4xyrljn6wkdle640b");
-        const targetRow = table.rows[i];
-        const targetCell = targetRow.cells[j];
-        for (let r = 0; r < rowspan; r++) {
-          // Only start deleting cells to the right for the first row (r == 0)
-          if (r === 0) {
-            // Delete cells to the right of the target cell in the first row
-            for (let c = colspan - 1; c > 0; c--) {
-              if (table.rows[i + r].cells[j + c]) {
-                table.rows[i + r].deleteCell(j + c);
-              }
-            }
-          }
-          // For rows below the first, delete starting from the target column
-          if (r > 0) {
-            for (let c = colspan - 1; c >= 0; c--) {
-              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
-                table.rows[i + r].deleteCell(j);
-              }
-            }
-          }
-        }
-        // Set rowspan and colspan of the target cell
-        targetCell.rowSpan = rowspan;
-        targetCell.colSpan = colspan;
-      }
-
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 0, 'tinytable_css_33h0rky0aa0l96ua7d7f') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 1, 'tinytable_css_33h0rky0aa0l96ua7d7f') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 2, 'tinytable_css_33h0rky0aa0l96ua7d7f') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 3, 'tinytable_css_33h0rky0aa0l96ua7d7f') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 4, 'tinytable_css_33h0rky0aa0l96ua7d7f') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 5, 'tinytable_css_33h0rky0aa0l96ua7d7f') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 6, 'tinytable_css_33h0rky0aa0l96ua7d7f') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 7, 'tinytable_css_33h0rky0aa0l96ua7d7f') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 8, 'tinytable_css_33h0rky0aa0l96ua7d7f') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 0, 'tinytable_css_ow263hbnvipxjox4h1ja') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(1, 0, 'tinytable_css_ow263hbnvipxjox4h1ja') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(2, 0, 'tinytable_css_ow263hbnvipxjox4h1ja') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(3, 0, 'tinytable_css_ow263hbnvipxjox4h1ja') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 1, 'tinytable_css_818pnhynkt59imv76gn5') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(1, 1, 'tinytable_css_818pnhynkt59imv76gn5') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(2, 1, 'tinytable_css_818pnhynkt59imv76gn5') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(3, 1, 'tinytable_css_818pnhynkt59imv76gn5') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 2, 'tinytable_css_27nshq15wbgdhs262z8x') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(1, 2, 'tinytable_css_27nshq15wbgdhs262z8x') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(2, 2, 'tinytable_css_27nshq15wbgdhs262z8x') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(3, 2, 'tinytable_css_27nshq15wbgdhs262z8x') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 3, 'tinytable_css_dvcx5kmca3cw61u57w69') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(1, 3, 'tinytable_css_dvcx5kmca3cw61u57w69') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(2, 3, 'tinytable_css_dvcx5kmca3cw61u57w69') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(3, 3, 'tinytable_css_dvcx5kmca3cw61u57w69') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 4, 'tinytable_css_ipft79h0vk4afym2fsug') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(1, 4, 'tinytable_css_ipft79h0vk4afym2fsug') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(2, 4, 'tinytable_css_ipft79h0vk4afym2fsug') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(3, 4, 'tinytable_css_ipft79h0vk4afym2fsug') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 5, 'tinytable_css_107ohmny4ecn6v4j4ft7') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(1, 5, 'tinytable_css_107ohmny4ecn6v4j4ft7') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(2, 5, 'tinytable_css_107ohmny4ecn6v4j4ft7') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(3, 5, 'tinytable_css_107ohmny4ecn6v4j4ft7') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 6, 'tinytable_css_0oerlkxqxecrfj998iqp') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(1, 6, 'tinytable_css_0oerlkxqxecrfj998iqp') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(2, 6, 'tinytable_css_0oerlkxqxecrfj998iqp') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(3, 6, 'tinytable_css_0oerlkxqxecrfj998iqp') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 7, 'tinytable_css_56ys7rzy76rghxrtvd2n') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(1, 7, 'tinytable_css_56ys7rzy76rghxrtvd2n') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(2, 7, 'tinytable_css_56ys7rzy76rghxrtvd2n') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(3, 7, 'tinytable_css_56ys7rzy76rghxrtvd2n') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(0, 8, 'tinytable_css_62vy9z8tqfslyniakiqu') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(1, 8, 'tinytable_css_62vy9z8tqfslyniakiqu') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(2, 8, 'tinytable_css_62vy9z8tqfslyniakiqu') })
-window.addEventListener('load', function () { styleCell_tinytable_78cepxucjabv9v9jgm53(3, 8, 'tinytable_css_62vy9z8tqfslyniakiqu') })
-    </script>
+<!-- hack to avoid NA insertion in last line -->
 </div>
 </div>
 </section><section id="warning-saving-to-file" class="level1"><h1>Warning: Saving to file</h1>
