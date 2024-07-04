@@ -62,16 +62,14 @@ factory_kableExtra <- function(tab,
     "row.names" = NULL
   )
 
-  ## siunitx in preamble
   extra_siunitx <- "
-  \\newcolumntype{d}{S[
-    input-open-uncertainty=,
-    input-close-uncertainty=,
-    parse-numbers = false,
-    table-align-text-pre=false,
-    table-align-text-post=false
-  ]}
+    \\newcolumntype{d}{S[
+      table-align-text-before=false,
+      table-align-text-after=false,
+      input-symbols={-,\\*+()}
+    ]}
   "
+
   if (settings_equal("output_format", c("latex", "latex_tabular")) &&
       settings_equal("format_numeric_latex", "siunitx")) {
     invisible(knitr::knit_meta_add(list(

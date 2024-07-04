@@ -4,6 +4,7 @@
 
 * `coef_rename()` gets a `poly=TRUE` argument to rename `poly(x, 2)`-style coefficients. Thanks to @mccarthy-m-g for code contribution #778.
 * `get_gof()`: `logLik` column converted to numeric for consistent types. Issue 649 reported on the `mice` Github.
+* `kableExtra` update the `siunitx` commands for `d` columns.
 
 ## 2.1.1
 
