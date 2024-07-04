@@ -79,7 +79,7 @@ sections below):
 \itemize{
 \item \code{metrics}, \code{estimator}, etc.
 }
-\item \link[tinytable:tt]{tinytable::tt}, \link[kableExtra:kbl]{kableExtra::kbl} or \link[gt:gt]{gt::gt} draw tables, depending on the value of the \code{output} argument.
+\item \link[tinytable:tt]{tinytable::tt}, \link[kableExtra:kbl]{kableExtra::kbl} or \link[gt:gt]{gt::gt} draw tables, depending on the value of the \code{output} argument. For example, by default \code{modelsummary} creates tables with \link[tinytable:tt]{tinytable::tt}, which accepts a \code{width} and \code{theme} arguments.
 }}
 }
 \description{
