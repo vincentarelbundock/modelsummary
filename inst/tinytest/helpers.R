@@ -30,6 +30,7 @@ print.custom_html_string <- function(x, ...) {
 
 
 print_html <- function(x) {
+  set.seed(1024)
   if (inherits(x, "gt_tbl")) {
     x <- gt::as_raw_html(x)
     x <- gsub('div id="\\w+"', '', x)

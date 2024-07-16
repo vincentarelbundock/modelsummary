@@ -32,17 +32,17 @@ options("modelsummary_format_numeric_latex" = NULL)
 # HTML global options
 expect_snapshot_print(
     print_html(modelsummary(mod, output = "html")),
-    "mathmode-html_null")
+    "mathmode-null.html")
 
 options("modelsummary_format_numeric_html" = "dollars")
 expect_snapshot_print(
     print_html(modelsummary(mod, output = "html")),
-    "mathmode-html_dollars")
+    "mathmode-html_dollars.html")
 
 options("modelsummary_format_numeric_html" = "anything else")
 expect_snapshot_print(
     print_html(modelsummary(mod, output = "html")),
-    "mathmode-html_anything")
+    "mathmode-html_anything.html")
 
 options("modelsummary_format_numeric_html" = NULL)
 

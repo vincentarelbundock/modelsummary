@@ -21,6 +21,9 @@ factory_kableExtra <- function(tab,
 
   # escape
   if (isTRUE(escape) && isTRUE(output_format %in% c("latex", "html", "typst"))) {
+    # escape ourselves rather than use the kableExtra escaping
+    escape <- FALSE
+
     tmp <- escape_everything(
       tab = tab,
       output_format = output_format,
@@ -57,7 +60,7 @@ factory_kableExtra <- function(tab,
     "caption"   = title,
     "format"    = kable_format,
     "booktabs"  = TRUE,
-    "escape" = FALSE, # never use kableExtra's default escape; inconsistent
+    "escape" = escape,
     "linesep"   = "",
     "row.names" = NULL
   )
@@ -152,7 +155,13 @@ factory_kableExtra <- function(tab,
       arguments[["general"]] <- notes
       arguments[["general_title"]] <- ""
       arguments[["kable_input"]] <- out
-      arguments[["escape"]] <- FALSE
+
+      # Issue #855: When output="kableExtra", we do not know the ultimate output format, 
+      # so we must rely on kableExtra's escaping for notes.
+      if (settings_equal("output_format", "kableExtra")) {
+        arguments[["escape"]] <- escape
+      }
+
       if (isTRUE(any(nchar(arguments$general) > 0))) {
         out <- do.call(kableExtra::footnote, arguments)
       }
@@ -179,7 +188,7 @@ factory_kableExtra <- function(tab,
     for (i in 1:length(span_list)) {
       sp <- span_list[[i]]
       names(span_list[[i]]) <- gsub("&nbsp;", " ", names(span_list[[i]]))
-      out <- kableExtra::add_header_above(out, span_list[[i]], escape = TRUE)
+      out <- kableExtra::add_header_above(out, span_list[[i]], escape = escape)
     }
   }
 
