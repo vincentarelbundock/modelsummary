@@ -6,7 +6,7 @@ using("tinysnapshot")
 mod <- lm(hp ~ mpg, data = mtcars)
 expect_snapshot_print(
     print_html(modelsummary(mod, gof_omit = ".*")),
-    "html-gof_omit") |> suppressWarnings()
+    "html-gof_omit.html") |> suppressWarnings()
 
 # PR 538
 mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)

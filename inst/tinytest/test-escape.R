@@ -17,10 +17,10 @@ expect_snapshot_print(
     "escape-latex")
 ## <td style="text-align:left;"> `oh&amp;yeah&lt;sup&gt;2&lt;/sup&gt;` </td>
 tab <- modelsummary(mod)
-expect_snapshot_print(print_html(tab), "escape-html")
+expect_snapshot_print(print_html(tab), "escape-escape.html")
 ## <td style="text-align:left;"> `oh&amp;yeah<sup>2</sup>` </td>
 tab <- modelsummary(mod, escape = FALSE)
-expect_snapshot_print(print_html(tab), "escape-html_escape_FALSE")
+expect_snapshot_print(print_html(tab), "escape-escape_html_false.html")
 
 # manual escape
 expect_equivalent(modelsummary:::escape_latex("$&_"), "\\$\\&\\_")
@@ -124,7 +124,7 @@ mod <- list(
 tab <- modelsummary(mod,
     vcov = c("classical", "HC1"),
     escape = FALSE)
-expect_snapshot_print(print_html(tab), "escape-modelsummary_html")
+expect_snapshot_print(print_html(tab), "escape-modelsummary.html")
 
 # Issue 546: escape gof names
 requiet("fixest")
