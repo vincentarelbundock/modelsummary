@@ -40,10 +40,6 @@ print_html <- function(x) {
   if (inherits(x, "tinytable")) {
     x <- tinytable::save_tt(x, output = "html")
   }
-  x <- gsub("tinytable_\\w+\\b", "tinytable", x)
-  x <- gsub("styleCell_\\w+\\b", "tinytable", x)
-  x <- gsub("insertSpanRow\\w+\\b", "tinytable", x)
-  x <- gsub("styleHeaderCell_\\w+\\b", "tinytable", x)
   class(x) <- c("custom_html_string", "character")
   return(x)
 }
