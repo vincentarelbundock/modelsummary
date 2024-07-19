@@ -6,6 +6,7 @@
 * `get_gof()`: `logLik` column converted to numeric for consistent types. Issue 649 reported on the `mice` Github.
 * `kableExtra` update the `siunitx` commands for `d` columns.
 * `kableExtra` escapes footnotes in HTML when `output="kableExtra")`. Thanks to @dmurdoch and @michaelherndon97 for report #793.
+* New `fmt_equivalence()` function to implement the rounding suggestion of Astier & Wolak (2024). Thanks to Nicolas Astier for code prototype.
 
 ## 2.1.1
 
