@@ -317,3 +317,90 @@ fmt_nainf <- function(x) {
 
     return(out)
 }
+
+
+#' Rounding with number of digits determined by an equivalence test
+#'
+#' This function implements the suggestions of Astier & Wolak for the number of decimal digits to keep for coefficient estimates. The other statistics are rounded by `fmt_significant()`.
+#' @param conf_level Confidence level to use for the equivalence test (1 - alpha).
+#' @inheritParams fmt_significant
+#' @references
+#' Astier, Nicolas, and Frank A. Wolak. Credible Numbers: A Procedure for Reporting Statistical Precision in Parameter Estimates. No. w32124. National Bureau of Economic Research, 2024.
+#'
+#' @examples
+#' library(modelsummary)
+#' mod <- lm(mpg ~ hp, mtcars)
+#' 
+#' # Default equivalence-based formatting
+#' modelsummary(mod, fmt = fmt_equivalence())
+#' 
+#' # alpha = 0.2
+#' modelsummary(mod, fmt = fmt_equivalence(conf_level = .8))
+#' 
+#' # default equivalence, but with alternative significant digits for other statistics
+#' modelsummary(mod, fmt = fmt_equivalence(digits = 5))
+#' 
+#' @export
+fmt_equivalence <- function(conf_level = 0.95, digits = 3, pdigits = NULL, ...) {
+
+    alpha <- 1 - conf_level
+
+    fun_sig <- fmt_significant(digits = digits, pdigits = pdigits)
+
+    out <- function(x) {
+        if (!isTRUE(checkmate::check_data_frame(x))) {
+            msg <- "`fmt_equivalence()` only accepts data frames, not vectors."
+            insight::format_error(msg)
+        }
+        if (!all(c("estimate", "std.error") %in% colnames(x))) {
+            msg <- "The data frame to format must include an `estimate` and a `std.error` column."
+            insight::format_error(msg)
+        }
+
+        x_out <- fun_sig(x)
+
+        # Rank of last reported digit (first non-significant digit)
+        x$fnsd <- ceiling((log(x$std.error) + log(qnorm(p = (1 - alpha)))) / log(10)) - 1
+
+        # 1/ Format estimates (code provided by Nicolas Astier)
+        estimate_string <- as.character(x$estimate)
+
+        # Point estimates for which no scientific notation is needed
+        if (sum(x$fnsd <= 0) > 0) {
+            estimate_string[x$fnsd <= 0] <- unlist(
+                lapply(
+                    X = 1:sum(x$fnsd <= 0),
+                    FUN = function(z) {
+                        format(round(x$estimate[x$fnsd <= 0][z],
+                            digits = -x$fnsd[x$fnsd <= 0][z]),
+                            nsmall = -x$fnsd[x$fnsd <= 0][z])
+                    })
+            )
+        }
+
+        # Point estimates for which scientific notation is needed
+        if (sum(x$fnsd > 0) > 0) {
+            estimate_string[x$fnsd > 0] <- unlist(
+                lapply(
+                    X = 1:sum(x$fnsd > 0),
+                    FUN = function(z) {
+                        order_x <- floor(log(abs(x$estimate[x$fnsd > 0][z])) / log(10))
+                        if (order_x >= x$fnsd[x$fnsd > 0][z]) {
+                            return(formatC(x$estimate[x$fnsd > 0][x], format = "e", digits = order_x - x$fnsd[x$fnsd > 0][z]))
+                        } else {
+                            return(0)
+                        }
+                    })
+            )
+        }
+
+        # Update dataframe
+        x_out$estimate <- estimate_string
+
+        return(x_out)
+    }
+
+    class(out) <- c("fmt_factory", class(out))
+    return(out)
+}
+
