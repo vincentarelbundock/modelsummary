@@ -6,6 +6,15 @@ labels: ''
 assignees: ''
 ---
 
+Before reporting a bug, please update to the latest development version of `modelsummary` and make sure the bug has not been fixed yet. You can update `modelsummary` and all its dependencies with:
+
+```r
+modelsummary::update_modelsummary()
+```
+
+Then, restart your R session completely and try again.
+
+
 Bug reports must include:
 
 1. *Concise* description of the bug
