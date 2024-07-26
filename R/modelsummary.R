@@ -62,7 +62,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * Note on LaTeX output: To ensure proper typography, all numeric entries are enclosed in the `\num{}` command, which requires the `siunitx` package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 #' @param stars to indicate statistical significance
 #' * FALSE (default): no significance stars.
-#' * TRUE: +=.1, *=.05, **=.01, ***=0.001
+#' * TRUE: `c("+" = .1, "*" = .05, "**" = .01, "***" = 0.001)`
 #' * Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
 #' * Note: a legend will not be inserted at the bottom of the table when the `estimate` or `statistic` arguments use "glue strings" with `{stars}`.
 #' @param statistic vector of strings or `glue` strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics.
