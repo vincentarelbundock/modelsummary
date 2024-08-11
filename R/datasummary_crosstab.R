@@ -76,7 +76,10 @@ datasummary_crosstab <- function(formula,
 
 
     # argument checking
-    sanitize_output(output) # before sanitize_escape
+    tmp <- sanitize_output(output) # before sanitize_escape
+    output_format <- tmp$output_format
+    output_factory <- tmp$output_factory
+    output_file <- tmp$output_file
     sanitize_escape(escape) # after sanitize_output
 
     checkmate::assert_formula(formula)

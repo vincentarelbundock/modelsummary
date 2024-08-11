@@ -28,14 +28,14 @@ factory_gt <- function(tab,
   # create gt table object
   idx_col <- ncol(tab)
   colnames(tab)[is.na(colnames(tab))] <- ""
-  colnames(tab) <- pad(colnames(tab))
+  colnames(tab) <- pad(colnames(tab), output_format = output_format)
   out <- gt::gt(tab, caption = title)
 
   # theme
   theme_ms <- getOption("modelsummary_theme_gt",
                         default = theme_ms_gt)
   out <- theme_ms(out,
-                  output_format = settings_get("output_format"),
+                  output_format = output_format,
                   hrule = hrule,
                   hgroup = hgroup)
 
@@ -71,21 +71,21 @@ factory_gt <- function(tab,
   # output
   if (is.null(output_file)) {
 
-    if (settings_equal("output_format", "html")) {
+    if (identical(output_format, "html")) {
       out <- gt::as_raw_html(out)
     }
 
-    if (settings_equal("output_format", "latex")) {
+    if (identical(output_format, "latex")) {
       out <- gt::as_latex(out)
     }
 
     if (!is.null(getOption("modelsummary_orgmode")) &&
-        settings_equal("output_format", c("html", "latex"))) {
+        output_format %in% c("html", "latex")) {
       out <- sprintf("#+BEGIN_EXPORT %s\n%s\n#+END_EXPORT", settings_get("output_format"), out)
       return(out)
     }
 
-    if (settings_equal("output_format", c("default", "gt"))) {
+    if (output_format %in% c("default", "gt")) {
       return(out)
     }
 

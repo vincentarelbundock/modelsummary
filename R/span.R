@@ -36,7 +36,7 @@ get_span_gt <- function(tab) {
         span <- lapply(span, rev)
         span_max <- max(sapply(span, length))
         span <- lapply(span, function(x) c(x, rep(" ", span_max - length(x))))
-        column_names <- pad(sapply(span, function(x) x[1]))
+        column_names <- pad(sapply(span, function(x) x[1]), output_format = output_format)
         for (i in 2:span_max) {
             tmp <- sapply(span, function(x) x[i])
             lab <- setdiff(unique(tmp), " ")

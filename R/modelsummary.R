@@ -498,7 +498,7 @@ modelsummary <- function(
   } else {
     model_names <- names(models)
   }
-  model_names <- pad(model_names)
+  model_names <- pad(model_names, output_format = output_format)
 
   # kableExtra sometimes converts (1), (2) to list items, which breaks formatting
   # insert think white non-breaking space

@@ -24,7 +24,7 @@ make_stars <- function(pvalues, stars) {
   }
 
   # Remove this code because the new tinytable default uses a better set of options for siunitx by default, which handles *-+() gracefully
-  # if (settings_equal("output_format", "latex") && settings_equal("dcolumn_stars_mbox", TRUE)) {
+  # if (identical(output_format, "latex") && settings_equal("dcolumn_stars_mbox", TRUE)) {
   #   tmp <- sprintf(" \\mbox{%s}", tmp)
   # }
 

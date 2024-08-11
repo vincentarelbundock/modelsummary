@@ -126,7 +126,10 @@ datasummary_correlation <- function(data,
   ))
 
   # sanity checks
-  sanitize_output(output) # before sanitize_escape
+  tmp <- sanitize_output(output) # before sanitize_escape
+  output_format <- tmp$output_format
+  output_factory <- tmp$output_factory
+  output_file <- tmp$output_file
   sanitize_escape(escape) # after sanitize_output
   sanity_add_columns(add_columns)
   sanity_align(align)
@@ -244,6 +247,9 @@ datasummary_correlation <- function(data,
     notes = notes,
     title = title,
     escape = escape,
+    output_factory = output_factory,
+    output_format = output_format,
+    output_file = output_file,
     ...)
 
   # invisible return

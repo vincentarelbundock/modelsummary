@@ -7,10 +7,14 @@
 #' makes it harder to select columns, so we only apply pad duplicate
 #' entries.
 #' @noRd
-pad <- function(x, style = "unique", sep = ".") {
+pad <- function(x, style = "unique", sep = ".", output_format = NULL) {
   checkmate::assert_character(x)
   checkmate::assert_string(sep, n.chars = 1)
   checkmate::assert_choice(style, choices = c("unique", "character"))
+
+  if (is.null(output_format)) {
+    output_format <- settings_get("output_format")
+  }
 
   if (style == "unique") {
     out <- trimws(x)
@@ -49,7 +53,7 @@ pad <- function(x, style = "unique", sep = ".") {
 
     for (i in seq_along(x_split)) {
 
-      if (settings_equal("output_format", "markdown")) {
+      if (identical(output_format, "markdown")) {
         padchar <- " "
       } else {
         padchar <- "\U02007"

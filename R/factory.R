@@ -25,7 +25,6 @@ factory <- function(tab,
   # sanity check functions are hosted in R/sanity_checks.R
   sanity_title(title, ...)
   sanity_notes(notes)
-  # sanitize_output(output) # do not override (otherwise this breaks quarto for shape="rbind")
 
   # parse output
   if (isTRUE(output == "data.frame")) { # internal calls from datasummary_skim()
@@ -68,7 +67,7 @@ factory <- function(tab,
   }
 
   # de-duplicate columns with whitespace
-  colnames(tab) <- pad(colnames(tab))
+  colnames(tab) <- pad(colnames(tab), output_format = output_format)
 
   # add_columns
   if (!is.null(add_columns)) {
@@ -127,7 +126,7 @@ factory <- function(tab,
   if (!is.null(add_rows)) {
 
     # data.frame includes metadata columns
-    if (settings_equal("output_format", "dataframe")) {
+    if (identical(output_format, "dataframe")) {
       # only for modelsummary, not for datasummary
 
       if (all(c("term", "statistic") %in% colnames(tab))) {
@@ -176,10 +175,10 @@ factory <- function(tab,
   align <- strsplit(align, "")[[1]]
 
   # dot align with unicode spaces (latex has its own mechanism)
-  if (!settings_equal("output_format", c("latex", "tinytable"))) {
+  if (!output_format %in% c("latex", "tinytable")) {
     align_d <- grep("d", align)
     for (i in align_d) {
-      tab[[i]] <- pad(tab[[i]], style = "character")
+      tab[[i]] <- pad(tab[[i]], style = "character", output_format = output_format)
     }
     align[align == "d"] <- "c"
   }

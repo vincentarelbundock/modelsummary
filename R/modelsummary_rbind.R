@@ -88,7 +88,7 @@ modelsummary_rbind <- function(
     } else {
         panel_names <- names(panels)
     }
-    panel_names <- pad(panel_names)
+    panel_names <- pad(panel_names, output_format = output_format)
 
     # If there are no common model names but all the panels have the same number
     # of models, we make assumptions.
@@ -212,7 +212,7 @@ modelsummary_rbind <- function(
     tab[is.na(tab)] <- ""
 
     # pad
-    colnames(tab) <- pad(colnames(tab))
+    colnames(tab) <- pad(colnames(tab), output_format = output_format)
 
     # group rows by panel: kableExtra
     if (isTRUE(nrow(gof_same) > 0)) {
@@ -275,6 +275,9 @@ modelsummary_rbind <- function(
         add_rows = add_rows,
         add_columns = add_columns,
         escape = escape,
+        output_factory = output_factory,
+        output_format = output_format,
+        output_file = output_file,
         ...
     )
 

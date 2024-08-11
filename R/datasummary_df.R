@@ -19,7 +19,10 @@ datasummary_df <- function(data,
 
   settings_init(settings = list("function_called" = "datasummary_df"))
 
-  sanitize_output(output) # before sanitize_escape
+  tmp <- sanitize_output(output) # before sanitize_escape
+  output_format <- tmp$output_format
+  output_factory <- tmp$output_factory
+  output_file <- tmp$output_file
   sanitize_escape(escape) # after sanitize_output
   sanity_align(align)
 
@@ -39,6 +42,9 @@ datasummary_df <- function(data,
           escape = escape,
           add_rows = add_rows,
           add_columns = add_columns,
+          output_factory = output_factory,
+          output_format = output_format,
+          output_file = output_file,
           ...)
 
   settings_rm()

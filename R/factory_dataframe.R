@@ -24,7 +24,7 @@ factory_dataframe <- function(tab,
   if (!isTRUE(list(...)$internal_call)) {
     colnames(out) <- gsub("\\|\\|\\|\\|", " / ", colnames(out))
     colnames(out) <- ifelse(colnames(out) == " ", colnames(out), trimws(colnames(out)))
-    colnames(out) <- pad(trimws(colnames(out)))
+    colnames(out) <- pad(trimws(colnames(out)), output_format = output_format)
   }
 
   # factor -> character (useful for R<4.0.0)

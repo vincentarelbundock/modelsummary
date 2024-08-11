@@ -101,7 +101,7 @@ factory_tinytable <- function(tab,
   # post-process it with `plot_tt()` in `datasummary_skim()`
   if (output_format %in% c("latex", "typst", "html", "markdown")) {
     out@output <- output_format
-  } else if (settings_equal("output_format", "latex_tabular")) {
+  } else if (output_format %in% "latex_tabular") {
     out@output <- "latex"
     out <- tinytable::theme_tt(out, "tabular")
   }
