@@ -4,7 +4,7 @@
 \alias{escape_string}
 \title{Make sure LaTeX and HTML are safe to compile}
 \usage{
-escape_string(x)
+escape_string(x, output_format = NULL)
 }
 \description{
 Make sure LaTeX and HTML are safe to compile

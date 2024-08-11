@@ -11,6 +11,8 @@ fmt_equivalence(conf_level = 0.95, digits = 3, pdigits = NULL, ...)
 
 \item{digits}{Number of significant digits to keep.}
 
+\item{pdigits}{Number of decimal digits to keep for p values. If \code{NULL}, the value of \code{digits} is used.}
+
 \item{...}{Additional arguments are passed to the \code{format()} function (e.g., \code{big.marks}, \code{scientific}). See \code{?format}}
 }
 \description{

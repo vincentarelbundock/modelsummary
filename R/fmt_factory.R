@@ -324,6 +324,7 @@ fmt_nainf <- function(x) {
 #' This function implements the suggestions of Astier & Wolak for the number of decimal digits to keep for coefficient estimates. The other statistics are rounded by `fmt_significant()`.
 #' @param conf_level Confidence level to use for the equivalence test (1 - alpha).
 #' @inheritParams fmt_significant
+#' @inheritParams fmt_decimal
 #' @references
 #' Astier, Nicolas, and Frank A. Wolak. Credible Numbers: A Procedure for Reporting Statistical Precision in Parameter Estimates. No. w32124. National Bureau of Economic Research, 2024.
 #'
@@ -360,7 +361,7 @@ fmt_equivalence <- function(conf_level = 0.95, digits = 3, pdigits = NULL, ...) 
         x_out <- fun_sig(x)
 
         # Rank of last reported digit (first non-significant digit)
-        x$fnsd <- ceiling((log(x$std.error) + log(qnorm(p = (1 - alpha)))) / log(10)) - 1
+        x$fnsd <- ceiling((log(x$std.error) + log(stats::qnorm(p = (1 - alpha)))) / log(10)) - 1
 
         # 1/ Format estimates (code provided by Nicolas Astier)
         estimate_string <- as.character(x$estimate)
