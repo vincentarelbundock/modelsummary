@@ -8,6 +8,10 @@
 * `kableExtra` escapes footnotes in HTML when `output="kableExtra")`. Thanks to @dmurdoch and @michaelherndon97 for report #793.
 * New `fmt_equivalence()` function to implement the rounding suggestion of Astier & Wolak (2024). Thanks to Nicolas Astier for code prototype.
 
+Bugs:
+
+* `datasummary_*()` functions can be called as arguments in another `datasummary_*()` arguments, like `add_columns`. Thanks to @mronkko for report #799 
+
 ## 2.1.1
 
 * Documentation improvements

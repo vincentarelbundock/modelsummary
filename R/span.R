@@ -25,7 +25,7 @@ get_span_kableExtra <- function(tab) {
 }
 
 
-get_span_gt <- function(tab) {
+get_span_gt <- function(tab, output_format = NULL) {
     span_list <- attr(tab, "span_gt")
     if (!is.null(span_list)) return(span_list)
 

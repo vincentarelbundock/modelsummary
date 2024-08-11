@@ -38,3 +38,13 @@ x <- setNames(iris[, 1:3], c("blah blah", "hello world", "foo bar"))
 x <- data.table(x)
 x <- datasummary_correlation(x)
 expect_inherits(x, "tinytable")
+
+
+# issue #799: Including a call to datasummary_correlation as an argument to datasummary fails with an uninformative error message #799
+requiet("car") # Prestige data
+k <- subset(Prestige, select = c(income, education, women, prestige))
+tab <- datasummary(
+    All(k) ~ Mean + SD,
+    data = k,
+    add_columns = datasummary_correlation(k, output = "data.frame")[, -1])
+expect_inherits(tab, "tinytable")
