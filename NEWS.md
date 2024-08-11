@@ -10,6 +10,7 @@
 
 Bugs:
 
+* Stars footnotes get properly escaped in some LaTeX configurations. Thanks to @etiennebacher for report #798.
 * `datasummary_*()` functions can be called as arguments in another `datasummary_*()` arguments, like `add_columns`. Thanks to @mronkko for report #799 
 
 ## 2.1.1
