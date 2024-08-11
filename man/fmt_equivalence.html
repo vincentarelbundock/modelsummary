@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>fmt_statistic – modelsummary: Data and Model Summaries in R</title>
+<title>fmt_equivalence – modelsummary: Data and Model Summaries in R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,8 +64,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../man/fmt_term.html" rel="next">
-<link href="../man/fmt_sprintf.html" rel="prev">
+<link href="../man/fmt_sci.html" rel="next">
+<link href="../man/fmt_decimal.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -109,7 +143,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../man/modelsummary.html">Functions</a></li><li class="breadcrumb-item"><a href="../man/fmt_decimal.html">Formatting</a></li><li class="breadcrumb-item"><a href="../man/fmt_statistic.html"><code>fmt_statistic</code></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../man/modelsummary.html">Functions</a></li><li class="breadcrumb-item"><a href="../man/fmt_decimal.html">Formatting</a></li><li class="breadcrumb-item"><a href="../man/fmt_equivalence.html"><code>fmt_equivalence</code></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -225,7 +259,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../man/fmt_equivalence.html" class="sidebar-item-text sidebar-link">
+  <a href="../man/fmt_equivalence.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><code>fmt_equivalence</code></span></a>
   </div>
 </li>
@@ -249,7 +283,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../man/fmt_statistic.html" class="sidebar-item-text sidebar-link active">
+  <a href="../man/fmt_statistic.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><code>fmt_statistic</code></span></a>
   </div>
 </li>
@@ -350,11 +384,13 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#rounding-with-decimal-digits-on-a-per-statistic-basis-in-the-fmt-argument-for-modelsummary" id="toc-rounding-with-decimal-digits-on-a-per-statistic-basis-in-the-fmt-argument-for-modelsummary" class="nav-link active" data-scroll-target="#rounding-with-decimal-digits-on-a-per-statistic-basis-in-the-fmt-argument-for-modelsummary">Rounding with decimal digits on a per-statistic basis in the <code>fmt</code> argument for <code>modelsummary()</code></a>
+  <li><a href="#rounding-with-number-of-digits-determined-by-an-equivalence-test" id="toc-rounding-with-number-of-digits-determined-by-an-equivalence-test" class="nav-link active" data-scroll-target="#rounding-with-number-of-digits-determined-by-an-equivalence-test">Rounding with number of digits determined by an equivalence test</a>
   <ul class="collapse">
   <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
   <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
   <li><a href="#arguments" id="toc-arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -365,15 +401,15 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="rounding-with-decimal-digits-on-a-per-statistic-basis-in-the-fmt-argument-for-modelsummary" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="rounding-with-decimal-digits-on-a-per-statistic-basis-in-the-fmt-argument-for-modelsummary">Rounding with decimal digits on a per-statistic basis in the <code>fmt</code> argument for <code>modelsummary()</code></h2>
+<section id="rounding-with-number-of-digits-determined-by-an-equivalence-test" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="rounding-with-number-of-digits-determined-by-an-equivalence-test">Rounding with number of digits determined by an equivalence test</h2>
 <section id="description" class="level3">
 <h3 class="anchored" data-anchor-id="description">Description</h3>
-<p>Rounding with decimal digits on a per-statistic basis in the <code>fmt</code> argument for <code>modelsummary()</code></p>
+<p>This function implements the suggestions of Astier &amp; Wolak for the number of decimal digits to keep for coefficient estimates. The other statistics are rounded by <code>fmt_significant()</code>.</p>
 </section>
 <section id="usage" class="level3">
 <h3 class="anchored" data-anchor-id="usage">Usage</h3>
-<pre><code class="language-R">fmt_statistic(..., default = 3)
+<pre><code class="language-R">fmt_equivalence(conf_level = 0.95, digits = 3, pdigits = NULL, ...)
 </code></pre>
 </section>
 <section id="arguments" class="level3">
@@ -381,21 +417,489 @@ ul.task-list li input[type="checkbox"] {
 <table>
 <tbody><tr>
 <td style="white-space: nowrap; font-family: monospace; vertical-align: top">
-<code id="...">…</code>
+<code id="conf_level">conf_level</code>
 </td>
 <td>
-Statistic names and <code>fmt</code> value
+Confidence level to use for the equivalence test (1 - alpha).
 </td>
 </tr>
 <tr>
 <td style="white-space: nowrap; font-family: monospace; vertical-align: top">
-<code id="default">default</code>
+<code id="digits">digits</code>
 </td>
 <td>
-Number of decimal digits to keep for unspecified terms
+Number of significant digits to keep.
+</td>
+</tr>
+<tr>
+<td style="white-space: nowrap; font-family: monospace; vertical-align: top">
+<code id="pdigits">pdigits</code>
+</td>
+<td>
+Number of decimal digits to keep for p values. If <code>NULL</code>, the value of <code>digits</code> is used.
+</td>
+</tr>
+<tr>
+<td style="white-space: nowrap; font-family: monospace; vertical-align: top">
+<code id="...">…</code>
+</td>
+<td>
+Additional arguments are passed to the <code>format()</code> function (e.g., <code>big.marks</code>, <code>scientific</code>). See <code>?format</code>
 </td>
 </tr>
 </tbody></table>
+</section>
+<section id="references" class="level3">
+<h3 class="anchored" data-anchor-id="references">References</h3>
+<p>Astier, Nicolas, and Frank A. Wolak. Credible Numbers: A Procedure for Reporting Statistical Precision in Parameter Estimates. No.&nbsp;w32124. National Bureau of Economic Research, 2024.</p>
+</section>
+<section id="examples" class="level3">
+<h3 class="anchored" data-anchor-id="examples">Examples</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"modelsummary"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> hp, mtcars)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Default equivalence-based formatting</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(mod, <span class="at">fmt =</span> <span class="fu">fmt_equivalence</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<!-- preamble start -->
+
+    <script>
+      function styleCell_3ltvfit02oilj0eahdoh(i, j, css_id) {
+        var table = document.getElementById("tinytable_3ltvfit02oilj0eahdoh");
+        table.rows[i].cells[j].classList.add(css_id);
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_3ltvfit02oilj0eahdoh');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_3ltvfit02oilj0eahdoh(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_3ltvfit02oilj0eahdoh");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(0, 0, 'tinytable_css_idnfasikkmi2tqtupy6a34') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(0, 1, 'tinytable_css_ido8dywg6efbnahjw2opry') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(1, 0, 'tinytable_css_idu2gxp4xj7uwrsild3jdv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(1, 1, 'tinytable_css_idzqqs5wikqgu14lwhi9cv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(2, 0, 'tinytable_css_idu2gxp4xj7uwrsild3jdv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(2, 1, 'tinytable_css_idzqqs5wikqgu14lwhi9cv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(3, 0, 'tinytable_css_idu2gxp4xj7uwrsild3jdv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(3, 1, 'tinytable_css_idzqqs5wikqgu14lwhi9cv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(4, 0, 'tinytable_css_idwvrwpjq9169mgbr905ml') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(4, 1, 'tinytable_css_id4ls2y61v3e99t7qr9gea') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(5, 0, 'tinytable_css_idu2gxp4xj7uwrsild3jdv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(5, 1, 'tinytable_css_idzqqs5wikqgu14lwhi9cv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(6, 0, 'tinytable_css_idu2gxp4xj7uwrsild3jdv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(6, 1, 'tinytable_css_idzqqs5wikqgu14lwhi9cv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(7, 0, 'tinytable_css_idu2gxp4xj7uwrsild3jdv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(7, 1, 'tinytable_css_idzqqs5wikqgu14lwhi9cv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(8, 0, 'tinytable_css_idu2gxp4xj7uwrsild3jdv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(8, 1, 'tinytable_css_idzqqs5wikqgu14lwhi9cv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(9, 0, 'tinytable_css_idu2gxp4xj7uwrsild3jdv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(9, 1, 'tinytable_css_idzqqs5wikqgu14lwhi9cv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(10, 0, 'tinytable_css_idu2gxp4xj7uwrsild3jdv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(10, 1, 'tinytable_css_idzqqs5wikqgu14lwhi9cv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(11, 0, 'tinytable_css_idu2gxp4xj7uwrsild3jdv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(11, 1, 'tinytable_css_idzqqs5wikqgu14lwhi9cv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(12, 0, 'tinytable_css_idu2gxp4xj7uwrsild3jdv') })
+window.addEventListener('load', function () { styleCell_3ltvfit02oilj0eahdoh(12, 1, 'tinytable_css_idzqqs5wikqgu14lwhi9cv') })
+    </script>
+
+    <style>
+    .table td.tinytable_css_idnfasikkmi2tqtupy6a34, .table th.tinytable_css_idnfasikkmi2tqtupy6a34 {  text-align: left;  border-bottom: solid 0.1em #d3d8dc; }
+    .table td.tinytable_css_ido8dywg6efbnahjw2opry, .table th.tinytable_css_ido8dywg6efbnahjw2opry {  text-align: center;  border-bottom: solid 0.1em #d3d8dc; }
+    .table td.tinytable_css_idu2gxp4xj7uwrsild3jdv, .table th.tinytable_css_idu2gxp4xj7uwrsild3jdv {  text-align: left; }
+    .table td.tinytable_css_idzqqs5wikqgu14lwhi9cv, .table th.tinytable_css_idzqqs5wikqgu14lwhi9cv {  text-align: center; }
+    .table td.tinytable_css_idwvrwpjq9169mgbr905ml, .table th.tinytable_css_idwvrwpjq9169mgbr905ml {  border-bottom: solid 0.05em black;  text-align: left; }
+    .table td.tinytable_css_id4ls2y61v3e99t7qr9gea, .table th.tinytable_css_id4ls2y61v3e99t7qr9gea {  border-bottom: solid 0.05em black;  text-align: center; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_3ltvfit02oilj0eahdoh" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        <thead>
+        
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">(1)</th>
+              </tr>
+        </thead>
+        
+        <tbody>
+                <tr>
+                  <td>(Intercept)</td>
+                  <td>30      </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(1.63)  </td>
+                </tr>
+                <tr>
+                  <td>hp         </td>
+                  <td>-0.07   </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(0.0101)</td>
+                </tr>
+                <tr>
+                  <td>Num.Obs.   </td>
+                  <td>32      </td>
+                </tr>
+                <tr>
+                  <td>R2         </td>
+                  <td>0.602   </td>
+                </tr>
+                <tr>
+                  <td>R2 Adj.    </td>
+                  <td>0.589   </td>
+                </tr>
+                <tr>
+                  <td>AIC        </td>
+                  <td>181.2   </td>
+                </tr>
+                <tr>
+                  <td>BIC        </td>
+                  <td>185.6   </td>
+                </tr>
+                <tr>
+                  <td>Log.Lik.   </td>
+                  <td>-87.619 </td>
+                </tr>
+                <tr>
+                  <td>F          </td>
+                  <td>45.460  </td>
+                </tr>
+                <tr>
+                  <td>RMSE       </td>
+                  <td>3.74    </td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
+</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># alpha = 0.2</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(mod, <span class="at">fmt =</span> <span class="fu">fmt_equivalence</span>(<span class="at">conf_level =</span> .<span class="dv">8</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<!-- preamble start -->
+
+    <script>
+      function styleCell_7y3o22xib9disnh50hcm(i, j, css_id) {
+        var table = document.getElementById("tinytable_7y3o22xib9disnh50hcm");
+        table.rows[i].cells[j].classList.add(css_id);
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_7y3o22xib9disnh50hcm');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_7y3o22xib9disnh50hcm(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_7y3o22xib9disnh50hcm");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(0, 0, 'tinytable_css_idprmwro6vgo0wkgt7xmdf') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(0, 1, 'tinytable_css_idz2kw9zn3au1flj7ktlev') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(1, 0, 'tinytable_css_idxo1cxcm5474aw2no5bdr') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(1, 1, 'tinytable_css_idaeeuyat329726w9mq3fc') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(2, 0, 'tinytable_css_idxo1cxcm5474aw2no5bdr') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(2, 1, 'tinytable_css_idaeeuyat329726w9mq3fc') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(3, 0, 'tinytable_css_idxo1cxcm5474aw2no5bdr') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(3, 1, 'tinytable_css_idaeeuyat329726w9mq3fc') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(4, 0, 'tinytable_css_idcze049rr4a0erfswjmll') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(4, 1, 'tinytable_css_idyk8r6asrm8tvv3nvxmt5') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(5, 0, 'tinytable_css_idxo1cxcm5474aw2no5bdr') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(5, 1, 'tinytable_css_idaeeuyat329726w9mq3fc') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(6, 0, 'tinytable_css_idxo1cxcm5474aw2no5bdr') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(6, 1, 'tinytable_css_idaeeuyat329726w9mq3fc') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(7, 0, 'tinytable_css_idxo1cxcm5474aw2no5bdr') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(7, 1, 'tinytable_css_idaeeuyat329726w9mq3fc') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(8, 0, 'tinytable_css_idxo1cxcm5474aw2no5bdr') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(8, 1, 'tinytable_css_idaeeuyat329726w9mq3fc') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(9, 0, 'tinytable_css_idxo1cxcm5474aw2no5bdr') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(9, 1, 'tinytable_css_idaeeuyat329726w9mq3fc') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(10, 0, 'tinytable_css_idxo1cxcm5474aw2no5bdr') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(10, 1, 'tinytable_css_idaeeuyat329726w9mq3fc') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(11, 0, 'tinytable_css_idxo1cxcm5474aw2no5bdr') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(11, 1, 'tinytable_css_idaeeuyat329726w9mq3fc') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(12, 0, 'tinytable_css_idxo1cxcm5474aw2no5bdr') })
+window.addEventListener('load', function () { styleCell_7y3o22xib9disnh50hcm(12, 1, 'tinytable_css_idaeeuyat329726w9mq3fc') })
+    </script>
+
+    <style>
+    .table td.tinytable_css_idprmwro6vgo0wkgt7xmdf, .table th.tinytable_css_idprmwro6vgo0wkgt7xmdf {  text-align: left;  border-bottom: solid 0.1em #d3d8dc; }
+    .table td.tinytable_css_idz2kw9zn3au1flj7ktlev, .table th.tinytable_css_idz2kw9zn3au1flj7ktlev {  text-align: center;  border-bottom: solid 0.1em #d3d8dc; }
+    .table td.tinytable_css_idxo1cxcm5474aw2no5bdr, .table th.tinytable_css_idxo1cxcm5474aw2no5bdr {  text-align: left; }
+    .table td.tinytable_css_idaeeuyat329726w9mq3fc, .table th.tinytable_css_idaeeuyat329726w9mq3fc {  text-align: center; }
+    .table td.tinytable_css_idcze049rr4a0erfswjmll, .table th.tinytable_css_idcze049rr4a0erfswjmll {  border-bottom: solid 0.05em black;  text-align: left; }
+    .table td.tinytable_css_idyk8r6asrm8tvv3nvxmt5, .table th.tinytable_css_idyk8r6asrm8tvv3nvxmt5 {  border-bottom: solid 0.05em black;  text-align: center; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_7y3o22xib9disnh50hcm" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        <thead>
+        
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">(1)</th>
+              </tr>
+        </thead>
+        
+        <tbody>
+                <tr>
+                  <td>(Intercept)</td>
+                  <td>30      </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(1.63)  </td>
+                </tr>
+                <tr>
+                  <td>hp         </td>
+                  <td>-0.068  </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(0.0101)</td>
+                </tr>
+                <tr>
+                  <td>Num.Obs.   </td>
+                  <td>32      </td>
+                </tr>
+                <tr>
+                  <td>R2         </td>
+                  <td>0.602   </td>
+                </tr>
+                <tr>
+                  <td>R2 Adj.    </td>
+                  <td>0.589   </td>
+                </tr>
+                <tr>
+                  <td>AIC        </td>
+                  <td>181.2   </td>
+                </tr>
+                <tr>
+                  <td>BIC        </td>
+                  <td>185.6   </td>
+                </tr>
+                <tr>
+                  <td>Log.Lik.   </td>
+                  <td>-87.619 </td>
+                </tr>
+                <tr>
+                  <td>F          </td>
+                  <td>45.460  </td>
+                </tr>
+                <tr>
+                  <td>RMSE       </td>
+                  <td>3.74    </td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># default equivalence, but with alternative significant digits for other statistics</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(mod, <span class="at">fmt =</span> <span class="fu">fmt_equivalence</span>(<span class="at">digits =</span> <span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<!-- preamble start -->
+
+    <script>
+      function styleCell_s1nnc5ssx2biaucqm51r(i, j, css_id) {
+        var table = document.getElementById("tinytable_s1nnc5ssx2biaucqm51r");
+        table.rows[i].cells[j].classList.add(css_id);
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_s1nnc5ssx2biaucqm51r');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_s1nnc5ssx2biaucqm51r(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_s1nnc5ssx2biaucqm51r");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(0, 0, 'tinytable_css_idn8pb8ryh4njae6t97ai0') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(0, 1, 'tinytable_css_idlh1z21tt1d330mtpm0a1') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(1, 0, 'tinytable_css_idsad4ike1i9oss6xcznpv') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(1, 1, 'tinytable_css_id0baodfs4mphfa7oywiyz') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(2, 0, 'tinytable_css_idsad4ike1i9oss6xcznpv') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(2, 1, 'tinytable_css_id0baodfs4mphfa7oywiyz') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(3, 0, 'tinytable_css_idsad4ike1i9oss6xcznpv') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(3, 1, 'tinytable_css_id0baodfs4mphfa7oywiyz') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(4, 0, 'tinytable_css_id6ot499xx98b099rfqj29') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(4, 1, 'tinytable_css_id7iun74bwusfptfix1pr0') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(5, 0, 'tinytable_css_idsad4ike1i9oss6xcznpv') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(5, 1, 'tinytable_css_id0baodfs4mphfa7oywiyz') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(6, 0, 'tinytable_css_idsad4ike1i9oss6xcznpv') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(6, 1, 'tinytable_css_id0baodfs4mphfa7oywiyz') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(7, 0, 'tinytable_css_idsad4ike1i9oss6xcznpv') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(7, 1, 'tinytable_css_id0baodfs4mphfa7oywiyz') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(8, 0, 'tinytable_css_idsad4ike1i9oss6xcznpv') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(8, 1, 'tinytable_css_id0baodfs4mphfa7oywiyz') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(9, 0, 'tinytable_css_idsad4ike1i9oss6xcznpv') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(9, 1, 'tinytable_css_id0baodfs4mphfa7oywiyz') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(10, 0, 'tinytable_css_idsad4ike1i9oss6xcznpv') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(10, 1, 'tinytable_css_id0baodfs4mphfa7oywiyz') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(11, 0, 'tinytable_css_idsad4ike1i9oss6xcznpv') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(11, 1, 'tinytable_css_id0baodfs4mphfa7oywiyz') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(12, 0, 'tinytable_css_idsad4ike1i9oss6xcznpv') })
+window.addEventListener('load', function () { styleCell_s1nnc5ssx2biaucqm51r(12, 1, 'tinytable_css_id0baodfs4mphfa7oywiyz') })
+    </script>
+
+    <style>
+    .table td.tinytable_css_idn8pb8ryh4njae6t97ai0, .table th.tinytable_css_idn8pb8ryh4njae6t97ai0 {  text-align: left;  border-bottom: solid 0.1em #d3d8dc; }
+    .table td.tinytable_css_idlh1z21tt1d330mtpm0a1, .table th.tinytable_css_idlh1z21tt1d330mtpm0a1 {  text-align: center;  border-bottom: solid 0.1em #d3d8dc; }
+    .table td.tinytable_css_idsad4ike1i9oss6xcznpv, .table th.tinytable_css_idsad4ike1i9oss6xcznpv {  text-align: left; }
+    .table td.tinytable_css_id0baodfs4mphfa7oywiyz, .table th.tinytable_css_id0baodfs4mphfa7oywiyz {  text-align: center; }
+    .table td.tinytable_css_id6ot499xx98b099rfqj29, .table th.tinytable_css_id6ot499xx98b099rfqj29 {  border-bottom: solid 0.05em black;  text-align: left; }
+    .table td.tinytable_css_id7iun74bwusfptfix1pr0, .table th.tinytable_css_id7iun74bwusfptfix1pr0 {  border-bottom: solid 0.05em black;  text-align: center; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_s1nnc5ssx2biaucqm51r" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        <thead>
+        
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">(1)</th>
+              </tr>
+        </thead>
+        
+        <tbody>
+                <tr>
+                  <td>(Intercept)</td>
+                  <td>30        </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(1.6339)  </td>
+                </tr>
+                <tr>
+                  <td>hp         </td>
+                  <td>-0.07     </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(0.010119)</td>
+                </tr>
+                <tr>
+                  <td>Num.Obs.   </td>
+                  <td>32        </td>
+                </tr>
+                <tr>
+                  <td>R2         </td>
+                  <td>0.602     </td>
+                </tr>
+                <tr>
+                  <td>R2 Adj.    </td>
+                  <td>0.589     </td>
+                </tr>
+                <tr>
+                  <td>AIC        </td>
+                  <td>181.2     </td>
+                </tr>
+                <tr>
+                  <td>BIC        </td>
+                  <td>185.6     </td>
+                </tr>
+                <tr>
+                  <td>Log.Lik.   </td>
+                  <td>-87.619   </td>
+                </tr>
+                <tr>
+                  <td>F          </td>
+                  <td>45.460    </td>
+                </tr>
+                <tr>
+                  <td>RMSE       </td>
+                  <td>3.74      </td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
+</div>
+</div>
 
 
 </section>
@@ -824,13 +1328,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../man/fmt_sprintf.html" class="pagination-link" aria-label="`fmt_sprintf`">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><code>fmt_sprintf</code></span>
+      <a href="../man/fmt_decimal.html" class="pagination-link" aria-label="`fmt_decimal`">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><code>fmt_decimal</code></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../man/fmt_term.html" class="pagination-link" aria-label="`fmt_term`">
-        <span class="nav-page-text"><code>fmt_term</code></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../man/fmt_sci.html" class="pagination-link" aria-label="`fmt_sci`">
+        <span class="nav-page-text"><code>fmt_sci</code></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
