@@ -37,6 +37,8 @@ factory_markdown <- function(tab,
                              notes = NULL,
                              title = NULL,
                              escape = TRUE,
+                             output_format = "markdown",
+                             output_file = NULL,
                               ...) {
 
 
@@ -107,10 +109,10 @@ factory_markdown <- function(tab,
     attr(tab, "format") <- "pipe"
 
     # output
-    if (is.null(settings_get("output_file"))) {
+    if (is.null(output_file)) {
         return(tab)
     } else {
-        writeLines(paste(tab, collapse = "\n"), con = settings_get("output_file"))
+        writeLines(paste(tab, collapse = "\n"), con = output_file)
     }
 }
 

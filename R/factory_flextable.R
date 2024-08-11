@@ -8,6 +8,8 @@ factory_flextable <- function(tab,
                               hrule = NULL,
                               notes = NULL,
                               title = NULL,
+                              output_format = "flextable",
+                              output_file = NULL,
                               ...) {
 
   insight::check_if_installed("flextable")
@@ -51,15 +53,15 @@ factory_flextable <- function(tab,
 
 
   # output
-  if (is.null(settings_get("output_file"))) {
+  if (is.null(output_file)) {
     return(out)
   } else if (settings_equal("output_format", "word")) {
-    flextable::save_as_docx(out, path = settings_get("output_file"))
+    flextable::save_as_docx(out, path = output_file)
   } else if (settings_equal("output_format", "powerpoint")) {
-    flextable::save_as_pptx(out, path = settings_get("output_file"))
+    flextable::save_as_pptx(out, path = output_file)
   } else if (settings_equal("output_format", "png")) {
-    flextable::save_as_image(out, path = settings_get("output_file"))
+    flextable::save_as_image(out, path = output_file)
   } else if (settings_equal("output_format", "html")) {
-    flextable::save_as_html(out, path = settings_get("output_file"))
+    flextable::save_as_html(out, path = output_file)
   }
 }

@@ -8,10 +8,10 @@ factory_dataframe <- function(tab,
                               align = NULL,
                               hrule = NULL,
                               notes = NULL,
-                              output_file = NULL,
-                              output_format = NULL,
                               add_rows = NULL,
                               title = NULL,
+                              output_file = NULL,
+                              output_format = NULL,
                               ...) {
 
   out <- tab
@@ -49,7 +49,6 @@ factory_dataframe <- function(tab,
   out <- theme_ms(out)
 
   # write spreadsheet to file
-  output_file <- settings_get("output_file")
   if (isTRUE(tools::file_ext(output_file) == "csv")) {
     utils::write.csv(out, file = output_file, row.names = FALSE)
   } else if (isTRUE(tools::file_ext(output_file) == "xlsx")) {

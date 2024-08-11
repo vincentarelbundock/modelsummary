@@ -12,6 +12,8 @@ factory_gt <- function(tab,
                        notes = NULL,
                        title = NULL,
                        escape = TRUE,
+                       output_format = "gt",
+                       output_file = NULL,
                        ...) {
 
   insight::check_if_installed("gt", minimum_version = "0.5.0")
@@ -67,7 +69,7 @@ factory_gt <- function(tab,
   }
 
   # output
-  if (is.null(settings_get("output_file"))) {
+  if (is.null(output_file)) {
 
     if (settings_equal("output_format", "html")) {
       out <- gt::as_raw_html(out)
@@ -88,6 +90,6 @@ factory_gt <- function(tab,
     }
 
   } else {
-    gt::gtsave(out, settings_get("output_file"))
+    gt::gtsave(out, output_file)
   }
 }

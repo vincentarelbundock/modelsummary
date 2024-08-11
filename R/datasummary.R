@@ -168,7 +168,10 @@ datasummary <- function(formula,
     ))
   }
 
-  sanitize_output(output) # before sanitize_escape
+  tmp <- sanitize_output(output)           # early
+  output_format <- tmp$output_format
+  output_factory <- tmp$output_factory
+  output_file <- tmp$output_file
   sanitize_escape(escape) # after sanitize_output
   sanity_align(align)
 
@@ -237,10 +240,13 @@ datasummary <- function(formula,
     add_columns = add_columns,
     add_rows = add_rows,
     escape = escape,
+    output_factory = output_factory,
+    output_format = output_format,
+    output_file = output_file,
     ...)
 
   # invisible return
-  if (!is.null(settings_get("output_file")) ||
+  if (!is.null(output_file) ||
       output == "jupyter" ||
       (output == "default" && settings_equal("output_default", "jupyter"))) {
     if (!isTRUE(list(...)[["internal_call"]])) settings_rm()

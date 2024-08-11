@@ -60,7 +60,10 @@ modelsummary_rbind <- function(
     }
 
     # need the settings for later -- before escape_string
-    sanitize_output(output)
+    tmp <- sanitize_output(output)           # early
+    output_format <- tmp$output_format
+    output_factory <- tmp$output_factory
+    output_file <- tmp$output_file
     sanitize_escape(escape)
 
     # panel names
@@ -276,7 +279,7 @@ modelsummary_rbind <- function(
     )
 
     # invisible return
-    if (!is.null(settings_get("output_file")) ||
+    if (!is.null(output_file) ||
         isTRUE(output == "jupyter") ||
         (output == "default" && settings_equal("output_default", "jupyter"))) {
         settings_rm()

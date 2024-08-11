@@ -162,4 +162,9 @@ sanitize_output <- function(output) {
   settings_set("output_factory", unname(output_factory))
   settings_set("output_format", unname(output_format))
   settings_set("output_file", unname(output_file))
+  out <- list(
+    output_factory = unname(output_factory),
+    output_format = unname(output_format),
+    output_file = unname(output_file))
+  return(out)
 }

@@ -8,6 +8,8 @@ factory_huxtable <- function(tab,
                              hrule = NULL,
                              notes = NULL,
                              title = NULL,
+                             output_format = "huxtable",
+                             output_file = NULL,
                              ...) {
 
 
@@ -41,7 +43,7 @@ factory_huxtable <- function(tab,
   out <- theme_ms(out, hrule = hrule)
 
   # output
-  output_file <- settings_get("output_file")
+  output_file <- output_file
   if (is.null(output_file)) {
     return(out)
   } else {
