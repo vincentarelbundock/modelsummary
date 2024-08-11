@@ -121,3 +121,11 @@ tab <- modelsummary(
   fmt = fmt_statistic(estimate = 3, p.value = 2))
 expect_false(any(grepl("\\*", tab[["Est."]])))
 expect_true(any(grepl("\\*", tab[[6]])))
+
+# Issue #798
+mod <- list()
+mod$OLS <- lm(am ~ drat, data = mtcars)
+mod$Logit <- glm(am ~ qsec, data = mtcars, family = binomial())
+expect_snapshot_print(
+  modelsummary(mod, output = "latex", stars = TRUE),
+  "stars-issue798")

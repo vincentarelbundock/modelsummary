@@ -35,10 +35,14 @@ make_stars <- function(pvalues, stars) {
 #' Internal function to prepare stars footnote
 #'
 #' @noRd
-make_stars_note <- function(stars) {
+make_stars_note <- function(stars, output_format = NULL) {
   out <- clean_stars(stars)
   if (!is.null(out)) {
-    out <- paste0(names(out), ' p < ', out)
+    if (identical(output_format, "latex")) {
+      out <- paste0(names(out), ' p \\num{< ', out, "}")
+    } else {
+      out <- paste0(names(out), ' p < ', out)
+    }
     out <- paste0(out, collapse = ', ')
   }
   return(out)

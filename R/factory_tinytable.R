@@ -130,7 +130,11 @@ escape_everything <- function(tab, output_format, span_list, title, notes) {
   }
   
   for (i in seq_along(notes)) {
-    notes[[i]] <- tinytable::format_tt(notes[[i]], escape = output_format)
+    # hack: avoid escaping stars notes with \num{} in LaTeX
+    flag <- !identical(output_format, "latex") || !grepl("\\\\num\\{", notes[[i]])
+    if (flag) {
+      notes[[i]] <- tinytable::format_tt(notes[[i]], escape = output_format)
+    }
   }
 
   if (isTRUE(checkmate::check_string(title))) {

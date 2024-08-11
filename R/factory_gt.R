@@ -81,7 +81,7 @@ factory_gt <- function(tab,
 
     if (!is.null(getOption("modelsummary_orgmode")) &&
         output_format %in% c("html", "latex")) {
-      out <- sprintf("#+BEGIN_EXPORT %s\n%s\n#+END_EXPORT", settings_get("output_format"), out)
+      out <- sprintf("#+BEGIN_EXPORT %s\n%s\n#+END_EXPORT", output_format, out)
       return(out)
     }
 

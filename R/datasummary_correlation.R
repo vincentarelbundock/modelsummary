@@ -253,7 +253,7 @@ datasummary_correlation <- function(data,
     ...)
 
   # invisible return
-  if (!is.null(settings_get("output_file")) ||
+  if (!is.null(output_file) ||
       output == "jupyter" ||
       (output == "default" && settings_equal("output_default", "jupyter"))) {
     settings_rm()

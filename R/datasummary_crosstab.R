@@ -185,7 +185,7 @@ Note that the `datasummary()` function supports the `=` sign and the `Heading()`
                 escape = escape,
                 ...)
 
-    if (!is.null(settings_get("output_file"))) {
+    if (!is.null(output_file)) {
         settings_rm()
         return(invisible(out))
     } else {

@@ -17,8 +17,6 @@ factory_kableExtra <- function(tab,
 
   insight::check_if_installed("kableExtra")
 
-  output_format <- settings_get("output_format")
-
   span_list <- get_span_kableExtra(tab)
 
   # escape
