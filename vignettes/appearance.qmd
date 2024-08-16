@@ -103,6 +103,31 @@ modelsummary(models) |>
 :::
 
 
+## Starting fresh
+
+When `modelsummary()` creates a `tinytable`, it fixes a few styling elements immediately, which can cause minor issues when customizing the table further. For example, `modelsummary()` draws a separator line to distinguish the coefficients and goodness-of-fit statistics, but this line is drawn at a hard-coded position in the table. If users call `tinytable` functions to add rows *after the fact*, the separator line may no longer appear in the correct place.
+
+One way to work around this issue is to manually "flush" all the stylings that `modelsummary()` inserted, to start fresh.
+
+To start, notice that added group labels breaks the location of the separator line:
+
+```{r}
+library(modelsummary)
+library(tinytable)
+mod <- lm(mpg ~ hp + factor(cyl), data = mtcars)
+tab <- modelsummary(mod)
+tab |> group_tt(i = list("Coefs" = 1, "Cylinders" = 5))
+```
+
+To fix this, we create the table, remove styles, and then add new ones:
+
+```{r}
+tab <- modelsummary(mod) 
+tab@lazy_style <- list()
+tab |> group_tt(i = list("Coefs" = 1, "Cylinders" = 5)) |>
+    style_tt(i = 10, line = "b", line_color = "lightgray")
+```
+
 # `gt`
 
 To illustrate how to customize tables using the `gt` package we will use the following functions from the `gt` package:
