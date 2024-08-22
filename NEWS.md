@@ -7,6 +7,7 @@
 * `kableExtra` update the `siunitx` commands for `d` columns.
 * `kableExtra` escapes footnotes in HTML when `output="kableExtra")`. Thanks to @dmurdoch and @michaelherndon97 for report #793.
 * New `fmt_equivalence()` function to implement the rounding suggestion of Astier & Wolak (2024). Thanks to Nicolas Astier for code prototype.
+* Fix partial match warnings for some `datasummary_*()` tables. No change in behavior. Thanks to @fkohrt for report #804.
 
 Bugs:
 

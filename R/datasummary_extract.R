@@ -10,7 +10,7 @@ datasummary_extract <- function(tab,
   if (is.null(fmt)) fmt <- '%.50f'
 
   # formatting specified in the tabular formula
-  idx <- unlist(attr(tab, 'format'))
+  idx <- unlist(attr(tab, 'formats'))
   for (i in seq_along(tab)) {
     # use default where not specified in the tabular formula
     if (is.na(idx[i])) {
