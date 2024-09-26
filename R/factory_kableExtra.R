@@ -147,8 +147,9 @@ factory_kableExtra <- function(tab,
     ## kableExtra::footnote does not support markdown
     ## kableExtra::add_footnote does not support longtable
     if (output_format %in% c("kableExtra", "html", "latex")) {
-      if (isTRUE(kable_format == "latex") && any(grepl(" < ", notes))) {
+      if (isTRUE(kable_format == "latex") && any(grepl(" < ", notes)) && !isTRUE(escape)) {
         notes <- gsub(" < ", " $<$ ", notes)
+        arguments[["escape"]] <- FALSE
       }
       ## threeparttable only works with 1 note. But it creates a weird bug
       ## when using coef_map and stars in Rmarkdown PDF output
