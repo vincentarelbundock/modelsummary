@@ -3,6 +3,7 @@
 #' @inheritParams datasummary
 #' @inheritParams modelsummary
 #' @param hrule position of horizontal rules (integer vector)
+#' @template kableExtra2tinytable
 #' @template citation
 #' @export
 datasummary_df <- function(data,
@@ -16,7 +17,6 @@ datasummary_df <- function(data,
                            add_columns = NULL,
                            escape = TRUE,
                            ...) {
-
   settings_init(settings = list("function_called" = "datasummary_df"))
 
   tmp <- sanitize_output(output) # before sanitize_escape
@@ -34,20 +34,19 @@ datasummary_df <- function(data,
   }
 
   out <- factory(data,
-          align = align,
-          hrule = hrule,
-          notes = notes,
-          output = output,
-          title = title,
-          escape = escape,
-          add_rows = add_rows,
-          add_columns = add_columns,
-          output_factory = output_factory,
-          output_format = output_format,
-          output_file = output_file,
-          ...)
+    align = align,
+    hrule = hrule,
+    notes = notes,
+    output = output,
+    title = title,
+    escape = escape,
+    add_rows = add_rows,
+    add_columns = add_columns,
+    output_factory = output_factory,
+    output_format = output_format,
+    output_file = output_file,
+    ...)
 
   settings_rm()
   return(out)
-
 }

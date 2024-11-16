@@ -2,7 +2,7 @@
 #'
 #' This function was inspired by the excellent `skimr` package for R.
 #' See the Details and Examples sections below, and the vignettes on the
-#' `modelsummary` website: 
+#' `modelsummary` website:
 #' * https://modelsummary.com/
 #' * https://modelsummary.com/articles/datasummary.html
 #'
@@ -11,8 +11,9 @@
 #' @import data.table
 #' @param type String. Variables to summarize: "all", "numeric", "categorical", "dataset"
 #' @param by Character vector of grouping variables to compute statistics over.
-#' @param fun_numeric Named list of funtions to apply to each column of `data`. If `fun_numeric` includes "Histogram" or "Density", inline plots are inserted. 
+#' @param fun_numeric Named list of funtions to apply to each column of `data`. If `fun_numeric` includes "Histogram" or "Density", inline plots are inserted.
 #'
+#' @template kableExtra2tinytable
 #' @template citation
 #' @template options
 #' @examplesIf FALSE
@@ -24,25 +25,25 @@
 #'
 #' @export
 datasummary_skim <- function(data,
-                             output = 'default',
-                             type   = 'all',
-                             fmt    = 1,
-                             title  = NULL,
-                             notes  = NULL,
-                             align  = NULL,
+                             output = "default",
+                             type = "all",
+                             fmt = 1,
+                             title = NULL,
+                             notes = NULL,
+                             align = NULL,
                              escape = TRUE,
                              by = NULL,
-                             fun_numeric = list("Unique" = NUnique,
-                                                "Missing Pct." = PercentMissing,
-                                                "Mean" = Mean,
-                                                "SD" = SD,
-                                                "Min" = Min,
-                                                "Median" = Median,
-                                                "Max" = Max,
-                                                "Histogram" = function(x) ""),
+                             fun_numeric = list(
+                               "Unique" = NUnique,
+                               "Missing Pct." = PercentMissing,
+                               "Mean" = Mean,
+                               "SD" = SD,
+                               "Min" = Min,
+                               "Median" = Median,
+                               "Max" = Max,
+                               "Histogram" = function(x) ""),
                              ...) {
-
-  ## settings 
+  ## settings
   settings_init(settings = list("function_called" = "datasummary_skim"))
   tmp <- sanitize_output(output) # before sanitize_escape
   output_format <- tmp$output_format
@@ -83,16 +84,18 @@ datasummary_skim <- function(data,
   }
 
   if (type == "all") {
-    a <- tryCatch(datasummary_skim_numeric(data,
-                                           output = "tinytable", fmt = fmt, by = by,
-                                           title = title, notes = notes, align = align,
-                                           escape = FALSE, fun_numeric = fun_numeric, ...),
-                  error = function(e) e$message)
-    b <- tryCatch(datasummary_skim_categorical(data,
-                                               output = "tinytable", fmt = fmt,
-                                               title = title, notes = notes, align = align,
-                                               escape = FALSE, ...),
-                  error = function(e) e$message)
+    a <- tryCatch(
+      datasummary_skim_numeric(data,
+        output = "tinytable", fmt = fmt, by = by,
+        title = title, notes = notes, align = align,
+        escape = FALSE, fun_numeric = fun_numeric, ...),
+      error = function(e) e$message)
+    b <- tryCatch(
+      datasummary_skim_categorical(data,
+        output = "tinytable", fmt = fmt,
+        title = title, notes = notes, align = align,
+        escape = FALSE, ...),
+      error = function(e) e$message)
 
     sanitize_output(output)
 
@@ -103,7 +106,7 @@ datasummary_skim <- function(data,
       out <- tinytable::format_tt(out, replace = "")
       out <- tinytable::style_tt(out, i = nrow(a) + 1, line = "t", line_size = .3)
       if (identical(output_format, "html")) {
-          out <- tinytable::style_tt(out, i = nrow(a) + 1, bold = TRUE, line = "bt", line_color = "#d3d8dc")
+        out <- tinytable::style_tt(out, i = nrow(a) + 1, bold = TRUE, line = "bt", line_color = "#d3d8dc")
       }
     } else if (!inherits(a, "tinytable") && !inherits(b, "tinytable")) {
       insight::format_error(a, b)
@@ -123,7 +126,6 @@ datasummary_skim <- function(data,
     }
 
     out <- tinytable::format_tt(out, escape = escape)
-
   } else if (type == "numeric") {
     out <- datasummary_skim_numeric(data,
       output = output, fmt = fmt, by = by,
@@ -132,14 +134,12 @@ datasummary_skim <- function(data,
     sanitize_output(output)
 
     data_list <- attr(out, "data_list")
-
   } else if (type == "categorical") {
     out <- datasummary_skim_categorical(data,
       output = output, fmt = fmt,
       title = title, notes = notes, align = align,
       escape = escape, ...)
     sanitize_output(output)
-
   } else if (type == "dataset") {
     out <- datasummary_skim_dataset(data,
       output = output, title = title,
@@ -168,23 +168,19 @@ datasummary_skim <- function(data,
     settings_rm()
     return(out)
   }
-
 }
 
 #' Internal function to skim whole datasets
 #'
 #' @noRd
 datasummary_skim_dataset <- function(
-  data,
-  output,
-  title,
-  notes,
-  align,
-  escape,
-  ...) {
-
-
-
+    data,
+    output,
+    title,
+    notes,
+    align,
+    escape,
+    ...) {
   is.binary <- function(x) {
     tryCatch(length(unique(stats::na.omit(x))) == 2, error = function(e) FALSE, silent = TRUE)
   }
@@ -213,7 +209,6 @@ datasummary_skim_dataset <- function(
     ...)
 
   return(out)
-
 }
 
 
@@ -230,16 +225,15 @@ datasummary_skim_numeric <- function(data,
                                      by = NULL,
                                      fun_numeric = NULL,
                                      ...) {
-
   # subset of numeric variables
   idx <- sapply(data, is.numeric)
   idx[colnames(data) %in% by] <- TRUE
-  if (!any(idx)) insight::format_error('data contains no numeric variable.')
+  if (!any(idx)) insight::format_error("data contains no numeric variable.")
   dat_new <- data[, idx, drop = FALSE]
 
   # subset of non-NA variables
   idx <- sapply(dat_new, function(x) !all(is.na(x)))
-  if (!any(idx)) insight::format_error('all numeric variables are completely missing.')
+  if (!any(idx)) insight::format_error("all numeric variables are completely missing.")
   dat <- dat_new[, idx, drop = FALSE]
 
   # too large
@@ -252,18 +246,18 @@ datasummary_skim_numeric <- function(data,
   dat <- data.table::as.data.table(dat)
 
   funcs <- list(
-      "Variable" = function(x) "",
-      "Internal Data List" = function(x) list(x)
+    "Variable" = function(x) "",
+    "Internal Data List" = function(x) list(x)
   )
   funcs <- c(funcs, fun_numeric)
 
   # Compute
   rows <- list()
   for (v in cols) {
-    tmp <- dat[, lapply(funcs, function(funny) funny(variable)), 
-               by = by,
-               env = list("variable" = v)][
-               , Variable := v]
+    tmp <- dat[, lapply(funcs, function(funny) funny(variable)),
+      by = by,
+      env = list("variable" = v)][
+      , Variable := v]
     for (i in seq_along(tmp)) {
       class(tmp[[i]]) <- setdiff(class(tmp[[i]]), c("haven_labelled", "vctrs_vctr"))
     }
@@ -280,7 +274,7 @@ datasummary_skim_numeric <- function(data,
       rows[Variable == col, Variable := lab]
     }
   }
-  
+
   rows[, Variable := dedup(Variable)]
   rows[, `Internal Data List` := NULL]
   idx <- unique(c("Variable", by, colnames(rows)))
@@ -288,8 +282,8 @@ datasummary_skim_numeric <- function(data,
   data.table::setnames(rows, old = "Variable", new = " ")
 
   out <- datasummary_df(rows,
-                        fmt = fmt,
-                        output = output)
+    fmt = fmt,
+    output = output)
 
 
   attr(out, "data_list") <- data_list
@@ -303,15 +297,14 @@ datasummary_skim_numeric <- function(data,
 #'
 #' @noRd
 datasummary_skim_categorical <- function(
-  data,
-  output,
-  fmt,
-  title,
-  notes,
-  align,
-  escape,
-  ...) {
-
+    data,
+    output,
+    fmt,
+    title,
+    notes,
+    align,
+    escape,
+    ...) {
   dat_new <- data
 
   # pad colnames in case one is named Min, Max, Mean, or other function name
@@ -322,7 +315,6 @@ datasummary_skim_categorical <- function(
 
 
   for (n in colnames(dat_new)) {
-
     # completely missing
     if (all(is.na(dat_new[[n]]))) {
       dat_new[[n]] <- NULL
@@ -330,9 +322,8 @@ datasummary_skim_categorical <- function(
     }
 
     if (is.logical(dat_new[[n]]) |
-        is.character(dat_new[[n]]) |
-        is.factor(dat_new[[n]])) {
-
+      is.character(dat_new[[n]]) |
+      is.factor(dat_new[[n]])) {
       # convert to factor and keep NAs as distinct level
       if (is.logical(dat_new[[n]]) | is.character(dat_new[[n]])) {
         dat_new[[n]] <- factor(dat_new[[n]], exclude = NULL)
@@ -346,22 +337,21 @@ datasummary_skim_categorical <- function(
 
       ## factors with too many levels
       if (is.factor(dat_new[[n]])) {
-          if (length(levels(dat_new[[n]])) > 50) {
-              dat_new[[n]] <- NULL
-              drop_too_many_levels <- c(drop_too_many_levels, n)
-          }
+        if (length(levels(dat_new[[n]])) > 50) {
+          dat_new[[n]] <- NULL
+          drop_too_many_levels <- c(drop_too_many_levels, n)
+        }
       }
 
-    # discard non-factors
+      # discard non-factors
     } else {
       dat_new[[n]] <- NULL
     }
-
   }
 
   # too small
   if (ncol(dat_new) == 0) {
-    stop('data contains no logical, character, or factor variable.')
+    stop("data contains no logical, character, or factor variable.")
   }
 
   # too large
@@ -370,18 +360,18 @@ datasummary_skim_categorical <- function(
   }
 
   if (!is.null(drop_too_many_levels)) {
-    warning(sprintf("These variables were omitted because they include more than 50 levels: %s.", paste(drop_too_many_levels, collapse=", ")),
-            call. = FALSE)
+    warning(sprintf("These variables were omitted because they include more than 50 levels: %s.", paste(drop_too_many_levels, collapse = ", ")),
+      call. = FALSE)
   }
 
   if (!is.null(drop_entirely_na)) {
-    warning(sprintf("These variables were omitted because they are entirely missing: %s.", paste(drop_entirely_na, collapse=", ")),
-            call. = FALSE)
+    warning(sprintf("These variables were omitted because they are entirely missing: %s.", paste(drop_entirely_na, collapse = ", ")),
+      call. = FALSE)
   }
 
   pctformat <- sanitize_fmt(fmt)
   f <- All(dat_new, numeric = FALSE, factor = TRUE, logical = TRUE, character = TRUE) ~
-       (N = 1) * Format() + (`%` = Percent()) * Format(pctformat())
+    (N = 1) * Format() + (`%` = Percent()) * Format(pctformat())
 
   datasummary(
     formula = f,
@@ -390,13 +380,14 @@ datasummary_skim_categorical <- function(
     title = title,
     align = align,
     notes = notes)
-
 }
 
 
 
 dedup <- function(x) {
-  if (length(x) < 2) return(x)
+  if (length(x) < 2) {
+    return(x)
+  }
   for (i in length(x):2) {
     if (x[i] == x[i - 1]) {
       x[i] <- NA

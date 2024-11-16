@@ -5,13 +5,15 @@
 #' `datasummary` can use any summary function which produces one numeric or
 #' character value per variable. The examples section of this documentation
 #' shows how to define custom summary functions.
-#' 
-#' `modelsummary` also supplies several shortcut summary functions which can be used in `datasummary()` formulas: Min, Max, Mean, Median, Var, SD, NPercent, NUnique, Ncol, P0, P25, P50, P75, P100. 
-#' 
-#' See the Details and Examples sections below, and the vignettes on the `modelsummary` website: 
 #'
-#' * https://modelsummary.com/ 
+#' `modelsummary` also supplies several shortcut summary functions which can be used in `datasummary()` formulas: Min, Max, Mean, Median, Var, SD, NPercent, NUnique, Ncol, P0, P25, P50, P75, P100.
+#'
+#' See the Details and Examples sections below, and the vignettes on the `modelsummary` website:
+#'
+#' * https://modelsummary.com/
 #' * https://modelsummary.com/articles/datasummary.html
+#'
+#' @template kableExtra2tinytable
 #'
 #' @inheritParams modelsummary
 #' @import tables
@@ -24,7 +26,7 @@
 #' your main table.
 #' @param fmt how to format numeric values: integer, user-supplied function, or `modelsummary` function.
 #' * Integer: Number of decimal digits
-#' * User-supplied functions: 
+#' * User-supplied functions:
 #'   - Any function which accepts a numeric vector and returns a character vector of the same length.
 #' * `modelsummary` functions:
 #'   - `fmt = fmt_significant(2)`: Two significant digits (at the term-level)
@@ -46,7 +48,7 @@
 #'
 #' ```{r, eval = identical(Sys.getenv("pkgdown"), "true")}
 #' library(modelsummary)
-#' 
+#'
 #' # The left-hand side of the formula describes rows, and the right-hand side
 #' # describes columns. This table uses the "mpg" variable as a row and the "mean"
 #' # function as a column:
@@ -150,7 +152,7 @@
 #' @export
 datasummary <- function(formula,
                         data,
-                        output = 'default',
+                        output = "default",
                         fmt = 2,
                         title = NULL,
                         notes = NULL,
@@ -160,7 +162,6 @@ datasummary <- function(formula,
                         sparse_header = TRUE,
                         escape = TRUE,
                         ...) {
-
   if (!isTRUE(list(...)[["internal_call"]])) {
     ## settings: don't overwrite settings on internal calls
     settings_init(settings = list(
@@ -168,7 +169,7 @@ datasummary <- function(formula,
     ))
   }
 
-  tmp <- sanitize_output(output)           # early
+  tmp <- sanitize_output(output) # early
   output_format <- tmp$output_format
   output_factory <- tmp$output_factory
   output_file <- tmp$output_file
@@ -196,8 +197,8 @@ datasummary <- function(formula,
   tab <- tryCatch(tables::tabular(formula, data), error = function(e) e)
 
   # informative error message
-  if (inherits(tab, 'error')) {
-    if (grepl('Duplicate values:', tab$message)) {
+  if (inherits(tab, "error")) {
+    if (grepl("Duplicate values:", tab$message)) {
       message('This error often occurs when the "*" nesting operator is used, but none of the nested terms are categorical variables (factor, logical or character types). You can transform your variable in the original data, or wrap it in a Factor() function in the `datasummary` formula.')
     }
     stop(tab$message)
@@ -210,20 +211,21 @@ datasummary <- function(formula,
     data = data)
 
   # align stub l rest r
-  stub_width <- attr(dse, 'stub_width')
+  stub_width <- attr(dse, "stub_width")
   tab_width <- ncol(dse)
-  if (inherits(add_columns, 'data.frame')) {
+  if (inherits(add_columns, "data.frame")) {
     tab_width <- tab_width + ncol(add_columns)
   }
   if (is.null(align)) {
-    align <- paste0(strrep('l', stub_width),
-      strrep('r', tab_width - stub_width))
+    align <- paste0(
+      strrep("l", stub_width),
+      strrep("r", tab_width - stub_width))
   }
   align <- paste(align, collapse = "")
 
   # convert to numeric if fmt==NULL
   if (is.null(fmt)) {
-    idx <- attr(dse, 'stub_width')
+    idx <- attr(dse, "stub_width")
     for (i in (idx + 1):ncol(dse)) {
       dse[[i]] <- as.numeric(dse[[i]])
     }
@@ -247,16 +249,15 @@ datasummary <- function(formula,
 
   # invisible return
   if (!is.null(output_file) ||
-      output == "jupyter" ||
-      (output == "default" && settings_equal("output_default", "jupyter"))) {
+    output == "jupyter" ||
+    (output == "default" && settings_equal("output_default", "jupyter"))) {
     if (!isTRUE(list(...)[["internal_call"]])) settings_rm()
     return(invisible(out))
-  # visible return
+    # visible return
   } else {
     if (!isTRUE(list(...)[["internal_call"]])) settings_rm()
     return(out)
   }
-
 }
 
 #' `dsummary()` is a shortcut to `datasummary()`

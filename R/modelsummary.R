@@ -1,10 +1,11 @@
 # https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when#comment20826625_12429344
 # 2012 wickham says "globalVariables is a hideous hack and I will never use it"
 # 2014 wickham updates his own answer with globalVariables as one of "two solutions"
-globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
-'value', 'p.value', 'std.error', 'statistic', 'stars_note', 'logLik',
-'formatBicLL', 'section', 'position', 'where', 'ticks', 'statistic1', 'model',
-'tmp_grp', 'condition_variable', 'conf_int', 'conf_level', '..idx', 'Internal Data List', 'Variable', 'variable'))
+globalVariables(c(
+  ".", "term", "part", "estimate", "conf.high", "conf.low",
+  "value", "p.value", "std.error", "statistic", "stars_note", "logLik",
+  "formatBicLL", "section", "position", "where", "ticks", "statistic1", "model",
+  "tmp_grp", "condition_variable", "conf_int", "conf_level", "..idx", "Internal Data List", "Variable", "variable"))
 
 
 
@@ -22,12 +23,10 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' * [The `modelsummary` Vignette includes dozens of examples of tables with extensive customizations.](https://modelsummary.com/articles/modelsummary.html)
 #' * [The Appearance Vignette shows how to modify the look of tables.](https://modelsummary.com/articles/appearance.html)
 #'
+#' @template kableExtra2tinytable
 #' @template citation
-#'
 #' @template modelsummary_details
-#'
 #' @template options
-#'
 #' @template modelsummary_parallel
 #'
 #' @param models a model, (named) list of models, or nested list of models.
@@ -36,7 +35,7 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   - Models are labelled automatically. The default label style can be altered by setting a global option. See below.
 #' * Named list of models: `modelsummary(list("A"=model1, "B"=model2))`
 #'   - Models are labelled using the list names.
-#' * Nested list of models: 
+#' * Nested list of models:
 #'   - When using the `shape` argument with "rbind", "rcollapse", or "cbind" values, `models` can be a nested list of models to display "panels" or "stacks" of regression models. See the `shape` argument documentation and examples below.
 #' @param output filename or object type (character string)
 #' * Supported filename extensions: .docx, .html, .tex, .md, .txt, .csv, .xlsx, .png, .jpg
@@ -73,8 +72,8 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #'   - `"{exp(estimate) * std.error}"`
 #'   - Numbers are automatically rounded and converted to strings. To apply functions to their numeric values, as in the last `glue` example, users must set `fmt=NULL`.
 #'   - Parentheses are added automatically unless the string includes `glue` curly braces `{}`.
-#' * Notes: 
-#'   - The names of the `statistic` are used a column names when using the `shape` argument to display statistics as columns: 
+#' * Notes:
+#'   - The names of the `statistic` are used a column names when using the `shape` argument to display statistics as columns:
 #'      - `statistic=c("p"="p.value", "["="conf.low", "]"="conf.high")`
 #'   - Some statistics are not supported for all models. See column names in `get_estimates(model)`, and visit the website to learn how to add custom statistics.
 #' @param vcov robust standard errors and other manual statistics. The `vcov`
@@ -182,91 +181,95 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' + [tinytable::tt], [kableExtra::kbl] or [gt::gt] draw tables, depending on the value of the `output` argument. For example, by default `modelsummary` creates tables with [tinytable::tt], which accepts a `width` and `theme` arguments.
 #' @return a regression table in a format determined by the `output` argument.
 #' @importFrom generics glance tidy
-#' @examplesIf isTRUE(Sys.getenv("R_NOT_CRAN") == 'true')
+#' @examplesIf isTRUE(Sys.getenv("R_NOT_CRAN") == "true")
 #' # The `modelsummary` website includes \emph{many} examples and tutorials:
 #' # https://modelsummary.com
 #'
 #' library(modelsummary)
-#' 
+#'
 #' # load data and estimate models
 #' utils::data(trees)
 #' models <- list()
-#' models[['Bivariate']] <- lm(Girth ~ Height, data = trees)
-#' models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
-#' 
+#' models[["Bivariate"]] <- lm(Girth ~ Height, data = trees)
+#' models[["Multivariate"]] <- lm(Girth ~ Height + Volume, data = trees)
+#'
 #' # simple table
 #' modelsummary(models)
-#' 
+#'
 #' # statistic
 #' modelsummary(models, statistic = NULL)
-#' 
-#' modelsummary(models, statistic = 'p.value')
-#' 
-#' modelsummary(models, statistic = 'statistic')
-#' 
-#' modelsummary(models, statistic = 'conf.int', conf_level = 0.99)
-#' 
-#' modelsummary(models, statistic = c("t = {statistic}",
-#'                                    "se = {std.error}",
-#'                                    "conf.int"))
-#' 
+#'
+#' modelsummary(models, statistic = "p.value")
+#'
+#' modelsummary(models, statistic = "statistic")
+#'
+#' modelsummary(models, statistic = "conf.int", conf_level = 0.99)
+#'
+#' modelsummary(models, statistic = c(
+#'   "t = {statistic}",
+#'   "se = {std.error}",
+#'   "conf.int"))
+#'
 #' # estimate
 #' modelsummary(models,
 #'   statistic = NULL,
 #'   estimate = "{estimate} [{conf.low}, {conf.high}]")
-#' 
+#'
 #' modelsummary(models,
-#'   estimate = c("{estimate}{stars}",
-#'                "{estimate} ({std.error})"))
-#' 
+#'   estimate = c(
+#'     "{estimate}{stars}",
+#'     "{estimate} ({std.error})"))
+#'
 #' # vcov
 #' modelsummary(models, vcov = "robust")
-#' 
+#'
 #' modelsummary(models, vcov = list("classical", "stata"))
-#' 
+#'
 #' modelsummary(models, vcov = sandwich::vcovHC)
-#' 
+#'
 #' modelsummary(models,
 #'   vcov = list(stats::vcov, sandwich::vcovHC))
-#' 
+#'
 #' modelsummary(models,
-#'   vcov = list(c("(Intercept)"="", "Height"="!"),
-#'               c("(Intercept)"="", "Height"="!", "Volume"="!!")))
-#' 
+#'   vcov = list(
+#'     c("(Intercept)" = "", "Height" = "!"),
+#'     c("(Intercept)" = "", "Height" = "!", "Volume" = "!!")))
+#'
 #' # vcov with custom names
 #' modelsummary(
 #'   models,
-#'   vcov = list("Stata Corp" = "stata",
-#'               "Newey Lewis & the News" = "NeweyWest"))
-#' 
+#'   vcov = list(
+#'     "Stata Corp" = "stata",
+#'     "Newey Lewis & the News" = "NeweyWest"))
+#'
 #' # fmt
 #' mod <- lm(mpg ~ hp + drat + qsec, data = mtcars)
-#' 
+#'
 #' modelsummary(mod, fmt = 3)
-#' 
+#'
 #' modelsummary(mod, fmt = fmt_significant(3))
-#' 
+#'
 #' modelsummary(mod, fmt = NULL)
-#' 
+#'
 #' modelsummary(mod, fmt = fmt_decimal(4))
-#' 
+#'
 #' modelsummary(mod, fmt = fmt_sprintf("%.5f"))
-#' 
+#'
 #' modelsummary(mod, fmt = fmt_statistic(estimate = 4, conf.int = 1), statistic = "conf.int")
-#' 
+#'
 #' modelsummary(mod, fmt = fmt_term(hp = 4, drat = 1, default = 2))
-#' 
+#'
 #' m <- lm(mpg ~ I(hp * 1000) + drat, data = mtcars)
 #' f <- function(x) format(x, digits = 3, nsmall = 2, scientific = FALSE, trim = TRUE)
 #' modelsummary(m, fmt = f, gof_map = NA)
-#' 
+#'
 #' # coef_rename
-#' modelsummary(models, coef_rename = c('Volume' = 'Large', 'Height' = 'Tall'))
-#' 
+#' modelsummary(models, coef_rename = c("Volume" = "Large", "Height" = "Tall"))
+#'
 #' modelsummary(models, coef_rename = toupper)
-#' 
+#'
 #' modelsummary(models, coef_rename = coef_rename)
-#' 
+#'
 #' # coef_rename = TRUE for variable labels
 #' datlab <- mtcars
 #' datlab$cyl <- factor(datlab$cyl)
@@ -274,122 +277,122 @@ globalVariables(c('.', 'term', 'part', 'estimate', 'conf.high', 'conf.low',
 #' attr(datlab$cyl, "label") <- "Cylinders"
 #' modlab <- lm(mpg ~ hp * drat + cyl, data = datlab)
 #' modelsummary(modlab, coef_rename = TRUE)
-#' 
+#'
 #' # coef_rename: unnamed vector of length equal to the number of terms in the final table
 #' m <- lm(hp ~ mpg + factor(cyl), data = mtcars)
 #' modelsummary(m, coef_omit = -(3:4), coef_rename = c("Cyl 6", "Cyl 8"))
-#' 
+#'
 #' # coef_map
-#' modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
-#' 
-#' modelsummary(models, coef_map = c('Volume', 'Height'))
-#' 
+#' modelsummary(models, coef_map = c("Volume" = "Large", "Height" = "Tall"))
+#'
+#' modelsummary(models, coef_map = c("Volume", "Height"))
+#'
 #' # coef_omit: omit the first and second coefficients
 #' modelsummary(models, coef_omit = 1:2)
-#' 
+#'
 #' # coef_omit: omit coefficients matching one substring
 #' modelsummary(models, coef_omit = "ei", gof_omit = ".*")
-#' 
+#'
 #' # coef_omit: omit a specific coefficient
 #' modelsummary(models, coef_omit = "^Volume$", gof_omit = ".*")
-#' 
+#'
 #' # coef_omit: omit coefficients matching either one of two substring
-#' #modelsummary(models, coef_omit = "ei|rc", gof_omit = ".*")
-#' 
+#' # modelsummary(models, coef_omit = "ei|rc", gof_omit = ".*")
+#'
 #' # coef_omit: keep coefficients starting with a substring (using a negative lookahead)
-#' #modelsummary(models, coef_omit = "^(?!Vol)", gof_omit = ".*")
-#' 
+#' # modelsummary(models, coef_omit = "^(?!Vol)", gof_omit = ".*")
+#'
 #' # coef_omit: keep coefficients matching a substring
 #' modelsummary(models, coef_omit = "^(?!.*ei|.*pt)", gof_omit = ".*")
-#' 
+#'
 #' # shape: multinomial model
 #' library(nnet)
-#' multi <- multinom(factor(cyl) ~ mpg + hp, data = mtcars, trace = FALSE) 
-#' 
+#' multi <- multinom(factor(cyl) ~ mpg + hp, data = mtcars, trace = FALSE)
+#'
 #' # shape: term names and group ids in rows, models in columns
 #' modelsummary(multi, shape = response ~ model)
-#' 
+#'
 #' # shape: term names and group ids in rows in a single column
-#' modelsummary(multi, shape = term : response ~ model)
-#' 
+#' modelsummary(multi, shape = term:response ~ model)
+#'
 #' # shape: term names in rows and group ids in columns
 #' modelsummary(multi, shape = term ~ response:model)
-#' 
+#'
 #' # shape = "rcollapse"
 #' panels <- list(
-#'     "Panel A: MPG" = list(
-#'         "A" = lm(mpg ~ hp, data = mtcars),
-#'         "B" = lm(mpg ~ hp + factor(gear), data = mtcars)),
-#'     "Panel B: Displacement" = list(
-#'         "A" = lm(disp ~ hp, data = mtcars),
-#'         "C" = lm(disp ~ hp + factor(gear), data = mtcars))
+#'   "Panel A: MPG" = list(
+#'     "A" = lm(mpg ~ hp, data = mtcars),
+#'     "B" = lm(mpg ~ hp + factor(gear), data = mtcars)),
+#'   "Panel B: Displacement" = list(
+#'     "A" = lm(disp ~ hp, data = mtcars),
+#'     "C" = lm(disp ~ hp + factor(gear), data = mtcars))
 #' )
-#' 
+#'
 #' # shape = "cbind"
 #' modelsummary(panels, shape = "cbind")
-#' 
+#'
 #' modelsummary(
-#'     panels,
-#'     shape = "rbind",
-#'     gof_map = c("nobs", "r.squared"))
-#' 
+#'   panels,
+#'   shape = "rbind",
+#'   gof_map = c("nobs", "r.squared"))
+#'
 #' # title
-#' modelsummary(models, title = 'This is the title')
-#' 
+#' modelsummary(models, title = "This is the title")
+#'
 #' # title with LaTeX label (for numbering and referencing)
-#' modelsummary(models, title = 'This is the title \\label{tab:description}', escape = FALSE)
-#' 
+#' modelsummary(models, title = "This is the title \\label{tab:description}", escape = FALSE)
+#'
 #' # add_rows
-#' rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,
-#'   'Empty row', '-', '-',
-#'   'Another empty row', '?', '?')
-#' attr(rows, 'position') <- c(1, 3)
+#' rows <- tibble::tribble(
+#'   ~term, ~Bivariate, ~Multivariate,
+#'   "Empty row", "-", "-",
+#'   "Another empty row", "?", "?")
+#' attr(rows, "position") <- c(1, 3)
 #' modelsummary(models, add_rows = rows)
-#' 
+#'
 #' # notes
-#' modelsummary(models, notes = list('A first note', 'A second note'))
-#' 
+#' modelsummary(models, notes = list("A first note", "A second note"))
+#'
 #' # gof_map: tribble
 #' library(tibble)
 #' gm <- tribble(
-#'   ~raw,        ~clean,      ~fmt,
+#'   ~raw, ~clean, ~fmt,
 #'   "r.squared", "R Squared", 5)
 #' modelsummary(models, gof_map = gm)
-#' 
+#'
 #' # gof_map: list of lists
-#' f <- function(x) format(round(x, 3), big.mark=",")
+#' f <- function(x) format(round(x, 3), big.mark = ",")
 #' gm <- list(
 #'   list("raw" = "nobs", "clean" = "N", "fmt" = f),
 #'   list("raw" = "AIC", "clean" = "aic", "fmt" = f))
 #' modelsummary(models, gof_map = gm)
-#' 
+#'
 #' @export
 modelsummary <- function(
-  models,
-  output      = "default",
-  fmt         = 3,
-  estimate    = "estimate",
-  statistic   = "std.error",
-  vcov        = NULL,
-  conf_level  = 0.95,
-  exponentiate = FALSE,
-  stars       = FALSE,
-  shape       = term + statistic ~ model,
-  coef_map    = NULL,
-  coef_omit   = NULL,
-  coef_rename = FALSE,
-  gof_map     = NULL,
-  gof_omit    = NULL,
-  gof_function  = NULL,
-  group_map   = NULL,
-  add_columns = NULL,
-  add_rows    = NULL,
-  align       = NULL,
-  notes       = NULL,
-  title       = NULL,
-  escape      = TRUE,
-  ...) {
-
+    models,
+    output = "default",
+    fmt = 3,
+    estimate = "estimate",
+    statistic = "std.error",
+    vcov = NULL,
+    conf_level = 0.95,
+    exponentiate = FALSE,
+    stars = FALSE,
+    shape = term + statistic ~ model,
+    coef_map = NULL,
+    coef_omit = NULL,
+    coef_rename = FALSE,
+    gof_map = NULL,
+    gof_omit = NULL,
+    gof_function = NULL,
+    group_map = NULL,
+    add_columns = NULL,
+    add_rows = NULL,
+    align = NULL,
+    notes = NULL,
+    title = NULL,
+    escape = TRUE,
+    ...) {
   # panel summary shape: dispatch to other function
   checkmate::assert(
     checkmate::check_formula(shape),
@@ -421,7 +424,7 @@ modelsummary <- function(
       title = title,
       escape = escape,
       ...)
-      return(out)
+    return(out)
   }
 
   dots <- list(...)
@@ -437,7 +440,7 @@ modelsummary <- function(
   ## sanity functions validate variables/settings
   ## sanitize functions validate & modify & initialize
   checkmate::assert_string(gof_omit, null.ok = TRUE)
-  tmp <- sanitize_output(output)           # early
+  tmp <- sanitize_output(output) # early
   output_format <- tmp$output_format
   output_factory <- tmp$output_factory
   output_file <- tmp$output_file
@@ -453,7 +456,7 @@ modelsummary <- function(
 
   # other sanity checks
   sanitize_escape(escape)
-  sanity_ellipsis(vcov, ...)        # before sanitize_vcov
+  sanity_ellipsis(vcov, ...) # before sanitize_vcov
   models <- sanitize_models(models, ...) # before sanitize_vcov
   vcov <- sanitize_vcov(vcov, models, ...)
   number_of_models <- max(length(models), length(vcov))
@@ -494,7 +497,6 @@ modelsummary <- function(
     if (grepl("\\(", modelsummary_model_labels)) {
       model_names <- sprintf("(%s)", model_names)
     }
-
   } else {
     model_names <- names(models)
   }
@@ -504,8 +506,8 @@ modelsummary <- function(
   # insert think white non-breaking space
   # don't do this now when called from modelsummary_rbind() or there are escape issues
   if (!settings_equal("function_called", "modelsummary_rbind") &&
-      all(grepl("^\\(\\d+\\)$", model_names)) &&
-      identical(output_format, "kableExtra")) {
+    all(grepl("^\\(\\d+\\)$", model_names)) &&
+    identical(output_format, "kableExtra")) {
     model_names <- paste0("&nbsp;", model_names)
   }
 
@@ -514,15 +516,16 @@ modelsummary <- function(
   #######################
   #  modelsummary_list  #
   #######################
-  msl <- get_list_of_modelsummary_lists(models = models,
-                                        conf_level = conf_level,
-                                        vcov = vcov,
-                                        gof_map = gof_map, # check if we can skip all gof computation
-                                        gof_function = gof_function,
-                                        shape = shape,
-                                        coef_rename = coef_rename,
-                                        output_format = output_format,
-                                        ...)
+  msl <- get_list_of_modelsummary_lists(
+    models = models,
+    conf_level = conf_level,
+    vcov = vcov,
+    gof_map = gof_map, # check if we can skip all gof computation
+    gof_function = gof_function,
+    shape = shape,
+    coef_rename = coef_rename,
+    output_format = output_format,
+    ...)
   names(msl) <- model_names
 
 
@@ -539,29 +542,28 @@ modelsummary <- function(
   ###############
   est <- list()
   for (i in seq_along(msl)) {
-
     tmp <- format_estimates(
-      est        = msl[[i]]$tidy,
-      fmt        = fmt,
-      estimate   = estimate[[i]],
+      est = msl[[i]]$tidy,
+      fmt = fmt,
+      estimate = estimate[[i]],
       # enforce single name when multiple estimates in different colums
       estimate_label = names(estimate)[1],
-      statistic  = statistic,
-      vcov       = vcov[[i]],
+      statistic = statistic,
+      vcov = vcov[[i]],
       conf_level = conf_level,
-      stars      = stars,
-      shape      = shape,
+      stars = stars,
+      shape = shape,
       group_name = shape$group_name,
       exponentiate = exponentiate[[i]],
       ...)
 
     # before merging to collapse
     tmp <- map_estimates(
-        tmp,
-        coef_rename = coef_rename,
-        coef_map = coef_map,
-        coef_omit = coef_omit,
-        group_map = group_map)
+      tmp,
+      coef_rename = coef_rename,
+      coef_map = coef_map,
+      coef_omit = coef_omit,
+      group_map = group_map)
 
     colnames(tmp)[match("modelsummary_value", colnames(tmp))] <- model_names[i]
 
@@ -573,8 +575,11 @@ modelsummary <- function(
 
   bycols <- c(list(c(shape$group_name, "group", "term", "statistic")), lapply(est, colnames))
   bycols <- Reduce(intersect, bycols)
-  f <- function(x, y) merge(x, y, all = TRUE, sort = FALSE,
-                            by = bycols)
+  f <- function(x, y) {
+    merge(x, y,
+      all = TRUE, sort = FALSE,
+      by = bycols)
+  }
   est <- Reduce(f, est)
 
   # warn that `shape` might be needed
@@ -607,18 +612,17 @@ modelsummary <- function(
   # sort rows using factor trick
   if ("term" %in% colnames(est)) {
     if (!is.null(coef_map)) {
-        term_order <- coef_map
+      term_order <- coef_map
     }
     est$term <- factor(est$term, unique(term_order))
 
     if ("group" %in% colnames(est)) {
       if (!is.null(group_map)) {
-          est$group <- factor(est$group, group_map)
+        est$group <- factor(est$group, group_map)
       } else {
-          est$group <- factor(est$group, unique(est$group))
+        est$group <- factor(est$group, unique(est$group))
       }
     }
-
   } else if ("model" %in% colnames(est)) {
     est$model <- factor(est$model, model_names)
   }
@@ -696,9 +700,9 @@ modelsummary <- function(
   for (i in seq_along(msl)) {
     if (is.data.frame(msl[[i]]$glance)) {
       gof[[i]] <- format_gof(msl[[i]]$glance,
-                             fmt = fmt,
-                             gof_map = gof_map,
-                             ...)
+        fmt = fmt,
+        gof_map = gof_map,
+        ...)
       colnames(gof[[i]])[2] <- model_names[i]
     } else {
       gof[[i]] <- NULL
@@ -717,26 +721,26 @@ modelsummary <- function(
   ##################
 
   # empty cells
-  tab[is.na(tab)] <- ''
+  tab[is.na(tab)] <- ""
 
   # interaction : becomes ×
   if (is.null(coef_map) &&
-      isFALSE(coef_rename) &&
-      "term" %in% colnames(tab) &&
-      !identical(output_format, "rtf")) {
-    idx <- tab$part != 'gof'
+    isFALSE(coef_rename) &&
+    "term" %in% colnames(tab) &&
+    !identical(output_format, "rtf")) {
+    idx <- tab$part != "gof"
     # catch for fixest `i()` operator
-    tab$term <- ifelse(idx, gsub('::', ' = ', tab$term), tab$term)
+    tab$term <- ifelse(idx, gsub("::", " = ", tab$term), tab$term)
     # conventional interaction
-    tab$term <- ifelse(idx, gsub(':', ' \u00d7 ', tab$term), tab$term)
+    tab$term <- ifelse(idx, gsub(":", " \u00d7 ", tab$term), tab$term)
   }
 
   # measure table
-  hrule <- match('gof', tab$part)
+  hrule <- match("gof", tab$part)
   if (!is.na(hrule) &&
-      !is.null(add_rows) &&
-      !is.null(attr(add_rows, 'position'))) {
-    hrule <- hrule + sum(attr(add_rows, 'position') < hrule)
+    !is.null(add_rows) &&
+    !is.null(attr(add_rows, "position"))) {
+    hrule <- hrule + sum(attr(add_rows, "position") < hrule)
   }
   if (is.na(hrule)) {
     hrule <- NULL
@@ -759,7 +763,6 @@ modelsummary <- function(
   }
 
   if (!identical(output_format, "dataframe") && !settings_equal("function_called", "modelsummary_rbind")) {
-
     dups <- c("term", "model", shape$group_name)
     for (d in dups) {
       tab <- redundant_labels(tab, d)
@@ -770,7 +773,7 @@ modelsummary <- function(
 
 
     # HACK: arbitrary spaces to avoid name conflict
-    if ("term" %in% colnames(tab)) colnames(tab)[colnames(tab) == "term"]   <- "       "
+    if ("term" %in% colnames(tab)) colnames(tab)[colnames(tab) == "term"] <- "       "
     if ("model" %in% colnames(tab)) colnames(tab)[colnames(tab) == "model"] <- "         "
     if ("group" %in% colnames(tab)) colnames(tab)[colnames(tab) == "model"] <- "          "
   }
@@ -792,7 +795,7 @@ modelsummary <- function(
   # align
   if (is.null(align)) {
     n_stub <- sum(grepl("^ *$", colnames(tab))) +
-              sum(colnames(tab) %in% c(" ", shape$group_name))
+      sum(colnames(tab) %in% c(" ", shape$group_name))
     align <- paste0(strrep("l", n_stub), strrep("c", ncol(tab) - n_stub))
     if (isTRUE(checkmate::check_data_frame(add_columns))) {
       align <- paste0(align, strrep("c", ncol(add_columns)))
@@ -825,12 +828,12 @@ modelsummary <- function(
   ## build table
   out <- factory(
     tab,
-    align    = align,
-    fmt      = fmt,
-    hrule    = hrule,
-    notes    = notes,
-    output   = output,
-    title    = title,
+    align = align,
+    fmt = fmt,
+    hrule = hrule,
+    notes = notes,
+    output = output,
+    title = title,
     add_rows = add_rows,
     add_columns = add_columns,
     escape = escape,
@@ -847,74 +850,72 @@ modelsummary <- function(
   if (settings_equal("function_called", "modelsummary_rbind")) {
     return(out)
   } else if (!is.null(output_file) ||
-      isTRUE(output == "jupyter") ||
-      (isTRUE(output == "default") && settings_equal("output_default", "jupyter"))) {
+    isTRUE(output == "jupyter") ||
+    (isTRUE(output == "default") && settings_equal("output_default", "jupyter"))) {
     settings_rm()
     return(invisible(out))
-  # visible return
+    # visible return
   } else {
     settings_rm()
     return(out)
   }
-
 }
 
 
 get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, gof_function, shape, coef_rename, output_format, ...) {
+  number_of_models <- max(length(models), length(vcov))
 
-    number_of_models <- max(length(models), length(vcov))
+  inner_loop <- function(i) {
+    # recycling when 1 model and many vcov
+    j <- ifelse(length(models) == 1, 1, i)
 
-    inner_loop <- function(i) {
-        # recycling when 1 model and many vcov
-        j <- ifelse(length(models) == 1, 1, i)
-
-        if (inherits(models[[j]], "modelsummary_list")) {
-            out <- list(
-                tidy = models[[j]][["tidy"]],
-                glance = models[[j]][["glance"]])
-            return(out)
-        }
-
-        # don't waste time if we are going to exclude all gof anyway
-        gla <- get_gof(models[[j]], vcov_type = names(vcov)[i], gof_map = gof_map, gof_function = gof_function, ...)
-
-        tid <- get_estimates(
-            models[[j]],
-            conf_level = conf_level,
-            vcov = vcov[[i]],
-            shape = shape,
-            coef_rename = coef_rename,
-            ...)
-
-        out <- list("tidy" = tid, "glance" = gla)
-        class(out) <- "modelsummary_list"
-        return(out)
+    if (inherits(models[[j]], "modelsummary_list")) {
+      out <- list(
+        tidy = models[[j]][["tidy"]],
+        glance = models[[j]][["glance"]])
+      return(out)
     }
 
-    # {parallel}
-    dots <- list(...)
-    if ("mc.cores" %in% names(dots)) {
-        out <- parallel::mclapply(seq_len(number_of_models), inner_loop, mc.cores = dots[["mc.cores"]])
+    # don't waste time if we are going to exclude all gof anyway
+    gla <- get_gof(models[[j]], vcov_type = names(vcov)[i], gof_map = gof_map, gof_function = gof_function, ...)
+
+    tid <- get_estimates(
+      models[[j]],
+      conf_level = conf_level,
+      vcov = vcov[[i]],
+      shape = shape,
+      coef_rename = coef_rename,
+      ...)
+
+    out <- list("tidy" = tid, "glance" = gla)
+    class(out) <- "modelsummary_list"
+    return(out)
+  }
+
+  # {parallel}
+  dots <- list(...)
+  if ("mc.cores" %in% names(dots)) {
+    out <- parallel::mclapply(seq_len(number_of_models), inner_loop, mc.cores = dots[["mc.cores"]])
 
     # {future}
-    } else if (isTRUE(check_dependency("future.apply")) &&
-               future::nbrOfWorkers() > 1 &&
-               number_of_models > 1 &&
-               isTRUE(getOption("modelsummary_future", default = TRUE))) {
-        # Issue #647: conflict with `furrr`. Very hard to diagnose.
-        out <- try(
-          future.apply::future_lapply(seq_len(number_of_models), inner_loop, future.seed = TRUE),
-          silent = TRUE)
-        if (inherits(out, "try-error")) {
-          out <- lapply(seq_len(number_of_models), inner_loop)
-        }
-
-    # sequential
-    } else {
-        out <- lapply(seq_len(number_of_models), inner_loop)
+  } else if (isTRUE(check_dependency("future.apply")) &&
+    future::nbrOfWorkers() > 1 &&
+    number_of_models > 1 &&
+    isTRUE(getOption("modelsummary_future", default = TRUE))) {
+    # Issue #647: conflict with `furrr`. Very hard to diagnose.
+    out <- try(
+      future.apply::future_lapply(seq_len(number_of_models), inner_loop, future.seed = TRUE),
+      silent = TRUE)
+    if (inherits(out, "try-error")) {
+      out <- lapply(seq_len(number_of_models), inner_loop)
     }
 
-   return(out)
+    # sequential
+  } else {
+    out <- lapply(seq_len(number_of_models), inner_loop)
+  }
+
+  return(out)
 }
 
 
@@ -940,5 +941,3 @@ redundant_labels <- function(dat, column) {
 #' @keywords internal
 #' @export
 msummary <- modelsummary
-
-

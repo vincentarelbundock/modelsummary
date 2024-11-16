@@ -84,6 +84,19 @@ affect the behavior of other functions behind the scenes.}
 \description{
 Draw a table from a data.frame
 }
+\section{Version 2.0.0, kableExtra, and tinytable}{
+
+
+Since version 2.0.0, \code{modelsummary} uses \code{tinytable} as its default table-drawing backend.
+Learn more at: https://vincentarelbundock.github.io/tinytable/",
+
+Revert to \code{kableExtra} for one session:
+
+\code{options(modelsummary_factory_default = 'kableExtra')}
+\code{options(modelsummary_factory_latex = 'kableExtra')}
+\code{options(modelsummary_factory_html = 'kableExtra')}
+}
+
 \references{
 Arel-Bundock V (2022). “modelsummary: Data and Model Summaries in R.” \emph{Journal of Statistical Software}, \emph{103}(1), 1-23. \doi{10.18637/jss.v103.i01}.'
 }

@@ -326,6 +326,19 @@ will be adjusted by, for example, taking the square root of the matrix's
 diagonal.
 }
 }
+\section{Version 2.0.0, kableExtra, and tinytable}{
+
+
+Since version 2.0.0, \code{modelsummary} uses \code{tinytable} as its default table-drawing backend.
+Learn more at: https://vincentarelbundock.github.io/tinytable/",
+
+Revert to \code{kableExtra} for one session:
+
+\code{options(modelsummary_factory_default = 'kableExtra')}
+\code{options(modelsummary_factory_latex = 'kableExtra')}
+\code{options(modelsummary_factory_html = 'kableExtra')}
+}
+
 \section{Global Options}{
 
 
@@ -460,7 +473,7 @@ Some users have reported difficult to reproduce errors when using the
 }
 
 \examples{
-\dontshow{if (isTRUE(Sys.getenv("R_NOT_CRAN") == 'true')) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (isTRUE(Sys.getenv("R_NOT_CRAN") == "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # The `modelsummary` website includes \emph{many} examples and tutorials:
 # https://modelsummary.com
 
@@ -469,8 +482,8 @@ library(modelsummary)
 # load data and estimate models
 utils::data(trees)
 models <- list()
-models[['Bivariate']] <- lm(Girth ~ Height, data = trees)
-models[['Multivariate']] <- lm(Girth ~ Height + Volume, data = trees)
+models[["Bivariate"]] <- lm(Girth ~ Height, data = trees)
+models[["Multivariate"]] <- lm(Girth ~ Height + Volume, data = trees)
 
 # simple table
 modelsummary(models)
@@ -478,15 +491,16 @@ modelsummary(models)
 # statistic
 modelsummary(models, statistic = NULL)
 
-modelsummary(models, statistic = 'p.value')
+modelsummary(models, statistic = "p.value")
 
-modelsummary(models, statistic = 'statistic')
+modelsummary(models, statistic = "statistic")
 
-modelsummary(models, statistic = 'conf.int', conf_level = 0.99)
+modelsummary(models, statistic = "conf.int", conf_level = 0.99)
 
-modelsummary(models, statistic = c("t = {statistic}",
-                                   "se = {std.error}",
-                                   "conf.int"))
+modelsummary(models, statistic = c(
+  "t = {statistic}",
+  "se = {std.error}",
+  "conf.int"))
 
 # estimate
 modelsummary(models,
@@ -494,8 +508,9 @@ modelsummary(models,
   estimate = "{estimate} [{conf.low}, {conf.high}]")
 
 modelsummary(models,
-  estimate = c("{estimate}{stars}",
-               "{estimate} ({std.error})"))
+  estimate = c(
+    "{estimate}{stars}",
+    "{estimate} ({std.error})"))
 
 # vcov
 modelsummary(models, vcov = "robust")
@@ -508,14 +523,16 @@ modelsummary(models,
   vcov = list(stats::vcov, sandwich::vcovHC))
 
 modelsummary(models,
-  vcov = list(c("(Intercept)"="", "Height"="!"),
-              c("(Intercept)"="", "Height"="!", "Volume"="!!")))
+  vcov = list(
+    c("(Intercept)" = "", "Height" = "!"),
+    c("(Intercept)" = "", "Height" = "!", "Volume" = "!!")))
 
 # vcov with custom names
 modelsummary(
   models,
-  vcov = list("Stata Corp" = "stata",
-              "Newey Lewis & the News" = "NeweyWest"))
+  vcov = list(
+    "Stata Corp" = "stata",
+    "Newey Lewis & the News" = "NeweyWest"))
 
 # fmt
 mod <- lm(mpg ~ hp + drat + qsec, data = mtcars)
@@ -539,7 +556,7 @@ f <- function(x) format(x, digits = 3, nsmall = 2, scientific = FALSE, trim = TR
 modelsummary(m, fmt = f, gof_map = NA)
 
 # coef_rename
-modelsummary(models, coef_rename = c('Volume' = 'Large', 'Height' = 'Tall'))
+modelsummary(models, coef_rename = c("Volume" = "Large", "Height" = "Tall"))
 
 modelsummary(models, coef_rename = toupper)
 
@@ -558,9 +575,9 @@ m <- lm(hp ~ mpg + factor(cyl), data = mtcars)
 modelsummary(m, coef_omit = -(3:4), coef_rename = c("Cyl 6", "Cyl 8"))
 
 # coef_map
-modelsummary(models, coef_map = c('Volume' = 'Large', 'Height' = 'Tall'))
+modelsummary(models, coef_map = c("Volume" = "Large", "Height" = "Tall"))
 
-modelsummary(models, coef_map = c('Volume', 'Height'))
+modelsummary(models, coef_map = c("Volume", "Height"))
 
 # coef_omit: omit the first and second coefficients
 modelsummary(models, coef_omit = 1:2)
@@ -572,70 +589,71 @@ modelsummary(models, coef_omit = "ei", gof_omit = ".*")
 modelsummary(models, coef_omit = "^Volume$", gof_omit = ".*")
 
 # coef_omit: omit coefficients matching either one of two substring
-#modelsummary(models, coef_omit = "ei|rc", gof_omit = ".*")
+# modelsummary(models, coef_omit = "ei|rc", gof_omit = ".*")
 
 # coef_omit: keep coefficients starting with a substring (using a negative lookahead)
-#modelsummary(models, coef_omit = "^(?!Vol)", gof_omit = ".*")
+# modelsummary(models, coef_omit = "^(?!Vol)", gof_omit = ".*")
 
 # coef_omit: keep coefficients matching a substring
 modelsummary(models, coef_omit = "^(?!.*ei|.*pt)", gof_omit = ".*")
 
 # shape: multinomial model
 library(nnet)
-multi <- multinom(factor(cyl) ~ mpg + hp, data = mtcars, trace = FALSE) 
+multi <- multinom(factor(cyl) ~ mpg + hp, data = mtcars, trace = FALSE)
 
 # shape: term names and group ids in rows, models in columns
 modelsummary(multi, shape = response ~ model)
 
 # shape: term names and group ids in rows in a single column
-modelsummary(multi, shape = term : response ~ model)
+modelsummary(multi, shape = term:response ~ model)
 
 # shape: term names in rows and group ids in columns
 modelsummary(multi, shape = term ~ response:model)
 
 # shape = "rcollapse"
 panels <- list(
-    "Panel A: MPG" = list(
-        "A" = lm(mpg ~ hp, data = mtcars),
-        "B" = lm(mpg ~ hp + factor(gear), data = mtcars)),
-    "Panel B: Displacement" = list(
-        "A" = lm(disp ~ hp, data = mtcars),
-        "C" = lm(disp ~ hp + factor(gear), data = mtcars))
+  "Panel A: MPG" = list(
+    "A" = lm(mpg ~ hp, data = mtcars),
+    "B" = lm(mpg ~ hp + factor(gear), data = mtcars)),
+  "Panel B: Displacement" = list(
+    "A" = lm(disp ~ hp, data = mtcars),
+    "C" = lm(disp ~ hp + factor(gear), data = mtcars))
 )
 
 # shape = "cbind"
 modelsummary(panels, shape = "cbind")
 
 modelsummary(
-    panels,
-    shape = "rbind",
-    gof_map = c("nobs", "r.squared"))
+  panels,
+  shape = "rbind",
+  gof_map = c("nobs", "r.squared"))
 
 # title
-modelsummary(models, title = 'This is the title')
+modelsummary(models, title = "This is the title")
 
 # title with LaTeX label (for numbering and referencing)
-modelsummary(models, title = 'This is the title \\\\label{tab:description}', escape = FALSE)
+modelsummary(models, title = "This is the title \\\\label{tab:description}", escape = FALSE)
 
 # add_rows
-rows <- tibble::tribble(~term, ~Bivariate, ~Multivariate,
-  'Empty row', '-', '-',
-  'Another empty row', '?', '?')
-attr(rows, 'position') <- c(1, 3)
+rows <- tibble::tribble(
+  ~term, ~Bivariate, ~Multivariate,
+  "Empty row", "-", "-",
+  "Another empty row", "?", "?")
+attr(rows, "position") <- c(1, 3)
 modelsummary(models, add_rows = rows)
 
 # notes
-modelsummary(models, notes = list('A first note', 'A second note'))
+modelsummary(models, notes = list("A first note", "A second note"))
 
 # gof_map: tribble
 library(tibble)
 gm <- tribble(
-  ~raw,        ~clean,      ~fmt,
+  ~raw, ~clean, ~fmt,
   "r.squared", "R Squared", 5)
 modelsummary(models, gof_map = gm)
 
 # gof_map: list of lists
-f <- function(x) format(round(x, 3), big.mark=",")
+f <- function(x) format(round(x, 3), big.mark = ",")
 gm <- list(
   list("raw" = "nobs", "clean" = "N", "fmt" = f),
   list("raw" = "AIC", "clean" = "aic", "fmt" = f))

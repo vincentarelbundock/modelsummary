@@ -118,6 +118,19 @@ Hierarchical or "nested" column labels are only available for these output
 formats: tinytable, kableExtra, gt, html, rtf, and LaTeX. When saving tables to other
 formats, nested labels will be combined to a "flat" header.
 }
+\section{Version 2.0.0, kableExtra, and tinytable}{
+
+
+Since version 2.0.0, \code{modelsummary} uses \code{tinytable} as its default table-drawing backend.
+Learn more at: https://vincentarelbundock.github.io/tinytable/",
+
+Revert to \code{kableExtra} for one session:
+
+\code{options(modelsummary_factory_default = 'kableExtra')}
+\code{options(modelsummary_factory_latex = 'kableExtra')}
+\code{options(modelsummary_factory_html = 'kableExtra')}
+}
+
 \section{Global Options}{
 
 

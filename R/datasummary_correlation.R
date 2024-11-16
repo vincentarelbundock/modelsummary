@@ -3,7 +3,7 @@
 #' The names of the variables displayed in the correlation table are the names
 #' of the columns in the `data`. You can rename those columns (with or without
 #' spaces) to produce a table of human-readable variables. See the Details and
-#' Examples sections below, and the vignettes on the `modelsummary` website: 
+#' Examples sections below, and the vignettes on the `modelsummary` website:
 #' * https://modelsummary.com/
 #' * https://modelsummary.com/articles/datasummary.html
 #'
@@ -19,6 +19,7 @@
 #'     `datasummary_correlation_format` can often be useful for formatting the
 #'     output of custom correlation functions.
 #' }
+#' @template kableExtra2tinytable
 #' @template citation
 #' @template options
 #' @param ... other parameters are passed through to the table-making
@@ -39,12 +40,12 @@
 #'   select(`Miles / Gallon` = mpg,
 #'          `Horse Power` = hp)
 #' datasummary_correlation(dat)
-#' 
+#'
 #' # `correlation` package objects
 #' if (requireNamespace("correlation", quietly = TRUE)) {
 #'   co <- correlation::correlation(mtcars[, 1:4])
 #'   datasummary_correlation(co)
-#' 
+#'
 #'   # add stars to easycorrelation objects
 #'   datasummary_correlation(co, stars = TRUE)
 #' }
@@ -107,7 +108,7 @@
 #' datasummary_correlation(dat, method = cor_fun, escape = FALSE)
 #' ```
 datasummary_correlation <- function(data,
-                                    output = 'default',
+                                    output = "default",
                                     method = "pearson",
                                     fmt = 2,
                                     align = NULL,
@@ -118,8 +119,6 @@ datasummary_correlation <- function(data,
                                     escape = TRUE,
                                     stars = FALSE,
                                     ...) {
-
-
   ## settings
   settings_init(settings = list(
     "function_called" = "datasummary_correlation"
@@ -137,12 +136,12 @@ datasummary_correlation <- function(data,
   if (inherits(data, "data.table")) {
     data <- as.data.frame(data, check.names = FALSE)
   }
-  
+
   easycorrelation <- inherits(data, "easycorrelation")
 
   if (isFALSE(easycorrelation) && !isFALSE(stars)) {
-      msg <- "The `stars` argument of the `datasummary_correlation()` function is only supported when `x` is an object produced by the `correlation` package."
-      insight::format_error(msg)
+    msg <- "The `stars` argument of the `datasummary_correlation()` function is only supported when `x` is an object produced by the `correlation` package."
+    insight::format_error(msg)
   }
 
   if (easycorrelation) {
@@ -154,8 +153,8 @@ datasummary_correlation <- function(data,
     # store the p values in a "attribute" of the object
     # this is retrieved and used in the `_format()` function.
     attr(data, "p") <- attr(s, "p")
-  } 
-  
+  }
+
   any_numeric <- any(sapply(data, is.numeric) == TRUE)
   if (any_numeric == FALSE) {
     stop("`datasummary_correlation` can only summarize numeric data columns.")
@@ -173,11 +172,13 @@ datasummary_correlation <- function(data,
   } else if (method == "pearspear") {
     fn <- correlation_pearspear
   } else {
-    fn <- function(x) stats::cor(
-      x,
-      use = "pairwise.complete.obs",
-      method = method)
-  } 
+    fn <- function(x) {
+      stats::cor(
+        x,
+        use = "pairwise.complete.obs",
+        method = method)
+    }
+  }
 
   # subset numeric and compute correlation
   if (easycorrelation == FALSE) {
@@ -189,19 +190,19 @@ datasummary_correlation <- function(data,
   }
 
   if ((!is.matrix(out) && !inherits(out, "data.frame")) ||
-      is.null(row.names(out)) ||
-      is.null(colnames(out)) ||
-      nrow(out) != ncol(out)) {
+    is.null(row.names(out)) ||
+    is.null(colnames(out)) ||
+    nrow(out) != ncol(out)) {
     stop("The function supplied to the `method` argument did not return a square matrix or data.frame with row.names and colnames.")
   }
 
   if (easycorrelation) {
     out <- datasummary_correlation_format(
-        out,
-        fmt = fmt,
-        diagonal = "1",
-        upper_triangle = ".",
-        stars = stars)
+      out,
+      fmt = fmt,
+      diagonal = "1",
+      upper_triangle = ".",
+      stars = stars)
   } else if (is.character(method)) {
     if (method == "pearspear") {
       out <- datasummary_correlation_format(
@@ -219,18 +220,18 @@ datasummary_correlation <- function(data,
     out <- datasummary_correlation_format(
       out,
       fmt = fmt)
-  } 
+  }
 
   col_names <- colnames(out)
   out <- cbind(rowname = row.names(out), out)
-  colnames(out) <- c(' ', col_names)
+  colnames(out) <- c(" ", col_names)
 
   if (is.null(align)) {
-      ncols <- ncol(out)
-      if (!is.null(add_columns)) {
-          ncols <- ncols + ncol(add_columns)
-      }
-      align <- paste0('l', strrep('r', ncols - 1))
+    ncols <- ncol(out)
+    if (!is.null(add_columns)) {
+      ncols <- ncols + ncol(add_columns)
+    }
+    align <- paste0("l", strrep("r", ncols - 1))
   }
 
   # labelled data
@@ -254,16 +255,15 @@ datasummary_correlation <- function(data,
 
   # invisible return
   if (!is.null(output_file) ||
-      output == "jupyter" ||
-      (output == "default" && settings_equal("output_default", "jupyter"))) {
+    output == "jupyter" ||
+    (output == "default" && settings_equal("output_default", "jupyter"))) {
     settings_rm()
     return(invisible(out))
-  # visible return
+    # visible return
   } else {
     settings_rm()
     return(out)
   }
-
 }
 
 correlation_pearspear <- function(x) {
@@ -313,13 +313,12 @@ correlation_pearspear <- function(x) {
 #'
 #' datasummary_correlation(dat, method = cor_fun)
 datasummary_correlation_format <- function(
-  x,
-  fmt,
-  leading_zero = FALSE,
-  diagonal = NULL,
-  upper_triangle = NULL,
-  stars = FALSE) {
-
+    x,
+    fmt,
+    leading_zero = FALSE,
+    diagonal = NULL,
+    upper_triangle = NULL,
+    stars = FALSE) {
   # sanity
   checkmate::assert_character(diagonal, len = 1, null.ok = TRUE)
   checkmate::assert_character(upper_triangle, len = 1, null.ok = TRUE)
@@ -333,7 +332,7 @@ datasummary_correlation_format <- function(
     fmt <- sanitize_fmt(fmt)
     out[[i]] <- fmt(out[[i]])
     if (leading_zero == FALSE) {
-      out[[i]] <- gsub('0\\.', '\\.', out[[i]])
+      out[[i]] <- gsub("0\\.", "\\.", out[[i]])
     }
   }
 

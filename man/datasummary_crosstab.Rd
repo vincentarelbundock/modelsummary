@@ -128,6 +128,19 @@ table.
 
 Variables in \code{formula} are automatically wrapped in \code{Factor()}.
 }
+\section{Version 2.0.0, kableExtra, and tinytable}{
+
+
+Since version 2.0.0, \code{modelsummary} uses \code{tinytable} as its default table-drawing backend.
+Learn more at: https://vincentarelbundock.github.io/tinytable/",
+
+Revert to \code{kableExtra} for one session:
+
+\code{options(modelsummary_factory_default = 'kableExtra')}
+\code{options(modelsummary_factory_latex = 'kableExtra')}
+\code{options(modelsummary_factory_html = 'kableExtra')}
+}
+
 \section{Global Options}{
 
 
@@ -239,7 +252,7 @@ datasummary_crosstab(cyl ~ gear, statistic = ~ N, data = mtcars)
 # crosstab of three variables
   datasummary_crosstab(am * cyl ~ gear, data = mtcars)
 
-# crosstab with two variables and column percentages 
+# crosstab with two variables and column percentages
 datasummary_crosstab(am ~ gear, statistic = ~ Percent("col"), data = mtcars)
 }\if{html}{\out{</div>}}
 }
