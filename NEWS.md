@@ -5,6 +5,7 @@
 Bugs:
 
 * Stars note in `kableExtra` escaped `\num{}` in LaTeX.
+* Bad horizontal rule placement with `add_rows`. Thanks to @pyoungblood for Issue #813.
 
 ## 2.2.0
 

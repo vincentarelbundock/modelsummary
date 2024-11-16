@@ -740,7 +740,7 @@ modelsummary <- function(
   if (!is.na(hrule) &&
     !is.null(add_rows) &&
     !is.null(attr(add_rows, "position"))) {
-    hrule <- hrule + sum(attr(add_rows, "position") < hrule)
+    hrule <- hrule + sum(length(attr(add_rows, "position") < hrule)) - 1
   }
   if (is.na(hrule)) {
     hrule <- NULL
