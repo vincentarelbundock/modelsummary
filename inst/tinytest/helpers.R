@@ -4,8 +4,8 @@ suppressWarnings(modelsummary::config_modelsummary(reset = TRUE))
 ON_CRAN <- !identical(Sys.getenv("R_NOT_CRAN"), "true")
 ON_GH <- identical(Sys.getenv("R_GH"), "true")
 ON_CI <- isTRUE(ON_CRAN) || isTRUE(ON_GH)
-ON_WINDOWS <- isTRUE(Sys.info()[['sysname']] == "Windows")
-ON_OSX <- isTRUE(Sys.info()[['sysname']] == "Darwin")
+ON_WINDOWS <- isTRUE(Sys.info()[["sysname"]] == "Windows")
+ON_OSX <- isTRUE(Sys.info()[["sysname"]] == "Darwin")
 
 requiet <- function(package) {
   suppressMessages(suppressWarnings(suppressPackageStartupMessages(
@@ -14,7 +14,7 @@ requiet <- function(package) {
 }
 
 random_string <- function() {
-  paste(sample(letters, 30, replace=TRUE), collapse="")
+  paste(sample(letters, 30, replace = TRUE), collapse = "")
 }
 
 compare_files <- function(x, y) {
@@ -24,8 +24,8 @@ compare_files <- function(x, y) {
 }
 
 print.custom_html_string <- function(x, ...) {
-    cat(x, "\n", sep = "", ...)
-    invisible(x)
+  cat(x, "\n", sep = "", ...)
+  invisible(x)
 }
 
 
@@ -33,7 +33,8 @@ print_html <- function(x) {
   set.seed(1024)
   if (inherits(x, "gt_tbl")) {
     x <- gt::as_raw_html(x)
-    x <- gsub('div id="\\w+"', '', x)
+    x <- gsub('div id="\\w+"', "", x)
+    x <- gsub(".*<table", "<table", x)
     class(x) <- c("custom_html_string", "character")
     return(x)
   }
