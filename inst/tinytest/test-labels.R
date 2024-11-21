@@ -1,5 +1,7 @@
 source("helpers.R")
 requiet("haven")
+requiet("labelled")
+requiet("tinytable")
 
 # datasummary labels",{
 # datasummary()
@@ -118,3 +120,24 @@ v2 <- labelled( c(0L, 0L, 1L), labels = c(yes = 1, no = 0))
 dat <- data.frame(v2, y = 1:3)
 tab <- datasummary(y ~ Mean, dat)
 expect_inherits(tab, "tinytable")
+
+
+# Issue #807
+df1 <- mtcars
+attr(df1$cyl, "label") <- "Number of cylinders"
+tab <- datasummary_crosstab(data = df1, formula = cyl ~ am)
+tab <- save_tt(tab, "markdown")
+expect_true(grepl("Number of cylinders", tab))
+
+df2 <- mtcars
+df2$cyl <- haven::labelled(df2$cyl, label = "Number of cylinders")
+tab <- datasummary_crosstab(data = df2, formula = cyl ~ am)
+tab <- save_tt(tab, "markdown")
+expect_true(grepl("Number of cylinders", tab))
+
+df3 <- mtcars
+var_label(df3$cyl) <- "Number of cylinders"
+tab <- datasummary_crosstab(data = df3, formula = cyl ~ am)
+tab <- save_tt(tab, "markdown")
+expect_true(grepl("Number of cylinders", tab))
+

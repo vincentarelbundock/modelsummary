@@ -7,6 +7,10 @@ Bugs:
 * Stars note in `kableExtra` escaped `\num{}` in LaTeX.
 * Bad horizontal rule placement with `add_rows`. Thanks to @pyoungblood for Issue #813.
 
+New features:
+
+* Support for variable labels supplied by the `labelled` and `sjlabelled` packages.
+
 ## 2.2.0
 
 * Bump minimum version requirement for `tinytable`, `parameters`, and `insight` dependencies.

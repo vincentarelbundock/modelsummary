@@ -23,12 +23,11 @@ get_variable_labels_data <- function(data) {
     lab <- attr(data, "label", exact = TRUE)
 
 
+    tmp <- sapply(data, function(x) attr(x, "label"))
     # variable attributes: haven-style
     if (is.null(lab)) {
-        lab <- Filter(
-            function(x) inherits(data[[x]], c("labelled", "haven_labelled")),
-            colnames(data))
-        lab <- sapply(lab, function(x) attr(data[[x]], "label", exact = TRUE))
+        lab <- unlist(sapply(data, function(x) attr(x, "label", exact = TRUE)))
+        lab <- Filter(function(x) !is.null(x), lab)
     }
     if (length(lab) == 0) {
         lab <- NULL
