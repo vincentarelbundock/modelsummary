@@ -11,7 +11,7 @@
 #' @import data.table
 #' @param type String. Variables to summarize: "all", "numeric", "categorical", "dataset"
 #' @param by Character vector of grouping variables to compute statistics over.
-#' @param fun_numeric Named list of funtions to apply to each column of `data`. If `fun_numeric` includes "Histogram" or "Density", inline plots are inserted.
+#' @param fun_numeric Named list of funtions to apply to each numeric column of `data`. If `fun_numeric` includes "Histogram" or "Density", inline plots are inserted. This argument is only used when `type="numeric"` or `"all"`.
 #'
 #' @template kableExtra2tinytable
 #' @template citation

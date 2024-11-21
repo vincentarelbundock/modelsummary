@@ -71,7 +71,7 @@ prevent the file from compiling/displaying. \code{TRUE} escapes all cells, capti
 
 \item{by}{Character vector of grouping variables to compute statistics over.}
 
-\item{fun_numeric}{Named list of funtions to apply to each column of \code{data}. If \code{fun_numeric} includes "Histogram" or "Density", inline plots are inserted.}
+\item{fun_numeric}{Named list of funtions to apply to each numeric column of \code{data}. If \code{fun_numeric} includes "Histogram" or "Density", inline plots are inserted. This argument is only used when \code{type="numeric"} or \code{"all"}.}
 
 \item{...}{all other arguments are passed through to the table-making
 functions \link[tinytable:tt]{tinytable::tt}, \link[kableExtra:kbl]{kableExtra::kbl}, \link[gt:gt]{gt::gt}, \link[DT:datatable]{DT::datatable}, etc. depending on the \code{output} argument.
