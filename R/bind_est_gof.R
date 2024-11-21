@@ -21,8 +21,9 @@ bind_est_gof <- function(est, gof) {
   bad <- c("part", "term", "model", "group", "statistic")
   bad <- stats::na.omit(match(bad, colnames(est)))
 
-  idx <- sapply(colnames(gof), function(x) # first matches
-                setdiff(grep(x, colnames(est)), bad)[1])
+  idx <- sapply(colnames(gof), function(x) { # first matches
+    setdiff(grep(x, colnames(est), fixed = TRUE), bad)[1]
+  })
   idx <- stats::na.omit(idx)
   if (length(idx) > 0) {
     data.table::setnames(gof, old = names(idx), new = names(est)[idx])
@@ -33,4 +34,3 @@ bind_est_gof <- function(est, gof) {
 
   return(out)
 }
-
