@@ -1,11 +1,13 @@
 #'
 #' @section Global Options:
 #'
-#' The behavior of `modelsummary` can be modified by setting global options. For example:
+#' The behavior of `modelsummary` can be modified by setting global options.  In particular, most of the arguments for most of the package's functions cna be set using global options. For example:
 #' 
-#' * `options(modelsummary_model_labels = "roman")`
+#' * `options(modelsummary_output = "modelsummary_list")`
+#' * `options(modelsummary_statistic = '({conf.low}, {conf.high})')`
+#' * `options(modelsummary_stars = TRUE)`
 #' 
-#' The rest of this section describes each of the options above.
+#' Options not specific to give arguments are listed below.
 #' 
 #' ### Model labels: default column names
 #' 

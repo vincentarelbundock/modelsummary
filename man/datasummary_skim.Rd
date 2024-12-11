@@ -6,16 +6,17 @@
 \usage{
 datasummary_skim(
   data,
-  output = "default",
-  type = "all",
+  output = getOption("modelsummary_output", default = "default"),
+  type = getOption("modelsummary_type", default = "all"),
   fmt = 1,
-  title = NULL,
-  notes = NULL,
-  align = NULL,
-  escape = TRUE,
-  by = NULL,
-  fun_numeric = list(Unique = NUnique, `Missing Pct.` = PercentMissing, Mean = Mean, SD =
-    SD, Min = Min, Median = Median, Max = Max, Histogram = function(x) ""),
+  title = getOption("modelsummary_title", default = NULL),
+  notes = getOption("modelsummary_notes", default = NULL),
+  align = getOption("modelsummary_align", default = NULL),
+  escape = getOption("modelsummary_escape", default = TRUE),
+  by = getOption("modelsummary_by", default = NULL),
+  fun_numeric = getOption("modelsummary_fun_numeric", default = list(Unique = NUnique,
+    `Missing Pct.` = PercentMissing, Mean = Mean, SD = SD, Min = Min, Median = Median,
+    Max = Max, Histogram = function(x) "")),
   ...
 )
 }
@@ -103,12 +104,14 @@ Revert to \code{kableExtra} for one session:
 \section{Global Options}{
 
 
-The behavior of \code{modelsummary} can be modified by setting global options. For example:
+The behavior of \code{modelsummary} can be modified by setting global options.  In particular, most of the arguments for most of the package's functions cna be set using global options. For example:
 \itemize{
-\item \code{options(modelsummary_model_labels = "roman")}
+\item \code{options(modelsummary_output = "modelsummary_list")}
+\item \code{options(modelsummary_statistic = '({conf.low}, {conf.high})')}
+\item \code{options(modelsummary_stars = TRUE)}
 }
 
-The rest of this section describes each of the options above.
+Options not specific to give arguments are listed below.
 \subsection{Model labels: default column names}{
 
 These global option changes the style of the default column headers:

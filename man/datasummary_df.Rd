@@ -6,15 +6,15 @@
 \usage{
 datasummary_df(
   data,
-  output = "default",
+  output = getOption("modelsummary_output", default = "default"),
   fmt = 2,
-  align = NULL,
-  hrule = NULL,
-  title = NULL,
-  notes = NULL,
-  add_rows = NULL,
-  add_columns = NULL,
-  escape = TRUE,
+  align = getOption("modelsummary_align", default = NULL),
+  hrule = getOption("modelsummary_hrule", default = NULL),
+  title = getOption("modelsummary_title", default = NULL),
+  notes = getOption("modelsummary_notes", default = NULL),
+  add_rows = getOption("modelsummary_add_rows", default = NULL),
+  add_columns = getOption("modelsummary_add_columns", default = NULL),
+  escape = getOption("modelsummary_escape", default = TRUE),
   ...
 )
 }

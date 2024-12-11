@@ -25,15 +25,15 @@
 #'
 #' @export
 datasummary_skim <- function(data,
-                             output = "default",
-                             type = "all",
+                             output = getOption("modelsummary_output", default = "default"),
+                             type = getOption("modelsummary_type", default = "all"),
                              fmt = 1,
-                             title = NULL,
-                             notes = NULL,
-                             align = NULL,
-                             escape = TRUE,
-                             by = NULL,
-                             fun_numeric = list(
+                             title = getOption("modelsummary_title", default = NULL),
+                             notes = getOption("modelsummary_notes", default = NULL),
+                             align = getOption("modelsummary_align", default = NULL),
+                             escape = getOption("modelsummary_escape", default = TRUE),
+                             by = getOption("modelsummary_by", default = NULL),
+                             fun_numeric = getOption("modelsummary_fun_numeric", default = list(
                                "Unique" = NUnique,
                                "Missing Pct." = PercentMissing,
                                "Mean" = Mean,
@@ -41,7 +41,7 @@ datasummary_skim <- function(data,
                                "Min" = Min,
                                "Median" = Median,
                                "Max" = Max,
-                               "Histogram" = function(x) ""),
+                               "Histogram" = function(x) "")),
                              ...) {
   ## settings
   settings_init(settings = list("function_called" = "datasummary_skim"))

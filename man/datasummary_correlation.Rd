@@ -6,16 +6,16 @@
 \usage{
 datasummary_correlation(
   data,
-  output = "default",
-  method = "pearson",
+  output = getOption("modelsummary_output", default = "default"),
+  method = getOption("modelsummary_method", default = "pearson"),
   fmt = 2,
-  align = NULL,
-  add_rows = NULL,
-  add_columns = NULL,
-  title = NULL,
-  notes = NULL,
-  escape = TRUE,
-  stars = FALSE,
+  align = getOption("modelsummary_align", default = NULL),
+  add_rows = getOption("modelsummary_add_rows", default = NULL),
+  add_columns = getOption("modelsummary_add_columns", default = NULL),
+  title = getOption("modelsummary_title", default = NULL),
+  notes = getOption("modelsummary_notes", default = NULL),
+  escape = getOption("modelsummary_escape", default = TRUE),
+  stars = getOption("modelsummary_stars", default = FALSE),
   ...
 )
 }
@@ -123,12 +123,14 @@ Revert to \code{kableExtra} for one session:
 \section{Global Options}{
 
 
-The behavior of \code{modelsummary} can be modified by setting global options. For example:
+The behavior of \code{modelsummary} can be modified by setting global options.  In particular, most of the arguments for most of the package's functions cna be set using global options. For example:
 \itemize{
-\item \code{options(modelsummary_model_labels = "roman")}
+\item \code{options(modelsummary_output = "modelsummary_list")}
+\item \code{options(modelsummary_statistic = '({conf.low}, {conf.high})')}
+\item \code{options(modelsummary_stars = TRUE)}
 }
 
-The rest of this section describes each of the options above.
+Options not specific to give arguments are listed below.
 \subsection{Model labels: default column names}{
 
 These global option changes the style of the default column headers:

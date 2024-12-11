@@ -87,17 +87,17 @@
 #'
 #' @export
 modelplot <- function(models,
-                      conf_level  = .95,
-                      coef_map    = NULL,
-                      coef_omit   = NULL,
-                      coef_rename = NULL,
-                      vcov        = NULL,
-                      exponentiate = FALSE,
-                      add_rows    = NULL,
-                      facet       = FALSE,
-                      draw        = TRUE,
-                      background  = NULL,
-                      ...) {
+                     conf_level = getOption("modelsummary_conf_level", default = .95),
+                     coef_map = getOption("modelsummary_coef_map", default = NULL),
+                     coef_omit = getOption("modelsummary_coef_omit", default = NULL),
+                     coef_rename = getOption("modelsummary_coef_rename", default = NULL),
+                     vcov = getOption("modelsummary_vcov", default = NULL),
+                     exponentiate = getOption("modelsummary_exponentiate", default = FALSE),
+                     add_rows = getOption("modelsummary_add_rows", default = NULL),
+                     facet = getOption("modelsummary_facet", default = FALSE),
+                     draw = getOption("modelsummary_draw", default = TRUE),
+                     background = getOption("modelsummary_background", default = NULL),
+                     ...) {
 
   ellip <- list(...)
    
