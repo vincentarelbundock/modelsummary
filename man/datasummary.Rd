@@ -141,7 +141,7 @@ The behavior of \code{modelsummary} can be modified by setting global options.  
 \item \code{options(modelsummary_stars = TRUE)}
 }
 
-Options not specific to give arguments are listed below.
+Options not specific to given arguments are listed below.
 \subsection{Model labels: default column names}{
 
 These global option changes the style of the default column headers:

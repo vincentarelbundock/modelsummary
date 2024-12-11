@@ -7,7 +7,7 @@
 #' * `options(modelsummary_statistic = '({conf.low}, {conf.high})')`
 #' * `options(modelsummary_stars = TRUE)`
 #' 
-#' Options not specific to give arguments are listed below.
+#' Options not specific to given arguments are listed below.
 #' 
 #' ### Model labels: default column names
 #' 
