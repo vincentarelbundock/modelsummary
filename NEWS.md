@@ -10,6 +10,7 @@ Bugs:
 
 New features:
 
+* Nearly all arguments can now be set using global options.
 * Support for variable labels supplied by the `labelled` and `sjlabelled` packages.
 
 ## 2.2.0

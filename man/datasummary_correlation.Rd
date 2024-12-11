@@ -6,16 +6,16 @@
 \usage{
 datasummary_correlation(
   data,
-  output = "default",
-  method = "pearson",
+  output = getOption("modelsummary_output", default = "default"),
+  method = getOption("modelsummary_method", default = "pearson"),
   fmt = 2,
-  align = NULL,
-  add_rows = NULL,
-  add_columns = NULL,
-  title = NULL,
-  notes = NULL,
-  escape = TRUE,
-  stars = FALSE,
+  align = getOption("modelsummary_align", default = NULL),
+  add_rows = getOption("modelsummary_add_rows", default = NULL),
+  add_columns = getOption("modelsummary_add_columns", default = NULL),
+  title = getOption("modelsummary_title", default = NULL),
+  notes = getOption("modelsummary_notes", default = NULL),
+  escape = getOption("modelsummary_escape", default = TRUE),
+  stars = getOption("modelsummary_stars", default = FALSE),
   ...
 )
 }

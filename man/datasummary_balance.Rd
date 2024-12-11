@@ -8,17 +8,17 @@ control and treatment groups)}
 datasummary_balance(
   formula,
   data,
-  output = "default",
+  output = getOption("modelsummary_output", default = "default"),
   fmt = fmt_decimal(digits = 1, pdigits = 3),
-  title = NULL,
-  notes = NULL,
-  align = NULL,
-  stars = FALSE,
-  add_columns = NULL,
-  add_rows = NULL,
-  dinm = TRUE,
-  dinm_statistic = "std.error",
-  escape = TRUE,
+  title = getOption("modelsummary_title", default = NULL),
+  notes = getOption("modelsummary_notes", default = NULL),
+  align = getOption("modelsummary_align", default = NULL),
+  stars = getOption("modelsummary_stars", default = FALSE),
+  add_columns = getOption("modelsummary_add_columns", default = NULL),
+  add_rows = getOption("modelsummary_add_rows", default = NULL),
+  dinm = getOption("modelsummary_dinm", default = TRUE),
+  dinm_statistic = getOption("modelsummary_dinm_statistic", default = "std.error"),
+  escape = getOption("modelsummary_escape", default = TRUE),
   ...
 )
 }

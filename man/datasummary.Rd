@@ -8,15 +8,15 @@
 datasummary(
   formula,
   data,
-  output = "default",
+  output = getOption("modelsummary_output", default = "default"),
   fmt = 2,
-  title = NULL,
-  notes = NULL,
-  align = NULL,
-  add_columns = NULL,
-  add_rows = NULL,
-  sparse_header = TRUE,
-  escape = TRUE,
+  title = getOption("modelsummary_title", default = NULL),
+  notes = getOption("modelsummary_notes", default = NULL),
+  align = getOption("modelsummary_align", default = NULL),
+  add_columns = getOption("modelsummary_add_columns", default = NULL),
+  add_rows = getOption("modelsummary_add_rows", default = NULL),
+  sparse_header = getOption("modelsummary_sparse_header", default = TRUE),
+  escape = getOption("modelsummary_escape", default = TRUE),
   ...
 )
 }
