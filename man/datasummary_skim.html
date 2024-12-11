@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.39">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,10 +71,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3bff3e942231dbc8cd1912207933fdf0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -399,7 +399,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../man/modelsummary.html">Functions</a></li><li class="breadcrumb-item"><a href="../man/datasummary_skim.html"><code>datasummary_skim</code></a></li></ol></nav></header>
 
 
 
@@ -422,16 +422,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="usage">Usage</h3>
 <pre><code class="language-R">datasummary_skim(
   data,
-  output = "default",
-  type = "all",
+  output = getOption("modelsummary_output", default = "default"),
+  type = getOption("modelsummary_type", default = "all"),
   fmt = 1,
-  title = NULL,
-  notes = NULL,
-  align = NULL,
-  escape = TRUE,
-  by = NULL,
-  fun_numeric = list(Unique = NUnique, `Missing Pct.` = PercentMissing, Mean = Mean, SD =
-    SD, Min = Min, Median = Median, Max = Max, Histogram = function(x) ""),
+  title = getOption("modelsummary_title", default = NULL),
+  notes = getOption("modelsummary_notes", default = NULL),
+  align = getOption("modelsummary_align", default = NULL),
+  escape = getOption("modelsummary_escape", default = TRUE),
+  by = getOption("modelsummary_by", default = NULL),
+  fun_numeric = getOption("modelsummary_fun_numeric", default = list(Unique = NUnique,
+    `Missing Pct.` = PercentMissing, Mean = Mean, SD = SD, Min = Min, Median = Median,
+    Max = Max, Histogram = function(x) "")),
   ...
 )
 </code></pre>
@@ -606,13 +607,19 @@ all other arguments are passed through to the table-making functions tinytable::
 </section>
 <section id="global-options" class="level3">
 <h3 class="anchored" data-anchor-id="global-options">Global Options</h3>
-<p>The behavior of <code>modelsummary</code> can be modified by setting global options. For example:</p>
+<p>The behavior of <code>modelsummary</code> can be modified by setting global options. In particular, most of the arguments for most of the package’s functions cna be set using global options. For example:</p>
 <ul>
 <li>
-<p><code>options(modelsummary_model_labels = “roman”)</code></p>
+<p><code>options(modelsummary_output = “modelsummary_list”)</code></p>
+</li>
+<li>
+<p><code>options(modelsummary_statistic = ‘({conf.low}, {conf.high})’)</code></p>
+</li>
+<li>
+<p><code>options(modelsummary_stars = TRUE)</code></p>
 </li>
 </ul>
-<p>The rest of this section describes each of the options above.</p>
+<p>Options not specific to give arguments are listed below.</p>
 <h4 class="anchored">
 Model labels: default column names
 </h4>
@@ -789,8 +796,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -901,7 +906,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

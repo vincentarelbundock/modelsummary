@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.39">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,10 +71,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-3bff3e942231dbc8cd1912207933fdf0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -395,7 +395,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../man/modelsummary.html">Functions</a></li><li class="breadcrumb-item"><a href="../man/datasummary_balance.html"><code>datsummary_balance</code></a></li></ol></nav></header>
 
 
 
@@ -418,17 +418,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code class="language-R">datasummary_balance(
   formula,
   data,
-  output = "default",
+  output = getOption("modelsummary_output", default = "default"),
   fmt = fmt_decimal(digits = 1, pdigits = 3),
-  title = NULL,
-  notes = NULL,
-  align = NULL,
-  stars = FALSE,
-  add_columns = NULL,
-  add_rows = NULL,
-  dinm = TRUE,
-  dinm_statistic = "std.error",
-  escape = TRUE,
+  title = getOption("modelsummary_title", default = NULL),
+  notes = getOption("modelsummary_notes", default = NULL),
+  align = getOption("modelsummary_align", default = NULL),
+  stars = getOption("modelsummary_stars", default = FALSE),
+  add_columns = getOption("modelsummary_add_columns", default = NULL),
+  add_rows = getOption("modelsummary_add_rows", default = NULL),
+  dinm = getOption("modelsummary_dinm", default = TRUE),
+  dinm_statistic = getOption("modelsummary_dinm_statistic", default = "std.error"),
+  escape = getOption("modelsummary_escape", default = TRUE),
   ...
 )
 </code></pre>
@@ -651,13 +651,19 @@ all other arguments are passed through to the table-making functions tinytable::
 </section>
 <section id="global-options" class="level3">
 <h3 class="anchored" data-anchor-id="global-options">Global Options</h3>
-<p>The behavior of <code>modelsummary</code> can be modified by setting global options. For example:</p>
+<p>The behavior of <code>modelsummary</code> can be modified by setting global options. In particular, most of the arguments for most of the package’s functions cna be set using global options. For example:</p>
 <ul>
 <li>
-<p><code>options(modelsummary_model_labels = “roman”)</code></p>
+<p><code>options(modelsummary_output = “modelsummary_list”)</code></p>
+</li>
+<li>
+<p><code>options(modelsummary_statistic = ‘({conf.low}, {conf.high})’)</code></p>
+</li>
+<li>
+<p><code>options(modelsummary_stars = TRUE)</code></p>
 </li>
 </ul>
-<p>The rest of this section describes each of the options above.</p>
+<p>Options not specific to give arguments are listed below.</p>
 <h4 class="anchored">
 Model labels: default column names
 </h4>
@@ -742,8 +748,8 @@ Formatting numeric entries
 
     <script>
 
-      function styleCell_uffrjyw5qlzdlc4856me(i, j, css_id) {
-          var table = document.getElementById("tinytable_uffrjyw5qlzdlc4856me");
+      function styleCell_kkfzcb91sslg3w2imes6(i, j, css_id) {
+          var table = document.getElementById("tinytable_kkfzcb91sslg3w2imes6");
           var cell = table.rows[i]?.cells[j];  // Safe navigation to avoid errors
           if (cell) {
               console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
@@ -753,7 +759,7 @@ Formatting numeric entries
           }
       }
       function insertSpanRow(i, colspan, content) {
-        var table = document.getElementById('tinytable_uffrjyw5qlzdlc4856me');
+        var table = document.getElementById('tinytable_kkfzcb91sslg3w2imes6');
         var newRow = table.insertRow(i);
         var newCell = newRow.insertCell(0);
         newCell.setAttribute("colspan", colspan);
@@ -761,8 +767,8 @@ Formatting numeric entries
         // this may be unsafe, but innerText does not interpret <br>
         newCell.innerHTML = content;
       }
-      function spanCell_uffrjyw5qlzdlc4856me(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_uffrjyw5qlzdlc4856me");
+      function spanCell_kkfzcb91sslg3w2imes6(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_kkfzcb91sslg3w2imes6");
         const targetRow = table.rows[i];
         const targetCell = targetRow.cells[j];
         for (let r = 0; r < rowspan; r++) {
@@ -792,21 +798,21 @@ Formatting numeric entries
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: 0, j: 0 },  ], css_id: 'tinytable_css_mnf0qsi778yryxp7z9y2',}, 
-          { positions: [ { i: 1, j: 0 },  ], css_id: 'tinytable_css_lgamqrzwbxsh4fds72x5',}, 
-          { positions: [ { i: 0, j: 1 }, { i: 0, j: 2 },  ], css_id: 'tinytable_css_l48mbwcyutljoibaarjv',}, 
-          { positions: [ { i: 2, j: 0 }, { i: 3, j: 0 }, { i: 4, j: 0 }, { i: 5, j: 0 }, { i: 6, j: 0 }, { i: 7, j: 0 }, { i: 8, j: 0 }, { i: 9, j: 0 }, { i: 10, j: 0 },  ], css_id: 'tinytable_css_8mqbnluqr47siefm2w7b',}, 
-          { positions: [ { i: 11, j: 3 }, { i: 11, j: 5 }, { i: 11, j: 4 }, { i: 11, j: 2 }, { i: 11, j: 1 }, { i: 11, j: 6 },  ], css_id: 'tinytable_css_6lgznwfj0170f6g2wbsj',}, 
-          { positions: [ { i: 11, j: 0 },  ], css_id: 'tinytable_css_69wj6cbkrdfo10u4evpb',}, 
-          { positions: [ { i: 0, j: 3 }, { i: 0, j: 6 }, { i: 0, j: 5 }, { i: 0, j: 4 },  ], css_id: 'tinytable_css_55n5zobp3l6mdre7ixvb',}, 
-          { positions: [ { i: 2, j: 1 }, { i: 3, j: 1 }, { i: 6, j: 1 }, { i: 7, j: 1 }, { i: 4, j: 1 }, { i: 5, j: 1 }, { i: 2, j: 2 }, { i: 3, j: 2 }, { i: 4, j: 2 }, { i: 5, j: 2 }, { i: 6, j: 2 }, { i: 7, j: 2 }, { i: 8, j: 2 }, { i: 8, j: 1 }, { i: 9, j: 1 }, { i: 10, j: 1 }, { i: 2, j: 5 }, { i: 2, j: 4 }, { i: 2, j: 3 }, { i: 3, j: 3 }, { i: 4, j: 3 }, { i: 5, j: 3 }, { i: 6, j: 3 }, { i: 7, j: 3 }, { i: 8, j: 3 }, { i: 9, j: 3 }, { i: 9, j: 2 }, { i: 10, j: 2 }, { i: 2, j: 6 }, { i: 3, j: 6 }, { i: 3, j: 5 }, { i: 3, j: 4 }, { i: 4, j: 4 }, { i: 5, j: 4 }, { i: 6, j: 4 }, { i: 7, j: 4 }, { i: 8, j: 4 }, { i: 9, j: 4 }, { i: 10, j: 4 }, { i: 10, j: 3 }, { i: 4, j: 5 }, { i: 5, j: 5 }, { i: 6, j: 5 }, { i: 4, j: 6 }, { i: 8, j: 5 }, { i: 9, j: 5 }, { i: 10, j: 5 }, { i: 7, j: 5 }, { i: 8, j: 6 }, { i: 5, j: 6 }, { i: 6, j: 6 }, { i: 7, j: 6 }, { i: 9, j: 6 }, { i: 10, j: 6 },  ], css_id: 'tinytable_css_4bvrgnwotfk9usewa5mq',}, 
-          { positions: [ { i: 1, j: 1 }, { i: 1, j: 5 }, { i: 1, j: 4 }, { i: 1, j: 3 }, { i: 1, j: 6 }, { i: 1, j: 2 },  ], css_id: 'tinytable_css_4a6dgr16o0qxwjesvo90',}, 
+          { positions: [ { i: 0, j: 3 }, { i: 0, j: 6 }, { i: 0, j: 5 }, { i: 0, j: 4 },  ], css_id: 'tinytable_css_xwysdnzk48c06sq73b4q',}, 
+          { positions: [ { i: 1, j: 0 },  ], css_id: 'tinytable_css_wu0rdksmxs9pjwzeo9er',}, 
+          { positions: [ { i: 11, j: 3 }, { i: 11, j: 5 }, { i: 11, j: 4 }, { i: 11, j: 2 }, { i: 11, j: 1 }, { i: 11, j: 6 },  ], css_id: 'tinytable_css_vxnltqgoukt0bdf35ilf',}, 
+          { positions: [ { i: 2, j: 1 }, { i: 3, j: 1 }, { i: 6, j: 1 }, { i: 7, j: 1 }, { i: 4, j: 1 }, { i: 5, j: 1 }, { i: 2, j: 2 }, { i: 3, j: 2 }, { i: 4, j: 2 }, { i: 5, j: 2 }, { i: 6, j: 2 }, { i: 7, j: 2 }, { i: 8, j: 2 }, { i: 8, j: 1 }, { i: 9, j: 1 }, { i: 10, j: 1 }, { i: 2, j: 5 }, { i: 2, j: 4 }, { i: 2, j: 3 }, { i: 3, j: 3 }, { i: 4, j: 3 }, { i: 5, j: 3 }, { i: 6, j: 3 }, { i: 7, j: 3 }, { i: 8, j: 3 }, { i: 9, j: 3 }, { i: 9, j: 2 }, { i: 10, j: 2 }, { i: 2, j: 6 }, { i: 3, j: 6 }, { i: 3, j: 5 }, { i: 3, j: 4 }, { i: 4, j: 4 }, { i: 5, j: 4 }, { i: 6, j: 4 }, { i: 7, j: 4 }, { i: 8, j: 4 }, { i: 9, j: 4 }, { i: 10, j: 4 }, { i: 10, j: 3 }, { i: 4, j: 5 }, { i: 5, j: 5 }, { i: 6, j: 5 }, { i: 4, j: 6 }, { i: 8, j: 5 }, { i: 9, j: 5 }, { i: 10, j: 5 }, { i: 7, j: 5 }, { i: 8, j: 6 }, { i: 5, j: 6 }, { i: 6, j: 6 }, { i: 7, j: 6 }, { i: 9, j: 6 }, { i: 10, j: 6 },  ], css_id: 'tinytable_css_lohqmuhew0jomgrbv3a6',}, 
+          { positions: [ { i: 11, j: 0 },  ], css_id: 'tinytable_css_izk14lb1nm41b9iseo3c',}, 
+          { positions: [ { i: 1, j: 1 }, { i: 1, j: 5 }, { i: 1, j: 4 }, { i: 1, j: 3 }, { i: 1, j: 6 }, { i: 1, j: 2 },  ], css_id: 'tinytable_css_g1dsue0bfgo0r070elds',}, 
+          { positions: [ { i: 2, j: 0 }, { i: 3, j: 0 }, { i: 4, j: 0 }, { i: 5, j: 0 }, { i: 6, j: 0 }, { i: 7, j: 0 }, { i: 8, j: 0 }, { i: 9, j: 0 }, { i: 10, j: 0 },  ], css_id: 'tinytable_css_9jz4892jc5uz1weu50ck',}, 
+          { positions: [ { i: 0, j: 0 },  ], css_id: 'tinytable_css_7n8u7w84y55xdemqwvjg',}, 
+          { positions: [ { i: 0, j: 1 }, { i: 0, j: 2 },  ], css_id: 'tinytable_css_3nwu29gqm8z48stjahta',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  styleCell_uffrjyw5qlzdlc4856me(cell.i, cell.j, group.css_id);
+                  styleCell_kkfzcb91sslg3w2imes6(cell.i, cell.j, group.css_id);
               });
           });
       });
@@ -814,18 +820,18 @@ Formatting numeric entries
 
     <style>
       /* tinytable css entries after */
-      .table td.tinytable_css_mnf0qsi778yryxp7z9y2, .table th.tinytable_css_mnf0qsi778yryxp7z9y2 { text-align: left; text-align: center; border-top: solid #d3d8dc 0.1em; text-align: center; }
-      .table td.tinytable_css_lgamqrzwbxsh4fds72x5, .table th.tinytable_css_lgamqrzwbxsh4fds72x5 { text-align: left; border-bottom: solid #d3d8dc 0.05em; }
-      .table td.tinytable_css_l48mbwcyutljoibaarjv, .table th.tinytable_css_l48mbwcyutljoibaarjv { text-align: right; text-align: center; border-top: solid #d3d8dc 0.1em; text-align: center; border-bottom: solid #d3d8dc 0.05em; }
-      .table td.tinytable_css_8mqbnluqr47siefm2w7b, .table th.tinytable_css_8mqbnluqr47siefm2w7b { text-align: left; }
-      .table td.tinytable_css_6lgznwfj0170f6g2wbsj, .table th.tinytable_css_6lgznwfj0170f6g2wbsj { text-align: right; border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_69wj6cbkrdfo10u4evpb, .table th.tinytable_css_69wj6cbkrdfo10u4evpb { text-align: left; border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_55n5zobp3l6mdre7ixvb, .table th.tinytable_css_55n5zobp3l6mdre7ixvb { text-align: right; text-align: center; border-top: solid #d3d8dc 0.1em; text-align: center; }
-      .table td.tinytable_css_4bvrgnwotfk9usewa5mq, .table th.tinytable_css_4bvrgnwotfk9usewa5mq { text-align: right; }
-      .table td.tinytable_css_4a6dgr16o0qxwjesvo90, .table th.tinytable_css_4a6dgr16o0qxwjesvo90 { text-align: right; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_xwysdnzk48c06sq73b4q, .table th.tinytable_css_xwysdnzk48c06sq73b4q { text-align: right; text-align: center; border-top: solid #d3d8dc 0.1em; text-align: center; }
+      .table td.tinytable_css_wu0rdksmxs9pjwzeo9er, .table th.tinytable_css_wu0rdksmxs9pjwzeo9er { text-align: left; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_vxnltqgoukt0bdf35ilf, .table th.tinytable_css_vxnltqgoukt0bdf35ilf { text-align: right; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_lohqmuhew0jomgrbv3a6, .table th.tinytable_css_lohqmuhew0jomgrbv3a6 { text-align: right; }
+      .table td.tinytable_css_izk14lb1nm41b9iseo3c, .table th.tinytable_css_izk14lb1nm41b9iseo3c { text-align: left; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_g1dsue0bfgo0r070elds, .table th.tinytable_css_g1dsue0bfgo0r070elds { text-align: right; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_9jz4892jc5uz1weu50ck, .table th.tinytable_css_9jz4892jc5uz1weu50ck { text-align: left; }
+      .table td.tinytable_css_7n8u7w84y55xdemqwvjg, .table th.tinytable_css_7n8u7w84y55xdemqwvjg { text-align: left; text-align: center; border-top: solid #d3d8dc 0.1em; text-align: center; }
+      .table td.tinytable_css_3nwu29gqm8z48stjahta, .table th.tinytable_css_3nwu29gqm8z48stjahta { text-align: right; text-align: center; border-top: solid #d3d8dc 0.1em; text-align: center; border-bottom: solid #d3d8dc 0.05em; }
     </style>
     <div class="container">
-      <table class="table table-borderless" id="tinytable_uffrjyw5qlzdlc4856me" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="table table-borderless" id="tinytable_kkfzcb91sslg3w2imes6" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
         <thead>
 <tr>
 <th scope="col" align="center" colspan="1"> </th>
@@ -1030,8 +1036,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -1142,7 +1146,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
