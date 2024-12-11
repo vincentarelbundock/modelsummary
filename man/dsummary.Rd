@@ -133,12 +133,14 @@ Revert to \code{kableExtra} for one session:
 \section{Global Options}{
 
 
-The behavior of \code{modelsummary} can be modified by setting global options. For example:
+The behavior of \code{modelsummary} can be modified by setting global options.  In particular, most of the arguments for most of the package's functions cna be set using global options. For example:
 \itemize{
-\item \code{options(modelsummary_model_labels = "roman")}
+\item \code{options(modelsummary_output = "modelsummary_list")}
+\item \code{options(modelsummary_statistic = '({conf.low}, {conf.high})')}
+\item \code{options(modelsummary_stars = TRUE)}
 }
 
-The rest of this section describes each of the options above.
+Options not specific to give arguments are listed below.
 \subsection{Model labels: default column names}{
 
 These global option changes the style of the default column headers:
