@@ -831,6 +831,7 @@ modelsummary <- function(
     align = align,
     fmt = fmt,
     hrule = hrule,
+    gof_idx = hrule,
     notes = notes,
     output = output,
     title = title,

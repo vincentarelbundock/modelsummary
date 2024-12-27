@@ -13,8 +13,8 @@ factory_tinytable <- function(tab,
                               escape = TRUE,
                               output_format = "tinytable",
                               output_file = NULL,
+                              gof_idx = NULL,
                               ...) {
-
   insight::check_if_installed("tinytable")
 
   span_list <- get_span_kableExtra(tab)
@@ -61,7 +61,7 @@ factory_tinytable <- function(tab,
   if (!is.null(align)) {
     for (idx in seq_along(tab)) {
       out <- tinytable::style_tt(out, j = idx, align = align[idx])
-    } 
+    }
   }
 
   # span: compute
@@ -91,6 +91,12 @@ factory_tinytable <- function(tab,
     out <- tinytable::group_tt(out, i = hg)
   }
 
+  if ("d" %in% align && !is.null(gof_idx)) {
+    idx <- paste(match("d", align), collapse = ",")
+    inn <- sprintf("cell{%s-%s}{%s}={guard,halign=c},", gof_idx + 1, nrow(out) + out@nhead, idx)
+    out <- tinytable::style_tt(out, tabularray_inner = inn)
+  }
+
   # write to file
   if (!is.null(output_file)) {
     tinytable::save_tt(out, output = output_file, overwrite = TRUE)
@@ -107,7 +113,6 @@ factory_tinytable <- function(tab,
   }
 
   return(invisible(out))
-
 }
 
 
@@ -128,7 +133,7 @@ escape_everything <- function(tab, output_format, span_list, title, notes) {
   if (!is.null(colnames(tab))) {
     colnames(tab) <- tinytable::format_tt(colnames(tab), escape = output_format)
   }
-  
+
   for (i in seq_along(notes)) {
     # hack: avoid escaping stars notes with \num{} in LaTeX
     flag <- !identical(output_format, "latex") || !grepl("\\\\num\\{", notes[[i]])

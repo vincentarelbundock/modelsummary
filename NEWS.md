@@ -7,6 +7,7 @@ Bugs:
 * Stars note in `kableExtra` escaped `\num{}` in LaTeX.
 * Bad horizontal rule placement with `add_rows`. Thanks to @pyoungblood for Issue #813.
 * `shape` creates bad columns when model names include spaces. Thanks to @daSilva5 for report #816.
+* Center align GOF in dot-aligned columns. Thanks to @svraka for report #827.
 
 New features:
 
