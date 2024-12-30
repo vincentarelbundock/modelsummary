@@ -393,8 +393,9 @@ sanitize_datasummary_balance_data <- function(formula, data) {
   lhs <- stats::update(formula, ".~1")
   lhs <- all.vars(lhs)
   lhs <- setdiff(lhs, ".")
+  bonus <- c("clusters", "weights", "blocks")
   if (length(lhs) > 0) {
-    cols <- intersect(c(lhs, rhs), colnames(data))
+    cols <- intersect(c(lhs, rhs, bonus), colnames(data))
     if (length(cols) > 1) {
       data <- data[, cols, drop = FALSE]
     }

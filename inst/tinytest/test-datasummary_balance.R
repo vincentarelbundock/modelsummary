@@ -327,3 +327,32 @@ expect_snapshot_print(tab, "datasummary_balance-issue711")
 tab <- datasummary_balance(mpg + hp ~ am, data = mtcars, output = "dataframe")
 expect_equal(nrow(tab), 2)
 
+
+# Issue #840
+requiet("randomizr")
+requiet("estimatr")
+requiet("tibble")
+
+dat <- tibble::tibble(
+  x = rnorm(n = 1000),
+  clusters = randomizr::simple_ra(N = 1000, num_arms = 50),
+  Z = randomizr::cluster_ra(clusters = clusters),
+  y = x + Z * 5,
+  weights = ifelse(y > 5, 0, 1)) # making sure the weights actually make a difference
+dat <- data.frame(dat)
+tab <- datasummary_balance(y ~ Z, data = dat, fmt = 4, output = "data.frame")
+
+wm <- weighted.mean(dat$y[dat$Z == 1], dat$weights[dat$Z == 1])
+wm <- sprintf("%.4f", wm)
+expect_equivalent(wm, tab[, 4])
+wm <- weighted.mean(dat$y[dat$Z == 0], dat$weights[dat$Z == 0])
+wm <- sprintf("%.4f", wm)
+expect_equivalent(wm, tab[, 2])
+
+# and these should be the differences
+dinm <- difference_in_means(y ~ Z,
+  clusters = clusters,
+  weights = weights,
+  data = dat)
+dinm <- sprintf("%.4f", coef(dinm))
+expect_equivalent(dinm, tab[, 6])
