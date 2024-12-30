@@ -8,6 +8,7 @@ Bugs:
 * Bad horizontal rule placement with `add_rows`. Thanks to @pyoungblood for Issue #813.
 * `shape` creates bad columns when model names include spaces. Thanks to @daSilva5 for report #816.
 * Center align GOF in dot-aligned columns. Thanks to @svraka for report #827.
+* Weights, blocks, and clusters ignored by `datasummary_balance()`. Thanks to @kleuveld for report #840.
 
 New features:
 
