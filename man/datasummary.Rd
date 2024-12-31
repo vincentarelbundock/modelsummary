@@ -216,7 +216,7 @@ HTML tables:
 \section{LaTeX preamble}{
 
 
-When creating LaTeX via the \code{tinytable} backend (default in version 2.0.0 and later), it is useful to include the following commands in the LaTeX preamble of your documents. Note that they are added automatically when compiling Rmarkdown or Quarto documents (except when the \code{modelsummary()} calls are cached).
+When creating LaTeX via the \code{tinytable} backend (default in version 2.0.0 and later), it is useful to include the following commands in the LaTeX preamble of your documents. These commands are automatically added to the preamble when compiling Rmarkdown or Quarto documents, except when the \code{modelsummary()} calls are cached.
 
 \if{html}{\out{<div class="sourceCode latex">}}\preformatted{\\usepackage\{tabularray\}
 \\usepackage\{float\}
