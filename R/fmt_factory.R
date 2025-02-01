@@ -88,6 +88,10 @@ fmt_decimal <- function(digits = 3, pdigits = NULL, ...) {
             if (isTRUE(grepl("e", out))) {
                 out <- format(z, digits = digits, scientific = TRUE, trim = TRUE, ...)
             }
+
+            # add back minus sign if rounded to 0.000
+            out <- add_sign(out, z)
+
             return(out)
         }
         pfun <- function(z, ...) {
@@ -152,14 +156,16 @@ fmt_significant <- function(digits = 3, ...) {
                 z[[n]] <- tmp[[n]]
                 z[[n]] <- fmt_nainf(z[[n]])
                 z[[n]] <- fmt_mathmode(z[[n]])
+                z[[n]] <- add_sign(z[[n]], tmp[[n]])
             }
-            x <- z
+            out <- z
         } else if (isTRUE(checkmate::check_numeric(x))) {
-            x <- fun(x)
-            x <- fmt_nainf(x)
-            x <- fmt_mathmode(x)
+            out <- fun(x)
+            out <- fmt_nainf(out)
+            out <- fmt_mathmode(out)
         }
-        return(x)
+
+        return(out)
     }
     class(out) <- c("fmt_factory", class(out))
     return(out)
@@ -402,6 +408,14 @@ fmt_equivalence <- function(conf_level = 0.95, digits = 3, pdigits = NULL, ...) 
     }
 
     class(out) <- c("fmt_factory", class(out))
+    return(out)
+}
+
+
+add_sign <- function(string, number) {
+    if (!is.numeric(number)) return(string)
+    out <- ifelse(sign(number) == -1 & !grepl("^-", string),
+        paste0("-", string), string)
     return(out)
 }
 
