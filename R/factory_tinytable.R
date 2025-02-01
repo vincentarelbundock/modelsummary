@@ -36,7 +36,8 @@ factory_tinytable <- function(tab,
       output_format = of,
       span_list = span_list,
       title = title,
-      notes = notes)
+      notes = notes
+    )
     tab <- tmp$tab
     title <- tmp$title
     notes <- tmp$notes
@@ -84,7 +85,7 @@ factory_tinytable <- function(tab,
     }
   }
 
-  if (!is.null(hgroup)) {
+  if (!is.null(hgroup) && length(hgroup) > 0) {
     hg <- sapply(hgroup, min)
     names(hg) <- names(hgroup)
     hg <- as.list(hg)
@@ -123,7 +124,8 @@ escape_everything <- function(tab, output_format, span_list, title, notes) {
     tab[[col]] <- ifelse(
       grepl("\\\\num\\{", tab[[col]]),
       tab[[col]],
-      tinytable::format_tt(tab[[col]], escape = output_format))
+      tinytable::format_tt(tab[[col]], escape = output_format)
+    )
   }
 
   for (i in seq_along(span_list)) {

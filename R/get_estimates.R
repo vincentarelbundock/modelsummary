@@ -146,7 +146,9 @@ get_estimates <- function(model, conf_level = .95, vcov = NULL, shape = NULL, co
 
 get_estimates_broom <- function(model, conf_int, conf_level, ...) {
     insight::check_if_installed("broom")
+    insight::check_if_installed("generics")
 
+    # broom::tidy()
     if (isTRUE(conf_int) && !is.null(conf_level)) {
         out <- suppressWarnings(try(
             broom::tidy(model, conf.int = conf_int, conf.level = conf_level, ...),
@@ -157,8 +159,26 @@ get_estimates_broom <- function(model, conf_int, conf_level, ...) {
             silent = TRUE))
     }
 
+    # generics::tidy()
+    if (!inherits(out, "data.frame")) {
+        if (isTRUE(conf_int) && !is.null(conf_level)) {
+            out <- suppressWarnings(try(
+                generics::tidy(model, conf.int = conf_int, conf.level = conf_level, ...),
+                silent = TRUE))
+        } else {
+            out <- suppressWarnings(try(
+                generics::tidy(model, conf.int = conf_int, ...),
+                silent = TRUE))
+        }
+    }
+
     if (!inherits(out, "data.frame") || nrow(out) < 1) {
         return("`broom::tidy(model)` did not return a valid data.frame.")
+    }
+
+    # shim for marginaleffects::hypotheses()
+    if ("hypothesis" %in% colnames(out) && !"term" %in% colnames(out)) {
+        colnames(out)[colnames(out) == "hypothesis"] <- "term"
     }
 
     if (!"term" %in% colnames(out)) {

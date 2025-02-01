@@ -136,12 +136,9 @@ Options not specific to given arguments are listed below.
 These global option changes the style of the default column headers:
 \itemize{
 \item \code{options(modelsummary_model_labels = "roman")}
-\item \code{options(modelsummary_panel_labels = "roman")}
 }
 
-The supported styles are: "model", "panel", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)"
-
-The panel-specific option is only used when \code{shape="rbind"}
+The supported styles are: "model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)"
 }
 
 \subsection{Table-making packages}{
