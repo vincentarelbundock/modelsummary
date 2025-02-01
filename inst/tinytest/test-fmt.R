@@ -37,7 +37,12 @@ expect_equivalent(known, z$OLS)
 
 # significant digits per term
 mod <- lm(mpg ~ hp + drat + qsec, data = mtcars)
-tab <- modelsummary(mod, output = "dataframe", fmt = fmt_significant(2), statistic = "conf.int", gof_map = NA)
+tab <- modelsummary(mod,
+  output = "dataframe",
+  fmt = fmt_significant(2),
+  statistic = "conf.int",
+  gof_map = NA
+)
 expect_equivalent(tab[["(1)"]], c("17.7", "[-8.9, 44.4]", "-0.058", "[-0.087, -0.029]", "4.4", "[1.8, 7.1]", "-0.28", "[-1.29, 0.72]"))
 
 ### FUNCTION FACTORY REFACTOR
@@ -78,8 +83,10 @@ tab <- modelsummary(
   fmt = fmt_statistic(
     estimate = 5,
     std.error = \(x) sprintf("%.3f", x),
-    default = fmt_significant(1)),
-  gof_map = NA)
+    default = fmt_significant(1)
+  ),
+  gof_map = NA
+)
 expect_equivalent(tab[["(1)"]], c("17.73662", "(13.020)", "(1.4)", "[-8.93, 44.41]", "-0.05797", "(0.014)", "(-4.1)", "[-0.09, -0.03]", "4.42875", "(1.292)", "(3.4)", "[1.78, 7.07]", "-0.28407", "(0.489)", "(-0.6)", "[-1.29, 0.72]"))
 
 tab <- modelsummary(
@@ -88,8 +95,10 @@ tab <- modelsummary(
   fmt = fmt_term(
     "(Intercept)" = 5,
     "hp" = 3,
-    default = fmt_sprintf("%.1f")),
-  gof_map = NA)
+    default = fmt_sprintf("%.1f")
+  ),
+  gof_map = NA
+)
 expect_equivalent(tab[["(1)"]], c("17.73662", "(13.01979)", "-0.058", "(0.014)", "4.4", "(1.3)", "-0.3", "(0.5)"))
 
 
@@ -97,7 +106,8 @@ expect_equivalent(tab[["(1)"]], c("17.73662", "(13.01979)", "-0.058", "(0.014)",
 mod <- lm(mpg ~ hp, mtcars)
 tab <- modelsummary(mod,
   output = "data.frame",
-  fmt = fmt_statistic(estimate = 3, std.error = 1, r.squared = 7))
+  fmt = fmt_statistic(estimate = 3, std.error = 1, r.squared = 7)
+)
 expect_equivalent(tab[c(1:2, 6), 4], c("30.099", "(1.6)", "0.6024373"))
 
 
@@ -113,4 +123,17 @@ testmod <- lmer(Conc ~ Year + (1 | ID), data = dat)
 modelsummary(testmod, output = "markdown")
 expect_snapshot_print(
   modelsummary(testmod, fmt = fmt_sci(digits = 2), output = "markdown"),
-  "fmt-fmt_sci_2")
+  "fmt-fmt_sci_2"
+)
+
+
+# Issue #848: sign when rounded to zero
+x <- fmt_decimal(2)(c(-1e-5, 1e-5))
+expect_equal(x, c("-0.00", "0.00"))
+dat <- transform(mtcars, mpg = mpg / 100000)
+mod <- lm(mpg ~ hp, dat)
+tab <- modelsummary(mod,
+  fmt = fmt_statistic(estimate = 2, std.error = 2),
+  output = "data.frame"
+)
+expect_true("-0.00" %in% tab[["(1)"]])
