@@ -121,7 +121,7 @@ models.](https://modelsummary.com/articles/modelsummary.html#adding-new-models-1
 Text/Markdown, Microsoft Word, Powerpoint, RTF, JPG, or PNG formats.
 They can also be inserted seamlessly in Rmarkdown documents to produce
 [automated documents and reports in PDF, HTML, RTF, or Microsoft Word
-formats.](https://modelsummary.com/articles/modelsummary.html#rmarkdown-and-knitr-1)
+formats.](https://modelsummary.com/articles/modelsummary.html#rmarkdown-quarto-org-mode)
 
 #### Dangerous
 
