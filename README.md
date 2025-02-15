@@ -1,6 +1,7 @@
 
 
 <p align="center">
+
 <a href="https://modelsummary.com">
 <img src="man/figures/modelsummary_gallery.gif" height = "350" class = "center">
 </a> <br> <br>
@@ -38,23 +39,22 @@ statistics* and to summarize *statistical models* in `R`.
 `modelsummary` includes two families of functions:
 
 1.  Model Summary
-    -   `modelsummary`: Regression tables with side-by-side models.
-    -   `modelplot`: Coefficient plots.
+    - `modelsummary`: Regression tables with side-by-side models.
+    - `modelplot`: Coefficient plots.
 2.  Data Summary
-    -   `datasummary`: Powerful tool to create (multi-level) cross-tabs
-        and data summaries.
-    -   `datasummary_crosstab`: Cross-tabulations.
-    -   `datasummary_balance`: Balance tables with subgroup statistics
-        and difference in means (aka “Table 1”).
-    -   `datasummary_correlation`: Correlation tables.
-    -   `datasummary_skim`: Quick overview (“skim”) of a dataset.
-    -   `datasummary_df`: Turn dataframes into nice tables with titles,
-        notes, etc.
+    - `datasummary`: Powerful tool to create (multi-level) cross-tabs
+      and data summaries.
+    - `datasummary_crosstab`: Cross-tabulations.
+    - `datasummary_balance`: Balance tables with subgroup statistics and
+      difference in means (aka “Table 1”).
+    - `datasummary_correlation`: Correlation tables.
+    - `datasummary_skim`: Quick overview (“skim”) of a dataset.
+    - `datasummary_df`: Turn dataframes into nice tables with titles,
+      notes, etc.
 
 ## Why?
 
-Here are a few benefits of `modelsummary` over some [alternative
-packages](#alternative-packages):
+Here are a few benefits of `modelsummary`:
 
 #### Easy
 
@@ -188,12 +188,11 @@ plots produced by `modelsummary`, but [the Get Started
 page](https://modelsummary.com/vignettes/get_started.html) only
 scratches the surface. For details, see the vignettes:
 
--   [Data
-    Summaries](https://modelsummary.com/vignettes/datasummary.html)
--   [Model
-    Summaries](https://modelsummary.com/vignettes/modelsummary.html)
--   [Model Plots](https://modelsummary.com/vignettes/modelplot.html)
--   [`modelsummary` extensions and
-    customization](https://modelsummary.com/vignettes/modelsummary_extension.html)
--   [Themes and
-    Styles](https://modelsummary.com/vignettes/appearance.html)
+- [Data Summaries](https://modelsummary.com/vignettes/datasummary.html)
+- [Model
+  Summaries](https://modelsummary.com/vignettes/modelsummary.html)
+- [Model Plots](https://modelsummary.com/vignettes/modelplot.html)
+- [`modelsummary` extensions and
+  customization](https://modelsummary.com/vignettes/modelsummary_extension.html)
+- [Themes and
+  Styles](https://modelsummary.com/vignettes/appearance.html)
