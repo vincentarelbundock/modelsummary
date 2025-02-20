@@ -153,9 +153,9 @@ globalVariables(c(
 #' #' your main table. By default, rows are appended to the bottom of the table.
 #' You can define a "position" attribute of integers to set the columns positions.
 #' See Examples section below.
-#' @param add_rows a data.frame (or tibble) with the same number of columns as
-#' your main table. By default, rows are appended to the bottom of the table.
-#' You can define a "position" attribute of integers to set the row positions.
+#' @param add_rows a data.frame (or tibble) with the same number of columns as your main table. By default, rows are appended to the bottom of the table. Positions can be defined using integers. In the `modelsummary()` function (only), you can also use string shortcuts: "coef_start", "coef_end", "gof_start", "gof_end"
+#'   - `attr(new_rows, 1:2)`
+#'   - `attr(new_rows, "gof_start")`
 #' See Examples section below.
 #' @param title string. Cross-reference labels should be added with Quarto or Rmarkdown chunk options when applicable. When saving standalone LaTeX files, users can add a label such as `\\label{tab:mytable}` directly to the title string, while also specifying `escape=FALSE`.
 #' @param notes list or vector of notes to append to the bottom of the table.
@@ -377,7 +377,7 @@ modelsummary <- function(
     vcov = getOption("modelsummary_vcov", default = NULL),
     conf_level = getOption("modelsummary_conf_level", default = 0.95),
     exponentiate = getOption("modelsummary_exponentiate", default = FALSE),
-    stars = getOption("modelsummary_stars", default = FALSE), 
+    stars = getOption("modelsummary_stars", default = FALSE),
     shape = getOption("modelsummary_shape", default = term + statistic ~ model),
     coef_map = getOption("modelsummary_coef_map", default = NULL),
     coef_omit = getOption("modelsummary_coef_omit", default = NULL),
@@ -740,7 +740,26 @@ modelsummary <- function(
   if (!is.na(hrule) &&
     !is.null(add_rows) &&
     !is.null(attr(add_rows, "position"))) {
-    hrule <- hrule + sum(length(attr(add_rows, "position") < hrule)) - 1
+    pos <- attr(add_rows, "position")
+    # gof_start/gof_end do not change hrule
+    if (identical(pos, "gof_start")) {
+      pos <- match("gof", tab$part)
+      pos <- pos:(pos + nrow(add_rows) - 1)
+      attr(add_rows, "position") <- pos
+    } else if (identical(pos, "gof_end")) {
+      attr(add_rows, "position") <- NULL
+    } else if (identical(pos, "coef_start")) {
+      pos <- seq_len(nrow(add_rows))
+      attr(add_rows, "position") <- pos
+      hrule <- hrule + sum(length(pos < hrule - 1))
+    } else if (identical(pos, "coef_end")) {
+      pos <- match("gof", tab$part)
+      pos <- pos:(pos + nrow(add_rows) - 1)
+      attr(add_rows, "position") <- pos
+      hrule <- hrule + sum(length(pos < hrule - 1))
+    } else {
+      hrule <- hrule + sum(length(pos < hrule - 1))
+    }
   }
   if (is.na(hrule)) {
     hrule <- NULL

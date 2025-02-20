@@ -65,10 +65,12 @@ the table (e.g., \code{align = "lcc"}).  Valid characters: l, c, r, d.
 
 \item{notes}{list or vector of notes to append to the bottom of the table.}
 
-\item{add_rows}{a data.frame (or tibble) with the same number of columns as
-your main table. By default, rows are appended to the bottom of the table.
-You can define a "position" attribute of integers to set the row positions.
-See Examples section below.}
+\item{add_rows}{a data.frame (or tibble) with the same number of columns as your main table. By default, rows are appended to the bottom of the table. Positions can be defined using integers. In the \code{modelsummary()} function (only), you can also use string shortcuts: "coef_start", "coef_end", "gof_start", "gof_end"
+\itemize{
+\item \code{attr(new_rows, 1:2)}
+\item \code{attr(new_rows, "gof_start")}
+See Examples section below.
+}}
 
 \item{add_columns}{a data.frame (or tibble) with the same number of rows as
 your main table.}
