@@ -1,6 +1,10 @@
-
-
 # News
+
+## Development
+
+Bug:
+
+* `modelplot()` accepts `linewidth` argument. Thanks to @trekonom for report #861.
 
 ## 2.3.0
 
