@@ -105,3 +105,8 @@ expect_inherits(p, "gg")
 # Issue #682
 mod <- lm(mpg ~ hp, mtcars)
 expect_silent(modelplot(mod, ci_method = "wald"))
+
+# Issue #861: linewidth
+mod <- lm(hp ~ mpg + drat, data = mtcars)
+p <- modelplot(mod, linewidth = 3)
+expect_snapshot_plot(p, "modelplot-issue861")
