@@ -28,6 +28,20 @@ print.custom_html_string <- function(x, ...) {
   invisible(x)
 }
 
+strip_random_sequential <- function(x, stem = "tinytable_css_") {
+  pattern <- paste0(stem, "\\w+\\b")
+  match_list <- lapply(x, function(s) {
+    regmatches(s, gregexpr(pattern, s, perl = TRUE))[[1]]
+  })
+  all_matches <- unlist(match_list)
+  unique_matches <- unique(all_matches)
+  new_ids <- sprintf("tinytable_css_%02d", seq_along(unique_matches))
+  replaced <- x
+  for (i in seq_along(unique_matches)) {
+    replaced <- gsub(unique_matches[i], new_ids[i], replaced, perl = TRUE)
+  }
+  replaced
+}
 strip_random <- function(x) {
   for (stem in c("tinytable_css_", "tinytable_(?!css)", "styleCell_", "spanCell_", "insertSpanRow", "styleHeaderCell_", "tinytable/")) {
     x <- strip_random_sequential(x, stem)
