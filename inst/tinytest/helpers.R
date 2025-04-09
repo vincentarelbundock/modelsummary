@@ -28,6 +28,14 @@ print.custom_html_string <- function(x, ...) {
   invisible(x)
 }
 
+strip_random <- function(x) {
+  for (stem in c("tinytable_css_", "tinytable_(?!css)", "styleCell_", "spanCell_", "insertSpanRow", "styleHeaderCell_", "tinytable/")) {
+    x <- strip_random_sequential(x, stem)
+  }
+  x
+}
+options(tinysnapshot_fn_current = strip_random)
+options(tinysnapshot_fn_target = strip_random)
 
 print_html <- function(x) {
   set.seed(1024)
