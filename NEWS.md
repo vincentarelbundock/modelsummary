@@ -6,6 +6,10 @@ Bug:
 
 * `modelplot()` accepts `linewidth` argument. Thanks to @trekonom for report #861.
 
+Misc:
+
+* Allow `tinytable`-style note specification: `notes=list(a = list(i = 0:1, j = 1, text = "Blah."))`. Thanks to @sverrirarnors for feature request #867.
+
 ## 2.3.0
 
 Breaking change:

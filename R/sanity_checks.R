@@ -4,10 +4,10 @@
 check_dependency <- function(library_name) {
   flag <- requireNamespace(library_name, quietly = TRUE)
   if (isFALSE(flag)) {
-      msg <- sprintf("Please install the `%s` package.", library_name)
-      return(msg)
+    msg <- sprintf("Please install the `%s` package.", library_name)
+    return(msg)
   } else {
-      return(TRUE)
+    return(TRUE)
   }
 }
 assert_dependency <- checkmate::makeAssertionFunction(check_dependency)
@@ -44,9 +44,8 @@ sanity_ellipsis <- function(vcov, ...) {
 
   if ("statistic_vertical" %in% names(ellip)) {
     warning("The `statistic_vertical` argument is deprecated and will be ignored. To display uncertainty estimates next to your coefficients, use a `glue` string in the `estimate` argument. See `?modelsummary`",
-            call. = FALSE)
+      call. = FALSE)
   }
-
 }
 
 
@@ -54,8 +53,8 @@ sanity_ellipsis <- function(vcov, ...) {
 #'
 #' @noRd
 sanity_model_names <- function(modelnames) {
-  if (any(modelnames == '')) {
-    stop('Model names cannot include empty strings. Please make sure that every object in the `models` list has a unique, non-empty name. If the `models` list has no names at all (NULL), `modelsummary` will create some automatically.')
+  if (any(modelnames == "")) {
+    stop("Model names cannot include empty strings. Please make sure that every object in the `models` list has a unique, non-empty name. If the `models` list has no names at all (NULL), `modelsummary` will create some automatically.")
   }
 }
 
@@ -64,15 +63,15 @@ sanity_model_names <- function(modelnames) {
 #'
 #' @noRd
 sanity_align <- function(align, estimate = NULL, statistic = NULL, stars = FALSE) {
-    checkmate::assert_string(align, null.ok = TRUE)
-    if (!is.null(align) && any(grepl("[^lcrd]", align))) {
-        insight::format_error('The `align` argument must be a character string which only includes the letters l, c, r, or d. Example: "lcdd"')
-    }
+  checkmate::assert_string(align, null.ok = TRUE)
+  if (!is.null(align) && any(grepl("[^lcrd]", align))) {
+    insight::format_error('The `align` argument must be a character string which only includes the letters l, c, r, or d. Example: "lcdd"')
+  }
 
-    # the d-column siunitx LaTeX preamble doesn't play well with stars, so we need to wrap them in \\mbox{}
-    if (any(grepl("d", align))) {
-      settings_set("dcolumn_stars_mbox", TRUE)
-    }
+  # the d-column siunitx LaTeX preamble doesn't play well with stars, so we need to wrap them in \\mbox{}
+  if (any(grepl("d", align))) {
+    settings_set("dcolumn_stars_mbox", TRUE)
+  }
 }
 
 
@@ -126,7 +125,7 @@ sanity_title <- function(title, ...) {
     insight::format_warning("The `caption` argument is not supported by `modelsummary`. Try `title` instead.")
   }
   return(TRUE)
-  #checkmate::assert_character(title, len = 1, null.ok = TRUE)
+  # checkmate::assert_character(title, len = 1, null.ok = TRUE)
 }
 
 
@@ -134,7 +133,6 @@ sanity_title <- function(title, ...) {
 #'
 #' @noRd
 sanity_coef <- function(coef_map, coef_rename, coef_omit) {
-
   checkmate::assert(
     checkmate::check_string(coef_omit, null.ok = TRUE),
     checkmate::check_numeric(coef_omit)
@@ -173,33 +171,35 @@ sanity_coef <- function(coef_map, coef_rename, coef_omit) {
 sanity_factory <- function(factory_dict) {
   check_option <- function(output_type, valid) {
     if (!factory_dict[output_type] %in% valid) {
-      msg <- sprintf("`modelsummary` cannot write a table of type '%s' using the '%s' package. You must use one of the following as a global option: %s. Consider setting a global option such as: options(modelsummary_factory_%s='%s')",
+      msg <- sprintf(
+        "`modelsummary` cannot write a table of type '%s' using the '%s' package. You must use one of the following as a global option: %s. Consider setting a global option such as: options(modelsummary_factory_%s='%s')",
         output_type,
         factory_dict[output_type],
-        paste(valid, collapse = ', '),
+        paste(valid, collapse = ", "),
         output_type,
         valid[1])
       stop(msg)
     }
   }
-  check_option('html', c('gt', 'kableExtra', 'flextable', 'huxtable', 'tinytable'))
-  check_option('rtf', c('gt', 'huxtable'))
-  check_option('latex', c('gt', 'kableExtra', 'huxtable', 'tinytable'))
-  check_option('markdown', c('kableExtra', 'modelsummary', 'tinytable'))
-  check_option('word', c('flextable', 'huxtable', 'tinytable'))
-  check_option('powerpoint', c('flextable', 'huxtable'))
-  check_option('png', c('gt', 'flextable', 'kableExtra', 'tinytable'))
-  check_option('jpg', c('flextable', 'kableExtra'))
+  check_option("html", c("gt", "kableExtra", "flextable", "huxtable", "tinytable"))
+  check_option("rtf", c("gt", "huxtable"))
+  check_option("latex", c("gt", "kableExtra", "huxtable", "tinytable"))
+  check_option("markdown", c("kableExtra", "modelsummary", "tinytable"))
+  check_option("word", c("flextable", "huxtable", "tinytable"))
+  check_option("powerpoint", c("flextable", "huxtable"))
+  check_option("png", c("gt", "flextable", "kableExtra", "tinytable"))
+  check_option("jpg", c("flextable", "kableExtra"))
 
   # check default
   modelsummary_default <- getOption("modelsummary_factory_default", default = "kableExtra")
-  checkmate::assert_true(modelsummary_default %in% c("tinytable", "gt", "kableExtra",
-                                                     "flextable", "huxtable",
-                                                     "DT",
-                                                     "jupyter", "markdown",
-                                                     "html", "data.frame",
-                                                     "dataframe", "latex",
-                                                     "latex_tabular"))
+  checkmate::assert_true(modelsummary_default %in% c(
+    "tinytable", "gt", "kableExtra",
+    "flextable", "huxtable",
+    "DT",
+    "jupyter", "markdown",
+    "html", "data.frame",
+    "dataframe", "latex",
+    "latex_tabular"))
 }
 
 
@@ -209,7 +209,7 @@ sanity_factory <- function(factory_dict) {
 sanity_stars <- function(stars) {
   checkmate::assert(
     checkmate::check_flag(stars),
-    checkmate::check_numeric(stars, lower = 0, upper = 1, names = 'unique')
+    checkmate::check_numeric(stars, lower = 0, upper = 1, names = "unique")
   )
 }
 
@@ -222,14 +222,14 @@ sanity_notes <- function(notes) {
     checkmate::check_list(notes, null.ok = TRUE),
     checkmate::check_character(notes)
   )
-  if ('list' %in% class(notes)) {
-    for (note in notes) {
-      checkmate::assert(
-        checkmate::check_character(note),
-        checkmate::check_class(note, 'from_markdown')
-      )
-    }
-  }
+  # if ('list' %in% class(notes)) {
+  #   for (note in notes) {
+  #     checkmate::assert(
+  #       checkmate::check_character(note),
+  #       checkmate::check_class(note, 'from_markdown')
+  #     )
+  #   }
+  # }
 }
 
 
@@ -237,19 +237,19 @@ sanity_notes <- function(notes) {
 #'
 #' @noRd
 sanity_add_rows <- function(add_rows, models) {
-  if (inherits(add_rows, 'list')) {
+  if (inherits(add_rows, "list")) {
     for (i in seq_along(add_rows)) {
       checkmate::assert_character(add_rows[[i]], null.ok = FALSE, len = (length(models) + 1))
     }
-  } else if (inherits(add_rows, 'data.frame')) {
-    checkmate::assert_true(all(c('section', 'position') %in% colnames(add_rows)))
+  } else if (inherits(add_rows, "data.frame")) {
+    checkmate::assert_true(all(c("section", "position") %in% colnames(add_rows)))
     checkmate::assert_true(all(
-      colnames(add_rows) %in% c('term', 'section', 'position', names(models))))
+      colnames(add_rows) %in% c("term", "section", "position", names(models))))
   }
 }
 
 sanity_add_columns <- function(add_columns) {
-    checkmate::assert_data_frame(add_columns, min.cols = 1, null.ok = TRUE)
+  checkmate::assert_data_frame(add_columns, min.cols = 1, null.ok = TRUE)
 }
 
 
@@ -265,16 +265,15 @@ sanity_gof <- function(gof_output, gof_custom) {
 #'
 #' @noRd
 sanity_tidy <- function(tidy_output, tidy_custom, estimate, statistic, modelclass) {
-
   # tidy model
   checkmate::assert_data_frame(tidy_output, min.rows = 1, min.cols = 3)
-  checkmate::assert_true('term' %in% colnames(tidy_output))
+  checkmate::assert_true("term" %in% colnames(tidy_output))
 
   # tidy_custom model
   if (!is.null(tidy_custom)) {
     checkmate::assert_data_frame(tidy_custom,
       min.rows = 1, min.cols = 2)
-    checkmate::assert_true('term' %in% colnames(tidy_custom))
+    checkmate::assert_true("term" %in% colnames(tidy_custom))
   }
 }
 
@@ -283,23 +282,23 @@ sanity_ds_data <- function(formula, data, internal_call = FALSE) {
   checkmate::assert_data_frame(data)
 }
 
-  
+
 #' sanity check: datasummary
 #'
 #' @noRd
 sanity_ds_nesting_factor <- function(formula, data) {
   idx <- sapply(data, function(x) is.character(x) | is.logical(x))
   idx <- names(idx)[idx]
-  idx <- c(paste0('^', idx, ':'), paste0(':', idx, '$'))
+  idx <- c(paste0("^", idx, ":"), paste0(":", idx, "$"))
   termlabs <- labels(stats::terms(formula))
   warn <- any(sapply(idx, function(x) any(grepl(x, termlabs))))
   if (warn) {
     msg <- format_msg(
-    'You are trying to create a nested table by applying the * operator to a
+      "You are trying to create a nested table by applying the * operator to a
     character or a logical variable. It is usually a good idea to convert such
     variables to a factor before calling datasummary: dat$y<-as.factor(dat$y).
     Alternatively, you could wrap your categorical variable inside Factor() in
-    the datasummary call itself: datasummary(x ~ Factor(y) * z, data)')
+    the datasummary call itself: datasummary(x ~ Factor(y) * z, data)")
     warning(msg, call. = FALSE)
   }
 }
@@ -324,7 +323,7 @@ sanity_dots <- function(model, ...) {
   # R2 can be misleading when standardizing without an intercept
   if (identical(dots[["standardize"]], "refit") && identical(class(model), "lm")) {
     if (!"(Intercept)" %in% names(stats::coef(model))) {
-      msg <- "The goodness-of-fit statistics were calculated using the original model rather than the standardized model." 
+      msg <- "The goodness-of-fit statistics were calculated using the original model rather than the standardized model."
       insight::format_warning(msg)
     }
   }
