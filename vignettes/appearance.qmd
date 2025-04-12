@@ -296,3 +296,22 @@ modelsummary(models, output = 'tinytable') |>
     group_tt(j = list(Literacy = 2:3)) |>
     save_tt("table.html")
 ```
+
+
+## LaTeX significance stars
+
+When rendering a notebook to PDF or saving a table to LaTeX, `modelsummary` will automatically wrap the stars identifiers in the footnote in a `siunitx` `\num{}` tag. This ensures proper rendering. Unfortunately, when saving the table to file using `save_tt()`, `modelsummary` does not know *ex ante* what the ultimate file format will be, so it cannot automatically wrap the stars.
+
+One alternative is to turn off the stars footnote using a global option, and then supply the stars indicators manually in the `notes` argument.
+
+```r
+library(tinytable)
+library(modelsummary)
+x <- rnorm(1e6)
+y <- x + rnorm(1e6)
+m <- lm(y ~ x)
+sn <- "+ \\num{< 0.1}, * \\num{p< 0.05}, ** \\num{p<0.01}, *** \\num{p<0.001}"
+options(modelsummary_stars_note = FALSE)
+modelsummary(m, notes = sn, stars = TRUE) |> save_tt("latex")
+```
+
