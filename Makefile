@@ -27,8 +27,9 @@ deploy: ## pkgdown::deploy_to_branch()
 	Rscript -e "pkgdown::deploy_to_branch()"
 
 website: install ## render vignettes and website
+	rm -rf docs
 	Rscript -e "altdoc::render_docs(verbose = TRUE)"
-	rm -rf _quarto
+	git restore docs/CNAME
 
 buildpdf: document ## document + R CMD Rd2pdf .
 	R CMD Rd2pdf .
