@@ -2,11 +2,34 @@
 # 2012 wickham says "globalVariables is a hideous hack and I will never use it"
 # 2014 wickham updates his own answer with globalVariables as one of "two solutions"
 globalVariables(c(
-  ".", "term", "part", "estimate", "conf.high", "conf.low",
-  "value", "p.value", "std.error", "statistic", "stars_note", "logLik",
-  "formatBicLL", "section", "position", "where", "ticks", "statistic1", "model",
-  "tmp_grp", "condition_variable", "conf_int", "conf_level", "..idx", "Internal Data List", "Variable", "variable"))
-
+  ".",
+  "term",
+  "part",
+  "estimate",
+  "conf.high",
+  "conf.low",
+  "value",
+  "p.value",
+  "std.error",
+  "statistic",
+  "stars_note",
+  "logLik",
+  "formatBicLL",
+  "section",
+  "position",
+  "where",
+  "ticks",
+  "statistic1",
+  "model",
+  "tmp_grp",
+  "condition_variable",
+  "conf_int",
+  "conf_level",
+  "..idx",
+  "Internal Data List",
+  "Variable",
+  "variable"
+))
 
 
 #' Model Summary Tables
@@ -350,6 +373,9 @@ globalVariables(c(
 #' attr(rows, "position") <- c(1, 3)
 #' modelsummary(models, add_rows = rows)
 #'
+#' attr(rows, "position") <- "gof_start"
+#' modelsummary(models, add_rows = rows)
+#'
 #' # notes
 #' modelsummary(models, notes = list("A first note", "A second note"))
 #'
@@ -369,38 +395,41 @@ globalVariables(c(
 #'
 #' @export
 modelsummary <- function(
-    models,
-    output = getOption("modelsummary_output", default = "default"),
-    fmt = getOption("modelsummary_fmt", default = 3),
-    estimate = getOption("modelsummary_estimate", default = "estimate"),
-    statistic = getOption("modelsummary_statistic", default = "std.error"),
-    vcov = getOption("modelsummary_vcov", default = NULL),
-    conf_level = getOption("modelsummary_conf_level", default = 0.95),
-    exponentiate = getOption("modelsummary_exponentiate", default = FALSE),
-    stars = getOption("modelsummary_stars", default = FALSE),
-    shape = getOption("modelsummary_shape", default = term + statistic ~ model),
-    coef_map = getOption("modelsummary_coef_map", default = NULL),
-    coef_omit = getOption("modelsummary_coef_omit", default = NULL),
-    coef_rename = getOption("modelsummary_coef_rename", default = FALSE),
-    gof_map = getOption("modelsummary_gof_map", default = NULL),
-    gof_omit = getOption("modelsummary_gof_omit", default = NULL),
-    gof_function = getOption("modelsummary_gof_function", default = NULL),
-    group_map = getOption("modelsummary_group_map", default = NULL),
-    add_columns = getOption("modelsummary_add_columns", default = NULL),
-    add_rows = getOption("modelsummary_add_rows", default = NULL),
-    align = getOption("modelsummary_align", default = NULL),
-    notes = getOption("modelsummary_notes", default = NULL),
-    title = getOption("modelsummary_title", default = NULL),
-    escape = getOption("modelsummary_escape", default = TRUE),
-    ...) {
+  models,
+  output = getOption("modelsummary_output", default = "default"),
+  fmt = getOption("modelsummary_fmt", default = 3),
+  estimate = getOption("modelsummary_estimate", default = "estimate"),
+  statistic = getOption("modelsummary_statistic", default = "std.error"),
+  vcov = getOption("modelsummary_vcov", default = NULL),
+  conf_level = getOption("modelsummary_conf_level", default = 0.95),
+  exponentiate = getOption("modelsummary_exponentiate", default = FALSE),
+  stars = getOption("modelsummary_stars", default = FALSE),
+  shape = getOption("modelsummary_shape", default = term + statistic ~ model),
+  coef_map = getOption("modelsummary_coef_map", default = NULL),
+  coef_omit = getOption("modelsummary_coef_omit", default = NULL),
+  coef_rename = getOption("modelsummary_coef_rename", default = FALSE),
+  gof_map = getOption("modelsummary_gof_map", default = NULL),
+  gof_omit = getOption("modelsummary_gof_omit", default = NULL),
+  gof_function = getOption("modelsummary_gof_function", default = NULL),
+  group_map = getOption("modelsummary_group_map", default = NULL),
+  add_columns = getOption("modelsummary_add_columns", default = NULL),
+  add_rows = getOption("modelsummary_add_rows", default = NULL),
+  align = getOption("modelsummary_align", default = NULL),
+  notes = getOption("modelsummary_notes", default = NULL),
+  title = getOption("modelsummary_title", default = NULL),
+  escape = getOption("modelsummary_escape", default = TRUE),
+  ...
+) {
   # panel summary shape: dispatch to other function
   checkmate::assert(
     checkmate::check_formula(shape),
     checkmate::check_choice(shape, c("cbind", "rbind", "rcollapse")),
-    checkmate::check_null(shape))
+    checkmate::check_null(shape)
+  )
 
   if (isTRUE(checkmate::check_choice(shape, c("rbind", "rcollapse")))) {
-    out <- modelsummary_rbind(models,
+    out <- modelsummary_rbind(
+      models,
       output = output,
       fmt = fmt,
       estimate = estimate,
@@ -423,7 +452,8 @@ modelsummary <- function(
       notes = notes,
       title = title,
       escape = escape,
-      ...)
+      ...
+    )
     return(out)
   }
 
@@ -431,11 +461,12 @@ modelsummary <- function(
 
   ## settings
   if (!settings_equal("function_called", "modelsummary_rbind")) {
-    settings_init(settings = list(
-      "function_called" = "modelsummary"
-    ))
+    settings_init(
+      settings = list(
+        "function_called" = "modelsummary"
+      )
+    )
   }
-
 
   ## sanity functions validate variables/settings
   ## sanitize functions validate & modify & initialize
@@ -473,18 +504,29 @@ modelsummary <- function(
   sanity_align(align, estimate = estimate, statistic = statistic, stars = stars)
   checkmate::assert_function(gof_function, null.ok = TRUE)
 
-
   # confidence intervals are expensive
   if (!any(grepl("conf", c(estimate, statistic)))) {
     conf_level <- NULL
   }
 
   # model names dictionary: use unique names for manipulation
-  modelsummary_model_labels <- getOption("modelsummary_model_labels", default = "(arabic)")
+  modelsummary_model_labels <- getOption(
+    "modelsummary_model_labels",
+    default = "(arabic)"
+  )
   if (is.null(names(models))) {
     checkmate::assert_choice(
       modelsummary_model_labels,
-      choices = c("model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)"))
+      choices = c(
+        "model",
+        "arabic",
+        "letters",
+        "roman",
+        "(arabic)",
+        "(letters)",
+        "(roman)"
+      )
+    )
     if (modelsummary_model_labels == "model") {
       model_names <- paste("Model", 1:number_of_models)
     } else if (grepl("arabic", modelsummary_model_labels)) {
@@ -505,13 +547,13 @@ modelsummary <- function(
   # kableExtra sometimes converts (1), (2) to list items, which breaks formatting
   # insert think white non-breaking space
   # don't do this now when called from modelsummary_rbind() or there are escape issues
-  if (!settings_equal("function_called", "modelsummary_rbind") &&
-    all(grepl("^\\(\\d+\\)$", model_names)) &&
-    identical(output_format, "kableExtra")) {
+  if (
+    !settings_equal("function_called", "modelsummary_rbind") &&
+      all(grepl("^\\(\\d+\\)$", model_names)) &&
+      identical(output_format, "kableExtra")
+  ) {
     model_names <- paste0("&nbsp;", model_names)
   }
-
-
 
   #######################
   #  modelsummary_list  #
@@ -525,9 +567,9 @@ modelsummary <- function(
     shape = shape,
     coef_rename = coef_rename,
     output_format = output_format,
-    ...)
+    ...
+  )
   names(msl) <- model_names
-
 
   if (identical(output_format, "modelsummary_list")) {
     if (length(msl) == 1) {
@@ -555,7 +597,8 @@ modelsummary <- function(
       shape = shape,
       group_name = shape$group_name,
       exponentiate = exponentiate[[i]],
-      ...)
+      ...
+    )
 
     # before merging to collapse
     tmp <- map_estimates(
@@ -563,7 +606,8 @@ modelsummary <- function(
       coef_rename = coef_rename,
       coef_map = coef_map,
       coef_omit = coef_omit,
-      group_map = group_map)
+      group_map = group_map
+    )
 
     colnames(tmp)[match("modelsummary_value", colnames(tmp))] <- model_names[i]
 
@@ -573,12 +617,13 @@ modelsummary <- function(
   term_order <- unique(unlist(lapply(est, function(x) x$term)))
   statistic_order <- unique(unlist(lapply(est, function(x) x$statistic)))
 
-  bycols <- c(list(c(shape$group_name, "group", "term", "statistic")), lapply(est, colnames))
+  bycols <- c(
+    list(c(shape$group_name, "group", "term", "statistic")),
+    lapply(est, colnames)
+  )
   bycols <- Reduce(intersect, bycols)
   f <- function(x, y) {
-    merge(x, y,
-      all = TRUE, sort = FALSE,
-      by = bycols)
+    merge(x, y, all = TRUE, sort = FALSE, by = bycols)
   }
   est <- Reduce(f, est)
 
@@ -590,17 +635,36 @@ modelsummary <- function(
       candidate_groups <- unlist(candidate_groups)
       candidate_groups <- setdiff(
         candidate_groups,
-        c("term", "type", "estimate", "std.error", "conf.level", "conf.low", "conf.high", "statistic", "df.error", "p.value"))
+        c(
+          "term",
+          "type",
+          "estimate",
+          "std.error",
+          "conf.level",
+          "conf.low",
+          "conf.high",
+          "statistic",
+          "df.error",
+          "p.value"
+        )
+      )
       msg <- c(
         "There are duplicate term names in the table.",
         "The `shape` argument of the `modelsummary` function can be used to print related terms together. The `group_map` argument can be used to reorder, subset, and rename group identifiers. See `?modelsummary` for details.",
         "You can find the group identifier to use in the `shape` argument by calling `get_estimates()` on one of your models. Candidates include:",
-        paste(candidate_groups, collapse = ", "))
+        paste(candidate_groups, collapse = ", ")
+      )
       insight::format_warning(msg)
     }
   }
 
-  est <- shape_estimates(est, shape, conf_level = conf_level, statistic = statistic, estimate = estimate)
+  est <- shape_estimates(
+    est,
+    shape,
+    conf_level = conf_level,
+    statistic = statistic,
+    estimate = estimate
+  )
 
   # distinguish between estimates and gof (first column for tests)
   est$part <- "estimates"
@@ -639,7 +703,9 @@ modelsummary <- function(
     coef_omit <- unique(round(coef_omit))
 
     if (length(unique(sign(coef_omit))) != 1) {
-      insight::format_error("All elements of `coef_omit` must have the same sign.")
+      insight::format_error(
+        "All elements of `coef_omit` must have the same sign."
+      )
     }
 
     if (!"term" %in% shape$lhs) {
@@ -649,7 +715,10 @@ modelsummary <- function(
 
     term_idx <- paste(est$group, est$term)
     if (max(abs(coef_omit)) > length(unique(term_idx))) {
-      msg <- sprintf("There are %s unique terms, but `coef_omit` tried to omit more than that.", length(term_idx))
+      msg <- sprintf(
+        "There are %s unique terms, but `coef_omit` tried to omit more than that.",
+        length(term_idx)
+      )
       insight::format_error(msg)
     }
 
@@ -682,7 +751,8 @@ modelsummary <- function(
   # character for binding
   cols <- intersect(
     colnames(est),
-    c("term", shape$group_name, "model", "statistic"))
+    c("term", shape$group_name, "model", "statistic")
+  )
   for (col in cols) {
     est[[col]] <- as.character(est[[col]])
   }
@@ -692,17 +762,13 @@ modelsummary <- function(
     est[["term"]] <- NULL
   }
 
-
   #####################
   #  goodness-of-fit  #
   #####################
   gof <- list()
   for (i in seq_along(msl)) {
     if (is.data.frame(msl[[i]]$glance)) {
-      gof[[i]] <- format_gof(msl[[i]]$glance,
-        fmt = fmt,
-        gof_map = gof_map,
-        ...)
+      gof[[i]] <- format_gof(msl[[i]]$glance, fmt = fmt, gof_map = gof_map, ...)
       colnames(gof[[i]])[2] <- model_names[i]
     } else {
       gof[[i]] <- NULL
@@ -724,10 +790,12 @@ modelsummary <- function(
   tab[is.na(tab)] <- ""
 
   # interaction : becomes ×
-  if (is.null(coef_map) &&
-    isFALSE(coef_rename) &&
-    "term" %in% colnames(tab) &&
-    !identical(output_format, "rtf")) {
+  if (
+    is.null(coef_map) &&
+      isFALSE(coef_rename) &&
+      "term" %in% colnames(tab) &&
+      !identical(output_format, "rtf")
+  ) {
     idx <- tab$part != "gof"
     # catch for fixest `i()` operator
     tab$term <- ifelse(idx, gsub("::", " = ", tab$term), tab$term)
@@ -737,9 +805,11 @@ modelsummary <- function(
 
   # measure table
   hrule <- match("gof", tab$part)
-  if (!is.na(hrule) &&
-    !is.null(add_rows) &&
-    !is.null(attr(add_rows, "position"))) {
+  if (
+    !is.na(hrule) &&
+      !is.null(add_rows) &&
+      !is.null(attr(add_rows, "position"))
+  ) {
     pos <- attr(add_rows, "position")
     # gof_start/gof_end do not change hrule
     if (identical(pos, "gof_start")) {
@@ -756,9 +826,9 @@ modelsummary <- function(
       pos <- match("gof", tab$part)
       pos <- pos:(pos + nrow(add_rows) - 1)
       attr(add_rows, "position") <- pos
-      hrule <- hrule + sum(length(pos < hrule - 1))
+      hrule <- hrule + sum(pos < hrule - 1)
     } else {
-      hrule <- hrule + sum(length(pos < hrule - 1))
+      hrule <- hrule + sum(pos < hrule - 1)
     }
   }
   if (is.na(hrule)) {
@@ -767,8 +837,16 @@ modelsummary <- function(
 
   # stars
   stars_note <- settings_get("stars_note")
-  if (isTRUE(stars_note) && !isFALSE(stars) && !any(grepl("\\{stars\\}", c(estimate, statistic)))) {
-    stars_note <- make_stars_note(stars, output_format = output_format, output_factory = output_factory)
+  if (
+    isTRUE(stars_note) &&
+      !isFALSE(stars) &&
+      !any(grepl("\\{stars\\}", c(estimate, statistic)))
+  ) {
+    stars_note <- make_stars_note(
+      stars,
+      output_format = output_format,
+      output_factory = output_factory
+    )
     if (is.null(notes)) {
       notes <- stars_note
     } else {
@@ -781,7 +859,10 @@ modelsummary <- function(
     tab <- redundant_labels(tab, "term")
   }
 
-  if (!identical(output_format, "dataframe") && !settings_equal("function_called", "modelsummary_rbind")) {
+  if (
+    !identical(output_format, "dataframe") &&
+      !settings_equal("function_called", "modelsummary_rbind")
+  ) {
     dups <- c("term", "model", shape$group_name)
     for (d in dups) {
       tab <- redundant_labels(tab, d)
@@ -790,17 +871,18 @@ modelsummary <- function(
     # after label redundancy, before align
     tab$statistic <- tab$part <- NULL
 
-
     # HACK: arbitrary spaces to avoid name conflict
-    if ("term" %in% colnames(tab)) colnames(tab)[colnames(tab) == "term"] <- "       "
-    if ("model" %in% colnames(tab)) colnames(tab)[colnames(tab) == "model"] <- "         "
-    if ("group" %in% colnames(tab)) colnames(tab)[colnames(tab) == "model"] <- "          "
+    if ("term" %in% colnames(tab))
+      colnames(tab)[colnames(tab) == "term"] <- "       "
+    if ("model" %in% colnames(tab))
+      colnames(tab)[colnames(tab) == "model"] <- "         "
+    if ("group" %in% colnames(tab))
+      colnames(tab)[colnames(tab) == "model"] <- "          "
   }
 
   if (length(unique(tab$group)) == 1) {
     tab$group <- NULL
   }
-
 
   # only show group label if it is a row-property (lhs of the group formula)
   tmp <- setdiff(shape$lhs, c("model", "term"))
@@ -809,7 +891,6 @@ modelsummary <- function(
   } else if (!identical(output_format, "dataframe")) {
     colnames(tab)[colnames(tab) == "group"] <- "        "
   }
-
 
   # align
   if (is.null(align)) {
@@ -821,9 +902,12 @@ modelsummary <- function(
     }
   }
 
-
   # {marginaleffects} hack
-  flag <- any(sapply(models, inherits, c("marginaleffects", "comparisons", "marginalmeans")))
+  flag <- any(sapply(
+    models,
+    inherits,
+    c("marginaleffects", "comparisons", "marginalmeans")
+  ))
   if (isTRUE(flag)) {
     colnames(tab) <- gsub("^value$", " ", colnames(tab)) # marginalmeans()
     colnames(tab) <- gsub("^contrast_", "", colnames(tab)) # comparisons() and marginaleffects()
@@ -869,9 +953,12 @@ modelsummary <- function(
   # invisible return
   if (settings_equal("function_called", "modelsummary_rbind")) {
     return(out)
-  } else if (!is.null(output_file) ||
-    isTRUE(output == "jupyter") ||
-    (isTRUE(output == "default") && settings_equal("output_default", "jupyter"))) {
+  } else if (
+    !is.null(output_file) ||
+      isTRUE(output == "jupyter") ||
+      (isTRUE(output == "default") &&
+        settings_equal("output_default", "jupyter"))
+  ) {
     settings_rm()
     return(invisible(out))
     # visible return
@@ -882,7 +969,17 @@ modelsummary <- function(
 }
 
 
-get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, gof_function, shape, coef_rename, output_format, ...) {
+get_list_of_modelsummary_lists <- function(
+  models,
+  conf_level,
+  vcov,
+  gof_map,
+  gof_function,
+  shape,
+  coef_rename,
+  output_format,
+  ...
+) {
   number_of_models <- max(length(models), length(vcov))
 
   inner_loop <- function(i) {
@@ -892,12 +989,19 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, go
     if (inherits(models[[j]], "modelsummary_list")) {
       out <- list(
         tidy = models[[j]][["tidy"]],
-        glance = models[[j]][["glance"]])
+        glance = models[[j]][["glance"]]
+      )
       return(out)
     }
 
     # don't waste time if we are going to exclude all gof anyway
-    gla <- get_gof(models[[j]], vcov_type = names(vcov)[i], gof_map = gof_map, gof_function = gof_function, ...)
+    gla <- get_gof(
+      models[[j]],
+      vcov_type = names(vcov)[i],
+      gof_map = gof_map,
+      gof_function = gof_function,
+      ...
+    )
 
     tid <- get_estimates(
       models[[j]],
@@ -905,7 +1009,8 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, go
       vcov = vcov[[i]],
       shape = shape,
       coef_rename = coef_rename,
-      ...)
+      ...
+    )
 
     out <- list("tidy" = tid, "glance" = gla)
     class(out) <- "modelsummary_list"
@@ -915,17 +1020,28 @@ get_list_of_modelsummary_lists <- function(models, conf_level, vcov, gof_map, go
   # {parallel}
   dots <- list(...)
   if ("mc.cores" %in% names(dots)) {
-    out <- parallel::mclapply(seq_len(number_of_models), inner_loop, mc.cores = dots[["mc.cores"]])
+    out <- parallel::mclapply(
+      seq_len(number_of_models),
+      inner_loop,
+      mc.cores = dots[["mc.cores"]]
+    )
 
     # {future}
-  } else if (isTRUE(check_dependency("future.apply")) &&
-    future::nbrOfWorkers() > 1 &&
-    number_of_models > 1 &&
-    isTRUE(getOption("modelsummary_future", default = TRUE))) {
+  } else if (
+    isTRUE(check_dependency("future.apply")) &&
+      future::nbrOfWorkers() > 1 &&
+      number_of_models > 1 &&
+      isTRUE(getOption("modelsummary_future", default = TRUE))
+  ) {
     # Issue #647: conflict with `furrr`. Very hard to diagnose.
     out <- try(
-      future.apply::future_lapply(seq_len(number_of_models), inner_loop, future.seed = TRUE),
-      silent = TRUE)
+      future.apply::future_lapply(
+        seq_len(number_of_models),
+        inner_loop,
+        future.seed = TRUE
+      ),
+      silent = TRUE
+    )
     if (inherits(out, "try-error")) {
       out <- lapply(seq_len(number_of_models), inner_loop)
     }
@@ -946,8 +1062,10 @@ redundant_labels <- function(dat, column) {
   # Issue #558: 1-row estimates table with no gof
   if (nrow(dat) > 1) {
     for (i in nrow(dat):2) {
-      if (dat$part[i] == "estimates" &&
-        dat[[column]][i - 1] == dat[[column]][i]) {
+      if (
+        dat$part[i] == "estimates" &&
+          dat[[column]][i - 1] == dat[[column]][i]
+      ) {
         dat[[column]][i] <- ""
       }
     }
