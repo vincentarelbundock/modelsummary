@@ -315,3 +315,15 @@ options(modelsummary_stars_note = FALSE)
 modelsummary(m, notes = sn, stars = TRUE) |> save_tt("latex")
 ```
 
+## Math
+
+To render math in `modelsummary` in HTML files, you need to ensure that MathJax is enabled. See the [`tinytable` documentation for more details.](https://vincentarelbundock.github.io/tinytable/vignettes/format.html#math)
+
+Here is a minimal example:
+
+```{r}
+options(tinytable_html_mathjax = TRUE)
+mod <- lm(mpg ~ factor(cyl) - 1, data = mtcars)
+cr <- c("factor(cyl)4" = "$\\beta_1$", "factor(cyl)6" = "$\\beta_2$", "factor(cyl)8" = "$\\beta_3$")
+modelsummary(mod, coef_map = cr)
+```
