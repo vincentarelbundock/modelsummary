@@ -373,6 +373,9 @@ globalVariables(c(
 #' attr(rows, "position") <- c(1, 3)
 #' modelsummary(models, add_rows = rows)
 #'
+#' attr(rows, "position") <- "gof_start"
+#' modelsummary(models, add_rows = rows)
+#'
 #' # notes
 #' modelsummary(models, notes = list("A first note", "A second note"))
 #'
