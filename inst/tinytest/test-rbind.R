@@ -26,7 +26,12 @@ panels <- list(
         lm(disp ~ hp + factor(gear), data = mtcars)
     )
 )
-tab1 <- modelsummary(panels, gof_map = "nobs", output = "dataframe", shape = "rbind")
+tab1 <- modelsummary(
+    panels,
+    gof_map = "nobs",
+    output = "dataframe",
+    shape = "rbind"
+)
 expect_equivalent(colnames(tab1), c(" ", "(1)", "(2)"))
 
 panels <- list(
@@ -39,11 +44,21 @@ panels <- list(
         "C" = lm(disp ~ hp + factor(gear), data = mtcars)
     )
 )
-tab2 <- modelsummary(panels, gof_map = "nobs", output = "dataframe", shape = "rbind")
+tab2 <- modelsummary(
+    panels,
+    gof_map = "nobs",
+    output = "dataframe",
+    shape = "rbind"
+)
 expect_equivalent(colnames(tab2), c(" ", "A", "B", "C"))
 
 # stars note
-p <- suppressWarnings(modelsummary(panels, output = "markdown", stars = TRUE, shape = "rbind"))
+p <- suppressWarnings(modelsummary(
+    panels,
+    output = "markdown",
+    stars = TRUE,
+    shape = "rbind"
+))
 expect_true(any(grepl("p < 0.1", p, fixed = TRUE)))
 
 # output formats: no validity
@@ -65,15 +80,29 @@ panels <- list(
         lm(qsec ~ hp + am, data = mtcars)
     )
 )
-tab1 <- modelsummary(panels, shape = "rbind", gof_map = "nobs", output = "dataframe")
-tab2 <- modelsummary(panels, shape = "rcollapse", gof_map = "nobs", output = "dataframe")
+tab1 <- modelsummary(
+    panels,
+    shape = "rbind",
+    gof_map = "nobs",
+    output = "dataframe"
+)
+tab2 <- modelsummary(
+    panels,
+    shape = "rcollapse",
+    gof_map = "nobs",
+    output = "dataframe"
+)
 expect_true(nrow(tab1) == nrow(tab2) + 1)
 
 # Issue #593: models with different FEs do not get collapsed
 panels <- list(
     list(
         feols(mpg ~ cyl | gear, data = mtcars, cluster = ~hp),
-        feols(mpg ~ cyl | gear + am, data = subset(mtcars, mpg > 20), cluster = ~hp)
+        feols(
+            mpg ~ cyl | gear + am,
+            data = subset(mtcars, mpg > 20),
+            cluster = ~hp
+        )
     ),
     list(
         feols(disp ~ cyl | gear, data = mtcars, cluster = ~hp),
@@ -87,7 +116,11 @@ expect_equivalent(sum(tab[[1]] == "FE: gear"), 2)
 panels <- list(
     list(
         feols(mpg ~ cyl | gear, data = mtcars, cluster = ~hp),
-        feols(mpg ~ cyl | gear + carb, data = subset(mtcars, mpg > 20), cluster = ~hp)
+        feols(
+            mpg ~ cyl | gear + carb,
+            data = subset(mtcars, mpg > 20),
+            cluster = ~hp
+        )
     ),
     list(
         feols(disp ~ cyl | gear, data = mtcars, cluster = ~hp),
@@ -98,13 +131,13 @@ tab <- modelsummary(panels, shape = "rcollapse", output = "dataframe")
 expect_equivalent(sum(tab[[1]] == "FE: gear"), 1)
 
 
-
 # Issue #620
 models <- list(
     mpg = lm(mpg ~ cyl + disp, mtcars),
     hp = lm(hp ~ cyl + disp, mtcars)
 )
-tab <- modelsummary(models,
+tab <- modelsummary(
+    models,
     output = "data.frame",
     statistic = NULL,
     estimate = "{estimate}{stars} [{conf.low}, {conf.high}] ",
@@ -115,8 +148,12 @@ expect_equivalent(nrow(tab), 9)
 
 # Issue #626: shape="rbind" does not respect with add_rows
 rows <- tibble::tribble(
-    ~term,          ~OLS,  ~Logit,
-    "Info",         "???", "XYZ"
+    ~term,
+    ~OLS,
+    ~Logit,
+    "Info",
+    "???",
+    "XYZ"
 )
 attr(rows, "position") <- c(6)
 gm <- c("r.squared", "nobs", "rmse")
@@ -158,7 +195,7 @@ panels <- list(
 )
 tab <- modelsummary(
     panels,
-    output = "tinytable",
+    output = "markdown",
     shape = "rbind",
     gof_map = gm
 )
@@ -172,7 +209,13 @@ fins <- list(
     hypotheses(mod, "`factor(cyl)6`+`factor(cyl)6:disp`=0"),
     hypotheses(mod, "`factor(cyl)8`+`factor(cyl)8:disp`=0")
 )
-tab <- modelsummary(fins, stars = TRUE, gof_omit = ".*", shape = "rbind")
+tab <- modelsummary(
+    fins,
+    stars = TRUE,
+    gof_omit = ".*",
+    shape = "rbind",
+    output = "markdown"
+)
 expect_snapshot_print(tab, "rbind-issue849_without_panel_names")
 
 mod <- lm(mpg ~ factor(cyl) * disp, mtcars)
@@ -180,9 +223,14 @@ fins <- list(
     a = hypotheses(mod, "`factor(cyl)6`+`factor(cyl)6:disp`=0"),
     b = hypotheses(mod, "`factor(cyl)8`+`factor(cyl)8:disp`=0")
 )
-tab <- modelsummary(fins, stars = TRUE, gof_omit = ".*", shape = "rbind")
+tab <- modelsummary(
+    fins,
+    stars = TRUE,
+    gof_omit = ".*",
+    shape = "rbind",
+    output = "markdown"
+)
 expect_snapshot_print(tab, "rbind-issue849_with_panel_names")
-
 
 
 rm(list = ls())

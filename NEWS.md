@@ -5,6 +5,7 @@
 Bug:
 
 * `modelplot()` accepts `linewidth` argument. Thanks to @trekonom for report #861.
+* Misplaced horizontal rule with `add_rows`. Thanks to @judgelord for report #875.
 
 Misc:
 
