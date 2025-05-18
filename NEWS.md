@@ -2,6 +2,12 @@
 
 ## Development
 
+* `add_rows`: The position of new rows can be set using a "position" attribute. Previously, this only accepted integers. Now we accept string shortcuts:
+  - `attr(new_rows, "coef_start")`
+  - `attr(new_rows, "coef_end")`
+  - `attr(new_rows, "gof_start")`
+  - `attr(new_rows, "gof_end")`
+
 Bug:
 
 * `modelplot()` accepts `linewidth` argument. Thanks to @trekonom for report #861.
