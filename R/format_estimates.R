@@ -115,10 +115,9 @@ format_estimates <- function(
     cols <- intersect(cols, colnames(est))
     
     # Create a mask for non-random effects
-    non_random <- if ("effect" %in% colnames(est)) {
-      is.na(est[["effect"]]) | est[["effect"]] != "random"
-    } else {
-      rep(TRUE, nrow(est))
+    non_random <- rep(TRUE, nrow(est))
+    if (all(c("term", "effect") %in% colnames(est))) {
+      non_random <- ifelse(grepl("^SD |^Cor ", est$term) & est$effect == "random", FALSE, TRUE)
     }
     
     for (col in cols) {
