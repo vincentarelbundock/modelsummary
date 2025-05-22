@@ -132,7 +132,8 @@ confidence intervals, which can be faster for some models.}
 \item{exponentiate}{TRUE, FALSE, or logical vector of length equal to the
 number of models. If TRUE, the \code{estimate}, \code{conf.low}, and \code{conf.high}
 statistics are exponentiated, and the \code{std.error} is transformed to
-\code{exp(estimate)*std.error}.}
+\code{exp(estimate)*std.error}. The \code{exponentiate} argument is ignored for
+random effects parameters (identified in the "effect" column of the \code{get_estimates()} output).}
 
 \item{stars}{to indicate statistical significance
 \itemize{

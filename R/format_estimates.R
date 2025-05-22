@@ -113,11 +113,19 @@ format_estimates <- function(
     # standard error before transforming estimate
     cols <- c("std.error", "estimate", "conf.low", "conf.high")
     cols <- intersect(cols, colnames(est))
+    
+    # Create a mask for non-random effects
+    non_random <- if ("effect" %in% colnames(est)) {
+      is.na(est[["effect"]]) | est[["effect"]] != "random"
+    } else {
+      rep(TRUE, nrow(est))
+    }
+    
     for (col in cols) {
       if (col == "std.error") {
-        est[["std.error"]] <- exp(est[["estimate"]]) * est[["std.error"]]
+        est[["std.error"]][non_random] <- exp(est[["estimate"]][non_random]) * est[["std.error"]][non_random]
       } else if (col %in% c("estimate", "conf.low", "conf.high")) {
-        est[[col]] <- exp(est[[col]])
+        est[[col]][non_random] <- exp(est[[col]][non_random])
       }
     }
   }
