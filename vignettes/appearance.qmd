@@ -103,7 +103,20 @@ modelsummary(models) |>
 :::
 
 
-## Starting fresh
+## Dot alignement in LaTeX
+
+Sometimes, dot-alignment fails in LaTeX because some cells include only text. In other cases, users wish to prevent dot-alignment for specific cells. This can be achieved by using the `tinytable::style_tt()` function to insert `tabularray` instructions in to the raw LaTeX table. Here, we create a regression table for a `fixest` model. The output includes a text-only row which identifies fixed effects. We call `style_tt()` to "guard" and center the text in the relevant cells.
+
+```{r}
+library(fixest)
+library(tinytable)
+library(modelsummary)
+m <- feols(mpg ~ wt + factor(cyl) | carb, data = mtcars)
+modelsummary(m, align = "ld") |>
+  tinytable::style_tt(tabularray_inner = "cell{16-17}{2}={guard,halign=c}")
+```
+
+## Removing elements (e.g. horizontal rules)
 
 When `modelsummary()` creates a `tinytable`, it fixes a few styling elements immediately, which can cause minor issues when customizing the table further. For example, `modelsummary()` draws a separator line to distinguish the coefficients and goodness-of-fit statistics, but this line is drawn at a hard-coded position in the table. If users call `tinytable` functions to add rows *after the fact*, the separator line may no longer appear in the correct place.
 

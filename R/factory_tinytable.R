@@ -92,12 +92,6 @@ factory_tinytable <- function(tab,
     out <- tinytable::group_tt(out, i = hg)
   }
 
-  if ("d" %in% align && !is.null(gof_idx)) {
-    idx <- paste(match("d", align), collapse = ",")
-    inn <- sprintf("cell{%s-%s}{%s}={guard,halign=c},", gof_idx + 1, nrow(out) + out@nhead, idx)
-    out <- tinytable::style_tt(out, tabularray_inner = inn)
-  }
-
   # write to file
   if (!is.null(output_file)) {
     tinytable::save_tt(out, output = output_file, overwrite = TRUE)
