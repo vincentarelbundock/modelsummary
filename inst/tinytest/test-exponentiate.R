@@ -76,3 +76,19 @@ tab <- modelsummary(mod,
     output = "data.frame", statistic = NULL, fmt = identity)
 expect_equivalent(exp(b), as.numeric(tab[["(1)"]][1:2]), ignore_attr = TRUE)
 expect_equivalent(b, as.numeric(tab[["(2)"]][1:2]), ignore_attr = TRUE)
+
+
+# Issue #878: do not exponentiate random effects parameters
+requiet("lme4")
+gm1a <- glmer(cbind(incidence, size - incidence) ~ period + (1 | herd),
+              data = cbpp, binomial, verbose = 0, nAGQ = 9)
+e1 <- get_estimates(gm1a, exponentiate = TRUE)
+e2 <- get_estimates(gm1a, exponentiate = FALSE)
+expect_equal(e1$estimate[nrow(e1)], e2$estimate[nrow(e2)])
+expect_equal(e1$estimate[1:3], exp(e2$estimate[1:3]))
+
+mod <- lmer(Sepal.Length ~ (1 + Sepal.Width | Species), data = iris)
+e1 <- get_estimates(mod, exponentiate = FALSE)
+e2 <- get_estimates(mod, exponentiate = TRUE)
+expect_equal(exp(e1$estimate[1]), e2$estimate[1])
+expect_equal(e1$estimate[2:5], e2$estimate[2:5])

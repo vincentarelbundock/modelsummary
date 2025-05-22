@@ -116,7 +116,8 @@ globalVariables(c(
 #' @param exponentiate TRUE, FALSE, or logical vector of length equal to the
 #' number of models. If TRUE, the `estimate`, `conf.low`, and `conf.high`
 #' statistics are exponentiated, and the `std.error` is transformed to
-#' `exp(estimate)*std.error`.
+#' `exp(estimate)*std.error`. The `exponentiate` argument is ignored for
+#' distributional random effects parameters (SD and Cor).
 #' @param coef_map character vector. Subset, rename, and reorder coefficients.
 #' Coefficients omitted from this vector are omitted from the table. The order
 #' of the vector determines the order of the table. `coef_map` can be a named

@@ -85,7 +85,8 @@ sections below):
 \item{exponentiate}{TRUE, FALSE, or logical vector of length equal to the
 number of models. If TRUE, the \code{estimate}, \code{conf.low}, and \code{conf.high}
 statistics are exponentiated, and the \code{std.error} is transformed to
-\code{exp(estimate)*std.error}.}
+\code{exp(estimate)*std.error}. The \code{exponentiate} argument is ignored for
+distributional random effects parameters (SD and Cor).}
 
 \item{add_rows}{a data.frame (or tibble) with the same number of columns as your main table. By default, rows are appended to the bottom of the table. Positions can be defined using integers. In the \code{modelsummary()} function (only), you can also use string shortcuts: "coef_start", "coef_end", "gof_start", "gof_end"
 \itemize{
