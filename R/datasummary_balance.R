@@ -6,7 +6,7 @@
 #' summary tables for full data sets. See the Details and Examples sections
 #' below, and the vignettes on the `modelsummary` website:
 #' * https://modelsummary.com/
-#' * https://modelsummary.com/articles/datasummary.html
+#' * https://modelsummary.com/vignettes/datasummary.html
 #'
 #' @param formula
 #' + `~1`: show summary statistics for the full dataset

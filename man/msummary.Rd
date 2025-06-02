@@ -279,8 +279,8 @@ one of the supported table customization packages: \code{tinytable}, \code{kable
 sections below, and the vignettes on the \code{modelsummary} website:
 https://modelsummary.com/
 \itemize{
-\item \href{https://modelsummary.com/articles/modelsummary.html}{The \code{modelsummary} Vignette includes dozens of examples of tables with extensive customizations.}
-\item \href{https://modelsummary.com/articles/appearance.html}{The Appearance Vignette shows how to modify the look of tables.}
+\item \href{https://modelsummary.com/vignettes/modelsummary.html}{The \code{modelsummary} Vignette includes dozens of examples of tables with extensive customizations.}
+\item \href{https://modelsummary.com/vignettes/appearance.html}{The Appearance Vignette shows how to modify the look of tables.}
 }
 }
 \details{
@@ -379,7 +379,7 @@ format, you can use ' the \code{options} function:
 
 \subsection{Table themes}{
 
-Change the look of tables in an automated and replicable way, using the \code{modelsummary} theming functionality. See the vignette: https://modelsummary.com/articles/appearance.html
+Change the look of tables in an automated and replicable way, using the \code{modelsummary} theming functionality. See the vignette: https://modelsummary.com/vignettes/appearance.html
 \itemize{
 \item \code{modelsummary_theme_gt}
 \item \code{modelsummary_theme_kableExtra}

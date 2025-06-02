@@ -85,7 +85,7 @@ See the Details and Examples sections below, and the vignettes on the
 \code{modelsummary} website:
 \itemize{
 \item https://modelsummary.com/
-\item https://modelsummary.com/articles/datasummary.html
+\item https://modelsummary.com/vignettes/datasummary.html
 }
 }
 \section{Version 2.0.0, kableExtra, and tinytable}{
@@ -138,7 +138,7 @@ format, you can use ' the \code{options} function:
 
 \subsection{Table themes}{
 
-Change the look of tables in an automated and replicable way, using the \code{modelsummary} theming functionality. See the vignette: https://modelsummary.com/articles/appearance.html
+Change the look of tables in an automated and replicable way, using the \code{modelsummary} theming functionality. See the vignette: https://modelsummary.com/vignettes/appearance.html
 \itemize{
 \item \code{modelsummary_theme_gt}
 \item \code{modelsummary_theme_kableExtra}

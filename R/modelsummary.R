@@ -43,8 +43,8 @@ globalVariables(c(
 #' `flextable`, `huxtable`, `DT`. For more information, see the Details and Examples
 #' sections below, and the vignettes on the `modelsummary` website:
 #' https://modelsummary.com/
-#' * [The `modelsummary` Vignette includes dozens of examples of tables with extensive customizations.](https://modelsummary.com/articles/modelsummary.html)
-#' * [The Appearance Vignette shows how to modify the look of tables.](https://modelsummary.com/articles/appearance.html)
+#' * [The `modelsummary` Vignette includes dozens of examples of tables with extensive customizations.](https://modelsummary.com/vignettes/modelsummary.html)
+#' * [The Appearance Vignette shows how to modify the look of tables.](https://modelsummary.com/vignettes/appearance.html)
 #'
 #' @template kableExtra2tinytable
 #' @template citation

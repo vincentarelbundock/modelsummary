@@ -87,7 +87,7 @@ modelsummary(mod, output = "table.tex")
 
 *Information*: The package offers many intuitive and powerful utilities
 to [customize the
-information](https://modelsummary.com/articles/modelsummary.html)
+information](https://modelsummary.com/vignettes/modelsummary.html)
 reported in a summary table. You can rename, reorder, subset or omit
 parameter estimates; choose the set of goodness-of-fit statistics to
 include; display various “robust” standard errors or confidence
@@ -103,7 +103,7 @@ rows with supplemental information about your models.
 [`flextable`](https://davidgohel.github.io/flextable/), and
 [`DT`](https://rstudio.github.io/DT/) packages, the appearance of
 `modelsummary` tables is endlessly customizable. The [appearance
-customization page](https://modelsummary.com/articles/appearance.html)
+customization page](https://modelsummary.com/vignettes/appearance.html)
 shows tables with colored cells, weird text, spanning column labels, row
 groups, titles, source notes, footnotes, significance stars, and more.
 This only scratches the surface of possibilities.
@@ -115,19 +115,19 @@ supports *hundreds* of statistical models out-of-the-box. Installing
 other packages can extend the capabilities further (e.g.,
 [`broom.mixed`](https://CRAN.R-project.org/package=broom.mixed)). It is
 also very easy to [add or customize your own
-models.](https://modelsummary.com/articles/modelsummary.html#adding-new-models-1)
+models.](https://modelsummary.com/vignettes/modelsummary.html#adding-new-models-1)
 
 *Output formats*: `modelsummary` tables can be saved to HTML, LaTeX,
 Text/Markdown, Microsoft Word, Powerpoint, RTF, JPG, or PNG formats.
 They can also be inserted seamlessly in Rmarkdown documents to produce
 [automated documents and reports in PDF, HTML, RTF, or Microsoft Word
-formats.](https://modelsummary.com/articles/modelsummary.html#rmarkdown-quarto-org-mode)
+formats.](https://modelsummary.com/vignettes/modelsummary.html#rmarkdown-quarto-org-mode)
 
 #### Dangerous
 
 `modelsummary` is dangerous! It allows users to do stupid stuff like
 [inserting squirrels in all your
-tables.](https://modelsummary.com/articles/appearance.html#gt-1)
+tables.](https://modelsummary.com/vignettes/appearance.html#gt-1)
 
 <img src="man/figures/squirrel.png" width="40%" class = "center">
 

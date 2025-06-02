@@ -125,7 +125,7 @@ more information, see the Details and Examples sections below, and the
 vignettes on the \code{modelsummary} website:
 https://modelsummary.com/
 \itemize{
-\item \href{https://modelsummary.com/articles/modelplot.html}{modelplot Vignette.}
+\item \href{https://modelsummary.com/vignettes/modelplot.html}{modelplot Vignette.}
 }
 }
 \section{Examples}{
