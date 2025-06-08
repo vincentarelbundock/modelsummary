@@ -28,7 +28,12 @@ gm <- modelsummary::gof_map
 gm <- gm[gm$clean == "Std.Errors", ]
 tab1 <- modelsummary(mod_feols, output = "dataframe", gof_map = gm)
 tab2 <- modelsummary(mod_felm, output = "dataframe", gof_map = gm)
-tab3 <- modelsummary(mod_feols, vcov = ~ am + cyl, output = "dataframe", gof_map = gm)
+tab3 <- modelsummary(
+  mod_feols,
+  vcov = ~ am + cyl,
+  output = "dataframe",
+  gof_map = gm
+)
 expect_equivalent(tab1, tab2)
 expect_equivalent(tab1, tab3)
 
@@ -40,7 +45,13 @@ fixest_mod <- fixest::feols(hp ~ mpg + drat, mtcars, vcov = ~vs)
 mod <- list(
   "feols" = fixest_mod,
   "felm" = felm(hp ~ mpg + drat | 0 | 0 | vs, mtcars),
-  "estimatr" = lm_robust(hp ~ mpg + drat, mtcars, se_type = "stata", clusters = vs))
+  "estimatr" = lm_robust(
+    hp ~ mpg + drat,
+    mtcars,
+    se_type = "stata",
+    clusters = vs
+  )
+)
 tab <- modelsummary(mod, output = "data.frame")
 expect_equivalent(tab$feols[nrow(tab)], "by: vs")
 expect_equivalent(tab$felm[nrow(tab)], "by: vs")

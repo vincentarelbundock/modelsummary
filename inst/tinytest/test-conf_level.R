@@ -4,26 +4,32 @@
 # bad combination of arguments
 mod <- lm(mpg ~ hp, data = mtcars)
 expect_error(
-    modelsummary(
-        mod,
-        output = "data.frame",
-        statistic = "conf.int",
-        conf_level = NULL),
-    pattern = "Cannot display")
-
-# baseline
-tab <- modelsummary(
+  modelsummary(
     mod,
     output = "data.frame",
     statistic = "conf.int",
-    conf_level = .9)
+    conf_level = NULL
+  ),
+  pattern = "Cannot display"
+)
+
+# baseline
+tab <- modelsummary(
+  mod,
+  output = "data.frame",
+  statistic = "conf.int",
+  conf_level = .9
+)
 expect_true(any(grepl("\\[", tab[["(1)"]])))
 
 # faster
 est <- get_estimates(mod, conf_level = NULL)
 expect_true(!"conf.low" %in% colnames(est) || all(is.na(est$conf.low)))
 
-ci_funs <- paste0(c("^ci$", "ci\\.glm", "confint\\.glm", "stats::confint"), collapse = "|")
+ci_funs <- paste0(
+  c("^ci$", "ci\\.glm", "confint\\.glm", "stats::confint"),
+  collapse = "|"
+)
 mod <- list()
 mod$Poisson <- glm(am ~ drat, data = mtcars, family = poisson())
 mod$Logit <- glm(am ~ qsec, data = mtcars, family = poisson())

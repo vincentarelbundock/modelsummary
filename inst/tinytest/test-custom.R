@@ -5,7 +5,12 @@ mod <- glm(am ~ mpg, mtcars, family = binomial)
 ###################
 # glance_custom.glm
 glance_custom.glm <- function(x) {
-  data.frame("test" = 1.54, "test2" = "lkkd", "test3" = as.integer(2), "test4" = TRUE)
+  data.frame(
+    "test" = 1.54,
+    "test2" = "lkkd",
+    "test3" = as.integer(2),
+    "test4" = TRUE
+  )
 }
 # beware of testthat scoping issue
 assign("glance_custom.glm", glance_custom.glm, envir = .GlobalEnv)
@@ -16,7 +21,12 @@ rm("glance_custom.glm", envir = .GlobalEnv)
 
 # glance_custom.glm preserve order
 glance_custom.glm <- function(x) {
-  data.frame("test5" = 1.54, "test6" = "lkkd", "test3" = as.integer(2), "test4" = TRUE)
+  data.frame(
+    "test5" = 1.54,
+    "test6" = "lkkd",
+    "test3" = as.integer(2),
+    "test4" = TRUE
+  )
 }
 # beware of testthat scoping issue
 assign("glance_custom.glm", glance_custom.glm, envir = .GlobalEnv)
@@ -39,13 +49,9 @@ tidy_custom.glm <- function(x) {
 }
 # beware of testthat scoping issue
 assign("tidy_custom.glm", tidy_custom.glm, envir = .GlobalEnv)
-out <- modelsummary(mod,
-  output = "data.frame",
-  gof_omit = "",
-  statistic = NULL)
+out <- modelsummary(mod, output = "data.frame", gof_omit = "", statistic = NULL)
 expect_equivalent(unname(out[["(1)"]]), c("-", "+"))
 rm("tidy_custom.glm", envir = .GlobalEnv)
-
 
 
 # tidy_custom.glm partial term names
@@ -57,13 +63,9 @@ tidy_custom.glm <- function(x) {
 }
 # beware of testthat scoping issue
 assign("tidy_custom.glm", tidy_custom.glm, envir = .GlobalEnv)
-out <- modelsummary(mod,
-  output = "data.frame",
-  gof_omit = "",
-  statistic = NULL)
+out <- modelsummary(mod, output = "data.frame", gof_omit = "", statistic = NULL)
 expect_equivalent(unname(out[["(1)"]]), c("3.142", "0.307"))
 rm("tidy_custom.glm", envir = .GlobalEnv)
-
 
 
 # tidy_custom.glm wrong term names
@@ -75,12 +77,13 @@ tidy_custom.glm <- function(x) {
 }
 # beware of testthat scoping issue
 assign("tidy_custom.glm", tidy_custom.glm, envir = .GlobalEnv)
-expect_warning(modelsummary(mod,
+expect_warning(modelsummary(
+  mod,
   output = "data.frame",
   gof_omit = "",
-  statistic = NULL))
+  statistic = NULL
+))
 rm("tidy_custom.glm", envir = .GlobalEnv)
-
 
 
 #################

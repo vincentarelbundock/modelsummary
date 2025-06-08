@@ -1,10 +1,11 @@
-theme_ms_kableExtra <- function(tab,
-                                output_format,
-                                hrule = NULL,
-                                hgroup = NULL,
-                                hindent = NULL,
-                                ...) {
-
+theme_ms_kableExtra <- function(
+  tab,
+  output_format,
+  hrule = NULL,
+  hgroup = NULL,
+  hindent = NULL,
+  ...
+) {
   dots <- list(...)
 
   if (!output_format %in% c("markdown", "latex_tabular")) {
@@ -16,7 +17,8 @@ theme_ms_kableExtra <- function(tab,
   # kableExtra quirk: latex hrule before hgroup
   if (!is.null(hrule) && output_format %in% c("latex", "latex_tabular")) {
     for (pos in hrule) {
-      out <- kableExtra::row_spec(out,
+      out <- kableExtra::row_spec(
+        out,
         row = pos - 1,
         extra_latex_after = "\\midrule"
       )
@@ -37,7 +39,8 @@ theme_ms_kableExtra <- function(tab,
         group_label = names(hgroup[i]),
         start_row = hgroup[[i]][1],
         end_row = hgroup[[i]][2],
-        escape = FALSE)
+        escape = FALSE
+      )
 
       # user-specified arguments override default themes
       dots <- list(...)
@@ -54,7 +57,8 @@ theme_ms_kableExtra <- function(tab,
   # kableExtra quirk: latex hrule before hgroup
   if (!is.null(hrule) && output_format %in% c("kableExtra", "html")) {
     for (pos in hrule) {
-      out <- kableExtra::row_spec(out,
+      out <- kableExtra::row_spec(
+        out,
         row = pos - 1,
         extra_css = "box-shadow: 0px 1.5px"
       )
@@ -72,13 +76,10 @@ theme_ms_kableExtra <- function(tab,
 }
 
 
-theme_ms_gt <- function(tab,
-                        output_format,
-                        hrule = NULL,
-                        hgroup = NULL,
-                        ...) {
+theme_ms_gt <- function(tab, output_format, hrule = NULL, hgroup = NULL, ...) {
   out <- tab
-  if (!is.null(hrule)) { # check if there are >0 GOF
+  if (!is.null(hrule)) {
+    # check if there are >0 GOF
     for (pos in hrule) {
       out <- gt::tab_style(
         out,
@@ -89,45 +90,36 @@ theme_ms_gt <- function(tab,
   }
 
   if (!is.null(hgroup)) {
-
   }
 
-    # group rows by panel: gt
-    hgroup <- rev(hgroup)
-    for (i in seq_along(hgroup)) {
-      out <- gt::tab_row_group(
-        out,
-        label = names(hgroup)[i],
-        id = names(hgroup)[i],
-        rows = hgroup[[i]][1]:hgroup[[i]][2])
-    }
+  # group rows by panel: gt
+  hgroup <- rev(hgroup)
+  for (i in seq_along(hgroup)) {
+    out <- gt::tab_row_group(
+      out,
+      label = names(hgroup)[i],
+      id = names(hgroup)[i],
+      rows = hgroup[[i]][1]:hgroup[[i]][2]
+    )
+  }
 
   return(out)
 }
 
 
-theme_ms_flextable <- function(tab,
-                               output_format,
-                               hrule,
-                               ...) {
+theme_ms_flextable <- function(tab, output_format, hrule, ...) {
   out <- tab
   # horizontal rule to separate coef/gof
   if (!is.null(hrule)) {
     for (pos in hrule) {
-      out <- flextable::border(out,
-        i = pos,
-        border.top = officer::fp_border()
-      )
+      out <- flextable::border(out, i = pos, border.top = officer::fp_border())
     }
   }
   return(out)
 }
 
 
-theme_ms_huxtable <- function(tab,
-                              output_format,
-                              hrule,
-                              ...) {
+theme_ms_huxtable <- function(tab, output_format, hrule, ...) {
   out <- tab
 
   # horizontal rules

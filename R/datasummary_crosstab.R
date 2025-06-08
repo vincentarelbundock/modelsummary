@@ -56,24 +56,27 @@
 #' @details
 #' Variables in `formula` are automatically wrapped in `Factor()`.
 #' @export
-datasummary_crosstab <- function(formula,
-                                 statistic = 1 ~ 1 + N + Percent("row"),
-                                 data,
-                                 output = getOption("modelsummary_output", default = "default"),
-                                 fmt = 1,
-                                 title = getOption("modelsummary_title", default = NULL),
-                                 notes = getOption("modelsummary_notes", default = NULL),
-                                 align = getOption("modelsummary_align", default = NULL),
-                                 add_columns = getOption("modelsummary_add_columns", default = NULL),
-                                 add_rows = getOption("modelsummary_add_rows", default = NULL),
-                                 sparse_header = getOption("modelsummary_sparse_header", default = TRUE),
-                                 escape = getOption("modelsummary_escape", default = TRUE),
-                                 ...) {
+datasummary_crosstab <- function(
+  formula,
+  statistic = 1 ~ 1 + N + Percent("row"),
+  data,
+  output = getOption("modelsummary_output", default = "default"),
+  fmt = 1,
+  title = getOption("modelsummary_title", default = NULL),
+  notes = getOption("modelsummary_notes", default = NULL),
+  align = getOption("modelsummary_align", default = NULL),
+  add_columns = getOption("modelsummary_add_columns", default = NULL),
+  add_rows = getOption("modelsummary_add_rows", default = NULL),
+  sparse_header = getOption("modelsummary_sparse_header", default = TRUE),
+  escape = getOption("modelsummary_escape", default = TRUE),
+  ...
+) {
   ## settings
-  settings_init(settings = list(
-    "function_called" = "datasummary_crosstab"
-  ))
-
+  settings_init(
+    settings = list(
+      "function_called" = "datasummary_crosstab"
+    )
+  )
 
   # argument checking
   tmp <- sanitize_output(output) # before sanitize_escape
@@ -90,7 +93,10 @@ datasummary_crosstab <- function(formula,
   formula_str <- deparse(formula, width.cutoff = 500)
 
   if (grepl("+", formula_str, fixed = TRUE)) {
-    stop("The `formula` argument of the `datasummary_crosstab` function may not contain variables connected by +, only interactions with * are allowed. To produce more complex tables, consider using the datasummary() function.", call. = FALSE)
+    stop(
+      "The `formula` argument of the `datasummary_crosstab` function may not contain variables connected by +, only interactions with * are allowed. To produce more complex tables, consider using the datasummary() function.",
+      call. = FALSE
+    )
   }
 
   if (isTRUE(grepl("=|Heading", formula_str))) {
@@ -108,23 +114,32 @@ Note that the `datasummary()` function supports the `=` sign and the `Heading()`
 
   # `formula` must be length 3
   if (length(formula) != 3) {
-    stop("`formula` needs to be a two-sided formula, e.g. var1 ~ var2. To produce more complex tables, consider using the datasummary() function.", call. = FALSE)
+    stop(
+      "`formula` needs to be a two-sided formula, e.g. var1 ~ var2. To produce more complex tables, consider using the datasummary() function.",
+      call. = FALSE
+    )
   }
 
   # check statistic formula
   if (!is.null(statistic)) {
     lhs_statistic <- ifelse(length(statistic) == 2, "", deparse(statistic[[2]]))
     if (!(lhs_statistic %in% c("", ".", "1"))) {
-      stop("The left-hand side of `statistic` must either be empty of 1. To produce more complex tables, consider using the datasummary() function.")
+      stop(
+        "The left-hand side of `statistic` must either be empty of 1. To produce more complex tables, consider using the datasummary() function."
+      )
     }
     rhs_statistic <- utils::tail(as.character(statistic), 1)
     if (grepl("*", rhs_statistic, fixed = TRUE)) {
-      stop("`statistic` may not contain interactions. To produce more complex tables, consider using the datasummary() function.")
+      stop(
+        "`statistic` may not contain interactions. To produce more complex tables, consider using the datasummary() function."
+      )
     }
     statistic_terms <- stats::terms(statistic)
     allowed <- c("N", "Percent()", 'Percent("row")', 'Percent("col")')
     if (!all(labels(statistic_terms) %in% allowed)) {
-      stop("The right-hand side of `statistic` may only contain 1, N, Percent(), Percent('row'), or Percent('col').To produce more complex tables, consider using the datasummary() function.")
+      stop(
+        "The right-hand side of `statistic` may only contain 1, N, Percent(), Percent('row'), or Percent('col').To produce more complex tables, consider using the datasummary() function."
+      )
     }
 
     # find out if row/column totals should be included
@@ -154,24 +169,30 @@ Note that the `datasummary()` function supports the `=` sign and the `Heading()`
   lhs_formula <- ifelse(
     sapply(lhs_formula, function(x) !is.factor(data[[x]])),
     sprintf("Factor(%s)", lhs_formula),
-    lhs_formula)
+    lhs_formula
+  )
 
   rhs_formula <- ifelse(
     sapply(rhs_formula, function(x) !is.factor(data[[x]])),
     sprintf("Factor(%s)", rhs_formula),
-    rhs_formula)
+    rhs_formula
+  )
 
   if (is.null(statistic)) {
     d_formula <- sprintf(
       "%s ~ %s",
       paste(lhs_formula, collapse = " * "),
-      paste(rhs_formula, collapse = " * "))
+      paste(rhs_formula, collapse = " * ")
+    )
   } else {
     d_formula <- sprintf(
       "(%s%s) * (%s) ~ %s%s",
-      paste(lhs_formula, collapse = " * "), total_row,
+      paste(lhs_formula, collapse = " * "),
+      total_row,
       paste(labels, collapse = " + "),
-      paste(rhs_formula, collapse = " * "), total_col)
+      paste(rhs_formula, collapse = " * "),
+      total_col
+    )
   }
 
   out <- datasummary(
@@ -186,7 +207,8 @@ Note that the `datasummary()` function supports the `=` sign and the `Heading()`
     add_rows = add_rows,
     sparse_header = sparse_header,
     escape = escape,
-    ...)
+    ...
+  )
 
   if (!is.null(output_file)) {
     settings_rm()

@@ -4,16 +4,17 @@
 #' @inheritParams factory_gt
 #' @return data.frame
 #' @noRd
-factory_dataframe <- function(tab,
-                              align = NULL,
-                              hrule = NULL,
-                              notes = NULL,
-                              add_rows = NULL,
-                              title = NULL,
-                              output_file = NULL,
-                              output_format = NULL,
-                              ...) {
-
+factory_dataframe <- function(
+  tab,
+  align = NULL,
+  hrule = NULL,
+  notes = NULL,
+  add_rows = NULL,
+  title = NULL,
+  output_file = NULL,
+  output_format = NULL,
+  ...
+) {
   out <- tab
 
   # empty higher level headers in datasummary
@@ -23,7 +24,11 @@ factory_dataframe <- function(tab,
   # secret internal arguments
   if (!isTRUE(list(...)$internal_call)) {
     colnames(out) <- gsub("\\|\\|\\|\\|", " / ", colnames(out))
-    colnames(out) <- ifelse(colnames(out) == " ", colnames(out), trimws(colnames(out)))
+    colnames(out) <- ifelse(
+      colnames(out) == " ",
+      colnames(out),
+      trimws(colnames(out))
+    )
     colnames(out) <- pad(trimws(colnames(out)), output_format = output_format)
   }
 
@@ -33,7 +38,6 @@ factory_dataframe <- function(tab,
       out[[i]] <- as.character(out[[i]])
     }
   }
-
 
   attr(out, 'align') <- align
   attr(out, 'hrule') <- hrule
@@ -57,5 +61,4 @@ factory_dataframe <- function(tab,
   }
 
   return(out)
-
 }

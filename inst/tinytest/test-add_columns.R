@@ -6,11 +6,12 @@ if (getRversion() < "4.0.0") exit_file("old R")
 
 
 # too many rows in add_columns
-ac <- read.csv(text =
-  "first,last
+ac <- read.csv(
+  text = "first,last
    blah,2
    junk,4
-   another,5")
+   another,5"
+)
 expect_error(datasummary(mpg + hp ~ mean + sd, data = mtcars, add_columns = ac))
 
 # add_columns support in modelsummary.
@@ -23,14 +24,17 @@ expect_equivalent(ncol(tab), 5)
 
 
 # datasummary add_columns
-ac <- read.csv(text = 
-"first,last
+ac <- read.csv(
+  text = "first,last
 blah,2
-junk,4")
+junk,4"
+)
 attr(ac, 'position') <- c(1, NA)
-tab <- datasummary(mpg + hp ~ mean + sd,
+tab <- datasummary(
+  mpg + hp ~ mean + sd,
   data = mtcars,
   add_columns = ac,
   fmt = '%.2f',
-  output = 'dataframe')
+  output = 'dataframe'
+)
 expect_snapshot_print(tab, "add_columns-dataframe")

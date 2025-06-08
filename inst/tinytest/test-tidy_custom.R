@@ -16,7 +16,8 @@ tab <- modelsummary(
   mod,
   output = "data.frame",
   gof_omit = ".*",
-  statistic = NULL)
+  statistic = NULL
+)
 expect_equivalent(tab[["(1)"]], c("a", "b"))
 rm("tidy.custom")
 rm("tidy_custom.custom")
@@ -28,13 +29,25 @@ tidy_custom.polr <- function(x, ...) {
   s <- coeftest(x)
   out <- data.frame(
     term = row.names(s),
-    p.value = s[, "Pr(>|z|)"])
+    p.value = s[, "Pr(>|z|)"]
+  )
   out
 }
 mod <- list(
   "LM" = lm(gear ~ hp + mpg, data = mtcars),
-  "POLR" = polr(as.ordered(gear) ~ hp + mpg, data = mtcars))
+  "POLR" = polr(as.ordered(gear) ~ hp + mpg, data = mtcars)
+)
 tab <- suppressMessages(modelsummary(mod, stars = TRUE, output = "data.frame"))
-truth <- c("", "", "0.020*", "(0.010)", "0.373**", "(0.123)", "10.158**", "(3.660)", "12.798**")
+truth <- c(
+  "",
+  "",
+  "0.020*",
+  "(0.010)",
+  "0.373**",
+  "(0.123)",
+  "10.158**",
+  "(3.660)",
+  "12.798**"
+)
 expect_equivalent(tab$POLR[1:9], truth)
 rm("tidy_custom.polr")

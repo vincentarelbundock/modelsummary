@@ -1,6 +1,6 @@
 #' List of model objects from which `modelsummary` can extract estimates and
 #' statistics
-#' 
+#'
 #' @keywords internal
 #' @export
 supported_models <- function() {

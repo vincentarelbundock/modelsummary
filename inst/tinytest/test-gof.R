@@ -16,10 +16,10 @@ expect_equivalent(dim(tab), c(6, 5))
 # error about factor levels, not clear why
 if (getRversion() < "4.0.0") exit_file("old R")
 gm <- read.csv(
-  text =
-    "raw,clean,fmt
+  text = "raw,clean,fmt
 nobs,Num.Obs,0
-r.squared,R2,2")
+r.squared,R2,2"
+)
 tab <- modelsummary(mod, gof_map = gm, output = "dataframe")
 expect_equivalent(dim(tab), c(8, 5))
 
@@ -28,7 +28,8 @@ f1 <- function(x) sprintf("%.0f", x)
 f2 <- function(x) sprintf("%.1f", x)
 gm <- list(
   list("raw" = "nobs", "clean" = "N", "fmt" = f1),
-  list("raw" = "aic", "clean" = "AIC", "fmt" = f2))
+  list("raw" = "aic", "clean" = "AIC", "fmt" = f2)
+)
 tab <- modelsummary(mod, output = "data.frame", gof_map = gm)
 tab <- tab[tab$part == "gof", ]
 expect_equivalent(tab$OLS, c("32", "28.6"))
@@ -54,7 +55,7 @@ expect_equivalent(ncol(tmp), 5)
 
 # F statistic included for both `lm` and `glm` objects
 mod <- list(
-  "OLS"   = lm(am ~ drat, data = mtcars),
+  "OLS" = lm(am ~ drat, data = mtcars),
   "Logit" = glm(am ~ qsec, data = mtcars, family = binomial())
 )
 tab <- modelsummary(mod, output = "data.frame")

@@ -150,23 +150,27 @@
 #' formats: tinytable, kableExtra, gt, html, rtf, and LaTeX. When saving tables to other
 #' formats, nested labels will be combined to a "flat" header.
 #' @export
-datasummary <- function(formula,
-                        data,
-                        output = getOption("modelsummary_output", default = "default"),
-                        fmt = 2,
-                        title = getOption("modelsummary_title", default = NULL),
-                        notes = getOption("modelsummary_notes", default = NULL),
-                        align = getOption("modelsummary_align", default = NULL),
-                        add_columns = getOption("modelsummary_add_columns", default = NULL),
-                        add_rows = getOption("modelsummary_add_rows", default = NULL),
-                        sparse_header = getOption("modelsummary_sparse_header", default = TRUE),
-                        escape = getOption("modelsummary_escape", default = TRUE),
-                        ...) {
+datasummary <- function(
+  formula,
+  data,
+  output = getOption("modelsummary_output", default = "default"),
+  fmt = 2,
+  title = getOption("modelsummary_title", default = NULL),
+  notes = getOption("modelsummary_notes", default = NULL),
+  align = getOption("modelsummary_align", default = NULL),
+  add_columns = getOption("modelsummary_add_columns", default = NULL),
+  add_rows = getOption("modelsummary_add_rows", default = NULL),
+  sparse_header = getOption("modelsummary_sparse_header", default = TRUE),
+  escape = getOption("modelsummary_escape", default = TRUE),
+  ...
+) {
   if (!isTRUE(list(...)[["internal_call"]])) {
     ## settings: don't overwrite settings on internal calls
-    settings_init(settings = list(
-      "function_called" = "datasummary"
-    ))
+    settings_init(
+      settings = list(
+        "function_called" = "datasummary"
+      )
+    )
   }
 
   tmp <- sanitize_output(output) # early
@@ -176,8 +180,11 @@ datasummary <- function(formula,
   sanitize_escape(escape) # after sanitize_output
   sanity_align(align)
 
-  sanity_ds_data(formula = formula, data = data, internal_call = list(...)[["internal_call"]])
-
+  sanity_ds_data(
+    formula = formula,
+    data = data,
+    internal_call = list(...)[["internal_call"]]
+  )
 
   # convenience: transform logical and character to factor
   # are there use-cases for character variables?
@@ -199,16 +206,20 @@ datasummary <- function(formula,
   # informative error message
   if (inherits(tab, "error")) {
     if (grepl("Duplicate values:", tab$message)) {
-      message('This error often occurs when the "*" nesting operator is used, but none of the nested terms are categorical variables (factor, logical or character types). You can transform your variable in the original data, or wrap it in a Factor() function in the `datasummary` formula.')
+      message(
+        'This error often occurs when the "*" nesting operator is used, but none of the nested terms are categorical variables (factor, logical or character types). You can transform your variable in the original data, or wrap it in a Factor() function in the `datasummary` formula.'
+      )
     }
     stop(tab$message)
   }
 
   # extract content
-  dse <- datasummary_extract(tab,
+  dse <- datasummary_extract(
+    tab,
     fmt = fmt,
     sparse_header = sparse_header,
-    data = data)
+    data = data
+  )
 
   # align stub l rest r
   stub_width <- attr(dse, "stub_width")
@@ -219,7 +230,8 @@ datasummary <- function(formula,
   if (is.null(align)) {
     align <- paste0(
       strrep("l", stub_width),
-      strrep("r", tab_width - stub_width))
+      strrep("r", tab_width - stub_width)
+    )
   }
   align <- paste(align, collapse = "")
 
@@ -232,7 +244,8 @@ datasummary <- function(formula,
   }
 
   # build
-  out <- factory(dse,
+  out <- factory(
+    dse,
     align = align,
     fmt = fmt,
     hrule = NULL,
@@ -245,12 +258,15 @@ datasummary <- function(formula,
     output_factory = output_factory,
     output_format = output_format,
     output_file = output_file,
-    ...)
+    ...
+  )
 
   # invisible return
-  if (!is.null(output_file) ||
-    output == "jupyter" ||
-    (output == "default" && settings_equal("output_default", "jupyter"))) {
+  if (
+    !is.null(output_file) ||
+      output == "jupyter" ||
+      (output == "default" && settings_equal("output_default", "jupyter"))
+  ) {
     if (!isTRUE(list(...)[["internal_call"]])) settings_rm()
     return(invisible(out))
     # visible return

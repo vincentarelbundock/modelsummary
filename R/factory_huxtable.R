@@ -3,16 +3,16 @@
 #' @inheritParams factory_gt
 #' @noRd
 #' @return huxtable object
-factory_huxtable <- function(tab,
-                             align = NULL,
-                             hrule = NULL,
-                             notes = NULL,
-                             title = NULL,
-                             output_format = "huxtable",
-                             output_file = NULL,
-                             ...) {
-
-
+factory_huxtable <- function(
+  tab,
+  align = NULL,
+  hrule = NULL,
+  notes = NULL,
+  title = NULL,
+  output_format = "huxtable",
+  output_file = NULL,
+  ...
+) {
   insight::check_if_installed("huxtable")
 
   colnames(tab) <- gsub("\\|\\|\\|\\|", " / ", colnames(tab))
@@ -38,8 +38,10 @@ factory_huxtable <- function(tab,
   }
 
   # theme
-  theme_ms <- getOption("modelsummary_theme_huxtable",
-                        default = theme_ms_huxtable)
+  theme_ms <- getOption(
+    "modelsummary_theme_huxtable",
+    default = theme_ms_huxtable
+  )
   out <- theme_ms(out, hrule = hrule)
 
   # output
@@ -59,5 +61,4 @@ factory_huxtable <- function(tab,
       huxtable::quick_latex(out, file = output_file, open = FALSE)
     }
   }
-
 }

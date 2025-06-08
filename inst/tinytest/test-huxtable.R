@@ -18,16 +18,25 @@ models[["Logit 2"]] <- glm(am ~ hp + disp, mtcars, family = binomial())
 # markdown caption and notes
 # minor UTF8 encoding issue on CRAN and Windows
 expect_warning(
-  modelsummary(models, "huxtable",
-    title = "test title", notes = "test note",
-    stars = TRUE) %>%
-    huxtable::to_md())
-unknown <- suppressWarnings(modelsummary(models,
-  output = "huxtable",
-  title = "test title",
-  notes = "test note",
-  stars = TRUE) %>%
-  huxtable::to_md())
+  modelsummary(
+    models,
+    "huxtable",
+    title = "test title",
+    notes = "test note",
+    stars = TRUE
+  ) %>%
+    huxtable::to_md()
+)
+unknown <- suppressWarnings(
+  modelsummary(
+    models,
+    output = "huxtable",
+    title = "test title",
+    notes = "test note",
+    stars = TRUE
+  ) %>%
+    huxtable::to_md()
+)
 expect_snapshot_print(unknown, "huxtable-md_title_note_stars")
 
 # save to file

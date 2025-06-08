@@ -47,8 +47,12 @@ rmd_file <- paste0(random_string(), ".Rmd")
 # Rmarkdown to pdf_document
 ## not sure why PDF compilation doesn't work on Github actions
 cat(sprintf(dangerous_document, "pdf_document"), file = rmd_file)
-pdf_file <- gsub("\\.Rmd$", ".pdf", rmd_file )
-suppressWarnings(rmarkdown::render(rmd_file, output_file = pdf_file, quiet = TRUE))
+pdf_file <- gsub("\\.Rmd$", ".pdf", rmd_file)
+suppressWarnings(rmarkdown::render(
+  rmd_file,
+  output_file = pdf_file,
+  quiet = TRUE
+))
 
 
 # # Rmarkdown to html_document
@@ -56,12 +60,10 @@ suppressWarnings(rmarkdown::render(rmd_file, output_file = pdf_file, quiet = TRU
 # html_file <- gsub("\\.Rmd$", ".html", rmd_file )
 # rmarkdown::render(rmd_file, output_file = html_file, quiet = TRUE)
 
-
 # # Rmarkdown to word_document
 # cat(sprintf(dangerous_document, "word_document"), file = rmd_file)
 # docx_file <- gsub("\\.Rmd$", ".docx", rmd_file )
 # rmarkdown::render(rmd_file, output_file = docx_file, quiet = TRUE)
-
 
 # # does not even work interactively
 # # # Rmarkdown to bookdown::word_document2

@@ -32,7 +32,7 @@ N <- function(x) {
   # number of elements in a subgroup (factor)
   if (is.logical(x) && all(is.na(x))) {
     sprintf("%.0f", length(x))
-  # number of non-missing observations
+    # number of non-missing observations
   } else {
     sprintf("%.0f", sum(!is.na(x)))
   }
@@ -127,8 +127,7 @@ Var <- function(x, fmt = NULL, na.rm = TRUE, ...) {
 #' @keywords internal
 #' @inheritParams Mean
 #' @export
-Ncol <- function(x, ...)
-  paste0('(N = ', length(x), ')')
+Ncol <- function(x, ...) paste0('(N = ', length(x), ')')
 
 #' datasummary statistic shortcut
 #' @keywords internal
@@ -261,7 +260,17 @@ PercentMissing <- function(x) {
 #' @export
 Histogram <- function(x, bins = 10) {
   # ticks <- c(" ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█")
-  ticks <- c(" ", "\u2581", "\u2582", "\u2583", "\u2584", "\u2585", "\u2586", "\u2587", "\u2588")
+  ticks <- c(
+    " ",
+    "\u2581",
+    "\u2582",
+    "\u2583",
+    "\u2584",
+    "\u2585",
+    "\u2586",
+    "\u2587",
+    "\u2588"
+  )
   barheight <- cut(x, breaks = bins, labels = FALSE)
   barheight <- table(barheight)
   barheight <- barheight / max(barheight) * 7 + 1

@@ -4,7 +4,11 @@ dat$gear <- as.factor(dat$gear)
 
 # basic
 expect_silent(datasummary_skim(dat, type = "numeric", output = "data.frame"))
-tmp <- suppressWarnings(datasummary_skim(dat, type = "numeric", output = "data.frame"))
+tmp <- suppressWarnings(datasummary_skim(
+  dat,
+  type = "numeric",
+  output = "data.frame"
+))
 expect_equivalent(dim(tmp), c(9, 9))
 
 tmp <- datasummary_skim(dat, type = "categorical", output = "data.frame")
@@ -32,33 +36,51 @@ tab <- datasummary_skim(tmp)
 expect_inherits(tab, "tinytable")
 
 tmp <- data.frame(
-# all fully missing
+  # all fully missing
   a = rep(NA_real_, 20),
-  b = rep(NA_character_, 20))
-expect_error(datasummary_skim(tmp),
-  pattern = "all numeric")
+  b = rep(NA_character_, 20)
+)
+expect_error(datasummary_skim(tmp), pattern = "all numeric")
 
 # too many columns
 tmp <- data.frame(matrix(rnorm(252 * 3), ncol = 252))
-expect_error(datasummary_skim(tmp),
-  pattern = "more than 250 variables")
+expect_error(datasummary_skim(tmp), pattern = "more than 250 variables")
 
 
 # errors and warnings: categorical
 
 # no categorical
 tmp <- data.frame(a = rnorm(10))
-expect_error(datasummary_skim(tmp, type = "categorical"),
-  pattern = "contains no logical")
+expect_error(
+  datasummary_skim(tmp, type = "categorical"),
+  pattern = "contains no logical"
+)
 
 # too many columns
 tmp <- data.frame(matrix(as.character(rnorm(52 * 3)), ncol = 52))
-expect_error(datasummary_skim(tmp, type = "categorical"),
-  pattern = "more than 50 variables")
+expect_error(
+  datasummary_skim(tmp, type = "categorical"),
+  pattern = "more than 50 variables"
+)
 
 # fmt
-known <- c("33.9000", "8.0000", "472.0000", "335.0000", "4.9300", "5.4240", "22.9000", "1.0000", "8.0000")
-tmp <- datasummary_skim(dat, output = "data.frame", type = "numeric", fmt = "%.4f")
+known <- c(
+  "33.9000",
+  "8.0000",
+  "472.0000",
+  "335.0000",
+  "4.9300",
+  "5.4240",
+  "22.9000",
+  "1.0000",
+  "8.0000"
+)
+tmp <- datasummary_skim(
+  dat,
+  output = "data.frame",
+  type = "numeric",
+  fmt = "%.4f"
+)
 expect_equivalent(tmp$Max, known)
 
 # empty string factor level (tricky for tables::tabular)
@@ -70,15 +92,29 @@ expect_equivalent(dim(tmp), c(3, 3))
 N <- 20000
 tmp <- data.frame(
   a = sample(letters, N, replace = TRUE),
-  b = as.character(sample(1:100, N, replace = TRUE)))
-expect_warning(datasummary_skim(tmp, type = "categorical", output = "data.frame"))
-tmp <- suppressWarnings(datasummary_skim(tmp, type = "categorical", output = "data.frame"))
+  b = as.character(sample(1:100, N, replace = TRUE))
+)
+expect_warning(datasummary_skim(
+  tmp,
+  type = "categorical",
+  output = "data.frame"
+))
+tmp <- suppressWarnings(datasummary_skim(
+  tmp,
+  type = "categorical",
+  output = "data.frame"
+))
 expect_equivalent(ncol(tmp), 3)
 
 # completely missing variables are dropped
 tmp <- dat
 tmp$junk <- rep(NA_character_, nrow(dat))
-tmp <- expect_warning(datasummary_skim(tmp, type = "categorical", output = "data.frame", histogram = FALSE))
+tmp <- expect_warning(datasummary_skim(
+  tmp,
+  type = "categorical",
+  output = "data.frame",
+  histogram = FALSE
+))
 expect_false("junk" %in% tmp[[1]])
 
 # simple dataset
@@ -86,7 +122,9 @@ tab <- datasummary_skim(mtcars, type = "dataset", output = "data.frame")
 expect_equivalent(dim(tab), c(4, 2))
 
 # tibble input does not error
-penguins <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv")
+penguins <- read.csv(
+  "https://vincentarelbundock.github.io/Rdatasets/csv/palmerpenguins/penguins.csv"
+)
 penguins <- tibble::as_tibble(penguins)
 tab <- datasummary_skim(penguins)
 expect_inherits(tab, "tinytable")
@@ -111,10 +149,8 @@ tmp <- mtcars |>
 tab <- datasummary_skim(tmp, by = "gear", type = "all")
 expect_inherits(tab, "tinytable")
 
-
 # Issue #627: histograms in gt
 # expect_inherits(datasummary_skim(mtcars, output = "gt"), "gt_tbl")
-
 
 # # Big refactor
 # Q
@@ -131,7 +167,6 @@ expect_inherits(tab, "tinytable")
 #   #
 #
 
-
 # # RDatasets tests: must be commented out
 # any_categorical <- function(x) {
 #   # datasummary_skim ignores characters with more than 10 levels
@@ -145,7 +180,7 @@ expect_inherits(tab, "tinytable")
 #       }
 #     }
 #   }
-#   idx <- sapply(x, function(x) 
+#   idx <- sapply(x, function(x)
 #                 is.factor(x) | is.logical(x) | is.character(x))
 #   any(idx) & (ncol(x) < 40)
 # }
@@ -158,11 +193,11 @@ expect_inherits(tab, "tinytable")
 #   if (any_numeric(dat)) {
 #     test_that(paste("numeric:", f), {
 #       expect_error(datasummary_skim(dat, type="numeric"), NA)
-#     
+#
 #   }
 #   if (any_categorical(dat)) {
 #     test_that(paste("categorical:", f), {
 #       expect_error(datasummary_skim(dat, type="categorical"), NA)
-#     
+#
 #   }
 # }

@@ -8,7 +8,6 @@ options(modelsummary_factory_html = "kableExtra")
 options(modelsummary_factory_latex = "kableExtra")
 
 
-
 models <- list()
 models[["OLS 1"]] <- lm(hp ~ mpg + wt, mtcars)
 models[["Poisson 1"]] <- glm(hp ~ mpg + drat, mtcars, family = poisson())
@@ -31,7 +30,8 @@ cm <- c(
   "wt" = "Weight",
   "drat" = "Rear axle ratio",
   "disp" = "Displacement",
-  "(Intercept)" = "Constant")
+  "(Intercept)" = "Constant"
+)
 
 expect_snapshot_print(
   modelsummary(
@@ -42,9 +42,12 @@ expect_snapshot_print(
     title = "Summarizing 5 statistical models using the `modelsummary` package for `R`.",
     notes = c(
       "First custom note to contain text.",
-      "Second custom note with different content."),
-    output = "markdown"),
-    "kableExtra-markdown_complex")
+      "Second custom note with different content."
+    ),
+    output = "markdown"
+  ),
+  "kableExtra-markdown_complex"
+)
 
 # kable markdown: rouding + custom stars
 expect_snapshot_print(
@@ -52,8 +55,10 @@ expect_snapshot_print(
     models,
     stars = c("+" = .1, "*" = .01),
     fmt = "%.8f",
-    output = "markdown"),
-    "kableExtra-markdown_fmt")
+    output = "markdown"
+  ),
+  "kableExtra-markdown_fmt"
+)
 
 # Issue #548: titles escaped in kableExtra
 mod <- lm(mpg ~ hp, mtcars)
@@ -75,8 +80,6 @@ expect_false(grepl("blah\\\\_cyl", tab))
 #   estimate = c(ABC = "estimate"),
 #   shape = term ~ model + statistic
 # )
-
-
 
 options(modelsummary_factory_default = NULL)
 options(modelsummary_factory_html = NULL)

@@ -86,31 +86,32 @@
 #' ```
 #'
 #' @export
-modelplot <- function(models,
-                     conf_level = getOption("modelsummary_conf_level", default = .95),
-                     coef_map = getOption("modelsummary_coef_map", default = NULL),
-                     coef_omit = getOption("modelsummary_coef_omit", default = NULL),
-                     coef_rename = getOption("modelsummary_coef_rename", default = NULL),
-                     vcov = getOption("modelsummary_vcov", default = NULL),
-                     exponentiate = getOption("modelsummary_exponentiate", default = FALSE),
-                     add_rows = getOption("modelsummary_add_rows", default = NULL),
-                     facet = getOption("modelsummary_facet", default = FALSE),
-                     draw = getOption("modelsummary_draw", default = TRUE),
-                     background = getOption("modelsummary_background", default = NULL),
-                     ...) {
-
+modelplot <- function(
+  models,
+  conf_level = getOption("modelsummary_conf_level", default = .95),
+  coef_map = getOption("modelsummary_coef_map", default = NULL),
+  coef_omit = getOption("modelsummary_coef_omit", default = NULL),
+  coef_rename = getOption("modelsummary_coef_rename", default = NULL),
+  vcov = getOption("modelsummary_vcov", default = NULL),
+  exponentiate = getOption("modelsummary_exponentiate", default = FALSE),
+  add_rows = getOption("modelsummary_add_rows", default = NULL),
+  facet = getOption("modelsummary_facet", default = FALSE),
+  draw = getOption("modelsummary_draw", default = TRUE),
+  background = getOption("modelsummary_background", default = NULL),
+  ...
+) {
   ellip <- list(...)
-   
+
   ## settings
-   settings_init(settings = list(
-   "function_called" = "modelplot"
-   ))
-   
-   # more informative error message specific to `modelplot`
-   sanity_conf_level_modelplot(conf_level)
-   
-  
-  
+  settings_init(
+    settings = list(
+      "function_called" = "modelplot"
+    )
+  )
+
+  # more informative error message specific to `modelplot`
+  sanity_conf_level_modelplot(conf_level)
+
   # Function to remove invalid arguments
   remove_invalid_args <- function(args, valid_args) {
     # Filter out invalid arguments based on their names
@@ -126,23 +127,21 @@ modelplot <- function(models,
 
   # otherwise `modelsummary` returns a tinytable
   out <- modelsummary(
-    output      = "dataframe",
-    models      = models,
-    fmt         = NULL,
-    estimate    = estimate,
-    statistic   = NULL,
-    conf_level  = conf_level,
-    coef_map    = coef_map,
-    coef_omit   = coef_omit,
+    output = "dataframe",
+    models = models,
+    fmt = NULL,
+    estimate = estimate,
+    statistic = NULL,
+    conf_level = conf_level,
+    coef_map = coef_map,
+    coef_omit = coef_omit,
     coef_rename = coef_rename,
-    gof_omit    = ".*",
-    vcov        = vcov,
+    gof_omit = ".*",
+    vcov = vcov,
     exponentiate = exponentiate,
     ...
   )
   out$part <- out$statistic <- NULL
-  
-
 
   # save for sorting later
   term_order <- unique(out$term)
@@ -154,7 +153,8 @@ modelplot <- function(models,
     times = colnames(out)[2:ncol(out)],
     v.names = "value",
     timevar = "model",
-    direction = "long")
+    direction = "long"
+  )
 
   if (is.null(conf_level)) {
     out$estimate <- as.numeric(out$value)
@@ -167,7 +167,7 @@ modelplot <- function(models,
     out$p.value <- as.numeric(gsub(regex, "\\5", out$value))
   }
 
-  dat <- out[!is.na(out$term) & !is.na(out$model) & !is.na(out$estimate),]
+  dat <- out[!is.na(out$term) & !is.na(out$model) & !is.na(out$estimate), ]
   # clean and sort
   row.names(dat) <- dat$value <- dat$id <- NULL
   dat$term <- factor(dat$term, term_order)
@@ -208,8 +208,8 @@ modelplot <- function(models,
   # theme_set() from being overwritten
   if (identical(ggplot2::theme_get(), ggplot2::theme_grey())) {
     p <- p +
-         ggplot2::theme_minimal() +
-         ggplot2::theme(legend.title = ggplot2::element_blank())
+      ggplot2::theme_minimal() +
+      ggplot2::theme(legend.title = ggplot2::element_blank())
   }
 
   # background geoms
@@ -225,27 +225,48 @@ modelplot <- function(models,
   if (!is.null(conf_level)) {
     if (length(unique(dat$model)) == 1) {
       args_list <- list(
-        mapping = ggplot2::aes(y = term, x = estimate, xmin = conf.low, xmax = conf.high)
+        mapping = ggplot2::aes(
+          y = term,
+          x = estimate,
+          xmin = conf.low,
+          xmax = conf.high
+        )
       )
       args_list <- c(args_list, ellip)
       p <- p + do_call(ggplot2::geom_pointrange, args_list)
     } else {
       if (facet) {
         args_list <- list(
-          mapping = ggplot2::aes(y = model, x = estimate, xmin = conf.low, xmax = conf.high)
+          mapping = ggplot2::aes(
+            y = model,
+            x = estimate,
+            xmin = conf.low,
+            xmax = conf.high
+          )
         )
         args_list <- c(args_list, ellip)
-        p <- p + do_call(ggplot2::geom_pointrange, c(args_list, ellip)) +
-            ggplot2::facet_grid(term ~ ., scales = 'free_y')
+        p <- p +
+          do_call(ggplot2::geom_pointrange, c(args_list, ellip)) +
+          ggplot2::facet_grid(term ~ ., scales = 'free_y')
       } else {
         args_list <- list(
-          mapping = ggplot2::aes(y = term, x = estimate, xmin = conf.low, xmax = conf.high, color = model),
-          position = ggplot2::position_dodge(width = .5))
+          mapping = ggplot2::aes(
+            y = term,
+            x = estimate,
+            xmin = conf.low,
+            xmax = conf.high,
+            color = model
+          ),
+          position = ggplot2::position_dodge(width = .5)
+        )
         args_list <- c(args_list, ellip)
         p <- p + do_call(ggplot2::geom_pointrange, args_list)
       }
     }
-    tmp <- sprintf('Coefficient estimates and %s%% confidence intervals', conf_level * 100)
+    tmp <- sprintf(
+      'Coefficient estimates and %s%% confidence intervals',
+      conf_level * 100
+    )
     p <- p + ggplot2::labs(x = tmp, y = '')
     # geom_point: without confidence interval
   } else {

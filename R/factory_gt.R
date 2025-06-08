@@ -5,16 +5,18 @@
 #' @param output_format character
 #' @noRd
 #' @return tbl_gt object
-factory_gt <- function(tab,
-                       align = NULL,
-                       hrule = NULL,
-                       hgroup = NULL,
-                       notes = NULL,
-                       title = NULL,
-                       escape = TRUE,
-                       output_format = "gt",
-                       output_file = NULL,
-                       ...) {
+factory_gt <- function(
+  tab,
+  align = NULL,
+  hrule = NULL,
+  hgroup = NULL,
+  notes = NULL,
+  title = NULL,
+  escape = TRUE,
+  output_format = "gt",
+  output_file = NULL,
+  ...
+) {
   insight::check_if_installed("gt", minimum_version = "0.11.1")
 
   # compute spans
@@ -31,12 +33,13 @@ factory_gt <- function(tab,
   out <- gt::gt(tab, caption = title)
 
   # theme
-  theme_ms <- getOption("modelsummary_theme_gt",
-    default = theme_ms_gt)
-  out <- theme_ms(out,
+  theme_ms <- getOption("modelsummary_theme_gt", default = theme_ms_gt)
+  out <- theme_ms(
+    out,
     output_format = output_format,
     hrule = hrule,
-    hgroup = hgroup)
+    hgroup = hgroup
+  )
 
   # user-supplied notes at the bottom of table
   if (!is.null(notes)) {
@@ -47,10 +50,12 @@ factory_gt <- function(tab,
 
   if (length(span_list) > 0) {
     for (s in span_list) {
-      out <- gt::tab_spanner(out,
+      out <- gt::tab_spanner(
+        out,
         label = s$label,
         columns = tidyselect::all_of(s$columns),
-        level = s$level)
+        level = s$level
+      )
     }
   }
 
@@ -61,13 +66,19 @@ factory_gt <- function(tab,
     right <- grep("r", align)
     out <- gt::cols_align(
       out,
-      align = "center", columns = tidyselect::all_of(center))
+      align = "center",
+      columns = tidyselect::all_of(center)
+    )
     out <- gt::cols_align(
       out,
-      align = "left", columns = tidyselect::all_of(left))
+      align = "left",
+      columns = tidyselect::all_of(left)
+    )
     out <- gt::cols_align(
       out,
-      align = "right", column = tidyselect::all_of(right))
+      align = "right",
+      column = tidyselect::all_of(right)
+    )
   }
 
   # output
@@ -80,8 +91,10 @@ factory_gt <- function(tab,
       out <- gt::as_latex(out)
     }
 
-    if (!is.null(getOption("modelsummary_orgmode")) &&
-      output_format %in% c("html", "latex")) {
+    if (
+      !is.null(getOption("modelsummary_orgmode")) &&
+        output_format %in% c("html", "latex")
+    ) {
       out <- sprintf("#+BEGIN_EXPORT %s\n%s\n#+END_EXPORT", output_format, out)
       return(out)
     }

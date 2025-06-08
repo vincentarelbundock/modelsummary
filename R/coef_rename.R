@@ -22,14 +22,16 @@
 #' mod <- lm(mpg ~ horse_power + factor(cyl), dat)
 #' modelsummary(mod, coef_rename = coef_rename)
 #' ```
-coef_rename <- function(x,
-                       factor = TRUE,
-                       factor_name = TRUE,
-                       poly = TRUE,
-                       backticks = TRUE,
-                       titlecase = TRUE,
-                       underscore = TRUE,
-                       asis = TRUE) {
+coef_rename <- function(
+  x,
+  factor = TRUE,
+  factor_name = TRUE,
+  poly = TRUE,
+  backticks = TRUE,
+  titlecase = TRUE,
+  underscore = TRUE,
+  asis = TRUE
+) {
   out <- x
 
   if (isTRUE(factor_name)) {

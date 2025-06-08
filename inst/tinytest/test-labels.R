@@ -8,22 +8,27 @@ requiet("tinytable")
 dat <- mtcars
 dat$am <- haven::labelled(
   dat$am,
-  label = "Transmission")
+  label = "Transmission"
+)
 dat$mpg <- haven::labelled(
   dat$mpg,
-  label = "Miles per Gallon")
+  label = "Miles per Gallon"
+)
 dat$hp <- haven::labelled(
   dat$hp,
-  label = "Horsepower")
+  label = "Horsepower"
+)
 dat$cyl <- haven::labelled(
   dat$cyl,
-  label = "Cylinders")
+  label = "Cylinders"
+)
 
 
 tab <- datasummary(
   output = "dataframe",
   mpg + hp ~ Factor(am) * (Mean + SD) + Factor(vs) * (Mean + SD),
-  data = dat)
+  data = dat
+)
 expect_true(all(c("Miles per Gallon", "Horsepower") %in% tab[[1]]))
 expect_true("Transmission / 0 / Mean" %in% colnames(tab))
 expect_true("vs / 0 / Mean" %in% colnames(tab))
@@ -43,7 +48,11 @@ expect_true("Transmission" %in% tab[[1]])
 expect_true("Transmission" %in% colnames(tab))
 
 # datasummary_crosstab()
-tab <- datasummary_crosstab(am * cyl ~ gear * vs, data = dat, output = "data.frame")
+tab <- datasummary_crosstab(
+  am * cyl ~ gear * vs,
+  data = dat,
+  output = "data.frame"
+)
 expect_true("Cylinders" %in% colnames(tab))
 expect_true("Transmission" %in% colnames(tab))
 
@@ -53,8 +62,6 @@ expect_true("Transmission" %in% colnames(tab))
 #     pattern = "belled.*balance"),
 #     pattern = "It is not safe")
 
-
-
 # modelsummary: use variable labels by default
 data(trees)
 dat <- trees
@@ -62,7 +69,8 @@ dat <- trees
 # no labels
 mod <- list(
   "Bivariate" = lm(Girth ~ Height, data = dat),
-  "Multivariate" = lm(Girth ~ Height + Volume, data = dat))
+  "Multivariate" = lm(Girth ~ Height + Volume, data = dat)
+)
 tab <- modelsummary(mod, "dataframe")
 expect_true(all(c("Height", "Volume") %in% tab$term))
 
@@ -71,10 +79,10 @@ dat$Height <- haven::labelled(dat$Height, label = "Height (in feet)")
 dat$Volume <- haven::labelled(dat$Volume, label = "Volume (in liters)")
 mod <- list(
   "Bivariate" = lm(Girth ~ Height, data = dat),
-  "Multivariate" = lm(Girth ~ Height + Volume, data = dat))
+  "Multivariate" = lm(Girth ~ Height + Volume, data = dat)
+)
 tab <- modelsummary(mod, "dataframe", coef_rename = TRUE)
 expect_true(all(c("Height (in feet)", "Volume (in liters)") %in% tab$term))
-
 
 
 # interaction
@@ -87,7 +95,6 @@ tab <- modelsummary(mod, output = "dataframe", coef_rename = TRUE)
 expect_true("Height (in feet) × Volume (in liters)" %in% tab$term)
 
 
-
 # coef_rename ignores labels
 data(trees)
 dat <- trees
@@ -95,10 +102,10 @@ dat$height_2 <- haven::labelled(dat$Height, label = "Height (in feet)")
 dat$volume_2 <- haven::labelled(dat$Volume, label = "Volume (in liters)")
 mod <- list(
   "Bivariate" = lm(Girth ~ height_2, data = dat),
-  "Multivariate" = lm(Girth ~ height_2 + volume_2, data = dat))
+  "Multivariate" = lm(Girth ~ height_2 + volume_2, data = dat)
+)
 tab <- modelsummary(mod, "dataframe", coef_rename = coef_rename)
 expect_true(all(c("Height 2", "Volume 2") %in% tab$term))
-
 
 
 # modelsummary: also applies variable labels for depvar
@@ -108,7 +115,8 @@ dat$cyl <- as.factor(dat$cyl)
 dat$cyl <- haven::labelled(dat$cyl, label = "Number of cylinders")
 mod <- list(
   lm(mpg ~ cyl + drat + disp, data = dat),
-  lm(hp ~ cyl + drat + disp, data = dat))
+  lm(hp ~ cyl + drat + disp, data = dat)
+)
 tab <- modelsummary(dvnames(mod), "dataframe", coef_rename = TRUE)
 expect_equivalent(names(tab)[4:5], c("Miles per gallon", "hp"))
 expect_true("Number of cylinders" %in% tab$term)
@@ -116,7 +124,7 @@ expect_true("Number of cylinders" %in% tab$term)
 
 # Issue #752
 requiet("labelled")
-v2 <- labelled( c(0L, 0L, 1L), labels = c(yes = 1, no = 0))
+v2 <- labelled(c(0L, 0L, 1L), labels = c(yes = 1, no = 0))
 dat <- data.frame(v2, y = 1:3)
 tab <- datasummary(y ~ Mean, dat)
 expect_inherits(tab, "tinytable")
@@ -140,4 +148,3 @@ var_label(df3$cyl) <- "Number of cylinders"
 tab <- datasummary_crosstab(data = df3, formula = cyl ~ am)
 tab <- save_tt(tab, "markdown")
 expect_true(grepl("Number of cylinders", tab))
-

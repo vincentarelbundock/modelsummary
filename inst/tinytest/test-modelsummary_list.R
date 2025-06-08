@@ -3,13 +3,16 @@ source("helpers.R")
 # Issue 507: extraneous error about not supported
 mod <- lm(mpg ~ hp + factor(cyl), mtcars)
 ml <- modelsummary(mod, output = "modelsummary_list")
-msg <- capture.output({tab <- modelsummary(ml, output = "data.frame")})
+msg <- capture.output({
+  tab <- modelsummary(ml, output = "data.frame")
+})
 expect_equivalent(length(msg), 0)
 
 # output="modelsummary_list" and back to data.frame
 mod <- list(
-    lm(mpg ~ hp, mtcars),
-    lm(mpg ~ hp + drat, mtcars))
+  lm(mpg ~ hp, mtcars),
+  lm(mpg ~ hp + drat, mtcars)
+)
 tab <- modelsummary(mod, "modelsummary_list")
 expect_true(all(sapply(tab, inherits, "modelsummary_list")))
 expect_true(class(tab)[1] == "list")

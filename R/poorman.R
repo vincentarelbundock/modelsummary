@@ -24,7 +24,6 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
 #' bind columns
 #' @noRd
 bind_cols <- function(...) {
@@ -45,12 +44,18 @@ bind_rows <- function(..., .id = NULL) {
   lsts <- flatten(lsts)
   lsts <- Filter(Negate(is.null), lsts)
   lapply(lsts, function(x) is_df_or_vector(x))
-  lapply(lsts, function(x) if (is.atomic(x) && !is_named(x)) stop("Vectors must be named."))
+  lapply(
+    lsts,
+    function(x) if (is.atomic(x) && !is_named(x)) stop("Vectors must be named.")
+  )
 
   if (!missing(.id)) {
     lsts <- lapply(seq_along(lsts), function(i) {
       nms <- names(lsts)
-      id_df <- data.frame(id = if (is.null(nms)) as.character(i) else nms[i], stringsAsFactors = FALSE)
+      id_df <- data.frame(
+        id = if (is.null(nms)) as.character(i) else nms[i],
+        stringsAsFactors = FALSE
+      )
       colnames(id_df) <- .id
       cbind(id_df, lsts[[i]])
     })
@@ -60,7 +65,8 @@ bind_rows <- function(..., .id = NULL) {
   lsts <- lapply(
     lsts,
     function(x) {
-      if (!is.data.frame(x)) x <- data.frame(as.list(x), stringsAsFactors = FALSE)
+      if (!is.data.frame(x))
+        x <- data.frame(as.list(x), stringsAsFactors = FALSE)
       for (i in nms[!nms %in% names(x)]) x[[i]] <- NA
       x
     }
@@ -105,10 +111,17 @@ is_df_or_vector <- function(x) {
 
 #' Check whether any elements of a list are nested#' @param lst A `list()`
 #' @noRd
-is_nested <- function(lst) vapply(lst, function(x) inherits(x[1L], "list"), FALSE)
+is_nested <- function(lst)
+  vapply(lst, function(x) inherits(x[1L], "list"), FALSE)
 
 squash <- function(lst) {
-  do.call(c, lapply(lst, function(x) if (is.list(x) && !is.data.frame(x)) squash(x) else list(x)))
+  do.call(
+    c,
+    lapply(
+      lst,
+      function(x) if (is.list(x) && !is.data.frame(x)) squash(x) else list(x)
+    )
+  )
 }
 
 
@@ -118,41 +131,144 @@ names_are_invalid <- function(x) {
 }
 
 #' @noRd
-inner_join <- function(x, y, by = NULL, suffix = c(".x", ".y"), ..., na_matches = c("na", "never")) {
-  join_worker(x = x, y = y, by = by, suffix = suffix, sort = FALSE, ..., keep = FALSE, na_matches = na_matches)
+inner_join <- function(
+  x,
+  y,
+  by = NULL,
+  suffix = c(".x", ".y"),
+  ...,
+  na_matches = c("na", "never")
+) {
+  join_worker(
+    x = x,
+    y = y,
+    by = by,
+    suffix = suffix,
+    sort = FALSE,
+    ...,
+    keep = FALSE,
+    na_matches = na_matches
+  )
 }
 
 #' @noRd
-left_join <- function(x, y, by = NULL, suffix = c(".x", ".y"), ..., keep = FALSE, na_matches = c("na", "never")) {
-  join_worker(x = x, y = y, by = by, suffix = suffix, all.x = TRUE, ..., keep = keep, na_matches = na_matches)
+left_join <- function(
+  x,
+  y,
+  by = NULL,
+  suffix = c(".x", ".y"),
+  ...,
+  keep = FALSE,
+  na_matches = c("na", "never")
+) {
+  join_worker(
+    x = x,
+    y = y,
+    by = by,
+    suffix = suffix,
+    all.x = TRUE,
+    ...,
+    keep = keep,
+    na_matches = na_matches
+  )
 }
 
 #' @noRd
-right_join <- function(x, y, by = NULL, suffix = c(".x", ".y"), ..., keep = FALSE, na_matches = c("na", "never")) {
-  join_worker(x = x, y = y, by = by, suffix = suffix, all.y = TRUE, ..., keep = keep, na_matches = na_matches)
+right_join <- function(
+  x,
+  y,
+  by = NULL,
+  suffix = c(".x", ".y"),
+  ...,
+  keep = FALSE,
+  na_matches = c("na", "never")
+) {
+  join_worker(
+    x = x,
+    y = y,
+    by = by,
+    suffix = suffix,
+    all.y = TRUE,
+    ...,
+    keep = keep,
+    na_matches = na_matches
+  )
 }
 
 #' @noRd
-full_join <- function(x, y, by = NULL, suffix = c(".x", ".y"), ..., keep = FALSE, na_matches = c("na", "never")) {
-  join_worker(x = x, y = y, by = by, suffix = suffix, all = TRUE, ..., keep = keep, na_matches = na_matches)
+full_join <- function(
+  x,
+  y,
+  by = NULL,
+  suffix = c(".x", ".y"),
+  ...,
+  keep = FALSE,
+  na_matches = c("na", "never")
+) {
+  join_worker(
+    x = x,
+    y = y,
+    by = by,
+    suffix = suffix,
+    all = TRUE,
+    ...,
+    keep = keep,
+    na_matches = na_matches
+  )
 }
 
-join_worker <- function(x, y, by = NULL, suffix = c(".x", ".y"), keep = FALSE, na_matches = c("na", "never"), ...) {
-  na_matches <- match.arg(arg = na_matches, choices = c("na", "never"), several.ok = FALSE)
+join_worker <- function(
+  x,
+  y,
+  by = NULL,
+  suffix = c(".x", ".y"),
+  keep = FALSE,
+  na_matches = c("na", "never"),
+  ...
+) {
+  na_matches <- match.arg(
+    arg = na_matches,
+    choices = c("na", "never"),
+    several.ok = FALSE
+  )
   incomparables <- if (na_matches == "never") NA else NULL
   x[, ".join_id"] <- seq_len(nrow(x))
   merged <- if (is.null(by)) {
     by <- intersect(names(x), names(y))
     join_message(by)
     merge(
-      x = x, y = y, by = by, suffixes = suffix, incomparables = incomparables, ...
+      x = x,
+      y = y,
+      by = by,
+      suffixes = suffix,
+      incomparables = incomparables,
+      ...
     )[, union(names(x), names(y)), drop = FALSE]
   } else if (is.null(names(by))) {
-    merge(x = x, y = y, by = by, suffixes = suffix, incomparables = incomparables, ...)
+    merge(
+      x = x,
+      y = y,
+      by = by,
+      suffixes = suffix,
+      incomparables = incomparables,
+      ...
+    )
   } else {
-    merge(x = x, y = y, by.x = names(by), by.y = by, suffixes = suffix, incomparables = incomparables, ...)
+    merge(
+      x = x,
+      y = y,
+      by.x = names(by),
+      by.y = by,
+      suffixes = suffix,
+      incomparables = incomparables,
+      ...
+    )
   }
-  merged <- merged[order(merged[, ".join_id"]), colnames(merged) != ".join_id", drop = FALSE]
+  merged <- merged[
+    order(merged[, ".join_id"]),
+    colnames(merged) != ".join_id",
+    drop = FALSE
+  ]
   if (isTRUE(keep)) {
     keep_pos <- match(by, names(merged))
     x_by <- paste0(by, suffix[1L])
@@ -165,7 +281,12 @@ join_worker <- function(x, y, by = NULL, suffix = c(".x", ".y"), keep = FALSE, n
 
 join_message <- function(by) {
   if (length(by) > 1L) {
-    message("Joining, by = c(\"", paste0(by, collapse = "\", \""), "\")\n", sep = "")
+    message(
+      "Joining, by = c(\"",
+      paste0(by, collapse = "\", \""),
+      "\")\n",
+      sep = ""
+    )
   } else {
     message("Joining, by = \"", by, "\"\n", sep = "")
   }
@@ -202,4 +323,3 @@ remove_attributes <- function(data) {
   }
   as.data.frame(data)
 }
-

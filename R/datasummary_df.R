@@ -6,17 +6,19 @@
 #' @template kableExtra2tinytable
 #' @template citation
 #' @export
-datasummary_df <- function(data,
-                          output = getOption("modelsummary_output", default = "default"),
-                          fmt = 2,
-                          align = getOption("modelsummary_align", default = NULL),
-                          hrule = getOption("modelsummary_hrule", default = NULL),
-                          title = getOption("modelsummary_title", default = NULL),
-                          notes = getOption("modelsummary_notes", default = NULL),
-                          add_rows = getOption("modelsummary_add_rows", default = NULL),
-                          add_columns = getOption("modelsummary_add_columns", default = NULL),
-                          escape = getOption("modelsummary_escape", default = TRUE),
-                          ...) {
+datasummary_df <- function(
+  data,
+  output = getOption("modelsummary_output", default = "default"),
+  fmt = 2,
+  align = getOption("modelsummary_align", default = NULL),
+  hrule = getOption("modelsummary_hrule", default = NULL),
+  title = getOption("modelsummary_title", default = NULL),
+  notes = getOption("modelsummary_notes", default = NULL),
+  add_rows = getOption("modelsummary_add_rows", default = NULL),
+  add_columns = getOption("modelsummary_add_columns", default = NULL),
+  escape = getOption("modelsummary_escape", default = TRUE),
+  ...
+) {
   settings_init(settings = list("function_called" = "datasummary_df"))
 
   tmp <- sanitize_output(output) # before sanitize_escape
@@ -33,7 +35,8 @@ datasummary_df <- function(data,
     data[[n]] <- fmt(data[[n]])
   }
 
-  out <- factory(data,
+  out <- factory(
+    data,
     align = align,
     hrule = hrule,
     notes = notes,
@@ -45,7 +48,8 @@ datasummary_df <- function(data,
     output_factory = output_factory,
     output_format = output_format,
     output_file = output_file,
-    ...)
+    ...
+  )
 
   settings_rm()
   return(out)

@@ -44,9 +44,10 @@ expect_inherits(x, "tinytable")
 requiet("car") # Prestige data
 k <- subset(Prestige, select = c(income, education, women, prestige))
 tab <- datasummary(
-    All(k) ~ Mean + SD,
-    data = k,
-    add_columns = datasummary_correlation(k, output = "data.frame")[, -1])
+  All(k) ~ Mean + SD,
+  data = k,
+  add_columns = datasummary_correlation(k, output = "data.frame")[, -1]
+)
 expect_inherits(tab, "tinytable")
 
 

@@ -15,9 +15,8 @@ format_estimates <- function(
   shape,
   group_name,
   exponentiate,
-  ...) {
-
-
+  ...
+) {
   # when length(estimate) > 1, we want different stat and we want to allow labels
   if (is.null(estimate_label)) estimate_label <- "estimate"
 
@@ -25,37 +24,47 @@ format_estimates <- function(
   estimate_glue <- ifelse(
     estimate == "conf.int",
     "[{conf.low}, {conf.high}]",
-    estimate)
+    estimate
+  )
 
   statistic_glue <- ifelse(
     statistic == "conf.int",
     "[{conf.low}, {conf.high}]",
-    statistic)
+    statistic
+  )
 
   # estimate to glue
   estimate_glue <- ifelse(
     grepl("\\{", estimate_glue),
     estimate_glue,
-    sprintf("{%s}", estimate_glue))
+    sprintf("{%s}", estimate_glue)
+  )
 
   # statistics to glue
-  if ("statistic" %in% shape$rhs) { # don't add parentheses
-     statistic_glue <- ifelse(
-      grepl("\\{", statistic_glue),
-      statistic_glue,
-      sprintf("{%s}", statistic_glue))
-  } else if (!is.null(vcov) &&     # don't add parentheses
-      is.character(vcov) && # to manual strings
-      length(vcov) > 1) {   # of length greater than 1 (i.e., robust shortcuts)
+  if ("statistic" %in% shape$rhs) {
+    # don't add parentheses
     statistic_glue <- ifelse(
       grepl("\\{", statistic_glue),
       statistic_glue,
-      sprintf("{%s}", statistic_glue))
+      sprintf("{%s}", statistic_glue)
+    )
+  } else if (
+    !is.null(vcov) && # don't add parentheses
+      is.character(vcov) && # to manual strings
+      length(vcov) > 1
+  ) {
+    # of length greater than 1 (i.e., robust shortcuts)
+    statistic_glue <- ifelse(
+      grepl("\\{", statistic_glue),
+      statistic_glue,
+      sprintf("{%s}", statistic_glue)
+    )
   } else {
     statistic_glue <- ifelse(
       grepl("\\{", statistic_glue),
       statistic_glue,
-      sprintf("({%s})", statistic_glue))
+      sprintf("({%s})", statistic_glue)
+    )
   }
 
   # combine estimate and statistics
@@ -71,8 +80,10 @@ format_estimates <- function(
   is_glue <- grepl("\\{", estimate)
   if (is_star) {
     if (!'p.value' %in% colnames(est)) {
-      stop('To use the `stars` argument, the `get_estimates(model)` function must produce a column called "p.value"',
-           call. = FALSE)
+      stop(
+        'To use the `stars` argument, the `get_estimates(model)` function must produce a column called "p.value"',
+        call. = FALSE
+      )
     }
     # we always want stars, regardless of argument value, in case there is a glue {stars}
     if (is.logical(stars)) {
@@ -88,7 +99,7 @@ format_estimates <- function(
   # otherwise we get stars in `estimate` even when stars=FALSE and another glue
   # string includes {stars}`
   if (isTRUE(is_star) && isFALSE(is_glue) && !isFALSE(stars)) {
-      estimate_glue[1] <- paste0(estimate_glue[1], "{stars}")
+    estimate_glue[1] <- paste0(estimate_glue[1], "{stars}")
   }
 
   # check if statistics are available -- too complicated for glue strings
@@ -97,12 +108,22 @@ format_estimates <- function(
   statistic_nonglue[statistic_nonglue == "conf.int"] <- "conf.low"
   for (s in statistic_nonglue) {
     if (!s %in% colnames(est)) {
-      stop(sprintf("`%s` is not available. The `estimate` and `statistic` arguments must correspond to column names in the output of this command: `get_estimates(model)`", s), call. = FALSE)
+      stop(
+        sprintf(
+          "`%s` is not available. The `estimate` and `statistic` arguments must correspond to column names in the output of this command: `get_estimates(model)`",
+          s
+        ),
+        call. = FALSE
+      )
     }
   }
 
   # reference categories (while still numeric)
-  if ("include_reference" %in% names(list(...)) && all(c("estimate", "std.error") %in% colnames(est))) {
+  if (
+    "include_reference" %in%
+      names(list(...)) &&
+      all(c("estimate", "std.error") %in% colnames(est))
+  ) {
     idx_ref <- est$estimate == 0 & is.na(est$std.error)
   } else {
     idx_ref <- rep(FALSE, nrow(est))
@@ -113,16 +134,21 @@ format_estimates <- function(
     # standard error before transforming estimate
     cols <- c("std.error", "estimate", "conf.low", "conf.high")
     cols <- intersect(cols, colnames(est))
-    
+
     # Create a mask for non-random effects
     non_random <- rep(TRUE, nrow(est))
     if (all(c("term", "effect") %in% colnames(est))) {
-      non_random <- ifelse(grepl("^SD |^Cor ", est$term) & est$effect == "random", FALSE, TRUE)
+      non_random <- ifelse(
+        grepl("^SD |^Cor ", est$term) & est$effect == "random",
+        FALSE,
+        TRUE
+      )
     }
-    
+
     for (col in cols) {
       if (col == "std.error") {
-        est[["std.error"]][non_random] <- exp(est[["estimate"]][non_random]) * est[["std.error"]][non_random]
+        est[["std.error"]][non_random] <- exp(est[["estimate"]][non_random]) *
+          est[["std.error"]][non_random]
       } else if (col %in% c("estimate", "conf.low", "conf.high")) {
         est[[col]][non_random] <- exp(est[[col]][non_random])
       }
@@ -154,9 +180,13 @@ format_estimates <- function(
     }
   }
 
-
   # modelplot safety hack: statistics may not be available for some models (e.g., "brms")
-  if (identical(estimate_glue, "{estimate}|{std.error}|{conf.low}|{conf.high}|{p.value}")) {
+  if (
+    identical(
+      estimate_glue,
+      "{estimate}|{std.error}|{conf.low}|{conf.high}|{p.value}"
+    )
+  ) {
     if (!"std.error" %in% colnames(est)) {
       estimate_glue <- gsub("{std.error}", " ", estimate_glue, fixed = TRUE)
     }
@@ -191,7 +221,10 @@ format_estimates <- function(
   if (!is.null(group_name)) {
     miss <- setdiff(shape$group_name, colnames(est))
     if (length(miss) > 0) {
-      msg <- sprintf('Group columns (%s) were not found in the extracted data. The "group" argument must be a column name in the data.frame produced by `get_estimates(model)`.  If you wish to combine models with and without grouped estimates, you will find examples on the modelsummary website:', paste(miss, collapse = ", "))
+      msg <- sprintf(
+        'Group columns (%s) were not found in the extracted data. The "group" argument must be a column name in the data.frame produced by `get_estimates(model)`.  If you wish to combine models with and without grouped estimates, you will find examples on the modelsummary website:',
+        paste(miss, collapse = ", ")
+      )
       msg <- c(msg, "https://modelsummary.com")
       insight::format_error(msg)
     }
@@ -203,7 +236,12 @@ format_estimates <- function(
 
   # subset columns
   # "group" is used by parameters() to keep lme4::lmer() types of coefficients together
-  cols <- c(group_name, 'group', 'term', paste0('modelsummary_tmp', seq_along(estimate_glue)))
+  cols <- c(
+    group_name,
+    'group',
+    'term',
+    paste0('modelsummary_tmp', seq_along(estimate_glue))
+  )
   cols <- intersect(cols, colnames(est))
   est <- est[, cols, drop = FALSE]
 
@@ -218,19 +256,21 @@ format_estimates <- function(
 
   est <- stats::reshape(
     data.frame(est),
-    varying       = grep("modelsummary_tmp\\d+$", colnames(est), value = TRUE),
-    times         = grep("modelsummary_tmp\\d+$", colnames(est), value = TRUE),
-    v.names       = "modelsummary_value",
-    timevar       = "statistic",
-    direction     = "long")
+    varying = grep("modelsummary_tmp\\d+$", colnames(est), value = TRUE),
+    times = grep("modelsummary_tmp\\d+$", colnames(est), value = TRUE),
+    v.names = "modelsummary_value",
+    timevar = "statistic",
+    direction = "long"
+  )
   est$id <- NULL
 
   # sort then convert back to character
-  est <- est[do.call("order", as.list(est[, c(group_name, "term", "statistic")])), ]
+  est <- est[
+    do.call("order", as.list(est[, c(group_name, "term", "statistic")])),
+  ]
   for (col in c(group_name, "term")) {
     est[[col]] <- as.character(est[[col]])
   }
-
 
   # statistics need informative names
   idx <- as.numeric(factor(est$statistic))

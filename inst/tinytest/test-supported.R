@@ -30,7 +30,7 @@ lung <- subset(lung, subset = ph.ecog %in% 0:2)
 lung$sex <- factor(lung$sex, labels = c("male", "female"))
 lung$ph.ecog <- factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
 mod <- survival::coxph(Surv(time, status) ~ sex + age + ph.ecog, data = lung)
-tab <- modelsummary(mod, output="data.frame")
+tab <- modelsummary(mod, output = "data.frame")
 expect_inherits(tab, "data.frame")
 expect_true(nrow(tab) > 11)
 
@@ -39,8 +39,9 @@ requiet("mgcv")
 mod <- mgcv::gam(
   formula = mpg ~ s(hp) + s(wt) + factor(cyl) + am + qsec,
   family = stats::quasi(),
-  data = mtcars)
-tab <- modelsummary(mod, output="data.frame", statistic="p.value")
+  data = mtcars
+)
+tab <- modelsummary(mod, output = "data.frame", statistic = "p.value")
 expect_inherits(tab, "data.frame")
 expect_true(nrow(tab) > 5)
 
@@ -49,8 +50,11 @@ requiet("betareg")
 data("GasolineYield", package = "betareg")
 data("FoodExpenditure", package = "betareg")
 m1 <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
-m2 <- betareg::betareg(I(food / income) ~ income + persons, data = FoodExpenditure)
-tab <- modelsummary(list(m1, m2), output="data.frame")
+m2 <- betareg::betareg(
+  I(food / income) ~ income + persons,
+  data = FoodExpenditure
+)
+tab <- modelsummary(list(m1, m2), output = "data.frame")
 expect_inherits(tab, "data.frame")
 expect_true(nrow(tab) > 30)
 
@@ -62,8 +66,9 @@ requiet("ivreg")
 data(CigarettesSW, package = "AER")
 mod <- ivreg::ivreg(
   log(packs) ~ log(price) + log(income) | log(income) + I(tax / cpi),
-  data = CigarettesSW)
-tab <- modelsummary(mod, output="data.frame", diagnostic=TRUE)
+  data = CigarettesSW
+)
+tab <- modelsummary(mod, output = "data.frame", diagnostic = TRUE)
 expect_inherits(tab, "data.frame")
 expect_true(nrow(tab) > 5)
 
@@ -71,9 +76,8 @@ expect_true(nrow(tab) > 5)
 requiet("pscl")
 set.seed(123)
 data("bioChemists", package = "pscl")
-mod<- pscl::hurdle(formula = art ~ .,
-             data = bioChemists, zero = "geometric")
-tab <- modelsummary(mod, output="data.frame")
+mod <- pscl::hurdle(formula = art ~ ., data = bioChemists, zero = "geometric")
+tab <- modelsummary(mod, output = "data.frame")
 expect_inherits(tab, "data.frame")
 expect_true(nrow(tab) > 25)
 
@@ -96,14 +100,38 @@ mod$Logit <- with(dat, glm(am ~ wt + vs, family = binomial()))
 mod <- lapply(mod, mice::pool)
 
 # ols and logit
-raw <- modelsummary(mod, output="dataframe")
+raw <- modelsummary(mod, output = "dataframe")
 
-truth <- c("1.772", "(0.329)", "-0.499", "(0.092)", "0.002", "(0.002)",
-           "-0.108", "(0.182)", "32", "5", "0.564", "0.517")
+truth <- c(
+  "1.772",
+  "(0.329)",
+  "-0.499",
+  "(0.092)",
+  "0.002",
+  "(0.002)",
+  "-0.108",
+  "(0.182)",
+  "32",
+  "5",
+  "0.564",
+  "0.517"
+)
 expect_equivalent(truth, unname(raw[[4]]))
 
-truth <- c("19.428", "(7.833)", "-5.986", "(2.299)", "", "", "-3.498",
-           "(2.301)", "32", "5", "", "")
+truth <- c(
+  "19.428",
+  "(7.833)",
+  "-5.986",
+  "(2.299)",
+  "",
+  "",
+  "-3.498",
+  "(2.301)",
+  "32",
+  "5",
+  "",
+  ""
+)
 expect_equivalent(truth, unname(raw[[5]]))
 
 # sandwich vignette
@@ -111,29 +139,31 @@ requiet("sandwich")
 data("PetersenCL", package = "sandwich")
 m <- lm(y ~ x, data = PetersenCL)
 vc <- list(
-  "Standard"              = vcov(m),
-  "Sandwich (basic)"      = sandwich::sandwich(m),
-  "Clustered"             = sandwich::vcovCL(m, cluster = ~ firm),
-  "Clustered (two-way)"   = sandwich::vcovCL(m, cluster = ~ firm + year),
-  "HC3"                   = sandwich::vcovHC(m),
-  "Andrews' kernel HAC"   = sandwich::kernHAC(m),
-  "Newey-West"            = sandwich::NeweyWest(m),
-  "Bootstrap"             = sandwich::vcovBS(m),
-  "Bootstrap (clustered)" = sandwich::vcovBS(m, cluster = ~ firm))
+  "Standard" = vcov(m),
+  "Sandwich (basic)" = sandwich::sandwich(m),
+  "Clustered" = sandwich::vcovCL(m, cluster = ~firm),
+  "Clustered (two-way)" = sandwich::vcovCL(m, cluster = ~ firm + year),
+  "HC3" = sandwich::vcovHC(m),
+  "Andrews' kernel HAC" = sandwich::kernHAC(m),
+  "Newey-West" = sandwich::NeweyWest(m),
+  "Bootstrap" = sandwich::vcovBS(m),
+  "Bootstrap (clustered)" = sandwich::vcovBS(m, cluster = ~firm)
+)
 tab <- modelsummary(
   m,
   output = "data.frame",
   vcov = vc["Clustered"],
-  stars = TRUE)
+  stars = TRUE
+)
 expect_inherits(tab, "data.frame")
 expect_true("Clustered" %in% tab[["(1)"]])
 
 # nnet::multinom with `response` column
 requiet("nnet")
 make_data <- function(response = c("A", "B", "C")) {
-  var1 <- sample(response, replace = T, size=100)
-  var2 <- sample(c(0,1), size=100, replace=T)
-  var3 <- rnorm(100, mean=10, sd=2)
+  var1 <- sample(response, replace = T, size = 100)
+  var2 <- sample(c(0, 1), size = 100, replace = T)
+  var3 <- rnorm(100, mean = 10, sd = 2)
   var1 <- factor(var1)
   df1 <- data.frame(var1, var2, var3)
   df1
@@ -141,7 +171,11 @@ make_data <- function(response = c("A", "B", "C")) {
 dat <- make_data()
 invisible(capture.output(mod <- nnet::multinom(var1 ~ var2, data = dat)))
 expect_warning(modelsummary(mod, output = "dataframe"), pattern = "duplicate")
-tab <- suppressWarnings(modelsummary(mod, shape = response + term ~ model, output = "dataframe"))
+tab <- suppressWarnings(modelsummary(
+  mod,
+  shape = response + term ~ model,
+  output = "dataframe"
+))
 expect_inherits(tab, "data.frame")
 expect_true(nrow(tab) > 11)
 
@@ -151,12 +185,28 @@ requiet("did")
 data(mpdta, package = 'did')
 dat <- mpdta
 dat$newvar <- substr(mpdta$countyreal, 1, 2)
-mod1 <- att_gt(yname = "lemp", gname = "first.treat", idname = "countyreal",
-               tname = "year", xformla = ~1, data = dat)
-mod2 <- att_gt(yname = "lemp", gname = "first.treat", idname = "countyreal",
-               tname = "year", xformla = ~1, data = dat,
-               clustervars = c('countyreal', 'newvar'))
+mod1 <- att_gt(
+  yname = "lemp",
+  gname = "first.treat",
+  idname = "countyreal",
+  tname = "year",
+  xformla = ~1,
+  data = dat
+)
+mod2 <- att_gt(
+  yname = "lemp",
+  gname = "first.treat",
+  idname = "countyreal",
+  tname = "year",
+  xformla = ~1,
+  data = dat,
+  clustervars = c('countyreal', 'newvar')
+)
 mods <- list('mod1' = mod1, 'mod2' = mod2)
-tab <- msummary(mods, gof_omit = 'Num|ngroup|ntime|control|method', output = 'data.frame')
+tab <- msummary(
+  mods,
+  gof_omit = 'Num|ngroup|ntime|control|method',
+  output = 'data.frame'
+)
 expect_equivalent(tab$mod1[nrow(tab)], "by: countyreal")
 expect_equivalent(tab$mod2[nrow(tab)], "by: countyreal & newvar")

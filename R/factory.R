@@ -6,28 +6,29 @@
 #' @noRd
 #' @inheritParams datasummary
 #' @inheritParams modelsummary
-factory <- function(tab,
-                    align = NULL,
-                    fmt = 3,
-                    hrule = NULL,
-                    notes = NULL,
-                    output = NULL,
-                    title = NULL,
-                    add_rows = NULL,
-                    add_columns = NULL,
-                    escape = TRUE,
-                    output_factory = "tinytable",
-                    output_format = "tinytable",
-                    output_file = NULL,
-                    ...) {
-
-
+factory <- function(
+  tab,
+  align = NULL,
+  fmt = 3,
+  hrule = NULL,
+  notes = NULL,
+  output = NULL,
+  title = NULL,
+  add_rows = NULL,
+  add_columns = NULL,
+  escape = TRUE,
+  output_factory = "tinytable",
+  output_format = "tinytable",
+  output_file = NULL,
+  ...
+) {
   # sanity check functions are hosted in R/sanity_checks.R
   sanity_title(title, ...)
   sanity_notes(notes)
 
   # parse output
-  if (isTRUE(output == "data.frame")) { # internal calls from datasummary_skim()
+  if (isTRUE(output == "data.frame")) {
+    # internal calls from datasummary_skim()
     factory_fun <- factory_dataframe
   } else if (output_factory == "gt") {
     factory_fun <- factory_gt
@@ -54,15 +55,13 @@ factory <- function(tab,
   if (!is.null(flat_header)) {
     flat_factories <- c('huxtable', 'dataframe', 'typst')
     flat_formats <- c('markdown', 'word', 'powerpoint', 'typst')
-    if (output_factory %in% flat_factories ||
-        output_format %in% flat_formats) {
-        attr(tab, "header_bottom") <- colnames(tab)
+    if (output_factory %in% flat_factories || output_format %in% flat_formats) {
+      attr(tab, "header_bottom") <- colnames(tab)
 
       # datasummary_balance with dinm produces more cols than flat_header
       for (i in seq_along(flat_header)) {
         colnames(tab)[i] <- flat_header[i]
       }
-
     }
   }
 
@@ -71,7 +70,6 @@ factory <- function(tab,
 
   # add_columns
   if (!is.null(add_columns)) {
-
     # sanity check
     checkmate::assert_data_frame(add_columns, min.cols = 1, min.rows = 1)
 
@@ -124,7 +122,6 @@ factory <- function(tab,
 
   # add_rows
   if (!is.null(add_rows)) {
-
     # data.frame includes metadata columns
     if (identical(output_format, "dataframe")) {
       # only for modelsummary, not for datasummary
@@ -134,7 +131,6 @@ factory <- function(tab,
         add_rows$statistic <- ""
         add_rows <- add_rows[, colnames(tab)]
       }
-
     }
 
     # sanity check
@@ -178,13 +174,18 @@ factory <- function(tab,
   if (!output_format %in% c("latex", "tinytable")) {
     align_d <- grep("d", align)
     for (i in align_d) {
-      tab[[i]] <- pad(tab[[i]], style = "character", output_format = output_format)
+      tab[[i]] <- pad(
+        tab[[i]],
+        style = "character",
+        output_format = output_format
+      )
     }
     align[align == "d"] <- "c"
   }
 
   ## build table
-  out <- factory_fun(tab,
+  out <- factory_fun(
+    tab,
     align = align,
     hrule = hrule,
     notes = notes,
@@ -192,11 +193,13 @@ factory <- function(tab,
     escape = escape,
     output_format = output_format,
     output_file = output_file,
-    ...)
+    ...
+  )
 
-
-  if (output == "jupyter" ||
-      (output == "default" && settings_equal("output_default", "jupyter"))) {
+  if (
+    output == "jupyter" ||
+      (output == "default" && settings_equal("output_default", "jupyter"))
+  ) {
     insight::check_if_installed("IRdisplay")
     IRdisplay::display_html(as.character(out))
   } else {

@@ -15,14 +15,23 @@ glance_custom_internal.lm <- function(x, vcov_type = NULL, gof = NULL, ...) {
   }
 
   # default glance
-  if ((is.null(vcov_type) || vcov_type %in% c("Classical", "Constant", "IID", "Standard", "Default", ""))) {
+  if (
+    (is.null(vcov_type) ||
+      vcov_type %in%
+        c("Classical", "Constant", "IID", "Standard", "Default", ""))
+  ) {
     # F-statistic
     if (inherits(gof, "data.frame") && "statistic" %in% colnames(gof)) {
       out[["F"]] <- gof$statistic
     } else {
       fstat <- NULL
       if (isTRUE(check_dependency("lmtest"))) {
-        void <- utils::capture.output(fstat <- try(lmtest::waldtest(x, vcov = stats::vcov)$F[2], silent = TRUE))
+        void <- utils::capture.output(
+          fstat <- try(
+            lmtest::waldtest(x, vcov = stats::vcov)$F[2],
+            silent = TRUE
+          )
+        )
       }
       if (inherits(fstat, "numeric")) {
         out[["F"]] <- fstat
@@ -31,23 +40,26 @@ glance_custom_internal.lm <- function(x, vcov_type = NULL, gof = NULL, ...) {
   }
 
   # sandwich HC
-  if (!is.null(vcov_type) &&
+  if (
+    !is.null(vcov_type) &&
       isTRUE(check_dependency("lmtest")) &&
       isTRUE(check_dependency("sandwich")) &&
-      vcov_type %in% c("HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5")) {
-      fun <- function(k) sandwich::vcovHC(k, type = vcov_type)
-      fstat <- try(lmtest::waldtest(x, vcov = fun)$F[2], silent = TRUE)
-      if (inherits(fstat, "numeric")) {
-        out[["F"]] <- fstat
-      }
+      vcov_type %in% c("HC", "HC0", "HC1", "HC2", "HC3", "HC4", "HC4m", "HC5")
+  ) {
+    fun <- function(k) sandwich::vcovHC(k, type = vcov_type)
+    fstat <- try(lmtest::waldtest(x, vcov = fun)$F[2], silent = TRUE)
+    if (inherits(fstat, "numeric")) {
+      out[["F"]] <- fstat
+    }
   }
 
   # log-likelihood (broken with `gam`, which inherits from `glm`)
   if (!"gam" %in% class(x)) {
-      ll <- tryCatch(
-          insight::get_loglikelihood(x),
-          error = function(e) NULL)
-      out[["logLik"]] <- ll
+    ll <- tryCatch(
+      insight::get_loglikelihood(x),
+      error = function(e) NULL
+    )
+    out[["logLik"]] <- ll
   }
 
   row.names(out) <- NULL
@@ -58,7 +70,7 @@ glance_custom_internal.lm <- function(x, vcov_type = NULL, gof = NULL, ...) {
 #' @inherit get_vcov
 #' @keywords internal
 get_vcov.mlm <- function(model, vcov = NULL, conf_level = NULL, ...) {
-    out <- parameters::parameters(model, vcov = vcov, ci = conf_level, ...)
-    out <- parameters::standardize_names(out, style = "broom")
-    return(out)
+  out <- parameters::parameters(model, vcov = vcov, ci = conf_level, ...)
+  out <- parameters::standardize_names(out, style = "broom")
+  return(out)
 }

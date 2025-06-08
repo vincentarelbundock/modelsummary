@@ -34,24 +34,24 @@ get_factory_name <- function(x, default) {
 #'
 #' @noRd
 sanitize_output <- function(output) {
-
   extension_dict <- c(
-    "csv"  = "dataframe",
+    "csv" = "dataframe",
     "xlsx" = "dataframe",
-    "md"   = "markdown",
-    "Rmd"  = "markdown",
-    "txt"  = "markdown",
-    "tex"  = "latex",
-    "ltx"  = "latex",
+    "md" = "markdown",
+    "Rmd" = "markdown",
+    "txt" = "markdown",
+    "tex" = "latex",
+    "ltx" = "latex",
     "docx" = "word",
-    "doc"  = "word",
+    "doc" = "word",
     "pptx" = "powerpoint",
-    "ppt"  = "powerpoint",
-    "png"  = "png",
-    "jpg"  = "jpg",
-    "rtf"  = "rtf",
-    "htm"  = "html",
-    "html" = "html")
+    "ppt" = "powerpoint",
+    "png" = "png",
+    "jpg" = "jpg",
+    "rtf" = "rtf",
+    "htm" = "html",
+    "html" = "html"
+  )
 
   factory_dict <- c(
     "dataframe" = "dataframe",
@@ -73,7 +73,8 @@ sanitize_output <- function(output) {
     "word" = get_factory_name("word", default = "tinytable"),
     "jpg" = get_factory_name("jpg", default = "kableExtra"),
     "rtf" = get_factory_name("rtf", default = "gt"),
-    "powerpoint" = get_factory_name("powerpoint", default = "flextable"))
+    "powerpoint" = get_factory_name("powerpoint", default = "flextable")
+  )
   sanity_factory(factory_dict)
 
   fmt_dict <- list(
@@ -86,7 +87,10 @@ sanitize_output <- function(output) {
   # useful in modelsummary_rbind()
   if (is.null(output)) return(NULL)
 
-  if (!isTRUE(checkmate::check_string(output)) && settings_equal("function_called", "modelsummary")) {
+  if (
+    !isTRUE(checkmate::check_string(output)) &&
+      settings_equal("function_called", "modelsummary")
+  ) {
     msg <- "The `output` argument must be a string. This error is sometimes raised when users supply multiple models to `modelsummary` but forget to wrap them in a list. This works: `modelsummary(list(model1, model2))`. This does *not* work: `modelsummary(model1, model2)`"
     insight::format_error(msg)
   }
@@ -100,16 +104,36 @@ sanitize_output <- function(output) {
   ext <- tools::file_ext(output)
 
   if (isTRUE(ext == "")) {
-    object_types <- c('default', 'tinytable', 'gt', 'kableExtra', 'flextable', 'huxtable', 'DT', 'html', 'jupyter', 'latex', 'latex_tabular', 'markdown', 'dataframe', 'typst', 'modelsummary_list') 
+    object_types <- c(
+      'default',
+      'tinytable',
+      'gt',
+      'kableExtra',
+      'flextable',
+      'huxtable',
+      'DT',
+      'html',
+      'jupyter',
+      'latex',
+      'latex_tabular',
+      'markdown',
+      'dataframe',
+      'typst',
+      'modelsummary_list'
+    )
     if (!isTRUE(checkmate::check_choice(output, object_types))) {
-      msg <- sprintf("`output` must be a file path or one of: %s", paste(object_types, collapse = ", "))
+      msg <- sprintf(
+        "`output` must be a file path or one of: %s",
+        paste(object_types, collapse = ", ")
+      )
       insight::format_error(msg)
     }
-
   } else if (!ext %in% names(extension_dict)) {
-    msg <- sprintf("`output` supports these file path extensions: %s", paste(names(extension_dict), collapse = ", "))
+    msg <- sprintf(
+      "`output` supports these file path extensions: %s",
+      paste(names(extension_dict), collapse = ", ")
+    )
     insight::format_error(msg)
-
   } else {
     checkmate::assert_path_for_output(output, overwrite = TRUE)
   }
@@ -129,15 +153,14 @@ sanitize_output <- function(output) {
         output_format <- "typst"
       }
     }
-    if (is.null(output_format)) output_format <- getOption("modelsummary_factory_default", default = NULL)
+    if (is.null(output_format))
+      output_format <- getOption("modelsummary_factory_default", default = NULL)
     if (is.null(output_format)) output_format <- config_get("factory_default")
     if (is.null(output_format)) output_format <- "tinytable"
     output_file <- NULL
-
   } else if (ext %in% names(extension_dict)) {
     output_format <- extension_dict[ext]
     output_file <- output
-
   } else {
     output_format <- output
     output_file <- NULL
@@ -149,14 +172,22 @@ sanitize_output <- function(output) {
   output_factory <- factory_dict[[output_format]]
 
   # kableExtra must specify output_format ex ante (but after factory choice)
-  if (output_factory == "kableExtra" && output_format %in% c("default", "kableExtra")) {
+  if (
+    output_factory == "kableExtra" &&
+      output_format %in% c("default", "kableExtra")
+  ) {
     if (isTRUE(check_dependency("knitr")) && knitr::is_latex_output()) {
       output_format <- "latex"
     }
   }
 
-  if (settings_equal("format_numeric_latex", "siunitx") && (output %in% c("latex", "latex_tabular") || tools::file_ext(output) == "tex")) {
-      warn_once(latex_compilation_tips, "latex_siunitx_preamble")
+  if (
+    settings_equal("format_numeric_latex", "siunitx") &&
+      (output %in%
+        c("latex", "latex_tabular") ||
+        tools::file_ext(output) == "tex")
+  ) {
+    warn_once(latex_compilation_tips, "latex_siunitx_preamble")
   }
 
   settings_set("output_factory", unname(output_factory))
@@ -165,6 +196,7 @@ sanitize_output <- function(output) {
   out <- list(
     output_factory = unname(output_factory),
     output_format = unname(output_format),
-    output_file = unname(output_file))
+    output_file = unname(output_file)
+  )
   return(out)
 }

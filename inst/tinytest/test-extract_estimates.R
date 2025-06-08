@@ -10,8 +10,10 @@ expect_error(
 )
 
 expect_error(
-  modelsummary(mod,
+  modelsummary(
+    mod,
     statistic = "junk",
     output = "dataframe",
-    statistic_override = vcov)
+    statistic_override = vcov
+  )
 )

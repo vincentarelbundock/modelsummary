@@ -29,14 +29,14 @@ pad <- function(x, style = "unique", sep = ".", output_format = NULL) {
         out[idx] <- tmp
       }
     }
-
   } else if (style == "character") {
     # split at character or last digit
     nosep <- !grepl(sep, x, fixed = TRUE)
     x <- ifelse(
       nosep,
       gsub("(.*)([0-9])([^0-9]*)", paste0("\\1\\2", sep, "\\3"), x),
-      x)
+      x
+    )
 
     # split but make sure there are two elements
     x_split <- strsplit(x, sep, fixed = TRUE)
@@ -46,13 +46,18 @@ pad <- function(x, style = "unique", sep = ".", output_format = NULL) {
       }
     }
 
-    left_long <- max(sapply(x_split, function(i) ifelse(length(i) == 2, nchar(i[[1]], type = "width"), 0)))
-    right_long <- max(sapply(x_split, function(i) ifelse(length(i) == 2, nchar(i[[2]], type = "width"), 0)))
+    left_long <- max(sapply(
+      x_split,
+      function(i) ifelse(length(i) == 2, nchar(i[[1]], type = "width"), 0)
+    ))
+    right_long <- max(sapply(
+      x_split,
+      function(i) ifelse(length(i) == 2, nchar(i[[2]], type = "width"), 0)
+    ))
     left_long <- max(ceiling((nchar(x, type = "width") - 1) / 2), left_long)
     right_long <- max(ceiling((nchar(x, type = "width") - 1) / 2), right_long)
 
     for (i in seq_along(x_split)) {
-
       if (identical(output_format, "markdown")) {
         padchar <- " "
       } else {
@@ -64,8 +69,14 @@ pad <- function(x, style = "unique", sep = ".", output_format = NULL) {
         if (is_rounded) {
           left <- x_split[[i]]
           right <- ""
-          left <- paste0(strrep(padchar, left_long - nchar(left, type = "width")), left)
-          right <- paste0(strrep(padchar, right_long - nchar(right, type = "width") + 1))
+          left <- paste0(
+            strrep(padchar, left_long - nchar(left, type = "width")),
+            left
+          )
+          right <- paste0(strrep(
+            padchar,
+            right_long - nchar(right, type = "width") + 1
+          ))
           x_split[[i]] <- paste0(left, right)
         } else {
           x_split[[i]] <- x[[i]]
@@ -75,10 +86,15 @@ pad <- function(x, style = "unique", sep = ".", output_format = NULL) {
       } else if (length(x_split[[i]]) == 2) {
         left <- x_split[[i]][[1]]
         right <- x_split[[i]][[2]]
-        left <- paste0(strrep(padchar, left_long - nchar(left, type = "width")), left)
-        right <- paste0(right, strrep(padchar, right_long - nchar(right, type = "width")))
+        left <- paste0(
+          strrep(padchar, left_long - nchar(left, type = "width")),
+          left
+        )
+        right <- paste0(
+          right,
+          strrep(padchar, right_long - nchar(right, type = "width"))
+        )
         x_split[[i]] <- paste0(left, sep, right)
-
 
         # string or unknown
       } else {

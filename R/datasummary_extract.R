@@ -1,11 +1,12 @@
 #' Extract data from a `tables::tabular` object
 #'
 #' @noRd
-datasummary_extract <- function(tab,
-                                fmt = NULL,
-                                sparse_header = TRUE,
-                                data = NULL) {
-
+datasummary_extract <- function(
+  tab,
+  fmt = NULL,
+  sparse_header = TRUE,
+  data = NULL
+) {
   # arbitrary length of no formatting requested
   if (is.null(fmt)) fmt <- '%.50f'
 
@@ -29,13 +30,12 @@ datasummary_extract <- function(tab,
   header <- as.matrix(tables::colLabels(tab))
   stub_width <- ncol(mat) - ncol(header) # before taking the full large header
   for (i in 1:nrow(header)) {
-    header[i, ] <- carry_forward(as.vector(header[i,]))
+    header[i, ] <- carry_forward(as.vector(header[i, ]))
   }
 
   tmp <- mat[1:nrow(header), , drop = FALSE]
   tmp[1:nrow(header), (stub_width + 1):ncol(mat)] <- header
   header <- tmp
-
 
   # main --- TODO: test if main has only one row
   main <- mat[(idx + 1):nrow(mat), , drop = FALSE]
@@ -49,7 +49,6 @@ datasummary_extract <- function(tab,
     main[, i] <- ifelse(is.na(main[, i]) | is.nan(main[, i]), "", main[, i])
     main[, i] <- ifelse(main[, i] %in% c("NA", "NaN"), "", main[, i])
   }
-
 
   # labelled data
   variable_labels <- get_variable_labels_data(data)
@@ -79,42 +78,41 @@ datasummary_extract <- function(tab,
 
   # header flat with sep="||||"
   if (nrow(header_sparse) > 1) {
-      cols <- apply(header_sparse, 2, paste, collapse = "||||")
-      # remove extraneous levels
-      cols <- gsub("^\\|*$", "", cols)
-      cols <- gsub("^\\|{4}", "", cols)
-      cols <- pad(cols)
+    cols <- apply(header_sparse, 2, paste, collapse = "||||")
+    # remove extraneous levels
+    cols <- gsub("^\\|*$", "", cols)
+    cols <- gsub("^\\|{4}", "", cols)
+    cols <- pad(cols)
   } else {
-      cols <- unlist(header_sparse)
+    cols <- unlist(header_sparse)
   }
   colnames(main) <- cols
 
   # return
   return(main)
-
 }
 
 # fill-in spanning column labels horizontally
 carry_forward <- function(x, empty = '') {
-    x <- trimws(x)
-    if (length(x) > 1) {
-        for (i in 2:length(x)) {
-            # carry foward when header is NA, but not "" because that indicates
-            # a new higher level span
-            if (is.na(x[i])) {
-                if (!is.na(x[i - 1]) && !isTRUE(x[i - 1] == "")) {
-                    x[i] <- x[i - 1]
-                }
-            }
+  x <- trimws(x)
+  if (length(x) > 1) {
+    for (i in 2:length(x)) {
+      # carry foward when header is NA, but not "" because that indicates
+      # a new higher level span
+      if (is.na(x[i])) {
+        if (!is.na(x[i - 1]) && !isTRUE(x[i - 1] == "")) {
+          x[i] <- x[i - 1]
         }
+      }
     }
-    x
+  }
+  x
 }
 
 # utility functions
 sparsify <- function(h) {
-    unique_na <- function(x) length(unique(base::setdiff(x, ''))) > 1
-    idx <- apply(h, 1, unique_na)
-    out <- h[idx, , drop = FALSE]
-    return(out)
+  unique_na <- function(x) length(unique(base::setdiff(x, ''))) > 1
+  idx <- apply(h, 1, unique_na)
+  out <- h[idx, , drop = FALSE]
+  return(out)
 }

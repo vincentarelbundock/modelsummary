@@ -22,7 +22,8 @@ fmt_labels_md <- function(tab, position = c("both", "row", "column")) {
     out <- gt::fmt_markdown(out, columns = 1)
   }
   if (match.arg(position) %in% c("both", "column")) {
-    f <- function(x) stats::setNames(lapply(names(x$`_data`), gt::md), names(x$`_data`))
+    f <- function(x)
+      stats::setNames(lapply(names(x$`_data`), gt::md), names(x$`_data`))
     out <- gt::cols_label(out, .list = f(out))
   }
   return(out)

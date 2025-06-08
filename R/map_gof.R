@@ -2,7 +2,6 @@
 #'
 #' @keywords internal
 map_gof <- function(gof, gof_omit, gof_map) {
-
   if (is.null(gof) || isTRUE(nrow(gof) == 0)) {
     return(gof)
   }
@@ -16,7 +15,6 @@ map_gof <- function(gof, gof_omit, gof_map) {
     idx <- !grepl(gof_omit, gof$term, perl = TRUE)
     gof <- gof[idx, , drop = FALSE]
   }
-
 
   # map
   gm_raw <- sapply(gof_map, function(x) x$raw)
@@ -49,4 +47,3 @@ map_gof <- function(gof, gof_omit, gof_map) {
 
   return(gof)
 }
-

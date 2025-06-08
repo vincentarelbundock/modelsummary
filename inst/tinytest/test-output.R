@@ -8,11 +8,20 @@ using("tinysnapshot")
 if (ON_CI) exit_file("CI")
 
 mod <- list(
-lm(hp ~ mpg, mtcars),
-lm(hp ~ mpg + drat, mtcars))
+  lm(hp ~ mpg, mtcars),
+  lm(hp ~ mpg + drat, mtcars)
+)
 
 # table objects from different packages: no error
-otp <- c("gt", "kableExtra", "flextable", "huxtable", "html", "latex", "markdown")
+otp <- c(
+  "gt",
+  "kableExtra",
+  "flextable",
+  "huxtable",
+  "html",
+  "latex",
+  "markdown"
+)
 for (o in otp) {
   tab <- modelsummary(mod, output = o)
 }
@@ -48,7 +57,6 @@ unlink(filename)
 options(modelsummary_factory_html = NULL)
 
 
-
 # unsupported global options
 
 options(modelsummary_factory_rtf = 'kableExtra')
@@ -77,8 +85,6 @@ options(modelsummary_factory_png = NULL)
 # options(modelsummary_factory_jpg = 'gt')
 # expect_error(modelsummary(mod, 'test.jpg'))
 # options(modelsummary_factory_jpg = 'kableExtra')
-
-
 
 # save to file
 random <- random_string()
@@ -131,7 +137,16 @@ unlink(filename)
 tmp <- mtcars
 tmp$cyl <- as.character(tmp$cyl)
 tmp$vs <- as.logical(tmp$vs)
-otp <- c("tinytable", "huxtable", "flextable", "kableExtra", "dataframe", "markdown", "latex", "html")
+otp <- c(
+  "tinytable",
+  "huxtable",
+  "flextable",
+  "kableExtra",
+  "dataframe",
+  "markdown",
+  "latex",
+  "html"
+)
 for (o in otp) {
   tab <- datasummary_balance(~am, tmp, output = o)
 }
@@ -142,7 +157,16 @@ tmp <- mtcars
 tmp$cyl <- as.character(tmp$cyl)
 tmp$vs <- as.logical(tmp$vs)
 custom <- data.frame('a' = 1:2, 'b' = 1:2)
-output_formats <- c('tinytable', 'gt', 'kableExtra', 'flextable', 'huxtable', 'latex', 'markdown', 'html')
+output_formats <- c(
+  'tinytable',
+  'gt',
+  'kableExtra',
+  'flextable',
+  'huxtable',
+  'latex',
+  'markdown',
+  'html'
+)
 for (o in output_formats) {
   testname <- paste("add_columns with", o)
   tab <- datasummary_balance(~am, tmp, add_columns = custom, output = o)
@@ -186,8 +210,8 @@ unlink("test.tex")
 
 
 # unsupported formats
-expect_warning(datasummary_skim(dat, output="flextable"))
-expect_warning(datasummary_skim(dat, output="huxtable"))
+expect_warning(datasummary_skim(dat, output = "flextable"))
+expect_warning(datasummary_skim(dat, output = "huxtable"))
 
 
 # Issue #671: Do not indent title
@@ -204,9 +228,17 @@ expect_snapshot_print(
 # output format do not produce errors
 
 # output formats do not produce errors
-otp <- c("gt", "kableExtra", "flextable", "huxtable", "html", "latex", "markdown")
+otp <- c(
+  "gt",
+  "kableExtra",
+  "flextable",
+  "huxtable",
+  "html",
+  "latex",
+  "markdown"
+)
 for (o in otp) {
-  datasummary_correlation(mtcars, output = o) 
+  datasummary_correlation(mtcars, output = o)
 }
 
 tmp <- mtcars

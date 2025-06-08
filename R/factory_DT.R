@@ -10,8 +10,8 @@ factory_DT <- function(
   notes = NULL,
   title = NULL,
   escape = TRUE,
-  ...) {
-
+  ...
+) {
   insight::check_if_installed("DT")
 
   colnames(tab) <- gsub("\\|\\|\\|\\|", " / ", colnames(tab))
@@ -22,7 +22,8 @@ factory_DT <- function(
     tab,
     caption = title,
     escape = escape,
-    rownames = FALSE)
+    rownames = FALSE
+  )
   args <- c(args, dots)
   do.call(DT::datatable, args)
 }

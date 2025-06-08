@@ -12,7 +12,8 @@ weighted_sd <- function(x, w) {
   }
   mean_x <- sum(w * x) / weightsum
   num_nonzero <- sum(w > 0)
-  var_x <- sum(w * ((x - mean_x)^2)) / (weightsum * (num_nonzero - 1) / num_nonzero)
+  var_x <- sum(w * ((x - mean_x)^2)) /
+    (weightsum * (num_nonzero - 1) / num_nonzero)
   sd_x <- sqrt(var_x)
   return(sd_x)
 }

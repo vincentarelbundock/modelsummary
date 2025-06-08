@@ -5,7 +5,6 @@
 #' @return data.frame with goodness-of-fit  statistics
 #' @noRd
 format_gof <- function(gof, fmt, gof_map, ...) {
-
   if (!is.data.frame(gof)) {
     return(NULL)
   }
@@ -16,7 +15,6 @@ format_gof <- function(gof, fmt, gof_map, ...) {
       gof[[i]] <- as.character(gof[[i]])
     }
   }
-
 
   # `as.character` is needed for R-devel changes to `intersect` with empty sets
   gm_raw <- as.character(sapply(gof_map, function(x) x$raw))
@@ -48,7 +46,7 @@ format_gof <- function(gof, fmt, gof_map, ...) {
     # reshape
     out <- data.frame(term = names(gof), value = unlist(gof))
 
-  # all gof are excluded return an empty tibble (needs character to match merge type)
+    # all gof are excluded return an empty tibble (needs character to match merge type)
   } else {
     out <- data.frame(term = NA_character_, value = NA_character_)
     out <- stats::na.omit(out)

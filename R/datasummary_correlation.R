@@ -107,22 +107,26 @@
 #' # The `escape=FALSE` is important here!
 #' datasummary_correlation(dat, method = cor_fun, escape = FALSE)
 #' ```
-datasummary_correlation <- function(data,
-                                    output = getOption("modelsummary_output", default = "default"),
-                                    method = getOption("modelsummary_method", default = "pearson"),
-                                    fmt = 2,
-                                    align = getOption("modelsummary_align", default = NULL),
-                                    add_rows = getOption("modelsummary_add_rows", default = NULL),
-                                    add_columns = getOption("modelsummary_add_columns", default = NULL),
-                                    title = getOption("modelsummary_title", default = NULL),
-                                    notes = getOption("modelsummary_notes", default = NULL),
-                                    escape = getOption("modelsummary_escape", default = TRUE),
-                                    stars = getOption("modelsummary_stars", default = FALSE),
-                                    ...) {
+datasummary_correlation <- function(
+  data,
+  output = getOption("modelsummary_output", default = "default"),
+  method = getOption("modelsummary_method", default = "pearson"),
+  fmt = 2,
+  align = getOption("modelsummary_align", default = NULL),
+  add_rows = getOption("modelsummary_add_rows", default = NULL),
+  add_columns = getOption("modelsummary_add_columns", default = NULL),
+  title = getOption("modelsummary_title", default = NULL),
+  notes = getOption("modelsummary_notes", default = NULL),
+  escape = getOption("modelsummary_escape", default = TRUE),
+  stars = getOption("modelsummary_stars", default = FALSE),
+  ...
+) {
   ## settings
-  settings_init(settings = list(
-    "function_called" = "datasummary_correlation"
-  ))
+  settings_init(
+    settings = list(
+      "function_called" = "datasummary_correlation"
+    )
+  )
 
   # sanity checks
   tmp <- sanitize_output(output) # before sanitize_escape
@@ -163,8 +167,10 @@ datasummary_correlation <- function(data,
   checkmate::assert(
     checkmate::check_choice(
       method,
-      c("pearson", "kendall", "spearman", "pearspear")),
-    checkmate::check_function(method))
+      c("pearson", "kendall", "spearman", "pearspear")
+    ),
+    checkmate::check_function(method)
+  )
 
   # assign correlation computation function
   if (is.function(method)) {
@@ -176,7 +182,8 @@ datasummary_correlation <- function(data,
       stats::cor(
         x,
         use = "pairwise.complete.obs",
-        method = method)
+        method = method
+      )
     }
   }
 
@@ -189,11 +196,15 @@ datasummary_correlation <- function(data,
     out <- data
   }
 
-  if ((!is.matrix(out) && !inherits(out, "data.frame")) ||
-    is.null(row.names(out)) ||
-    is.null(colnames(out)) ||
-    nrow(out) != ncol(out)) {
-    stop("The function supplied to the `method` argument did not return a square matrix or data.frame with row.names and colnames.")
+  if (
+    (!is.matrix(out) && !inherits(out, "data.frame")) ||
+      is.null(row.names(out)) ||
+      is.null(colnames(out)) ||
+      nrow(out) != ncol(out)
+  ) {
+    stop(
+      "The function supplied to the `method` argument did not return a square matrix or data.frame with row.names and colnames."
+    )
   }
 
   if (easycorrelation) {
@@ -202,24 +213,28 @@ datasummary_correlation <- function(data,
       fmt = fmt,
       diagonal = "1",
       upper_triangle = ".",
-      stars = stars)
+      stars = stars
+    )
   } else if (is.character(method)) {
     if (method == "pearspear") {
       out <- datasummary_correlation_format(
         out,
         fmt = fmt,
-        diagonal = "1")
+        diagonal = "1"
+      )
     } else {
       out <- datasummary_correlation_format(
         out,
         fmt = fmt,
         diagonal = "1",
-        upper_triangle = ".")
+        upper_triangle = "."
+      )
     }
   } else {
     out <- datasummary_correlation_format(
       out,
-      fmt = fmt)
+      fmt = fmt
+    )
   }
 
   col_names <- colnames(out)
@@ -239,7 +254,8 @@ datasummary_correlation <- function(data,
   out[, 1] <- replace_dict(out[, 1], dict)
   colnames(out) <- replace_dict(colnames(out), dict)
 
-  out <- factory(out,
+  out <- factory(
+    out,
     align = align,
     hrule = NULL,
     output = output,
@@ -251,12 +267,15 @@ datasummary_correlation <- function(data,
     output_factory = output_factory,
     output_format = output_format,
     output_file = output_file,
-    ...)
+    ...
+  )
 
   # invisible return
-  if (!is.null(output_file) ||
-    output == "jupyter" ||
-    (output == "default" && settings_equal("output_default", "jupyter"))) {
+  if (
+    !is.null(output_file) ||
+      output == "jupyter" ||
+      (output == "default" && settings_equal("output_default", "jupyter"))
+  ) {
     settings_rm()
     return(invisible(out))
     # visible return
@@ -313,12 +332,13 @@ correlation_pearspear <- function(x) {
 #'
 #' datasummary_correlation(dat, method = cor_fun)
 datasummary_correlation_format <- function(
-    x,
-    fmt,
-    leading_zero = FALSE,
-    diagonal = NULL,
-    upper_triangle = NULL,
-    stars = FALSE) {
+  x,
+  fmt,
+  leading_zero = FALSE,
+  diagonal = NULL,
+  upper_triangle = NULL,
+  stars = FALSE
+) {
   # sanity
   checkmate::assert_character(diagonal, len = 1, null.ok = TRUE)
   checkmate::assert_character(upper_triangle, len = 1, null.ok = TRUE)
@@ -344,7 +364,6 @@ datasummary_correlation_format <- function(
       out[, j] <- paste0(out[, j], st[, j])
     }
   }
-
 
   for (i in 1:nrow(out)) {
     for (j in 1:ncol(out)) {

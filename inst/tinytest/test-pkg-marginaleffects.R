@@ -21,31 +21,41 @@ expect_inherits(tab, "data.frame")
 mod <- lm(mpg ~ am + vs + factor(cyl), data = mtcars)
 mod2 <- lm(mpg ~ drat + am + vs + factor(cyl), data = mtcars)
 cmp <- avg_comparisons(mod, variables = c("am", "vs"), by = "cyl", cross = TRUE)
-cmp2 <- avg_comparisons(mod2, variables = c("am", "vs"), by = "cyl", cross = TRUE)
+cmp2 <- avg_comparisons(
+  mod2,
+  variables = c("am", "vs"),
+  by = "cyl",
+  cross = TRUE
+)
 
 tab <- modelsummary(
-    list(cmp, cmp2),
-    output = "dataframe",
-    gof_map = NA,
-    shape = cyl + contrast_am + contrast_vs ~ model)
+  list(cmp, cmp2),
+  output = "dataframe",
+  gof_map = NA,
+  shape = cyl + contrast_am + contrast_vs ~ model
+)
 expect_equivalent(dim(tab), c(6, 7))
 
 tab <- modelsummary(
-    cmp,
-    output = "dataframe",
-    gof_map = NA,
-    shape = contrast_vs + contrast_am + cyl ~ model)
+  cmp,
+  output = "dataframe",
+  gof_map = NA,
+  shape = contrast_vs + contrast_am + cyl ~ model
+)
 expect_equivalent(dim(tab), c(6, 6))
 
 tab <- modelsummary(
-    cmp,
-    output = "dataframe",
-    gof_map = NA,
-    shape = contrast_vs + contrast_am ~ cyl + model)
+  cmp,
+  output = "dataframe",
+  gof_map = NA,
+  shape = contrast_vs + contrast_am ~ cyl + model
+)
 expect_equivalent(dim(tab), c(2, 7))
 
 expect_error(
-    modelsummary(
-        cmp,
-        shape = term + cyl + trash + contrast_am + contrast_vs ~ model),
-    pattern = "not found")
+  modelsummary(
+    cmp,
+    shape = term + cyl + trash + contrast_am + contrast_vs ~ model
+  ),
+  pattern = "not found"
+)

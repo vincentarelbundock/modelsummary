@@ -10,16 +10,26 @@ shape_estimates <- function(estimates, shape, conf_level, statistic, estimate) {
 
   shape_formula <- shape$shape_formula
 
-  idx <- intersect(colnames(estimates), c("term", "statistic", "group", shape$group_name))
+  idx <- intersect(
+    colnames(estimates),
+    c("term", "statistic", "group", shape$group_name)
+  )
 
   # long
-  out <- data.table::melt(data.table::data.table(estimates),
+  out <- data.table::melt(
+    data.table::data.table(estimates),
     id.vars = idx,
     variable.name = "model",
-    value.name = "estimate")
+    value.name = "estimate"
+  )
 
   if ("statistic" %in% shape$rhs) {
-    out$statistic <- rename_statistics(out$statistic, conf_level = conf_level, statistic = statistic, estimate = estimate)
+    out$statistic <- rename_statistics(
+      out$statistic,
+      conf_level = conf_level,
+      statistic = statistic,
+      estimate = estimate
+    )
   }
 
   # use factors to preserve order in `dcast`
@@ -30,10 +40,12 @@ shape_estimates <- function(estimates, shape, conf_level, statistic, estimate) {
   }
 
   # wide
-  out <- data.table::dcast(eval(shape_formula),
+  out <- data.table::dcast(
+    eval(shape_formula),
     data = out,
     value.var = "estimate",
-    sep = "||||")
+    sep = "||||"
+  )
 
   data.table::setDF(out)
 

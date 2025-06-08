@@ -33,20 +33,25 @@
 #' library(modelsummary)
 #' datasummary_balance(~am, mtcars)
 #' ```
-datasummary_balance <- function(formula,
-                                data,
-                                output = getOption("modelsummary_output", default = "default"),
-                                fmt = fmt_decimal(digits = 1, pdigits = 3),
-                                title = getOption("modelsummary_title", default = NULL),
-                                notes = getOption("modelsummary_notes", default = NULL),
-                                align = getOption("modelsummary_align", default = NULL),
-                                stars = getOption("modelsummary_stars", default = FALSE),
-                                add_columns = getOption("modelsummary_add_columns", default = NULL),
-                                add_rows = getOption("modelsummary_add_rows", default = NULL),
-                                dinm = getOption("modelsummary_dinm", default = TRUE),
-                                dinm_statistic = getOption("modelsummary_dinm_statistic", default = "std.error"),
-                                escape = getOption("modelsummary_escape", default = TRUE),
-                                ...) {
+datasummary_balance <- function(
+  formula,
+  data,
+  output = getOption("modelsummary_output", default = "default"),
+  fmt = fmt_decimal(digits = 1, pdigits = 3),
+  title = getOption("modelsummary_title", default = NULL),
+  notes = getOption("modelsummary_notes", default = NULL),
+  align = getOption("modelsummary_align", default = NULL),
+  stars = getOption("modelsummary_stars", default = FALSE),
+  add_columns = getOption("modelsummary_add_columns", default = NULL),
+  add_rows = getOption("modelsummary_add_rows", default = NULL),
+  dinm = getOption("modelsummary_dinm", default = TRUE),
+  dinm_statistic = getOption(
+    "modelsummary_dinm_statistic",
+    default = "std.error"
+  ),
+  escape = getOption("modelsummary_escape", default = TRUE),
+  ...
+) {
   ## settings
   settings_init(settings = list("function_called" = "datasummary_balance"))
 
@@ -70,7 +75,6 @@ datasummary_balance <- function(formula,
   checkmate::assert_flag(dinm)
   checkmate::assert_choice(dinm_statistic, choices = c("std.error", "p.value"))
   data <- sanitize_datasummary_balance_data(formula, data)
-
 
   if ("p.value" %in% dinm_statistic) {
     insight::check_if_installed("estimatr")
@@ -118,14 +122,18 @@ datasummary_balance <- function(formula,
 
   if (dinm && !isTRUE(check_dependency("estimatr"))) {
     dinm <- FALSE
-    warning("Please install the `estimatr` package or set `dinm=FALSE` to suppress this warning.",
-      call. = FALSE)
+    warning(
+      "Please install the `estimatr` package or set `dinm=FALSE` to suppress this warning.",
+      call. = FALSE
+    )
   }
 
   if (dinm && (length(unique(data[[rhs]])) > 2)) {
     dinm <- FALSE
-    warning("The difference in means can only be calculate with two groups in the right-hand side variable. Set `dinm=FALSE` to suppress this warning.",
-      call. = FALSE)
+    warning(
+      "The difference in means can only be calculate with two groups in the right-hand side variable. Set `dinm=FALSE` to suppress this warning.",
+      call. = FALSE
+    )
   }
 
   ## factors
@@ -133,8 +141,16 @@ datasummary_balance <- function(formula,
     ## enforce 2-column stub, even when there is only one factor
     tmp1 <- data
     tmp2 <- data_norhs
-    tmp1$bad_factor_for_stub <- as.factor(sample(c("A", "B"), nrow(tmp1), replace = TRUE))
-    tmp2$bad_factor_for_stub <- as.factor(sample(c("A", "B"), nrow(tmp2), replace = TRUE))
+    tmp1$bad_factor_for_stub <- as.factor(sample(
+      c("A", "B"),
+      nrow(tmp1),
+      replace = TRUE
+    ))
+    tmp2$bad_factor_for_stub <- as.factor(sample(
+      c("A", "B"),
+      nrow(tmp2),
+      replace = TRUE
+    ))
 
     # pctformat = function(x) sprintf("%.1f", x)
     pctformat <- sanitize_fmt(1)
@@ -144,18 +160,22 @@ datasummary_balance <- function(formula,
     if (!is.null(rhs)) {
       f_fac <- stats::as.formula(sprintf(
         "All(tmp2, factor = TRUE, numeric = FALSE) ~
-                 Factor(%s) * (N * Format(nformat()) + Heading('Pct.') * Percent('col') * Format(pctformat()))", rhs))
+                 Factor(%s) * (N * Format(nformat()) + Heading('Pct.') * Percent('col') * Format(pctformat()))",
+        rhs
+      ))
     } else {
       f_fac <- stats::as.formula(
         "All(tmp2, factor = TRUE, numeric = FALSE) ~
-                 (N * Format(nformat()) + Heading('Pct.') * Percent('col') * Format(pctformat()))")
+                 (N * Format(nformat()) + Heading('Pct.') * Percent('col') * Format(pctformat()))"
+      )
     }
     tab_fac <- datasummary(
       formula = f_fac,
       data = tmp1,
       fmt = fmt,
       internal_call = TRUE,
-      output = "data.frame")
+      output = "data.frame"
+    )
 
     ## datasummary(output="dataframe") changes the output format
     sanitize_output(output)
@@ -205,7 +225,8 @@ datasummary_balance <- function(formula,
       fmt = fmt,
       data = data,
       internal_call = TRUE,
-      output = "data.frame")
+      output = "data.frame"
+    )
 
     ## datasummary(output="dataframe") changes the output format
     sanitize_output(output)
@@ -237,7 +258,9 @@ datasummary_balance <- function(formula,
   } else if (any_factor) {
     tab <- tab_fac
   } else {
-    stop("The `datasummary_balance` function was unable to extract summary statistics.")
+    stop(
+      "The `datasummary_balance` function was unable to extract summary statistics."
+    )
   }
 
   ## differences in means for numeric variables
@@ -254,8 +277,10 @@ datasummary_balance <- function(formula,
           fmt = fmt,
           statistic = dinm_statistic,
           stars = stars,
-          escape = escape)
-      })
+          escape = escape
+        )
+      }
+    )
     tmp <- do.call("rbind", tmp)
 
     ## use poorman's left_join because merge breaks the order, even with sort=FALSE
@@ -273,10 +298,13 @@ datasummary_balance <- function(formula,
   }
 
   ## align: default (TODO: `add_columns` support)
-  if (is.null(align) && !is.null(attr(tab, "stub_width")) && is.null(add_columns)) {
+  if (
+    is.null(align) && !is.null(attr(tab, "stub_width")) && is.null(add_columns)
+  ) {
     align <- paste0(
       strrep("l", attr(tab, "stub_width")),
-      strrep("r", ncol(tab) - attr(tab, "stub_width")))
+      strrep("r", ncol(tab) - attr(tab, "stub_width"))
+    )
   }
 
   ## weights warning
@@ -300,12 +328,15 @@ datasummary_balance <- function(formula,
     output_factory = output_factory,
     output_format = output_format,
     output_file = output_file,
-    ...)
+    ...
+  )
 
   # invisible return
-  if (!is.null(output_file) ||
-    output == "jupyter" ||
-    (output == "default" && settings_equal("output_default", "jupyter"))) {
+  if (
+    !is.null(output_file) ||
+      output == "jupyter" ||
+      (output == "default" && settings_equal("output_default", "jupyter"))
+  ) {
     settings_rm()
     return(invisible(out))
     # visible return
@@ -338,7 +369,11 @@ DinM <- function(lhs, rhs, data, fmt, statistic, stars = TRUE, escape = TRUE) {
 
   out <- estimatr::difference_in_means(
     outcome_variable_placeholder ~ condition_variable_placeholder,
-    data = data, blocks = blocks, clusters = clusters, weights = weights)
+    data = data,
+    blocks = blocks,
+    clusters = clusters,
+    weights = weights
+  )
 
   out <- estimatr::tidy(out)
 
@@ -349,7 +384,8 @@ DinM <- function(lhs, rhs, data, fmt, statistic, stars = TRUE, escape = TRUE) {
   if (!isFALSE(stars) && "p.value" %in% colnames(out)) {
     out$estimate <- paste0(
       out$estimate,
-      make_stars(out$p.value, stars))
+      make_stars(out$p.value, stars)
+    )
   }
 
   if (identical(statistic, "p.value")) {
@@ -409,7 +445,8 @@ sanitize_datasummary_balance_data <- function(formula, data) {
     if (length(unique(data[[rhs]])) > 10) {
       stop(sprintf(
         "Each value of the `%s` variable will create two separate columns. This variable has more than 10 unique values, so the table would be too wide to be readable.",
-        rhs))
+        rhs
+      ))
     }
     data <- data[!is.na(data[[rhs]]), , drop = FALSE]
   } else {
@@ -451,13 +488,23 @@ sanitize_datasummary_balance_data <- function(formula, data) {
   }
 
   if (!is.null(drop_too_many_levels)) {
-    warning(sprintf("These variables were omitted because they include more than 50 levels: %s.", paste(drop_too_many_levels, collapse = ", ")),
-      call. = FALSE)
+    warning(
+      sprintf(
+        "These variables were omitted because they include more than 50 levels: %s.",
+        paste(drop_too_many_levels, collapse = ", ")
+      ),
+      call. = FALSE
+    )
   }
 
   if (!is.null(drop_entirely_na)) {
-    warning(sprintf("These variables were omitted because they are entirely missing: %s.", paste(drop_entirely_na, collapse = ", ")),
-      call. = FALSE)
+    warning(
+      sprintf(
+        "These variables were omitted because they are entirely missing: %s.",
+        paste(drop_entirely_na, collapse = ", ")
+      ),
+      call. = FALSE
+    )
   }
 
   return(data)

@@ -80,7 +80,8 @@ gof_map_build <- function() {
   tli,                       TLI,                0, TRUE,'
   out <- utils::read.csv(
     text = text,
-    colClasses = c("character", "character", "numeric", "logical", "NULL"))
+    colClasses = c("character", "character", "numeric", "logical", "NULL")
+  )
   for (i in 1:2) {
     out[[i]] <- trimws(out[[i]])
   }

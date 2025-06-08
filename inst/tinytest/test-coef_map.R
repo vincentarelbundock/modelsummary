@@ -2,18 +2,28 @@
 mod <- lm(hp ~ mpg + cyl, mtcars)
 expect_error(
   modelsummary(mod, coef_map = c("Blah" = "blah")),
-  pattern = "At least one of the term names")
+  pattern = "At least one of the term names"
+)
 
 # combine different regressors and collapse rows
 mod = lm(hp ~ mpg + factor(cyl), mtcars)
-tab1 <- modelsummary(mod,
+tab1 <- modelsummary(
+  mod,
   output = "data.frame",
-  coef_map = c("(Intercept)", "factor(cyl)6"))
-tab2 <- modelsummary(mod,
+  coef_map = c("(Intercept)", "factor(cyl)6")
+)
+tab2 <- modelsummary(
+  mod,
   output = "data.frame",
-  coef_map = c("(Intercept)" = "blah", "factor(cyl)6" = "blah blah"))
+  coef_map = c("(Intercept)" = "blah", "factor(cyl)6" = "blah blah")
+)
 expect_equivalent(tab1[[4]], tab2[[4]])
-tab1[[2]][1:4] = c("(Intercept)", "(Intercept)", "factory(cyl)6", "factory(cyl)6")
+tab1[[2]][1:4] = c(
+  "(Intercept)",
+  "(Intercept)",
+  "factory(cyl)6",
+  "factory(cyl)6"
+)
 tab2[[2]][1:4] = c("blah", "blah", "blah blah", "blah blah")
 
 # combine different regressors and collapse rows
@@ -39,7 +49,8 @@ expect_equivalent(unname(raw[[2]][1:5]), truth)
 cm <- c(
   "(Intercept)" = "Intercept",
   "factor(cyl)6" = "6-cylinder",
-  "factor(cyl)8" = "8-cylinder")
+  "factor(cyl)8" = "8-cylinder"
+)
 models <- list()
 models[["OLS"]] <- lm(mpg ~ factor(cyl), mtcars)
 models[["Logit"]] <- glm(am ~ factor(cyl), mtcars, family = binomial)
@@ -58,16 +69,18 @@ expect_inherits(mat, "data.frame")
 expect_equivalent(dim(mat), c(17, 5))
 
 rows <- read.csv(
-  text =
-    "term        , OLS , Logit
+  text = "term        , OLS , Logit
      4-cylinder  , -   , -
-     12-cylinder , -   , -")
+     12-cylinder , -   , -"
+)
 
-mat <- modelsummary(models,
+mat <- modelsummary(
+  models,
   output = "dataframe",
   statistic = c("std.error", "conf.int"),
   add_rows = rows,
-  coef_map = cm)
+  coef_map = cm
+)
 
 expect_inherits(mat, "data.frame")
 expect_equivalent(dim(mat), c(19, 5))
@@ -81,5 +94,8 @@ tab <- modelsummary(
   coef_map = c("SD (Observations)", "(Intercept)"),
   output = "dataframe"
 )
-expect_equivalent(tab$term[1:3], c("SD (Observations)", "(Intercept)", "(Intercept)"))
+expect_equivalent(
+  tab$term[1:3],
+  c("SD (Observations)", "(Intercept)", "(Intercept)")
+)
 expect_equivalent(tab$statistic[1:3], c("estimate", "estimate", "std.error"))

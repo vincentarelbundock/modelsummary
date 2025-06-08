@@ -21,44 +21,44 @@
 #' @export
 
 dvnames <- function(
-    models,
-    number = FALSE,
-    strip = FALSE,
-    fill = 'Model') {
+  models,
+  number = FALSE,
+  strip = FALSE,
+  fill = 'Model'
+) {
+  if (class(models)[1] != 'list') {
+    models <- list(models)
+  }
 
-    if (class(models)[1] != 'list') {
-        models <- list(models)
+  # Get dependent variables
+  checkmate::assert_flag(strip)
+  if (!isTRUE(strip)) {
+    dvs <- tryCatch(
+      sapply(models, function(f) deparse(stats::formula(f)[[2]])),
+      error = function(e) NULL
+    )
+    if (is.null(dvs)) {
+      dvs <- sapply(models, insight::find_response)
     }
+  } else {
+    dvs <- sapply(models, insight::find_response)
+  }
 
-    # Get dependent variables
-    checkmate::assert_flag(strip)
-    if (!isTRUE(strip)) {
-        dvs <- tryCatch(
-            sapply(models, function(f) deparse(stats::formula(f)[[2]])),
-            error = function(e) NULL)
-        if (is.null(dvs)) {
-            dvs <- sapply(models, insight::find_response)
-        }
-    } else {
-        dvs <- sapply(models, insight::find_response)
-    }
+  lab <- get_variable_labels_models(models)
+  idx <- dvs %in% names(lab)
+  if (any(idx)) {
+    dvs[idx] <- lab[dvs[idx]]
+  }
 
-    lab <- get_variable_labels_models(models)
-    idx <- dvs %in% names(lab)
-    if (any(idx)) {
-        dvs[idx] <- lab[dvs[idx]]
-    }
+  # Replace nulls with fill
+  dvs <- sapply(dvs, function(x) ifelse(is.null(x), fill, x))
+  # Append numbers
+  if (number) {
+    dvs <- paste0(dvs, ' (', 1:length(dvs), ')')
+  }
 
-    # Replace nulls with fill
-    dvs <- sapply(dvs, function(x)
-        ifelse(is.null(x), fill, x))
-    # Append numbers
-    if (number) {
-        dvs <- paste0(dvs, ' (', 1:length(dvs), ')')
-    }
+  # Apply names
+  names(models) <- dvs
 
-    # Apply names
-    names(models) <- dvs
-
-    return(models)
+  return(models)
 }

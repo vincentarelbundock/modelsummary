@@ -4,6 +4,6 @@
 #' @keywords internal
 #' @noRd
 print.modelsummary_string <- function(x, ...) {
-    cat(x, "\n", sep = "", ...)
-    invisible(x)
+  cat(x, "\n", sep = "", ...)
+  invisible(x)
 }

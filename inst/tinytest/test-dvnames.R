@@ -31,7 +31,7 @@ expect_identical(dvnout, nondvn)
 
 # dvnames transformation
 m1 <- lm(mpg ~ cyl + hp, data = mtcars)
-m2 <- lm(log(mpg+1) ~ cyl + hp, data = mtcars)
+m2 <- lm(log(mpg + 1) ~ cyl + hp, data = mtcars)
 a <- modelsummary(dvnames(list(m1, m2)), output = "data.frame")
 b <- modelsummary(dvnames(list(m1, m2), strip = TRUE), output = "data.frame")
 expect_true("log(mpg + 1)" %in% colnames(a))

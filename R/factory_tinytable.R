@@ -3,18 +3,20 @@
 #' @inheritParams factory_gt
 #' @noRd
 #' @return tinytable object
-factory_tinytable <- function(tab,
-                              align = NULL,
-                              hrule = NULL,
-                              hgroup = NULL,
-                              hindent = FALSE,
-                              notes = NULL,
-                              title = NULL,
-                              escape = TRUE,
-                              output_format = "tinytable",
-                              output_file = NULL,
-                              gof_idx = NULL,
-                              ...) {
+factory_tinytable <- function(
+  tab,
+  align = NULL,
+  hrule = NULL,
+  hgroup = NULL,
+  hindent = FALSE,
+  notes = NULL,
+  title = NULL,
+  escape = TRUE,
+  output_format = "tinytable",
+  output_file = NULL,
+  gof_idx = NULL,
+  ...
+) {
   insight::check_if_installed("tinytable")
 
   span_list <- get_span_kableExtra(tab)
@@ -29,7 +31,13 @@ factory_tinytable <- function(tab,
   }
 
   # escape everything except \\num{} in LaTeX
-  if (isTRUE(escape) && isTRUE(output_format %in% c("latex", "latex_tabular", "html", "typst", "tinytable"))) {
+  if (
+    isTRUE(escape) &&
+      isTRUE(
+        output_format %in%
+          c("latex", "latex_tabular", "html", "typst", "tinytable")
+      )
+  ) {
     of <- if (output_format == "latex_tabular") "latex" else output_format
     tmp <- escape_everything(
       tab = tab,
@@ -52,10 +60,12 @@ factory_tinytable <- function(tab,
     arguments$notes <- notes
   }
   arguments <- c(arguments, list(...))
-  arguments <- arguments[base::intersect(names(arguments), c("x", "theme", "placement", "width", "caption", "align", "notes"))]
+  arguments <- arguments[base::intersect(
+    names(arguments),
+    c("x", "theme", "placement", "width", "caption", "align", "notes")
+  )]
   arguments <- c(list(tab), arguments)
   out <- do.call(tinytable::tt, arguments)
-
 
   # align: other factories require a vector of "c", "l", "r", etc.
   # before span because those should be centered
@@ -72,7 +82,10 @@ factory_tinytable <- function(tab,
       sp <- cumsum(span_list[[i]])
       sp <- as.list(sp)
       sp[[1]] <- 1:sp[[1]]
-      sp[2:length(sp)] <- lapply(2:length(sp), function(k) (max(sp[[k - 1]]) + 1):sp[[k]])
+      sp[2:length(sp)] <- lapply(
+        2:length(sp),
+        function(k) (max(sp[[k - 1]]) + 1):sp[[k]]
+      )
       sp <- sp[trimws(names(sp)) != ""]
       out <- tinytable::group_tt(out, j = sp)
       out <- tinytable::style_tt(out, i = -i, align = "c")
@@ -111,7 +124,6 @@ factory_tinytable <- function(tab,
 }
 
 
-
 escape_everything <- function(tab, output_format, span_list, title, notes) {
   # body: do not escape siunitx \num{}
   for (col in seq_len(ncol(tab))) {
@@ -123,7 +135,10 @@ escape_everything <- function(tab, output_format, span_list, title, notes) {
   }
 
   for (i in seq_along(span_list)) {
-    names(span_list[[i]]) <- tinytable::format_tt(names(span_list[[i]]), escape = output_format)
+    names(span_list[[i]]) <- tinytable::format_tt(
+      names(span_list[[i]]),
+      escape = output_format
+    )
   }
 
   if (!is.null(colnames(tab))) {
@@ -132,7 +147,8 @@ escape_everything <- function(tab, output_format, span_list, title, notes) {
 
   for (i in seq_along(notes)) {
     # hack: avoid escaping stars notes with \num{} in LaTeX
-    flag <- !identical(output_format, "latex") || !grepl("\\\\num\\{", notes[[i]])
+    flag <- !identical(output_format, "latex") ||
+      !grepl("\\\\num\\{", notes[[i]])
     if (flag && isTRUE(checkmate::check_string(notes[[i]]))) {
       notes[[i]] <- tinytable::format_tt(notes[[i]], escape = output_format)
     }

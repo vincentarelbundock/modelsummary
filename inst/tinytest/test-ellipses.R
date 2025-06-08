@@ -9,7 +9,8 @@ raw <- modelsummary(
   mod,
   gof_omit = ".*",
   output = "dataframe",
-  exponentiate = FALSE)
+  exponentiate = FALSE
+)
 truth <- c("-6.604", "(2.351)", "0.307", "(0.115)")
 expect_equivalent(raw[[4]], truth)
 
@@ -19,7 +20,8 @@ raw <- modelsummary(
   gof_omit = ".*",
   statistic = "conf.int",
   output = "dataframe",
-  exponentiate = FALSE)
+  exponentiate = FALSE
+)
 truth <- c("-6.604", "[-12.328, -2.772]", "0.307", "[0.122, 0.587]")
 expect_equivalent(raw[[4]], truth)
 
@@ -33,6 +35,7 @@ raw <- modelsummary(
   mod,
   gof_omit = ".*",
   output = "dataframe",
-  exponentiate = FALSE)
+  exponentiate = FALSE
+)
 truth <- c("-6.604", "(2.351)", "0.307", "(0.115)")
 expect_equivalent(raw[[4]], truth)
