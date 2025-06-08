@@ -1,21 +1,39 @@
+
+
 # News
 
 ## Development
 
-* `add_rows`: The position of new rows can be set using a "position" attribute. Previously, this only accepted integers. Now we accept string shortcuts:
+New:
+
+- `add_rows`: The position of new rows can be set using a “position”
+  attribute. Previously, this only accepted integers. Now we accept
+  string shortcuts:
   - `attr(new_rows, "coef_start")`
   - `attr(new_rows, "coef_end")`
   - `attr(new_rows, "gof_start")`
   - `attr(new_rows, "gof_end")`
+- Allow `tinytable`-style note specification:
+  `notes=list(a = list(i = 0:1, j = 1, text = "Blah."))`. Thanks to
+  @sverrirarnors for feature request \#867.
+- `exponentiate=TRUE` no longer exponentiates parameters that are marked
+  as “random” in the “effect” column when calling `get_estimates()`.
+  Thanks to @orvaquim for report \#878.
 
 Bug:
 
-* `modelplot()` accepts `linewidth` argument. Thanks to @trekonom for report #861.
-* Misplaced horizontal rule with `add_rows`. Thanks to @judgelord for report #875.
-
-Misc:
-
-* Allow `tinytable`-style note specification: `notes=list(a = list(i = 0:1, j = 1, text = "Blah."))`. Thanks to @sverrirarnors for feature request #867.
+- `modelplot()` accepts `linewidth` argument. Thanks to @trekonom for
+  report \#861.
+- Misplaced horizontal rule with `add_rows`. Thanks to @judgelord for
+  report \#875.
+- Fixed but in `fmt_equivalence()`. Thanks to Nicholas Astier for the
+  report and bugfix.
+- Rolled back the change about centering GOF in dot-aligned columns.
+  This created many problems with inconsistent font display. The
+  alternative solution with `tinytable::style_tt()` is now documented in
+  a the Themes and Styles vignette.
+- Custom stars did not work in `datasummary_correlation()`. Thanks to
+  @mvuorre for report \#860.
 
 ## 2.3.0
 

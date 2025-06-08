@@ -11,6 +11,7 @@ testone: ## make testone testfile="inst/tinytest/test-aaa-warn_once.R"
 	Rscript -e "pkgload::load_all();tinytest::run_test_file('$(testfile)')"
 
 document: ## devtools::document()
+	quarto render NEWS.qmd
 	Rscript -e "devtools::document()"
 
 check: document ## devtools::check()

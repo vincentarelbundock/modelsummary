@@ -337,7 +337,7 @@ datasummary_correlation_format <- function(
   }
 
   # before triangle, otherwise we get empty cells with stars
-  if (!is.null(p) && isTRUE(stars)) {
+  if (!is.null(p) && !isFALSE(stars)) {
     st <- make_stars(p, stars)
     st <- st[, 2:ncol(st)]
     for (j in 1:ncol(out)) {

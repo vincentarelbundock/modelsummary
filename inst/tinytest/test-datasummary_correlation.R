@@ -48,3 +48,23 @@ tab <- datasummary(
     data = k,
     add_columns = datasummary_correlation(k, output = "data.frame")[, -1])
 expect_inherits(tab, "tinytable")
+
+
+# Stars don't appear when stars=FALSE
+res <- datasummary_correlation(
+  correlation::correlation(mtcars[, 1:3]),
+  stars = FALSE,
+  output = "data.frame"
+)
+res <- grepl("*", res[3, 3], fixed = TRUE)
+expect_false(res)
+
+# Issue #860: custom stars
+res <- datasummary_correlation(
+  correlation::correlation(mtcars[, 1:3]),
+  stars = c("[zzz]" = .1),
+  output = "data.frame"
+)
+expect_true(grepl("[zzz]", res[2, 2], fixed = TRUE))
+expect_true(grepl("[zzz]", res[3, 2], fixed = TRUE))
+expect_true(grepl("[zzz]", res[3, 3], fixed = TRUE))
