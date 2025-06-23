@@ -139,7 +139,7 @@ sanitize_output <- function(output) {
   }
 
   # default: explicit > knitr > options > config
-  if (isTRUE(output == "default")) {
+  if (isTRUE(output %in% c("default", "tinytable"))) {
     output_format <- NULL
     if (isTRUE(check_dependency("knitr"))) {
       fmt <- hush(knitr::pandoc_to())
