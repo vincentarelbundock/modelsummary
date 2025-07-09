@@ -1,4 +1,7 @@
 source("helpers.R")
+requiet("pscl")
+requiet("Rdatasets")
+
 
 mod <- list()
 mod$OLS <- lm(am ~ drat, data = mtcars)
@@ -35,3 +38,19 @@ tab <- modelsummary(
   gof_map = NA
 )
 expect_equivalent(nrow(tab), 4)
+
+
+# Issue #892: not duplicated after rename because we use component
+dat <- Rdatasets::rddata("bioChemists", "pscl")
+model <- pscl::zeroinfl(art ~ fem + factor(kid5), dat)
+tab <- modelsummary(model,
+  output = "data.frame",
+  shape = component + term + statistic ~ model,
+  coef_rename = \(x) gsub("^count_|^zero_", "", x))
+expect_inherits(tab, "data.frame")
+expect_error(
+  modelsummary(model,
+    output = "data.frame",
+    shape = term + statistic ~ model,
+    coef_rename = \(x) gsub("^count_|^zero_", "", x)),
+  pattern = "duplicate labels")

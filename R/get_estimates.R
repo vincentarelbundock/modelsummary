@@ -299,10 +299,10 @@ get_estimates_parameters <- function(
   if (is.character(vcov) || is.matrix(vcov)) {
     args[["vcov"]] <- vcov
   }
-  out <- hush(tryCatch(
+  out <- tryCatch(
     do.call("tidy_easystats", args),
     error = function(e) NULL
-  ))
+  )
 
   if (isTRUE(coef_rename)) {
     labs <- attr(out, "pretty_labels")
