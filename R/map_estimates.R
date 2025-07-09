@@ -22,7 +22,7 @@ map_estimates <- function(
     cols <- intersect(cols, colnames(estimates))
     dups <- as.data.frame(estimates)[, cols, drop = FALSE]
     if (nrow(estimates) != nrow(unique(dups))) {
-      msg <- "There are duplicate labels in the estimates table. This can happen when you use `coef_map` or `coef_rename` to assign the same label to multiple variables, but these variables are part of the same model. Please check your `coef_map` and `coef_rename` arguments."
+      msg <- "There are duplicate labels in the estimates table. Call `get_estimates()` to see the available identifiers, and use the `shape` argument to specify the (potentially nested or grouped)  nature of parameters. Alternatively, duplication can happen when you use `coef_map` or `coef_rename` to assign the same label to multiple variables, but these variables are part of the same model. Please check your `coef_map` and `coef_rename` arguments."
       stop(msg, call. = FALSE)
     }
   }

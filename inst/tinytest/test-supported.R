@@ -20,7 +20,7 @@ if (isTRUE(requiet("margins"))) {
 requiet("MASS")
 # broom::tidy requires p.values=TRUE, but we now use easystats, so no need to error checking
 fit <- polr(Sat ~ Freq, weights = Freq, data = housing)
-tab <- modelsummary(fit, output = 'dataframe', statistic = "p.value")
+tab <- modelsummary(fit, output = "dataframe", statistic = "p.value")
 expect_inherits(tab, "data.frame")
 
 # survival
@@ -170,7 +170,7 @@ make_data <- function(response = c("A", "B", "C")) {
 }
 dat <- make_data()
 invisible(capture.output(mod <- nnet::multinom(var1 ~ var2, data = dat)))
-expect_warning(modelsummary(mod, output = "dataframe"), pattern = "duplicate")
+expect_error(modelsummary(mod, output = "dataframe"), pattern = "duplicate")
 tab <- suppressWarnings(modelsummary(
   mod,
   shape = response + term ~ model,
@@ -182,7 +182,7 @@ expect_true(nrow(tab) > 11)
 
 # did
 requiet("did")
-data(mpdta, package = 'did')
+data(mpdta, package = "did")
 dat <- mpdta
 dat$newvar <- substr(mpdta$countyreal, 1, 2)
 mod1 <- att_gt(
@@ -200,13 +200,13 @@ mod2 <- att_gt(
   tname = "year",
   xformla = ~1,
   data = dat,
-  clustervars = c('countyreal', 'newvar')
+  clustervars = c("countyreal", "newvar")
 )
-mods <- list('mod1' = mod1, 'mod2' = mod2)
+mods <- list("mod1" = mod1, "mod2" = mod2)
 tab <- msummary(
   mods,
-  gof_omit = 'Num|ngroup|ntime|control|method',
-  output = 'data.frame'
+  gof_omit = "Num|ngroup|ntime|control|method",
+  output = "data.frame"
 )
 expect_equivalent(tab$mod1[nrow(tab)], "by: countyreal")
 expect_equivalent(tab$mod2[nrow(tab)], "by: countyreal & newvar")
