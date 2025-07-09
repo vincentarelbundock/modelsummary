@@ -467,8 +467,6 @@ gm <- list(
 modelsummary(models, gof_map = gm)
 ```
 
-Notice the subtle difference between `coef_map` and `gof_map`. On the one hand, `coef_map` works as a "white list": any coefficient not explicitly entered will be omitted from the table. On the other, `gof_map` works as a "black list": statistics need to be explicitly marked for omission.
-
 Another convenient way to build a `gof_map` argument is to use the `tribble` function from the `tibble` package. In this example, we insert special HTML code to display a superscript, so we use the `escape=FALSE` argument.
 
 Warning: This `tribble` syntax may not work well when `fmt` is a function. In that case, please revert to the list syntax illustrated above.
@@ -1112,7 +1110,9 @@ modelsummary(mod)
 rm("tidy_custom.lm")
 ```
 
-## `fixest`: Fixed effects and instrumental variable regression
+## `fixest`: Fixed effects 
+
+### Instrumental variable regression
 
 One common use-case for `glance_custom` is to include additional goodness-of-fit statistics. For example, in an instrumental variable estimation computed by the `fixest` package, we may want to include an IV-Wald statistic for the first-stage regression of each endogenous regressor:
 
@@ -1147,6 +1147,34 @@ modelsummary(mod)
 
 ```{r, message = FALSE, eval = eval_fixest}
 rm("glance_custom.fixest")
+```
+
+### Customizing fixed effects indicators
+
+By default, fixed effects levels are indicated by a `X` mark at the bottom of the table. It is reasonably easy to customize this behavior by specifying a custom `glance_custom()` method.
+
+```{r}
+library(fixest)
+
+dat <- data.frame(
+  y = rnorm(1000),
+  x = rnorm(1000),
+  a = sample(1:10, 1000, replace = TRUE),
+  b = sample(1:10, 1000, replace = TRUE)
+)
+mod <- feols(y ~ x | a + b, dat)
+
+glance_custom.fixest <- function(x) {
+  out <- list()
+  for (v in x$fixef_vars) {
+    out[[paste0("FE: ", v)]] <- "✓"
+  }
+  return(data.frame(out, check.names = FALSE))
+}
+
+get_gof(mod)
+
+modelsummary(mod)
 ```
 
 ## Multiple imputation
