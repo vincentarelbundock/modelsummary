@@ -607,7 +607,8 @@ modelsummary <- function(
       coef_rename = coef_rename,
       coef_map = coef_map,
       coef_omit = coef_omit,
-      group_map = group_map
+      group_map = group_map,
+      shape = shape
     )
 
     colnames(tmp)[match("modelsummary_value", colnames(tmp))] <- model_names[i]

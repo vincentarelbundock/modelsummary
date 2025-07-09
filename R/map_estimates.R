@@ -3,25 +3,27 @@
 #'
 #' @keywords internal
 map_estimates <- function(
-  estimates,
-  coef_rename,
-  coef_map,
-  coef_omit,
-  group_map
-) {
+    estimates,
+    coef_rename,
+    coef_map,
+    coef_omit,
+    group_map,
+    shape = NULL) {
   # ambiguous rename
-  check_dups <- function(dict) {
-    dups <- unique(dict[duplicated(dict)])
-    for (d in dups) {
-      tmp <- names(dict)[which(d == dict)]
-      tmp <- intersect(tmp, estimates$term)
-      if (length(tmp) > 1) {
-        msg <- sprintf(
-          "These variables have been assigned the same label in `coef_map` or `coef_rename`, but they are all part of the same model: %s",
-          paste(tmp, collapse = ", ")
-        )
-        stop(msg, call. = FALSE)
-      }
+  check_dups <- function(estimates, shape) {
+    cols <- grep(
+      "term|group|component|statistic|^contrast|^part",
+      colnames(estimates),
+      value = TRUE)
+    # unknown shape variables (ex: marginaleffects `by="am"`)
+    if (isTRUE(checkmate::check_formula(shape[["shape_formula"]]))) {
+      cols <- c(cols, all.vars(shape[["shape_formula"]]))
+    }
+    cols <- intersect(cols, colnames(estimates))
+    dups <- as.data.frame(estimates)[, cols, drop = FALSE]
+    if (nrow(estimates) != nrow(unique(dups))) {
+      msg <- "There are duplicate labels in the estimates table. Call `get_estimates()` to see the available identifiers, and use the `shape` argument to specify the (potentially nested or grouped)  nature of parameters. Alternatively, duplication can happen when you use `coef_map` or `coef_rename` to assign the same label to multiple variables, but these variables are part of the same model. Please check your `coef_map` and `coef_rename` arguments."
+      stop(msg, call. = FALSE)
     }
   }
 
@@ -70,7 +72,6 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
     } else if (is.function(coef_rename)) {
       dict <- stats::setNames(coef_rename(estimates$term), estimates$term)
     }
-    check_dups(dict)
     # if coef_rename is a function, then we trust the user to do interaction
     # replacement. Otherwise, we can get duplicate replacements: "Height (in feet) (in feet)".
     estimates$term <- replace_dict(
@@ -82,7 +83,6 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
 
   # coef_map
   if (!is.null(coef_map)) {
-    check_dups(coef_map)
     if (is.null(names(coef_map))) {
       coef_map <- stats::setNames(coef_map, coef_map)
     }
@@ -114,8 +114,7 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
     }
     # subset
     estimates <- estimates[
-      estimates[[group_name]] %in% names(group_map),
-      ,
+      estimates[[group_name]] %in% names(group_map), ,
       drop = FALSE
     ]
     # reorder
@@ -128,6 +127,8 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
       group_map
     )
   }
+
+  check_dups(estimates, shape)
 
   return(estimates)
 }

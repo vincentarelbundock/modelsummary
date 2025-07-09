@@ -6,6 +6,9 @@
 
 - Quarto: better format detection when users explicitly use
   `output="tinytable"`. Thanks to @mvuorre for report \#886.
+- More flexible in allowing duplicate labels with `coef_rename` when
+  users specify `component` in the `shape` argument. Thanks to @raffaem
+  for report \#892.
 
 ## 2.4.0
 

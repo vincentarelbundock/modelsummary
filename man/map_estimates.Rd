@@ -5,7 +5,14 @@
 \title{rename and reorder estimates from a \emph{single} model
 (before merging to collapse)}
 \usage{
-map_estimates(estimates, coef_rename, coef_map, coef_omit, group_map)
+map_estimates(
+  estimates,
+  coef_rename,
+  coef_map,
+  coef_omit,
+  group_map,
+  shape = NULL
+)
 }
 \description{
 rename and reorder estimates from a \emph{single} model
