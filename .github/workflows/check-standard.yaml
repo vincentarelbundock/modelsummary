@@ -11,17 +11,18 @@ jobs:
     strategy:
       matrix:
         include:
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release', depends_only: TRUE}
+          - {os: macos-latest,   r: 'release'}
+          - {os: windows-latest, r: 'release'}
+          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
-          # - {os: macOS-latest,   r: 'release'}
-          # - {os: windows-latest, r: 'release'}
 
     runs-on: ${{ matrix.os }}
 
     env:
       _R_CHECK_FORCE_SUGGESTS_: "false"
       _R_CHECK_TESTS_NLINES_: 0
+      NOT_CRAN: true
       R_NOT_CRAN: true
       R_GH: true
       GITHUB_PAT: ${{ secrets.GITHUB_PAT}}
@@ -40,9 +41,6 @@ jobs:
         
       - name: svglite from source
         run: Rscript -e "bspm::disable();install.packages('svglite', from = 'source');bspm::enable()"
-          
-      - name: remotes
-        run: ./run.sh install_r remotes
 
       - name: Dependencies
         run: ./run.sh install_all
