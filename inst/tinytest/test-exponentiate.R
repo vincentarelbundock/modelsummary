@@ -162,7 +162,7 @@ e2 <- get_estimates(gm1a, exponentiate = FALSE)
 expect_equal(e1$estimate[nrow(e1)], e2$estimate[nrow(e2)])
 expect_equal(e1$estimate[1:3], exp(e2$estimate[1:3]))
 
-mod <- lmer(Sepal.Length ~ (1 + Sepal.Width | Species), data = iris)
+mod <- suppressMessages(lmer(Sepal.Length ~ (1 + Sepal.Width | Species), data = iris))
 e1 <- get_estimates(mod, exponentiate = FALSE)
 e2 <- get_estimates(mod, exponentiate = TRUE)
 expect_equal(exp(e1$estimate[1]), e2$estimate[1])

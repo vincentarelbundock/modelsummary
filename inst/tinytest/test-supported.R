@@ -20,7 +20,7 @@ if (isTRUE(requiet("margins"))) {
 requiet("MASS")
 # broom::tidy requires p.values=TRUE, but we now use easystats, so no need to error checking
 fit <- polr(Sat ~ Freq, weights = Freq, data = housing)
-tab <- modelsummary(fit, output = "dataframe", statistic = "p.value")
+tab <- modelsummary(fit, output = "dataframe", statistic = "p.value") |> suppressMessages()
 expect_inherits(tab, "data.frame")
 
 # survival
