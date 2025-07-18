@@ -287,7 +287,7 @@ get_estimates_parameters <- function(
     }
     inner <- parameters::parameters
     # void to sink output from {did} package
-    void <- capture.output(out <- do.call("inner", dots), silent = TRUE)
+    void <- utils::capture.output(out <- do.call("inner", dots), silent = TRUE)
     if (inherits(out, "try-error")) return(NULL)
     out <- insight::standardize_names(out, style = "broom")
 
