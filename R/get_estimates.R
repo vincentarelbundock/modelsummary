@@ -286,7 +286,9 @@ get_estimates_parameters <- function(
       dots[["pretty_names"]] <- "labels"
     }
     inner <- parameters::parameters
-    out <- do.call("inner", dots)
+    # void to sink output from {did} package
+    void <- capture.output(out <- do.call("inner", dots), silent = TRUE)
+    if (inherits(out, "try-error")) return(NULL)
     out <- insight::standardize_names(out, style = "broom")
 
     # S-value (Greenland 2019)
