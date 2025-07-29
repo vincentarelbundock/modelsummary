@@ -123,8 +123,11 @@ globalVariables(c(
 #' of the vector determines the order of the table. `coef_map` can be a named
 #' or an unnamed character vector. If `coef_map` is a named vector, its values
 #' define the labels that must appear in the table, and its names identify the
-#' original term names stored in the model object: `c("hp:mpg"="HPxM/G")`. See
-#' Examples section below.
+#' original term names stored in the model object: `c("hp:mpg"="HPxM/G")`.
+#' If `coef_map` is an unnamed vector, its values must be raw variable
+#' names if `coef_rename=FALSE` and variable labels if `coef_rename=TRUE`.
+#' See `modelsummary::get_estimates` to get the coefficient out of a model.
+#' See Examples section below.
 #' @param coef_omit integer vector or regular expression to identify which coefficients to omit (or keep) from the table. Positive integers determine which coefficients to omit. Negative integers determine which coefficients to keep. A regular expression can be used to omit coefficients, and perl-compatible "negative lookaheads" can be used to specify which coefficients to *keep* in the table. Examples:
 #' * c(2, 3, 5): omits the second, third, and fifth coefficients.
 #' * c(-2, -3, -5): negative values keep the second, third, and fifth coefficients.
