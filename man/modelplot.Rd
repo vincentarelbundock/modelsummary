@@ -46,8 +46,11 @@ Coefficients omitted from this vector are omitted from the table. The order
 of the vector determines the order of the table. \code{coef_map} can be a named
 or an unnamed character vector. If \code{coef_map} is a named vector, its values
 define the labels that must appear in the table, and its names identify the
-original term names stored in the model object: \code{c("hp:mpg"="HPxM/G")}. See
-Examples section below.}
+original term names stored in the model object: \code{c("hp:mpg"="HPxM/G")}.
+If \code{coef_map} is an unnamed vector, its values must be raw variable
+names if \code{coef_rename=FALSE} and variable labels if \code{coef_rename=TRUE}.
+See \code{modelsummary::get_estimates} to get the coefficient out of a model.
+See Examples section below.}
 
 \item{coef_omit}{integer vector or regular expression to identify which coefficients to omit (or keep) from the table. Positive integers determine which coefficients to omit. Negative integers determine which coefficients to keep. A regular expression can be used to omit coefficients, and perl-compatible "negative lookaheads" can be used to specify which coefficients to \emph{keep} in the table. Examples:
 \itemize{

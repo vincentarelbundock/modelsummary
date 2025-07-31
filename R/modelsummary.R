@@ -149,7 +149,7 @@ globalVariables(c(
 #' * character vector: "all", "none", or a vector of statistics such as `c("rmse", "nobs", "r.squared")`. Elements correspond to colnames in the data.frame produced by `get_gof(model)`. The `modelsummary::gof_map` default dictionary is used to format and rename statistics.
 #' * NA: excludes all statistics from the bottom part of the table.
 #' * data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below. The `fmt` column in this data frame only accepts integers. For more flexibility, use a list of lists, as described in the next bullet.
-#' * list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
+#' * list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. The `fmt` element can be a string (`?fmt_sprintf`), numeric value (`?fmt_decimal`), or function which will be used to round/format the string in question. See the 'Examples section below'.
 #' @param gof_omit string regular expression (perl-compatible) used to determine which statistics to omit from the bottom section of the table. A "negative lookahead" can be used to specify which statistics to *keep* in the table. Examples:
 #' * `"IC"`: omit statistics matching the "IC" substring.
 #' * `"BIC|AIC"`: omit statistics matching the "AIC" or "BIC" substrings.

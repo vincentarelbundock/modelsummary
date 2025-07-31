@@ -9,6 +9,7 @@
 - More flexible in allowing duplicate labels with `coef_rename` when
   users specify `component` in the `shape` argument. Thanks to @raffaem
   for report \#892.
+- Miscellaneous docs improvements.
 
 ## 2.4.0
 

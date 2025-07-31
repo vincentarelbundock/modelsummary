@@ -177,8 +177,11 @@ Coefficients omitted from this vector are omitted from the table. The order
 of the vector determines the order of the table. \code{coef_map} can be a named
 or an unnamed character vector. If \code{coef_map} is a named vector, its values
 define the labels that must appear in the table, and its names identify the
-original term names stored in the model object: \code{c("hp:mpg"="HPxM/G")}. See
-Examples section below.}
+original term names stored in the model object: \code{c("hp:mpg"="HPxM/G")}.
+If \code{coef_map} is an unnamed vector, its values must be raw variable
+names if \code{coef_rename=FALSE} and variable labels if \code{coef_rename=TRUE}.
+See \code{modelsummary::get_estimates} to get the coefficient out of a model.
+See Examples section below.}
 
 \item{coef_omit}{integer vector or regular expression to identify which coefficients to omit (or keep) from the table. Positive integers determine which coefficients to omit. Negative integers determine which coefficients to keep. A regular expression can be used to omit coefficients, and perl-compatible "negative lookaheads" can be used to specify which coefficients to \emph{keep} in the table. Examples:
 \itemize{
@@ -208,7 +211,7 @@ model information. This argument accepts 4 types of values:
 \item character vector: "all", "none", or a vector of statistics such as \code{c("rmse", "nobs", "r.squared")}. Elements correspond to colnames in the data.frame produced by \code{get_gof(model)}. The \code{modelsummary::gof_map} default dictionary is used to format and rename statistics.
 \item NA: excludes all statistics from the bottom part of the table.
 \item data.frame with 3 columns named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples' section below. The \code{fmt} column in this data frame only accepts integers. For more flexibility, use a list of lists, as described in the next bullet.
-\item list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. See the 'Examples section below'.
+\item list of lists, each of which includes 3 elements named "raw", "clean", "fmt". Unknown statistics are omitted. The \code{fmt} element can be a string (\code{?fmt_sprintf}), numeric value (\code{?fmt_decimal}), or function which will be used to round/format the string in question. See the 'Examples section below'.
 }}
 
 \item{gof_omit}{string regular expression (perl-compatible) used to determine which statistics to omit from the bottom section of the table. A "negative lookahead" can be used to specify which statistics to \emph{keep} in the table. Examples:
