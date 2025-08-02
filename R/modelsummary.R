@@ -80,7 +80,7 @@ globalVariables(c(
 #'   - `fmt = fmt_term("(Intercept)" = 1, "X" = 2)`: Format terms differently
 #'   - `fmt = fmt_statistic("estimate" = 1, "r.squared" = 6)`: Format statistics differently.
 #'   - `fmt = fmt_identity()`: unformatted raw values
-#' * string:
+#' * string: Passing the string `s` is equivalent to passing `fmt_sprintf(s)`
 #' * Note on LaTeX output: To ensure proper typography, all numeric entries are enclosed in the `\num{}` command, which requires the `siunitx` package to be loaded in the LaTeX preamble. This behavior can be altered with global options. See the 'Details' section.
 #' @param stars to indicate statistical significance
 #' * FALSE (default): no significance stars.
