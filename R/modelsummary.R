@@ -139,7 +139,7 @@ globalVariables(c(
 #' * `"^(?!.*ei|.*pt)"`: keep coefficients matching either the "ei" or the "pt" substrings.
 #' * See the Examples section below for complete code.
 #' @param coef_rename logical, named or unnamed character vector, or function
-#' * Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below. Note: renaming is done by the `parameters` package at the extraction stage, before other arguments are applied like `coef_omit`.
+#' * Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below. Note: renaming is done by the `parameters` package at the extraction stage, before other arguments are applied like `coef_omit`. Therefore, this only works for models with builtin support and not for custom moedels.
 #' * Unnamed character vector of length equal to the number of coefficients in the final table, after `coef_omit` is applied.
 #' * Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg")
 #' * Function: Accepts a character vector of the model's term names and returns a named vector like the one described above. The `modelsummary` package supplies a `coef_rename()` function which can do common cleaning tasks: `modelsummary(model, coef_rename = coef_rename)`
