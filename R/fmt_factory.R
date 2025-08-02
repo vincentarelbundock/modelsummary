@@ -31,9 +31,10 @@ fmt_function <- function(fun) {
 }
 
 
-#' Rounding with the `sprintf()` function in the `fmt` argument
+#' Rounding with the `sprintf()` function in the `fmt` argument.
 #'
-#' @param fmt A string to control `sprintf()`, such as `"%.3f"` to keep 3 decimal digits. See `?sprintf`
+#' @param fmt A string to control `sprintf()`, such as `"%.3f"` to keep 3 decimal digits. See `?sprintf`.
+#' @returns A function that takes an object and returns a string with the object formatted using `sprintf`.
 #' @export
 fmt_sprintf <- function(fmt) {
   fun <- function(k) sprintf(fmt, k)
