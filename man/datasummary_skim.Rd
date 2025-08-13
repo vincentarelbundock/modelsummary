@@ -162,7 +162,7 @@ goodness-of-fit extracted by \emph{both} packages by setting:
 
 \code{options(modelsummary_get = "all")}
 
-The "all" option means easystats then broom.
+The "all" option (default) means easystats then broom.
 }
 
 \subsection{Formatting numeric entries}{
