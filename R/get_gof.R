@@ -1,13 +1,14 @@
 #' Extract goodness-of-fit statistics a tidy format.
 #'
-#' A unified approach to extract results from a wide variety of models. For
-#' some models `get_gof` attaches useful attributes to the output. You
-#' can access this information by calling the `attributes` function:
-#' `attributes(get_estimates(model))`
+#' A unified approach to extract results from a wide variety of models. 
 #'
 #' @param vcov_type string vcov type to add at the bottom of the table
 #' @inheritParams get_estimates
 #' @inheritParams modelsummary
+#' @returns A dataframe with the goodness-o-fit statistics.
+#'          The `backend` attribute indicates the backend used to extract them.
+#'          Moreover, for some models `get_gof` attaches useful attributes to the output. 
+#'          You can access this information by calling the `attributes` function `attributes(get_estimates(model))`.
 #' @export
 get_gof <- function(model, gof_function = NULL, vcov_type = NULL, ...) {
   # secret argument passed internally
@@ -26,18 +27,19 @@ get_gof <- function(model, gof_function = NULL, vcov_type = NULL, ...) {
   )
 
   if (get_priority %in% c("all", "broom")) {
-    funs <- list(get_gof_broom, get_gof_parameters)
+    funs <- list("broom"=get_gof_broom, "parameters"=get_gof_parameters)
   } else {
-    funs <- list(get_gof_parameters, get_gof_broom)
+    funs <- list("parameters"=get_gof_parameters, "broom"=get_gof_broom)
   }
 
   warning_msg <- NULL
 
   gof <- NULL
 
-  for (f in funs) {
+  for (f in names(funs)) {
     if (get_priority == "all") {
-      tmp <- f(model, ...)
+      tmp <- funs[[f]](model, ...)
+      attr(tmp, "backend") <- f
       if (
         inherits(tmp, "data.frame") &&
           inherits(gof, "data.frame")
@@ -54,7 +56,8 @@ get_gof <- function(model, gof_function = NULL, vcov_type = NULL, ...) {
       }
     } else {
       if (!inherits(gof, "data.frame")) {
-        gof <- f(model, ...)
+        gof <- funs[[f]](model, ...)
+        attr(gof, "backend") <- f
       }
     }
   }

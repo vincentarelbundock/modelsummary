@@ -30,3 +30,32 @@ expect_equivalent(dim(gl), c(1, 0))
 ml <- list(glance = modelsummary:::get_gof(mod))
 class(ml) <- "modelsummary_list"
 expect_error(tidy(ml))
+
+# backend estractor
+mod1 <- lm(mpg ~ wt + cyl, data = mtcars)
+mod2 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
+res <- modelsummary::get_estimates(mod1)
+expect_equivalent(attr(res, "backend"), "parameters")
+
+# get_estimates
+options(modelsummary_get="broom")
+res <- modelsummary::get_estimates(mod1)
+expect_equivalent(attr(res, "backend"), "broom")
+
+options(modelsummary_get="parameters")
+res <- modelsummary::get_estimates(mod1)
+expect_equivalent(attr(res, "backend"), "parameters")
+
+# get_gof
+options(modelsummary_get="broom")
+res <- modelsummary::get_gof(mod1)
+expect_equivalent(attr(res, "backend"), "broom")
+
+options(modelsummary_get="parameters")
+res <- modelsummary::get_gof(mod1)
+expect_equivalent(attr(res, "backend"), "parameters")
+
+# modelsummary
+res <- modelsummary::modelsummary(list(mod1=mod1, mod2=mod2))
+attr(res, "backend")
+expect_equivalent(attr(res, "backend"), list(mod1=list(est="parameters", gof="parameters"), mod2=list(est="parameters", gof="parameters")))

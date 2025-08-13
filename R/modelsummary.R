@@ -206,7 +206,8 @@ globalVariables(c(
 #' + [performance::model_performance] extracts goodness-of-fit statistics. Available arguments depend on model type, but include:
 #'     - `metrics`, `estimator`, etc.
 #' + [tinytable::tt], [kableExtra::kbl] or [gt::gt] draw tables, depending on the value of the `output` argument. For example, by default `modelsummary` creates tables with [tinytable::tt], which accepts a `width` and `theme` arguments.
-#' @return a regression table in a format determined by the `output` argument.
+#' @return a regression table in a format determined by the `output` argument. 
+#'         The `backend` attribute includes the backend used to extract estimates and goodness-of-fit measure.
 #' @importFrom generics glance tidy
 #' @examplesIf isTRUE(Sys.getenv("R_NOT_CRAN") == "true")
 #' # The `modelsummary` website includes \emph{many} examples and tutorials:
@@ -574,6 +575,12 @@ modelsummary <- function(
     ...
   )
   names(msl) <- model_names
+
+  # propagate backends from the models
+  attr(msl, "backend") <- list()
+  for(mod_name in names(msl)) {
+    attr(msl, "backend")[[mod_name]] <- attr(msl[[mod_name]], "backend")
+  }
 
   if (identical(output_format, "modelsummary_list")) {
     if (length(msl) == 1) {
@@ -952,6 +959,9 @@ modelsummary <- function(
     ...
   )
 
+  ## propagate backend information
+  attr(out, "backend") <- attr(msl, "backend")
+
   # after factory call
   out <- set_span_cbind(out, span_cbind)
 
@@ -996,6 +1006,7 @@ get_list_of_modelsummary_lists <- function(
         tidy = models[[j]][["tidy"]],
         glance = models[[j]][["glance"]]
       )
+      attr(out, "backend") <- attr(models[[j]], "backend") 
       return(out)
     }
 
@@ -1019,6 +1030,7 @@ get_list_of_modelsummary_lists <- function(
 
     out <- list("tidy" = tid, "glance" = gla)
     class(out) <- "modelsummary_list"
+    attr(out, "backend") <- list(est=attr(tid, "backend"), gof=attr(gla, "backend"))
     return(out)
   }
 
@@ -1031,7 +1043,7 @@ get_list_of_modelsummary_lists <- function(
       mc.cores = dots[["mc.cores"]]
     )
 
-    # {future}
+  # {future}
   } else if (
     isTRUE(check_dependency("future.apply")) &&
       future::nbrOfWorkers() > 1 &&
@@ -1051,7 +1063,7 @@ get_list_of_modelsummary_lists <- function(
       out <- lapply(seq_len(number_of_models), inner_loop)
     }
 
-    # sequential
+  # sequential
   } else {
     out <- lapply(seq_len(number_of_models), inner_loop)
   }

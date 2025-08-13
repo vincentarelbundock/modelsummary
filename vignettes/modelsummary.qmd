@@ -1,5 +1,6 @@
 ---
 title: "Model Summaries"
+number-sections: true
 format: 
   html: default
 ---
@@ -807,7 +808,10 @@ modelsummary(mod_logit, exponentiate = c(TRUE, FALSE))
 All arguments passed by the user to a `modelsummary` function are pushed forward in two other functions:
 
 1. The function which extracts model estimates.
-   - By default, additional arguments are pushed forward to `parameters::parameters` and `performance::performance`. Users can also can also use a different "backend" to extract information from model objects: the `broom` package. By setting the `modelsummary_get` global option, we tell `modelsummary` to use the `easystats`/`parameters` packages instead of `broom`. With these packages, other arguments are available, such as the `metrics` argument. Please refer to these package's documentation to details.
+   - By default, additional arguments are pushed forward to `parameters::parameters` and `performance::performance`. 
+     Users can also can also use a different "backend" to extract information from model objects: the `broom` package.
+     See @sec-global-options section on how to do that.
+     With these packages, other arguments are available, such as the `metrics` argument. Please refer to these package's documentation to details.
 2. The table-making functions.
    - By default, additional arguments are pushed forward to `kableExtra::kbl`, but users can use a different table-making function by setting the `output` argument to a different value such as `"gt"`, `"flextable"`, or `"huxtable"`.
    - See [the Appearance vignette](https://modelsummary.com/vignettes/appearance.html) for examples.
@@ -967,7 +971,7 @@ modelsummary(mod, output = orgbackend) %>%
 #+END_SRC
 ````
 
-# Global options
+# Global options {#sec-global-options}
 
 Users can change the default behavior of `modelsummary` by setting global options.
 
@@ -1002,6 +1006,9 @@ options(modelsummary_get = "broom")
 # easystats: performance + parameters
 options(modelsummary_get = "easystats")
 ```
+
+Notice this just sets the first backend that modelsummary will try. In case the backend fails to return a result, modelsummary will try the other one.
+The final backend that modelsummary used to extract the information from the model is saved in the `backend` attribute of the object returned by modelsummary.
 
 [The `appearance` vignette](https://modelsummary.com/vignettes/appearance.html#themes) shows how to set "themes" for your tables using the `modelsummary_theme_gt`, `modelsummary_theme_kableExtra`, `modelsummary_theme_flextable` and `modelsummary_theme_huxtable` global options. For example:
 
