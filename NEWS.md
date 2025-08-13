@@ -10,6 +10,9 @@
   users specify `component` in the `shape` argument. Thanks to @raffaem
   for report \#892.
 - Miscellaneous docs improvements.
+- `flextable` output uses `hline` instead of `border`. This fixes report
+  \#693 from the `flextable` Github issue tracker. Thanks to @davidgohel
+  for the fix.
 
 ## 2.4.0
 

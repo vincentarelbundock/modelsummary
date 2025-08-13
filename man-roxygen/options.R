@@ -54,6 +54,8 @@
 #'
 #' `options(modelsummary_get = "all")`
 #'
+#' The "all" option means easystats then broom.
+#'
 #' ### Formatting numeric entries
 #'
 #' By default, LaTeX tables enclose all numeric entries in the `\num{}` command
