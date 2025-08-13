@@ -112,7 +112,7 @@ theme_ms_flextable <- function(tab, output_format, hrule, ...) {
   # horizontal rule to separate coef/gof
   if (!is.null(hrule)) {
     for (pos in hrule) {
-      out <- flextable::border(out, i = pos, border.top = officer::fp_border())
+      out <- flextable::hline(out, i = pos - 1, border = flextable::fp_border_default())
     }
   }
   return(out)
