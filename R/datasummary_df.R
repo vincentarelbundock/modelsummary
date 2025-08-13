@@ -7,18 +7,17 @@
 #' @template citation
 #' @export
 datasummary_df <- function(
-  data,
-  output = getOption("modelsummary_output", default = "default"),
-  fmt = 2,
-  align = getOption("modelsummary_align", default = NULL),
-  hrule = getOption("modelsummary_hrule", default = NULL),
-  title = getOption("modelsummary_title", default = NULL),
-  notes = getOption("modelsummary_notes", default = NULL),
-  add_rows = getOption("modelsummary_add_rows", default = NULL),
-  add_columns = getOption("modelsummary_add_columns", default = NULL),
-  escape = getOption("modelsummary_escape", default = TRUE),
-  ...
-) {
+    data,
+    output = getOption("modelsummary_output", default = "default"),
+    fmt = 2,
+    align = getOption("modelsummary_align", default = NULL),
+    hrule = getOption("modelsummary_hrule", default = NULL),
+    title = getOption("modelsummary_title", default = NULL),
+    notes = getOption("modelsummary_notes", default = NULL),
+    add_rows = getOption("modelsummary_add_rows", default = NULL),
+    add_columns = getOption("modelsummary_add_columns", default = NULL),
+    escape = getOption("modelsummary_escape", default = TRUE),
+    ...) {
   settings_init(settings = list("function_called" = "datasummary_df"))
 
   tmp <- sanitize_output(output) # before sanitize_escape
@@ -27,7 +26,7 @@ datasummary_df <- function(
   output_file <- tmp$output_file
   sanitize_escape(escape) # after sanitize_output
   sanity_align(align)
-
+  checkmate::assert_integerish(hrule, lower = 2)
   checkmate::assert_data_frame(data)
 
   for (n in colnames(data)) {
