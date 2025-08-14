@@ -82,9 +82,12 @@ sections below):
 \item \link[tinytable:tt]{tinytable::tt}, \link[kableExtra:kbl]{kableExtra::kbl} or \link[gt:gt]{gt::gt} draw tables, depending on the value of the \code{output} argument. For example, by default \code{modelsummary} creates tables with \link[tinytable:tt]{tinytable::tt}, which accepts a \code{width} and \code{theme} arguments.
 }}
 }
+\value{
+A dataframe with model estimates.
+The \code{backend} attribute of the returned object contains the backend that was used to extract parameters from the model.
+Moreover, for some models, \code{get_estimates} attaches useful attributes to the output.
+You can access this information by calling the \code{attributes} function: \code{attributes(get_estimates(model))}.
+}
 \description{
-A unified approach to extract results from a wide variety of models. For
-some models \code{get_estimates} attaches useful attributes to the output. You
-can access this information by calling the \code{attributes} function:
-\code{attributes(get_estimates(model))}
+A unified approach to extract results from a wide variety of models.
 }

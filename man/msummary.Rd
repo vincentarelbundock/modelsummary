@@ -270,6 +270,7 @@ prevent the file from compiling/displaying. \code{TRUE} escapes all cells, capti
 }
 \value{
 a regression table in a format determined by the \code{output} argument.
+The \code{backend} attribute includes the backend used to extract estimates and goodness-of-fit measure.
 }
 \description{
 Create beautiful and customizable tables to summarize several statistical
