@@ -438,19 +438,24 @@ modelsummary(models, gof_omit = 'DF|Deviance|R2|AIC|BIC')
 
 The `gof_map` argument can be used to rename, re-order, subset, and format the statistics displayed in the bottom section of the table ("goodness-of-fit").
 
-The first type of values allowed is a character vector with elements equal to column names in the data.frame produced by `get_gof(model)`:
+There are three accepted types: a character vector, a dataframe/tibble, and a list.
+
+The first type of allowed value is a character vector with elements equal to column names in the data.frame produced by `get_gof(model)`.
+Only the statistics in this vector will be printed, in the order in which they appear in the vector:
 
 ```{r}
 modelsummary(models, gof_map = c("nobs", "r.squared"))
 ```
 
-A more powerful mechanism is to supply a `data.frame` (or `tibble`) through the `gof_map` argument. This data.frame must include 3 columns:
+The second allowed type is a `data.frame` (or `tibble`). This data.frame/tibble must include 3 columns:
 
 1. `raw`: a string with the name of a column produced by `get_gof(model)`.
 2. `clean`: a string with the "clean" name of the statistic you want to appear in your final table.
-3. `fmt`: a string (`?fmt_sprintf`), numeric value (`?fmt_decimal`), or function which will be used to round/format the string in question.
+3. `fmt`: a string (`?fmt_sprintf`) or numeric value (`?fmt_decimal`) (you cannot pass a function here).
 
-You can see an example of a valid data frame by typing `modelsummary::gof_map`. This is the default data.frame that `modelsummary` uses to subset and reorder goodness-of-fit statistics. As you can see, `omit == TRUE` for quite a number of statistics. You can include setting `omit == FALSE`: 
+The goodness-of-fit statistics will be printed in the output table in the same order in which they appear in the `gof_map` data.frame.
+
+You can see an example of a valid data frame by typing `modelsummary::gof_map`. This is the default data.frame that `modelsummary` uses to subset and reorder goodness-of-fit statistics. As you can see, `omit == TRUE` for quite a number of statistics. You can include them by setting `omit == FALSE`: 
 
 ```r
 gm <- modelsummary::gof_map
@@ -458,19 +463,9 @@ gm$omit <- FALSE
 modelsummary(models, gof_map = gm)
 ```
 
-The goodness-of-fit statistics will be printed in the table in the same order as in the `gof_map` data.frame.
+A convenient way to build a `gof_map` tibble is to use the `tribble` function from the `tibble` package. In this example, we insert special HTML code to display a superscript, so we use the `escape=FALSE` argument.
 
-```r
-f <- function(x) format(round(x, 3), big.mark=",")
-gm <- list(
-  list("raw" = "nobs", "clean" = "N", "fmt" = f),
-  list("raw" = "AIC", "clean" = "aic", "fmt" = f))
-modelsummary(models, gof_map = gm)
-```
-
-Another convenient way to build a `gof_map` argument is to use the `tribble` function from the `tibble` package. In this example, we insert special HTML code to display a superscript, so we use the `escape=FALSE` argument.
-
-Warning: This `tribble` syntax may not work well when `fmt` is a function. In that case, please revert to the list syntax illustrated above.
+Warning: This `tribble` syntax may not work well when `fmt` is a function. In that case, please use the list syntax illustrated below.
 
 ```{r}
 gm <- tibble::tribble(
@@ -483,6 +478,32 @@ modelsummary(
   statistic = NULL,
   gof_map = gm,
   escape = FALSE)
+```
+
+The third allowed type is a `list`, which _may_ be named.
+This list _must_ have an element for each statistics we want to print. Each element _must_ be a _named_ list with exactly three elements:
+
+1. `raw`: a string with the name of a column produced by `get_gof(model)`.
+2. `clean`: a string with the "clean" name of the statistic you want to appear in your final table.
+3. `fmt`: a string (`?fmt_sprintf`), numeric value (`?fmt_decimal`), or function which will be used to round/format the string in question.
+
+Here is an example:
+
+```r
+f <- function(x) format(round(x, 3), big.mark=",")
+gm <- list(
+  list("raw" = "nobs", "clean" = "N", "fmt" = f),
+  list("raw" = "AIC", "clean" = "aic", "fmt" = f))
+modelsummary(models, gof_map = gm)
+```
+
+You can use a list built from the default `modelsummary::gof_map` as a starting point for your own list:
+
+```r
+gof_map <- modelsummary::gof_map %>%
+  dplyr::filter(!omit) %>%
+  dplyr::select(-omit) %>%
+  plyr::dlply(1, c)
 ```
 
 # `gof_function`
@@ -529,6 +550,7 @@ modelsummary(mod,
     coef_omit = cc$regex)
 ```
 
+Notice that `gof_map` is processed __after__ `gof_function`. So, if you use `gof_function` in conjuction with `gof_map`, make sure your additional statistics appear also in `gof_map`.
 
 # `shape`
 
