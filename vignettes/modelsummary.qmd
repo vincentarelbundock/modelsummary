@@ -416,13 +416,109 @@ modelsummary(modlab, coef_rename = TRUE)
 
 # `coef_map`
 
-The `coef_map` argument is a named vector which allows users to rename, reorder, and subset coefficient estimates. Values of this vector correspond to the "clean" variable name. Names of this vector correspond to the "raw" variable name. The table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.
+The `coef_map` argument is a character vector which allows users to rename, reorder, and subset coefficient estimates. This vector _may_ be named.
+
+If the vector is named:
+
+- If `coef_rename` equals `FALSE`, the names of this vector must be a subset of the variable names as returned by `modelsummary::get_estimates(mod)$term`.
+- If `coef_rename` equals `TRUE`, the names of this vector must be a subset of the variable labels as returned by `modelsummary::get_estimates(mod, coef_rename=TRUE)$term`.
+- The values of this vector correspond to new variable labels as they will appear in the output table (so, if `coef_rename` equals `TRUE`, the variables are basically renamed two times).
+
+If the vector is not named:
+
+- If `coef_rename` equals `FALSE`, the values of this vector must be a subset of the variable names as returned by `modelsummary::get_estimates(mod)$term`.
+- If `coef_rename` equals `TRUE`, the values of this vector must be a subset of the variable labels as returned by `modelsummary::get_estimates(mod, coef_rename=TRUE)$term`.
+
+The output table will be sorted in the order in which terms are presented in `coef_map`. Coefficients which are *not* included in `coef_map` will be excluded from the table.
+
+Here is an example in which only the variables `disp`, `hp` and `qsec` are shown in the output table. The variables `vs`, `am` as well as the intercept are not shown:
 
 ```{r}
-cm <- c('Literacy'    = 'Literacy (%)',
-        'Commerce'    = 'Patents per capita',
-        '(Intercept)' = 'Constant')
-modelsummary(models, coef_map = cm)
+mod1 <- lm(mpg ~ disp + hp + qsec + vs + am, data = mtcars)
+modelsummary(
+  mod1,
+  coef_map = c("disp", "hp", "qsec")
+)
+```
+
+We can re-label the variables in the output table. Notice that `coef_rename=FALSE`, is the default value:
+
+```
+modelsummary(
+  mod1,
+  coef_rename = FALSE, # this is the default value
+  coef_map = c(
+    disp = "displacement",
+    hp = "horsepower",
+    qsec = "time"
+  )
+)
+```
+
+Or we can label the variables in the dataframe. In this case, we use `coef_rename=TRUE` and pass to `coef_map` an un-named vector of variable labels:
+
+```
+df <- mtcars
+df <- labelled::set_variable_labels(
+  df,
+  .strict = FALSE,
+  mpg = "Miles per gallon",
+  disp = "Displacement (cu.in.)",
+  hp = "Gross horsepower",
+  qsec = "1/4 mile time",
+  vs = "Engine type (0 = V/S, 1 = straight)",
+  am = "Transmission (0 = automatic, 1 = manual)"
+)
+mod1 <- lm(mpg ~ disp + hp + qsec + vs + am, data = df)
+modelsummary(
+  mod1,
+  coef_rename = TRUE,
+  coef_map = c("Displacement (cu.in.)", "Gross horsepower", "1/4 mile time")
+)
+```
+
+Or we can pass a named vector to re-label the variables once more:
+
+```
+modelsummary(
+  mod1,
+  coef_rename = TRUE,
+  coef_map = c(
+    "Displacement (cu.in.)" = "displacement",
+    "Gross horsepower" = "horsepower",
+    "1/4 mile time" = "time"
+  )
+)
+```
+
+Here is an example of a table displaying two models. The variables are sorted as follows: the variables which are only in the first model but not in the second, the variables which are only in the second model but not in the first, the variables which are common between the two models, then the intercept:
+
+```
+# Estimate the models
+mod1 <- lm(mpg ~ disp + hp + qsec + vs + am, data = mtcars)
+mod2 <- lm(cyl ~ drat + wt + qsec + vs + am, data = mtcars)
+
+# Get coefficients of the two models
+coefs1 <- modelsummary::get_estimates(mod1)$term
+coefs2 <- modelsummary::get_estimates(mod2)$term
+
+# Get the coefficients in common
+coefs_common <- intersect(coefs1, coefs2)
+
+# Get the coefficients not in common
+coefs1 <- setdiff(coefs1, coefs_common)
+coefs2 <- setdiff(coefs2, coefs_common)
+
+# Build `coef_map`
+coef_map <- c(coefs1, coefs2, coefs_common)
+# Move the intercept at the end
+coef_map <- c(coef_map %>% {.[.!="(Intercept)"]}, "(Intercept)")
+
+# Display output table
+modelsummary(
+  list(mod1, mod2),
+  coef_map = coef_map
+)
 ```
 
 # `gof_omit`
@@ -437,24 +533,39 @@ modelsummary(models, gof_omit = 'DF|Deviance|R2|AIC|BIC')
 
 The `gof_map` argument can be used to rename, re-order, subset, and format the statistics displayed in the bottom section of the table ("goodness-of-fit").
 
-There are three accepted types: a character vector, a dataframe/tibble, and a list.
+There are three accepted types: a character vector, a dataframe/tibble, or a list.
 
-The first type of allowed value is a character vector with elements equal to column names in the data.frame produced by `get_gof(model)`.
-Only the statistics in this vector will be printed, in the order in which they appear in the vector:
+The first type of allowed value is a character vector.
+This vector _may_ be named. If it is named, the names are ignored (i.e., you cannot rename goodness-of-fit statistics with this type of value).
+The values of the vector _must_ be a subset of `colnames(modelsummary::get_gof(model))`. Invalid values are silently ignored.
+Only the statistics in this vector will be printed in the output vector, in the order in which they appear in the vector:
+
+Here is an example which prints only the number of observations, the AIC and the BIC as goodness-of-fit statistics.
+The other goodness-of-fit statistics returned by the model (i.e., $R^2$) are discarded.
 
 ```{r}
-modelsummary(models, gof_map = c("nobs", "r.squared"))
+mod1 <- lm(mpg ~ disp + hp + qsec + vs + am, data = mtcars)
+modelsummary(
+  mod1,
+  gof_map = c("nobs", "aic", "bic")
+)
 ```
 
-The second allowed type is a `data.frame` (or `tibble`). This data.frame/tibble must include 3 columns:
+The second allowed type is a `data.frame` (or `tibble`). This data.frame/tibble _must_ contain these 3 columns:
 
-1. `raw`: a string with the name of a column produced by `get_gof(model)`.
+1. `raw`: a string which _must_ be one of the strings in `colnames(modelsummary::get_gof(model))`. Invalid values are silently ignored.
 2. `clean`: a string with the "clean" name of the statistic you want to appear in your final table.
-3. `fmt`: a string (`?fmt_sprintf`) or numeric value (`?fmt_decimal`) (you cannot pass a function here).
+3. `fmt`: a string (`?fmt_sprintf`) or numeric value (`?fmt_decimal`) used to format the statistics. You cannot pass a function here.
+
+If one of these 3 columns is missing in the dataframe, an error is thrown.
+If the dataframe contains these 3 columns and other columns, the other columns are silently ignored.
 
 The goodness-of-fit statistics will be printed in the output table in the same order in which they appear in the `gof_map` data.frame.
 
-You can see an example of a valid data frame by typing `modelsummary::gof_map`. This is the default data.frame that `modelsummary` uses to subset and reorder goodness-of-fit statistics. As you can see, `omit == TRUE` for quite a number of statistics. You can include them by setting `omit == FALSE`: 
+You can see an example of a valid data frame by typing `modelsummary::gof_map`.
+This is the default data.frame that `modelsummary` uses to subset and reorder goodness-of-fit statistics.
+As you can see, `omit == TRUE` for quite a number of statistics.
+You can include them by setting `omit == FALSE`: 
 
 ```r
 gm <- modelsummary::gof_map
