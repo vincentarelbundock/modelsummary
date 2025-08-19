@@ -45,7 +45,7 @@ get_estimates <- function(
   if (
     inherits(
       model,
-      c("comparisons", "marginaleffects", "predictions", "marginalmeans")
+      c("comparisons", "slopes", "predictions", "hypotheses")
     )
   ) {
     funs <- list(get_estimates_broom)

@@ -13,6 +13,9 @@
 - `flextable` output uses `hline` instead of `border`. This fixes report
   \#693 from the `flextable` Github issue tracker. Thanks to @davidgohel
   for the fix.
+- Result of `get_estimates()`, `get_gof()` and `modelsummary()` gets a
+  “backend” attribute with info about the extraction method. Thanks to
+  @raffaem for contribution \#914.
 - Result of `get_estimates()` and `get_gof()` gets a “backend” attribute
   with info about the extraction method. Thanks to @raffaem for
   contribution \#914.
