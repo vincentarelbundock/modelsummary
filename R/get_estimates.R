@@ -48,7 +48,7 @@ get_estimates <- function(
       c("comparisons", "slopes", "predictions", "hypotheses")
     )
   ) {
-    funs <- list(get_estimates_broom)
+    funs <- list("broom" = get_estimates_broom)
   } else {
     get_priority <- getOption("modelsummary_get", default = "easystats")
     checkmate::assert_choice(

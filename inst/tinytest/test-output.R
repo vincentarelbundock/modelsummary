@@ -27,31 +27,31 @@ for (o in otp) {
 }
 
 # unsupported output
-expect_error(modelsummary(mod, 'bad'))
-expect_error(modelsummary(mod, 'htm'))
-expect_error(modelsummary(mod, 't.est'))
+expect_error(modelsummary(mod, "bad"))
+expect_error(modelsummary(mod, "htm"))
+expect_error(modelsummary(mod, "t.est"))
 
 # supported global options
 random <- random_string()
 
 # RTF
-filename <- paste0(random, '.rtf')
-options(modelsummary_factory_rtf = 'gt')
+filename <- paste0(random, ".rtf")
+options(modelsummary_factory_rtf = "gt")
 tab <- modelsummary(mod, filename)
 unlink(filename)
 
 # HTML
-filename <- paste0(random, '.html')
-options(modelsummary_factory_html = 'gt')
+filename <- paste0(random, ".html")
+options(modelsummary_factory_html = "gt")
 tab <- modelsummary(mod, filename)
 unlink(filename)
-options(modelsummary_factory_html = 'kableExtra')
+options(modelsummary_factory_html = "kableExtra")
 tab <- modelsummary(mod, filename)
 unlink(filename)
-options(modelsummary_factory_html = 'flextable')
+options(modelsummary_factory_html = "flextable")
 tab <- modelsummary(mod, filename)
 unlink(filename)
-options(modelsummary_factory_html = 'huxtable')
+options(modelsummary_factory_html = "huxtable")
 tab <- modelsummary(mod, filename)
 unlink(filename)
 options(modelsummary_factory_html = NULL)
@@ -59,26 +59,27 @@ options(modelsummary_factory_html = NULL)
 
 # unsupported global options
 
-options(modelsummary_factory_rtf = 'kableExtra')
-expect_error(modelsummary(mod, 'test.rtf'))
-options(modelsummary_factory_rtf = 'gt')
+options(modelsummary_factory_rtf = "kableExtra")
+expect_error(modelsummary(mod, "test.rtf"))
+options(modelsummary_factory_rtf = "gt")
 
-options(modelsummary_factory_word = 'kableExtra')
-expect_error(modelsummary(mod, 'test.docx'))
-options(modelsummary_factory_word = 'gt')
-expect_error(modelsummary(mod, 'test.docx'))
-options(modelsummary_factory_word = 'flextable')
+options(modelsummary_factory_word = "kableExtra")
+expect_error(modelsummary(mod, "test.docx"))
+options(modelsummary_factory_word = "gt")
+expect_error(modelsummary(mod, "test.docx"))
+options(modelsummary_factory_word = "flextable")
 
-options(modelsummary_factory_powerpoint = 'kableExtra')
-expect_error(modelsummary(mod, 'test.pptx'))
-options(modelsummary_factory_powerpoint = 'gt')
-expect_error(modelsummary(mod, 'test.pptx'))
-options(modelsummary_factory_powerpoint = 'flextable')
+options(modelsummary_factory_powerpoint = "kableExtra")
+expect_error(modelsummary(mod, "test.pptx"))
+options(modelsummary_factory_powerpoint = "gt")
+expect_error(modelsummary(mod, "test.pptx"))
+options(modelsummary_factory_powerpoint = "flextable")
 
-options(modelsummary_factory_png = 'huxtable')
-expect_error(modelsummary(mod, 'test.png'))
-unlink("test.png")
-options(modelsummary_factory_png = NULL)
+## webshot breaks in tinytest
+# options(modelsummary_factory_png = 'huxtable')
+# expect_error(modelsummary(mod, 'test.png'))
+# unlink("test.png")
+# options(modelsummary_factory_png = NULL)
 
 # options(modelsummary_factory_jpg = 'huxtable')
 # expect_error(modelsummary(mod, 'test.jpg'))
@@ -89,27 +90,27 @@ options(modelsummary_factory_png = NULL)
 # save to file
 random <- random_string()
 
-filename <- paste0(random, '.html')
+filename <- paste0(random, ".html")
 tab <- modelsummary(mod, filename)
 unlink(filename)
 
-filename <- paste0(random, '.rtf')
+filename <- paste0(random, ".rtf")
 tab <- modelsummary(mod, filename)
 unlink(filename)
 
-filename <- paste0(random, '.tex')
+filename <- paste0(random, ".tex")
 tab <- modelsummary(mod, filename)
 unlink(filename)
 
-filename <- paste0(random, '.md')
+filename <- paste0(random, ".md")
 tab <- modelsummary(mod, filename)
 unlink(filename)
 
-filename <- paste0(random, '.docx')
+filename <- paste0(random, ".docx")
 tab <- modelsummary(mod, filename)
 unlink(filename)
 
-filename <- paste0(random, '.pptx')
+filename <- paste0(random, ".pptx")
 tab <- modelsummary(mod, filename)
 unlink(filename)
 
@@ -117,15 +118,16 @@ unlink(filename)
 # tab <- modelsummary(mod, filename)
 # unlink(filename)
 
-options(modelsummary_factory_png = NULL)
-filename <- paste0(random, '.png')
-tab <- modelsummary(mod, filename)
-unlink(filename)
+## webshot breaks in tinytest
+# options(modelsummary_factory_png = NULL)
+# filename <- paste0(random, ".png")
+# tab <- modelsummary(mod, filename)
+# unlink(filename)
 
 # overwrite file
 options(modelsummary_factory_html = NULL)
 random <- random_string()
-filename <- paste0(random, '.html')
+filename <- paste0(random, ".html")
 modelsummary(mod, filename)
 unlink(filename)
 
@@ -156,16 +158,16 @@ for (o in otp) {
 tmp <- mtcars
 tmp$cyl <- as.character(tmp$cyl)
 tmp$vs <- as.logical(tmp$vs)
-custom <- data.frame('a' = 1:2, 'b' = 1:2)
+custom <- data.frame("a" = 1:2, "b" = 1:2)
 output_formats <- c(
-  'tinytable',
-  'gt',
-  'kableExtra',
-  'flextable',
-  'huxtable',
-  'latex',
-  'markdown',
-  'html'
+  "tinytable",
+  "gt",
+  "kableExtra",
+  "flextable",
+  "huxtable",
+  "latex",
+  "markdown",
+  "html"
 )
 for (o in output_formats) {
   testname <- paste("add_columns with", o)
@@ -185,10 +187,11 @@ save_to_file <- function(ext) {
   unlink(filename)
 }
 
-options(modelsummary_factory_png = NULL)
-for (ext in c(".html", ".tex", ".docx", ".png")) {
-  save_to_file(ext)
-}
+## webshot breaks in tinytest
+# options(modelsummary_factory_png = NULL)
+# for (ext in c(".html", ".tex", ".docx", ".png")) {
+#   save_to_file(ext)
+# }
 
 ###################################
 # "output: datasummary_skim"
@@ -199,12 +202,13 @@ dat$vs <- as.logical(dat$vs)
 dat$gear <- as.factor(dat$gear)
 
 # write to file
-datasummary_skim(dat, output = "test.png")
-datasummary_skim(dat, type = "categorical", output = "test.png")
+## webshot2 breaks in tinytest
+# datasummary_skim(dat, output = "test.png")
+# datasummary_skim(dat, type = "categorical", output = "test.png")
 datasummary_skim(dat, output = "test.html")
 datasummary_skim(dat, type = "categorical", output = "test.html")
 
-unlink("test.png")
+# unlink("test.png")
 unlink("test.html")
 unlink("test.tex")
 
@@ -253,6 +257,6 @@ save_to_file <- function(ext = ".html") {
   unlink(filename)
 }
 
-for (ext in c(".html", ".tex", ".docx", ".png")) {
+for (ext in c(".html", ".tex", ".docx")) {
   save_to_file(ext)
 }
