@@ -39,7 +39,9 @@ get_gof <- function(model, gof_function = NULL, vcov_type = NULL, ...) {
   for (f in names(funs)) {
     if (get_priority == "all") {
       tmp <- funs[[f]](model, ...)
-      attr(tmp, "backend") <- f
+      if (!is.null(tmp)) {
+        attr(tmp, "backend") <- f
+      }
       if (
         inherits(tmp, "data.frame") &&
           inherits(gof, "data.frame")
@@ -57,7 +59,9 @@ get_gof <- function(model, gof_function = NULL, vcov_type = NULL, ...) {
     } else {
       if (!inherits(gof, "data.frame")) {
         gof <- funs[[f]](model, ...)
-        attr(gof, "backend") <- f
+        if (!is.null(gof)) {
+          attr(gof, "backend") <- f
+        }
       }
     }
   }

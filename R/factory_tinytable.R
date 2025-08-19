@@ -108,7 +108,6 @@ factory_tinytable <- function(
   # write to file
   if (!is.null(output_file)) {
     tinytable::save_tt(out, output = output_file, overwrite = TRUE)
-    return(invisible())
   }
 
   # change output format in the S4 object, but return a `tinytable` for when we

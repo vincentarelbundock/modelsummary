@@ -45,10 +45,7 @@ factory_huxtable <- function(
   out <- theme_ms(out, hrule = hrule)
 
   # output
-  output_file <- output_file
-  if (is.null(output_file)) {
-    return(out)
-  } else {
+  if (!is.null(output_file)) {
     if (identical(output_format, "word")) {
       huxtable::quick_docx(out, file = output_file, open = FALSE)
     } else if (identical(output_format, "powerpoint")) {
@@ -61,4 +58,6 @@ factory_huxtable <- function(
       huxtable::quick_latex(out, file = output_file, open = FALSE)
     }
   }
+  
+  return(out)
 }
