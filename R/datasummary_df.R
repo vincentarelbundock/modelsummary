@@ -26,7 +26,7 @@ datasummary_df <- function(
   output_file <- tmp$output_file
   sanitize_escape(escape) # after sanitize_output
   sanity_align(align)
-  checkmate::assert_integerish(hrule, lower = 2)
+  checkmate::assert_integerish(hrule, lower = 2, null.ok = TRUE)
   checkmate::assert_data_frame(data)
 
   for (n in colnames(data)) {
