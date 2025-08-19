@@ -117,7 +117,7 @@ factory_tinytable <- function(
     out@output <- output_format
   } else if (output_format %in% "latex_tabular") {
     out@output <- "latex"
-    out <- tinytable::theme_tt(out, "tabular")
+    out <- tinytable::theme_latex(out, environment = "tabular", environment_table = FALSE)
   }
 
   return(invisible(out))
