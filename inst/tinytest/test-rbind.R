@@ -2,6 +2,7 @@ source("helpers.R")
 requiet("fixest")
 requiet("tinysnapshot")
 using("tinysnapshot")
+set.seed(48103)
 fixest::setFixest_nthreads(1)
 
 panels <- list(
