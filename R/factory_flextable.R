@@ -7,16 +7,26 @@ factory_flextable <- function(
   tab,
   align = NULL,
   hrule = NULL,
+  hgroup = NULL,
   notes = NULL,
   title = NULL,
   output_format = "flextable",
   output_file = NULL,
+  escape = TRUE,
   ...
 ) {
   insight::check_if_installed("flextable")
 
-  span <- get_span_kableExtra(tab)
-  colnames(tab) <- gsub(".*\\|\\|\\|\\|", "", colnames(tab))
+  span_list <- get_span_kableExtra(tab)
+
+  # colnames with or without spans: before escape and for all span/no-span
+  if (is.null(span_list)) {
+    if (!is.null(colnames(tab))) {
+      colnames(tab) <- gsub("\\|{4}", " / ", colnames(tab))
+    }
+  } else {
+    colnames(tab) <- attr(span_list, "column_names")
+  }
   colnames(tab) <- pad(colnames(tab), output_format = output_format)
 
   # measurements
@@ -48,13 +58,46 @@ factory_flextable <- function(
   )
   out <- theme_ms(out, hrule = hrule)
 
+  # alignment: apply before spanning headers
+  if (!is.null(align)) {
+    for (idx in seq_along(tab)) {
+      if (idx <= length(align)) {
+        alignment <- switch(align[idx],
+          "c" = "center",
+          "l" = "left", 
+          "r" = "right",
+          "center"
+        )
+        out <- flextable::align(out, j = idx, align = alignment, part = "all")
+      }
+    }
+  }
+
   # spanning headers
-  for (i in seq_along(span)) {
-    out <- flextable::add_header_row(
-      out,
-      colwidths = span[[i]],
-      values = names(span[[i]])
-    )
+  if (!is.null(span_list)) {
+    for (i in seq_along(span_list)) {
+      out <- flextable::add_header_row(
+        out,
+        colwidths = span_list[[i]],
+        values = names(span_list[[i]])
+      )
+      # center align spanning headers
+      out <- flextable::align(out, i = 1, align = "center", part = "header")
+    }
+  }
+
+  # horizontal grouping (hgroup)
+  if (!is.null(hgroup) && length(hgroup) > 0) {
+    # hgroup creates grouped rows in the body
+    for (group_name in names(hgroup)) {
+      group_rows <- hgroup[[group_name]]
+      if (length(group_rows) > 0) {
+        # add a row above the first row of each group
+        first_row <- min(group_rows)
+        out <- flextable::add_header_lines(out, values = group_name)
+        out <- flextable::align(out, i = 1, align = "left", part = "header")
+      }
+    }
   }
 
   # output

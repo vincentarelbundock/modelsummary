@@ -20,6 +20,9 @@
   with info about the extraction method. Thanks to @raffaem for
   contribution \#914.
 - Update to `tinytable` 0.13.0, which fixes Issue \#912.
+- `flextable`: Added support for spanning headers in `modelsummary()`,
+  `datasummary()`, and other functions, matching the functionality
+  available in `tinytable`.
 
 ## 2.4.0
 
