@@ -30,6 +30,7 @@ deploy: ## pkgdown::deploy_to_branch()
 website: install ## render vignettes and website
 	rm -rf docs
 	Rscript -e "altdoc::render_docs(verbose = TRUE)"
+	mkdir -p docs/man/figures
 	cp man/figures/* docs/man/figures/
 	git restore docs/CNAME
 
