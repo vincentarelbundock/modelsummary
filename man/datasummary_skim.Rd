@@ -82,11 +82,15 @@ affect the behavior of other functions behind the scenes.}
 \description{
 This function was inspired by the excellent \code{skimr} package for R.
 See the Details and Examples sections below, and the vignettes on the
+}
+\details{
 \code{modelsummary} website:
 \itemize{
 \item https://modelsummary.com/
 \item https://modelsummary.com/vignettes/datasummary.html
 }
+
+Note that the default \code{escape=TRUE} may not be best for all formats, such as LaTeX/PDF.
 }
 \section{Version 2.0.0, kableExtra, and tinytable}{
 

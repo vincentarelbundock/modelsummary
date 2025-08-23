@@ -2,9 +2,12 @@
 #'
 #' This function was inspired by the excellent `skimr` package for R.
 #' See the Details and Examples sections below, and the vignettes on the
+#'
 #' `modelsummary` website:
 #' * https://modelsummary.com/
 #' * https://modelsummary.com/vignettes/datasummary.html
+#'
+#' Note that the default `escape=TRUE` may not be best for all formats, such as LaTeX/PDF.
 #'
 #' @inheritParams datasummary
 #' @inheritParams modelsummary
