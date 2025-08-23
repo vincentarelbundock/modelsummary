@@ -1,6 +1,9 @@
 #' Title models with their dependent variables
 #'
-#' A convenience function for use with a regression model or list of regression models. Returns a named list of models, where the names are the models' respective dependent variables. Pass your list of models to \code{dvnames} before sending to \code{modelsummary} to automatically get dependent variable-titled columns.
+#' A convenience function for use with a regression model or list of regression models. 
+#' Returns a named list of models, where the names are the models' respective dependent variables.
+#' If the dependent variables are labelled, the labels are used as names.
+#' Pass your list of models to \code{dvnames} before sending to \code{modelsummary} to automatically get dependent variable-titled columns.
 #'
 #' @param models A regression model or list of regression models
 #' @param number Should the models be numbered (1), (2), etc., in addition to their dependent variable names?
