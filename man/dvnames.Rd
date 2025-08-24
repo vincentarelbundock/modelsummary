@@ -16,7 +16,10 @@ dvnames(models, number = FALSE, strip = FALSE, fill = "Model")
 \item{fill}{If \code{insight::find_response()} cannot find a response, the column title to use in its place. Set to \code{' '} to leave blank.}
 }
 \description{
-A convenience function for use with a regression model or list of regression models. Returns a named list of models, where the names are the models' respective dependent variables. Pass your list of models to \code{dvnames} before sending to \code{modelsummary} to automatically get dependent variable-titled columns.
+A convenience function for use with a regression model or list of regression models.
+Returns a named list of models, where the names are the models' respective dependent variables.
+If the dependent variables are labelled, the labels are used as names.
+Pass your list of models to \code{dvnames} before sending to \code{modelsummary} to automatically get dependent variable-titled columns.
 }
 \examples{
 
