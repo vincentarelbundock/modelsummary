@@ -1,5 +1,6 @@
 source("helpers.R")
 requiet("broom")
+requiet("glmmTMB")
 
 
 fit <- glm(am ~ mpg + factor(cyl), data = mtcars, family = binomial)
@@ -167,3 +168,28 @@ e1 <- get_estimates(mod, exponentiate = FALSE)
 e2 <- get_estimates(mod, exponentiate = TRUE)
 expect_equal(exp(e1$estimate[1]), e2$estimate[1])
 expect_equal(e1$estimate[2:5], e2$estimate[2:5])
+
+
+# Issue #896: do not exponentiate dispersion parameters
+Owls <- transform(Owls,
+  Nest = reorder(Nest, NegPerChick),
+  NCalls = SiblingNegotiation,
+  FT = FoodTreatment)
+mod <- glmmTMB(
+  NCalls ~ (FT + ArrivalTime) * SexParent +
+    offset(log(BroodSize)) + (1 | Nest),
+  data = Owls,
+  ziformula = ~1,
+  family = glmmTMB::nbinom1(link = "log"))
+tab1 <- modelsummary(mod,
+  output = "data.frame",
+  shape = component + term + statistic ~ model,
+  exponentiate = TRUE)
+tab2 <- modelsummary(mod,
+  output = "data.frame",
+  shape = component + term + statistic ~ model,
+  exponentiate = FALSE)
+expect_equal(
+  tab1[["(1)"]][tab$component == "dispersion"],
+  tab2[["(1)"]][tab$component == "dispersion"])
+expect_false(tab1[["(1)"]][1] == tab2[["(1)"]][1])

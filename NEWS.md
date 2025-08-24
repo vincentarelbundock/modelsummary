@@ -23,6 +23,8 @@
 - `flextable`: Added support for spanning headers in `modelsummary()`,
   `datasummary()`, and other functions, matching the functionality
   available in `tinytable`.
+- Dispersion parameters are no longer exponentiated when
+  `exponentiate=TRUE`. Thanks to @raffaem for report \#896.
 
 ## 2.4.0
 

@@ -144,6 +144,13 @@ format_estimates <- function(
         TRUE
       )
     }
+    if ("component" %in% colnames(est)) {
+      non_random <- ifelse(
+        est$component == "dispersion",
+        FALSE,
+        non_random
+      )
+    }
 
     for (col in cols) {
       if (col == "std.error") {

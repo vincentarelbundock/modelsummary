@@ -133,7 +133,7 @@ confidence intervals, which can be faster for some models.}
 number of models. If TRUE, the \code{estimate}, \code{conf.low}, and \code{conf.high}
 statistics are exponentiated, and the \code{std.error} is transformed to
 \code{exp(estimate)*std.error}. The \code{exponentiate} argument is ignored for
-distributional random effects parameters (SD and Cor).}
+distributional random effects parameters (SD and Cor) and dispersions parameters.}
 
 \item{stars}{to indicate statistical significance
 \itemize{
