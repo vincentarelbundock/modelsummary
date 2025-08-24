@@ -2,7 +2,7 @@
 
 # News
 
-## Development
+## 2.5.0
 
 - Quarto: better format detection when users explicitly use
   `output="tinytable"`. Thanks to @mvuorre for report \#886.
