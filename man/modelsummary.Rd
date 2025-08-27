@@ -90,6 +90,7 @@ the data.frame produced by \code{get_estimates(model)}, and strings with curly b
 \item \code{"estimate"}
 \item \code{"{estimate} ({std.error}){stars}"}
 \item \code{"{estimate} [{conf.low}, {conf.high}]"}
+\item Numbers are automatically rounded and converted to strings. To let glue apply functions to numeric values, users must set \code{fmt=NULL}. For more complex formatting, users are encouraged to use the \code{fmt} argument, which accepts custom functions.
 }}
 
 \item{statistic}{vector of strings or \code{glue} strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics.
@@ -100,8 +101,6 @@ the data.frame produced by \code{get_estimates(model)}, and strings with curly b
 \item \code{"{p.value} [{conf.low}, {conf.high}]"}
 \item \code{"Std.Error: {std.error}"}
 \item \code{"{exp(estimate) * std.error}"}
-\item Numbers are automatically rounded and converted to strings. To apply functions to their numeric values, as in the last \code{glue} example, users must set \code{fmt=NULL}.
-\item Parentheses are added automatically unless the string includes \code{glue} curly braces \code{{}}.
 }
 \item Notes:
 \itemize{
@@ -110,6 +109,7 @@ the data.frame produced by \code{get_estimates(model)}, and strings with curly b
 \item \code{statistic=c("p"="p.value", "["="conf.low", "]"="conf.high")}
 }
 \item Some statistics are not supported for all models. See column names in \code{get_estimates(model)}, and visit the website to learn how to add custom statistics.
+\item Parentheses are added automatically unless the string includes \code{glue} curly braces \code{{}}.
 }
 }}
 

@@ -93,12 +93,11 @@ globalVariables(c(
 #'   - `"{p.value} [{conf.low}, {conf.high}]"`
 #'   - `"Std.Error: {std.error}"`
 #'   - `"{exp(estimate) * std.error}"`
-#'   - Numbers are automatically rounded and converted to strings. To apply functions to their numeric values, as in the last `glue` example, users must set `fmt=NULL`.
-#'   - Parentheses are added automatically unless the string includes `glue` curly braces `{}`.
 #' * Notes:
 #'   - The names of the `statistic` are used a column names when using the `shape` argument to display statistics as columns:
 #'      - `statistic=c("p"="p.value", "["="conf.low", "]"="conf.high")`
 #'   - Some statistics are not supported for all models. See column names in `get_estimates(model)`, and visit the website to learn how to add custom statistics.
+#'   - Parentheses are added automatically unless the string includes `glue` curly braces `{}`.
 #' @param vcov robust standard errors and other manual statistics. The `vcov`
 #'   argument accepts six types of input (see the 'Details' and 'Examples'
 #'   sections below):
@@ -192,6 +191,7 @@ globalVariables(c(
 #' * `"estimate"`
 #' * `"{estimate} ({std.error}){stars}"`
 #' * `"{estimate} [{conf.low}, {conf.high}]"`
+#' * Numbers are automatically rounded and converted to strings. To let glue apply functions to numeric values, users must set `fmt=NULL`. For more complex formatting, users are encouraged to use the `fmt` argument, which accepts custom functions.
 #' @param align A string with a number of characters equal to the number of columns in
 #' the table (e.g., `align = "lcc"`).  Valid characters: l, c, r, d.
 #' * "l": left-aligned column
