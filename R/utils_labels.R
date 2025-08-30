@@ -1,4 +1,25 @@
+#' Create a named vector of variable labels from a list of models
+#' 
+#' @param models A model or a list of models
+#' @return A named vector of variable labels
+#' @examples
+#' \dontrun{
+#' dat <- mtcars
+#' dat %<>%
+#'   labelled::set_variable_labels(
+#'     mpg = "Miles/(US) gallon",
+#'     cyl = "Number of cylinders",
+#'   )
+#' dat$gear %<>% factor()
+#' mod <- lm(mpg ~ cyl + disp, dat)
+#' modelsummary::get_variable_labels_models(mod)
+#' }
 get_variable_labels_models <- function(models) {
+  # If we pass a single model, convert to list
+  if (!is.list(models)) {
+    models <- list(models)
+  }
+  # Loop over models, extract data, extract labels
   out <- list()
   for (mod in models) {
     dat <- hush(insight::get_data(mod))
@@ -17,24 +38,37 @@ get_variable_labels_models <- function(models) {
   return(out)
 }
 
-
+#' Return labels from data frame
+#' 
+#' @param data A data frame
+#' @return A named vector of variable labels
+#' @examples
+#' \dontrun{
+#' dat <- mtcars
+#' dat %<>%
+#'   labelled::set_variable_labels(
+#'     mpg = "Miles/(US) gallon",
+#'     cyl = "Number of cylinders",
+#'   )
+#' dat$gear %<>% factor()
+#' mod <- lm(mpg ~ cyl + disp, dat)
+#' modelsummary::get_variable_labels_data(insight::get_data(mod))
+#' }
 get_variable_labels_data <- function(data) {
   # global variables: sjlabelled-style
   lab <- attr(data, "label", exact = TRUE)
-
-  tmp <- sapply(data, function(x) attr(x, "label"))
   # variable attributes: haven-style
   if (is.null(lab)) {
-    lab <- unlist(sapply(data, function(x) attr(x, "label", exact = TRUE)))
-    lab <- Filter(function(x) !is.null(x), lab)
+    # Extract labels from data vector
+    lab <- sapply(data, function(x) attr(x, "label", exact = TRUE))
+    # Use variable name as label for variables that miss a label
+    mask <- sapply(lab, is.null)
+    lab[mask] <- names(lab)[mask]
+    # !! `unlist` would drop NULL values
+    lab <- unlist(lab)
   }
   if (length(lab) == 0) {
     lab <- NULL
-  }
-  for (n in names(lab)) {
-    if (is.null(lab[[n]])) {
-      lab[[n]] <- names(n)
-    }
   }
   return(lab)
 }
