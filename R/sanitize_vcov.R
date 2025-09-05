@@ -1,10 +1,38 @@
-#' sanity check
-#'
+#' Get default sandwich types
 #' @noRd
-sanitize_vcov <- function(vcov, models, ...) {
-  ellip <- list(...)
-  number_of_models <- length(models)
+get_sandwich_types <- function() {
+  c(
+    "Andrews", "BS", "classical", "constant", "CR", "CR0", "CR1", "CR1p",
+    "CR2", "CR3", "HAC", "HC", "HC0", "HC1", "HC2", "HC3", "HC4",
+    "HC4m", "HC5", "iid", "kenward-roger", "mammen", "NeweyWest",
+    "outer-product", "panel-corrected", "PL", "bootstrap", "residual",
+    "robust", "stata", "weave", "webb", "wild", "xy"
+  )
+}
 
+#' Classify and validate vcov type
+#' @noRd
+classify_vcov <- function(vcov_item, sandwich_types = NULL) {
+  if (is.null(sandwich_types)) {
+    sandwich_types <- get_sandwich_types()
+  }
+  
+  if (is.null(vcov_item)) return("null")
+  if (isTRUE(checkmate::check_formula(vcov_item))) return("formula")
+  if (isTRUE(checkmate::check_function(vcov_item))) return("function")
+  if (isTRUE(checkmate::check_matrix(vcov_item))) return("matrix")
+  if (isTRUE(checkmate::check_numeric(vcov_item))) return("numeric")
+  if (isTRUE(checkmate::check_character(vcov_item, min.len = 2))) return("character_vector")
+  if (isTRUE(checkmate::check_character(vcov_item, len = 1))) {
+    if (tolower(vcov_item) %in% tolower(sandwich_types)) return("character_single")
+  }
+  
+  stop("The value of the `vcov` argument is invalid. Please refer to the documentation.", call. = FALSE)
+}
+
+#' Recycle vcov for multiple models
+#' @noRd
+recycle_vcov <- function(vcov, number_of_models) {
   if (is.null(vcov)) {
     vcov <- list(vcov)
     names(vcov) <- ""
@@ -15,211 +43,186 @@ sanitize_vcov <- function(vcov, models, ...) {
     lab <- names(vcov) # user-supplied label
     vcov <- rep(list(NULL), number_of_models)
     names(vcov) <- rep(lab, number_of_models)
+    return(vcov)
   }
 
   # recycling vcov for multiple models
-  # single string/formulas/matrices/functions: apply to every model
   if (!isTRUE(checkmate::check_list(vcov))) {
-    if (
-      is.null(vcov) ||
-        isTRUE(checkmate::check_formula(vcov)) ||
-        isTRUE(checkmate::check_matrix(vcov)) ||
-        isTRUE(checkmate::check_function(vcov)) ||
-        # checkmate oddity for list(NULL) which flags as numeric
-        isTRUE(checkmate::check_numeric(vcov)) ||
-        isTRUE(checkmate::check_character(vcov, len = 1))
-    ) {
-      vcov <- rep(list(vcov), number_of_models)
-      # character vector to list (can be any length for single model many vcov)
-    } else if (isTRUE(checkmate::check_character(vcov))) {
+    if (isTRUE(checkmate::check_character(vcov)) && length(vcov) > 1) {
       vcov <- as.list(vcov)
-      # check first class because some models inherit from "list"
     } else if (class(vcov)[1] != "list") {
+      vcov <- rep(list(vcov), number_of_models)
+    } else {
       stop(
-        "The value of the `vcov` argument is invalid. Please refer to the documentation."
+        "The value of the `vcov` argument is invalid. Please refer to the documentation.",
+        call. = FALSE
       )
     }
   }
 
+  return(vcov)
+}
+
+#' Process fixest-specific vcov handling
+#' @noRd
+process_fixest_vcov <- function(vcov_item, model, vcov, i) {
+  insight::check_if_installed("fixest")
+
+  if (identical(vcov_item, "robust")) {
+    vcov[[i]] <- "HC1"
+    return(vcov)
+  }
+
+  if (identical(vcov_item, "HC3")) {
+    insight::check_if_installed("sandwich")
+    vcov[[i]] <- tryCatch(
+      sandwich::vcovHC(model),
+      error = function(e) "HC1"
+    )
+    names(vcov)[i] <- "HC3"
+    return(vcov)
+  }
+
+  if (isTRUE(checkmate::check_formula(vcov_item))) {
+    names(vcov)[i] <- paste(
+      "by:",
+      gsub("\\+", "\\&", gsub(":", "\\ & ", as.character(vcov_item)[2]))
+    )
+    vcov[[i]] <- stats::vcov(model, vcov = vcov_item)
+    return(vcov)
+  }
+
+  return(vcov)
+}
+
+#' Process character vcov types (shortcuts, normalization, special functions)
+#' @noRd
+process_character_vcov <- function(vcov_item, model, ..., sandwich_types = NULL) {
+  if (is.null(sandwich_types)) {
+    sandwich_types <- get_sandwich_types()
+  }
+  if (!isTRUE(checkmate::check_character(vcov_item, len = 1))) {
+    return(list(vcov = vcov_item, name = NULL))
+  }
+
+  # Apply shortcuts and normalize case
+  vcov_lower <- tolower(vcov_item)
+  vcov_lower <- switch(vcov_lower,
+    "stata" = "hc1",
+    "robust" = "hc3",
+    vcov_lower
+  )
+  normalized <- sandwich_types[match(vcov_lower, tolower(sandwich_types))]
+
+  # Handle default types that become NULL
+  if (vcov_lower %in% c("classical", "constant", "iid", "default")) {
+    name <- switch(vcov_lower,
+      "iid" = "IID",
+      "classical" = "Classical",
+      "constant" = "Constant", 
+      "default" = "Default"
+    )
+
+    if (inherits(model, c("lm_robust", "iv_robust", "felm"))) {
+      warning(sprintf(
+        'When the `vcov` argument is set to "iid", "classical", or "constant", `modelsummary` extracts the default variance-covariance matrix from the model object. For objects of class `%s`, the default vcov is not always IID. Please make sure that the standard error label matches the numeric results in the table. Note that the `vcov` argument accepts a named list for users who want to customize the standard error labels in their regression tables.',
+        class(model)[1]
+      ), call. = FALSE)
+    }
+    return(list(vcov = NULL, name = name))
+  }
+
+  # Handle special functions with lookup
+  special_functions <- list(
+    "weave" = list(vcov = sandwich::weave, name = "Weave"),
+    "neweywest" = list(vcov = normalized, name = "Newey-West"),
+    "andrews" = list(vcov = sandwich::kernHAC, name = "Andrews"),
+    "bootstrap" = list(vcov = normalized, name = "Bootstrap"),
+    "panel-corrected" = list(vcov = sandwich::vcovPC, name = "Panel-corrected"),
+    "outer-product" = list(vcov = sandwich::vcovOPG, name = "Outer product")
+  )
+
+  if (vcov_lower %in% names(special_functions)) {
+    spec <- special_functions[[vcov_lower]]
+
+    # Check sandwich dependency for functions that need it
+    sand <- c("weave", "andrews", "bootstrap", "panel-corrected", "outer-product")
+    if (vcov_lower %in% sand) {
+      assert_dependency("sandwich")
+    }
+
+    if (vcov_lower == "panel-corrected" && !"cluster" %in% ...names()) {
+      stop('You must specify a `cluster` argument when using "panel-corrected" standard errors.', call. = FALSE)
+    }
+
+    return(list(vcov = spec$vcov, name = spec$name))
+  }
+
+  return(list(vcov = normalized, name = normalized))
+}
+
+#' Sanitize vcov argument
+#' @noRd
+sanitize_vcov <- function(vcov, models, ...) {
+  number_of_models <- length(models)
+
+  sandwich_types <- get_sandwich_types()
+
+  vcov <- recycle_vcov(vcov, number_of_models)
   labels <- names(vcov)
 
   checkmate::check_true(length(vcov) == number_of_models)
 
-  sandwich_types <- c(
-    "Andrews",
-    "BS",
-    "classical",
-    "constant",
-    "CR",
-    "CR0",
-    "CR1",
-    "CR1p",
-    "CR2",
-    "CR3",
-    "HAC",
-    "HC",
-    "HC0",
-    "HC1",
-    "HC2",
-    "HC3",
-    "HC4",
-    "HC4m",
-    "HC5",
-    "iid",
-    "kenward-roger",
-    "mammen",
-    "NeweyWest",
-    "outer-product",
-    "panel-corrected",
-    "PL",
-    "bootstrap",
-    "residual",
-    "robust",
-    "stata",
-    "weave",
-    "webb",
-    "wild",
-    "xy"
-  )
-
   for (i in seq_along(vcov)) {
-    # lme4::lmer
+    # Convert special matrix types to standard matrices
     if (inherits(vcov[[i]], "dpoMatrix") || inherits(vcov[[i]], "vcovCR")) {
       vcov[[i]] <- as.matrix(vcov[[i]])
     }
 
-    j <- ifelse(length(models) == 1, 1, i)
-    # fixest does its own checks
+    j <- if (length(models) == 1) 1 else i
 
-    if (!inherits(models[[j]], "fixest")) {
-      checkmate::assert(
-        checkmate::check_null(vcov[[i]]),
-        checkmate::check_formula(vcov[[i]]),
-        checkmate::check_function(vcov[[i]]),
-        checkmate::check_matrix(vcov[[i]]),
-        checkmate::check_numeric(vcov[[i]]),
-        checkmate::check_character(vcov[[i]], min.len = 2),
-        checkmate::check_choice(
-          tolower(vcov[[i]]),
-          choices = tolower(sandwich_types)
-        ),
-        combine = "or"
-      )
-
-      # fixest is weird
-    } else {
-      insight::check_if_installed("fixest")
-      if (identical(vcov[[i]], "robust")) {
-        vcov[[i]] <- "HC1"
-      } else if (identical(vcov[[i]], "HC3")) {
-        insight::check_if_installed("sandwich")
-        vcov[[i]] <- tryCatch(
-          sandwich::vcovHC(models[[j]]),
-          error = function(e) "HC1"
-        )
-        names(vcov)[i] <- "HC3"
-      } else if (isTRUE(checkmate::check_formula(vcov[[i]]))) {
-        lab <- paste(
-          "by:",
-          gsub("\\+", "\\&", gsub(":", "\\ & ", as.character(vcov[[i]])[2]))
-        )
-        vcov[[i]] <- stats::vcov(models[[j]], vcov = vcov[[i]])
-        names(vcov)[i] <- lab
-      }
+    # Classify and validate vcov type
+    vcov_type <- classify_vcov(vcov[[i]], sandwich_types)
+    
+    # Handle fixest vs non-fixest models  
+    if (inherits(models[[j]], "fixest")) {
+      vcov <- process_fixest_vcov(vcov[[i]], models[[j]], vcov, i)
     }
 
-    if (isTRUE(checkmate::check_formula(vcov[[i]]))) {
+    # Generate formula labels (skip for fixest as it's already handled)
+    if (vcov_type == "formula" && !inherits(models[[j]], "fixest")) {
       names(vcov)[i] <- paste(
         "by:",
         gsub("\\+", "\\&", gsub(":", "\\ & ", as.character(vcov[[i]])[2]))
       )
     }
 
+    # Set default labels for custom types
     if (
       (is.null(names(vcov)[i]) || is.na(names(vcov)[i])) &&
-        (isTRUE(checkmate::check_function(vcov[[i]])) ||
-          isTRUE(checkmate::check_matrix(vcov[[i]])) ||
-          isTRUE(checkmate::check_numeric(vcov[[i]])) ||
-          isTRUE(checkmate::check_character(vcov[[i]])))
+        vcov_type %in% c("function", "matrix", "numeric", "character_vector", "character_single")
     ) {
       names(vcov)[i] <- "Custom"
     }
 
-    # case-insensitive sandwich types
-    if (isTRUE(checkmate::check_character(vcov[[i]], len = 1))) {
-      # modelsummary-specific shortcuts
-      vcov[[i]] <- switch(
-        tolower(vcov[[i]]),
-        "stata" = "hc1",
-        "robust" = "hc3",
-        vcov[[i]]
-      )
-
-      # case normalization
-      vcov[[i]] <- sandwich_types[match(
-        tolower(vcov[[i]]),
-        tolower(sandwich_types)
-      )]
-      names(vcov)[i] <- vcov[[i]]
-
-      if (
-        isTRUE(
-          tolower(vcov[[i]]) %in% c("classical", "constant", "iid", "default")
-        )
-      ) {
-        vcov[i] <- list(NULL)
-        if (
-          isTRUE(tolower(vcov[[i]]) %in% c("classical", "constant", "default"))
-        ) {
-          names(vcov)[i] <- tools::toTitleCase("vcov[[i]]")
-        } else {
-          names(vcov)[i] <- "IID"
-        }
-        j <- ifelse(length(models) == 1, 1, i)
-        if (inherits(models[[j]], c("lm_robust", "iv_robust", "felm"))) {
-          msg <- insight::format_message(sprintf(
-            'When the `vcov` argument is set to "iid", "classical", or "constant", `modelsummary` extracts the default variance-covariance matrix from the model object. For objects of class `%s`, the default vcov is not always IID. Please make sure that the standard error label matches the numeric results in the table. Note that the `vcov` argument accepts a named list for users who want to customize the standard error labels in their regression tables.',
-            class(models[[j]])[1]
-          ))
-          warning(msg, call. = FALSE)
-        }
-      }
-
-      # after case normalization
-      if (identical(tolower(vcov[[i]]), "weave")) {
-        assert_dependency("sandwich")
-        vcov[[i]] <- sandwich::weave
-        names(vcov)[i] <- "Weave"
-      } else if (identical(tolower(vcov[[i]]), "NeweyWest")) {
-        names(vcov)[i] <- "Newey-West"
-      } else if (identical(tolower(vcov[[i]]), "andrews")) {
-        assert_dependency("sandwich")
-        vcov[[i]] <- sandwich::kernHAC
-        names(vcov)[i] <- "Andrews"
-      } else if (identical(tolower(vcov[[i]]), "bootstrap")) {
-        assert_dependency("sandwich")
-        names(vcov)[i] <- "Bootstrap"
-      } else if (identical(tolower(vcov[[i]]), "panel-corrected")) {
-        assert_dependency("sandwich")
-        if (!"cluster" %in% names(ellip)) {
-          msg <- 'You must specify a `cluster` argument when using "panel-corrected" standard errors.'
-          stop(insight::format_message(msg), call. = FALSE)
-        }
-        vcov[[i]] <- sandwich::vcovPC
-        names(vcov)[i] <- "Panel-corrected"
-      } else if (identical(tolower(vcov[[i]]), "outer-product")) {
-        assert_dependency("sandwich")
-        vcov[[i]] <- sandwich::vcovOPG
-        names(vcov)[i] <- "Outer product"
-      }
+    # Process character vcov types
+    char_result <- process_character_vcov(vcov[[i]], models[[j]], ..., sandwich_types)
+    if (!is.null(char_result$vcov)) {
+      vcov[[i]] <- char_result$vcov
+    } else {
+      vcov[i] <- list(NULL)
+    }
+    if (!is.null(char_result$name)) {
+      names(vcov)[i] <- char_result$name
     }
   }
 
-  # user-supplied labels
+  # Restore user-supplied labels
   if (!is.null(labels)) {
     names(vcov) <- labels
   }
 
+  # Clean up names
   for (i in seq_along(vcov)) {
     if (!is.null(names(vcov)) && is.na(names(vcov)[i])) {
       names(vcov)[i] <- ""
