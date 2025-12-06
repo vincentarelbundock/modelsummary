@@ -41,7 +41,8 @@ expect_equivalent(tab1, tab3)
 requiet("fixest")
 requiet("lfe")
 requiet("estimatr")
-fixest_mod <- fixest::feols(hp ~ mpg + drat, mtcars, vcov = ~vs)
+fixest_mod <- fixest::feols(hp ~ mpg + drat, mtcars, vcov = ~vs) |>
+  suppressWarnings()
 mod <- list(
   "feols" = fixest_mod,
   "felm" = felm(hp ~ mpg + drat | 0 | 0 | vs, mtcars),

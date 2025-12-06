@@ -125,7 +125,7 @@ p <- modelplot(mod, facet = FALSE, conf_level = NULL)
 requiet("car")
 fit <- lm(mpg ~ disp + hp, mtcars)
 fit_dm <- car::deltaMethod(fit, "disp / hp", rhs = 1)
-p <- modelplot(fit_dm)
+p <- modelplot(fit_dm) |> suppressWarnings()
 
 # Issue #529
 requiet("survey")

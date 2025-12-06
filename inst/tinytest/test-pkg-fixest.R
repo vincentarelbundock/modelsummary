@@ -22,7 +22,7 @@ expect_equivalent(ncol(modelsummary(mod2, "dataframe")), 5)
 # fixest built in SE label
 mod <- feols(Euros ~ dist_km | Product + Destination + Origin, data = trade)
 tab <- modelsummary(mod, "data.frame")
-expect_true("by: Product" %in% tab[["(1)"]])
+expect_true("FE: Product" %in% tab[["term"]])
 
 # multi: after 0.10.5
 mod <- feols(mpg ~ hp, split = ~cyl, data = mtcars)
@@ -39,7 +39,7 @@ mod <- feols(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris)
 raw <- modelsummary(mod, "data.frame")
 expect_inherits(raw, "data.frame")
 expect_equivalent(ncol(raw), 4)
-expect_true("by: Species" %in% raw[["(1)"]])
+expect_true("FE: Species" %in% raw[["term"]])
 
 # gof_map standard errors with `vcov.type`
 gm <- list(
@@ -52,7 +52,7 @@ expect_true("Uncertainty" %in% tab$term)
 expect_true("FE: Gear" %in% tab$term)
 
 # fixest std.error labels
-mod <- feols(hp ~ mpg + drat, mtcars, cluster = "vs")
+mod <- feols(hp ~ mpg + drat, mtcars, cluster = "vs") |> suppressWarnings()
 tab <- modelsummary(mod, output = "data.frame")
 expect_equivalent(tab[tab$term == "Std.Errors", "(1)"], "by: vs")
 tab <- modelsummary(mod, vcov = list(NULL), output = "data.frame")

@@ -464,7 +464,7 @@ tab <- modelsummary(
   shape = model + term + response ~ statistic,
   output = "dataframe",
   coef_rename = TRUE
-)
+) |> suppressWarnings()
 known <- sort(unique(tab$term))
 unknown <- c(
   "(Intercept)",

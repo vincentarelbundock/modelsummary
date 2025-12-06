@@ -109,7 +109,7 @@ panels <- list(
     feols(disp ~ cyl | gear, data = mtcars, cluster = ~hp),
     feols(disp ~ cyl | gear + carb, data = mtcars, cluster = ~hp)
   )
-)
+) |> suppressWarnings() |> suppressMessages()
 tab <- modelsummary(panels, shape = "rcollapse", output = "dataframe")
 expect_equivalent(sum(tab[[1]] == "FE: gear"), 2)
 
@@ -127,7 +127,7 @@ panels <- list(
     feols(disp ~ cyl | gear, data = mtcars, cluster = ~hp),
     feols(disp ~ cyl | gear + carb, data = mtcars, cluster = ~hp)
   )
-)
+) |> suppressWarnings() |> suppressMessages()
 tab <- modelsummary(panels, shape = "rcollapse", output = "dataframe")
 expect_equivalent(sum(tab[[1]] == "FE: gear"), 1)
 
