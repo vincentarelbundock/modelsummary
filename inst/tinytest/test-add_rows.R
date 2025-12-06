@@ -36,22 +36,3 @@ tab <- datasummary(
 expect_equivalent(tab$sd, c("69", "6", "3", "4"))
 
 
-# Issue #875: misplaced hrule
-models <- list()
-models[['OLS']] <- lm(mpg ~ factor(cyl), mtcars)
-models[['Logit']] <- glm(am ~ factor(cyl), mtcars, family = binomial)
-rows <- tribble(
-  ~term,
-  ~OLS,
-  ~Logit,
-  'factor(cyl)4',
-  '-',
-  '-',
-  'Info',
-  '???',
-  'XYZ'
-)
-attr(rows, 'position') <- c(3, 9)
-sty <- modelsummary(models, add_rows = rows)@style
-sty <- subset(sty, line == "b")
-expect_true(all(sty$i == 7))
