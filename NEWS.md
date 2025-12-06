@@ -2,6 +2,11 @@
 
 # News
 
+## Development
+
+- Better labelling for `vcov_type` when the user supplies a string.
+  “classical” becomes “Classical” instead of “IID”, etc.
+
 ## 2.5.0
 
 - Quarto: better format detection when users explicitly use
