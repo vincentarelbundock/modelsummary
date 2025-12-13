@@ -11,7 +11,7 @@ dvnames(models, number = FALSE, strip = FALSE, fill = "Model")
 
 \item{number}{Should the models be numbered (1), (2), etc., in addition to their dependent variable names?}
 
-\item{strip}{boolean FALSE returns the dependent variable names as they appear in the model. TRUE returns the dependent variable names as they appear in the data, without transformations.}
+\item{strip}{Boolean toggle for how dependent variable names are extracted. When strip is \code{TRUE}, the function calls \code{insight::find_response()}, typically returning the raw variable name stripped of any transformation notation (e.g., \code{log(y)}). When strip is \code{FALSE}, it first tries to parse the formula stored in the model object and return the characters before the first \code{~}, keeping any transformation text; it falls back to \code{insight::find_response()} if the formula cannot be parsed. In both cases, if \code{insight::find_response()} and labels fail, the name is replaced by \code{fill}.}
 
 \item{fill}{If \code{insight::find_response()} cannot find a response, the column title to use in its place. Set to \code{' '} to leave blank.}
 }

@@ -8,7 +8,7 @@
 #' @param models A regression model or list of regression models
 #' @param number Should the models be numbered (1), (2), etc., in addition to their dependent variable names?
 #' @param fill If \code{insight::find_response()} cannot find a response, the column title to use in its place. Set to \code{' '} to leave blank.
-#' @param strip boolean FALSE returns the dependent variable names as they appear in the model. TRUE returns the dependent variable names as they appear in the data, without transformations.
+#' @param strip Boolean toggle for how dependent variable names are extracted. When strip is `TRUE`, the function calls `insight::find_response()`, typically returning the raw variable name stripped of any transformation notation (e.g., `log(y)`). When strip is `FALSE`, it first tries to parse the formula stored in the model object and return the characters before the first `~`, keeping any transformation text; it falls back to `insight::find_response()` if the formula cannot be parsed. In both cases, if `insight::find_response()` and labels fail, the name is replaced by `fill`.
 #'
 #' @examples
 #'
