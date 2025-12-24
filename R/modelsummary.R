@@ -188,9 +188,9 @@ globalVariables(c(
 #' @param estimate a single string or a character vector of length equal to the
 #' number of models. Valid entries include any column name of
 #' the data.frame produced by `get_estimates(model)`, and strings with curly braces compatible with the `glue` package format. Examples:
-#' * `"estimate"`
-#' * `"{estimate} ({std.error}){stars}"`
-#' * `"{estimate} [{conf.low}, {conf.high}]"`
+#' * `"estimate"` shows coefficient estimate only
+#' * `"{estimate} ({std.error}){stars}"` shows coefficient estimate with standard error and stars for statistical significance
+#' * `"{estimate} [{conf.low}, {conf.high}]"` shows coefficient estimate with confidence interval
 #' * Numbers are automatically rounded and converted to strings. To let glue apply functions to numeric values, users must set `fmt=NULL`. For more complex formatting, users are encouraged to use the `fmt` argument, which accepts custom functions.
 #' @param align A string with a number of characters equal to the number of columns in
 #' the table (e.g., `align = "lcc"`).  Valid characters: l, c, r, d.
