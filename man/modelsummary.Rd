@@ -93,7 +93,7 @@ the data.frame produced by \code{get_estimates(model)}, and strings with curly b
 \item Numbers are automatically rounded and converted to strings. To let glue apply functions to numeric values, users must set \code{fmt=NULL}. For more complex formatting, users are encouraged to use the \code{fmt} argument, which accepts custom functions.
 }}
 
-\item{statistic}{vector of strings or \code{glue} strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics.
+\item{statistic}{vector of strings or \code{glue} strings which select uncertainty statistics to report vertically below the estimate (ex: standard errors, confidence intervals, p values). NULL omits all uncertainty statistics.
 \itemize{
 \item "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", or any column name produced by \code{get_estimates(model)}
 \item \code{glue} package strings with braces, with or without R functions, such as:

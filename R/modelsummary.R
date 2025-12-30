@@ -87,7 +87,7 @@ globalVariables(c(
 #' * TRUE: `c("+" = .1, "*" = .05, "**" = .01, "***" = 0.001)`
 #' * Named numeric vector for custom stars such as `c('*' = .1, '+' = .05)`
 #' * Note: a legend will not be inserted at the bottom of the table when the `estimate` or `statistic` arguments use "glue strings" with `{stars}`.
-#' @param statistic vector of strings or `glue` strings which select uncertainty statistics to report vertically below the estimate. NULL omits all uncertainty statistics.
+#' @param statistic vector of strings or `glue` strings which select uncertainty statistics to report vertically below the estimate (ex: standard errors, confidence intervals, p values). NULL omits all uncertainty statistics.
 #' * "conf.int", "std.error", "statistic", "p.value", "conf.low", "conf.high", or any column name produced by `get_estimates(model)`
 #' * `glue` package strings with braces, with or without R functions, such as:
 #'   - `"{p.value} [{conf.low}, {conf.high}]"`
