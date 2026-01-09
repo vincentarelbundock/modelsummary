@@ -4,6 +4,8 @@
 
 ## Development
 
+- `output` now accepts `*.typ` file paths when working with the `typst`
+  backend.
 - Better labelling for `vcov_type` when the user supplies a string.
   “classical” becomes “Classical” instead of “IID”, etc.
 - Improve documentation for `dvnames(skip=)`. Thanks to @raffaem for

@@ -42,6 +42,7 @@ sanitize_output <- function(output) {
     "txt" = "markdown",
     "tex" = "latex",
     "ltx" = "latex",
+    "typ" = "typst",
     "docx" = "word",
     "doc" = "word",
     "pptx" = "powerpoint",
