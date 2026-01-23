@@ -15,6 +15,11 @@
   - `modelsummary_model_labels_term`
   - `modelsummary_model_labels_group`
   - `modelsummary_model_labels_model`
+- `datasummary_balance()` gains a `fn` argument (and
+  `modelsummary_balance_fn` option) to supply custom summary functions
+  for numeric variables. When `fn` is supplied and the data includes
+  weights, weights are ignored with a warning. Defaults remain `Mean`
+  and `Std. Dev.`
 - Documentation improvements.
 
 ## 2.5.0

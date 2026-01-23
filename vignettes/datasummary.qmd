@@ -171,6 +171,18 @@ Users can also use the `~ 1` formula to indicate that they want to summarize all
 datasummary_balance(~ 1, data = training)
 ```
 
+You can customize the numeric summary statistics with the `fn` argument, which
+accepts a named list of functions. The names become column headers:
+
+```{r}
+fun <- list(
+  "Median" = function(x) median(x, na.rm = TRUE),
+  "Variance" = function(x) var(x, na.rm = TRUE)
+)
+
+datasummary_balance(~ Treatment, data = training, fn = fun)
+```
+
 # `datasummary_correlation`
 
 The `datasummary_correlation` accepts a dataframe or tibble, it identifies all the numeric variables, and calculates the correlation between each of those variables:
@@ -670,5 +682,4 @@ datasummary(f, data = penguins, output = 'DT')
 ```
 
 Please note that hierarchical or "nested" column labels are only available for these output formats: kableExtra, gt, html, rtf, and LaTeX. When saving tables to other formats, nested labels will be combined to a "flat" header.
-
 

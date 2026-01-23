@@ -143,6 +143,18 @@ The behavior of \code{modelsummary} can be modified by setting global options.  
 }
 
 Options not specific to given arguments are listed below.
+\subsection{Balance tables: summary functions}{
+
+You can customize the summary statistics shown in \code{datasummary_balance()}:
+\itemize{
+\item \code{options(modelsummary_balance_fn = list(Mean = Mean, "Std. Dev." = SD))}
+}
+
+The list must be named, and each function should accept a numeric vector and
+return a single value. When this option is set and a \code{weights} column is
+present, weights are ignored with a warning.
+}
+
 \subsection{Model labels: default column names}{
 
 These global option changes the style of the default column headers:

@@ -9,6 +9,16 @@
 #'
 #' Options not specific to given arguments are listed below.
 #'
+#' ### Balance tables: summary functions
+#'
+#' You can customize the summary statistics shown in `datasummary_balance()`:
+#'
+#' * `options(modelsummary_balance_fn = list(Mean = Mean, "Std. Dev." = SD))`
+#'
+#' The list must be named, and each function should accept a numeric vector and
+#' return a single value. When this option is set and a `weights` column is
+#' present, weights are ignored with a warning.
+#'
 #' ### Model labels: default column names
 #'
 #' These global option changes the style of the default column headers:

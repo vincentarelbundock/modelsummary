@@ -22,6 +22,10 @@
 #'   "weights", this information will be taken into account automatically by
 #'   `estimatr::difference_in_means`.
 #' @param dinm_statistic string: "std.error" or "p.value"
+#' @param fn Named list of functions used to summarize numeric variables. Each
+#' function should accept a numeric vector and return a single value. Defaults
+#' to mean and standard deviation with `na.rm = TRUE`. If a `weights` column is
+#' present and `fn` is supplied, weights are ignored with a warning.
 #' @inheritParams datasummary
 #' @inheritParams modelsummary
 #' @template kableExtra2tinytable
@@ -32,6 +36,13 @@
 #' ```{r, eval = identical(Sys.getenv("pkgdown"), "true")}
 #' library(modelsummary)
 #' datasummary_balance(~am, mtcars)
+#'
+#' # custom summary functions
+#' fun <- list(
+#'   "Median" = function(x) median(x, na.rm = TRUE),
+#'   "Variance" = function(x) var(x, na.rm = TRUE)
+#' )
+#' datasummary_balance(~am, mtcars, fn = fun)
 #' ```
 datasummary_balance <- function(
   formula,
@@ -49,6 +60,7 @@ datasummary_balance <- function(
     "modelsummary_dinm_statistic",
     default = "std.error"
   ),
+  fn = getOption("modelsummary_balance_fn", default = NULL),
   escape = getOption("modelsummary_escape", default = TRUE),
   ...
 ) {
@@ -75,6 +87,19 @@ datasummary_balance <- function(
   checkmate::assert_flag(dinm)
   checkmate::assert_choice(dinm_statistic, choices = c("std.error", "p.value"))
   data <- sanitize_datasummary_balance_data(formula, data)
+  fn_option <- getOption("modelsummary_balance_fn", default = NULL)
+  fn_user <- !missing(fn) || !is.null(fn_option)
+  if (is.null(fn)) {
+    fn <- list(
+      Mean = Mean,
+      "Std. Dev." = SD
+    )
+  }
+  checkmate::assert_list(fn, min.len = 1, names = "unique")
+  checkmate::assert_true(all(nzchar(names(fn))))
+  for (fn_element in fn) {
+    checkmate::assert_function(fn_element)
+  }
 
   if ("p.value" %in% dinm_statistic) {
     insight::check_if_installed("estimatr")
@@ -193,31 +218,67 @@ datasummary_balance <- function(
       return(" ")
     }
     empty <- ifelse(any_factor, "Heading(' ') * emptyfun + ", "")
+    fn_env <- list2env(fn, parent = environment())
+    fn_terms <- character(length(fn))
+    for (i in seq_along(fn)) {
+      fn_label <- names(fn)[i]
+      fn_name <- make.names(paste0("fn_", fn_label))
+      assign(fn_name, fn[[i]], envir = fn_env)
+      fn_label <- gsub("'", "\\'", fn_label)
+      fn_terms[i] <- sprintf("Heading('%s') * %s", fn_label, fn_name)
+    }
+    fn_terms <- paste(fn_terms, collapse = " + ")
     # weights
     if ("weights" %in% colnames(data)) {
-      # Grouped
-      if (!is.null(rhs)) {
-        f_num <- "All(data_norhs) ~ %s Factor(%s) * (
-                        Heading('Mean') * weighted.mean * Arguments(w = weights, na.rm = TRUE) +
-                        Heading('Std. Dev.') * modelsummary:::weighted_sd * Arguments(w = weights))"
-        f_num <- stats::as.formula(sprintf(f_num, empty, rhs))
-        # No groups
+      if (isTRUE(fn_user)) {
+        warning(
+          "`fn` was supplied, so `datasummary_balance()` ignores weights for numeric summaries.",
+          call. = FALSE
+        )
+        if (!is.null(rhs)) {
+          f_num <- "All(data_norhs) ~ %s Factor(%s) * (%s)"
+          f_num <- stats::as.formula(
+            sprintf(f_num, empty, rhs, fn_terms),
+            env = fn_env
+          )
+        } else {
+          f_num <- "All(data_norhs) ~ %s (%s)"
+          f_num <- stats::as.formula(
+            sprintf(f_num, empty, fn_terms),
+            env = fn_env
+          )
+        }
       } else {
-        f_num <- "All(data_norhs) ~ %s (
-                    Heading('Mean') * weighted.mean * Arguments(w = weights, na.rm = TRUE) +
-                    Heading('Std. Dev.') * modelsummary:::weighted_sd * Arguments(w = weights))"
-        f_num <- stats::as.formula(sprintf(f_num, empty))
+        # Grouped
+        if (!is.null(rhs)) {
+          f_num <- "All(data_norhs) ~ %s Factor(%s) * (
+                          Heading('Mean') * weighted.mean * Arguments(w = weights, na.rm = TRUE) +
+                          Heading('Std. Dev.') * modelsummary:::weighted_sd * Arguments(w = weights))"
+          f_num <- stats::as.formula(sprintf(f_num, empty, rhs))
+          # No groups
+        } else {
+          f_num <- "All(data_norhs) ~ %s (
+                      Heading('Mean') * weighted.mean * Arguments(w = weights, na.rm = TRUE) +
+                      Heading('Std. Dev.') * modelsummary:::weighted_sd * Arguments(w = weights))"
+          f_num <- stats::as.formula(sprintf(f_num, empty))
+        }
       }
       # no weights
     } else {
       # Grouped
       if (!is.null(rhs)) {
-        f_num <- "All(data_norhs) ~ %s Factor(%s) * (Mean + Heading('Std. Dev.') * SD)"
-        f_num <- stats::as.formula(sprintf(f_num, empty, rhs))
+        f_num <- "All(data_norhs) ~ %s Factor(%s) * (%s)"
+        f_num <- stats::as.formula(
+          sprintf(f_num, empty, rhs, fn_terms),
+          env = fn_env
+        )
         # No groups
       } else {
-        f_num <- "All(data_norhs) ~ %s (Mean + Heading('Std. Dev.') * SD)"
-        f_num <- stats::as.formula(sprintf(f_num, empty))
+        f_num <- "All(data_norhs) ~ %s (%s)"
+        f_num <- stats::as.formula(
+          sprintf(f_num, empty, fn_terms),
+          env = fn_env
+        )
       }
     }
     tab_num <- datasummary(

@@ -93,14 +93,14 @@ tmp$vs <- as.logical(tmp$vs)
 tab <- datasummary_balance(
   ~vs,
   data = tmp,
-  output = 'dataframe',
+  output = "dataframe",
   add_columns = data.frame(k = letters[1:13]),
   z = 1:13
 )
 expect_equivalent(dim(tab), c(13, 9))
 
 # only numeric
-tab <- datasummary_balance(~vs, mtcars, output = 'dataframe')
+tab <- datasummary_balance(~vs, mtcars, output = "dataframe")
 truth <- c(
   " ",
   "0 / Mean",
@@ -110,19 +110,44 @@ truth <- c(
   "Diff. in Means",
   "Std. Error"
 )
-expect_inherits(tab, 'data.frame')
+expect_inherits(tab, "data.frame")
 expect_equivalent(dim(tab), c(10, 7))
 expect_equivalent(colnames(tab), truth)
+
+# custom summary functions
+fun <- list(
+  "Mean (custom)" = function(x) mean(x, na.rm = TRUE)
+)
+tab <- datasummary_balance(~vs, mtcars, output = "dataframe", fn = fun)
+expect_equivalent(
+  colnames(tab),
+  c(" ", "0", "1", "Diff. in Means", "Std. Error")
+)
+
+fun <- list(
+  "Median" = function(x) median(x, na.rm = TRUE),
+  "Variance" = function(x) var(x, na.rm = TRUE)
+)
+tab <- datasummary_balance(~vs, mtcars, output = "dataframe", fn = fun)
+expect_true(any(grepl("Median", colnames(tab))))
+expect_true(any(grepl("Variance", colnames(tab))))
+
+tmp <- mtcars
+tmp$weights <- seq_len(nrow(tmp))
+expect_warning(
+  datasummary_balance(~vs, tmp, output = "dataframe", fn = fun),
+  pattern = "ignores weights"
+)
 
 # only factors
 tmp <- mtcars
 tmp$cyl <- factor(tmp$cyl)
 tmp$gear <- factor(tmp$gear)
 tmp$vs <- as.logical(tmp$vs)
-tmp <- tmp[, c('am', 'vs', 'cyl', 'gear')]
-tab <- datasummary_balance(~am, tmp, output = 'dataframe')
+tmp <- tmp[, c("am", "vs", "cyl", "gear")]
+tab <- datasummary_balance(~am, tmp, output = "dataframe")
 truth <- c("", "", "0 / N", "0 / Pct.", "1 / N", "1 / Pct.")
-expect_inherits(tab, 'data.frame')
+expect_inherits(tab, "data.frame")
 expect_equivalent(dim(tab), c(8, 6))
 expect_equivalent(trimws(colnames(tab)), truth)
 
@@ -131,8 +156,8 @@ tmp <- mtcars
 tmp$cyl <- factor(tmp$cyl)
 tmp$gear <- factor(tmp$gear)
 tmp$vs <- as.logical(tmp$vs)
-tab <- datasummary_balance(~am, tmp, output = 'dataframe')
-expect_inherits(tab, 'data.frame')
+tab <- datasummary_balance(~am, tmp, output = "dataframe")
+expect_inherits(tab, "data.frame")
 expect_equivalent(dim(tab), c(16, 8))
 ## col order
 truth <- c(
@@ -194,19 +219,19 @@ expect_equivalent(
 tmp <- mtcars
 tmp$cyl <- factor(tmp$cyl)
 tmp$vs <- as.logical(tmp$vs)
-tab <- datasummary_balance(~gear, tmp, output = 'dataframe', dinm = FALSE)
-expect_inherits(tab, 'data.frame')
+tab <- datasummary_balance(~gear, tmp, output = "dataframe", dinm = FALSE)
+expect_inherits(tab, "data.frame")
 expect_equivalent(dim(tab), c(14, 8))
 expect_warning(datasummary_balance(
   ~gear,
   tmp,
-  output = 'dataframe',
+  output = "dataframe",
   dinm = TRUE
 ))
 tab <- suppressWarnings(datasummary_balance(
   ~gear,
   tmp,
-  output = 'dataframe',
+  output = "dataframe",
   dinm = TRUE
 ))
 expect_equivalent(dim(tab), c(14, 8))
@@ -215,65 +240,65 @@ expect_equivalent(dim(tab), c(14, 8))
 tmp <- mtcars
 tmp$cyl <- factor(tmp$cyl)
 tmp$vs <- as.logical(tmp$vs)
-tab <- datasummary_balance(~1, tmp, output = 'dataframe', dinm = FALSE)
-expect_inherits(tab, 'data.frame')
+tab <- datasummary_balance(~1, tmp, output = "dataframe", dinm = FALSE)
+expect_inherits(tab, "data.frame")
 expect_equivalent(dim(tab), c(15, 4))
 tab <- suppressWarnings(datasummary_balance(
   ~1,
   tmp,
-  output = 'dataframe',
+  output = "dataframe",
   dinm = TRUE
 ))
 expect_equivalent(dim(tab), c(15, 4))
 
 
 # single numeric
-tmp <- mtcars[, c('am', 'mpg')]
-tab <- datasummary_balance(~am, data = tmp, output = 'dataframe')
-expect_inherits(tab, 'data.frame')
+tmp <- mtcars[, c("am", "mpg")]
+tab <- datasummary_balance(~am, data = tmp, output = "dataframe")
+expect_inherits(tab, "data.frame")
 expect_equivalent(dim(tab), c(1, 7))
-expect_equivalent(tab[[1]], 'mpg')
+expect_equivalent(tab[[1]], "mpg")
 
 
 # single factor has two stub columns
-tmp <- mtcars[, c('am', 'gear')]
+tmp <- mtcars[, c("am", "gear")]
 tmp$gear <- factor(tmp$gear)
-tab <- datasummary_balance(~am, data = tmp, output = 'dataframe')
-expect_inherits(tab, 'data.frame')
+tab <- datasummary_balance(~am, data = tmp, output = "dataframe")
+expect_inherits(tab, "data.frame")
 expect_equivalent(dim(tab), c(3, 6))
-expect_equivalent(tab[[2]][1], '3')
+expect_equivalent(tab[[2]][1], "3")
 
 
 # dinm=FALSE
-tab <- datasummary_balance(~vs, mtcars, dinm = FALSE, output = 'dataframe')
-expect_inherits(tab, 'data.frame')
+tab <- datasummary_balance(~vs, mtcars, dinm = FALSE, output = "dataframe")
+expect_inherits(tab, "data.frame")
 expect_equivalent(dim(tab), c(10, 5))
-expect_equivalent(tab[[1]][1], 'mpg')
+expect_equivalent(tab[[1]][1], "mpg")
 
 
 # dinm_statistic = "p.value"
 tab <- datasummary_balance(
   ~vs,
   data = mtcars,
-  dinm_statistic = 'p.value',
-  output = 'dataframe'
+  dinm_statistic = "p.value",
+  output = "dataframe"
 )
-expect_inherits(tab, 'data.frame')
+expect_inherits(tab, "data.frame")
 expect_equivalent(dim(tab), c(10, 7))
-expect_equivalent(tab[[1]][1], 'mpg')
-expect_equivalent(colnames(tab)[ncol(tab)], 'p')
+expect_equivalent(tab[[1]][1], "mpg")
+expect_equivalent(colnames(tab)[ncol(tab)], "p")
 
 # sanity checks prevent other than p.value or std.error
 expect_error(
-  datasummary_balance(~vs, mtcars, dinm_statistic = 'bad', output = 'dataframe')
+  datasummary_balance(~vs, mtcars, dinm_statistic = "bad", output = "dataframe")
 )
 
 
 # fmt
-tmp <- mtcars[, c('am', 'mpg', 'gear')]
+tmp <- mtcars[, c("am", "mpg", "gear")]
 tmp$gear <- factor(tmp$gear)
 truth <- c("17.15", "N", "15", "4", "0")
-tab <- datasummary_balance(~am, tmp, fmt = "%.2f", output = 'dataframe')
+tab <- datasummary_balance(~am, tmp, fmt = "%.2f", output = "dataframe")
 expect_equivalent(tab[[3]], truth)
 
 
@@ -308,7 +333,7 @@ truth <- estimatr::difference_in_means(
 )
 truth <- estimatr::tidy(truth)
 
-tab <- datasummary_balance(~Z_clust, dat, fmt = "%.6f", output = 'dataframe')
+tab <- datasummary_balance(~Z_clust, dat, fmt = "%.6f", output = "dataframe")
 expect_equivalent(tab[1, ncol(tab)], sprintf("%.6f", truth$std.error))
 
 # blocks
@@ -326,7 +351,7 @@ dat$clusters <- NULL
 truth <- estimatr::difference_in_means(Y ~ Z_block, blocks = block, data = dat)
 truth <- sprintf("%.6f", tidy(truth)$std.error)
 
-tab <- datasummary_balance(~Z_block, dat, fmt = "%.6f", output = 'dataframe')
+tab <- datasummary_balance(~Z_block, dat, fmt = "%.6f", output = "dataframe")
 expect_equivalent(tab[1, ncol(tab)], truth)
 
 #############
@@ -397,26 +422,26 @@ data(PlantGrowth)
 tab <- datasummary_balance(
   ~group,
   PlantGrowth,
-  output = 'dataframe',
+  output = "dataframe",
   dinm = FALSE
 )
-expect_equivalent(tab[1, 2], '5.0')
-expect_equivalent(tab[1, 3], '0.6')
-expect_equivalent(tab[1, 4], '4.7')
-expect_equivalent(tab[1, 5], '0.8')
-expect_equivalent(tab[1, 6], '5.5')
-expect_equivalent(tab[1, 7], '0.4')
+expect_equivalent(tab[1, 2], "5.0")
+expect_equivalent(tab[1, 3], "0.6")
+expect_equivalent(tab[1, 4], "4.7")
+expect_equivalent(tab[1, 5], "0.8")
+expect_equivalent(tab[1, 6], "5.5")
+expect_equivalent(tab[1, 7], "0.4")
 
 # Issue #711: stars and d-columns
 requiet("dplyr")
-training <- 'https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv'
+training <- "https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Treatment.csv"
 training <- read.csv(training, na.strings = "")
 training <- training %>%
   dplyr::mutate(
     `Earnings Before` = re75 / 1000,
     `Earnings After` = re78 / 1000,
-    Treatment = ifelse(treat == TRUE, 'Treatment', 'Control'),
-    Married = ifelse(married == TRUE, 'Yes', 'No')
+    Treatment = ifelse(treat == TRUE, "Treatment", "Control"),
+    Married = ifelse(married == TRUE, "Yes", "No")
   ) %>%
   dplyr::select(
     `Earnings Before`,

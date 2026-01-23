@@ -18,6 +18,7 @@ datasummary_balance(
   add_rows = getOption("modelsummary_add_rows", default = NULL),
   dinm = getOption("modelsummary_dinm", default = TRUE),
   dinm_statistic = getOption("modelsummary_dinm_statistic", default = "std.error"),
+  fn = getOption("modelsummary_balance_fn", default = NULL),
   escape = getOption("modelsummary_escape", default = TRUE),
   ...
 )
@@ -102,6 +103,11 @@ installed. If \code{data} includes columns named "blocks", "clusters", or
 
 \item{dinm_statistic}{string: "std.error" or "p.value"}
 
+\item{fn}{Named list of functions used to summarize numeric variables. Each
+function should accept a numeric vector and return a single value. Defaults
+to mean and standard deviation with \code{na.rm = TRUE}. If a \code{weights} column is
+present and \code{fn} is supplied, weights are ignored with a warning.}
+
 \item{escape}{boolean TRUE escapes or substitutes LaTeX/HTML characters which could
 prevent the file from compiling/displaying. \code{TRUE} escapes all cells, captions, and notes. Users can have more fine-grained control by setting \code{escape=FALSE} and using an external command such as: \code{modelsummary(model, "latex") |> tinytable::format_tt(tab, j=1:5, escape=TRUE)}}
 
@@ -144,6 +150,18 @@ The behavior of \code{modelsummary} can be modified by setting global options.  
 }
 
 Options not specific to given arguments are listed below.
+\subsection{Balance tables: summary functions}{
+
+You can customize the summary statistics shown in \code{datasummary_balance()}:
+\itemize{
+\item \code{options(modelsummary_balance_fn = list(Mean = Mean, "Std. Dev." = SD))}
+}
+
+The list must be named, and each function should accept a numeric vector and
+return a single value. When this option is set and a \code{weights} column is
+present, weights are ignored with a warning.
+}
+
 \subsection{Model labels: default column names}{
 
 These global option changes the style of the default column headers:
@@ -243,6 +261,13 @@ When creating LaTeX via the \code{tinytable} backend (default in version 2.0.0 a
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{library(modelsummary)
 datasummary_balance(~am, mtcars)
+
+# custom summary functions
+fun <- list(
+  "Median" = function(x) median(x, na.rm = TRUE),
+  "Variance" = function(x) var(x, na.rm = TRUE)
+)
+datasummary_balance(~am, mtcars, fn = fun)
 }\if{html}{\out{</div>}}
 }
 
