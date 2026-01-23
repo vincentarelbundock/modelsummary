@@ -4,12 +4,12 @@
 
 ## Development
 
-- `output` now accepts `*.typ` file paths when working with the `typst`
-  backend.
 - Better labelling for `vcov_type` when the user supplies a string.
   “classical” becomes “Classical” instead of “IID”, etc.
 - Improve documentation for `dvnames(skip=)`. Thanks to @raffaem for
   report \#933.
+- `datasummary_skim()` in Quarto no longer escapes `\num{}` and
+  underscores twice. Fixes Issue \#939.
 - Documentation improvements.
 
 ## 2.5.0

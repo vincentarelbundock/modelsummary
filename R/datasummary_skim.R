@@ -108,7 +108,7 @@ datasummary_skim <- function(
         title = title,
         notes = notes,
         align = align,
-        escape = FALSE,
+        escape = escape,
         fun_numeric = fun_numeric,
         ...
       ),
@@ -122,7 +122,7 @@ datasummary_skim <- function(
         title = title,
         notes = notes,
         align = align,
-        escape = FALSE,
+        escape = escape,
         ...
       ),
       error = function(e) e$message
@@ -168,8 +168,6 @@ datasummary_skim <- function(
     if (!is.null(ofile)) {
       tinytable::save_tt(out, output = ofile, overwrite = TRUE)
     }
-
-    out <- tinytable::format_tt(out, escape = escape)
   } else if (type == "numeric") {
     out <- datasummary_skim_numeric(
       data,
@@ -314,13 +312,16 @@ datasummary_skim_numeric <- function(
   # subset of numeric variables
   idx <- sapply(data, is.numeric)
   idx[colnames(data) %in% by] <- TRUE
-  if (!any(idx)) insight::format_error("data contains no numeric variable.")
+  if (!any(idx)) {
+    insight::format_error("data contains no numeric variable.")
+  }
   dat_new <- data[, idx, drop = FALSE]
 
   # subset of non-NA variables
   idx <- sapply(dat_new, function(x) !all(is.na(x)))
-  if (!any(idx))
+  if (!any(idx)) {
     insight::format_error("all numeric variables are completely missing.")
+  }
   dat <- dat_new[, idx, drop = FALSE]
 
   # too large
@@ -374,7 +375,7 @@ datasummary_skim_numeric <- function(
   rows <- rows[, ..idx]
   data.table::setnames(rows, old = "Variable", new = " ")
 
-  out <- datasummary_df(rows, fmt = fmt, output = output)
+  out <- datasummary_df(rows, fmt = fmt, output = output, escape = escape)
 
   attr(out, "data_list") <- data_list
 
@@ -486,7 +487,8 @@ datasummary_skim_categorical <- function(
     output = output,
     title = title,
     align = align,
-    notes = notes
+    notes = notes,
+    escape = escape
   )
 }
 
