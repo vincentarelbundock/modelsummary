@@ -481,7 +481,7 @@ Some users have reported difficult to reproduce errors when using the
 }
 
 \examples{
-\dontshow{if (isTRUE(Sys.getenv("R_NOT_CRAN") == "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (isTRUE(Sys.getenv("R_NOT_CRAN") == "true")) withAutoprint(\{ # examplesIf}
 # The `modelsummary` website includes \emph{many} examples and tutorials:
 # https://modelsummary.com
 

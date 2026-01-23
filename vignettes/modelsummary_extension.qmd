@@ -46,6 +46,35 @@ modelsummary(mod)
 ```
 
 
+# New information: `modelsummary_list`
+
+`modelsummary_list` can also be used to add new columns of information that do not exist in the original model output. The example below shows how to combine the unstandardized estimates from `get_estimates()` with standardized betas computed by `parameters::standardize_parameters()`. We add the standardized values as a new `estimate_std` column, build a `modelsummary_list`, and then display both `b` and `beta` side by side using the `estimate` argument.
+
+```{r}
+#| warning: false
+#| message: false
+library(parameters)
+
+mod <- lm(mpg ~ hp + wt, data = mtcars)
+
+est <- get_estimates(mod)
+std <- standardize_parameters(mod)
+est$estimate_std <- std$Parameter[match(est$term, std$Parameter)]
+
+gof <- get_gof(mod)
+
+mod_list <- list(tidy = est, glance = gof)
+class(mod_list) <- "modelsummary_list"
+
+modelsummary(
+  mod_list,
+  estimate = c("b" = "{estimate}"),
+  statistic = c("b (std)" = "{estimate_std}", "SE" = "std.error", "p" = "p.value"),
+  shape = term ~ statistic
+)
+```
+
+
 # Unsupported models: `glance` and `tidy`
 
 `modelsummary` relies on two functions from the `broom` package to extract model information: `tidy` and `glance`. If `broom` doesn't support the type of model you are trying to summarize, `modelsummary` won't support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.

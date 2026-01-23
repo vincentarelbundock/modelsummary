@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.24">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Custom – modelsummary: Data and Model Summaries in R</title>
 <style>
@@ -65,14 +65,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../vignettes/modelplot.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-555d7fa6eb067a0c9d334ac7ef1a20f4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-71cad71ea2641a666ed748e297584855.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -105,6 +106,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">modelsummary: Data and Model Summaries in R</span>
     </a>
@@ -139,7 +142,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="sidebar-menu-container"> 
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+    <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
@@ -369,6 +376,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
 <li><a href="#unsupported-models-modelsummary_list" id="toc-unsupported-models-modelsummary_list" class="nav-link active" data-scroll-target="#unsupported-models-modelsummary_list">Unsupported models: <code>modelsummary_list</code></a></li>
+  <li><a href="#new-information-modelsummary_list" id="toc-new-information-modelsummary_list" class="nav-link" data-scroll-target="#new-information-modelsummary_list">New information: <code>modelsummary_list</code></a></li>
   <li><a href="#unsupported-models-glance-and-tidy" id="toc-unsupported-models-glance-and-tidy" class="nav-link" data-scroll-target="#unsupported-models-glance-and-tidy">Unsupported models: <code>glance</code> and <code>tidy</code></a></li>
   <li><a href="#modifying-information-tidy_custom-and-glance_custom" id="toc-modifying-information-tidy_custom-and-glance_custom" class="nav-link" data-scroll-target="#modifying-information-tidy_custom-and-glance_custom">Modifying information: <code>tidy_custom</code> and <code>glance_custom</code></a></li>
   <li><a href="#new-information-tidy_custom-and-glance_custom" id="toc-new-information-tidy_custom-and-glance_custom" class="nav-link" data-scroll-target="#new-information-tidy_custom-and-glance_custom">New information: <code>tidy_custom</code> and <code>glance_custom</code></a></li>
@@ -403,14 +411,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://modelsummary.com">modelsummary</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://modelsummary.com">modelsummary</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="unsupported-models-modelsummary_list" class="level1"><h1>Unsupported models: <code>modelsummary_list</code>
 </h1>
 <p>The simplest way to summarize an unsupported model is to create a <code>modelsummary_list</code> object. This approach is super flexible, but it requires manual intervention, and it can become tedious if you need to summarize many models. The next section shows how to add formal support for an unsupported model type.</p>
 <p>A <code>modelsummary_list</code> is a list with two element that conform to the <code>broom</code> package specification: <code>tidy</code> and <code>glance</code>. <code>tidy</code> is a data.frame with at least three columns: <code>term</code>, <code>estimate</code>, and <code>std.error</code>. <code>glance</code> is a data.frame with only a single row, and where each column will be displayed at the bottom of the table in the goodness-of-fit section. Finally, we wrap those two elements in a list and assign it a <code>modelsummary_list</code> class:</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ti</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ti</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
 <span>  term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"coef1"</span>, <span class="st">"coef2"</span>, <span class="st">"coef3"</span><span class="op">)</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
 <span>  std.error <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">pi</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -424,120 +432,247 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>  glance <span class="op">=</span> <span class="va">gl</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"modelsummary_list"</span></span>
 <span></span>
-<span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <!-- preamble start -->
 
-    <script>
-
-      function styleCell_6g9581vmo5mt2pbh0v17(i, j, css_id) {
-          var table = document.getElementById("tinytable_6g9581vmo5mt2pbh0v17");
-          var cell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-          if (cell) {
-              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
-              cell.classList.add(css_id);
-          } else {
-              console.warn(`Cell at (${i}, ${j}) not found.`);
-          }
-      }
-      function spanCell_6g9581vmo5mt2pbh0v17(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_6g9581vmo5mt2pbh0v17");
-        const targetCell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-        if (!targetCell) {
-          console.warn(`Cell at (${i}, ${j}) not found.`);
-        }
-
-        // Get all cells that need to be removed
-        const cellsToRemove = [];
-        for (let r = 0; r < rowspan; r++) {
-          for (let c = 0; c < colspan; c++) {
-            if (r === 0 && c === 0) continue; // Skip the target cell
-            const cell = table.querySelector(`[data-row="${i + r}"][data-col="${j + c}"]`);
-            if (cell) {
-              cellsToRemove.push(cell);
-            }
-          }
-        }
-
-        // Remove all cells
-        cellsToRemove.forEach(cell => cell.remove());
-
-        // Set rowspan and colspan of the target cell if it exists
-        if (targetCell) {
-          targetCell.rowSpan = rowspan;
-          targetCell.colSpan = colspan;
-        }
-      }
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_n2norzae48gnyfkcv4vr = TinyTable.createTableFunctions("tinytable_n2norzae48gnyfkcv4vr");
       // tinytable span after
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: '8', j: 1 },  ], css_id: 'tinytable_css_c0y5zdu89hrbse4x3dky',}, 
-          { positions: [ { i: '6', j: 1 },  ], css_id: 'tinytable_css_hj80xx7jr0aua3u8bzfx',}, 
-          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '7', j: 1 },  ], css_id: 'tinytable_css_ptqiqhm44l4amw8h52nh',}, 
-          { positions: [ { i: '0', j: 1 },  ], css_id: 'tinytable_css_z9gfntkmhd6ztiisyxy8',}, 
-          { positions: [ { i: '8', j: 0 },  ], css_id: 'tinytable_css_5p632vlnwkb025it8fwu',}, 
-          { positions: [ { i: '6', j: 0 },  ], css_id: 'tinytable_css_s6u8r71hcu06sdceh74r',}, 
-          { positions: [ { i: '1', j: 0 }, { i: '2', j: 0 }, { i: '3', j: 0 }, { i: '4', j: 0 }, { i: '5', j: 0 }, { i: '7', j: 0 },  ], css_id: 'tinytable_css_gn2q9pn0xf59a6j2hcl3',}, 
-          { positions: [ { i: '0', j: 0 },  ], css_id: 'tinytable_css_mhzq6bswjkfv1y9w9e5c',}, 
+          { positions: [ { i: '8', j: 2 } ], css_id: 'tinytable_css_y6gkdm6ma79z4qt794sl',}, 
+          { positions: [ { i: '6', j: 2 } ], css_id: 'tinytable_css_j2j6lz19vkkl309b7loe',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '7', j: 2 } ], css_id: 'tinytable_css_hxbgrbaqyis7e63kfdfl',}, 
+          { positions: [ { i: '0', j: 2 } ], css_id: 'tinytable_css_8oto0eib0p9ql6nejjg4',}, 
+          { positions: [ { i: '8', j: 1 } ], css_id: 'tinytable_css_4oing823et95m6r3suca',}, 
+          { positions: [ { i: '6', j: 1 } ], css_id: 'tinytable_css_phl467in5b1lia1pdtdb',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '7', j: 1 } ], css_id: 'tinytable_css_rnsxhy8k7vt4j673a3gc',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_vslsatl2bv3ac2kb5bh9',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  styleCell_6g9581vmo5mt2pbh0v17(cell.i, cell.j, group.css_id);
+                  tableFns_n2norzae48gnyfkcv4vr.styleCell(cell.i, cell.j, group.css_id);
               });
           });
       });
-    </script><style>
-      /* tinytable css entries after */
-      .table td.tinytable_css_c0y5zdu89hrbse4x3dky, .table th.tinytable_css_c0y5zdu89hrbse4x3dky { text-align: center; border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_hj80xx7jr0aua3u8bzfx, .table th.tinytable_css_hj80xx7jr0aua3u8bzfx { text-align: center; border-bottom: solid black 0.05em; }
-      .table td.tinytable_css_ptqiqhm44l4amw8h52nh, .table th.tinytable_css_ptqiqhm44l4amw8h52nh { text-align: center; }
-      .table td.tinytable_css_z9gfntkmhd6ztiisyxy8, .table th.tinytable_css_z9gfntkmhd6ztiisyxy8 { text-align: center; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
-      .table td.tinytable_css_5p632vlnwkb025it8fwu, .table th.tinytable_css_5p632vlnwkb025it8fwu { text-align: left; border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_s6u8r71hcu06sdceh74r, .table th.tinytable_css_s6u8r71hcu06sdceh74r { text-align: left; border-bottom: solid black 0.05em; }
-      .table td.tinytable_css_gn2q9pn0xf59a6j2hcl3, .table th.tinytable_css_gn2q9pn0xf59a6j2hcl3 { text-align: left; }
-      .table td.tinytable_css_mhzq6bswjkfv1y9w9e5c, .table th.tinytable_css_mhzq6bswjkfv1y9w9e5c { text-align: left; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_n2norzae48gnyfkcv4vr td.tinytable_css_y6gkdm6ma79z4qt794sl, #tinytable_n2norzae48gnyfkcv4vr th.tinytable_css_y6gkdm6ma79z4qt794sl {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_n2norzae48gnyfkcv4vr td.tinytable_css_j2j6lz19vkkl309b7loe, #tinytable_n2norzae48gnyfkcv4vr th.tinytable_css_j2j6lz19vkkl309b7loe {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_n2norzae48gnyfkcv4vr td.tinytable_css_hxbgrbaqyis7e63kfdfl, #tinytable_n2norzae48gnyfkcv4vr th.tinytable_css_hxbgrbaqyis7e63kfdfl { text-align: center }
+    #tinytable_n2norzae48gnyfkcv4vr td.tinytable_css_8oto0eib0p9ql6nejjg4, #tinytable_n2norzae48gnyfkcv4vr th.tinytable_css_8oto0eib0p9ql6nejjg4 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_n2norzae48gnyfkcv4vr td.tinytable_css_4oing823et95m6r3suca, #tinytable_n2norzae48gnyfkcv4vr th.tinytable_css_4oing823et95m6r3suca {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_n2norzae48gnyfkcv4vr td.tinytable_css_phl467in5b1lia1pdtdb, #tinytable_n2norzae48gnyfkcv4vr th.tinytable_css_phl467in5b1lia1pdtdb {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_n2norzae48gnyfkcv4vr td.tinytable_css_rnsxhy8k7vt4j673a3gc, #tinytable_n2norzae48gnyfkcv4vr th.tinytable_css_rnsxhy8k7vt4j673a3gc { text-align: left }
+    #tinytable_n2norzae48gnyfkcv4vr td.tinytable_css_vslsatl2bv3ac2kb5bh9, #tinytable_n2norzae48gnyfkcv4vr th.tinytable_css_vslsatl2bv3ac2kb5bh9 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
     </style>
 <div class="container">
-      <table class="table table-borderless" id="tinytable_6g9581vmo5mt2pbh0v17" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="tinytable" id="tinytable_n2norzae48gnyfkcv4vr" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <thead><tr>
-<th scope="col" data-row="0" data-col="0"> </th>
-                <th scope="col" data-row="0" data-col="1">(1)</th>
+<th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">(1)</th>
               </tr></thead>
 <tbody>
 <tr>
-<td data-row="1" data-col="0">coef1</td>
-                  <td data-row="1" data-col="1">1.000</td>
+<td data-row="1" data-col="1">coef1</td>
+                  <td data-row="1" data-col="2">1.000</td>
                 </tr>
 <tr>
-<td data-row="2" data-col="0"></td>
-                  <td data-row="2" data-col="1">(3.142)</td>
+<td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(3.142)</td>
                 </tr>
 <tr>
-<td data-row="3" data-col="0">coef2</td>
-                  <td data-row="3" data-col="1">2.000</td>
+<td data-row="3" data-col="1">coef2</td>
+                  <td data-row="3" data-col="2">2.000</td>
                 </tr>
 <tr>
-<td data-row="4" data-col="0"></td>
-                  <td data-row="4" data-col="1">(2.718)</td>
+<td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(2.718)</td>
                 </tr>
 <tr>
-<td data-row="5" data-col="0">coef3</td>
-                  <td data-row="5" data-col="1">3.000</td>
+<td data-row="5" data-col="1">coef3</td>
+                  <td data-row="5" data-col="2">3.000</td>
                 </tr>
 <tr>
-<td data-row="6" data-col="0"></td>
-                  <td data-row="6" data-col="1">(1.414)</td>
+<td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2">(1.414)</td>
                 </tr>
 <tr>
-<td data-row="7" data-col="0">stat1</td>
-                  <td data-row="7" data-col="1">blah</td>
+<td data-row="7" data-col="1">stat1</td>
+                  <td data-row="7" data-col="2">blah</td>
                 </tr>
 <tr>
-<td data-row="8" data-col="0">stat2</td>
-                  <td data-row="8" data-col="1">blah blah</td>
+<td data-row="8" data-col="1">stat2</td>
+                  <td data-row="8" data-col="2">blah blah</td>
+                </tr>
+</tbody>
+</table>
+</div>
+<!-- hack to avoid NA insertion in last line -->
+</div>
+</div>
+</section><section id="new-information-modelsummary_list" class="level1"><h1>New information: <code>modelsummary_list</code>
+</h1>
+<p><code>modelsummary_list</code> can also be used to add new columns of information that do not exist in the original model output. The example below shows how to combine the unstandardized estimates from <code><a href="https://modelsummary.com/man/get_estimates.html">get_estimates()</a></code> with standardized betas computed by <code><a href="https://easystats.github.io/parameters/reference/standardize_parameters.html">parameters::standardize_parameters()</a></code>. We add the standardized values as a new <code>estimate_std</code> column, build a <code>modelsummary_list</code>, and then display both <code>b</code> and <code>beta</code> side by side using the <code>estimate</code> argument.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/parameters/">parameters</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">est</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modelsummary.com/man/get_estimates.html">get_estimates</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
+<span><span class="va">std</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/parameters/reference/standardize_parameters.html">standardize_parameters</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
+<span><span class="va">est</span><span class="op">$</span><span class="va">estimate_std</span> <span class="op">&lt;-</span> <span class="va">std</span><span class="op">$</span><span class="va">Parameter</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="va">est</span><span class="op">$</span><span class="va">term</span>, <span class="va">std</span><span class="op">$</span><span class="va">Parameter</span><span class="op">)</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">gof</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modelsummary.com/man/get_gof.html">get_gof</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mod_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>tidy <span class="op">=</span> <span class="va">est</span>, glance <span class="op">=</span> <span class="va">gof</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">mod_list</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"modelsummary_list"</span></span>
+<span></span>
+<span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span></span>
+<span>  <span class="va">mod_list</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"b"</span> <span class="op">=</span> <span class="st">"{estimate}"</span><span class="op">)</span>,</span>
+<span>  statistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"b (std)"</span> <span class="op">=</span> <span class="st">"{estimate_std}"</span>, <span class="st">"SE"</span> <span class="op">=</span> <span class="st">"std.error"</span>, <span class="st">"p"</span> <span class="op">=</span> <span class="st">"p.value"</span><span class="op">)</span>,</span>
+<span>  shape <span class="op">=</span> <span class="va">term</span> <span class="op">~</span> <span class="va">statistic</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<!-- preamble start -->
+
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_woulr3vcj690nu2bldyc = TinyTable.createTableFunctions("tinytable_woulr3vcj690nu2bldyc");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '-1', j: 3 }, { i: '-1', j: 4 }, { i: '-1', j: 5 } ], css_id: 'tinytable_css_expuxi5g9vq7b61a79vx',}, 
+          { positions: [ { i: '11', j: 2 }, { i: '11', j: 3 }, { i: '11', j: 4 }, { i: '11', j: 5 } ], css_id: 'tinytable_css_d7mlwfxogk1uzoyk45vi',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '8', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '4', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '7', j: 3 }, { i: '8', j: 3 }, { i: '9', j: 3 }, { i: '10', j: 3 }, { i: '1', j: 4 }, { i: '2', j: 4 }, { i: '4', j: 4 }, { i: '5', j: 4 }, { i: '6', j: 4 }, { i: '7', j: 4 }, { i: '8', j: 4 }, { i: '9', j: 4 }, { i: '10', j: 4 }, { i: '1', j: 5 }, { i: '2', j: 5 }, { i: '4', j: 5 }, { i: '5', j: 5 }, { i: '6', j: 5 }, { i: '7', j: 5 }, { i: '8', j: 5 }, { i: '9', j: 5 }, { i: '10', j: 5 } ], css_id: 'tinytable_css_6mt8nd23199bghqso5d0',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '3', j: 2 }, { i: '0', j: 3 }, { i: '3', j: 3 }, { i: '0', j: 4 }, { i: '3', j: 4 }, { i: '0', j: 5 }, { i: '3', j: 5 } ], css_id: 'tinytable_css_cko6if1c61836js68mcu',}, 
+          { positions: [ { i: '-1', j: 2 } ], css_id: 'tinytable_css_bc2vjpldzdccfud7xqr9',}, 
+          { positions: [ { i: '11', j: 1 } ], css_id: 'tinytable_css_h7ntkza7m0rm18b9prvy',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '8', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 } ], css_id: 'tinytable_css_fmyqq0if1f426hjj1ygh',}, 
+          { positions: [ { i: '0', j: 1 }, { i: '3', j: 1 } ], css_id: 'tinytable_css_q5kqrctkjim0abjhx60v',}, 
+          { positions: [ { i: '-1', j: 1 } ], css_id: 'tinytable_css_vcjrwnaygedlhz0ccxp9',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_woulr3vcj690nu2bldyc.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_woulr3vcj690nu2bldyc td.tinytable_css_expuxi5g9vq7b61a79vx, #tinytable_woulr3vcj690nu2bldyc th.tinytable_css_expuxi5g9vq7b61a79vx {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: black; --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.03em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_woulr3vcj690nu2bldyc td.tinytable_css_d7mlwfxogk1uzoyk45vi, #tinytable_woulr3vcj690nu2bldyc th.tinytable_css_d7mlwfxogk1uzoyk45vi {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_woulr3vcj690nu2bldyc td.tinytable_css_6mt8nd23199bghqso5d0, #tinytable_woulr3vcj690nu2bldyc th.tinytable_css_6mt8nd23199bghqso5d0 { text-align: center }
+    #tinytable_woulr3vcj690nu2bldyc td.tinytable_css_cko6if1c61836js68mcu, #tinytable_woulr3vcj690nu2bldyc th.tinytable_css_cko6if1c61836js68mcu {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_woulr3vcj690nu2bldyc td.tinytable_css_bc2vjpldzdccfud7xqr9, #tinytable_woulr3vcj690nu2bldyc th.tinytable_css_bc2vjpldzdccfud7xqr9 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: black; --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.03em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 3%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_woulr3vcj690nu2bldyc td.tinytable_css_h7ntkza7m0rm18b9prvy, #tinytable_woulr3vcj690nu2bldyc th.tinytable_css_h7ntkza7m0rm18b9prvy {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_woulr3vcj690nu2bldyc td.tinytable_css_fmyqq0if1f426hjj1ygh, #tinytable_woulr3vcj690nu2bldyc th.tinytable_css_fmyqq0if1f426hjj1ygh { text-align: left }
+    #tinytable_woulr3vcj690nu2bldyc td.tinytable_css_q5kqrctkjim0abjhx60v, #tinytable_woulr3vcj690nu2bldyc th.tinytable_css_q5kqrctkjim0abjhx60v {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_woulr3vcj690nu2bldyc td.tinytable_css_vcjrwnaygedlhz0ccxp9, #tinytable_woulr3vcj690nu2bldyc th.tinytable_css_vcjrwnaygedlhz0ccxp9 {  position: relative; --border-bottom: 0; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.1em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    </style>
+<div class="container">
+      <table class="tinytable" id="tinytable_woulr3vcj690nu2bldyc" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+<thead>
+<tr>
+<th scope="col" align="center" colspan="1" data-row="-1" data-col="1"> </th>
+<th scope="col" align="center" colspan="4" data-row="-1" data-col="2">(1)</th>
+</tr>
+<tr>
+<th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">b</th>
+                <th scope="col" data-row="0" data-col="3">b (std)</th>
+                <th scope="col" data-row="0" data-col="4">SE</th>
+                <th scope="col" data-row="0" data-col="5">p</th>
+              </tr>
+</thead>
+<tbody>
+<tr>
+<td data-row="1" data-col="1">(Intercept)</td>
+                  <td data-row="1" data-col="2">37.227</td>
+                  <td data-row="1" data-col="3">(Intercept)</td>
+                  <td data-row="1" data-col="4">1.599</td>
+                  <td data-row="1" data-col="5">&lt;0.001</td>
+                </tr>
+<tr>
+<td data-row="2" data-col="1">hp</td>
+                  <td data-row="2" data-col="2">-0.032</td>
+                  <td data-row="2" data-col="3">hp</td>
+                  <td data-row="2" data-col="4">0.009</td>
+                  <td data-row="2" data-col="5">0.001</td>
+                </tr>
+<tr>
+<td data-row="3" data-col="1">wt</td>
+                  <td data-row="3" data-col="2">-3.878</td>
+                  <td data-row="3" data-col="3">wt</td>
+                  <td data-row="3" data-col="4">0.633</td>
+                  <td data-row="3" data-col="5">&lt;0.001</td>
+                </tr>
+<tr>
+<td data-row="4" data-col="1">Num.Obs.</td>
+                  <td data-row="4" data-col="2">32</td>
+                  <td data-row="4" data-col="3"></td>
+                  <td data-row="4" data-col="4"></td>
+                  <td data-row="4" data-col="5"></td>
+                </tr>
+<tr>
+<td data-row="5" data-col="1">R2</td>
+                  <td data-row="5" data-col="2">0.827</td>
+                  <td data-row="5" data-col="3"></td>
+                  <td data-row="5" data-col="4"></td>
+                  <td data-row="5" data-col="5"></td>
+                </tr>
+<tr>
+<td data-row="6" data-col="1">R2 Adj.</td>
+                  <td data-row="6" data-col="2">0.815</td>
+                  <td data-row="6" data-col="3"></td>
+                  <td data-row="6" data-col="4"></td>
+                  <td data-row="6" data-col="5"></td>
+                </tr>
+<tr>
+<td data-row="7" data-col="1">AIC</td>
+                  <td data-row="7" data-col="2">156.7</td>
+                  <td data-row="7" data-col="3"></td>
+                  <td data-row="7" data-col="4"></td>
+                  <td data-row="7" data-col="5"></td>
+                </tr>
+<tr>
+<td data-row="8" data-col="1">BIC</td>
+                  <td data-row="8" data-col="2">162.5</td>
+                  <td data-row="8" data-col="3"></td>
+                  <td data-row="8" data-col="4"></td>
+                  <td data-row="8" data-col="5"></td>
+                </tr>
+<tr>
+<td data-row="9" data-col="1">Log.Lik.</td>
+                  <td data-row="9" data-col="2">-74.326</td>
+                  <td data-row="9" data-col="3"></td>
+                  <td data-row="9" data-col="4"></td>
+                  <td data-row="9" data-col="5"></td>
+                </tr>
+<tr>
+<td data-row="10" data-col="1">F</td>
+                  <td data-row="10" data-col="2">69.211</td>
+                  <td data-row="10" data-col="3"></td>
+                  <td data-row="10" data-col="4"></td>
+                  <td data-row="10" data-col="5"></td>
+                </tr>
+<tr>
+<td data-row="11" data-col="1">RMSE</td>
+                  <td data-row="11" data-col="2">2.47</td>
+                  <td data-row="11" data-col="3"></td>
+                  <td data-row="11" data-col="4"></td>
+                  <td data-row="11" data-col="5"></td>
                 </tr>
 </tbody>
 </table>
@@ -549,7 +684,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </h1>
 <p><code>modelsummary</code> relies on two functions from the <code>broom</code> package to extract model information: <code>tidy</code> and <code>glance</code>. If <code>broom</code> doesn’t support the type of model you are trying to summarize, <code>modelsummary</code> won’t support it out of the box. Thankfully, it is extremely easy to add support for most models using custom methods.</p>
 <p>For example, models produced by the <code>MCMCglmm</code> package are not currently supported by <code>broom</code>. To add support, you simply need to create a <code>tidy</code> and a <code>glance</code> method:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># load packages and data</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># load packages and data</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://modelsummary.com">modelsummary</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jarrodhadfield/MCMCglmm">MCMCglmm</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">PlodiaPO</span><span class="op">)</span></span>
@@ -576,7 +711,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MCMCglmm/man/MCMCglmm.html">MCMCglmm</a></span><span class="op">(</span><span class="va">PO</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">plate</span>, random <span class="op">=</span> <span class="op">~</span> <span class="va">FSfamily</span>, data <span class="op">=</span> <span class="va">PlodiaPO</span>, verbose<span class="op">=</span><span class="cn">FALSE</span>, pr<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># summarize the model</span></span>
-<span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">model</span>, statistic <span class="op">=</span> <span class="st">'conf.int'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">model</span>, statistic <span class="op">=</span> <span class="st">'conf.int'</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Three important things to note.</p>
 <p>First, the methods are named <code>tidy.MCMCglmm</code> and <code>glance.MCMCglmm</code> because the model object I am trying to summarize is of class <code>MCMCglmm</code>. You can find the class of a model by running: <code>class(model)</code>.</p>
 <p>Second, both of the methods include the ellipsis <code>...</code> argument.</p>
@@ -587,11 +722,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Users may want to include more information than is made available by the default extractor function. For example, models produced by the <code><a href="https://rdrr.io/pkg/MASS/man/polr.html">MASS::polr</a></code> do not produce p values by default, which means that we cannot use the <code>stars=TRUE</code> argument in <code>modelsummary</code>. However, it is possible to extract this information by using the <code><a href="https://rdrr.io/pkg/lmtest/man/coeftest.html">lmtest::coeftest</a></code> function. To include such custom information, we will define new <code>glance_custom</code> and <code>tidy_custom</code> methods.</p>
 <p>We begin by estimating a model with the <code><a href="https://rdrr.io/pkg/MASS/man/polr.html">MASS::polr</a></code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">MASS</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">MASS</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">mod_ordinal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/polr.html">polr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.ordered</a></span><span class="op">(</span><span class="va">gear</span><span class="op">)</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://modelsummary.com/man/get_estimates.html">get_estimates</a></span><span class="op">(</span><span class="va">mod_ordinal</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://modelsummary.com/man/get_estimates.html">get_estimates</a></span><span class="op">(</span><span class="va">mod_ordinal</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Re-fitting to get Hessian</code></pre>
@@ -607,154 +742,118 @@ Re-fitting to get Hessian</code></pre>
 <p>The <code>get_estimates</code> function shows that our default extractor does <em>not</em> produce a <code>p.value</code> column. As a result, setting <code>stars=TRUE</code> in <code>modelsummary</code> will produce an error.</p>
 <p>We know that the <code><a href="https://rdrr.io/pkg/MASS/man/polr.html">MASS::polr</a></code> produces an object of class <code>polr</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">mod_ordinal</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">mod_ordinal</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "polr"</code></pre>
 </div>
 </div>
 <p>To extract more (custom) information from a model of this class, we thus define a method called <code>tidy_custom.polr</code> which returns a data.frame with two columns: <code>term</code> and <code>p.value</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tidy_custom.polr</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tidy_custom.polr</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/coeftest.html">coeftest</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
 <span>    term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span>,</span>
 <span>    p.value <span class="op">=</span> <span class="va">s</span><span class="op">[</span>, <span class="st">"Pr(&gt;|t|)"</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="va">out</span></span>
-<span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>When this method is defined, <code>modelsummary</code> can automatically extract p values from all models of this class, and will now work properly with <code>stars=TRUE</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod_ordinal</span>, stars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod_ordinal</span>, stars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <!-- preamble start -->
 
-    <script>
-
-      function styleCell_mz1hxjex0ueczwy7vavv(i, j, css_id) {
-          var table = document.getElementById("tinytable_mz1hxjex0ueczwy7vavv");
-          var cell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-          if (cell) {
-              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
-              cell.classList.add(css_id);
-          } else {
-              console.warn(`Cell at (${i}, ${j}) not found.`);
-          }
-      }
-      function spanCell_mz1hxjex0ueczwy7vavv(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_mz1hxjex0ueczwy7vavv");
-        const targetCell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-        if (!targetCell) {
-          console.warn(`Cell at (${i}, ${j}) not found.`);
-        }
-
-        // Get all cells that need to be removed
-        const cellsToRemove = [];
-        for (let r = 0; r < rowspan; r++) {
-          for (let c = 0; c < colspan; c++) {
-            if (r === 0 && c === 0) continue; // Skip the target cell
-            const cell = table.querySelector(`[data-row="${i + r}"][data-col="${j + c}"]`);
-            if (cell) {
-              cellsToRemove.push(cell);
-            }
-          }
-        }
-
-        // Remove all cells
-        cellsToRemove.forEach(cell => cell.remove());
-
-        // Set rowspan and colspan of the target cell if it exists
-        if (targetCell) {
-          targetCell.rowSpan = rowspan;
-          targetCell.colSpan = colspan;
-        }
-      }
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_xdmd2qitsmtg3ucte9l2 = TinyTable.createTableFunctions("tinytable_xdmd2qitsmtg3ucte9l2");
       // tinytable span after
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: '12', j: 1 },  ], css_id: 'tinytable_css_7da113cze0veopm6nnr1',}, 
-          { positions: [ { i: '8', j: 1 },  ], css_id: 'tinytable_css_q6civmi5c8ba9mbmso0f',}, 
-          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 },  ], css_id: 'tinytable_css_w37jof44pigk7jse6l35',}, 
-          { positions: [ { i: '0', j: 1 },  ], css_id: 'tinytable_css_emm71l0k07b2qxy23or6',}, 
-          { positions: [ { i: '12', j: 0 },  ], css_id: 'tinytable_css_mlxchr78exwunyf6qr4e',}, 
-          { positions: [ { i: '8', j: 0 },  ], css_id: 'tinytable_css_nhfa1uei6hy8nk573z28',}, 
-          { positions: [ { i: '1', j: 0 }, { i: '2', j: 0 }, { i: '3', j: 0 }, { i: '4', j: 0 }, { i: '5', j: 0 }, { i: '6', j: 0 }, { i: '7', j: 0 }, { i: '9', j: 0 }, { i: '10', j: 0 }, { i: '11', j: 0 },  ], css_id: 'tinytable_css_sijufg0twzpdiv2j5qiu',}, 
-          { positions: [ { i: '0', j: 0 },  ], css_id: 'tinytable_css_vwjglutih6t0u3y7q0m7',}, 
+          { positions: [ { i: '12', j: 2 } ], css_id: 'tinytable_css_hz7cmgfognnk1qid1bdn',}, 
+          { positions: [ { i: '8', j: 2 } ], css_id: 'tinytable_css_sncd6zwi1oovdestz9kl',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 } ], css_id: 'tinytable_css_jltfcjzkghtbw42jk7ex',}, 
+          { positions: [ { i: '0', j: 2 } ], css_id: 'tinytable_css_a5y7fbf016yqup8nwg54',}, 
+          { positions: [ { i: '12', j: 1 } ], css_id: 'tinytable_css_n2045hngrjcw0fz9iked',}, 
+          { positions: [ { i: '8', j: 1 } ], css_id: 'tinytable_css_q7t67n55l5xd975pu3pc',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 } ], css_id: 'tinytable_css_n97qk39m2v2d6som0plq',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_3yootws3mwu49wair3kr',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  styleCell_mz1hxjex0ueczwy7vavv(cell.i, cell.j, group.css_id);
+                  tableFns_xdmd2qitsmtg3ucte9l2.styleCell(cell.i, cell.j, group.css_id);
               });
           });
       });
-    </script><style>
-      /* tinytable css entries after */
-      .table td.tinytable_css_7da113cze0veopm6nnr1, .table th.tinytable_css_7da113cze0veopm6nnr1 { text-align: center; border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_q6civmi5c8ba9mbmso0f, .table th.tinytable_css_q6civmi5c8ba9mbmso0f { text-align: center; border-bottom: solid black 0.05em; }
-      .table td.tinytable_css_w37jof44pigk7jse6l35, .table th.tinytable_css_w37jof44pigk7jse6l35 { text-align: center; }
-      .table td.tinytable_css_emm71l0k07b2qxy23or6, .table th.tinytable_css_emm71l0k07b2qxy23or6 { text-align: center; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
-      .table td.tinytable_css_mlxchr78exwunyf6qr4e, .table th.tinytable_css_mlxchr78exwunyf6qr4e { text-align: left; border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_nhfa1uei6hy8nk573z28, .table th.tinytable_css_nhfa1uei6hy8nk573z28 { text-align: left; border-bottom: solid black 0.05em; }
-      .table td.tinytable_css_sijufg0twzpdiv2j5qiu, .table th.tinytable_css_sijufg0twzpdiv2j5qiu { text-align: left; }
-      .table td.tinytable_css_vwjglutih6t0u3y7q0m7, .table th.tinytable_css_vwjglutih6t0u3y7q0m7 { text-align: left; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_xdmd2qitsmtg3ucte9l2 td.tinytable_css_hz7cmgfognnk1qid1bdn, #tinytable_xdmd2qitsmtg3ucte9l2 th.tinytable_css_hz7cmgfognnk1qid1bdn {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_xdmd2qitsmtg3ucte9l2 td.tinytable_css_sncd6zwi1oovdestz9kl, #tinytable_xdmd2qitsmtg3ucte9l2 th.tinytable_css_sncd6zwi1oovdestz9kl {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_xdmd2qitsmtg3ucte9l2 td.tinytable_css_jltfcjzkghtbw42jk7ex, #tinytable_xdmd2qitsmtg3ucte9l2 th.tinytable_css_jltfcjzkghtbw42jk7ex { text-align: center }
+    #tinytable_xdmd2qitsmtg3ucte9l2 td.tinytable_css_a5y7fbf016yqup8nwg54, #tinytable_xdmd2qitsmtg3ucte9l2 th.tinytable_css_a5y7fbf016yqup8nwg54 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_xdmd2qitsmtg3ucte9l2 td.tinytable_css_n2045hngrjcw0fz9iked, #tinytable_xdmd2qitsmtg3ucte9l2 th.tinytable_css_n2045hngrjcw0fz9iked {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_xdmd2qitsmtg3ucte9l2 td.tinytable_css_q7t67n55l5xd975pu3pc, #tinytable_xdmd2qitsmtg3ucte9l2 th.tinytable_css_q7t67n55l5xd975pu3pc {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_xdmd2qitsmtg3ucte9l2 td.tinytable_css_n97qk39m2v2d6som0plq, #tinytable_xdmd2qitsmtg3ucte9l2 th.tinytable_css_n97qk39m2v2d6som0plq { text-align: left }
+    #tinytable_xdmd2qitsmtg3ucte9l2 td.tinytable_css_3yootws3mwu49wair3kr, #tinytable_xdmd2qitsmtg3ucte9l2 th.tinytable_css_3yootws3mwu49wair3kr {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
     </style>
 <div class="container">
-      <table class="table table-borderless" id="tinytable_mz1hxjex0ueczwy7vavv" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="tinytable" id="tinytable_xdmd2qitsmtg3ucte9l2" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <thead><tr>
-<th scope="col" data-row="0" data-col="0"> </th>
-                <th scope="col" data-row="0" data-col="1">(1)</th>
+<th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">(1)</th>
               </tr></thead>
-<tfoot><tr><td colspan="2">+ p </td></tr></tfoot>
+<tfoot><tr><td colspan="2">+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
 <tbody>
 <tr>
-<td data-row="1" data-col="0">3|4</td>
-                  <td data-row="1" data-col="1">13.963**</td>
+<td data-row="1" data-col="1">3|4</td>
+                  <td data-row="1" data-col="2">13.963**</td>
                 </tr>
 <tr>
-<td data-row="2" data-col="0"></td>
-                  <td data-row="2" data-col="1">(4.041)</td>
+<td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(4.041)</td>
                 </tr>
 <tr>
-<td data-row="3" data-col="0">4|5</td>
-                  <td data-row="3" data-col="1">16.899***</td>
+<td data-row="3" data-col="1">4|5</td>
+                  <td data-row="3" data-col="2">16.899***</td>
                 </tr>
 <tr>
-<td data-row="4" data-col="0"></td>
-                  <td data-row="4" data-col="1">(4.395)</td>
+<td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(4.395)</td>
                 </tr>
 <tr>
-<td data-row="5" data-col="0">mpg</td>
-                  <td data-row="5" data-col="1">-0.009</td>
+<td data-row="5" data-col="1">mpg</td>
+                  <td data-row="5" data-col="2">-0.009</td>
                 </tr>
 <tr>
-<td data-row="6" data-col="0"></td>
-                  <td data-row="6" data-col="1">(0.090)</td>
+<td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2">(0.090)</td>
                 </tr>
 <tr>
-<td data-row="7" data-col="0">drat</td>
-                  <td data-row="7" data-col="1">3.949**</td>
+<td data-row="7" data-col="1">drat</td>
+                  <td data-row="7" data-col="2">3.949**</td>
                 </tr>
 <tr>
-<td data-row="8" data-col="0"></td>
-                  <td data-row="8" data-col="1">(1.307)</td>
+<td data-row="8" data-col="1"></td>
+                  <td data-row="8" data-col="2">(1.307)</td>
                 </tr>
 <tr>
-<td data-row="9" data-col="0">Num.Obs.</td>
-                  <td data-row="9" data-col="1">32</td>
+<td data-row="9" data-col="1">Num.Obs.</td>
+                  <td data-row="9" data-col="2">32</td>
                 </tr>
 <tr>
-<td data-row="10" data-col="0">AIC</td>
-                  <td data-row="10" data-col="1">51.1</td>
+<td data-row="10" data-col="1">AIC</td>
+                  <td data-row="10" data-col="2">51.1</td>
                 </tr>
 <tr>
-<td data-row="11" data-col="0">BIC</td>
-                  <td data-row="11" data-col="1">57.0</td>
+<td data-row="11" data-col="1">BIC</td>
+                  <td data-row="11" data-col="2">57.0</td>
                 </tr>
 <tr>
-<td data-row="12" data-col="0">RMSE</td>
-                  <td data-row="12" data-col="1">3.44</td>
+<td data-row="12" data-col="1">RMSE</td>
+                  <td data-row="12" data-col="2">3.44</td>
                 </tr>
 </tbody>
 </table>
@@ -766,208 +865,172 @@ Re-fitting to get Hessian</code></pre>
 </h1>
 <p>Sometimes users will want to include information that is not supplied by those functions. A pretty easy way to include extra information is to define new <code>glance_custom</code> and <code>tidy_custom</code> methods. To illustrate, we estimate two linear regression models using the <code>lm</code> function:</p>
 <div class="cell">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://modelsummary.com">modelsummary</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://modelsummary.com">modelsummary</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">mod</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span>, <span class="va">mtcars</span><span class="op">)</span></span>
-<span><span class="va">mod</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">wt</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">am</span>, <span class="va">mtcars</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">mod</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">wt</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">am</span>, <span class="va">mtcars</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In <code>R</code>, the <code>lm</code> function produces models of class “lm”:</p>
 <div class="cell">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">mod</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "lm"</code></pre>
 </div>
 </div>
 <p>Let’s say you would like to print the dependent variable for each model of this particular class. All you need to do is define a new method called <code>glance_custom.lm</code>. This method should return a data.frame (or tibble) with 1 row, and 1 column per piece of information you want to display. For example:</p>
 <div class="cell">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">glance_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">glance_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">dv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html">formula</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
 <span>    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="st">"DV"</span> <span class="op">=</span> <span class="va">dv</span><span class="op">)</span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now, let’s customize the body of the table. The <code>vcov</code> argument already allows users to customize uncertainty estimates. But imagine you want to override the <em>coefficient estimates</em> of your “lm” models. Easy! All you need to do is define a <code>tidy_custom.lm</code> method which returns a data.frame (or tibble) with one column called “term” and one column called “estimate”.</p>
 <p>Here, we’ll substitute estimates by an up/down-pointing triangles which represents their signs:</p>
 <div class="cell">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tidy_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tidy_custom.lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span></span>
 <span>    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
 <span>      term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span>,</span>
 <span>      estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">s</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="st">'▲'</span>, <span class="st">'▼'</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>After you define the <code>glance_custom</code> and <code>tidy_custom</code> methods, <code>modelsummary</code> will automatically display your customized model information:</p>
 <div class="cell">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <!-- preamble start -->
 
-    <script>
-
-      function styleCell_51ljs4hgbbcaoqtucq5h(i, j, css_id) {
-          var table = document.getElementById("tinytable_51ljs4hgbbcaoqtucq5h");
-          var cell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-          if (cell) {
-              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
-              cell.classList.add(css_id);
-          } else {
-              console.warn(`Cell at (${i}, ${j}) not found.`);
-          }
-      }
-      function spanCell_51ljs4hgbbcaoqtucq5h(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_51ljs4hgbbcaoqtucq5h");
-        const targetCell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-        if (!targetCell) {
-          console.warn(`Cell at (${i}, ${j}) not found.`);
-        }
-
-        // Get all cells that need to be removed
-        const cellsToRemove = [];
-        for (let r = 0; r < rowspan; r++) {
-          for (let c = 0; c < colspan; c++) {
-            if (r === 0 && c === 0) continue; // Skip the target cell
-            const cell = table.querySelector(`[data-row="${i + r}"][data-col="${j + c}"]`);
-            if (cell) {
-              cellsToRemove.push(cell);
-            }
-          }
-        }
-
-        // Remove all cells
-        cellsToRemove.forEach(cell => cell.remove());
-
-        // Set rowspan and colspan of the target cell if it exists
-        if (targetCell) {
-          targetCell.rowSpan = rowspan;
-          targetCell.colSpan = colspan;
-        }
-      }
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_j9x5fiey7izqsepfsa0r = TinyTable.createTableFunctions("tinytable_j9x5fiey7izqsepfsa0r");
       // tinytable span after
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: '17', j: 1 }, { i: '17', j: 2 },  ], css_id: 'tinytable_css_sl80n3c0cg1ivdel48br',}, 
-          { positions: [ { i: '8', j: 2 }, { i: '8', j: 1 },  ], css_id: 'tinytable_css_i06dmrw7ydw8uuiriusr',}, 
-          { positions: [ { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '1', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '3', j: 2 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 }, { i: '12', j: 1 }, { i: '13', j: 1 }, { i: '14', j: 1 }, { i: '15', j: 1 }, { i: '16', j: 1 }, { i: '12', j: 2 }, { i: '5', j: 1 }, { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '16', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 }, { i: '13', j: 2 }, { i: '14', j: 2 }, { i: '15', j: 2 },  ], css_id: 'tinytable_css_gy6yeuajp8ywv68ephrm',}, 
-          { positions: [ { i: '0', j: 1 }, { i: '0', j: 2 },  ], css_id: 'tinytable_css_oy3hefkhmc3wyro5nt58',}, 
-          { positions: [ { i: '17', j: 0 },  ], css_id: 'tinytable_css_jxp51u7rcap9qcf7a85c',}, 
-          { positions: [ { i: '8', j: 0 },  ], css_id: 'tinytable_css_irgs8170dxxacwi2vt91',}, 
-          { positions: [ { i: '1', j: 0 }, { i: '2', j: 0 }, { i: '3', j: 0 }, { i: '4', j: 0 }, { i: '5', j: 0 }, { i: '6', j: 0 }, { i: '7', j: 0 }, { i: '12', j: 0 }, { i: '9', j: 0 }, { i: '10', j: 0 }, { i: '11', j: 0 }, { i: '16', j: 0 }, { i: '13', j: 0 }, { i: '14', j: 0 }, { i: '15', j: 0 },  ], css_id: 'tinytable_css_k6ro0s9wh2crnxivhfx3',}, 
-          { positions: [ { i: '0', j: 0 },  ], css_id: 'tinytable_css_1vd3up6w0flkn1ov0zto',}, 
+          { positions: [ { i: '17', j: 2 }, { i: '17', j: 3 } ], css_id: 'tinytable_css_9a9uyzss9m7b5su9j14r',}, 
+          { positions: [ { i: '8', j: 2 }, { i: '8', j: 3 } ], css_id: 'tinytable_css_2ena63555ibs432fsqy9',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 }, { i: '12', j: 2 }, { i: '13', j: 2 }, { i: '14', j: 2 }, { i: '15', j: 2 }, { i: '16', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '3', j: 3 }, { i: '4', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '7', j: 3 }, { i: '9', j: 3 }, { i: '10', j: 3 }, { i: '11', j: 3 }, { i: '12', j: 3 }, { i: '13', j: 3 }, { i: '14', j: 3 }, { i: '15', j: 3 }, { i: '16', j: 3 } ], css_id: 'tinytable_css_tyopt9jn9l1862dkzeab',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 } ], css_id: 'tinytable_css_68iw4d3hasyaxlszf60q',}, 
+          { positions: [ { i: '17', j: 1 } ], css_id: 'tinytable_css_06mu18tnbnx1ekfkvvuq',}, 
+          { positions: [ { i: '8', j: 1 } ], css_id: 'tinytable_css_qyhdzwlbk1hyq93gwd55',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 }, { i: '12', j: 1 }, { i: '13', j: 1 }, { i: '14', j: 1 }, { i: '15', j: 1 }, { i: '16', j: 1 } ], css_id: 'tinytable_css_idxw7vtfgsh4r4hweu3v',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_enwavic3obz81drudaml',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  styleCell_51ljs4hgbbcaoqtucq5h(cell.i, cell.j, group.css_id);
+                  tableFns_j9x5fiey7izqsepfsa0r.styleCell(cell.i, cell.j, group.css_id);
               });
           });
       });
-    </script><style>
-      /* tinytable css entries after */
-      .table td.tinytable_css_sl80n3c0cg1ivdel48br, .table th.tinytable_css_sl80n3c0cg1ivdel48br { text-align: center; border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_i06dmrw7ydw8uuiriusr, .table th.tinytable_css_i06dmrw7ydw8uuiriusr { text-align: center; border-bottom: solid black 0.05em; }
-      .table td.tinytable_css_gy6yeuajp8ywv68ephrm, .table th.tinytable_css_gy6yeuajp8ywv68ephrm { text-align: center; }
-      .table td.tinytable_css_oy3hefkhmc3wyro5nt58, .table th.tinytable_css_oy3hefkhmc3wyro5nt58 { text-align: center; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
-      .table td.tinytable_css_jxp51u7rcap9qcf7a85c, .table th.tinytable_css_jxp51u7rcap9qcf7a85c { text-align: left; border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_irgs8170dxxacwi2vt91, .table th.tinytable_css_irgs8170dxxacwi2vt91 { text-align: left; border-bottom: solid black 0.05em; }
-      .table td.tinytable_css_k6ro0s9wh2crnxivhfx3, .table th.tinytable_css_k6ro0s9wh2crnxivhfx3 { text-align: left; }
-      .table td.tinytable_css_1vd3up6w0flkn1ov0zto, .table th.tinytable_css_1vd3up6w0flkn1ov0zto { text-align: left; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_j9x5fiey7izqsepfsa0r td.tinytable_css_9a9uyzss9m7b5su9j14r, #tinytable_j9x5fiey7izqsepfsa0r th.tinytable_css_9a9uyzss9m7b5su9j14r {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_j9x5fiey7izqsepfsa0r td.tinytable_css_2ena63555ibs432fsqy9, #tinytable_j9x5fiey7izqsepfsa0r th.tinytable_css_2ena63555ibs432fsqy9 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_j9x5fiey7izqsepfsa0r td.tinytable_css_tyopt9jn9l1862dkzeab, #tinytable_j9x5fiey7izqsepfsa0r th.tinytable_css_tyopt9jn9l1862dkzeab { text-align: center }
+    #tinytable_j9x5fiey7izqsepfsa0r td.tinytable_css_68iw4d3hasyaxlszf60q, #tinytable_j9x5fiey7izqsepfsa0r th.tinytable_css_68iw4d3hasyaxlszf60q {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_j9x5fiey7izqsepfsa0r td.tinytable_css_06mu18tnbnx1ekfkvvuq, #tinytable_j9x5fiey7izqsepfsa0r th.tinytable_css_06mu18tnbnx1ekfkvvuq {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_j9x5fiey7izqsepfsa0r td.tinytable_css_qyhdzwlbk1hyq93gwd55, #tinytable_j9x5fiey7izqsepfsa0r th.tinytable_css_qyhdzwlbk1hyq93gwd55 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_j9x5fiey7izqsepfsa0r td.tinytable_css_idxw7vtfgsh4r4hweu3v, #tinytable_j9x5fiey7izqsepfsa0r th.tinytable_css_idxw7vtfgsh4r4hweu3v { text-align: left }
+    #tinytable_j9x5fiey7izqsepfsa0r td.tinytable_css_enwavic3obz81drudaml, #tinytable_j9x5fiey7izqsepfsa0r th.tinytable_css_enwavic3obz81drudaml {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
     </style>
 <div class="container">
-      <table class="table table-borderless" id="tinytable_51ljs4hgbbcaoqtucq5h" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="tinytable" id="tinytable_j9x5fiey7izqsepfsa0r" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <thead><tr>
-<th scope="col" data-row="0" data-col="0"> </th>
-                <th scope="col" data-row="0" data-col="1">(1)</th>
-                <th scope="col" data-row="0" data-col="2">(2)</th>
+<th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">(1)</th>
+                <th scope="col" data-row="0" data-col="3">(2)</th>
               </tr></thead>
 <tbody>
 <tr>
-<td data-row="1" data-col="0">(Intercept)</td>
-                  <td data-row="1" data-col="1">▲</td>
+<td data-row="1" data-col="1">(Intercept)</td>
                   <td data-row="1" data-col="2">▲</td>
+                  <td data-row="1" data-col="3">▲</td>
                 </tr>
 <tr>
-<td data-row="2" data-col="0"></td>
-                  <td data-row="2" data-col="1">(55.415)</td>
-                  <td data-row="2" data-col="2">(0.728)</td>
+<td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(55.415)</td>
+                  <td data-row="2" data-col="3">(0.728)</td>
                 </tr>
 <tr>
-<td data-row="3" data-col="0">mpg</td>
-                  <td data-row="3" data-col="1">▼</td>
+<td data-row="3" data-col="1">mpg</td>
                   <td data-row="3" data-col="2">▼</td>
+                  <td data-row="3" data-col="3">▼</td>
                 </tr>
 <tr>
-<td data-row="4" data-col="0"></td>
-                  <td data-row="4" data-col="1">(1.792)</td>
-                  <td data-row="4" data-col="2">(0.019)</td>
+<td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(1.792)</td>
+                  <td data-row="4" data-col="3">(0.019)</td>
                 </tr>
 <tr>
-<td data-row="5" data-col="0">drat</td>
-                  <td data-row="5" data-col="1">▲</td>
-                  <td data-row="5" data-col="2">▼</td>
+<td data-row="5" data-col="1">drat</td>
+                  <td data-row="5" data-col="2">▲</td>
+                  <td data-row="5" data-col="3">▼</td>
                 </tr>
 <tr>
-<td data-row="6" data-col="0"></td>
-                  <td data-row="6" data-col="1">(20.198)</td>
-                  <td data-row="6" data-col="2">(0.245)</td>
+<td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2">(20.198)</td>
+                  <td data-row="6" data-col="3">(0.245)</td>
                 </tr>
 <tr>
-<td data-row="7" data-col="0">am</td>
-                  <td data-row="7" data-col="1"></td>
-                  <td data-row="7" data-col="2">▼</td>
+<td data-row="7" data-col="1">am</td>
+                  <td data-row="7" data-col="2"></td>
+                  <td data-row="7" data-col="3">▼</td>
                 </tr>
 <tr>
-<td data-row="8" data-col="0"></td>
-                  <td data-row="8" data-col="1"></td>
-                  <td data-row="8" data-col="2">(0.240)</td>
+<td data-row="8" data-col="1"></td>
+                  <td data-row="8" data-col="2"></td>
+                  <td data-row="8" data-col="3">(0.240)</td>
                 </tr>
 <tr>
-<td data-row="9" data-col="0">Num.Obs.</td>
-                  <td data-row="9" data-col="1">32</td>
+<td data-row="9" data-col="1">Num.Obs.</td>
                   <td data-row="9" data-col="2">32</td>
+                  <td data-row="9" data-col="3">32</td>
                 </tr>
 <tr>
-<td data-row="10" data-col="0">R2</td>
-                  <td data-row="10" data-col="1">0.614</td>
-                  <td data-row="10" data-col="2">0.803</td>
+<td data-row="10" data-col="1">R2</td>
+                  <td data-row="10" data-col="2">0.614</td>
+                  <td data-row="10" data-col="3">0.803</td>
                 </tr>
 <tr>
-<td data-row="11" data-col="0">R2 Adj.</td>
-                  <td data-row="11" data-col="1">0.588</td>
-                  <td data-row="11" data-col="2">0.782</td>
+<td data-row="11" data-col="1">R2 Adj.</td>
+                  <td data-row="11" data-col="2">0.588</td>
+                  <td data-row="11" data-col="3">0.782</td>
                 </tr>
 <tr>
-<td data-row="12" data-col="0">AIC</td>
-                  <td data-row="12" data-col="1">337.9</td>
-                  <td data-row="12" data-col="2">46.4</td>
+<td data-row="12" data-col="1">AIC</td>
+                  <td data-row="12" data-col="2">337.9</td>
+                  <td data-row="12" data-col="3">46.4</td>
                 </tr>
 <tr>
-<td data-row="13" data-col="0">BIC</td>
-                  <td data-row="13" data-col="1">343.7</td>
-                  <td data-row="13" data-col="2">53.7</td>
+<td data-row="13" data-col="1">BIC</td>
+                  <td data-row="13" data-col="2">343.7</td>
+                  <td data-row="13" data-col="3">53.7</td>
                 </tr>
 <tr>
-<td data-row="14" data-col="0">Log.Lik.</td>
-                  <td data-row="14" data-col="1">-164.940</td>
-                  <td data-row="14" data-col="2">-18.201</td>
+<td data-row="14" data-col="1">Log.Lik.</td>
+                  <td data-row="14" data-col="2">-164.940</td>
+                  <td data-row="14" data-col="3">-18.201</td>
                 </tr>
 <tr>
-<td data-row="15" data-col="0">F</td>
-                  <td data-row="15" data-col="1">23.100</td>
-                  <td data-row="15" data-col="2">38.066</td>
+<td data-row="15" data-col="1">F</td>
+                  <td data-row="15" data-col="2">23.100</td>
+                  <td data-row="15" data-col="3">38.066</td>
                 </tr>
 <tr>
-<td data-row="16" data-col="0">RMSE</td>
-                  <td data-row="16" data-col="1">41.91</td>
-                  <td data-row="16" data-col="2">0.43</td>
+<td data-row="16" data-col="1">RMSE</td>
+                  <td data-row="16" data-col="2">41.91</td>
+                  <td data-row="16" data-col="3">0.43</td>
                 </tr>
 <tr>
-<td data-row="17" data-col="0">DV</td>
-                  <td data-row="17" data-col="1">hp</td>
-                  <td data-row="17" data-col="2">wt</td>
+<td data-row="17" data-col="1">DV</td>
+                  <td data-row="17" data-col="2">hp</td>
+                  <td data-row="17" data-col="3">wt</td>
                 </tr>
 </tbody>
 </table>
@@ -979,7 +1042,7 @@ Re-fitting to get Hessian</code></pre>
 </section><section id="customization-new-model-class" class="level1"><h1>Customization: New model class</h1>
 <p>An even more fundamental way to customize the output would be to completely bypass <code>modelsummary</code>’s extractor functions by assigning a new class name to your model. For example,</p>
 <div class="cell">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># estimate a linear model</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># estimate a linear model</span></span>
 <span><span class="va">mod_custom</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># assign it a new class</span></span>
@@ -1002,120 +1065,84 @@ Re-fitting to get Hessian</code></pre>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># summarize</span></span>
-<span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod_custom</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod_custom</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <!-- preamble start -->
 
-    <script>
-
-      function styleCell_nulj3l40h7t8n5ndu1u0(i, j, css_id) {
-          var table = document.getElementById("tinytable_nulj3l40h7t8n5ndu1u0");
-          var cell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-          if (cell) {
-              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
-              cell.classList.add(css_id);
-          } else {
-              console.warn(`Cell at (${i}, ${j}) not found.`);
-          }
-      }
-      function spanCell_nulj3l40h7t8n5ndu1u0(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_nulj3l40h7t8n5ndu1u0");
-        const targetCell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-        if (!targetCell) {
-          console.warn(`Cell at (${i}, ${j}) not found.`);
-        }
-
-        // Get all cells that need to be removed
-        const cellsToRemove = [];
-        for (let r = 0; r < rowspan; r++) {
-          for (let c = 0; c < colspan; c++) {
-            if (r === 0 && c === 0) continue; // Skip the target cell
-            const cell = table.querySelector(`[data-row="${i + r}"][data-col="${j + c}"]`);
-            if (cell) {
-              cellsToRemove.push(cell);
-            }
-          }
-        }
-
-        // Remove all cells
-        cellsToRemove.forEach(cell => cell.remove());
-
-        // Set rowspan and colspan of the target cell if it exists
-        if (targetCell) {
-          targetCell.rowSpan = rowspan;
-          targetCell.colSpan = colspan;
-        }
-      }
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_31fqg31zr5jd9bicjgxu = TinyTable.createTableFunctions("tinytable_31fqg31zr5jd9bicjgxu");
       // tinytable span after
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: '8', j: 1 },  ], css_id: 'tinytable_css_mtxblbu5elynplv3zeaa',}, 
-          { positions: [ { i: '6', j: 1 },  ], css_id: 'tinytable_css_pzvury41tt3eievljcyc',}, 
-          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '7', j: 1 },  ], css_id: 'tinytable_css_mev8ip09ew4jsl5y708f',}, 
-          { positions: [ { i: '0', j: 1 },  ], css_id: 'tinytable_css_k9wjr341emtxnsn2um4w',}, 
-          { positions: [ { i: '8', j: 0 },  ], css_id: 'tinytable_css_y2lz51s4zdsazo5fy448',}, 
-          { positions: [ { i: '6', j: 0 },  ], css_id: 'tinytable_css_grim5fqi8bes72uqrct8',}, 
-          { positions: [ { i: '1', j: 0 }, { i: '2', j: 0 }, { i: '3', j: 0 }, { i: '4', j: 0 }, { i: '5', j: 0 }, { i: '7', j: 0 },  ], css_id: 'tinytable_css_ggv51ax4c2xsv9inp394',}, 
-          { positions: [ { i: '0', j: 0 },  ], css_id: 'tinytable_css_2itvu9mdtit4fweah2p9',}, 
+          { positions: [ { i: '8', j: 2 } ], css_id: 'tinytable_css_h534t2kzg524wpj80z8c',}, 
+          { positions: [ { i: '6', j: 2 } ], css_id: 'tinytable_css_36c3689aaths0mef7ogr',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '7', j: 2 } ], css_id: 'tinytable_css_ugqfabd85nt89zbdzwqq',}, 
+          { positions: [ { i: '0', j: 2 } ], css_id: 'tinytable_css_om09gqi6n4vzhybb6095',}, 
+          { positions: [ { i: '8', j: 1 } ], css_id: 'tinytable_css_nv5df4hzwa3iybmj1gyv',}, 
+          { positions: [ { i: '6', j: 1 } ], css_id: 'tinytable_css_7juma1ygvo8bpwaruxwp',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '7', j: 1 } ], css_id: 'tinytable_css_zlpkiqpac861cmfcu7bu',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_y5zg8eb7h3fgh45rpeka',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  styleCell_nulj3l40h7t8n5ndu1u0(cell.i, cell.j, group.css_id);
+                  tableFns_31fqg31zr5jd9bicjgxu.styleCell(cell.i, cell.j, group.css_id);
               });
           });
       });
-    </script><style>
-      /* tinytable css entries after */
-      .table td.tinytable_css_mtxblbu5elynplv3zeaa, .table th.tinytable_css_mtxblbu5elynplv3zeaa { text-align: center; border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_pzvury41tt3eievljcyc, .table th.tinytable_css_pzvury41tt3eievljcyc { text-align: center; border-bottom: solid black 0.05em; }
-      .table td.tinytable_css_mev8ip09ew4jsl5y708f, .table th.tinytable_css_mev8ip09ew4jsl5y708f { text-align: center; }
-      .table td.tinytable_css_k9wjr341emtxnsn2um4w, .table th.tinytable_css_k9wjr341emtxnsn2um4w { text-align: center; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
-      .table td.tinytable_css_y2lz51s4zdsazo5fy448, .table th.tinytable_css_y2lz51s4zdsazo5fy448 { text-align: left; border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_grim5fqi8bes72uqrct8, .table th.tinytable_css_grim5fqi8bes72uqrct8 { text-align: left; border-bottom: solid black 0.05em; }
-      .table td.tinytable_css_ggv51ax4c2xsv9inp394, .table th.tinytable_css_ggv51ax4c2xsv9inp394 { text-align: left; }
-      .table td.tinytable_css_2itvu9mdtit4fweah2p9, .table th.tinytable_css_2itvu9mdtit4fweah2p9 { text-align: left; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_31fqg31zr5jd9bicjgxu td.tinytable_css_h534t2kzg524wpj80z8c, #tinytable_31fqg31zr5jd9bicjgxu th.tinytable_css_h534t2kzg524wpj80z8c {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_31fqg31zr5jd9bicjgxu td.tinytable_css_36c3689aaths0mef7ogr, #tinytable_31fqg31zr5jd9bicjgxu th.tinytable_css_36c3689aaths0mef7ogr {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_31fqg31zr5jd9bicjgxu td.tinytable_css_ugqfabd85nt89zbdzwqq, #tinytable_31fqg31zr5jd9bicjgxu th.tinytable_css_ugqfabd85nt89zbdzwqq { text-align: center }
+    #tinytable_31fqg31zr5jd9bicjgxu td.tinytable_css_om09gqi6n4vzhybb6095, #tinytable_31fqg31zr5jd9bicjgxu th.tinytable_css_om09gqi6n4vzhybb6095 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_31fqg31zr5jd9bicjgxu td.tinytable_css_nv5df4hzwa3iybmj1gyv, #tinytable_31fqg31zr5jd9bicjgxu th.tinytable_css_nv5df4hzwa3iybmj1gyv {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_31fqg31zr5jd9bicjgxu td.tinytable_css_7juma1ygvo8bpwaruxwp, #tinytable_31fqg31zr5jd9bicjgxu th.tinytable_css_7juma1ygvo8bpwaruxwp {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_31fqg31zr5jd9bicjgxu td.tinytable_css_zlpkiqpac861cmfcu7bu, #tinytable_31fqg31zr5jd9bicjgxu th.tinytable_css_zlpkiqpac861cmfcu7bu { text-align: left }
+    #tinytable_31fqg31zr5jd9bicjgxu td.tinytable_css_y5zg8eb7h3fgh45rpeka, #tinytable_31fqg31zr5jd9bicjgxu th.tinytable_css_y5zg8eb7h3fgh45rpeka {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
     </style>
 <div class="container">
-      <table class="table table-borderless" id="tinytable_nulj3l40h7t8n5ndu1u0" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="tinytable" id="tinytable_31fqg31zr5jd9bicjgxu" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <thead><tr>
-<th scope="col" data-row="0" data-col="0"> </th>
-                <th scope="col" data-row="0" data-col="1">(1)</th>
+<th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">(1)</th>
               </tr></thead>
 <tbody>
 <tr>
-<td data-row="1" data-col="0">(Intercept)</td>
-                  <td data-row="1" data-col="1">a</td>
+<td data-row="1" data-col="1">(Intercept)</td>
+                  <td data-row="1" data-col="2">a</td>
                 </tr>
 <tr>
-<td data-row="2" data-col="0"></td>
-                  <td data-row="2" data-col="1">(1.000)</td>
+<td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(1.000)</td>
                 </tr>
 <tr>
-<td data-row="3" data-col="0">mpg</td>
-                  <td data-row="3" data-col="1">b</td>
+<td data-row="3" data-col="1">mpg</td>
+                  <td data-row="3" data-col="2">b</td>
                 </tr>
 <tr>
-<td data-row="4" data-col="0"></td>
-                  <td data-row="4" data-col="1">(2.000)</td>
+<td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(2.000)</td>
                 </tr>
 <tr>
-<td data-row="5" data-col="0">drat</td>
-                  <td data-row="5" data-col="1">c</td>
+<td data-row="5" data-col="1">drat</td>
+                  <td data-row="5" data-col="2">c</td>
                 </tr>
 <tr>
-<td data-row="6" data-col="0"></td>
-                  <td data-row="6" data-col="1">(3.000)</td>
+<td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2">(3.000)</td>
                 </tr>
 <tr>
-<td data-row="7" data-col="0">Num.Obs.</td>
-                  <td data-row="7" data-col="1">32</td>
+<td data-row="7" data-col="1">Num.Obs.</td>
+                  <td data-row="7" data-col="2">32</td>
                 </tr>
 <tr>
-<td data-row="8" data-col="0">Model</td>
-                  <td data-row="8" data-col="1">Custom</td>
+<td data-row="8" data-col="1">Model</td>
+                  <td data-row="8" data-col="2">Custom</td>
                 </tr>
 </tbody>
 </table>
@@ -1127,23 +1154,23 @@ Re-fitting to get Hessian</code></pre>
 <p>Note that in the <code>glance.custom()</code> method, we called <code>stats:::nobs.lm()</code> instead of the default <code><a href="https://rdrr.io/r/stats/nobs.html">stats::nobs()</a></code> method, because the latter know does not know where to dispatch models of our new “custom” class. Being more explicit solves the problem.</p>
 <p>An alternative would be to set a new class that inherits from the previous one, and to use a global option to set <code>broom</code> as the default extractor function (otherwise <code>modelsummary</code> will use its standard <code>lm</code> extractors by inheritance):</p>
 <div class="cell">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>modelsummary_get <span class="op">=</span> <span class="st">"broom"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">mod_custom</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"custom"</span>, <span class="st">"lm"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>modelsummary_get <span class="op">=</span> <span class="st">"broom"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">mod_custom</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"custom"</span>, <span class="st">"lm"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="customization-modelsummary_list" class="level1"><h1>Customization: <code>modelsummary_list</code>
 </h1>
 <p>Another flexible way to customize model output is to use <code>output = "modelsummary_list"</code>. With this output option, <code><a href="https://modelsummary.com/man/modelsummary.html">modelsummary()</a></code> returns a list with two elements: <code>tidy</code> contains parameter estimates, standard errors, etc., and <code>glance</code> contains model statistics such as the AIC. For example,</p>
 <div class="cell">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span>, <span class="va">mtcars</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">drat</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="va">mod_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, output <span class="op">=</span> <span class="st">"modelsummary_list"</span><span class="op">)</span></span>
-<span><span class="va">mod_list</span><span class="op">$</span><span class="va">tidy</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">mod_list</span><span class="op">$</span><span class="va">tidy</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         term   estimate std.error  statistic df.error      p.value s.value group conf.low conf.high
 1 (Intercept) 278.515455 55.414866  5.0260061       29 2.359726e-05    15.4             NA        NA
 2         mpg  -9.985499  1.791837 -5.5727709       29 5.172030e-06    17.6             NA        NA
 3        drat  19.125752 20.197756  0.9469246       29 3.515013e-01     1.5             NA        NA</code></pre>
 </div>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mod_list</span><span class="op">$</span><span class="va">glance</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mod_list</span><span class="op">$</span><span class="va">glance</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       aic      bic r.squared adj.r.squared     rmse nobs        F    logLik
 1 337.8809 343.7438 0.6143611     0.5877653 41.90687   32 23.09994 -164.9404</code></pre>
@@ -1152,7 +1179,7 @@ Re-fitting to get Hessian</code></pre>
 <p>Both <code>tidy</code> and <code>glance</code> can now be customized, and the updated model can be passed back to modelsummary using <code>modelsummary(mod_list)</code>. All information that is displayed in the table is contained in <code>mod_list</code>, so this pattern allows for very flexible adjustments of output tables.</p>
 <p>A useful example for this pattern concerns mixed models using <code>lme4</code>. Assume we want to compare the effect of using different degrees-of-freedom adjustments on the significance of the coefficients. The models have identical parameter estimates, standard errors, and model fit statistics - we only want to change the p-values. We use the <code>parameters</code> package to compute the adjusted p-values.</p>
 <div class="cell">
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/">"lme4"</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/">"lme4"</a></span><span class="op">)</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">drat</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">am</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="va">mod_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, output <span class="op">=</span> <span class="st">"modelsummary_list"</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span>
 <span><span class="co"># create a copy, where we'll change the p-values</span></span>
@@ -1160,145 +1187,108 @@ Re-fitting to get Hessian</code></pre>
 <span><span class="va">mod_list_kenward</span><span class="op">$</span><span class="va">tidy</span><span class="op">$</span><span class="va">p.value</span> <span class="op">&lt;-</span> <span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/p_value_kenward.html">p_value_kenward</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span><span class="op">$</span><span class="va">p</span></span>
 <span></span>
 <span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"Wald"</span> <span class="op">=</span> <span class="va">mod_list</span>, <span class="st">"Kenward"</span> <span class="op">=</span> <span class="va">mod_list_kenward</span><span class="op">)</span>, </span>
-<span>            statistic <span class="op">=</span> <span class="st">"{std.error} ({p.value}) {stars}"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>            statistic <span class="op">=</span> <span class="st">"{std.error} ({p.value}) {stars}"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <!-- preamble start -->
 
-    <script>
-
-      function styleCell_od1rdxye34pwsll0mvdz(i, j, css_id) {
-          var table = document.getElementById("tinytable_od1rdxye34pwsll0mvdz");
-          var cell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-          if (cell) {
-              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
-              cell.classList.add(css_id);
-          } else {
-              console.warn(`Cell at (${i}, ${j}) not found.`);
-          }
-      }
-      function spanCell_od1rdxye34pwsll0mvdz(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_od1rdxye34pwsll0mvdz");
-        const targetCell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-        if (!targetCell) {
-          console.warn(`Cell at (${i}, ${j}) not found.`);
-        }
-
-        // Get all cells that need to be removed
-        const cellsToRemove = [];
-        for (let r = 0; r < rowspan; r++) {
-          for (let c = 0; c < colspan; c++) {
-            if (r === 0 && c === 0) continue; // Skip the target cell
-            const cell = table.querySelector(`[data-row="${i + r}"][data-col="${j + c}"]`);
-            if (cell) {
-              cellsToRemove.push(cell);
-            }
-          }
-        }
-
-        // Remove all cells
-        cellsToRemove.forEach(cell => cell.remove());
-
-        // Set rowspan and colspan of the target cell if it exists
-        if (targetCell) {
-          targetCell.rowSpan = rowspan;
-          targetCell.colSpan = colspan;
-        }
-      }
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_yuthpz8xxhsyd9n4rrnb = TinyTable.createTableFunctions("tinytable_yuthpz8xxhsyd9n4rrnb");
       // tinytable span after
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: '11', j: 1 }, { i: '11', j: 2 },  ], css_id: 'tinytable_css_63xtxnfaytmg5ffy4z03',}, 
-          { positions: [ { i: '4', j: 2 }, { i: '4', j: 1 },  ], css_id: 'tinytable_css_29hg1zl7pbnpo7uvzq62',}, 
-          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '5', j: 2 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '3', j: 2 }, { i: '8', j: 1 }, { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '7', j: 2 }, { i: '8', j: 2 }, { i: '9', j: 2 }, { i: '6', j: 2 }, { i: '10', j: 2 },  ], css_id: 'tinytable_css_igworufj23zpzroa3znz',}, 
-          { positions: [ { i: '0', j: 1 }, { i: '0', j: 2 },  ], css_id: 'tinytable_css_bhg45vkms2ima27ilohe',}, 
-          { positions: [ { i: '11', j: 0 },  ], css_id: 'tinytable_css_ehjv1u33f7umi18485xk',}, 
-          { positions: [ { i: '4', j: 0 },  ], css_id: 'tinytable_css_5srx5bs7wmjtevtw246u',}, 
-          { positions: [ { i: '1', j: 0 }, { i: '2', j: 0 }, { i: '3', j: 0 }, { i: '8', j: 0 }, { i: '5', j: 0 }, { i: '6', j: 0 }, { i: '7', j: 0 }, { i: '9', j: 0 }, { i: '10', j: 0 },  ], css_id: 'tinytable_css_g4y6zc0k708efz1xzefe',}, 
-          { positions: [ { i: '0', j: 0 },  ], css_id: 'tinytable_css_o0jy9wy90sss5w2p2gem',}, 
+          { positions: [ { i: '11', j: 2 }, { i: '11', j: 3 } ], css_id: 'tinytable_css_3ekp9n5mjsh1s9aojadp',}, 
+          { positions: [ { i: '4', j: 2 }, { i: '4', j: 3 } ], css_id: 'tinytable_css_0qegn9nn1xizns5673ee',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '8', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '3', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '7', j: 3 }, { i: '8', j: 3 }, { i: '9', j: 3 }, { i: '10', j: 3 } ], css_id: 'tinytable_css_99xiulc0kslvjgmkwkrj',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 } ], css_id: 'tinytable_css_b42ps4jwr5100rxw1g42',}, 
+          { positions: [ { i: '11', j: 1 } ], css_id: 'tinytable_css_wcognu9wvlecz0ksjmt7',}, 
+          { positions: [ { i: '4', j: 1 } ], css_id: 'tinytable_css_uqhpsjozczn0z7gclgy0',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '8', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 } ], css_id: 'tinytable_css_b8iheh83anmm4c76vzpd',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_o9lqmcd9houro36djfar',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  styleCell_od1rdxye34pwsll0mvdz(cell.i, cell.j, group.css_id);
+                  tableFns_yuthpz8xxhsyd9n4rrnb.styleCell(cell.i, cell.j, group.css_id);
               });
           });
       });
-    </script><style>
-      /* tinytable css entries after */
-      .table td.tinytable_css_63xtxnfaytmg5ffy4z03, .table th.tinytable_css_63xtxnfaytmg5ffy4z03 { text-align: center; border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_29hg1zl7pbnpo7uvzq62, .table th.tinytable_css_29hg1zl7pbnpo7uvzq62 { text-align: center; border-bottom: solid black 0.05em; }
-      .table td.tinytable_css_igworufj23zpzroa3znz, .table th.tinytable_css_igworufj23zpzroa3znz { text-align: center; }
-      .table td.tinytable_css_bhg45vkms2ima27ilohe, .table th.tinytable_css_bhg45vkms2ima27ilohe { text-align: center; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
-      .table td.tinytable_css_ehjv1u33f7umi18485xk, .table th.tinytable_css_ehjv1u33f7umi18485xk { text-align: left; border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_5srx5bs7wmjtevtw246u, .table th.tinytable_css_5srx5bs7wmjtevtw246u { text-align: left; border-bottom: solid black 0.05em; }
-      .table td.tinytable_css_g4y6zc0k708efz1xzefe, .table th.tinytable_css_g4y6zc0k708efz1xzefe { text-align: left; }
-      .table td.tinytable_css_o0jy9wy90sss5w2p2gem, .table th.tinytable_css_o0jy9wy90sss5w2p2gem { text-align: left; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_yuthpz8xxhsyd9n4rrnb td.tinytable_css_3ekp9n5mjsh1s9aojadp, #tinytable_yuthpz8xxhsyd9n4rrnb th.tinytable_css_3ekp9n5mjsh1s9aojadp {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_yuthpz8xxhsyd9n4rrnb td.tinytable_css_0qegn9nn1xizns5673ee, #tinytable_yuthpz8xxhsyd9n4rrnb th.tinytable_css_0qegn9nn1xizns5673ee {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_yuthpz8xxhsyd9n4rrnb td.tinytable_css_99xiulc0kslvjgmkwkrj, #tinytable_yuthpz8xxhsyd9n4rrnb th.tinytable_css_99xiulc0kslvjgmkwkrj { text-align: center }
+    #tinytable_yuthpz8xxhsyd9n4rrnb td.tinytable_css_b42ps4jwr5100rxw1g42, #tinytable_yuthpz8xxhsyd9n4rrnb th.tinytable_css_b42ps4jwr5100rxw1g42 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_yuthpz8xxhsyd9n4rrnb td.tinytable_css_wcognu9wvlecz0ksjmt7, #tinytable_yuthpz8xxhsyd9n4rrnb th.tinytable_css_wcognu9wvlecz0ksjmt7 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_yuthpz8xxhsyd9n4rrnb td.tinytable_css_uqhpsjozczn0z7gclgy0, #tinytable_yuthpz8xxhsyd9n4rrnb th.tinytable_css_uqhpsjozczn0z7gclgy0 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_yuthpz8xxhsyd9n4rrnb td.tinytable_css_b8iheh83anmm4c76vzpd, #tinytable_yuthpz8xxhsyd9n4rrnb th.tinytable_css_b8iheh83anmm4c76vzpd { text-align: left }
+    #tinytable_yuthpz8xxhsyd9n4rrnb td.tinytable_css_o9lqmcd9houro36djfar, #tinytable_yuthpz8xxhsyd9n4rrnb th.tinytable_css_o9lqmcd9houro36djfar {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
     </style>
 <div class="container">
-      <table class="table table-borderless" id="tinytable_od1rdxye34pwsll0mvdz" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="tinytable" id="tinytable_yuthpz8xxhsyd9n4rrnb" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <thead><tr>
-<th scope="col" data-row="0" data-col="0"> </th>
-                <th scope="col" data-row="0" data-col="1">Wald</th>
-                <th scope="col" data-row="0" data-col="2">Kenward</th>
+<th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">Wald</th>
+                <th scope="col" data-row="0" data-col="3">Kenward</th>
               </tr></thead>
 <tbody>
 <tr>
-<td data-row="1" data-col="0">(Intercept)</td>
-                  <td data-row="1" data-col="1">-5.159</td>
+<td data-row="1" data-col="1">(Intercept)</td>
                   <td data-row="1" data-col="2">-5.159</td>
+                  <td data-row="1" data-col="3">-5.159</td>
                 </tr>
 <tr>
-<td data-row="2" data-col="0"></td>
-                  <td data-row="2" data-col="1">6.409 (0.428)</td>
-                  <td data-row="2" data-col="2">6.409 (0.680)</td>
+<td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">6.409 (0.428)</td>
+                  <td data-row="2" data-col="3">6.409 (0.680)</td>
                 </tr>
 <tr>
-<td data-row="3" data-col="0">drat</td>
-                  <td data-row="3" data-col="1">7.045</td>
+<td data-row="3" data-col="1">drat</td>
                   <td data-row="3" data-col="2">7.045</td>
+                  <td data-row="3" data-col="3">7.045</td>
                 </tr>
 <tr>
-<td data-row="4" data-col="0"></td>
-                  <td data-row="4" data-col="1">1.736 (
-                  </td>
-<td data-row="4" data-col="2">1.736 (0.086) +</td>
+<td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">1.736 (&lt;0.001) ***</td>
+                  <td data-row="4" data-col="3">1.736 (0.086) +</td>
                 </tr>
 <tr>
-<td data-row="5" data-col="0">Num.Obs.</td>
-                  <td data-row="5" data-col="1">32</td>
+<td data-row="5" data-col="1">Num.Obs.</td>
                   <td data-row="5" data-col="2">32</td>
+                  <td data-row="5" data-col="3">32</td>
                 </tr>
 <tr>
-<td data-row="6" data-col="0">R2 Marg.</td>
-                  <td data-row="6" data-col="1">0.402</td>
+<td data-row="6" data-col="1">R2 Marg.</td>
                   <td data-row="6" data-col="2">0.402</td>
+                  <td data-row="6" data-col="3">0.402</td>
                 </tr>
 <tr>
-<td data-row="7" data-col="0">R2 Cond.</td>
-                  <td data-row="7" data-col="1">0.440</td>
+<td data-row="7" data-col="1">R2 Cond.</td>
                   <td data-row="7" data-col="2">0.440</td>
+                  <td data-row="7" data-col="3">0.440</td>
                 </tr>
 <tr>
-<td data-row="8" data-col="0">AIC</td>
-                  <td data-row="8" data-col="1">188.7</td>
+<td data-row="8" data-col="1">AIC</td>
                   <td data-row="8" data-col="2">188.7</td>
+                  <td data-row="8" data-col="3">188.7</td>
                 </tr>
 <tr>
-<td data-row="9" data-col="0">BIC</td>
-                  <td data-row="9" data-col="1">194.6</td>
+<td data-row="9" data-col="1">BIC</td>
                   <td data-row="9" data-col="2">194.6</td>
+                  <td data-row="9" data-col="3">194.6</td>
                 </tr>
 <tr>
-<td data-row="10" data-col="0">ICC</td>
-                  <td data-row="10" data-col="1">0.1</td>
+<td data-row="10" data-col="1">ICC</td>
                   <td data-row="10" data-col="2">0.1</td>
+                  <td data-row="10" data-col="3">0.1</td>
                 </tr>
 <tr>
-<td data-row="11" data-col="0">RMSE</td>
-                  <td data-row="11" data-col="1">4.28</td>
+<td data-row="11" data-col="1">RMSE</td>
                   <td data-row="11" data-col="2">4.28</td>
+                  <td data-row="11" data-col="3">4.28</td>
                 </tr>
 </tbody>
 </table>
@@ -1359,13 +1349,14 @@ Re-fitting to get Hessian</code></pre>
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.24">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>coef_rename – modelsummary: Data and Model Summaries in R</title>
 <style>
@@ -65,14 +65,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../man/get_gof.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-555d7fa6eb067a0c9d334ac7ef1a20f4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-71cad71ea2641a666ed748e297584855.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -105,6 +106,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">modelsummary: Data and Model Summaries in R</span>
     </a>
@@ -139,7 +142,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="sidebar-menu-container"> 
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+    <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
@@ -396,7 +403,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 )
 </code></pre>
 </section><section id="arguments" class="level3"><h3 class="anchored" data-anchor-id="arguments">Arguments</h3>
-<table>
+<table role="presentation">
 <tbody><tr>
 <td style="white-space: collapse; font-family: monospace; vertical-align: top">
 <code id="x">x</code>
@@ -463,158 +470,122 @@ boolean remove the <code>I</code> from as-is formula calls
 </tr>
 </tbody></table></section><section id="examples" class="level3"><h3 class="anchored" data-anchor-id="examples">Examples</h3>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://modelsummary.com">"modelsummary"</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://modelsummary.com">"modelsummary"</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://modelsummary.com">modelsummary</a></span><span class="op">)</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span>
 <span><span class="va">dat</span><span class="op">$</span><span class="va">horse_power</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">hp</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">horse_power</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, <span class="va">dat</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, coef_rename <span class="op">=</span> <span class="va">coef_rename</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://modelsummary.com/man/modelsummary.html">modelsummary</a></span><span class="op">(</span><span class="va">mod</span>, coef_rename <span class="op">=</span> <span class="va">coef_rename</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <!-- preamble start -->
 
-    <script>
-
-      function styleCell_1x8j5iuhtm7m6n5sz3bf(i, j, css_id) {
-          var table = document.getElementById("tinytable_1x8j5iuhtm7m6n5sz3bf");
-          var cell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-          if (cell) {
-              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
-              cell.classList.add(css_id);
-          } else {
-              console.warn(`Cell at (${i}, ${j}) not found.`);
-          }
-      }
-      function spanCell_1x8j5iuhtm7m6n5sz3bf(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_1x8j5iuhtm7m6n5sz3bf");
-        const targetCell = table.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-        if (!targetCell) {
-          console.warn(`Cell at (${i}, ${j}) not found.`);
-        }
-
-        // Get all cells that need to be removed
-        const cellsToRemove = [];
-        for (let r = 0; r < rowspan; r++) {
-          for (let c = 0; c < colspan; c++) {
-            if (r === 0 && c === 0) continue; // Skip the target cell
-            const cell = table.querySelector(`[data-row="${i + r}"][data-col="${j + c}"]`);
-            if (cell) {
-              cellsToRemove.push(cell);
-            }
-          }
-        }
-
-        // Remove all cells
-        cellsToRemove.forEach(cell => cell.remove());
-
-        // Set rowspan and colspan of the target cell if it exists
-        if (targetCell) {
-          targetCell.rowSpan = rowspan;
-          targetCell.colSpan = colspan;
-        }
-      }
+    <script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script><script>
+      // Create table-specific functions using external factory
+      const tableFns_blc4bupsoa1etu58ubj8 = TinyTable.createTableFunctions("tinytable_blc4bupsoa1etu58ubj8");
       // tinytable span after
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: '16', j: 1 },  ], css_id: 'tinytable_css_l13um21fu109t8dzsu13',}, 
-          { positions: [ { i: '8', j: 1 },  ], css_id: 'tinytable_css_o8aep6g4h0usv5m7y4ry',}, 
-          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '12', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 }, { i: '13', j: 1 }, { i: '14', j: 1 }, { i: '15', j: 1 },  ], css_id: 'tinytable_css_uqyiwevzv5ilx9s6y3ae',}, 
-          { positions: [ { i: '0', j: 1 },  ], css_id: 'tinytable_css_t2kci4zt3l75vjxcf3ec',}, 
-          { positions: [ { i: '16', j: 0 },  ], css_id: 'tinytable_css_eedepahg2lo04db735gy',}, 
-          { positions: [ { i: '8', j: 0 },  ], css_id: 'tinytable_css_475ic4rv7houl5xszelw',}, 
-          { positions: [ { i: '1', j: 0 }, { i: '2', j: 0 }, { i: '3', j: 0 }, { i: '4', j: 0 }, { i: '5', j: 0 }, { i: '6', j: 0 }, { i: '7', j: 0 }, { i: '12', j: 0 }, { i: '9', j: 0 }, { i: '10', j: 0 }, { i: '11', j: 0 }, { i: '13', j: 0 }, { i: '14', j: 0 }, { i: '15', j: 0 },  ], css_id: 'tinytable_css_hey4juw2yx7llajabzmj',}, 
-          { positions: [ { i: '0', j: 0 },  ], css_id: 'tinytable_css_xgumbuz946bqas3qyycs',}, 
+          { positions: [ { i: '16', j: 2 } ], css_id: 'tinytable_css_knbssl049j1pfvxijwqp',}, 
+          { positions: [ { i: '8', j: 2 } ], css_id: 'tinytable_css_awk9qiw6m39ef8701uj3',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 }, { i: '12', j: 2 }, { i: '13', j: 2 }, { i: '14', j: 2 }, { i: '15', j: 2 } ], css_id: 'tinytable_css_5oakt3tk9v0iob8fbq03',}, 
+          { positions: [ { i: '0', j: 2 } ], css_id: 'tinytable_css_qlm9w1wk4xr7l35yv07g',}, 
+          { positions: [ { i: '16', j: 1 } ], css_id: 'tinytable_css_6lx50b9xgx5oiz0l808v',}, 
+          { positions: [ { i: '8', j: 1 } ], css_id: 'tinytable_css_de2azl30u4lbhmfqkwtc',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 }, { i: '12', j: 1 }, { i: '13', j: 1 }, { i: '14', j: 1 }, { i: '15', j: 1 } ], css_id: 'tinytable_css_smid4gn3clov48jcnh6s',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_x86c282487e924egcch8',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  styleCell_1x8j5iuhtm7m6n5sz3bf(cell.i, cell.j, group.css_id);
+                  tableFns_blc4bupsoa1etu58ubj8.styleCell(cell.i, cell.j, group.css_id);
               });
           });
       });
-    </script><style>
-      /* tinytable css entries after */
-      .table td.tinytable_css_l13um21fu109t8dzsu13, .table th.tinytable_css_l13um21fu109t8dzsu13 { text-align: center; border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_o8aep6g4h0usv5m7y4ry, .table th.tinytable_css_o8aep6g4h0usv5m7y4ry { text-align: center; border-bottom: solid black 0.05em; }
-      .table td.tinytable_css_uqyiwevzv5ilx9s6y3ae, .table th.tinytable_css_uqyiwevzv5ilx9s6y3ae { text-align: center; }
-      .table td.tinytable_css_t2kci4zt3l75vjxcf3ec, .table th.tinytable_css_t2kci4zt3l75vjxcf3ec { text-align: center; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
-      .table td.tinytable_css_eedepahg2lo04db735gy, .table th.tinytable_css_eedepahg2lo04db735gy { text-align: left; border-bottom: solid #d3d8dc 0.1em; }
-      .table td.tinytable_css_475ic4rv7houl5xszelw, .table th.tinytable_css_475ic4rv7houl5xszelw { text-align: left; border-bottom: solid black 0.05em; }
-      .table td.tinytable_css_hey4juw2yx7llajabzmj, .table th.tinytable_css_hey4juw2yx7llajabzmj { text-align: left; }
-      .table td.tinytable_css_xgumbuz946bqas3qyycs, .table th.tinytable_css_xgumbuz946bqas3qyycs { text-align: left; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+    </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+<style>
+    /* tinytable css entries after */
+    #tinytable_blc4bupsoa1etu58ubj8 td.tinytable_css_knbssl049j1pfvxijwqp, #tinytable_blc4bupsoa1etu58ubj8 th.tinytable_css_knbssl049j1pfvxijwqp {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_blc4bupsoa1etu58ubj8 td.tinytable_css_awk9qiw6m39ef8701uj3, #tinytable_blc4bupsoa1etu58ubj8 th.tinytable_css_awk9qiw6m39ef8701uj3 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_blc4bupsoa1etu58ubj8 td.tinytable_css_5oakt3tk9v0iob8fbq03, #tinytable_blc4bupsoa1etu58ubj8 th.tinytable_css_5oakt3tk9v0iob8fbq03 { text-align: center }
+    #tinytable_blc4bupsoa1etu58ubj8 td.tinytable_css_qlm9w1wk4xr7l35yv07g, #tinytable_blc4bupsoa1etu58ubj8 th.tinytable_css_qlm9w1wk4xr7l35yv07g {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_blc4bupsoa1etu58ubj8 td.tinytable_css_6lx50b9xgx5oiz0l808v, #tinytable_blc4bupsoa1etu58ubj8 th.tinytable_css_6lx50b9xgx5oiz0l808v {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_blc4bupsoa1etu58ubj8 td.tinytable_css_de2azl30u4lbhmfqkwtc, #tinytable_blc4bupsoa1etu58ubj8 th.tinytable_css_de2azl30u4lbhmfqkwtc {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_blc4bupsoa1etu58ubj8 td.tinytable_css_smid4gn3clov48jcnh6s, #tinytable_blc4bupsoa1etu58ubj8 th.tinytable_css_smid4gn3clov48jcnh6s { text-align: left }
+    #tinytable_blc4bupsoa1etu58ubj8 td.tinytable_css_x86c282487e924egcch8, #tinytable_blc4bupsoa1etu58ubj8 th.tinytable_css_x86c282487e924egcch8 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
     </style>
 <div class="container">
-      <table class="table table-borderless" id="tinytable_1x8j5iuhtm7m6n5sz3bf" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="tinytable" id="tinytable_blc4bupsoa1etu58ubj8" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
 <thead><tr>
-<th scope="col" data-row="0" data-col="0"> </th>
-                <th scope="col" data-row="0" data-col="1">(1)</th>
+<th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">(1)</th>
               </tr></thead>
 <tbody>
 <tr>
-<td data-row="1" data-col="0">(Intercept)</td>
-                  <td data-row="1" data-col="1">28.650</td>
+<td data-row="1" data-col="1">(Intercept)</td>
+                  <td data-row="1" data-col="2">28.650</td>
                 </tr>
 <tr>
-<td data-row="2" data-col="0"></td>
-                  <td data-row="2" data-col="1">(1.588)</td>
+<td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(1.588)</td>
                 </tr>
 <tr>
-<td data-row="3" data-col="0">Horse Power</td>
-                  <td data-row="3" data-col="1">-0.024</td>
+<td data-row="3" data-col="1">Horse Power</td>
+                  <td data-row="3" data-col="2">-0.024</td>
                 </tr>
 <tr>
-<td data-row="4" data-col="0"></td>
-                  <td data-row="4" data-col="1">(0.015)</td>
+<td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(0.015)</td>
                 </tr>
 <tr>
-<td data-row="5" data-col="0">6</td>
-                  <td data-row="5" data-col="1">-5.968</td>
+<td data-row="5" data-col="1">6</td>
+                  <td data-row="5" data-col="2">-5.968</td>
                 </tr>
 <tr>
-<td data-row="6" data-col="0"></td>
-                  <td data-row="6" data-col="1">(1.639)</td>
+<td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2">(1.639)</td>
                 </tr>
 <tr>
-<td data-row="7" data-col="0">8</td>
-                  <td data-row="7" data-col="1">-8.521</td>
+<td data-row="7" data-col="1">8</td>
+                  <td data-row="7" data-col="2">-8.521</td>
                 </tr>
 <tr>
-<td data-row="8" data-col="0"></td>
-                  <td data-row="8" data-col="1">(2.326)</td>
+<td data-row="8" data-col="1"></td>
+                  <td data-row="8" data-col="2">(2.326)</td>
                 </tr>
 <tr>
-<td data-row="9" data-col="0">Num.Obs.</td>
-                  <td data-row="9" data-col="1">32</td>
+<td data-row="9" data-col="1">Num.Obs.</td>
+                  <td data-row="9" data-col="2">32</td>
                 </tr>
 <tr>
-<td data-row="10" data-col="0">R2</td>
-                  <td data-row="10" data-col="1">0.754</td>
+<td data-row="10" data-col="1">R2</td>
+                  <td data-row="10" data-col="2">0.754</td>
                 </tr>
 <tr>
-<td data-row="11" data-col="0">R2 Adj.</td>
-                  <td data-row="11" data-col="1">0.727</td>
+<td data-row="11" data-col="1">R2 Adj.</td>
+                  <td data-row="11" data-col="2">0.727</td>
                 </tr>
 <tr>
-<td data-row="12" data-col="0">AIC</td>
-                  <td data-row="12" data-col="1">169.9</td>
+<td data-row="12" data-col="1">AIC</td>
+                  <td data-row="12" data-col="2">169.9</td>
                 </tr>
 <tr>
-<td data-row="13" data-col="0">BIC</td>
-                  <td data-row="13" data-col="1">177.2</td>
+<td data-row="13" data-col="1">BIC</td>
+                  <td data-row="13" data-col="2">177.2</td>
                 </tr>
 <tr>
-<td data-row="14" data-col="0">Log.Lik.</td>
-                  <td data-row="14" data-col="1">-79.948</td>
+<td data-row="14" data-col="1">Log.Lik.</td>
+                  <td data-row="14" data-col="2">-79.948</td>
                 </tr>
 <tr>
-<td data-row="15" data-col="0">F</td>
-                  <td data-row="15" data-col="1">28.585</td>
+<td data-row="15" data-col="1">F</td>
+                  <td data-row="15" data-col="2">28.585</td>
                 </tr>
 <tr>
-<td data-row="16" data-col="0">RMSE</td>
-                  <td data-row="16" data-col="1">2.94</td>
+<td data-row="16" data-col="1">RMSE</td>
+                  <td data-row="16" data-col="2">2.94</td>
                 </tr>
 </tbody>
 </table>
@@ -675,13 +646,14 @@ boolean remove the <code>I</code> from as-is formula calls
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
