@@ -107,6 +107,12 @@ mod <- list(
 tab <- modelsummary(mod, "dataframe", coef_rename = coef_rename)
 expect_true(all(c("Height 2", "Volume 2") %in% tab$term))
 
+# Issue #930: Accessibility
+opts <- options(modelsummary_model_labels_term = "Parameter")
+tab <- modelsummary(lm(mpg ~ hp, mtcars))
+expect_true("Parameter" %in% colnames(tab))
+options(opts)
+
 
 # modelsummary: also applies variable labels for depvar
 dat <- mtcars

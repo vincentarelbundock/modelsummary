@@ -148,7 +148,14 @@ Options not specific to given arguments are listed below.
 These global option changes the style of the default column headers:
 \itemize{
 \item \code{options(modelsummary_model_labels = "roman")}
+\item \code{options(modelsummary_model_labels_term = "Parameter")}
+\item \code{options(modelsummary_model_labels_group = "Group")}
+\item \code{options(modelsummary_model_labels_model = "Model")}
 }
+
+The options above control the label shown in the stub columns for terms,
+groups, and model names. By default, those headers are blank. Setting any of
+these options to a character string inserts that label as the column header.
 
 The supported styles are: "model", "arabic", "letters", "roman", "(arabic)", "(letters)", "(roman)"
 }

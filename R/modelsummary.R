@@ -206,7 +206,7 @@ globalVariables(c(
 #' + [performance::model_performance] extracts goodness-of-fit statistics. Available arguments depend on model type, but include:
 #'     - `metrics`, `estimator`, etc.
 #' + [tinytable::tt], [kableExtra::kbl] or [gt::gt] draw tables, depending on the value of the `output` argument. For example, by default `modelsummary` creates tables with [tinytable::tt], which accepts a `width` and `theme` arguments.
-#' @return a regression table in a format determined by the `output` argument. 
+#' @return a regression table in a format determined by the `output` argument.
 #'         The `backend` attribute includes the backend used to extract estimates and goodness-of-fit measure.
 #' @importFrom generics glance tidy
 #' @examplesIf isTRUE(Sys.getenv("R_NOT_CRAN") == "true")
@@ -578,7 +578,7 @@ modelsummary <- function(
 
   # propagate backends from the models
   attr(msl, "backend") <- list()
-  for(mod_name in names(msl)) {
+  for (mod_name in names(msl)) {
     attr(msl, "backend")[[mod_name]] <- attr(msl[[mod_name]], "backend")
   }
 
@@ -871,6 +871,10 @@ modelsummary <- function(
     tab <- redundant_labels(tab, "term")
   }
 
+  term_label <- getOption("modelsummary_model_labels_term", default = NULL)
+  model_label <- getOption("modelsummary_model_labels_model", default = NULL)
+  group_label <- getOption("modelsummary_model_labels_group", default = NULL)
+
   if (
     !identical(output_format, "dataframe") &&
       !settings_equal("function_called", "modelsummary_rbind")
@@ -884,12 +888,35 @@ modelsummary <- function(
     tab$statistic <- tab$part <- NULL
 
     # HACK: arbitrary spaces to avoid name conflict
-    if ("term" %in% colnames(tab))
-      colnames(tab)[colnames(tab) == "term"] <- "       "
-    if ("model" %in% colnames(tab))
-      colnames(tab)[colnames(tab) == "model"] <- "         "
-    if ("group" %in% colnames(tab))
-      colnames(tab)[colnames(tab) == "model"] <- "          "
+    if ("term" %in% colnames(tab)) {
+      if (is.null(term_label)) {
+        colnames(tab)[colnames(tab) == "term"] <- "       "
+      } else {
+        colnames(tab)[colnames(tab) == "term"] <- term_label
+      }
+    }
+    if ("model" %in% colnames(tab)) {
+      if (is.null(model_label)) {
+        colnames(tab)[colnames(tab) == "model"] <- "         "
+      } else {
+        colnames(tab)[colnames(tab) == "model"] <- model_label
+      }
+    }
+  }
+
+  if (
+    identical(output_format, "dataframe") ||
+      settings_equal("function_called", "modelsummary_rbind")
+  ) {
+    if (!is.null(term_label) && "term" %in% colnames(tab)) {
+      colnames(tab)[colnames(tab) == "term"] <- term_label
+    }
+    if (!is.null(model_label) && "model" %in% colnames(tab)) {
+      colnames(tab)[colnames(tab) == "model"] <- model_label
+    }
+    if (!is.null(group_label) && "group" %in% colnames(tab)) {
+      colnames(tab)[colnames(tab) == "group"] <- group_label
+    }
   }
 
   if (length(unique(tab$group)) == 1) {
@@ -901,13 +928,27 @@ modelsummary <- function(
   if (length(tmp) == 0) {
     tab$group <- NULL
   } else if (!identical(output_format, "dataframe")) {
-    colnames(tab)[colnames(tab) == "group"] <- "        "
+    if (is.null(group_label)) {
+      colnames(tab)[colnames(tab) == "group"] <- "        "
+    } else {
+      colnames(tab)[colnames(tab) == "group"] <- group_label
+    }
   }
 
   # align
   if (is.null(align)) {
+    stub_labels <- c(" ", shape$group_name)
+    if (!is.null(term_label)) {
+      stub_labels <- c(stub_labels, term_label)
+    }
+    if (!is.null(model_label)) {
+      stub_labels <- c(stub_labels, model_label)
+    }
+    if (!is.null(group_label)) {
+      stub_labels <- c(stub_labels, group_label)
+    }
     n_stub <- sum(grepl("^ *$", colnames(tab))) +
-      sum(colnames(tab) %in% c(" ", shape$group_name))
+      sum(colnames(tab) %in% stub_labels)
     align <- paste0(strrep("l", n_stub), strrep("c", ncol(tab) - n_stub))
     if (isTRUE(checkmate::check_data_frame(add_columns))) {
       align <- paste0(align, strrep("c", ncol(add_columns)))
@@ -1006,7 +1047,7 @@ get_list_of_modelsummary_lists <- function(
         tidy = models[[j]][["tidy"]],
         glance = models[[j]][["glance"]]
       )
-      attr(out, "backend") <- attr(models[[j]], "backend") 
+      attr(out, "backend") <- attr(models[[j]], "backend")
       return(out)
     }
 
@@ -1030,7 +1071,10 @@ get_list_of_modelsummary_lists <- function(
 
     out <- list("tidy" = tid, "glance" = gla)
     class(out) <- "modelsummary_list"
-    attr(out, "backend") <- list(est=attr(tid, "backend"), gof=attr(gla, "backend"))
+    attr(out, "backend") <- list(
+      est = attr(tid, "backend"),
+      gof = attr(gla, "backend")
+    )
     return(out)
   }
 
@@ -1043,7 +1087,7 @@ get_list_of_modelsummary_lists <- function(
       mc.cores = dots[["mc.cores"]]
     )
 
-  # {future}
+    # {future}
   } else if (
     isTRUE(check_dependency("future.apply")) &&
       future::nbrOfWorkers() > 1 &&
@@ -1063,7 +1107,7 @@ get_list_of_modelsummary_lists <- function(
       out <- lapply(seq_len(number_of_models), inner_loop)
     }
 
-  # sequential
+    # sequential
   } else {
     out <- lapply(seq_len(number_of_models), inner_loop)
   }
