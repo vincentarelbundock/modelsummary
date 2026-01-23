@@ -10,8 +10,11 @@
   report \#933.
 - `datasummary_skim()` in Quarto no longer escapes `\num{}` and
   underscores twice. Fixes Issue \#939.
-- New global options to label the `term`, `group`, and `model` stub
-  columns to improve accessibility in table headers. Fixes Issue \#930.
+- New global options to label stub columns and improve accessibility in
+  table headers. Fixes Issue \#930. Thanks to @jfieberg.
+  - `modelsummary_model_labels_term`
+  - `modelsummary_model_labels_group`
+  - `modelsummary_model_labels_model`
 - Documentation improvements.
 
 ## 2.5.0
