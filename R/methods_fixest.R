@@ -55,7 +55,13 @@ glance_custom_internal.fixest <- function(x, vcov_type = NULL, ...) {
       vcov_type %in% c("", "Default", "Constant", "IID") ||
       !vcov_type %in% c("vector", "matrix", "function")
   ) {
-    fvcov_type <- attr(summary(x)[["se"]], "type")
+    
+    if (packageVersion("fixest") >= "0.14.0") {
+      fvcov_type <- attr(summary(x)[["se"]], "vcov_type")
+    } else {
+      fvcov_type <- attr(summary(x)[["se"]], "type")
+    }
+    
     if (isTRUE(grepl("^Clustered", fvcov_type))) {
       fvcov_type <- gsub("^Clustered \\((.*)\\)$", "by: \\1", fvcov_type)
     }
