@@ -4,6 +4,11 @@
 
 ## Development
 
+- Accomodate change in attribute name in fixest v0.14.0. Thanks to
+  @lrberge for pull request \#950.
+
+## 2.6.0
+
 - Better labelling for `vcov_type` when the user supplies a string.
   “classical” becomes “Classical” instead of “IID”, etc.
 - Improve documentation for `dvnames(skip=)`. Thanks to @raffaem for
