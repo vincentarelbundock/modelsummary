@@ -256,9 +256,11 @@ modelplot <- function(
             xmin = conf.low,
             xmax = conf.high,
             color = model
-          ),
-          position = ggplot2::position_dodge(width = .5)
+          )
         )
+        if (!"position" %in% names(ellip)) {
+          args_list[["position"]] <- ggplot2::position_dodge(width = .5)
+        }
         args_list <- c(args_list, ellip)
         p <- p + do_call(ggplot2::geom_pointrange, args_list)
       }
@@ -287,9 +289,11 @@ modelplot <- function(
           ggplot2::facet_grid(term ~ ., scales = 'free_y')
       } else {
         args_list <- list(
-          mapping = ggplot2::aes(y = term, x = estimate),
-          position = ggplot2::position_dodge(width = .5)
+          mapping = ggplot2::aes(y = term, x = estimate)
         )
+        if (!"position" %in% names(ellip)) {
+          args_list[["position"]] <- ggplot2::position_dodge(width = .5)
+        }
         args_list <- c(args_list, ellip)
         p <- p + do_call(ggplot2::geom_point, args_list)
       }
