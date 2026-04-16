@@ -1,0 +1,451 @@
+# scrutin configuration
+#
+# scrutin is configured via .scrutin/config.toml in the project root. Fallback:
+# ~/.config/scrutin/config.toml. There are no SCRUTIN_* environment
+# variables: this file is the only persistent source of truth.
+#
+# Any field below can be overridden at invocation time with
+# --set key.path=value (repeatable). The RHS is parsed as a TOML
+# expression, falling back to a bare string for unquoted values. So
+# --set run.workers=8, --set run.shuffle=true, --set run.tool=pytest
+# and --set 'pytest.extra_args=["--tb=short"]' all Just Work.
+#
+# Precedence: built-in defaults < this file < --set overrides < surviving
+# CLI flags. All fields are optional; every line below is commented out
+# so the file is a no-op as-shipped.
+
+
+# ---------------------------------------------------------------------------
+# [[suite]]: explicit test-suite declarations
+# ---------------------------------------------------------------------------
+# When at least one [[suite]] entry is present, auto-detection is skipped
+# entirely: you control exactly which tools run and where their
+# files live. When absent (the default), scrutin auto-detects from
+# marker files (DESCRIPTION, pyproject.toml, jarl.toml, ...) at the
+# *project root* (this directory).
+# Detected at `scrutin init` time: tinytest
+#
+# Terminology:
+#   - project root: where this .scrutin/config.toml lives. Anchors
+#     shared state (.scrutin/state.db, runner scripts, hooks).
+#   - suite root:   the directory each suite's tool runs from. Drives
+#     the subprocess CWD and the SCRUTIN_PKG_DIR env var, so
+#     pkgload::load_all() / pytest find the right DESCRIPTION /
+#     pyproject.toml / .venv / ruff.toml / jarl.toml.
+#
+# Supported `tool` values: "testthat", "tinytest", "pointblank",
+# "validate", "jarl", "pytest", "ruff", "great_expectations".
+#
+# Fields per [[suite]]:
+#   tool   (required)  tool name
+#   root   (optional)  suite root, relative to project root (default ".")
+#                      Absolute paths allowed.
+#   run    (optional)  glob patterns for files the tool operates on
+#                      (tests to execute, files to lint). Always globs,
+#                      anchored under `root`. Default: plugin-provided.
+#   watch  (optional)  glob patterns for files watched to trigger
+#                      reruns. Default: plugin-provided (or `run` for
+#                      linters, which re-check what they operate on).
+#   runner (optional)  path to a custom runner script, relative to
+#                      the project root.
+#
+# Single-package project (default shape):
+#
+# [[suite]]
+# tool = "testthat"
+# # root / run / watch omitted → plugin defaults under project root
+#
+# Monorepo: two sibling packages under one scrutin invocation:
+#
+# [[suite]]
+# tool = "testthat"
+# root = "r"
+#
+# [[suite]]
+# tool = "pytest"
+# root = "python"
+#
+# Custom globs:
+#
+# [[suite]]
+# tool  = "pytest"
+# root  = "python"
+# run   = ["tests/**/test_*.py"]
+# watch = ["marginaleffects/**/*.py"]
+
+
+# ---------------------------------------------------------------------------
+# [run]: execution parameters
+# ---------------------------------------------------------------------------
+[run]
+# tool = "auto"
+#   Restrict auto-detection to a single tool. "auto" (default)
+#   enables every tool whose marker files are present. Ignored
+#   when explicit [[suite]] entries are configured.
+
+# workers = 4
+#   Number of concurrent test-file slots per suite. Default:
+#   min(physical_cores, 8), minimum 2. In fork mode this is the
+#   semaphore width (how many children run in parallel); there is
+#   still exactly one parent process per suite.
+
+# fork_workers = false
+#   Worker isolation strategy. When false (the default), workers are
+#   killed and respawned after every file: safe but pays startup cost
+#   per file. When true (Linux/macOS only), each suite has one
+#   long-lived parent that fork()s a copy-on-write child per test
+#   file: fast startup + full process isolation.
+#
+#   Dangerous: forking a process that is itself multithreaded or that
+#   spawns its own forked workers (R's parallel::mclapply, Python's
+#   multiprocessing with the fork start method, BLAS/OpenMP threads,
+#   etc.) can deadlock or crash the child. Only turn this on if you
+#   know no code under test forks on its own. Auto-disabled on Windows
+#   where fork() is unavailable.
+
+# max_fail = 0
+#   Stop after this many failing *files* (failed + errored). 0 (default)
+#   means unlimited. File-level, not expectation-level: one crashing
+#   file counts as one bad file regardless of how many assertions it
+#   took down with it.
+
+# color = true
+#   ANSI color in plain-mode output. TUI and web always render colors
+#   regardless of this setting.
+
+# shuffle = false
+#   Randomize test-file execution order to surface inter-file state
+#   leaks. Does not reorder expectations within a file.
+
+# seed = 0
+#   Shuffle seed. Omit to draw a fresh seed from system time; the
+#   drawn seed is always printed so the run is reproducible by
+#   re-running with --set run.seed=<printed value>.
+
+# timeout_file_ms = 0
+#   Per-file timeout in milliseconds. A worker that doesn't return
+#   results within this budget is killed and the file marked errored.
+#   0 (default) disables the per-file timeout.
+
+# timeout_run_ms = 0
+#   Whole-run timeout in milliseconds across all suites. When
+#   exceeded, every in-flight worker is cancelled. 0 (default)
+#   disables this gate.
+
+# reruns = 0
+#   Re-execute failing files up to this many extra times before
+#   reporting. A file that passes on attempt > 1 is marked flaky in
+#   the history DB, in JUnit output, and in the plain-mode summary.
+
+# reruns_delay = 0
+#   Milliseconds to wait between rerun attempts. Useful for flakes
+#   caused by external rate limits or eventual consistency in fixtures.
+
+
+# ---------------------------------------------------------------------------
+# [preflight]: startup checks that fail fast with actionable errors
+# ---------------------------------------------------------------------------
+# Each check runs once at scrutin startup, before any test worker
+# spawns. Failures surface as a single clean error instead of per-file
+# noise mid-run. Disable individual checks if they are wrong for your
+# project, or set [preflight] enabled = false to skip them all.
+#
+# [preflight]
+# enabled        = true   # master switch
+# suite_roots    = true   # each [[suite]] root resolves to an existing dir
+# run_globs      = true   # each suite's `run` matches at least one file
+# command_tools  = true   # jarl / ruff are on PATH
+# python_imports = true   # `import <project>` works in the resolved venv
+# r_pkgload      = true   # R `pkgload` package is installed
+
+
+# ---------------------------------------------------------------------------
+# [watch]: file-watcher settings (TUI and web only)
+# ---------------------------------------------------------------------------
+[watch]
+# enabled = true
+#   Whether watch mode is on by default in the TUI and web. Override
+#   with --set watch.enabled=false. Plain / GitHub / JUnit reporters
+#   are always one-shot regardless.
+
+# debounce_ms = 50
+#   Coalesce file-change events within this window before triggering
+#   a re-run. Raise if your editor writes many files in bursts.
+
+# ignore = [".git", "*.Rhistory"]
+#   Glob patterns excluded from the watcher. Matches paths relative
+#   to the project root. The built-in ignore list also covers target/,
+#   node_modules/, __pycache__/, etc.
+
+
+# ---------------------------------------------------------------------------
+# [filter]: test-file selection
+# ---------------------------------------------------------------------------
+[filter]
+# include = []
+#   Glob patterns: only run test files matching at least one pattern.
+#   Empty (default) means no include filter.
+
+# exclude = []
+#   Glob patterns: skip test files matching any pattern. Applied
+#   after include.
+
+# group = "fast"
+#   Activate a named filter group at startup (from [filter.groups.*]).
+#   Equivalent to `-s filter.group=fast` on the CLI. When set, the
+#   group's include/exclude/tools *replace* the top-level filter.
+#   The TUI (f/F) and web dropdown cycle this at runtime.
+
+# Named filter groups. Activate one with `-s filter.group=NAME` or
+# by setting `group = "NAME"` above. The selected group's
+# include/exclude/tools replace the top-level [filter] entries.
+#
+# [filter.groups.fast]
+# tools   = ["pytest"]          # restrict to these tools (empty = all)
+# include = ["**/test_unit_*.py"]
+# exclude = ["**/test_slow_*.py"]
+
+
+# ---------------------------------------------------------------------------
+# [env]: environment variables injected into every subprocess
+# ---------------------------------------------------------------------------
+# Applied to worker subprocesses and command-mode plugins. Keys are
+# validated case-insensitively (Path and PATH cannot coexist: they
+# silently collapse on Windows). Empty values are legal (set the var
+# to empty). No interpolation, no unset semantics. [env] always wins
+# over inherited parent environment on conflict.
+#
+# [env]
+# RUST_LOG     = "debug"
+# DATABASE_URL = "postgres://localhost/test"
+
+
+# ---------------------------------------------------------------------------
+# [metadata]: run-provenance capture
+# ---------------------------------------------------------------------------
+# Controls what goes into the history DB and JUnit <properties>.
+# Provenance (git SHA, branch, hostname, CI provider) is captured
+# automatically when `enabled = true`.
+#
+# [metadata]
+# enabled = true            # set false for privacy / air-gapped builds
+
+
+# ---------------------------------------------------------------------------
+# [extras]: user-supplied key/value labels attached to every run
+# ---------------------------------------------------------------------------
+# Goes into the `extras` table of the history DB and the JUnit
+# <properties> block. Values can be any TOML scalar (string, int,
+# float, bool) and are coerced to strings at the storage/reporter
+# boundary, so --set extras.build=4521 Just Works without quoting.
+#
+# [extras]
+# build  = 4521
+# branch = "feature/auth"
+
+
+# ---------------------------------------------------------------------------
+# [hooks]: lifecycle hook scripts
+# ---------------------------------------------------------------------------
+# Process hooks run once per invocation from the Rust binary.
+# Worker hooks are sourced by each subprocess on boot / shutdown.
+#
+# [hooks]
+# startup  = "scripts/before_run.sh"   # runs before first worker spawns;
+#                                      # must be executable; failure aborts
+# teardown = "scripts/after_run.sh"    # runs after last result drains;
+#                                      # failure logs a warning only
+#
+# Language-level worker hooks apply to every tool in that language
+# unless overridden by a tool-level entry.
+#
+# [hooks.r]
+# worker_startup  = "scripts/r_setup.R"
+# worker_teardown = "scripts/r_teardown.R"
+#
+# [hooks.r.testthat]
+# worker_startup  = "scripts/testthat_setup.R"   # tool-level override
+#
+# [hooks.python]
+# worker_startup = "scripts/py_setup.py"
+#
+# [hooks.python.pytest]
+# worker_startup = "scripts/conftest_hook.py"
+
+[hooks.r.tinytest]
+worker_startup = "inst/tinytest/helpers.R"
+
+
+# ---------------------------------------------------------------------------
+# [python]: interpreter resolution
+# ---------------------------------------------------------------------------
+# When unset, scrutin auto-detects in this order: $VIRTUAL_ENV, then
+# .venv/ and venv/ in the project root, then $CONDA_PREFIX, then
+# python3 on PATH.
+#
+# [python]
+# venv        = "envs/test"          # path to a virtualenv directory
+# interpreter = "uv run python"      # replaces auto-detection entirely;
+#                                    # split on whitespace so wrappers work
+
+
+# ---------------------------------------------------------------------------
+# Per-tool config
+# ---------------------------------------------------------------------------
+# Custom runner scripts: `scrutin init` writes the embedded defaults to
+# .scrutin/runners/<tool>.<ext> (e.g. .scrutin/runners/testthat.R,
+# .scrutin/runners/pytest.py). Edit those files in place to swap package
+# loading, add project setup, or tweak the reporter; the engine picks
+# them up automatically over the embedded default whenever present.
+# Delete a file in that directory to fall back to the built-in runner.
+# To point at a runner somewhere else in the repo, set `runner` on an
+# explicit [[suite]] entry instead (see `runner` under [[suite]]).
+#
+# [pytest]
+# extra_args = []                 # appended verbatim to pytest.main(),
+#                                 # e.g. ["--tb=short", "-vv"]
+
+
+# ---------------------------------------------------------------------------
+# [keymap.<mode>]: TUI keybindings (replace semantics)
+# ---------------------------------------------------------------------------
+# Each [keymap.<mode>] subtable fully replaces the default bindings
+# for that mode (replace, not overlay): deleting a line unbinds the
+# key; deleting the whole subtable restores scrutin's built-in
+# defaults for that mode. Modes: normal, detail, failure, help, log.
+#
+# Key syntax: single chars (`j`, `J`), named keys (`Enter`, `Esc`,
+# `Tab`, `Space`, `Up`, `Down`, `PageUp`, `Backspace`, `F1`..`F12`),
+# and modifiers (`ctrl+x`, `alt+x`, `shift+x`). Action names live
+# in scrutin-tui::keymap::Action.
+#
+# The defaults for every mode are written out below by `scrutin init`
+# so you can edit in place rather than reconstructing them from docs.
+
+# [keymap.normal]
+# "j"        = "cursor_down"
+# "k"        = "cursor_up"
+# "Down"     = "cursor_down"
+# "Up"       = "cursor_up"
+# "Right"    = "enter_detail"
+# "Enter"    = "enter_detail"
+# "l"        = "enter_detail"
+# "Left"     = "pop"
+# "Esc"      = "pop"
+# "q"        = "quit"
+# "g"        = "cursor_top"
+# "G"        = "cursor_bottom"
+# "Home"     = "cursor_top"
+# "End"      = "cursor_bottom"
+# "PageUp"   = "full_page_up"
+# "PageDown" = "full_page_down"
+# "J"        = "source_scroll_down"
+# "K"        = "source_scroll_up"
+# "r"        = "open_run_menu"
+# "x"        = "cancel_file"
+# "X"        = "cancel_all"
+# "/"        = "filter_name"
+# "o"        = "filter_status"
+# "O"        = "filter_status_back"
+# "t"        = "filter_tool"
+# "T"        = "filter_tool_back"
+# "f"        = "filter_group"
+# "F"        = "filter_group_back"
+# "s"        = "open_sort_menu"
+# "-"        = "toggle_orientation"
+# "("        = "shrink_list"
+# ")"        = "grow_list"
+# "Space"    = "toggle_select"
+# "v"        = "toggle_visual"
+# "e"        = "edit_test"
+# "y"        = "yank_message"
+# "L"        = "enter_log"
+# "?"        = "enter_help"
+
+# [keymap.detail]
+# "j"        = "cursor_down"
+# "k"        = "cursor_up"
+# "Down"     = "cursor_down"
+# "Up"       = "cursor_up"
+# "Right"    = "enter_failure"
+# "Enter"    = "enter_failure"
+# "l"        = "enter_failure"
+# "Left"     = "pop"
+# "Esc"      = "pop"
+# "h"        = "pop"
+# "q"        = "quit"
+# "g"        = "cursor_top"
+# "G"        = "cursor_bottom"
+# "Home"     = "cursor_top"
+# "End"      = "cursor_bottom"
+# "PageUp"   = "full_page_up"
+# "PageDown" = "full_page_down"
+# "J"        = "source_scroll_down"
+# "K"        = "source_scroll_up"
+# "r"        = "run_current_file"
+# "R"        = "open_run_menu"
+# "x"        = "cancel_file"
+# "X"        = "cancel_all"
+# "/"        = "filter_name"
+# "o"        = "filter_status"
+# "O"        = "filter_status_back"
+# "t"        = "filter_tool"
+# "T"        = "filter_tool_back"
+# "f"        = "filter_group"
+# "F"        = "filter_group_back"
+# "s"        = "open_sort_menu"
+# "-"        = "toggle_orientation"
+# "("        = "shrink_list"
+# ")"        = "grow_list"
+# "e"        = "edit_test"
+# "E"        = "edit_source"
+# "y"        = "yank_message"
+# "L"        = "enter_log"
+# "?"        = "enter_help"
+
+# [keymap.failure]
+# "j"    = "cursor_down"
+# "k"    = "cursor_up"
+# "Down" = "cursor_down"
+# "Up"   = "cursor_up"
+# "Left" = "pop"
+# "Esc"  = "pop"
+# "h"    = "pop"
+# "q"    = "quit"
+# "r"    = "run_current_file"
+# "R"    = "open_run_menu"
+# "x"    = "cancel_file"
+# "X"    = "cancel_all"
+# "/"    = "filter_name"
+# "e"    = "edit_test"
+# "E"    = "edit_source"
+# "y"    = "yank_message"
+# "L"    = "enter_log"
+# "?"    = "enter_help"
+
+# [keymap.help]
+# "j"        = "cursor_down"
+# "k"        = "cursor_up"
+# "Down"     = "cursor_down"
+# "Up"       = "cursor_up"
+# "g"        = "cursor_top"
+# "G"        = "cursor_bottom"
+# "PageDown" = "cursor_down"
+# "PageUp"   = "cursor_up"
+# "Esc"      = "pop"
+# "q"        = "pop"
+# "?"        = "pop"
+
+# [keymap.log]
+# "j"        = "cursor_down"
+# "k"        = "cursor_up"
+# "Down"     = "cursor_down"
+# "Up"       = "cursor_up"
+# "g"        = "cursor_top"
+# "G"        = "cursor_bottom"
+# "PageDown" = "cursor_down"
+# "PageUp"   = "cursor_up"
+# "Esc"      = "pop"
+# "q"        = "pop"
+# "?"        = "pop"
+# "L"        = "pop"
