@@ -1,0 +1,26 @@
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+name: scrutin
+
+permissions: read-all
+
+jobs:
+  check_r:
+    runs-on: ${{ matrix.config.os }}
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macos-latest,   r: 'release'}
+          - {os: windows-latest, r: 'release'}
+          - {os: ubuntu-latest,  r: 'release'}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: vincentarelbundock/scrutin/.github/actions/check_r@main
+        with:
+          r-version: ${{ matrix.config.r }}
+          tool: tinytest
