@@ -63,13 +63,15 @@ Here are a few benefits of `modelsummary`:
 ``` r
 library(modelsummary)
 
-mod <- lm(y ~ x, dat)
+mod <- lm(mpg ~ hp, data = mtcars)
+
+modelsummary(mod)
 ```
 
-The command above will automatically display a summary table in the
-`Rstudio` Viewer or in a web browser. All you need is one word to change
-the output format. For example, a text-only version of the table can be
-printed to the Console by typing:
+The `modelsummary(mod)` command above will automatically display a
+summary table in the `RStudio` Viewer or in a web browser. All you need
+is one word to change the output format. For example, a text-only
+version of the table can be printed to the Console by typing:
 
 ``` r
 modelsummary(mod, output = "markdown")
