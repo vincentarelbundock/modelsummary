@@ -184,3 +184,23 @@ tab <- datasummary(
   data = penguins
 )
 expect_inherits(tab, "tinytable")
+
+# Issue #955: tinytable drops repeated nested column labels across header levels
+dat <- data.frame(
+  x = 1:12,
+  y = 12:1,
+  sex = rep(c("female", "male"), each = 6),
+  island = rep(rep(c("Biscoe", "Dream", "Torgersen"), each = 2), 2)
+)
+tab <- datasummary(
+  x + y ~ (sex * island) * (Mean + SD),
+  data = dat,
+  sparse_header = FALSE,
+  output = "tinytable"
+)
+html <- tinytable::save_tt(tab, output = "html")
+headers <- regmatches(html, gregexpr("<th[^>]*>[^<]*</th>", html, perl = TRUE))[[1]]
+headers <- trimws(gsub("<[^>]*>", "", headers))
+expect_equal(sum(headers == "Biscoe"), 2)
+expect_equal(sum(headers == "Dream"), 2)
+expect_equal(sum(headers == "Torgersen"), 2)

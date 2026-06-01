@@ -6,6 +6,9 @@
 
 - Accomodate change in attribute name in fixest v0.14.0. Thanks to
   @lrberge for pull request \#950.
+- `datasummary()` with `output = "tinytable"` now correctly displays
+  non-sparse subheaders when `sparse_header = FALSE`. Fixes Issue \#955.
+  Thanks to @raffaelemancuso.
 
 ## 2.6.0
 

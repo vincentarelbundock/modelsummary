@@ -79,7 +79,8 @@ factory_tinytable <- function(
   # after align, otherwise span alignment is overridden
   if (!is.null(span_list)) {
     for (i in seq_along(span_list)) {
-      sp <- cumsum(span_list[[i]])
+      span <- deduplicate_tinytable_span_names(span_list[[i]])
+      sp <- cumsum(span)
       sp <- as.list(sp)
       sp[[1]] <- 1:sp[[1]]
       sp[2:length(sp)] <- lapply(
@@ -122,6 +123,19 @@ factory_tinytable <- function(
   return(invisible(out))
 }
 
+
+# tinytable reconstructs multi-level spans from label names; duplicate names
+# overwrite earlier spans, so pad repeats without changing visible text.
+deduplicate_tinytable_span_names <- function(x) {
+  nms <- names(x)
+  if (is.null(nms)) {
+    return(x)
+  }
+  idx <- trimws(nms) != ""
+  nms[idx] <- pad(nms[idx])
+  names(x) <- nms
+  return(x)
+}
 
 escape_everything <- function(tab, output_format, span_list, title, notes) {
   # body: do not escape siunitx \num{}
