@@ -38,6 +38,37 @@ fixest_multi_names <- function(x) {
 }
 
 
+fixest_vcov_type <- function(x) {
+  get_attr <- function(z) {
+    if (is.null(z)) {
+      return(NULL)
+    }
+    out <- c(
+      attr(z, "vcov_type", exact = TRUE),
+      attr(z, "type", exact = TRUE)
+    )
+    out <- out[!is.na(out)]
+    if (length(out) > 0) {
+      return(out[[1]])
+    }
+    return(NULL)
+  }
+
+  out <- get_attr(x[["se"]])
+  if (is.null(out)) {
+    out <- get_attr(x[["cov.scaled"]])
+  }
+  if (is.null(out)) {
+    sx <- summary(x)
+    out <- get_attr(sx[["se"]])
+    if (is.null(out)) {
+      out <- get_attr(sx[["cov.scaled"]])
+    }
+  }
+
+  return(out)
+}
+
 #' @include glance_custom.R
 #' @keywords internal
 glance_custom_internal.fixest <- function(x, vcov_type = NULL, ...) {
@@ -56,11 +87,7 @@ glance_custom_internal.fixest <- function(x, vcov_type = NULL, ...) {
       !vcov_type %in% c("vector", "matrix", "function")
   ) {
     
-    if (packageVersion("fixest") >= "0.14.0") {
-      fvcov_type <- attr(summary(x)[["se"]], "vcov_type")
-    } else {
-      fvcov_type <- attr(summary(x)[["se"]], "type")
-    }
+    fvcov_type <- fixest_vcov_type(x)
     
     if (isTRUE(grepl("^Clustered", fvcov_type))) {
       fvcov_type <- gsub("^Clustered \\((.*)\\)$", "by: \\1", fvcov_type)

@@ -60,6 +60,12 @@ expect_equivalent(tab[tab$term == "Std.Errors", "(1)"], "by: vs")
 tab <- modelsummary(mod, vcov = list(NULL, "iid"), output = "data.frame")
 expect_equivalent(tab[tab$term == "Std.Errors", "(1)"], "by: vs")
 expect_equivalent(tab[tab$term == "Std.Errors", "(2)"], "by: vs")
+if (utils::packageVersion("fixest") >= "0.14.0") {
+  mod_twoway <- feols(hp ~ mpg | cyl + gear, mtcars)
+  mod_twoway <- summary(mod_twoway, vcov = "twoway")
+  tab <- modelsummary(mod_twoway, output = "data.frame")
+  expect_equivalent(tab[tab$term == "Std.Errors", "(1)"], "by: cyl & gear")
+}
 # unnamed function includes no label
 tab1 <- modelsummary(
   mod,
