@@ -37,27 +37,18 @@ get_vcov.default <- function(model, vcov = NULL, ...) {
     )
   } else if (isTRUE(checkmate::check_formula(vcov))) {
     dots[["cluster"]] <- vcov
-    if (inherits(model, "fixest")) {
-      out <- try(
-        insight::get_varcov(
-          model,
-          vcov = "vcovCL",
-          vcov_args = dots,
-          component = "all"
-        ),
-        silent = TRUE
-      )
-    } else {
-      out <- try(
-        insight::get_varcov(
-          model,
-          vcov = "vcovCL",
-          vcov_args = dots,
-          component = "all"
-        ),
-        silent = TRUE
-      )
-    }
+    # Note: for fixest models, sanitize_vcov() already converts formula vcov
+    # to a matrix via stats::vcov(model, vcov = formula), so this path is
+    # only reached by non-fixest models.
+    out <- try(
+      insight::get_varcov(
+        model,
+        vcov = "vcovCL",
+        vcov_args = dots,
+        component = "all"
+      ),
+      silent = TRUE
+    )
     if (inherits(out, "try-error")) {
       msg <- attr(out, "condition")$message
       if (grepl("Unable to extract", msg)) {

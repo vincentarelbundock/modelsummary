@@ -150,3 +150,21 @@ dat <- transform(mtcars, carb_carb = carb)
 mod <- feols(mpg ~ hp | carb_carb, data = dat)
 k <- modelsummary(mod, output = "latex")
 expect_false(grepl("FE: carb_carb", k))
+
+# fixest multi-way clustering formula: SEs match fixest native vcov
+mod <- feols(mpg ~ hp + drat, mtcars)
+se_native <- sqrt(diag(vcov(mod, vcov = ~vs + am)))
+tab <- modelsummary(
+  mod,
+  vcov = ~vs + am,
+  gof_map = NA,
+  estimate = "std.error",
+  statistic = NULL,
+  output = "dataframe"
+)
+se_ms <- as.numeric(tab[["(1)"]])
+expect_equivalent(se_ms, se_native, ignore_attr = TRUE)
+
+# fixest formula vcov label for multi-way clustering
+tab <- modelsummary(mod, vcov = ~vs + am, output = "dataframe")
+expect_true("by: vs & am" %in% tab[["(1)"]])
