@@ -314,8 +314,10 @@ NULL, "classical", "iid", and "constant" are aliases which do not modify
 uncertainty estimates and simply report the default standard errors stored
 in the model object.
 
-One-sided formulas such as \code{~clusterid} are passed to the \code{sandwich::vcovCL}
-function.
+One-sided formulas such as \code{~clusterid} are passed to \code{sandwich::vcovCL}
+for most model types. For \code{fixest} models, the formula is passed to
+\code{fixest}'s native \code{stats::vcov()} method, which supports multi-way
+clustering (e.g., \code{~cluster1 + cluster2}).
 
 Matrices and functions producing variance-covariance matrices are first
 passed to \code{lmtest}. If this does not work, \code{modelsummary} attempts to take
@@ -560,6 +562,9 @@ modelsummary(
   vcov = list(
     "Stata Corp" = "stata",
     "Newey Lewis & the News" = "NeweyWest"))
+
+# clustered standard errors with a formula
+modelsummary(models, vcov = ~ Height)
 
 # fmt
 mod <- lm(mpg ~ hp + drat + qsec, data = mtcars)

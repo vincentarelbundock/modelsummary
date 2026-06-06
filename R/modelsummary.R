@@ -270,6 +270,9 @@ globalVariables(c(
 #'     "Stata Corp" = "stata",
 #'     "Newey Lewis & the News" = "NeweyWest"))
 #'
+#' # clustered standard errors with a formula
+#' modelsummary(models, vcov = ~ Height)
+#'
 #' # fmt
 #' mod <- lm(mpg ~ hp + drat + qsec, data = mtcars)
 #'
