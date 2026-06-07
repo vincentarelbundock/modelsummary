@@ -1,11 +1,11 @@
-#' Extract goodness-of-fit statistics a tidy format.
+#' Extract goodness-of-fit statistics in a tidy format.
 #'
 #' A unified approach to extract results from a wide variety of models. 
 #'
 #' @param vcov_type string vcov type to add at the bottom of the table
 #' @inheritParams get_estimates
 #' @inheritParams modelsummary
-#' @returns A dataframe with the goodness-o-fit statistics.
+#' @returns A dataframe with the goodness-of-fit statistics.
 #'          The `backend` attribute indicates the backend used to extract them.
 #'          Moreover, for some models `get_gof` attaches useful attributes to the output. 
 #'          You can access this information by calling the `attributes` function `attributes(get_estimates(model))`.

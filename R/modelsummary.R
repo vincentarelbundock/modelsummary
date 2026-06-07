@@ -167,7 +167,7 @@ globalVariables(c(
 #'   - `term : response + statistic ~ model`: term and group id in a single column
 #'   - `term ~ response`
 #' * String: "cbind", "rbind", "rcollapse"
-#'   - "cbind": side-by-side models with autmoatic spanning column headers to group models (`tinytable` only feature).
+#'   - "cbind": side-by-side models with automatic spanning column headers to group models (`tinytable` only feature).
 #'   - "rbind" or "rcollapse": "panels" or "stacks" of regression models.
 #'   -  the `models` argument must be a (potentially named) nested list of models.
 #'     + Unnamed nested list with 2 panels: `list(list(model1, model2), list(model3, model4))`

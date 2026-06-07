@@ -240,7 +240,7 @@ fmt_statistic <- function(..., default = 3) {
 fmt_term <- function(..., default = 3) {
   args <- utils::modifyList(list(...), list("default" = default))
   if (!isTRUE(checkmate::check_list(args, names = "named"))) {
-    msg <- "All arguments of the `fmt_statistic()` function must be named."
+    msg <- "All arguments of the `fmt_term()` function must be named."
     insight::format_error(msg)
   }
 

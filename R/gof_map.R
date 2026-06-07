@@ -74,10 +74,10 @@ gof_map_build <- function() {
   sigma,                     Sigma,              3, TRUE,
   srmr,                      SRMR,               0, TRUE,
   statistic,                 Statistics,         3, TRUE,
+  tli,                       TLI,                0, TRUE,
   wu.hausman,                Wu-Hausman,         3, TRUE,
   wu.hausman.p,              Wu-Hausman (p),     3, TRUE,
-  statistic,                 Statistics,         3, TRUE,
-  tli,                       TLI,                0, TRUE,'
+'
   out <- utils::read.csv(
     text = text,
     colClasses = c("character", "character", "numeric", "logical", "NULL")
