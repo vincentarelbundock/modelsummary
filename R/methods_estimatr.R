@@ -1,5 +1,6 @@
 #' @include glance_custom.R
 #' @keywords internal
+#' @exportS3Method glance_custom_internal lm_robust
 glance_custom_internal.lm_robust <- function(x, vcov_type = NULL, ...) {
   insight::check_if_installed("estimatr")
   out <- data.frame(row.names = "firstrow")
@@ -15,4 +16,5 @@ glance_custom_internal.lm_robust <- function(x, vcov_type = NULL, ...) {
 
 
 #' @keywords internal
+#' @exportS3Method glance_custom_internal iv_robust
 glance_custom_internal.iv_robust <- glance_custom_internal.lm_robust
