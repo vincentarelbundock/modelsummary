@@ -823,23 +823,33 @@ modelsummary <- function(
       !is.null(attr(add_rows, "position"))
   ) {
     pos <- attr(add_rows, "position")
-    # gof_start/gof_end do not change hrule
+    # `hrule` is the first GOF row in the pre-add_rows table. Backends draw the
+    # coef/gof separator below `hrule - 1`, so rows added to the coefficient
+    # side must shift `hrule`; rows added to the GOF side must not.
     if (identical(pos, "gof_start")) {
+      # Same physical insertion point as "coef_end", but conceptually this is
+      # the first GOF row, below the separator.
       pos <- match("gof", tab$part)
       pos <- pos:(pos + nrow(add_rows) - 1)
       attr(add_rows, "position") <- pos
     } else if (identical(pos, "gof_end")) {
+      # Appending after all GOF rows leaves the coef/gof separator unchanged.
       attr(add_rows, "position") <- NULL
     } else if (identical(pos, "coef_start")) {
+      # Insert before the coefficient block, so the GOF block moves down.
       pos <- seq_len(nrow(add_rows))
       attr(add_rows, "position") <- pos
-      hrule <- hrule + sum(length(pos < hrule - 1))
+      hrule <- hrule + nrow(add_rows)
     } else if (identical(pos, "coef_end")) {
+      # Insert just before GOF, but keep the new rows above the separator as
+      # part of the coefficient block.
       pos <- match("gof", tab$part)
       pos <- pos:(pos + nrow(add_rows) - 1)
       attr(add_rows, "position") <- pos
-      hrule <- hrule + sum(pos < hrule - 1)
+      hrule <- hrule + nrow(add_rows)
     } else {
+      # Numeric positions do not carry coef/GOF semantics; preserve the legacy
+      # rule and only move the separator for rows clearly before the boundary.
       hrule <- hrule + sum(pos < hrule - 1)
     }
   }

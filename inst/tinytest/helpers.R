@@ -1,5 +1,7 @@
 rm(list = ls())
 suppressWarnings(modelsummary::config_modelsummary(reset = TRUE))
+options("modelsummary_warning_latex_siunitx_preamble" = FALSE)
+options("modelsummary_warning_performance_gof_expensive" = FALSE)
 
 ON_CRAN <- !identical(Sys.getenv("R_NOT_CRAN"), "true")
 ON_GH <- identical(Sys.getenv("R_GH"), "true")

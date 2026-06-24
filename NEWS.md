@@ -5,7 +5,9 @@
 ## Development
 
 - Accomodate change in attribute name in fixest v0.14.0. Thanks to
-  @raffaelemanucuso for Issue \#957.
+  @lrberge for pull request \#950.
+- `add_rows` with `position = "coef_end"` now places rows above the
+  coef/GOF separator. Fixes Issue \#964. Thanks to @ykonut.
 - `datasummary()` with `output = "tinytable"` now correctly displays
   non-sparse subheaders when `sparse_header = FALSE`. Fixes Issue \#955.
   Thanks to @raffaelemancuso.

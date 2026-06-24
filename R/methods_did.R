@@ -1,5 +1,6 @@
 #' @include glance_custom.R
 #' @keywords internal
+#' @exportS3Method glance_custom_internal MP
 glance_custom_internal.MP <- function(x, vcov_type = NULL, ...) {
   insight::check_if_installed("did")
   out <- data.frame(row.names = "firstrow")
@@ -19,4 +20,5 @@ glance_custom_internal.MP <- function(x, vcov_type = NULL, ...) {
 
 
 #' @keywords internal
+#' @exportS3Method glance_custom_internal AGGTEobj
 glance_custom_internal.AGGTEobj <- glance_custom_internal.MP

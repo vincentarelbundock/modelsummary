@@ -1,5 +1,6 @@
 #' @include glance_custom.R
 #' @keywords internal
+#' @exportS3Method glance_custom_internal felm
 glance_custom_internal.felm <- function(x, vcov_type = NULL, ...) {
   insight::check_if_installed("lfe")
   out <- data.frame(row.names = "firstrow")

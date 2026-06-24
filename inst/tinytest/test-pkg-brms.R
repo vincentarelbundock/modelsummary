@@ -1,12 +1,12 @@
 source("helpers.R")
-using("checkmate")
+suppressWarnings(using("checkmate"))
 requiet("brms")
 
 # brms: diagnostics and tests
 mod <- insight::download_model("brms_1")
 tab <- modelsummary(mod, "data.frame", statistic = "conf.int")
 expect_inherits(tab, "data.frame")
-tab <- modelsummary(mod, "data.frame", diagnostic = "ESS", statistic = "ess")
+tab <- modelsummary(mod, "data.frame", diagnostic = "ESS", statistic = "ess.tail")
 expect_inherits(tab, "data.frame")
 expect_error(
   modelsummary(mod, "data.frame", statistic = "rope"),

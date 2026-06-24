@@ -1,5 +1,6 @@
 #' @inherit glance_custom_internal
 #' @keywords internal
+#' @exportS3Method glance_custom_internal lm
 glance_custom_internal.lm <- function(x, vcov_type = NULL, gof = NULL, ...) {
   # glm also inherits from lm
 
@@ -69,6 +70,7 @@ glance_custom_internal.lm <- function(x, vcov_type = NULL, gof = NULL, ...) {
 
 #' @inherit get_vcov
 #' @keywords internal
+#' @exportS3Method get_vcov mlm
 get_vcov.mlm <- function(model, vcov = NULL, conf_level = NULL, ...) {
   out <- parameters::parameters(model, vcov = vcov, ci = conf_level, ...)
   out <- parameters::standardize_names(out, style = "broom")

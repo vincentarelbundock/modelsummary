@@ -71,6 +71,7 @@ fixest_vcov_type <- function(x) {
 
 #' @include glance_custom.R
 #' @keywords internal
+#' @exportS3Method glance_custom_internal fixest
 glance_custom_internal.fixest <- function(x, vcov_type = NULL, ...) {
   insight::check_if_installed("fixest", minimum_version = "0.10.4")
 
@@ -98,4 +99,5 @@ glance_custom_internal.fixest <- function(x, vcov_type = NULL, ...) {
   return(out)
 }
 
+#' @exportS3Method glance_custom_internal multi
 glance_custom_internal.multi <- glance_custom_internal.fixest
