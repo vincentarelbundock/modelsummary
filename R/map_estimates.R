@@ -28,8 +28,18 @@ map_estimates <- function(
   }
 
   # coef_omit
+  # Always matched against the raw variable names, never against display
+  # labels: `coef_rename = TRUE` relabels terms during extraction, and a regex
+  # written against the model's variables must keep working regardless.
+  # `modelsummary_raw_coef` is absent when no renaming happened, in which case
+  # `term` already holds the raw names.
+  raw_coef <- if ("modelsummary_raw_coef" %in% colnames(estimates)) {
+    estimates[["modelsummary_raw_coef"]]
+  } else {
+    estimates$term
+  }
   if (is.character(coef_omit)) {
-    idx <- !grepl(coef_omit, estimates$term, perl = TRUE)
+    idx <- !grepl(coef_omit, raw_coef, perl = TRUE)
     if (sum(idx) > 0) {
       estimates <- estimates[idx, , drop = FALSE]
     } else {
@@ -56,6 +66,12 @@ modelsummary(mod, coef_omit = "^(?!.*ei|.*pt)")
 '
       stop(msg, call. = FALSE)
     }
+  }
+
+  # the raw names have served their purpose; drop them so they never reach the
+  # merge, the reshaping or the printed table
+  if ("modelsummary_raw_coef" %in% colnames(estimates)) {
+    estimates[["modelsummary_raw_coef"]] <- NULL
   }
 
   # coef_rename
