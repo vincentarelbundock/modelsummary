@@ -311,6 +311,12 @@ get_estimates_parameters <- function(
   if (isTRUE(coef_rename)) {
     labs <- attr(out, "pretty_labels")
     labs <- gsub("\\*", "\u00d7", labs)
+    # Keep the raw variable names alongside the labels. `coef_omit` matches on
+    # these, so a regex written against the model's variables keeps working
+    # when `coef_rename = TRUE` swaps the terms for variable labels. The column
+    # is carried through `format_estimates()` and dropped in `map_estimates()`
+    # as soon as `coef_omit` has been applied.
+    out[["modelsummary_raw_coef"]] <- out$term
     out$term <- replace_dict(out$term, labs)
     out$term <- gsub("\\*", "\u00d7", out$term)
   }
