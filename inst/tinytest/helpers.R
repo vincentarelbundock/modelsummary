@@ -20,9 +20,17 @@ random_string <- function() {
 }
 
 compare_files <- function(x, y) {
-  known <- digest::digest(x, file = TRUE)
-  unknown <- digest::digest(y, file = TRUE)
-  expect_equivalent(known, unknown)
+  # Compare CONTENT, not raw bytes. `tinytable::save_tt()` writes platform
+  # native line endings, so a snapshot in known_output/ (recorded on Unix, LF)
+  # can never match a file written on Windows (CRLF) byte-for-byte: the
+  # digests differ by exactly one \r per line. Strip the carriage returns
+  # explicitly, because readLines() only drops them on the platform whose
+  # convention they follow.
+  digest_text <- function(path) {
+    txt <- sub("\r$", "", readLines(path, warn = FALSE))
+    digest::digest(paste(txt, collapse = "\n"), serialize = FALSE)
+  }
+  expect_equivalent(digest_text(x), digest_text(y))
 }
 
 print.custom_html_string <- function(x, ...) {
