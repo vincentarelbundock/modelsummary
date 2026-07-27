@@ -1035,6 +1035,67 @@ modelsummary <- function(
 }
 
 
+#' Packages a parallel worker must attach to handle these models
+#'
+#' `future` decides which packages to attach on a worker by static analysis of
+#' the function it is given. `inner_loop()` names only `modelsummary`'s own
+#' extractors, never the package that defines the model class, so a worker can
+#' receive a model it cannot dispatch on. The extractor then fails there with
+#' e.g. `could not find function "glmmTMB"`, `get_gof()` swallows the error, and
+#' the user sees only the generic "could not extract goodness-of-fit statistics
+#' from a model of class ..." warning -- once per model, with every GOF row
+#' silently missing from the table. Sequential runs are unaffected, and so are
+#' single-model tables (the `future` branch requires `number_of_models > 1`),
+#' which makes the failure look erratic.
+#'
+#' Returns only namespaces already loaded in the main session, so a worker is
+#' never asked to attach something unavailable to it.
+#'
+#' @keywords internal
+#' @noRd
+model_packages <- function(models) {
+  # `inherits()`, not `is.list()`: a fitted model usually IS a list, so
+  # `is.list()` would make a single model look like a list of models and
+  # iterate over its components instead.
+  if (!inherits(models, "list")) {
+    models <- list(models)
+  }
+  # generics whose methods a GOF/estimates extractor is likely to need, and
+  # which a modelling package almost always provides for its own class
+  generics <- c("logLik", "vcov", "predict", "nobs", "summary", "terms")
+
+  one <- function(model) {
+    classes <- class(model)
+    # S4 and R5 record the defining package directly
+    pkg <- attr(classes, "package")
+    if (!is.null(pkg)) {
+      return(pkg)
+    }
+    # S3: find where the class's methods are registered
+    for (cl in classes) {
+      for (gen in generics) {
+        fun <- tryCatch(
+          utils::getS3method(gen, cl, optional = TRUE),
+          error = function(e) NULL
+        )
+        if (is.function(fun)) {
+          nm <- environmentName(topenv(environment(fun)))
+          # base packages are always available on a worker
+          if (nzchar(nm) && !nm %in% c("R_GlobalEnv", "base", "stats")) {
+            return(nm)
+          }
+        }
+      }
+    }
+    character(0)
+  }
+
+  out <- unique(unlist(lapply(models, one)))
+  out <- out[!is.na(out) & nzchar(out)]
+  out[out %in% loadedNamespaces()]
+}
+
+
 get_list_of_modelsummary_lists <- function(
   models,
   conf_level,
@@ -1109,7 +1170,8 @@ get_list_of_modelsummary_lists <- function(
       future.apply::future_lapply(
         seq_len(number_of_models),
         inner_loop,
-        future.seed = TRUE
+        future.seed = TRUE,
+        future.packages = model_packages(models)
       ),
       silent = TRUE
     )
