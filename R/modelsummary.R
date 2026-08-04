@@ -138,7 +138,7 @@ globalVariables(c(
 #' * `"^(?!.*ei|.*pt)"`: keep coefficients matching either the "ei" or the "pt" substrings.
 #' * See the Examples section below for complete code.
 #'
-#' Regular expressions are always matched against the **raw variable names** of the model, never against the labels that `coef_rename` may substitute for them. `coef_omit="start_year"` therefore drops `factor(start_year)2008` whether or not `coef_rename=TRUE` relabels it to "StartYear [2008]". Note that the raw names are matched as a regex, so parentheses must be escaped: use `"factor\\(cyl\\)"`, not `"factor(cyl)"`.
+#' Regular expressions are always matched against the **raw variable names** of the model, never against the labels that `coef_rename` may substitute for them. `coef_omit="start_year"` therefore drops `factor(start_year)2008` whether or not `coef_rename=TRUE` relabels it to `StartYear [2008]`. Note that the raw names are matched as a regex, so parentheses must be escaped: use `"factor\\(cyl\\)"`, not `"factor(cyl)"`.
 #' @param coef_rename logical, named or unnamed character vector, or function
 #' * Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below. Note: renaming is done by the `parameters` package at the extraction stage. This only works for models with builtin support and not for custom models. The raw variable names are retained internally, so `coef_omit` still matches on them rather than on the labels.
 #' * Unnamed character vector of length equal to the number of coefficients in the final table, after `coef_omit` is applied.
@@ -271,6 +271,9 @@ globalVariables(c(
 #'   vcov = list(
 #'     "Stata Corp" = "stata",
 #'     "Newey Lewis & the News" = "NeweyWest"))
+#'
+#' # clustered standard errors with a formula
+#' modelsummary(models, vcov = ~ Height)
 #'
 #' # fmt
 #' mod <- lm(mpg ~ hp + drat + qsec, data = mtcars)

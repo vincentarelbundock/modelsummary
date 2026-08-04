@@ -24,8 +24,10 @@
 #' uncertainty estimates and simply report the default standard errors stored
 #' in the model object.
 #'
-#' One-sided formulas such as `~clusterid` are passed to the `sandwich::vcovCL`
-#' function.
+#' One-sided formulas such as `~clusterid` are passed to `sandwich::vcovCL`
+#' for most model types. For `fixest` models, the formula is passed to
+#' `fixest`'s native `stats::vcov()` method, which supports multi-way
+#' clustering (e.g., `~cluster1 + cluster2`).
 #'
 #' Matrices and functions producing variance-covariance matrices are first
 #' passed to `lmtest`. If this does not work, `modelsummary` attempts to take

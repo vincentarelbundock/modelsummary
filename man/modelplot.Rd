@@ -63,11 +63,13 @@ See Examples section below.}
 \item \code{"^(?!.*ei)"}: keep coefficients matching the "ei" substring.
 \item \code{"^(?!.*ei|.*pt)"}: keep coefficients matching either the "ei" or the "pt" substrings.
 \item See the Examples section below for complete code.
-}}
+}
+
+Regular expressions are always matched against the \strong{raw variable names} of the model, never against the labels that \code{coef_rename} may substitute for them. \code{coef_omit="start_year"} therefore drops \verb{factor(start_year)2008} whether or not \code{coef_rename=TRUE} relabels it to \code{StartYear [2008]}. Note that the raw names are matched as a regex, so parentheses must be escaped: use \code{"factor\\\\(cyl\\\\)"}, not \code{"factor(cyl)"}.}
 
 \item{coef_rename}{logical, named or unnamed character vector, or function
 \itemize{
-\item Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below. Note: renaming is done by the \code{parameters} package at the extraction stage, before other arguments are applied like \code{coef_omit}. Therefore, this only works for models with builtin support and not for custom models.
+\item Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below. Note: renaming is done by the \code{parameters} package at the extraction stage. This only works for models with builtin support and not for custom models. The raw variable names are retained internally, so \code{coef_omit} still matches on them rather than on the labels.
 \item Unnamed character vector of length equal to the number of coefficients in the final table, after \code{coef_omit} is applied.
 \item Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg")
 \item Function: Accepts a character vector of the model's term names and returns a named vector like the one described above. The \code{modelsummary} package supplies a \code{coef_rename()} function which can do common cleaning tasks: \code{modelsummary(model, coef_rename = coef_rename)}

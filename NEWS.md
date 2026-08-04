@@ -26,6 +26,13 @@
   `coef_rename = TRUE` with the other forms of `coef_rename`, where
   `coef_omit` was already applied before renaming. Thanks to
   @raffaelemancuso for pull request \#968.
+- Documentation: one-sided `vcov` formulas are passed to
+  `sandwich::vcovCL` for most models, but `fixest` models use `fixest`’s
+  own `stats::vcov()` method, which supports multi-way clustering such
+  as `~cluster1 + cluster2`. The two produce different standard errors,
+  so the previous text was misleading. A clustered standard error
+  example was also added. Thanks to @LeonidasZhak for pull request
+  \#959.
 
 ## 2.6.0
 

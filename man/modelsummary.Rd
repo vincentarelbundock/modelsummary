@@ -194,11 +194,13 @@ See Examples section below.}
 \item \code{"^(?!.*ei)"}: keep coefficients matching the "ei" substring.
 \item \code{"^(?!.*ei|.*pt)"}: keep coefficients matching either the "ei" or the "pt" substrings.
 \item See the Examples section below for complete code.
-}}
+}
+
+Regular expressions are always matched against the \strong{raw variable names} of the model, never against the labels that \code{coef_rename} may substitute for them. \code{coef_omit="start_year"} therefore drops \verb{factor(start_year)2008} whether or not \code{coef_rename=TRUE} relabels it to \code{StartYear [2008]}. Note that the raw names are matched as a regex, so parentheses must be escaped: use \code{"factor\\\\(cyl\\\\)"}, not \code{"factor(cyl)"}.}
 
 \item{coef_rename}{logical, named or unnamed character vector, or function
 \itemize{
-\item Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below. Note: renaming is done by the \code{parameters} package at the extraction stage, before other arguments are applied like \code{coef_omit}. Therefore, this only works for models with builtin support and not for custom models.
+\item Logical: TRUE renames variables based on the "label" attribute of each column. See the Example section below. Note: renaming is done by the \code{parameters} package at the extraction stage. This only works for models with builtin support and not for custom models. The raw variable names are retained internally, so \code{coef_omit} still matches on them rather than on the labels.
 \item Unnamed character vector of length equal to the number of coefficients in the final table, after \code{coef_omit} is applied.
 \item Named character vector: Values refer to the variable names that will appear in the table. Names refer to the original term names stored in the model object. Ex: c("hp:mpg"="hp X mpg")
 \item Function: Accepts a character vector of the model's term names and returns a named vector like the one described above. The \code{modelsummary} package supplies a \code{coef_rename()} function which can do common cleaning tasks: \code{modelsummary(model, coef_rename = coef_rename)}
@@ -314,8 +316,10 @@ NULL, "classical", "iid", and "constant" are aliases which do not modify
 uncertainty estimates and simply report the default standard errors stored
 in the model object.
 
-One-sided formulas such as \code{~clusterid} are passed to the \code{sandwich::vcovCL}
-function.
+One-sided formulas such as \code{~clusterid} are passed to \code{sandwich::vcovCL}
+for most model types. For \code{fixest} models, the formula is passed to
+\code{fixest}'s native \code{stats::vcov()} method, which supports multi-way
+clustering (e.g., \code{~cluster1 + cluster2}).
 
 Matrices and functions producing variance-covariance matrices are first
 passed to \code{lmtest}. If this does not work, \code{modelsummary} attempts to take
@@ -560,6 +564,9 @@ modelsummary(
   vcov = list(
     "Stata Corp" = "stata",
     "Newey Lewis & the News" = "NeweyWest"))
+
+# clustered standard errors with a formula
+modelsummary(models, vcov = ~ Height)
 
 # fmt
 mod <- lm(mpg ~ hp + drat + qsec, data = mtcars)
