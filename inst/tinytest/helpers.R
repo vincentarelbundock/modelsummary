@@ -1,5 +1,11 @@
 rm(list = ls())
-suppressWarnings(modelsummary::config_modelsummary(reset = TRUE))
+# `scrutin` sources this file twice: once as a `worker_startup` hook, before
+# `pkgload::load_all()`, and once at the top of each test file, after. On CI
+# the package is never installed to the library, so the early call would error
+# out of worker startup and take every test file down with it.
+if ("modelsummary" %in% loadedNamespaces()) {
+  suppressWarnings(modelsummary::config_modelsummary(reset = TRUE))
+}
 options("modelsummary_warning_latex_siunitx_preamble" = FALSE)
 options("modelsummary_warning_performance_gof_expensive" = FALSE)
 

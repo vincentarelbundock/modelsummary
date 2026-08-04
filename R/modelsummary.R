@@ -1109,7 +1109,14 @@ get_list_of_modelsummary_lists <- function(
       future.apply::future_lapply(
         seq_len(number_of_models),
         inner_loop,
-        future.seed = TRUE
+        future.seed = TRUE,
+        # `future` attaches only the packages it can infer from static analysis
+        # of `inner_loop()`, which never names the package that defines the
+        # model class. The worker then fails to dispatch, `get_gof()` swallows
+        # the error, and the table silently loses every GOF row. Mirror the
+        # main session instead: a model's stored `call` can only include a bare
+        # `glmmTMB(...)` if that package was attached when the model was fitted.
+        future.packages = .packages()
       ),
       silent = TRUE
     )
