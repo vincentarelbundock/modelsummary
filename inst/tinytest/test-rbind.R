@@ -183,6 +183,9 @@ expect_snapshot_print(
 
 
 # Issue #725: Headers are not printed if shape = "rbind" is used
+# Note: avoid `hp`, whose intercept is exactly 146.6875. That half-way case
+# rounds differently depending on the BLAS used to fit the model, which makes
+# the snapshot platform-dependent. `fmt = 2` keeps values away from ties.
 gm <- c("r.squared", "nobs", "rmse")
 panels <- list(
   "Panel A" = list(
@@ -190,14 +193,15 @@ panels <- list(
     lm(mpg ~ qsec, data = mtcars)
   ),
   "Panel B" = list(
-    lm(hp ~ 1, data = mtcars),
-    lm(hp ~ qsec, data = mtcars)
+    lm(disp ~ 1, data = mtcars),
+    lm(disp ~ qsec, data = mtcars)
   )
 )
 tab <- modelsummary(
   panels,
   output = "markdown",
   shape = "rbind",
+  fmt = 2,
   gof_map = gm
 )
 expect_snapshot_print(tab, "rbind-issue725_tinytable_hgroup")
