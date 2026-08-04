@@ -48,3 +48,33 @@ expect_error(
   modelsummary(mod, "data.frame", coef_omit = -1:3, gof_map = NA),
   pattern = "sign"
 )
+
+
+# Issue #968: coef_omit matches raw variable names, not `coef_rename=TRUE` labels
+set.seed(1024)
+dat <- data.frame(y = rnorm(100), start_year = sample(2010:2013, 100, TRUE))
+attr(dat$start_year, "label") <- "StartYear"
+mod <- lm(y ~ factor(start_year), data = dat)
+
+# labels are what reaches the table
+tab <- modelsummary(mod, coef_rename = TRUE, output = "dataframe")
+expect_true(any(grepl("StartYear", tab$term)))
+
+# ... but coef_omit matches the model's own variable names
+tab <- modelsummary(
+  mod,
+  coef_rename = TRUE,
+  coef_omit = "start_year",
+  gof_map = NA,
+  output = "dataframe"
+)
+expect_equivalent(unique(tab$term), "(Intercept)")
+
+# unchanged when no renaming happens
+tab <- modelsummary(
+  mod,
+  coef_omit = "start_year",
+  gof_map = NA,
+  output = "dataframe"
+)
+expect_equivalent(unique(tab$term), "(Intercept)")

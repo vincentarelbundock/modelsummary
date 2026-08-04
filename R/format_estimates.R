@@ -247,6 +247,8 @@ format_estimates <- function(
     group_name,
     'group',
     'term',
+    # raw variable names, kept for `coef_omit` in `map_estimates()`
+    'modelsummary_raw_coef',
     paste0('modelsummary_tmp', seq_along(estimate_glue))
   )
   cols <- intersect(cols, colnames(est))
