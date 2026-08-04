@@ -14,6 +14,9 @@
 - Model packages are now attached on `future` workers, so goodness-of-fit
   rows are no longer silently dropped when a multi-worker `future` plan is
   active. Thanks to @raffaelemancuso for pull request \#971.
+- Tests compare output files by content rather than raw bytes, so the
+  `test-output-file.R` assertions no longer fail on Windows because of CRLF
+  line endings. Thanks to @raffaelemancuso for pull request \#969.
 
 ## 2.6.0
 
