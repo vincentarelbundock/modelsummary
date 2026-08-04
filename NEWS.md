@@ -18,6 +18,13 @@
 - Tests compare output files by content rather than raw bytes, so the
   `test-output-file.R` assertions no longer fail on Windows because of
   CRLF line endings. Thanks to @raffaelemancuso for pull request \#969.
+- Documentation: one-sided `vcov` formulas are passed to
+  `sandwich::vcovCL` for most models, but `fixest` models use `fixest`’s
+  own `stats::vcov()` method, which supports multi-way clustering such
+  as `~cluster1 + cluster2`. The two produce different standard errors,
+  so the previous text was misleading. A clustered standard error
+  example was also added. Thanks to @LeonidasZhak for pull request
+  \#959.
 
 ## 2.6.0
 
