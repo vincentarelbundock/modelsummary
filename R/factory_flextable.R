@@ -32,6 +32,26 @@ factory_flextable <- function(
   # measurements
   table_width <- ncol(tab)
 
+  # horizontal grouping (hgroup): insert full-width group rows in the body
+  has_hgroup <- !is.null(hgroup) && length(hgroup) > 0
+  if (has_hgroup) {
+    # insert from last to first so earlier row indices stay valid
+    for (nm in rev(names(hgroup))) {
+      rng <- hgroup[[nm]]
+      grp <- data.frame(matrix("", nrow = 1, ncol = ncol(tab)))
+      colnames(grp) <- colnames(tab)
+      grp[1, 1] <- nm
+      tab <- rbind(
+        tab[seq_len(rng[1] - 1), , drop = FALSE],
+        grp,
+        tab[rng[1]:nrow(tab), , drop = FALSE]
+      )
+    }
+    if (!is.null(hrule)) {
+      hrule <- hrule + length(hgroup)
+    }
+  }
+
   # flextable object
   out <- flextable::flextable(tab)
 
@@ -86,16 +106,18 @@ factory_flextable <- function(
     }
   }
 
-  # horizontal grouping (hgroup)
-  if (!is.null(hgroup) && length(hgroup) > 0) {
-    # hgroup creates grouped rows in the body
-    for (group_name in names(hgroup)) {
-      group_rows <- hgroup[[group_name]]
-      if (length(group_rows) > 0) {
-        # add a row above the first row of each group
-        first_row <- min(group_rows)
-        out <- flextable::add_header_lines(out, values = group_name)
-        out <- flextable::align(out, i = 1, align = "left", part = "header")
+  # merge group rows across all columns
+  if (has_hgroup) {
+    stub <- trimws(as.character(out$body$dataset[[1]]))
+    for (nm in names(hgroup)) {
+      i <- which(stub == nm)
+      if (length(i) == 1) {
+        out <- flextable::merge_h_range(
+          out,
+          i = i,
+          j1 = 1,
+          j2 = length(out$col_keys)
+        )
       }
     }
   }
