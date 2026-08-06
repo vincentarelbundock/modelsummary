@@ -34,17 +34,22 @@ factory_flextable <- function(
 
   # horizontal grouping (hgroup): insert full-width group rows in the body
   has_hgroup <- !is.null(hgroup) && length(hgroup) > 0
+  group_rows <- integer(0)
   if (has_hgroup) {
-    # insert from last to first so earlier row indices stay valid
-    for (nm in rev(names(hgroup))) {
-      rng <- hgroup[[nm]]
+    # each panel's group row is inserted at that panel's first body row; a row
+    # inserted at an earlier position pushes every later group row down by one.
+    starts <- vapply(hgroup, function(x) x[1], numeric(1))
+    group_rows <- starts + vapply(starts, function(s) sum(starts < s), integer(1))
+    # insert from last to first so earlier (smaller) start indices stay valid
+    for (k in order(starts, decreasing = TRUE)) {
+      start <- hgroup[[k]][1]
       grp <- data.frame(matrix("", nrow = 1, ncol = ncol(tab)))
       colnames(grp) <- colnames(tab)
-      grp[1, 1] <- nm
+      grp[1, 1] <- names(hgroup)[k]
       tab <- rbind(
-        tab[seq_len(rng[1] - 1), , drop = FALSE],
+        tab[seq_len(start - 1), , drop = FALSE],
         grp,
-        tab[rng[1]:nrow(tab), , drop = FALSE]
+        tab[start:nrow(tab), , drop = FALSE]
       )
     }
     if (!is.null(hrule)) {
@@ -108,17 +113,13 @@ factory_flextable <- function(
 
   # merge group rows across all columns
   if (has_hgroup) {
-    stub <- trimws(as.character(out$body$dataset[[1]]))
-    for (nm in names(hgroup)) {
-      i <- which(stub == nm)
-      if (length(i) == 1) {
-        out <- flextable::merge_h_range(
-          out,
-          i = i,
-          j1 = 1,
-          j2 = length(out$col_keys)
-        )
-      }
+    for (i in group_rows) {
+      out <- flextable::merge_h_range(
+        out,
+        i = i,
+        j1 = 1,
+        j2 = length(out$col_keys)
+      )
     }
   }
 

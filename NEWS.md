@@ -4,6 +4,10 @@
 
 ## Development
 
+- `shape = "rbind"` with `output = "flextable"` now inserts panel labels
+  as merged full-width group rows in the table body, matching the
+  `tinytable` and `kableExtra` output, instead of pushing them into the
+  header rows. Thanks to @ykonut for pull request \#975.
 - Accomodate change in attribute name in fixest v0.14.0. Thanks to
   @lrberge for pull request \#950.
 - `add_rows` with `position = "coef_end"` now places rows above the
