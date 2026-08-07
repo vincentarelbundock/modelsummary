@@ -231,7 +231,12 @@ modelsummary_rbind <- function(
   }
 
   # stars
-  if (!isFALSE(stars) && !any(grepl("\\{stars\\}", c(estimate, statistic)))) {
+  stars_note <- settings_get("stars_note")
+  if (
+    isTRUE(stars_note) &&
+      !isFALSE(stars) &&
+      !any(grepl("\\{stars\\}", c(estimate, statistic)))
+  ) {
     stars_note <- make_stars_note(
       stars,
       output_format = output_format,
