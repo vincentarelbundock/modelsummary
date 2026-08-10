@@ -4,6 +4,10 @@
 
 ## Development
 
+- `shape = "rbind"` now respects the `modelsummary_stars_note` global
+  option, so the significance note is suppressed when that option is set
+  to `FALSE`, matching the behavior of `modelsummary()`. Thanks to
+  @ykonut for pull request \#976.
 - `shape = "rbind"` with `output = "flextable"` now inserts panel labels
   as merged full-width group rows in the table body, matching the
   `tinytable` and `kableExtra` output, instead of pushing them into the

@@ -62,6 +62,7 @@ strip_random <- function(x) {
   for (stem in c(
     "tinytable_css_",
     "tinytable_(?!css)",
+    "tableFns_",
     "styleCell_",
     "spanCell_",
     "insertSpanRow",
