@@ -4,6 +4,10 @@
 
 ## Development
 
+- `align = "d"` with LaTeX output no longer mangles p-values printed with
+  a leading comparator, such as `<0.001`. The comparator was typeset
+  outside its column and collided with the neighboring one. Fixed
+  upstream in `tinytable`. Issue \#880.
 - `shape = "rbind"` now respects the `modelsummary_stars_note` global
   option, so the significance note is suppressed when that option is set
   to `FALSE`, matching the behavior of `modelsummary()`. Thanks to
