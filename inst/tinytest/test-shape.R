@@ -485,3 +485,22 @@ mod <- list(
 )
 tab <- modelsummary(mod, shape = term ~ model + statistic)
 expect_equivalent(ncol(tab), 5)
+
+# Issue #977: Reserved column name inside model labels
+mod <- list(
+  "m3_terminated" = lm(Girth ~ Height, data = trees),
+  "m3_started" = lm(Girth ~ Height + Volume, data = trees)
+)
+tab <- modelsummary(
+  mod,
+  statistic = "std.error",
+  shape = term ~ model + statistic,
+  output = "data.frame"
+)
+expect_inherits(tab, "data.frame")
+expect_true("term" %in% colnames(tab))
+col_terminated <- grep("m3_terminated", colnames(tab), fixed = TRUE, value = TRUE)[1]
+col_started <- grep("m3_started", colnames(tab), fixed = TRUE, value = TRUE)[1]
+row_nobs <- which(tab$term == "Num.Obs.")
+expect_equal(tab[row_nobs, col_terminated], "31")
+expect_equal(tab[row_nobs, col_started], "31")

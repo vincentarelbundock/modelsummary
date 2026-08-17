@@ -21,9 +21,12 @@ bind_est_gof <- function(est, gof) {
   bad <- c("part", "term", "model", "group", "statistic")
   bad <- stats::na.omit(match(bad, colnames(est)))
 
-  idx <- sapply(colnames(gof), function(x) {
-    # first matches
-    setdiff(grep(x, colnames(est), fixed = TRUE), bad)[1]
+  # Match complete components of reshaped column names. The first GOF column
+  # identifies rows and must not be matched against model labels.
+  est_names <- paste0("||||", colnames(est), "||||")
+  idx <- sapply(colnames(gof)[-1], function(x) {
+    needle <- paste0("||||", x, "||||")
+    setdiff(grep(needle, est_names, fixed = TRUE), bad)[1]
   })
   idx <- stats::na.omit(idx)
   if (length(idx) > 0) {

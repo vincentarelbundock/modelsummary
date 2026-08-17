@@ -4,6 +4,8 @@
 
 ## Development
 
+- `shape = term ~ model + statistic` now handles model labels containing
+  structural column names such as `term`. Fixes Issue \#977.
 - `align = "d"` with LaTeX output no longer mangles p-values printed with
   a leading comparator, such as `<0.001`. The comparator was typeset
   outside its column and collided with the neighboring one. Fixed
