@@ -44,7 +44,7 @@ shape_estimates <- function(estimates, shape, conf_level, statistic, estimate) {
     eval(shape_formula),
     data = out,
     value.var = "estimate",
-    sep = "||||"
+    sep = SHAPE_SEP
   )
 
   data.table::setDF(out)
