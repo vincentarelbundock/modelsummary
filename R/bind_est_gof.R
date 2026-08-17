@@ -17,16 +17,22 @@ bind_est_gof <- function(est, gof) {
     return(out)
   }
 
-  # partial matches on model names, but not on known columns
-  bad <- c("part", "term", "model", "group", "statistic")
-  bad <- stats::na.omit(match(bad, colnames(est)))
+  # Match GOF columns to the estimate columns of the same model. A reshaped
+  # estimate column name glues several components together, as in
+  # "model||||statistic", and a model label may itself be or contain a
+  # structural name such as "term". So compare whole components rather than
+  # searching for substrings, and consider every component rather than
+  # assuming the model label comes first: the component order follows the
+  # `shape` formula.
+  structural <- c("part", "term", "model", "group", "statistic")
+  bad <- stats::na.omit(match(structural, colnames(est)))
 
-  # Match complete components of reshaped column names. The first GOF column
-  # identifies rows and must not be matched against model labels.
-  est_names <- paste0("||||", colnames(est), "||||")
-  idx <- sapply(colnames(gof)[-1], function(x) {
-    needle <- paste0("||||", x, "||||")
-    setdiff(grep(needle, est_names, fixed = TRUE), bad)[1]
+  est_components <- shape_sep_split(colnames(est))
+  candidates <- setdiff(colnames(gof), structural)
+
+  idx <- sapply(candidates, function(x) {
+    hit <- which(vapply(est_components, function(k) x %in% k, logical(1)))
+    setdiff(hit, bad)[1]
   })
   idx <- stats::na.omit(idx)
   if (length(idx) > 0) {
