@@ -725,6 +725,20 @@ The terms of the `shape` formula above can of course be rearranged to reshape th
 modelsummary(mod, shape = model + term ~ response)
 ```
 
+Models with and without grouped estimates can appear in the same table. When a model does not supply the group identifier---a `glm()` has no "response" column, for instance---its estimates are collected in a single unlabelled column:
+
+```{r, warning = FALSE, message = FALSE}
+dat_multinom$am <- factor(dat_multinom$am)
+
+mod <- list(
+    glm(am ~ mpg, data = dat_multinom, family = binomial),
+    nnet::multinom(cyl ~ mpg, data = dat_multinom, trace = FALSE))
+
+modelsummary(mod, shape = term ~ model + response)
+```
+
+To label that column instead of leaving it blank, we can define a `tidy_custom` method which adds the group identifier to the estimates of the ungrouped model. See the [Extension and customization vignette.](https://modelsummary.com/vignettes/modelsummary_extension.html)
+
 We can combine the `term` and group identifier columns by inserting an interaction colon `:` instead of the `+` in the formula:
 
 ```{r, warning = FALSE, message = FALSE}
