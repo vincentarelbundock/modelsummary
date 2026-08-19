@@ -504,3 +504,72 @@ col_started <- grep("m3_started", colnames(tab), fixed = TRUE, value = TRUE)[1]
 row_nobs <- which(tab$term == "Num.Obs.")
 expect_equal(tab[row_nobs, col_terminated], "31")
 expect_equal(tab[row_nobs, col_started], "31")
+
+# Issue #821: combine models with and without grouped estimates
+df <- mtcars
+df$cyl <- factor(df$cyl, levels = c(4, 6, 8))
+df$am <- factor(df$am)
+multi <- suppressMessages(nnet::multinom(
+  cyl ~ drat,
+  data = df,
+  Hess = FALSE,
+  trace = FALSE
+))
+bin <- glm(am ~ drat, data = df, family = binomial())
+
+# one column for the ungrouped model, one per response for the grouped model
+tab <- modelsummary(
+  list(bin, multi),
+  shape = term ~ model + response,
+  gof_map = NA,
+  output = "data.frame"
+)
+expect_equivalent(colnames(tab), c("part", "term", "statistic", "(1)", "(2) / 6", "(2) / 8"))
+expect_equivalent(tab[["(1)"]], c("-21.021", "(7.838)", "5.577", "(2.063)"))
+expect_equivalent(tab[["(2) / 6"]], c("13.392", "(7.314)", "-3.603", "(1.896)"))
+
+# order of the models does not matter
+tab <- modelsummary(
+  list(multi, bin),
+  shape = term ~ model + response,
+  gof_map = NA,
+  output = "data.frame"
+)
+expect_equivalent(colnames(tab), c("part", "term", "statistic", "(1) / 6", "(1) / 8", "(2)"))
+expect_equivalent(tab[["(2)"]], c("-21.021", "(7.838)", "5.577", "(2.063)"))
+
+# a group name which no model supplies is still an error
+expect_error(
+  modelsummary(list(bin, multi), shape = term ~ model + zzz),
+  pattern = "were not found in the extracted data"
+)
+expect_error(
+  modelsummary(multi, shape = term ~ model + response + zzz),
+  pattern = "were not found in the extracted data"
+)
+
+# `tidy_custom` can create the group column that the default extractor lacks
+assign(
+  "tidy_custom.glm",
+  function(x, ...) {
+    out <- broom::tidy(x, ...)
+    out$response <- "1"
+    out
+  },
+  envir = globalenv()
+)
+registerS3method(
+  "tidy_custom",
+  "glm",
+  get("tidy_custom.glm", envir = globalenv()),
+  envir = globalenv()
+)
+tab <- modelsummary(
+  list(bin, multi),
+  shape = term ~ model + response,
+  gof_map = NA,
+  output = "data.frame"
+)
+expect_equivalent(colnames(tab), c("part", "term", "statistic", "(1) / 1", "(2) / 6", "(2) / 8"))
+expect_equivalent(tab[["(1) / 1"]], c("-21.021", "(7.838)", "5.577", "(2.063)"))
+rm("tidy_custom.glm", envir = globalenv())
