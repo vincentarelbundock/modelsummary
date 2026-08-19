@@ -235,7 +235,7 @@ format_estimates <- function(
     # otherwise the group name is a typo and we raise an error below.
     fill <- intersect(miss, group_name_known)
     for (m in fill) {
-      est[[m]] <- ""
+      est[[m]] <- " "
     }
     miss <- setdiff(miss, fill)
     if (length(miss) > 0) {

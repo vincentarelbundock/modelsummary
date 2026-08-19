@@ -548,6 +548,18 @@ expect_error(
   pattern = "were not found in the extracted data"
 )
 
+# Issue #821: the blank group is unlabelled, not "V1"
+tab <- modelsummary(
+  list(bin, multi),
+  shape = model + term ~ response,
+  gof_map = NA,
+  output = "data.frame"
+)
+expect_equivalent(
+  colnames(tab),
+  c("part", "model", "term", "statistic", " ", "6", "8")
+)
+
 # `tidy_custom` can create the group column that the default extractor lacks
 assign(
   "tidy_custom.glm",
@@ -572,4 +584,4 @@ tab <- modelsummary(
 )
 expect_equivalent(colnames(tab), c("part", "term", "statistic", "(1) / 1", "(2) / 6", "(2) / 8"))
 expect_equivalent(tab[["(1) / 1"]], c("-21.021", "(7.838)", "5.577", "(2.063)"))
-rm("tidy_custom.glm", envir = globalenv())
+# note: `registerS3method` cannot be undone, so this must stay last in the file
