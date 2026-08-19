@@ -14,6 +14,7 @@ format_estimates <- function(
   stars,
   shape,
   group_name,
+  group_name_known = group_name,
   exponentiate,
   ...
 ) {
@@ -227,12 +228,21 @@ format_estimates <- function(
 
   if (!is.null(group_name)) {
     miss <- setdiff(shape$group_name, colnames(est))
+    # A model without grouped estimates (e.g., `glm()`) can be combined with
+    # grouped models (e.g., `nnet::multinom()`). Its estimates are assigned to
+    # a blank group, which merges into a single unlabelled column. This is only
+    # allowed for group columns which at least one other model supplies;
+    # otherwise the group name is a typo and we raise an error below.
+    fill <- intersect(miss, group_name_known)
+    for (m in fill) {
+      est[[m]] <- " "
+    }
+    miss <- setdiff(miss, fill)
     if (length(miss) > 0) {
       msg <- sprintf(
-        'Group columns (%s) were not found in the extracted data. The "group" argument must be a column name in the data.frame produced by `get_estimates(model)`.  If you wish to combine models with and without grouped estimates, you will find examples on the modelsummary website:',
+        'Group columns (%s) were not found in the extracted data of any of the models. Each group identifier in the `shape` formula must be a column name in the data.frame produced by `get_estimates(model)` for at least one of the models.',
         paste(miss, collapse = ", ")
       )
-      msg <- c(msg, "https://modelsummary.com")
       insight::format_error(msg)
     }
   } else if (is.null(group_name) && !"group" %in% colnames(est)) {

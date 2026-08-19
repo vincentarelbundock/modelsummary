@@ -598,6 +598,20 @@ modelsummary <- function(
   ###############
   #  estimates  #
   ###############
+
+  # Models with and without grouped estimates can be combined, but only if at
+  # least one model actually supplies each of the `shape` group columns.
+  # Otherwise the group name is a typo or an unsupported column, and we want
+  # `format_estimates()` to raise an informative error rather than build a
+  # table of blank groups.
+  group_name_known <- NULL
+  if (!is.null(shape$group_name)) {
+    group_name_known <- Reduce(
+      union,
+      lapply(msl, function(x) intersect(shape$group_name, colnames(x$tidy)))
+    )
+  }
+
   est <- list()
   for (i in seq_along(msl)) {
     tmp <- format_estimates(
@@ -612,6 +626,7 @@ modelsummary <- function(
       stars = stars,
       shape = shape,
       group_name = shape$group_name,
+      group_name_known = group_name_known,
       exponentiate = exponentiate[[i]],
       ...
     )

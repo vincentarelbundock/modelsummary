@@ -163,6 +163,28 @@ When this method is defined, `modelsummary` can automatically extract p values f
 modelsummary(mod_ordinal, stars = TRUE)
 ```
 
+A `tidy_custom` method can also create a column which the default extraction did not produce at all. This is useful to label a model which has no grouped estimates when it is displayed alongside models which do. A `glm()` has no "response" column, so this method assigns one:
+
+```{r, eval = FALSE}
+dat <- mtcars
+dat$cyl <- factor(dat$cyl)
+dat$am <- factor(dat$am)
+
+mod <- list(
+  glm(am ~ mpg, data = dat, family = binomial),
+  nnet::multinom(cyl ~ mpg, data = dat, trace = FALSE))
+
+tidy_custom.glm <- function(x, ...) {
+  out <- broom::tidy(x, ...)
+  out$response <- "1"
+  out
+}
+
+modelsummary(mod, shape = term ~ model + response)
+```
+
+Without this method, the estimates of the `glm()` model would still be displayed, but in a single unlabelled column.
+
 
 # New information: `tidy_custom` and `glance_custom`
 

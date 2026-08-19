@@ -4,6 +4,17 @@
 
 ## Development
 
+- Models with and without grouped estimates can now be combined in a
+  single table, as in
+  `modelsummary(list(glm_model, multinom_model), shape = term ~ model + response)`.
+  A model which does not supply the group identifier gets a single
+  unlabelled column instead of raising an error. An error is still
+  raised when none of the models supplies the group identifier, which
+  usually indicates a typo. Fixes Issue \#821.
+- `tidy_custom` methods can now add a column which the default
+  extraction did not produce, including a group identifier used in the
+  `shape` formula. Previously such a method failed with “undefined
+  columns selected”. Fixes Issue \#821.
 - Behavior change: `datasummary_balance()` now weights the counts and
   percentages of categorical variables when the `data` include a
   “weights” column, so the categorical and numeric blocks of the table

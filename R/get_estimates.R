@@ -109,7 +109,6 @@ get_estimates <- function(
   }
 
   override <- function(old, new, columns) {
-    columns <- setdiff(columns, c("term", shape$group_name))
     if (
       !inherits(new, "data.frame") ||
         nrow(new) == 0 ||
@@ -117,13 +116,17 @@ get_estimates <- function(
     ) {
       return(old)
     }
-    if (is.null(shape$group_name)) {
-      def <- old[["term"]]
-      cus <- new[["term"]]
-    } else {
-      def <- do.call("paste", as.list(old[, c("term", shape$group_name)]))
-      cus <- do.call("paste", as.list(new[, c("term", shape$group_name)]))
-    }
+    # Rows are matched on "term" and on the `shape` group columns, but only
+    # when those columns are available on both sides. A custom tidier is
+    # allowed to *create* a group column that the default extractor did not
+    # produce, in which case there is nothing to match on but "term".
+    key <- c(
+      "term",
+      intersect(shape$group_name, intersect(colnames(old), colnames(new)))
+    )
+    columns <- setdiff(columns, key)
+    def <- do.call("paste", as.list(old[, key, drop = FALSE]))
+    cus <- do.call("paste", as.list(new[, key, drop = FALSE]))
     idx <- match(def, cus)
     if (all(is.na(idx))) {
       warning(
@@ -135,6 +138,10 @@ get_estimates <- function(
       return(old)
     }
     for (n in columns) {
+      # the custom tidier can add a column which did not exist before
+      if (!n %in% colnames(old)) {
+        old[[n]] <- NA
+      }
       old[[n]] <- ifelse(is.na(idx), old[[n]], new[[n]][idx])
     }
     return(old)
