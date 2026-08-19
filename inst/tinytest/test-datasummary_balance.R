@@ -368,13 +368,36 @@ expect_error(
   pattern = "include missing data"
 )
 
-# warning: weights not supported for categorical
+# Issue #500: counts and percentages of categorical variables are weighted
 set.seed(1024)
 datw <- mtcars
 datw$weights <- runif(nrow(datw))
 datw$am <- factor(datw$am)
 datw$cyl <- factor(datw$cyl)
-expect_warning(datasummary_balance(~am, data = datw), pattern = "However")
+tab <- datasummary_balance(
+  ~am,
+  data = datw[, c("am", "cyl", "weights")],
+  output = "data.frame"
+)
+for (am in levels(datw$am)) {
+  sub <- datw[datw$am == am, ]
+  # "N" is the sum of weights
+  unknown <- sprintf("%.1f", tapply(sub$weights, sub$cyl, sum))
+  expect_equivalent(unknown, tab[[sprintf("%s (N=%s) / N", am, nrow(sub))]])
+  # "Pct." is the weighted share of the column
+  unknown <- tapply(sub$weights, sub$cyl, sum) / sum(sub$weights) * 100
+  unknown <- sprintf("%.1f", unknown)
+  expect_equivalent(unknown, tab[[sprintf("%s (N=%s) / Pct.", am, nrow(sub))]])
+}
+
+# no "weights" column: counts and percentages are unweighted
+tab <- datasummary_balance(
+  ~am,
+  data = datw[, c("am", "cyl")],
+  output = "data.frame"
+)
+expect_equivalent(tab[[3]], c("3", "4", "12"))
+expect_equivalent(tab[[4]], c("15.8", "21.1", "63.2"))
 
 # numeric weights
 set.seed(1024)

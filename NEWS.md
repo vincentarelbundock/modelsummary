@@ -4,6 +4,13 @@
 
 ## Development
 
+- Behavior change: `datasummary_balance()` now weights the counts and
+  percentages of categorical variables when the `data` include a
+  “weights” column, so the categorical and numeric blocks of the table
+  describe the same population. The “N” column reports the sum of
+  weights in each cell, and the “Pct.” column reports the weighted share
+  of the column. The warning about unweighted categorical statistics is
+  removed. Fixes Issue \#500.
 - `shape = term ~ model + statistic` now handles model labels containing
   structural column names such as `term`. Fixes Issue \#977.
 - `align = "d"` with LaTeX output no longer mangles p-values printed
