@@ -33,7 +33,9 @@ datasummary_balance(
 \item{data}{A data.frame (or tibble). If this data includes columns called
 "blocks", "clusters", and/or "weights", the "estimatr" package will consider
 them when calculating the difference in means. If there is a \code{weights}
-column, the reported mean and standard errors will also be weighted.}
+column, the reported mean and standard errors will also be weighted. For
+categorical variables, the "N" column then reports the sum of weights in
+each cell, and the "Pct." column reports the weighted share of the column.}
 
 \item{output}{filename or object type (character string)
 \itemize{

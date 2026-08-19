@@ -15,7 +15,9 @@
 #' @param data A data.frame (or tibble). If this data includes columns called
 #'   "blocks", "clusters", and/or "weights", the "estimatr" package will consider
 #'   them when calculating the difference in means. If there is a `weights`
-#'   column, the reported mean and standard errors will also be weighted.
+#'   column, the reported mean and standard errors will also be weighted. For
+#'   categorical variables, the "N" column then reports the sum of weights in
+#'   each cell, and the "Pct." column reports the weighted share of the column.
 #' @param dinm TRUE calculates a difference in means with uncertainty
 #'   estimates. This option is only available if the `estimatr` package is
 #'   installed. If `data` includes columns named "blocks", "clusters", or
@@ -182,17 +184,33 @@ datasummary_balance <- function(
     nformat <- function(x) {
       sanitize_fmt(0)(as.numeric(x))
     }
+    ## when a "weights" column is present, counts and percentages are weighted:
+    ## "N" becomes the sum of weights, and the percentage denominators are the
+    ## column-wise sums of weights.
+    if ("weights" %in% colnames(data)) {
+      wnformat <- sanitize_fmt(1)
+      weighted_n <- function(x) sum(x, na.rm = TRUE)
+      weighted_pct <- function(x, y) {
+        sum(x, na.rm = TRUE) / sum(y, na.rm = TRUE) * 100
+      }
+      stat_fac <- "weights * (Heading('N') * weighted_n * Format(wnformat()) +
+                 Heading('Pct.') * Percent('col', fn = weighted_pct) * Format(pctformat()))"
+    } else {
+      stat_fac <- "(N * Format(nformat()) +
+                 Heading('Pct.') * Percent('col') * Format(pctformat()))"
+    }
+
     if (!is.null(rhs)) {
       f_fac <- stats::as.formula(sprintf(
-        "All(tmp2, factor = TRUE, numeric = FALSE) ~
-                 Factor(%s) * (N * Format(nformat()) + Heading('Pct.') * Percent('col') * Format(pctformat()))",
-        rhs
+        "All(tmp2, factor = TRUE, numeric = FALSE) ~ Factor(%s) * %s",
+        rhs,
+        stat_fac
       ))
     } else {
-      f_fac <- stats::as.formula(
-        "All(tmp2, factor = TRUE, numeric = FALSE) ~
-                 (N * Format(nformat()) + Heading('Pct.') * Percent('col') * Format(pctformat()))"
-      )
+      f_fac <- stats::as.formula(sprintf(
+        "All(tmp2, factor = TRUE, numeric = FALSE) ~ %s",
+        stat_fac
+      ))
     }
     tab_fac <- datasummary(
       formula = f_fac,
@@ -366,12 +384,6 @@ datasummary_balance <- function(
       strrep("l", attr(tab, "stub_width")),
       strrep("r", ncol(tab) - attr(tab, "stub_width"))
     )
-  }
-
-  ## weights warning
-  if (isTRUE(any_factor) && "weights" %in% colnames(data)) {
-    msg <- 'When the `data` used in `datasummary_balance` contains a "weights" column, the means, standard deviations, difference in means, and standard errors of numeric variables are adjusted to account for weights. However, the counts and percentages for categorical variables are not adjusted.'
-    warning(msg, call. = FALSE)
   }
 
   ## make table
