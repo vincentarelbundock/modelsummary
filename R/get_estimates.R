@@ -254,7 +254,6 @@ get_estimates_parameters <- function(
 ) {
   dots <- list(...)
   args <- c(list("model" = model), dots)
-  args[["verbose"]] <- FALSE
 
   mi <- tryCatch(
     suppressMessages(suppressWarnings(insight::model_info(model))),
@@ -295,8 +294,12 @@ get_estimates_parameters <- function(
       dots[["pretty_names"]] <- "labels"
     }
     inner <- parameters::parameters
-    # void to sink output from {did} package
-    void <- utils::capture.output(out <- do.call("inner", dots), silent = TRUE)
+    # void to sink output from {did} package. Messages are mostly noise, but
+    # warnings flag real problems, like a `vcov` that `parameters` ignores (#983)
+    void <- utils::capture.output(
+      out <- suppressMessages(do.call("inner", dots)),
+      silent = TRUE
+    )
     if (inherits(out, "try-error")) return(NULL)
     out <- insight::standardize_names(out, style = "broom")
 
