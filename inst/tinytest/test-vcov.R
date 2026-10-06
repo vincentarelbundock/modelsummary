@@ -484,3 +484,17 @@ b <- modelsummary(
   gof_map = NA
 )
 expect_false(any(a[["(1)"]] == b[["(1)"]]))
+
+# Issue #983: warn when `parameters` ignores `vcov` instead of silently
+# reporting the default standard errors
+requiet("nnet")
+mod <- nnet::multinom(tension ~ breaks + wool, data = warpbreaks, trace = FALSE)
+expect_warning(
+  get_estimates(mod, vcov = sandwich::sandwich),
+  pattern = "will be ignored"
+)
+expect_warning(
+  get_estimates(mod, vcov = sandwich::sandwich(mod)),
+  pattern = "will be ignored"
+)
+expect_silent(get_estimates(mod))
